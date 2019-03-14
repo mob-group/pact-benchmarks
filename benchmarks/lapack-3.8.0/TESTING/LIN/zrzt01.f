@@ -1,4 +1,4 @@
-*> \brief \b ZRZT01
+*> \brief \b AB_ZRZT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION ZRZT01( M, N, A, AF, LDA, TAU, WORK,
+*       DOUBLE PRECISION FUNCTION AB_ZRZT01( M, N, A, AF, LDA, TAU, WORK,
 *                        LWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,9 +25,9 @@
 *>
 *> \verbatim
 *>
-*> ZRZT01 returns
+*> AB_ZRZT01 returns
 *>      || A - R*Q || / ( M * eps * ||A|| )
-*> for an upper trapezoidal A that was factored with ZTZRZF.
+*> for an upper trapezoidal A that was factored with AB_ZTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -54,7 +54,7 @@
 *> \param[in] AF
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDA,N)
-*>          The output of ZTZRZF for input matrix A.
+*>          The output of AB_ZTZRZF for input matrix A.
 *>          The lower triangle is not referenced.
 *> \endverbatim
 *>
@@ -67,8 +67,8 @@
 *> \param[in] TAU
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (M)
-*>          Details of the  Householder transformations as returned by
-*>          ZTZRZF.
+*>          Details of the  HousehoAB_LDEr transformations as returned by
+*>          AB_ZTZRZF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -95,7 +95,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION ZRZT01( M, N, A, AF, LDA, TAU, WORK,
+      DOUBLE PRECISION FUNCTION AB_ZRZT01( M, N, A, AF, LDA, TAU, WORK,
      $                 LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -125,21 +125,21 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZLASET, ZUNMRZ
+      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZLASET, AB_ZUNMRZ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      ZRZT01 = ZERO
+      AB_ZRZT01 = ZERO
 *
       IF( LWORK.LT.M*N+M ) THEN
-         CALL XERBLA( 'ZRZT01', 8 )
+         CALL AB_XERBLA( 'AB_ZRZT01', 8 )
          RETURN
       END IF
 *
@@ -148,11 +148,12 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      NORMA = ZLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      NORMA = AB_ZLANGE( 'One-norm', M, N, A, LDA, RWORK )
 *
 *     Copy upper triangle R
 *
-      CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), WORK,
+      CALL AB_ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), WORK
+     $,
      $             M )
       DO 20 J = 1, M
          DO 10 I = 1, J
@@ -162,24 +163,26 @@
 *
 *     R = R * P(1) * ... *P(m)
 *
-      CALL ZUNMRZ( 'Right', 'No tranpose', M, N, M, N-M, AF, LDA, TAU,
+      CALL AB_ZUNMRZ( 'Right', 'No tranpose', M, N, M, N-M, AF, LDA, TAU
+     $,
      $             WORK, M, WORK( M*N+1 ), LWORK-M*N, INFO )
 *
 *     R = R - A
 *
       DO 30 I = 1, N
-         CALL ZAXPY( M, DCMPLX( -ONE ), A( 1, I ), 1,
+         CALL AB_ZAXPY( M, DCMPLX( -ONE ), A( 1, I ), 1,
      $               WORK( ( I-1 )*M+1 ), 1 )
    30 CONTINUE
 *
-      ZRZT01 = ZLANGE( 'One-norm', M, N, WORK, M, RWORK )
+      AB_ZRZT01 = AB_ZLANGE( 'One-norm', M, N, WORK, M, RWORK )
 *
-      ZRZT01 = ZRZT01 / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+      AB_ZRZT01 = AB_ZRZT01 / ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N )
+     $ ) )
       IF( NORMA.NE.ZERO )
-     $   ZRZT01 = ZRZT01 / NORMA
+     $   AB_ZRZT01 = AB_ZRZT01 / NORMA
 *
       RETURN
 *
-*     End of ZRZT01
+*     End of AB_ZRZT01
 *
       END

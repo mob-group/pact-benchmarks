@@ -1,4 +1,4 @@
-*> \brief \b SRQT03
+*> \brief \b AB_SRQT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_SRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> SRQT03 tests SORMRQ, which computes Q*C, Q'*C, C*Q or C*Q'.
+*> AB_SRQT03 tests AB_SORMRQ, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
-*> SRQT03 compares the results of a call to SORMRQ with the results of
-*> forming Q explicitly by a call to SORGRQ and then performing matrix
-*> multiplication by a call to SGEMM.
+*> AB_SRQT03 compares the results of a call to AB_SORMRQ with the results of
+*> forming Q explicitly by a call to AB_SORGRQ and then performing matrix
+*> multiplication by a call to AB_SGEMM.
 *> \endverbatim
 *
 *  Arguments:
@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
 *>          Details of the RQ factorization of an m-by-n matrix, as
-*>          returned by SGERQF. See SGERQF for further details.
+*>          returned by AB_AB_SGERQF. See AB_AB_SGERQF for further details.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -133,7 +133,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_SRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK
+     $,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,12 +165,13 @@
       REAL               CNORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, SLAMCH, SLANGE
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLARNV, SLASET, SORGRQ, SORMRQ
+      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_SLARNV, AB_SLASET, AB_S
+     $ORGRQ, AB_SORMRQ
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
@@ -188,7 +190,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       MINMN = MIN( M, N )
 *
 *     Quick return if possible
@@ -203,18 +205,18 @@
 *
 *     Copy the last k rows of the factorization to the array Q
 *
-      CALL SLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
+      CALL AB_SLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
       IF( K.GT.0 .AND. N.GT.K )
-     $   CALL SLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
+     $   CALL AB_SLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
      $                Q( N-K+1, 1 ), LDA )
       IF( K.GT.1 )
-     $   CALL SLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
+     $   CALL AB_SLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
      $                Q( N-K+2, N-K+1 ), LDA )
 *
 *     Generate the n-by-n matrix Q
 *
-      SRNAMT = 'SORGRQ'
-      CALL SORGRQ( N, N, K, Q, LDA, TAU( MINMN-K+1 ), WORK, LWORK,
+      SRNAMT = 'AB_SORGRQ'
+      CALL AB_SORGRQ( N, N, K, Q, LDA, TAU( MINMN-K+1 ), WORK, LWORK,
      $             INFO )
 *
       DO 30 ISIDE = 1, 2
@@ -231,9 +233,9 @@
 *        Generate MC by NC matrix C
 *
          DO 10 J = 1, NC
-            CALL SLARNV( 2, ISEED, MC, C( 1, J ) )
+            CALL AB_SLARNV( 2, ISEED, MC, C( 1, J ) )
    10    CONTINUE
-         CNORM = SLANGE( '1', MC, NC, C, LDA, RWORK )
+         CNORM = AB_SLANGE( '1', MC, NC, C, LDA, RWORK )
          IF( CNORM.EQ.0.0 )
      $      CNORM = ONE
 *
@@ -246,29 +248,32 @@
 *
 *           Copy C
 *
-            CALL SLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
+            CALL AB_SLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
 *
 *           Apply Q or Q' to C
 *
-            SRNAMT = 'SORMRQ'
+            SRNAMT = 'AB_SORMRQ'
             IF( K.GT.0 )
-     $         CALL SORMRQ( SIDE, TRANS, MC, NC, K, AF( M-K+1, 1 ), LDA,
+     $         CALL AB_SORMRQ( SIDE, TRANS, MC, NC, K, AF( M-K+1, 1 ), L
+     $DA,
      $                      TAU( MINMN-K+1 ), CC, LDA, WORK, LWORK,
      $                      INFO )
 *
 *           Form explicit product and subtract
 *
-            IF( LSAME( SIDE, 'L' ) ) THEN
-               CALL SGEMM( TRANS, 'No transpose', MC, NC, MC, -ONE, Q,
+            IF( AB_LSAME( SIDE, 'L' ) ) THEN
+               CALL AB_SGEMM( TRANS, 'No transpose', MC, NC, MC, -ONE, Q
+     $,
      $                     LDA, C, LDA, ONE, CC, LDA )
             ELSE
-               CALL SGEMM( 'No transpose', TRANS, MC, NC, NC, -ONE, C,
+               CALL AB_SGEMM( 'No transpose', TRANS, MC, NC, NC, -ONE, C
+     $,
      $                     LDA, Q, LDA, ONE, CC, LDA )
             END IF
 *
 *           Compute error in the difference
 *
-            RESID = SLANGE( '1', MC, NC, CC, LDA, RWORK )
+            RESID = AB_SLANGE( '1', MC, NC, CC, LDA, RWORK )
             RESULT( ( ISIDE-1 )*2+ITRANS ) = RESID /
      $         ( REAL( MAX( 1, N ) )*CNORM*EPS )
 *
@@ -277,6 +282,6 @@
 *
       RETURN
 *
-*     End of SRQT03
+*     End of AB_SRQT03
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZPOTRI
+*> \brief \b AB_ZPOTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPOTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpotri.f">
+*> Download AB_ZPOTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPOTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpotri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPOTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpotri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPOTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPOTRI( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_ZPOTRI( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> ZPOTRI computes the inverse of a complex Hermitian positive definite
+*> AB_ZPOTRI computes the inverse of a complex Hermitian positive definite
 *> matrix A using the Cholesky factorization A = U**H*U or A = L*L**H
-*> computed by ZPOTRF.
+*> computed by AB_ZPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -60,7 +60,7 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L from the Cholesky
 *>          factorization A = U**H*U or A = L*L**H, as computed by
-*>          ZPOTRF.
+*>          AB_ZPOTRF.
 *>          On exit, the upper or lower triangle of the (Hermitian)
 *>          inverse of A, overwriting the input factor U or L.
 *> \endverbatim
@@ -93,7 +93,7 @@
 *> \ingroup complex16POcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZPOTRI( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_ZPOTRI( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -111,11 +111,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLAUUM, ZTRTRI
+      EXTERNAL           AB_XERBLA, AB_ZLAUUM, AB_ZTRTRI
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -125,7 +125,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
+     $THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -133,7 +134,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPOTRI', -INFO )
+         CALL AB_XERBLA( 'AB_ZPOTRI', -INFO )
          RETURN
       END IF
 *
@@ -144,16 +145,16 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL ZTRTRI( UPLO, 'Non-unit', N, A, LDA, INFO )
+      CALL AB_ZTRTRI( UPLO, 'Non-unit', N, A, LDA, INFO )
       IF( INFO.GT.0 )
      $   RETURN
 *
 *     Form inv(U) * inv(U)**H or inv(L)**H * inv(L).
 *
-      CALL ZLAUUM( UPLO, N, A, LDA, INFO )
+      CALL AB_ZLAUUM( UPLO, N, A, LDA, INFO )
 *
       RETURN
 *
-*     End of ZPOTRI
+*     End of AB_ZPOTRI
 *
       END

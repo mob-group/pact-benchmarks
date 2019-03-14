@@ -1,4 +1,4 @@
-*> \brief \b CGBT02
+*> \brief \b AB_CGBT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
+*       SUBROUTINE AB_CGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
 *                          LDB, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> CGBT02 computes the residual for a solution of a banded system of
+*> AB_CGBT02 computes the residual for a solution of a banded system of
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm( B - A*X ) / ( norm(A) * norm(X) * EPS).
 *> where EPS is the machine precision.
@@ -136,7 +136,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
+      SUBROUTINE AB_CGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B
+     $,
      $                   LDB, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -166,12 +167,12 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SCASUM, SLAMCH
-      EXTERNAL           LSAME, SCASUM, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_SCASUM, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGBMV
+      EXTERNAL           AB_CGBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -187,20 +188,20 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N
          I1 = MAX( KD+1-J, 1 )
          I2 = MIN( KD+M-J, KL+KD )
-         ANORM = MAX( ANORM, SCASUM( I2-I1+1, A( I1, J ), 1 ) )
+         ANORM = MAX( ANORM, AB_SCASUM( I2-I1+1, A( I1, J ), 1 ) )
    10 CONTINUE
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
       END IF
 *
-      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
+      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
          N1 = N
       ELSE
          N1 = M
@@ -209,7 +210,8 @@
 *     Compute  B - A*X (or  B - A'*X )
 *
       DO 20 J = 1, NRHS
-         CALL CGBMV( TRANS, M, N, KL, KU, -CONE, A, LDA, X( 1, J ), 1,
+         CALL AB_CGBMV( TRANS, M, N, KL, KU, -CONE, A, LDA, X( 1, J ), 1
+     $,
      $               CONE, B( 1, J ), 1 )
    20 CONTINUE
 *
@@ -218,8 +220,8 @@
 *
       RESID = ZERO
       DO 30 J = 1, NRHS
-         BNORM = SCASUM( N1, B( 1, J ), 1 )
-         XNORM = SCASUM( N1, X( 1, J ), 1 )
+         BNORM = AB_SCASUM( N1, B( 1, J ), 1 )
+         XNORM = AB_SCASUM( N1, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -229,6 +231,6 @@
 *
       RETURN
 *
-*     End of CGBT02
+*     End of AB_CGBT02
 *
       END

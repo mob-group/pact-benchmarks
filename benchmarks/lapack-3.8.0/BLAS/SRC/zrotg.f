@@ -1,4 +1,4 @@
-*> \brief \b ZROTG
+*> \brief \b AB_AB_ZROTG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZROTG(CA,CB,C,S)
+*       SUBROUTINE AB_AB_ZROTG(CA,CB,C,S)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 CA,CB,S
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*>    ZROTG determines a double complex Givens rotation.
+*>    AB_AB_ZROTG determines a double complex Givens rotation.
 *> \endverbatim
 *
 *  Arguments:
@@ -60,7 +60,7 @@
 *> \ingroup complex16_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE ZROTG(CA,CB,C,S)
+      SUBROUTINE AB_AB_ZROTG(CA,CB,C,S)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

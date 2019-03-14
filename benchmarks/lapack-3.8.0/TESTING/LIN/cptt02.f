@@ -1,4 +1,4 @@
-*> \brief \b CPTT02
+*> \brief \b AB_CPTT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPTT02( UPLO, N, NRHS, D, E, X, LDX, B, LDB, RESID )
+*       SUBROUTINE AB_CPTT02( UPLO, N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> CPTT02 computes the residual for the solution to a symmetric
+*> AB_CPTT02 computes the residual for the solution to a symmetric
 *> tridiagonal system of equations:
 *>    RESID = norm(B - A*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
@@ -113,7 +113,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CPTT02( UPLO, N, NRHS, D, E, X, LDX, B, LDB, RESID )
+      SUBROUTINE AB_CPTT02( UPLO, N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,14 +141,14 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANHT, SCASUM, SLAMCH
-      EXTERNAL           CLANHT, SCASUM, SLAMCH
+      REAL               AB_CLANHT, AB_SCASUM, AB_SLAMCH
+      EXTERNAL           AB_CLANHT, AB_SCASUM, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLAPTM
+      EXTERNAL           AB_CLAPTM
 *     ..
 *     .. Executable Statements ..
 *
@@ -161,11 +161,11 @@
 *
 *     Compute the 1-norm of the tridiagonal matrix A.
 *
-      ANORM = CLANHT( '1', N, D, E )
+      ANORM = AB_CLANHT( '1', N, D, E )
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -173,15 +173,15 @@
 *
 *     Compute B - A*X.
 *
-      CALL CLAPTM( UPLO, N, NRHS, -ONE, D, E, X, LDX, ONE, B, LDB )
+      CALL AB_CLAPTM( UPLO, N, NRHS, -ONE, D, E, X, LDX, ONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
 *        norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = SCASUM( N, B( 1, J ), 1 )
-         XNORM = SCASUM( N, X( 1, J ), 1 )
+         BNORM = AB_SCASUM( N, B( 1, J ), 1 )
+         XNORM = AB_SCASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -191,6 +191,6 @@
 *
       RETURN
 *
-*     End of CPTT02
+*     End of AB_CPTT02
 *
       END

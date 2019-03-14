@@ -1,4 +1,4 @@
-*> \brief \b CGQRTS
+*> \brief \b AB_CGQRTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGQRTS( N, M, P, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
+*       SUBROUTINE AB_CGQRTS( N, M, P, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
 *                          BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> CGQRTS tests CGGQRF, which computes the GQR factorization of an
+*> AB_CGQRTS tests AB_CGGQRF, which computes the GQR factorization of an
 *> N-by-M matrix A and a N-by-P matrix B: A = Q*R and B = Q*T*Z.
 *> \endverbatim
 *
@@ -63,7 +63,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDA,N)
 *>          Details of the GQR factorization of A and B, as returned
-*>          by CGGQRF, see CGGQRF for further details.
+*>          by AB_CGGQRF, see AB_CGGQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -88,7 +88,7 @@
 *> \verbatim
 *>          TAUA is COMPLEX array, dimension (min(M,N))
 *>          The scalar factors of the elementary reflectors, as returned
-*>          by CGGQRF.
+*>          by AB_CGGQRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -101,7 +101,7 @@
 *> \verbatim
 *>          BF is COMPLEX array, dimension (LDB,N)
 *>          Details of the GQR factorization of A and B, as returned
-*>          by CGGQRF, see CGGQRF for further details.
+*>          by AB_CGGQRF, see AB_CGGQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -131,7 +131,7 @@
 *> \verbatim
 *>          TAUB is COMPLEX array, dimension (min(P,N))
 *>          The scalar factors of the elementary reflectors, as returned
-*>          by SGGRQF.
+*>          by AB_SGGRQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -173,7 +173,8 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGQRTS( N, M, P, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
+      SUBROUTINE AB_CGQRTS( N, M, P, A, AF, Q, R, LDA, TAUA, B, BF, Z, T
+     $,
      $                   BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -208,81 +209,87 @@
       REAL               ANORM, BNORM, ULP, UNFL, RESID
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, CLANGE, CLANHE
-      EXTERNAL           SLAMCH, CLANGE, CLANHE
+      REAL               AB_SLAMCH, AB_CLANGE, AB_CLANHE
+      EXTERNAL           AB_SLAMCH, AB_CLANGE, AB_CLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLASET, CUNGQR,
-     $                   CUNGRQ, CHERK
+      EXTERNAL           AB_CGEMM, AB_CLACPY, AB_CLASET, AB_CUNGQR,
+     $                   AB_CUNGRQ, AB_AB_CHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = SLAMCH( 'Precision' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL CLACPY( 'Full', N, M, A, LDA, AF, LDA )
-      CALL CLACPY( 'Full', N, P, B, LDB, BF, LDB )
+      CALL AB_CLACPY( 'Full', N, M, A, LDA, AF, LDA )
+      CALL AB_CLACPY( 'Full', N, P, B, LDB, BF, LDB )
 *
-      ANORM = MAX( CLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( CLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
+      ANORM = MAX( AB_CLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( AB_CLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *
 *     Factorize the matrices A and B in the arrays AF and BF.
 *
-      CALL CGGQRF( N, M, P, AF, LDA, TAUA, BF, LDB, TAUB, WORK,
+      CALL AB_CGGQRF( N, M, P, AF, LDA, TAUA, BF, LDB, TAUB, WORK,
      $             LWORK, INFO )
 *
 *     Generate the N-by-N matrix Q
 *
-      CALL CLASET( 'Full', N, N, CROGUE, CROGUE, Q, LDA )
-      CALL CLACPY( 'Lower', N-1, M, AF( 2,1 ), LDA, Q( 2,1 ), LDA )
-      CALL CUNGQR( N, N, MIN( N, M ), Q, LDA, TAUA, WORK, LWORK, INFO )
+      CALL AB_CLASET( 'Full', N, N, CROGUE, CROGUE, Q, LDA )
+      CALL AB_CLACPY( 'Lower', N-1, M, AF( 2,1 ), LDA, Q( 2,1 ), LDA )
+      CALL AB_CUNGQR( N, N, MIN( N, M ), Q, LDA, TAUA, WORK, LWORK, INFO
+     $ )
 *
 *     Generate the P-by-P matrix Z
 *
-      CALL CLASET( 'Full', P, P, CROGUE, CROGUE, Z, LDB )
+      CALL AB_CLASET( 'Full', P, P, CROGUE, CROGUE, Z, LDB )
       IF( N.LE.P ) THEN
          IF( N.GT.0 .AND. N.LT.P )
-     $      CALL CLACPY( 'Full', N, P-N, BF, LDB, Z( P-N+1, 1 ), LDB )
+     $      CALL AB_CLACPY( 'Full', N, P-N, BF, LDB, Z( P-N+1, 1 ), LDB 
+     $)
          IF( N.GT.1 )
-     $      CALL CLACPY( 'Lower', N-1, N-1, BF( 2, P-N+1 ), LDB,
+     $      CALL AB_CLACPY( 'Lower', N-1, N-1, BF( 2, P-N+1 ), LDB,
      $                    Z( P-N+2, P-N+1 ), LDB )
       ELSE
          IF( P.GT.1)
-     $      CALL CLACPY( 'Lower', P-1, P-1, BF( N-P+2, 1 ), LDB,
+     $      CALL AB_CLACPY( 'Lower', P-1, P-1, BF( N-P+2, 1 ), LDB,
      $                    Z( 2, 1 ), LDB )
       END IF
-      CALL CUNGRQ( P, P, MIN( N, P ), Z, LDB, TAUB, WORK, LWORK, INFO )
+      CALL AB_CUNGRQ( P, P, MIN( N, P ), Z, LDB, TAUB, WORK, LWORK, INFO
+     $ )
 *
 *     Copy R
 *
-      CALL CLASET( 'Full', N, M, CZERO, CZERO, R, LDA )
-      CALL CLACPY( 'Upper', N, M, AF, LDA, R, LDA )
+      CALL AB_CLASET( 'Full', N, M, CZERO, CZERO, R, LDA )
+      CALL AB_CLACPY( 'Upper', N, M, AF, LDA, R, LDA )
 *
 *     Copy T
 *
-      CALL CLASET( 'Full', N, P, CZERO, CZERO, T, LDB )
+      CALL AB_CLASET( 'Full', N, P, CZERO, CZERO, T, LDB )
       IF( N.LE.P ) THEN
-         CALL CLACPY( 'Upper', N, N, BF( 1, P-N+1 ), LDB, T( 1, P-N+1 ),
+         CALL AB_CLACPY( 'Upper', N, N, BF( 1, P-N+1 ), LDB, T( 1, P-N+1
+     $ ),
      $                LDB )
       ELSE
-         CALL CLACPY( 'Full', N-P, P, BF, LDB, T, LDB )
-         CALL CLACPY( 'Upper', P, P, BF( N-P+1, 1 ), LDB, T( N-P+1, 1 ),
+         CALL AB_CLACPY( 'Full', N-P, P, BF, LDB, T, LDB )
+         CALL AB_CLACPY( 'Upper', P, P, BF( N-P+1, 1 ), LDB, T( N-P+1, 1
+     $ ),
      $                LDB )
       END IF
 *
 *     Compute R - Q'*A
 *
-      CALL CGEMM( 'Conjugate transpose', 'No transpose', N, M, N, -CONE,
+      CALL AB_CGEMM( 'Conjugate transpose', 'No transpose', N, M, N, -CO
+     $NE,
      $            Q, LDA, A, LDA, CONE, R, LDA )
 *
 *     Compute norm( R - Q'*A ) / ( MAX(M,N)*norm(A)*ULP ) .
 *
-      RESID = CLANGE( '1', N, M, R, LDA, RWORK )
+      RESID = AB_CLANGE( '1', N, M, R, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / REAL( MAX(1,M,N) ) ) / ANORM ) / ULP
       ELSE
@@ -291,14 +298,16 @@
 *
 *     Compute T*Z - Q'*B
 *
-      CALL CGEMM( 'No Transpose', 'No transpose', N, P, P, CONE, T, LDB,
+      CALL AB_CGEMM( 'No Transpose', 'No transpose', N, P, P, CONE, T, L
+     $DB,
      $            Z, LDB, CZERO, BWK, LDB )
-      CALL CGEMM( 'Conjugate transpose', 'No transpose', N, P, N, -CONE,
+      CALL AB_CGEMM( 'Conjugate transpose', 'No transpose', N, P, N, -CO
+     $NE,
      $            Q, LDA, B, LDB, CONE, BWK, LDB )
 *
 *     Compute norm( T*Z - Q'*B ) / ( MAX(P,N)*norm(A)*ULP ) .
 *
-      RESID = CLANGE( '1', N, P, BWK, LDB, RWORK )
+      RESID = AB_CLANGE( '1', N, P, BWK, LDB, RWORK )
       IF( BNORM.GT.ZERO ) THEN
          RESULT( 2 ) = ( ( RESID / REAL( MAX(1,P,N ) ) )/BNORM ) / ULP
       ELSE
@@ -307,28 +316,30 @@
 *
 *     Compute I - Q'*Q
 *
-      CALL CLASET( 'Full', N, N, CZERO, CONE, R, LDA )
-      CALL CHERK( 'Upper', 'Conjugate transpose', N, N, -ONE, Q, LDA,
+      CALL AB_CLASET( 'Full', N, N, CZERO, CONE, R, LDA )
+      CALL AB_AB_CHERK( 'Upper', 'Conjugate transpose', N, N, -ONE, Q, L
+     $DA,
      $            ONE, R, LDA )
 *
 *     Compute norm( I - Q'*Q ) / ( N * ULP ) .
 *
-      RESID = CLANHE( '1', 'Upper', N, R, LDA, RWORK )
+      RESID = AB_CLANHE( '1', 'Upper', N, R, LDA, RWORK )
       RESULT( 3 ) = ( RESID / REAL( MAX( 1, N ) ) ) / ULP
 *
 *     Compute I - Z'*Z
 *
-      CALL CLASET( 'Full', P, P, CZERO, CONE, T, LDB )
-      CALL CHERK( 'Upper', 'Conjugate transpose', P, P, -ONE, Z, LDB,
+      CALL AB_CLASET( 'Full', P, P, CZERO, CONE, T, LDB )
+      CALL AB_AB_CHERK( 'Upper', 'Conjugate transpose', P, P, -ONE, Z, L
+     $DB,
      $            ONE, T, LDB )
 *
 *     Compute norm( I - Z'*Z ) / ( P*ULP ) .
 *
-      RESID = CLANHE( '1', 'Upper', P, T, LDB, RWORK )
+      RESID = AB_CLANHE( '1', 'Upper', P, T, LDB, RWORK )
       RESULT( 4 ) = ( RESID / REAL( MAX( 1, P ) ) ) / ULP
 *
       RETURN
 *
-*     End of CGQRTS
+*     End of AB_CGQRTS
 *
       END

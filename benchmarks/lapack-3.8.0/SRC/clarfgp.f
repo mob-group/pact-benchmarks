@@ -1,4 +1,4 @@
-*> \brief \b CLARFGP generates an elementary reflector (Householder matrix) with non-negative beta.
+*> \brief \b AB_AB_AB_CLARFGP generates an elementary reflector (HousehoAB_LDEr matrix) with non-negative beta.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLARFGP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfgp.f">
+*> Download AB_AB_AB_CLARFGP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_CLARFGP.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_CLARFGP.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_CLARFGP.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARFGP( N, ALPHA, X, INCX, TAU )
+*       SUBROUTINE AB_AB_AB_CLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CLARFGP generates a complex elementary reflector H of order n, such
+*> AB_AB_AB_CLARFGP generates a complex elementary reflector H of order n, such
 *> that
 *>
 *>       H**H * ( alpha ) = ( beta ),   H**H * H = I.
@@ -102,7 +102,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLARFGP( N, ALPHA, X, INCX, TAU )
+      SUBROUTINE AB_AB_AB_CLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,15 +129,16 @@
       COMPLEX            SAVEALPHA
 *     ..
 *     .. External Functions ..
-      REAL               SCNRM2, SLAMCH, SLAPY3, SLAPY2
-      COMPLEX            CLADIV
-      EXTERNAL           SCNRM2, SLAMCH, SLAPY3, SLAPY2, CLADIV
+      REAL               AB_SCNRM2, AB_SLAMCH, AB_SLAPY3, AB_SLAPY2
+      COMPLEX            AB_CLADIV
+      EXTERNAL           AB_SCNRM2, AB_SLAMCH, AB_SLAPY3, AB_SLAPY2, AB_
+     $CLADIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, REAL, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSCAL, CSSCAL
+      EXTERNAL           AB_CSCAL, AB_CAB_SSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -146,7 +147,7 @@
          RETURN
       END IF
 *
-      XNORM = SCNRM2( N-1, X, INCX )
+      XNORM = AB_SCNRM2( N-1, X, INCX )
       ALPHR = REAL( ALPHA )
       ALPHI = AIMAG( ALPHA )
 *
@@ -171,7 +172,7 @@
             END IF
          ELSE
 *           Only "reflecting" the diagonal entry to be real and non-negative.
-            XNORM = SLAPY2( ALPHR, ALPHI )
+            XNORM = AB_SLAPY2( ALPHR, ALPHI )
             TAU = CMPLX( ONE - ALPHR / XNORM, -ALPHI / XNORM )
             DO J = 1, N-1
                X( 1 + (J-1)*INCX ) = ZERO
@@ -182,8 +183,8 @@
 *
 *        general case
 *
-         BETA = SIGN( SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-         SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'E' )
+         BETA = SIGN( AB_SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+         SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'E' )
          BIGNUM = ONE / SMLNUM
 *
          KNT = 0
@@ -193,7 +194,7 @@
 *
    10       CONTINUE
             KNT = KNT + 1
-            CALL CSSCAL( N-1, BIGNUM, X, INCX )
+            CALL AB_CAB_SSCAL( N-1, BIGNUM, X, INCX )
             BETA = BETA*BIGNUM
             ALPHI = ALPHI*BIGNUM
             ALPHR = ALPHR*BIGNUM
@@ -202,9 +203,9 @@
 *
 *           New BETA is at most 1, at least SMLNUM
 *
-            XNORM = SCNRM2( N-1, X, INCX )
+            XNORM = AB_SCNRM2( N-1, X, INCX )
             ALPHA = CMPLX( ALPHR, ALPHI )
-            BETA = SIGN( SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+            BETA = SIGN( AB_SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
          SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
@@ -217,7 +218,7 @@
             TAU = CMPLX( ALPHR/BETA, -ALPHI/BETA )
             ALPHA = CMPLX( -ALPHR, ALPHI )
          END IF
-         ALPHA = CLADIV( CMPLX( ONE ), ALPHA )
+         ALPHA = AB_CLADIV( CMPLX( ONE ), ALPHA )
 *
          IF ( ABS(TAU).LE.SMLNUM ) THEN
 *
@@ -241,7 +242,7 @@
                   BETA = -SAVEALPHA
                END IF
             ELSE
-               XNORM = SLAPY2( ALPHR, ALPHI )
+               XNORM = AB_SLAPY2( ALPHR, ALPHI )
                TAU = CMPLX( ONE - ALPHR / XNORM, -ALPHI / XNORM )
                DO J = 1, N-1
                   X( 1 + (J-1)*INCX ) = ZERO
@@ -253,7 +254,7 @@
 *
 *           This is the general case.
 *
-            CALL CSCAL( N-1, ALPHA, X, INCX )
+            CALL AB_CSCAL( N-1, ALPHA, X, INCX )
 *
          END IF
 *
@@ -267,6 +268,6 @@
 *
       RETURN
 *
-*     End of CLARFGP
+*     End of AB_AB_AB_CLARFGP
 *
       END

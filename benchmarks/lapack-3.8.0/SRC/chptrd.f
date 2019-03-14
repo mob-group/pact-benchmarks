@@ -1,4 +1,4 @@
-*> \brief \b CHPTRD
+*> \brief \b AB_CHPTRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHPTRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chptrd.f">
+*> Download AB_CHPTRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHPTRD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chptrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHPTRD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chptrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHPTRD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHPTRD( UPLO, N, AP, D, E, TAU, INFO )
+*       SUBROUTINE AB_CHPTRD( UPLO, N, AP, D, E, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CHPTRD reduces a complex Hermitian matrix A stored in packed form to
+*> AB_CHPTRD reduces a complex Hermitian matrix A stored in packed form to
 *> real symmetric tridiagonal form T by a unitary similarity
 *> transformation: Q**H * A * Q = T.
 *> \endverbatim
@@ -149,7 +149,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CHPTRD( UPLO, N, AP, D, E, TAU, INFO )
+      SUBROUTINE AB_CHPTRD( UPLO, N, AP, D, E, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -179,12 +179,13 @@
       COMPLEX            ALPHA, TAUI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CHPMV, CHPR2, CLARFG, XERBLA
+      EXTERNAL           AB_CAXPY, AB_CHPMV, AB_AB_CHPR2, AB_AB_CLARFG, 
+     $AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CDOTC
+      LOGICAL            AB_LSAME
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -194,14 +195,14 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHPTRD', -INFO )
+         CALL AB_XERBLA( 'AB_CHPTRD', -INFO )
          RETURN
       END IF
 *
@@ -223,7 +224,7 @@
 *           to annihilate A(1:i-1,i+1)
 *
             ALPHA = AP( I1+I-1 )
-            CALL CLARFG( I, ALPHA, AP( I1 ), 1, TAUI )
+            CALL AB_AB_CLARFG( I, ALPHA, AP( I1 ), 1, TAUI )
             E( I ) = ALPHA
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -234,18 +235,19 @@
 *
 *              Compute  y := tau * A * v  storing y in TAU(1:i)
 *
-               CALL CHPMV( UPLO, I, TAUI, AP, AP( I1 ), 1, ZERO, TAU,
+               CALL AB_CHPMV( UPLO, I, TAUI, AP, AP( I1 ), 1, ZERO, TAU,
      $                     1 )
 *
 *              Compute  w := y - 1/2 * tau * (y**H *v) * v
 *
-               ALPHA = -HALF*TAUI*CDOTC( I, TAU, 1, AP( I1 ), 1 )
-               CALL CAXPY( I, ALPHA, AP( I1 ), 1, TAU, 1 )
+               ALPHA = -HALF*TAUI*AB_CDOTC( I, TAU, 1, AP( I1 ), 1 )
+               CALL AB_CAXPY( I, ALPHA, AP( I1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL CHPR2( UPLO, I, -ONE, AP( I1 ), 1, TAU, 1, AP )
+               CALL AB_AB_CHPR2( UPLO, I, -ONE, AP( I1 ), 1, TAU, 1, AP 
+     $)
 *
             END IF
             AP( I1+I-1 ) = E( I )
@@ -268,7 +270,7 @@
 *           to annihilate A(i+2:n,i)
 *
             ALPHA = AP( II+1 )
-            CALL CLARFG( N-I, ALPHA, AP( II+2 ), 1, TAUI )
+            CALL AB_AB_CLARFG( N-I, ALPHA, AP( II+2 ), 1, TAUI )
             E( I ) = ALPHA
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -279,19 +281,22 @@
 *
 *              Compute  y := tau * A * v  storing y in TAU(i:n-1)
 *
-               CALL CHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1,
+               CALL AB_CHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1
+     $,
      $                     ZERO, TAU( I ), 1 )
 *
 *              Compute  w := y - 1/2 * tau * (y**H *v) * v
 *
-               ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1, AP( II+1 ),
+               ALPHA = -HALF*TAUI*AB_CDOTC( N-I, TAU( I ), 1, AP( II+1 )
+     $,
      $                 1 )
-               CALL CAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
+               CALL AB_CAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL CHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 1,
+               CALL AB_AB_CHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I 
+     $), 1,
      $                     AP( I1I1 ) )
 *
             END IF
@@ -305,6 +310,6 @@
 *
       RETURN
 *
-*     End of CHPTRD
+*     End of AB_CHPTRD
 *
       END

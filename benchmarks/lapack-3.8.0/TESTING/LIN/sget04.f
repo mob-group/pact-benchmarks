@@ -1,4 +1,4 @@
-*> \brief \b SGET04
+*> \brief \b AB_SGET04
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
+*       SUBROUTINE AB_SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDX, LDXACT, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SGET04 computes the difference between a computed solution and the
+*> AB_SGET04 computes the difference between a computed solution and the
 *> true solution to a system of linear equations.
 *>
 *> RESID =  ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
@@ -100,7 +100,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
+      SUBROUTINE AB_SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID 
+     $)
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,9 +127,9 @@
       REAL               DIFFNM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           ISAMAX, SLAMCH
+      INTEGER            AB_ISAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -144,7 +145,7 @@
 *
 *     Exit with RESID = 1/EPS if RCOND is invalid.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( RCOND.LT.ZERO ) THEN
          RESID = 1.0 / EPS
          RETURN
@@ -156,7 +157,7 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         IX = ISAMAX( N, XACT( 1, J ), 1 )
+         IX = AB_ISAMAX( N, XACT( 1, J ), 1 )
          XNORM = ABS( XACT( IX, J ) )
          DIFFNM = ZERO
          DO 10 I = 1, N
@@ -174,6 +175,6 @@
 *
       RETURN
 *
-*     End of SGET04
+*     End of AB_SGET04
 *
       END

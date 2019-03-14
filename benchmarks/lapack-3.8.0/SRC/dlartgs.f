@@ -1,4 +1,4 @@
-*> \brief \b DLARTGS generates a plane rotation designed to introduce a bulge in implicit QR iteration for the bidiagonal SVD problem.
+*> \brief \b AB_AB_DLARTGS generates a plane rotation designed to introduce a bulge in implicit QR iteration for the bidiagonal SVD problem.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARTGS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartgs.f">
+*> Download AB_AB_DLARTGS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DLARTGS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartgs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DLARTGS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartgs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DLARTGS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARTGS( X, Y, SIGMA, CS, SN )
+*       SUBROUTINE AB_AB_DLARTGS( X, Y, SIGMA, CS, SN )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION        CS, SIGMA, SN, X, Y
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DLARTGS generates a plane rotation designed to introduce a bulge in
+*> AB_AB_DLARTGS generates a plane rotation designed to introduce a bulge in
 *> Golub-Reinsch-style implicit QR iteration for the bidiagonal SVD
 *> problem. X and Y are the top-row entries, and SIGMA is the shift.
 *> The computed CS and SN define a plane rotation satisfying
@@ -88,7 +88,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DLARTGS( X, Y, SIGMA, CS, SN )
+      SUBROUTINE AB_AB_DLARTGS( X, Y, SIGMA, CS, SN )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -109,14 +109,14 @@
       DOUBLE PRECISION        R, S, THRESH, W, Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARTGP
+      EXTERNAL           AB_AB_DLARTGP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION        DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION        AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     .. Executable Statements ..
 *
-      THRESH = DLAMCH('E')
+      THRESH = AB_DLAMCH('E')
 *
 *     Compute the first column of B**T*B - SIGMA^2*I, up to a scale
 *     factor.
@@ -147,15 +147,15 @@
       END IF
 *
 *     Generate the rotation.
-*     CALL DLARTGP( Z, W, CS, SN, R ) might seem more natural;
+*     CALL AB_AB_DLARTGP( Z, W, CS, SN, R ) might seem more natural;
 *     reordering the arguments ensures that if Z = 0 then the rotation
 *     is by PI/2.
 *
-      CALL DLARTGP( W, Z, SN, CS, R )
+      CALL AB_AB_DLARTGP( W, Z, SN, CS, R )
 *
       RETURN
 *
-*     End DLARTGS
+*     End AB_AB_DLARTGS
 *
       END
 

@@ -1,4 +1,4 @@
-*> \brief \b CDRVHP
+*> \brief \b AB_CDRVHP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVHP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE AB_CDRVHP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                          NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> CDRVHP tests the driver routines CHPSV and -SVX.
+*> AB_CDRVHP tests the driver routines AB_CHPSV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -153,7 +153,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVHP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+      SUBROUTINE AB_CDRVHP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX
+     $,
      $                   A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
 *
@@ -200,14 +201,17 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CLANHP, SGET06
-      EXTERNAL           CLANHP, SGET06
+      REAL               AB_CLANHP, AB_SGET06
+      EXTERNAL           AB_CLANHP, AB_SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, CCOPY, CERRVX, CGET04,
-     $                   CHPSV, CHPSVX, CHPT01, CHPTRF, CHPTRI, CLACPY,
-     $                   CLAIPD, CLARHS, CLASET, CLATB4, CLATMS, CPPT02,
-     $                   CPPT05, XLAENV
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_CCOPY, AB_C
+     $ERRVX, AB_CGET04,
+     $                   AB_CHPSV, AB_AB_CHPSVX, AB_CHPT01, AB_CHPTRF, A
+     $B_CHPTRI, AB_CLACPY,
+     $                   AB_CLAIPD, AB_CLARHS, AB_CLASET, AB_CLATB4, AB_
+     $CLATMS, AB_CPPT02,
+     $                   AB_CPPT05, AB_XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -241,15 +245,15 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRVX( PATH, NOUT )
+     $   CALL AB_CERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
 *
       NB = 1
       NBMIN = 2
-      CALL XLAENV( 1, NB )
-      CALL XLAENV( 2, NBMIN )
+      CALL AB_XLAENV( 1, NB )
+      CALL AB_XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -286,21 +290,23 @@
                   PACKIT = 'R'
                END IF
 *
-*              Set up parameters with CLATB4 and generate a test matrix
-*              with CLATMS.
+*              Set up parameters with AB_CLATB4 and generate a test matrix
+*              with AB_CLATMS.
 *
-               CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+               CALL AB_CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
+     $DE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'CLATMS'
-               CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_CLATMS'
+               CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, PACKIT, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from CLATMS.
+*              Check error code from AB_CLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 160
                END IF
@@ -375,9 +381,9 @@
 *              Set the imaginary part of the diagonals.
 *
                IF( IUPLO.EQ.1 ) THEN
-                  CALL CLAIPD( N, A, 2, 1 )
+                  CALL AB_CLAIPD( N, A, 2, 1 )
                ELSE
-                  CALL CLAIPD( N, A, N, -1 )
+                  CALL AB_CLAIPD( N, A, N, -1 )
                END IF
 *
                DO 150 IFACT = 1, NFACT
@@ -387,7 +393,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by CHPSVX.
+*                 the value returned by AB_AB_CHPSVX.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -398,18 +404,18 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = CLANHP( '1', UPLO, N, A, RWORK )
+                     ANORM = AB_CLANHP( '1', UPLO, N, A, RWORK )
 *
 *                    Factor the matrix A.
 *
-                     CALL CCOPY( NPP, A, 1, AFAC, 1 )
-                     CALL CHPTRF( UPLO, N, AFAC, IWORK, INFO )
+                     CALL AB_CCOPY( NPP, A, 1, AFAC, 1 )
+                     CALL AB_CHPTRF( UPLO, N, AFAC, IWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-                     CALL CCOPY( NPP, AFAC, 1, AINV, 1 )
-                     CALL CHPTRI( UPLO, N, AINV, IWORK, WORK, INFO )
-                     AINVNM = CLANHP( '1', UPLO, N, AINV, RWORK )
+                     CALL AB_CCOPY( NPP, AFAC, 1, AINV, 1 )
+                     CALL AB_CHPTRI( UPLO, N, AINV, IWORK, WORK, INFO )
+                     AINVNM = AB_CLANHP( '1', UPLO, N, AINV, RWORK )
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -422,22 +428,22 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'CLARHS'
-                  CALL CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'AB_CLARHS'
+                  CALL AB_CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test CHPSV  ---
+*                 --- Test AB_CHPSV  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL CCOPY( NPP, A, 1, AFAC, 1 )
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_CCOPY( NPP, A, 1, AFAC, 1 )
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using CHPSV.
+*                    Factor the matrix and solve the system using AB_CHPSV.
 *
-                     SRNAMT = 'CHPSV '
-                     CALL CHPSV( UPLO, N, NRHS, AFAC, IWORK, X, LDA,
+                     SRNAMT = 'AB_CHPSV '
+                     CALL AB_CHPSV( UPLO, N, NRHS, AFAC, IWORK, X, LDA,
      $                           INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -457,10 +463,11 @@
                         END IF
                      END IF
 *
-*                    Check error code from CHPSV .
+*                    Check error code from AB_CHPSV .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'CHPSV ', INFO, K, UPLO, N,
+                        CALL AB_ALAERH( PATH, 'AB_CHPSV ', INFO, K, UPLO
+     $, N,
      $                               N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 120
@@ -471,18 +478,20 @@
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL CHPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA,
+                     CALL AB_CHPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA,
      $                            RWORK, RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL CPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA,
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_CPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA
+     $,
      $                            RWORK, RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -492,8 +501,9 @@
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'CHPSV ', UPLO, N,
+     $                        CALL AB_ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'AB_CHPSV ', UPLO, N
+     $,
      $                        IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -502,19 +512,20 @@
   120                CONTINUE
                   END IF
 *
-*                 --- Test CHPSVX ---
+*                 --- Test AB_AB_CHPSVX ---
 *
                   IF( IFACT.EQ.2 .AND. NPP.GT.0 )
-     $               CALL CLASET( 'Full', NPP, 1, CMPLX( ZERO ),
+     $               CALL AB_CLASET( 'Full', NPP, 1, CMPLX( ZERO ),
      $                            CMPLX( ZERO ), AFAC, NPP )
-                  CALL CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
+                  CALL AB_CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
      $                         CMPLX( ZERO ), X, LDA )
 *
 *                 Solve the system and compute the condition number and
-*                 error bounds using CHPSVX.
+*                 error bounds using AB_AB_CHPSVX.
 *
-                  SRNAMT = 'CHPSVX'
-                  CALL CHPSVX( FACT, UPLO, N, NRHS, A, AFAC, IWORK, B,
+                  SRNAMT = 'AB_AB_CHPSVX'
+                  CALL AB_AB_CHPSVX( FACT, UPLO, N, NRHS, A, AFAC, IWORK
+     $, B,
      $                         LDA, X, LDA, RCOND, RWORK,
      $                         RWORK( NRHS+1 ), WORK, RWORK( 2*NRHS+1 ),
      $                         INFO )
@@ -536,10 +547,11 @@
                      END IF
                   END IF
 *
-*                 Check the error code from CHPSVX.
+*                 Check the error code from AB_AB_CHPSVX.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'CHPSVX', INFO, K, FACT // UPLO,
+                     CALL AB_ALAERH( PATH, 'AB_AB_CHPSVX', INFO, K, FACT
+     $ // UPLO,
      $                            N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                            NERRS, NOUT )
                      GO TO 150
@@ -551,7 +563,8 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL CHPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA,
+                        CALL AB_CHPT01( UPLO, N, A, AFAC, IWORK, AINV, L
+     $DA,
      $                               RWORK( 2*NRHS+1 ), RESULT( 1 ) )
                         K1 = 1
                      ELSE
@@ -560,28 +573,30 @@
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL CPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA,
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_CPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA
+     $,
      $                            RWORK( 2*NRHS+1 ), RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
 *
 *                    Check the error bounds from iterative refinement.
 *
-                     CALL CPPT05( UPLO, N, NRHS, A, B, LDA, X, LDA,
+                     CALL AB_CPPT05( UPLO, N, NRHS, A, B, LDA, X, LDA,
      $                            XACT, LDA, RWORK, RWORK( NRHS+1 ),
      $                            RESULT( 4 ) )
                   ELSE
                      K1 = 6
                   END IF
 *
-*                 Compare RCOND from CHPSVX with the computed value
+*                 Compare RCOND from AB_AB_CHPSVX with the computed value
 *                 in RCONDC.
 *
-                  RESULT( 6 ) = SGET06( RCOND, RCONDC )
+                  RESULT( 6 ) = AB_SGET06( RCOND, RCONDC )
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
@@ -589,8 +604,9 @@
                   DO 140 K = K1, 6
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALADHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9998 )'CHPSVX', FACT, UPLO,
+     $                     CALL AB_ALADHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9998 )'AB_AB_CHPSVX', FACT, U
+     $PLO,
      $                     N, IMAT, K, RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -605,7 +621,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
@@ -613,6 +629,6 @@
      $      ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of CDRVHP
+*     End of AB_CDRVHP
 *
       END

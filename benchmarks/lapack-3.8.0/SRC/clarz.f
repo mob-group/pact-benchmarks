@@ -1,4 +1,4 @@
-*> \brief \b CLARZ applies an elementary reflector (as returned by stzrzf) to a general matrix.
+*> \brief \b AB_CLARZ applies an elementary reflector (as returned by AB_STZRZF) to a general matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLARZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarz.f">
+*> Download AB_CLARZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE AB_CLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CLARZ applies a complex elementary reflector H to a complex
+*> AB_CLARZ applies a complex elementary reflector H to a complex
 *> M-by-N matrix C, from either the left or the right. H is represented
 *> in the form
 *>
@@ -48,7 +48,7 @@
 *> To apply H**H (the conjugate transpose of H), supply conjg(tau) instead
 *> tau.
 *>
-*> H is a product of k elementary reflectors as returned by CTZRZF.
+*> H is a product of k elementary reflectors as returned by AB_CTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -77,7 +77,7 @@
 *> \verbatim
 *>          L is INTEGER
 *>          The number of entries of the vector V containing
-*>          the meaningful part of the Householder vectors.
+*>          the meaningful part of the HousehoAB_LDEr vectors.
 *>          If SIDE = 'L', M >= L >= 0, if SIDE = 'R', N >= L >= 0.
 *> \endverbatim
 *>
@@ -85,7 +85,7 @@
 *> \verbatim
 *>          V is COMPLEX array, dimension (1+(L-1)*abs(INCV))
 *>          The vector v in the representation of H as returned by
-*>          CTZRZF. V is not used if TAU = 0.
+*>          AB_CTZRZF. V is not used if TAU = 0.
 *> \endverbatim
 *>
 *> \param[in] INCV
@@ -145,7 +145,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE AB_CLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -169,15 +169,16 @@
      $                   ZERO = ( 0.0E+0, 0.0E+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGEMV, CGERC, CGERU, CLACGV
+      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CGEMV, AB_CGERC, AB_CGER
+     $U, AB_CLACGV
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
-      IF( LSAME( SIDE, 'L' ) ) THEN
+      IF( AB_LSAME( SIDE, 'L' ) ) THEN
 *
 *        Form  H * C
 *
@@ -185,23 +186,24 @@
 *
 *           w( 1:n ) = conjg( C( 1, 1:n ) )
 *
-            CALL CCOPY( N, C, LDC, WORK, 1 )
-            CALL CLACGV( N, WORK, 1 )
+            CALL AB_CCOPY( N, C, LDC, WORK, 1 )
+            CALL AB_CLACGV( N, WORK, 1 )
 *
 *           w( 1:n ) = conjg( w( 1:n ) + C( m-l+1:m, 1:n )**H * v( 1:l ) )
 *
-            CALL CGEMV( 'Conjugate transpose', L, N, ONE, C( M-L+1, 1 ),
+            CALL AB_CGEMV( 'Conjugate transpose', L, N, ONE, C( M-L+1, 1
+     $ ),
      $                  LDC, V, INCV, ONE, WORK, 1 )
-            CALL CLACGV( N, WORK, 1 )
+            CALL AB_CLACGV( N, WORK, 1 )
 *
 *           C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n )
 *
-            CALL CAXPY( N, -TAU, WORK, 1, C, LDC )
+            CALL AB_CAXPY( N, -TAU, WORK, 1, C, LDC )
 *
 *           C( m-l+1:m, 1:n ) = C( m-l+1:m, 1:n ) - ...
 *                               tau * v( 1:l ) * w( 1:n )**H
 *
-            CALL CGERU( L, N, -TAU, V, INCV, WORK, 1, C( M-L+1, 1 ),
+            CALL AB_CGERU( L, N, -TAU, V, INCV, WORK, 1, C( M-L+1, 1 ),
      $                  LDC )
          END IF
 *
@@ -213,21 +215,22 @@
 *
 *           w( 1:m ) = C( 1:m, 1 )
 *
-            CALL CCOPY( M, C, 1, WORK, 1 )
+            CALL AB_CCOPY( M, C, 1, WORK, 1 )
 *
 *           w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l )
 *
-            CALL CGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ), LDC,
+            CALL AB_CGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ), LDC
+     $,
      $                  V, INCV, ONE, WORK, 1 )
 *
 *           C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m )
 *
-            CALL CAXPY( M, -TAU, WORK, 1, C, 1 )
+            CALL AB_CAXPY( M, -TAU, WORK, 1, C, 1 )
 *
 *           C( 1:m, n-l+1:n ) = C( 1:m, n-l+1:n ) - ...
 *                               tau * w( 1:m ) * v( 1:l )**H
 *
-            CALL CGERC( M, L, -TAU, WORK, 1, V, INCV, C( 1, N-L+1 ),
+            CALL AB_CGERC( M, L, -TAU, WORK, 1, V, INCV, C( 1, N-L+1 ),
      $                  LDC )
 *
          END IF
@@ -236,6 +239,6 @@
 *
       RETURN
 *
-*     End of CLARZ
+*     End of AB_CLARZ
 *
       END

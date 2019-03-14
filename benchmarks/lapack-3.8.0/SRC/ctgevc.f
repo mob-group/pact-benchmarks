@@ -1,4 +1,4 @@
-*> \brief \b CTGEVC
+*> \brief \b AB_CTGEVC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTGEVC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgevc.f">
+*> Download AB_CTGEVC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTGEVC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgevc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTGEVC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgevc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTGEVC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+*       SUBROUTINE AB_CTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
 *                          LDVL, VR, LDVR, MM, M, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -39,14 +39,14 @@
 *>
 *> \verbatim
 *>
-*> CTGEVC computes some or all of the right and/or left eigenvectors of
+*> AB_CTGEVC computes some or all of the right and/or left eigenvectors of
 *> a pair of complex matrices (S,P), where S and P are upper triangular.
 *> Matrix pairs of this type are produced by the generalized Schur
 *> factorization of a complex matrix pair (A,B):
 *>
 *>    A = Q*S*Z**H,  B = Q*P*Z**H
 *>
-*> as computed by CGGHRD + CHGEQZ.
+*> as computed by AB_CGGHRD + AB_CHGEQZ.
 *>
 *> The right eigenvector x and the left eigenvector y of (S,P)
 *> corresponding to an eigenvalue w are defined by:
@@ -105,7 +105,7 @@
 *> \verbatim
 *>          S is COMPLEX array, dimension (LDS,N)
 *>          The upper triangular matrix S from a generalized Schur
-*>          factorization, as computed by CHGEQZ.
+*>          factorization, as computed by AB_CHGEQZ.
 *> \endverbatim
 *>
 *> \param[in] LDS
@@ -118,7 +118,7 @@
 *> \verbatim
 *>          P is COMPLEX array, dimension (LDP,N)
 *>          The upper triangular matrix P from a generalized Schur
-*>          factorization, as computed by CHGEQZ.  P must have real
+*>          factorization, as computed by AB_CHGEQZ.  P must have real
 *>          diagonal elements.
 *> \endverbatim
 *>
@@ -133,7 +133,7 @@
 *>          VL is COMPLEX array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Q
-*>          of left Schur vectors returned by CHGEQZ).
+*>          of left Schur vectors returned by AB_CHGEQZ).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -155,7 +155,7 @@
 *>          VR is COMPLEX array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Z
-*>          of right Schur vectors returned by CHGEQZ).
+*>          of right Schur vectors returned by AB_CHGEQZ).
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
 *>          if HOWMNY = 'B', the matrix Z*X;
@@ -216,7 +216,7 @@
 *> \ingroup complexGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+      SUBROUTINE AB_CTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -256,13 +256,13 @@
       COMPLEX            BCOEFF, CA, CB, D, SALPHA, SUM, SUMA, SUMB, X
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH
-      COMPLEX            CLADIV
-      EXTERNAL           LSAME, SLAMCH, CLADIV
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH
+      COMPLEX            AB_CLADIV
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_CLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, SLABAD, XERBLA
+      EXTERNAL           AB_CGEMV, AB_SLABAD, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, MIN, REAL
@@ -277,15 +277,15 @@
 *
 *     Decode and Test the input parameters
 *
-      IF( LSAME( HOWMNY, 'A' ) ) THEN
+      IF( AB_LSAME( HOWMNY, 'A' ) ) THEN
          IHWMNY = 1
          ILALL = .TRUE.
          ILBACK = .FALSE.
-      ELSE IF( LSAME( HOWMNY, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( HOWMNY, 'S' ) ) THEN
          IHWMNY = 2
          ILALL = .FALSE.
          ILBACK = .FALSE.
-      ELSE IF( LSAME( HOWMNY, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( HOWMNY, 'B' ) ) THEN
          IHWMNY = 3
          ILALL = .TRUE.
          ILBACK = .TRUE.
@@ -293,15 +293,15 @@
          IHWMNY = -1
       END IF
 *
-      IF( LSAME( SIDE, 'R' ) ) THEN
+      IF( AB_LSAME( SIDE, 'R' ) ) THEN
          ISIDE = 1
          COMPL = .FALSE.
          COMPR = .TRUE.
-      ELSE IF( LSAME( SIDE, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'L' ) ) THEN
          ISIDE = 2
          COMPL = .TRUE.
          COMPR = .FALSE.
-      ELSE IF( LSAME( SIDE, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'B' ) ) THEN
          ISIDE = 3
          COMPL = .TRUE.
          COMPR = .TRUE.
@@ -322,7 +322,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTGEVC', -INFO )
+         CALL AB_XERBLA( 'AB_CTGEVC', -INFO )
          RETURN
       END IF
 *
@@ -356,7 +356,7 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTGEVC', -INFO )
+         CALL AB_XERBLA( 'AB_CTGEVC', -INFO )
          RETURN
       END IF
 *
@@ -368,10 +368,10 @@
 *
 *     Machine Constants
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, BIG )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      CALL AB_SLABAD( SAFMIN, BIG )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SMALL = SAFMIN*N / ULP
       BIG = ONE / SMALL
       BIGNUM = ONE / ( SAFMIN*N )
@@ -524,14 +524,15 @@
                         SUM = TEMP*SUM
                      END IF
                   END IF
-                  WORK( J ) = CLADIV( -SUM, D )
+                  WORK( J ) = AB_CLADIV( -SUM, D )
                   XMAX = MAX( XMAX, ABS1( WORK( J ) ) )
   100          CONTINUE
 *
 *              Back transform eigenvector if HOWMNY='B'.
 *
                IF( ILBACK ) THEN
-                  CALL CGEMV( 'N', N, N+1-JE, CONE, VL( 1, JE ), LDVL,
+                  CALL AB_CGEMV( 'N', N, N+1-JE, CONE, VL( 1, JE ), LDVL
+     $,
      $                        WORK( JE ), 1, CZERO, WORK( N+1 ), 1 )
                   ISRC = 2
                   IBEG = 1
@@ -669,7 +670,7 @@
                      END IF
                   END IF
 *
-                  WORK( J ) = CLADIV( -WORK( J ), D )
+                  WORK( J ) = AB_CLADIV( -WORK( J ), D )
 *
                   IF( J.GT.1 ) THEN
 *
@@ -697,7 +698,7 @@
 *              Back transform eigenvector if HOWMNY='B'.
 *
                IF( ILBACK ) THEN
-                  CALL CGEMV( 'N', N, JE, CONE, VR, LDVR, WORK, 1,
+                  CALL AB_CGEMV( 'N', N, JE, CONE, VR, LDVR, WORK, 1,
      $                        CZERO, WORK( N+1 ), 1 )
                   ISRC = 2
                   IEND = N
@@ -732,6 +733,6 @@
 *
       RETURN
 *
-*     End of CTGEVC
+*     End of AB_CTGEVC
 *
       END

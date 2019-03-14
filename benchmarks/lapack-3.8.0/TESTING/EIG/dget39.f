@@ -1,4 +1,4 @@
-*> \brief \b DGET39
+*> \brief \b AB_DGET39
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET39( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE AB_DGET39( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DGET39 tests DLAQTR, a routine for solving the real or
+*> AB_DGET39 tests AB_DLAQTR, a routine for solving the real or
 *> special complex quasi upper triangular system
 *>
 *>      op(T)*p = scale*c,
@@ -47,7 +47,7 @@
 *> Scale is an output less than or equal to 1, chosen to avoid
 *> overflow in X.
 *> This subroutine is specially designed for the condition number
-*> estimation in the eigenproblem routine DTRSNA.
+*> estimation in the eigenproblem routine AB_DTRSNA.
 *>
 *> The test code verifies that the following residual is order 1:
 *>
@@ -101,7 +101,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET39( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE AB_DGET39( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,12 +128,13 @@
      $                   SCALE, SMLNUM, W, XNORM
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DDOT, DLAMCH, DLANGE
-      EXTERNAL           IDAMAX, DASUM, DDOT, DLAMCH, DLANGE
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DASUM, AB_DDOT, AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_IDAMAX, AB_DASUM, AB_DDOT, AB_DLAMCH, AB_DLA
+     $NGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMV, DLABAD, DLAQTR
+      EXTERNAL           AB_DCOPY, AB_DGEMV, AB_DLABAD, AB_DLAQTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, COS, DBLE, MAX, SIN, SQRT
@@ -159,10 +160,10 @@
 *
 *     Get machine parameters
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -230,13 +231,14 @@
                            D( I ) = SIN( DBLE( I ) )*VM4( IVM4 )
    40                   CONTINUE
 *
-                        NORM = DLANGE( '1', N, N, T, LDT, WORK )
-                        K = IDAMAX( N, B, 1 )
+                        NORM = AB_DLANGE( '1', N, N, T, LDT, WORK )
+                        K = AB_IDAMAX( N, B, 1 )
                         NORMTB = NORM + ABS( B( K ) ) + ABS( W )
 *
-                        CALL DCOPY( N, D, 1, X, 1 )
+                        CALL AB_DCOPY( N, D, 1, X, 1 )
                         KNT = KNT + 1
-                        CALL DLAQTR( .FALSE., .TRUE., N, T, LDT, DUM,
+                        CALL AB_DLAQTR( .FALSE., .TRUE., N, T, LDT, D
+     $UM,
      $                               DUMM, SCALE, X, WORK, INFO )
                         IF( INFO.NE.0 )
      $                     NINFO = NINFO + 1
@@ -244,11 +246,12 @@
 *                       || T*x - scale*d || /
 *                         max(ulp*||T||*||x||,smlnum/ulp*||T||,smlnum)
 *
-                        CALL DCOPY( N, D, 1, Y, 1 )
-                        CALL DGEMV( 'No transpose', N, N, ONE, T, LDT,
+                        CALL AB_DCOPY( N, D, 1, Y, 1 )
+                        CALL AB_DGEMV( 'No transpose', N, N, ONE, T, LDT
+     $,
      $                              X, 1, -SCALE, Y, 1 )
-                        XNORM = DASUM( N, X, 1 )
-                        RESID = DASUM( N, Y, 1 )
+                        XNORM = AB_DASUM( N, X, 1 )
+                        RESID = AB_DASUM( N, Y, 1 )
                         DOMIN = MAX( SMLNUM, ( SMLNUM / EPS )*NORM,
      $                          ( NORM*EPS )*XNORM )
                         RESID = RESID / DOMIN
@@ -257,9 +260,9 @@
                            LMAX = KNT
                         END IF
 *
-                        CALL DCOPY( N, D, 1, X, 1 )
+                        CALL AB_DCOPY( N, D, 1, X, 1 )
                         KNT = KNT + 1
-                        CALL DLAQTR( .TRUE., .TRUE., N, T, LDT, DUM,
+                        CALL AB_DLAQTR( .TRUE., .TRUE., N, T, LDT, DUM,
      $                               DUMM, SCALE, X, WORK, INFO )
                         IF( INFO.NE.0 )
      $                     NINFO = NINFO + 1
@@ -267,11 +270,12 @@
 *                       || T*x - scale*d || /
 *                         max(ulp*||T||*||x||,smlnum/ulp*||T||,smlnum)
 *
-                        CALL DCOPY( N, D, 1, Y, 1 )
-                        CALL DGEMV( 'Transpose', N, N, ONE, T, LDT, X,
+                        CALL AB_DCOPY( N, D, 1, Y, 1 )
+                        CALL AB_DGEMV( 'Transpose', N, N, ONE, T, LDT, X
+     $,
      $                              1, -SCALE, Y, 1 )
-                        XNORM = DASUM( N, X, 1 )
-                        RESID = DASUM( N, Y, 1 )
+                        XNORM = AB_DASUM( N, X, 1 )
+                        RESID = AB_DASUM( N, Y, 1 )
                         DOMIN = MAX( SMLNUM, ( SMLNUM / EPS )*NORM,
      $                          ( NORM*EPS )*XNORM )
                         RESID = RESID / DOMIN
@@ -280,9 +284,10 @@
                            LMAX = KNT
                         END IF
 *
-                        CALL DCOPY( 2*N, D, 1, X, 1 )
+                        CALL AB_DCOPY( 2*N, D, 1, X, 1 )
                         KNT = KNT + 1
-                        CALL DLAQTR( .FALSE., .FALSE., N, T, LDT, B, W,
+                        CALL AB_DLAQTR( .FALSE., .FALSE., N, T, LD
+     $T, B, W,
      $                               SCALE, X, WORK, INFO )
                         IF( INFO.NE.0 )
      $                     NINFO = NINFO + 1
@@ -292,35 +297,38 @@
 *                                  smlnum/ulp * (||T||+||B||), smlnum )
 *
 *
-                        CALL DCOPY( 2*N, D, 1, Y, 1 )
-                        Y( 1 ) = DDOT( N, B, 1, X( 1+N ), 1 ) +
+                        CALL AB_DCOPY( 2*N, D, 1, Y, 1 )
+                        Y( 1 ) = AB_DDOT( N, B, 1, X( 1+N ), 1 ) +
      $                           SCALE*Y( 1 )
                         DO 50 I = 2, N
                            Y( I ) = W*X( I+N ) + SCALE*Y( I )
    50                   CONTINUE
-                        CALL DGEMV( 'No transpose', N, N, ONE, T, LDT,
+                        CALL AB_DGEMV( 'No transpose', N, N, ONE, T, LDT
+     $,
      $                              X, 1, -ONE, Y, 1 )
 *
-                        Y( 1+N ) = DDOT( N, B, 1, X, 1 ) -
+                        Y( 1+N ) = AB_DDOT( N, B, 1, X, 1 ) -
      $                             SCALE*Y( 1+N )
                         DO 60 I = 2, N
                            Y( I+N ) = W*X( I ) - SCALE*Y( I+N )
    60                   CONTINUE
-                        CALL DGEMV( 'No transpose', N, N, ONE, T, LDT,
+                        CALL AB_DGEMV( 'No transpose', N, N, ONE, T, LDT
+     $,
      $                              X( 1+N ), 1, ONE, Y( 1+N ), 1 )
 *
-                        RESID = DASUM( 2*N, Y, 1 )
+                        RESID = AB_DASUM( 2*N, Y, 1 )
                         DOMIN = MAX( SMLNUM, ( SMLNUM / EPS )*NORMTB,
-     $                          EPS*( NORMTB*DASUM( 2*N, X, 1 ) ) )
+     $                          EPS*( NORMTB*AB_DASUM( 2*N, X, 1 ) ) )
                         RESID = RESID / DOMIN
                         IF( RESID.GT.RMAX ) THEN
                            RMAX = RESID
                            LMAX = KNT
                         END IF
 *
-                        CALL DCOPY( 2*N, D, 1, X, 1 )
+                        CALL AB_DCOPY( 2*N, D, 1, X, 1 )
                         KNT = KNT + 1
-                        CALL DLAQTR( .TRUE., .FALSE., N, T, LDT, B, W,
+                        CALL AB_DLAQTR( .TRUE., .FALSE., N, T, LDT, B
+     $, W,
      $                               SCALE, X, WORK, INFO )
                         IF( INFO.NE.0 )
      $                     NINFO = NINFO + 1
@@ -329,13 +337,14 @@
 *                          max(ulp*(||T||+||B||)*(||x1||+||x2||),
 *                                  smlnum/ulp * (||T||+||B||), smlnum )
 *
-                        CALL DCOPY( 2*N, D, 1, Y, 1 )
+                        CALL AB_DCOPY( 2*N, D, 1, Y, 1 )
                         Y( 1 ) = B( 1 )*X( 1+N ) - SCALE*Y( 1 )
                         DO 70 I = 2, N
                            Y( I ) = B( I )*X( 1+N ) + W*X( I+N ) -
      $                              SCALE*Y( I )
    70                   CONTINUE
-                        CALL DGEMV( 'Transpose', N, N, ONE, T, LDT, X,
+                        CALL AB_DGEMV( 'Transpose', N, N, ONE, T, LDT, X
+     $,
      $                              1, ONE, Y, 1 )
 *
                         Y( 1+N ) = B( 1 )*X( 1 ) + SCALE*Y( 1+N )
@@ -343,12 +352,12 @@
                            Y( I+N ) = B( I )*X( 1 ) + W*X( I ) +
      $                                SCALE*Y( I+N )
    80                   CONTINUE
-                        CALL DGEMV( 'Transpose', N, N, ONE, T, LDT,
+                        CALL AB_DGEMV( 'Transpose', N, N, ONE, T, LDT,
      $                              X( 1+N ), 1, -ONE, Y( 1+N ), 1 )
 *
-                        RESID = DASUM( 2*N, Y, 1 )
+                        RESID = AB_DASUM( 2*N, Y, 1 )
                         DOMIN = MAX( SMLNUM, ( SMLNUM / EPS )*NORMTB,
-     $                          EPS*( NORMTB*DASUM( 2*N, X, 1 ) ) )
+     $                          EPS*( NORMTB*AB_DASUM( 2*N, X, 1 ) ) )
                         RESID = RESID / DOMIN
                         IF( RESID.GT.RMAX ) THEN
                            RMAX = RESID
@@ -364,6 +373,6 @@
 *
       RETURN
 *
-*     End of DGET39
+*     End of AB_DGET39
 *
       END

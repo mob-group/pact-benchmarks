@@ -1,4 +1,4 @@
-*> \brief \b CSGT01
+*> \brief \b AB_CSGT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
+*       SUBROUTINE AB_CSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
 *                          WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CSGT01 checks a decomposition of the form
+*> AB_CSGT01 checks a decomposition of the form
 *>
 *>    A Z   =  B Z D or
 *>    A B Z =  Z D or
@@ -149,7 +149,8 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
+      SUBROUTINE AB_CSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D
+     $,
      $                   WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -181,11 +182,11 @@
       REAL               ANORM, ULP
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, CLANHE, SLAMCH
-      EXTERNAL           CLANGE, CLANHE, SLAMCH
+      REAL               AB_CLANGE, AB_CLANHE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHEMM, CSSCAL
+      EXTERNAL           AB_CHEMM, AB_CAB_SSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -193,12 +194,12 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      ULP = SLAMCH( 'Epsilon' )
+      ULP = AB_SLAMCH( 'Epsilon' )
 *
 *     Compute product of 1-norms of A and Z.
 *
-      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )*
-     $        CLANGE( '1', N, M, Z, LDZ, RWORK )
+      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )*
+     $        AB_CLANGE( '1', N, M, Z, LDZ, RWORK )
       IF( ANORM.EQ.ZERO )
      $   ANORM = ONE
 *
@@ -206,50 +207,55 @@
 *
 *        Norm of AZ - BZD
 *
-         CALL CHEMM( 'Left', UPLO, N, M, CONE, A, LDA, Z, LDZ, CZERO,
+         CALL AB_CHEMM( 'Left', UPLO, N, M, CONE, A, LDA, Z, LDZ, CZERO,
      $               WORK, N )
          DO 10 I = 1, M
-            CALL CSSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL AB_CAB_SSCAL( N, D( I ), Z( 1, I ), 1 )
    10    CONTINUE
-         CALL CHEMM( 'Left', UPLO, N, M, CONE, B, LDB, Z, LDZ, -CONE,
+         CALL AB_CHEMM( 'Left', UPLO, N, M, CONE, B, LDB, Z, LDZ, -CONE,
      $               WORK, N )
 *
-         RESULT( 1 ) = ( CLANGE( '1', N, M, WORK, N, RWORK ) / ANORM ) /
+         RESULT( 1 ) = ( AB_CLANGE( '1', N, M, WORK, N, RWORK ) / ANORM 
+     $) /
      $                 ( N*ULP )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        Norm of ABZ - ZD
 *
-         CALL CHEMM( 'Left', UPLO, N, M, CONE, B, LDB, Z, LDZ, CZERO,
+         CALL AB_CHEMM( 'Left', UPLO, N, M, CONE, B, LDB, Z, LDZ, CZERO,
      $               WORK, N )
          DO 20 I = 1, M
-            CALL CSSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL AB_CAB_SSCAL( N, D( I ), Z( 1, I ), 1 )
    20    CONTINUE
-         CALL CHEMM( 'Left', UPLO, N, M, CONE, A, LDA, WORK, N, -CONE,
+         CALL AB_CHEMM( 'Left', UPLO, N, M, CONE, A, LDA, WORK, N, -CONE
+     $,
      $               Z, LDZ )
 *
-         RESULT( 1 ) = ( CLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM ) /
+         RESULT( 1 ) = ( AB_CLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM )
+     $ /
      $                 ( N*ULP )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
 *        Norm of BAZ - ZD
 *
-         CALL CHEMM( 'Left', UPLO, N, M, CONE, A, LDA, Z, LDZ, CZERO,
+         CALL AB_CHEMM( 'Left', UPLO, N, M, CONE, A, LDA, Z, LDZ, CZERO,
      $               WORK, N )
          DO 30 I = 1, M
-            CALL CSSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL AB_CAB_SSCAL( N, D( I ), Z( 1, I ), 1 )
    30    CONTINUE
-         CALL CHEMM( 'Left', UPLO, N, M, CONE, B, LDB, WORK, N, -CONE,
+         CALL AB_CHEMM( 'Left', UPLO, N, M, CONE, B, LDB, WORK, N, -CONE
+     $,
      $               Z, LDZ )
 *
-         RESULT( 1 ) = ( CLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM ) /
+         RESULT( 1 ) = ( AB_CLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM )
+     $ /
      $                 ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of CSGT01
+*     End of AB_CSGT01
 *
       END

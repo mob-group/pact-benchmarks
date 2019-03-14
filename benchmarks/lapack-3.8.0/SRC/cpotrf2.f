@@ -1,4 +1,4 @@
-*> \brief \b CPOTRF2
+*> \brief \b AB_CPOTRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE CPOTRF2( UPLO, N, A, LDA, INFO )
+*       RECURSIVE SUBROUTINE AB_CPOTRF2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CPOTRF2 computes the Cholesky factorization of a real symmetric
+*> AB_CPOTRF2 computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A using the recursive algorithm.
 *>
 *> The factorization has the form
@@ -104,7 +104,7 @@
 *> \ingroup complexPOcomputational
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE CPOTRF2( UPLO, N, A, LDA, INFO )
+      RECURSIVE SUBROUTINE AB_CPOTRF2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,11 +133,11 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      EXTERNAL           LSAME, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      EXTERNAL           AB_LSAME, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHERK, CTRSM, XERBLA
+      EXTERNAL           AB_AB_CHERK, AB_CTRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL, SQRT
@@ -147,8 +147,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -156,7 +156,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPOTRF2', -INFO )
+         CALL AB_XERBLA( 'AB_CPOTRF2', -INFO )
          RETURN
       END IF
 *
@@ -172,7 +172,7 @@
 *        Test for non-positive-definiteness
 *
          AJJ = REAL( A( 1, 1 ) )
-         IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
+         IF( AJJ.LE.ZERO.OR.AB_SISNAN( AJJ ) ) THEN
             INFO = 1
             RETURN
          END IF
@@ -189,7 +189,7 @@
 *
 *        Factor A11
 *
-         CALL CPOTRF2( UPLO, N1, A( 1, 1 ), LDA, IINFO )
+         CALL AB_CPOTRF2( UPLO, N1, A( 1, 1 ), LDA, IINFO )
          IF ( IINFO.NE.0 ) THEN
             INFO = IINFO
             RETURN
@@ -201,15 +201,16 @@
 *
 *           Update and scale A12
 *
-            CALL CTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE,
+            CALL AB_CTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE,
      $                  A( 1, 1 ), LDA, A( 1, N1+1 ), LDA )
 *
 *           Update and factor A22
 *
-            CALL CHERK( UPLO, 'C', N2, N1, -ONE, A( 1, N1+1 ), LDA,
+            CALL AB_AB_CHERK( UPLO, 'C', N2, N1, -ONE, A( 1, N1+1 ), LDA
+     $,
      $                  ONE, A( N1+1, N1+1 ), LDA )
 *
-            CALL CPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
+            CALL AB_CPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
 *
             IF ( IINFO.NE.0 ) THEN
                INFO = IINFO + N1
@@ -222,15 +223,16 @@
 *
 *           Update and scale A21
 *
-            CALL CTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE,
+            CALL AB_CTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE,
      $                  A( 1, 1 ), LDA, A( N1+1, 1 ), LDA )
 *
 *           Update and factor A22
 *
-            CALL CHERK( UPLO, 'N', N2, N1, -ONE, A( N1+1, 1 ), LDA,
+            CALL AB_AB_CHERK( UPLO, 'N', N2, N1, -ONE, A( N1+1, 1 ), LDA
+     $,
      $                  ONE, A( N1+1, N1+1 ), LDA )
 *
-            CALL CPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
+            CALL AB_CPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
 *
             IF ( IINFO.NE.0 ) THEN
                INFO = IINFO + N1
@@ -241,6 +243,6 @@
       END IF
       RETURN
 *
-*     End of CPOTRF2
+*     End of AB_CPOTRF2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CGET37
+*> \brief \b AB_CGET37
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGET37( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_CGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, NIN
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CGET37 tests CTRSNA, a routine for estimating condition numbers of
+*> AB_CGET37 tests AB_CTRSNA, a routine for estimating condition numbers of
 *> eigenvalues and/or right eigenvectors of a matrix.
 *>
 *> The test matrices are read from a file with logical unit number NIN.
@@ -37,7 +37,7 @@
 *> \verbatim
 *>          RMAX is REAL array, dimension (3)
 *>          Value of the largest test ratio.
-*>          RMAX(1) = largest ratio comparing different calls to CTRSNA
+*>          RMAX(1) = largest ratio comparing different calls to AB_CTRSNA
 *>          RMAX(2) = largest error in reciprocal condition
 *>                    numbers taking their conditioning into account
 *>          RMAX(3) = largest error in reciprocal condition
@@ -50,17 +50,17 @@
 *>          LMAX is INTEGER array, dimension (3)
 *>          LMAX(i) is example number where largest test ratio
 *>          RMAX(i) is achieved. Also:
-*>          If CGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*>          If CHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*>          If CTRSNA returns INFO nonzero on example i, LMAX(3)=i
+*>          If AB_CGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If AB_CHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If AB_CTRSNA returns INFO nonzero on example i, LMAX(3)=i
 *> \endverbatim
 *>
 *> \param[out] NINFO
 *> \verbatim
 *>          NINFO is INTEGER array, dimension (3)
-*>          NINFO(1) = No. of times CGEHRD returned INFO nonzero
-*>          NINFO(2) = No. of times CHSEQR returned INFO nonzero
-*>          NINFO(3) = No. of times CTRSNA returned INFO nonzero
+*>          NINFO(1) = No. of times AB_CGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times AB_CHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times AB_CTRSNA returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -88,7 +88,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGET37( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_CGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,22 +130,23 @@
      $                   WORK( LWORK ), WTMP( LDT )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEHRD, CHSEQR, CLACPY, CSSCAL, CTREVC,
-     $                   CTRSNA, SCOPY, SLABAD, SSCAL
+      EXTERNAL           AB_CCOPY, AB_CGEHRD, AB_CHSEQR, AB_CLACPY, AB_C
+     $AB_SSCAL, AB_CTREVC,
+     $                   AB_CTRSNA, AB_SCOPY, AB_SLABAD, AB_SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, MAX, REAL, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *
@@ -178,23 +179,24 @@
       DO 30 I = 1, N
          READ( NIN, FMT = * )WRIN( I ), WIIN( I ), SIN( I ), SEPIN( I )
    30 CONTINUE
-      TNRM = CLANGE( 'M', N, N, TMP, LDT, RWORK )
+      TNRM = AB_CLANGE( 'M', N, N, TMP, LDT, RWORK )
       DO 260 ISCL = 1, 3
 *
 *        Scale input matrix
 *
          KNT = KNT + 1
-         CALL CLACPY( 'F', N, N, TMP, LDT, T, LDT )
+         CALL AB_CLACPY( 'F', N, N, TMP, LDT, T, LDT )
          VMUL = VAL( ISCL )
          DO 40 I = 1, N
-            CALL CSSCAL( N, VMUL, T( 1, I ), 1 )
+            CALL AB_CAB_SSCAL( N, VMUL, T( 1, I ), 1 )
    40    CONTINUE
          IF( TNRM.EQ.ZERO )
      $      VMUL = ONE
 *
 *        Compute eigenvalues and eigenvectors
 *
-         CALL CGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
+         CALL AB_CGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
+     $N,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 1 ) = KNT
@@ -209,7 +211,7 @@
 *
 *        Compute Schur form
 *
-         CALL CHSEQR( 'S', 'N', N, 1, N, T, LDT, W, CDUM, 1, WORK,
+         CALL AB_CHSEQR( 'S', 'N', N, 1, N, T, LDT, W, CDUM, 1, WORK,
      $                LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 2 ) = KNT
@@ -222,12 +224,14 @@
          DO 70 I = 1, N
             SELECT( I ) = .TRUE.
    70    CONTINUE
-         CALL CTREVC( 'B', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT, N,
+         CALL AB_CTREVC( 'B', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT, 
+     $N,
      $                M, WORK, RWORK, INFO )
 *
 *        Compute condition numbers
 *
-         CALL CTRSNA( 'B', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT, S,
+         CALL AB_CTRSNA( 'B', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT, 
+     $S,
      $                SEP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -238,7 +242,7 @@
 *        Sort eigenvalues and condition numbers lexicographically
 *        to compare with inputs
 *
-         CALL CCOPY( N, W, 1, WTMP, 1 )
+         CALL AB_CCOPY( N, W, 1, WTMP, 1 )
          IF( ISRT.EQ.0 ) THEN
 *
 *           Sort by increasing real part
@@ -254,9 +258,9 @@
                WSRT( I ) = AIMAG( W( I ) )
    90       CONTINUE
          END IF
-         CALL SCOPY( N, S, 1, STMP, 1 )
-         CALL SCOPY( N, SEP, 1, SEPTMP, 1 )
-         CALL SSCAL( N, ONE / VMUL, SEPTMP, 1 )
+         CALL AB_SCOPY( N, S, 1, STMP, 1 )
+         CALL AB_SCOPY( N, SEP, 1, SEPTMP, 1 )
+         CALL AB_SSCAL( N, ONE / VMUL, SEPTMP, 1 )
          DO 110 I = 1, N - 1
             KMIN = I
             VMIN = WSRT( I )
@@ -336,7 +340,8 @@
                VMAX = ONE / EPS
             ELSE IF( SEPIN( I )-TOLIN.GT.SEPTMP( I )+TOL ) THEN
                VMAX = ( SEPIN( I )-TOLIN ) / ( SEPTMP( I )+TOL )
-            ELSE IF( SEPIN( I )+TOLIN.LT.EPS*( SEPTMP( I )-TOL ) ) THEN
+            ELSE IF( SEPIN( I )+TOLIN.LT.EPS*( SEPTMP( I )-TOL ) ) TH
+     $EN
                VMAX = ONE / EPS
             ELSE IF( SEPIN( I )+TOLIN.LT.SEPTMP( I )-TOL ) THEN
                VMAX = ( SEPTMP( I )-TOL ) / ( SEPIN( I )+TOLIN )
@@ -403,9 +408,9 @@
 *
          VMAX = ZERO
          DUM( 1 ) = -ONE
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL CTRSNA( 'E', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_CTRSNA( 'E', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -421,9 +426,9 @@
 *
 *        Compute eigenvector condition numbers only and compare
 *
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL CTRSNA( 'V', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_CTRSNA( 'V', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -442,9 +447,9 @@
          DO 180 I = 1, N
             SELECT( I ) = .TRUE.
   180    CONTINUE
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL CTRSNA( 'B', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_CTRSNA( 'B', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -460,9 +465,9 @@
 *
 *        Compute eigenvalue condition numbers using SELECT and compare
 *
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL CTRSNA( 'E', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_CTRSNA( 'E', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -478,9 +483,9 @@
 *
 *        Compute eigenvector condition numbers using SELECT and compare
 *
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL CTRSNA( 'V', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_CTRSNA( 'V', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -499,7 +504,7 @@
      $         LMAX( 1 ) = KNT
          END IF
 *
-*        Select second and next to last eigenvalues
+*        Select AB_SECOND and next to last eigenvalues
 *
          DO 220 I = 1, N
             SELECT( I ) = .FALSE.
@@ -509,22 +514,22 @@
             ICMP = 1
             LCMP( 1 ) = 2
             SELECT( 2 ) = .TRUE.
-            CALL CCOPY( N, RE( 1, 2 ), 1, RE( 1, 1 ), 1 )
-            CALL CCOPY( N, LE( 1, 2 ), 1, LE( 1, 1 ), 1 )
+            CALL AB_CCOPY( N, RE( 1, 2 ), 1, RE( 1, 1 ), 1 )
+            CALL AB_CCOPY( N, LE( 1, 2 ), 1, LE( 1, 1 ), 1 )
          END IF
          IF( N.GT.3 ) THEN
             ICMP = 2
             LCMP( 2 ) = N - 1
             SELECT( N-1 ) = .TRUE.
-            CALL CCOPY( N, RE( 1, N-1 ), 1, RE( 1, 2 ), 1 )
-            CALL CCOPY( N, LE( 1, N-1 ), 1, LE( 1, 2 ), 1 )
+            CALL AB_CCOPY( N, RE( 1, N-1 ), 1, RE( 1, 2 ), 1 )
+            CALL AB_CCOPY( N, LE( 1, N-1 ), 1, LE( 1, 2 ), 1 )
          END IF
 *
 *        Compute all selected condition numbers
 *
-         CALL SCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL CTRSNA( 'B', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_SCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_CTRSNA( 'B', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -541,9 +546,9 @@
 *
 *        Compute selected eigenvalue condition numbers
 *
-         CALL SCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL CTRSNA( 'E', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_SCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_CTRSNA( 'E', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -560,9 +565,9 @@
 *
 *        Compute selected eigenvector condition numbers
 *
-         CALL SCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL CTRSNA( 'V', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_SCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_CTRSNA( 'V', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -584,6 +589,6 @@
   260 CONTINUE
       GO TO 10
 *
-*     End of CGET37
+*     End of AB_CGET37
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CGET52
+*> \brief \b AB_CGET52
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,17 +8,17 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHA, BETA,
+*       SUBROUTINE AB_CGET52( LEFT, N, A, LDA, B, LDB, E, AB_LDE, ALPHA, BETA,
 *                          WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            LEFT
-*       INTEGER            LDA, LDB, LDE, N
+*       INTEGER            LDA, LDB, AB_LDE, N
 *       ..
 *       .. Array Arguments ..
 *       REAL               RESULT( 2 ), RWORK( * )
 *       COMPLEX            A( LDA, * ), ALPHA( * ), B( LDB, * ),
-*      $                   BETA( * ), E( LDE, * ), WORK( * )
+*      $                   BETA( * ), E( AB_LDE, * ), WORK( * )
 *       ..
 *
 *
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CGET52  does an eigenvector check for the generalized eigenvalue
+*> AB_CGET52  does an eigenvector check for the generalized eigenvalue
 *> problem.
 *>
 *> The basic test for right eigenvectors is:
@@ -43,7 +43,7 @@
 *>                         H   H  _      _
 *> For left eigenvectors, A , B , a, and b  are used.
 *>
-*> CGET52 also tests the normalization of E.  Each eigenvector is
+*> AB_CGET52 also tests the normalization of E.  Each eigenvector is
 *> supposed to be normalized so that the maximum "absolute value"
 *> of its elements is 1, where in this case, "absolute value"
 *> of a complex value x is  |Re(x)| + |Im(x)| ; let us call this
@@ -70,7 +70,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrices.  If it is zero, CGET52 does
+*>          The size of the matrices.  If it is zero, AB_CGET52 does
 *>          nothing.  It must be at least zero.
 *> \endverbatim
 *>
@@ -102,13 +102,13 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is COMPLEX array, dimension (LDE, N)
+*>          E is COMPLEX array, dimension (AB_LDE, N)
 *>          The matrix of eigenvectors.  It must be O( 1 ).
 *> \endverbatim
 *>
-*> \param[in] LDE
+*> \param[in] AB_LDE
 *> \verbatim
-*>          LDE is INTEGER
+*>          AB_LDE is INTEGER
 *>          The leading dimension of E.  It must be at least 1 and at
 *>          least N.
 *> \endverbatim
@@ -158,7 +158,8 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHA, BETA,
+      SUBROUTINE AB_CGET52( LEFT, N, A, LDA, B, LDB, E, AB_LDE, ALPHA, B
+     $ETA,
      $                   WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -168,12 +169,12 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            LEFT
-      INTEGER            LDA, LDB, LDE, N
+      INTEGER            LDA, LDB, AB_LDE, N
 *     ..
 *     .. Array Arguments ..
       REAL               RESULT( 2 ), RWORK( * )
       COMPLEX            A( LDA, * ), ALPHA( * ), B( LDB, * ),
-     $                   BETA( * ), E( LDE, * ), WORK( * )
+     $                   BETA( * ), E( AB_LDE, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -194,11 +195,11 @@
       COMPLEX            ACOEFF, ALPHAI, BCOEFF, BETAI, X
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV
+      EXTERNAL           AB_CGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, MAX, REAL
@@ -216,9 +217,9 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SAFMAX = ONE / SAFMIN
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
       IF( LEFT ) THEN
          TRANS = 'C'
@@ -230,9 +231,9 @@
 *
 *     Norm of A, B, and E:
 *
-      ANORM = MAX( CLANGE( NORMAB, N, N, A, LDA, RWORK ), SAFMIN )
-      BNORM = MAX( CLANGE( NORMAB, N, N, B, LDB, RWORK ), SAFMIN )
-      ENORM = MAX( CLANGE( 'O', N, N, E, LDE, RWORK ), ULP )
+      ANORM = MAX( AB_CLANGE( NORMAB, N, N, A, LDA, RWORK ), SAFMIN )
+      BNORM = MAX( AB_CLANGE( NORMAB, N, N, B, LDB, RWORK ), SAFMIN )
+      ENORM = MAX( AB_CLANGE( 'O', N, N, E, AB_LDE, RWORK ), ULP )
       ALFMAX = SAFMAX / MAX( ONE, BNORM )
       BETMAX = SAFMAX / MAX( ONE, ANORM )
 *
@@ -257,13 +258,13 @@
             ACOEFF = CONJG( ACOEFF )
             BCOEFF = CONJG( BCOEFF )
          END IF
-         CALL CGEMV( TRANS, N, N, ACOEFF, A, LDA, E( 1, JVEC ), 1,
+         CALL AB_CGEMV( TRANS, N, N, ACOEFF, A, LDA, E( 1, JVEC ), 1,
      $               CZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-         CALL CGEMV( TRANS, N, N, -BCOEFF, B, LDA, E( 1, JVEC ), 1,
+         CALL AB_CGEMV( TRANS, N, N, -BCOEFF, B, LDA, E( 1, JVEC ), 1,
      $               CONE, WORK( N*( JVEC-1 )+1 ), 1 )
    10 CONTINUE
 *
-      ERRNRM = CLANGE( 'One', N, N, WORK, N, RWORK ) / ENORM
+      ERRNRM = AB_CLANGE( 'One', N, N, WORK, N, RWORK ) / ENORM
 *
 *     Compute RESULT(1)
 *
@@ -286,6 +287,6 @@
 *
       RETURN
 *
-*     End of CGET52
+*     End of AB_CGET52
 *
       END

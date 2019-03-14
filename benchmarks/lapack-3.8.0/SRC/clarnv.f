@@ -1,4 +1,4 @@
-*> \brief \b CLARNV returns a vector of random numbers from a uniform or normal distribution.
+*> \brief \b AB_CLARNV returns a vector of random numbers from a uniform or normal distribution.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLARNV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarnv.f">
+*> Download AB_CLARNV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARNV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarnv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARNV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarnv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARNV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARNV( IDIST, ISEED, N, X )
+*       SUBROUTINE AB_CLARNV( IDIST, ISEED, N, X )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CLARNV returns a vector of n random complex numbers from a uniform or
+*> AB_CLARNV returns a vector of n random complex numbers from a uniform or
 *> normal distribution.
 *> \endverbatim
 *
@@ -90,14 +90,14 @@
 *>
 *> \verbatim
 *>
-*>  This routine calls the auxiliary routine SLARUV to generate random
+*>  This routine calls the auxiliary routine AB_SLARUV to generate random
 *>  real numbers from a uniform (0,1) distribution, in batches of up to
 *>  128 using vectorisable code. The Box-Muller method is used to
 *>  transform numbers from a uniform to a normal distribution.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLARNV( IDIST, ISEED, N, X )
+      SUBROUTINE AB_CLARNV( IDIST, ISEED, N, X )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -132,17 +132,17 @@
       INTRINSIC          CMPLX, EXP, LOG, MIN, SQRT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARUV
+      EXTERNAL           AB_SLARUV
 *     ..
 *     .. Executable Statements ..
 *
       DO 60 IV = 1, N, LV / 2
          IL = MIN( LV / 2, N-IV+1 )
 *
-*        Call SLARUV to generate 2*IL real numbers from a uniform (0,1)
+*        Call AB_SLARUV to generate 2*IL real numbers from a uniform (0,1)
 *        distribution (2*IL <= LV)
 *
-         CALL SLARUV( ISEED, 2*IL, U )
+         CALL AB_SLARUV( ISEED, 2*IL, U )
 *
          IF( IDIST.EQ.1 ) THEN
 *
@@ -188,6 +188,6 @@
    60 CONTINUE
       RETURN
 *
-*     End of CLARNV
+*     End of AB_CLARNV
 *
       END

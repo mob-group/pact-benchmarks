@@ -1,4 +1,4 @@
-*> \brief \b ZGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
+*> \brief \b AB_ZGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGEQL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeql2.f">
+*> Download AB_ZGEQL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGEQL2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgeql2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGEQL2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeql2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGEQL2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGEQL2( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_ZGEQL2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZGEQL2 computes a QL factorization of a complex m by n matrix A:
+*> AB_ZGEQL2 computes a QL factorization of a complex m by n matrix A:
 *> A = Q * L.
 *> \endverbatim
 *
@@ -121,7 +121,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEQL2( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_ZGEQL2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,7 +146,7 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZLARFG
+      EXTERNAL           AB_XERBLA, AB_ZLARF, AB_AB_ZLARFG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MIN
@@ -164,7 +164,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGEQL2', -INFO )
+         CALL AB_XERBLA( 'AB_ZGEQL2', -INFO )
          RETURN
       END IF
 *
@@ -176,17 +176,17 @@
 *        A(1:m-k+i-1,n-k+i)
 *
          ALPHA = A( M-K+I, N-K+I )
-         CALL ZLARFG( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
+         CALL AB_AB_ZLARFG( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
 *
 *        Apply H(i)**H to A(1:m-k+i,1:n-k+i-1) from the left
 *
          A( M-K+I, N-K+I ) = ONE
-         CALL ZLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1,
+         CALL AB_ZLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1,
      $               DCONJG( TAU( I ) ), A, LDA, WORK )
          A( M-K+I, N-K+I ) = ALPHA
    10 CONTINUE
       RETURN
 *
-*     End of ZGEQL2
+*     End of AB_ZGEQL2
 *
       END

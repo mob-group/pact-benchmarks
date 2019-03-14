@@ -1,4 +1,4 @@
-*> \brief \b DLATBS solves a triangular banded system of equations.
+*> \brief \b AB_DLATBS solves a triangular banded system of equations.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLATBS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatbs.f">
+*> Download AB_DLATBS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLATBS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatbs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLATBS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatbs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLATBS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB, X,
+*       SUBROUTINE AB_DLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB, X,
 *                          SCALE, CNORM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLATBS solves one of the triangular systems
+*> AB_DLATBS solves one of the triangular systems
 *>
 *>    A *x = s*b  or  A**T*x = s*b
 *>
@@ -45,7 +45,7 @@
 *> are n-element vectors, and s is a scaling factor, usually less than
 *> or equal to 1, chosen so that the components of x will be less than
 *> the overflow threshold.  If the unscaled problem will not cause
-*> overflow, the Level 2 BLAS routine DTBSV is called.  If the matrix A
+*> overflow, the Level 2 BLAS routine AB_DTBSV is called.  If the matrix A
 *> is singular (A(j,j) = 0 for some j), then s is set to 0 and a
 *> non-trivial solution to A*x = 0 is returned.
 *> \endverbatim
@@ -171,7 +171,7 @@
 *>
 *> \verbatim
 *>
-*>  A rough bound on x is computed; if that is less than overflow, DTBSV
+*>  A rough bound on x is computed; if that is less than overflow, AB_DTBSV
 *>  is called, otherwise, specific code is used which checks for possible
 *>  overflow or divide-by-zero at every operation.
 *>
@@ -204,7 +204,7 @@
 *>     |x(j)| <= ( G(0) / |A(j,j)| ) product ( 1 + CNORM(i) / |A(i,i)| )
 *>                                   1<=i< j
 *>
-*>  Since |x(j)| <= M(j), we use the Level 2 BLAS routine DTBSV if the
+*>  Since |x(j)| <= M(j), we use the Level 2 BLAS routine AB_DTBSV if the
 *>  reciprocal of the largest M(j), j=1,..,n, is larger than
 *>  max(underflow, 1/overflow).
 *>
@@ -234,12 +234,13 @@
 *>            <= M(0) * product ( ( 1 + CNORM(i) ) / |A(i,i)| )
 *>                      1<=i<=j
 *>
-*>  and we can safely call DTBSV if 1/M(n) and 1/G(n) are both greater
+*>  and we can safely call AB_DTBSV if 1/M(n) and 1/G(n) are both greater
 *>  than max(underflow, 1/overflow).
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB, X,
+      SUBROUTINE AB_DLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB, 
+     $X,
      $                   SCALE, CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -269,13 +270,14 @@
      $                   TMAX, TSCAL, USCAL, XBND, XJ, XMAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DDOT, DLAMCH
-      EXTERNAL           LSAME, IDAMAX, DASUM, DDOT, DLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DASUM, AB_DDOT, AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DASUM, AB_DDOT, AB_DLAM
+     $CH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DSCAL, DTBSV, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DSCAL, AB_DTBSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -283,21 +285,22 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      NOTRAN = LSAME( TRANS, 'N' )
-      NOUNIT = LSAME( DIAG, 'N' )
+      UPPER = AB_LSAME( UPLO, 'U' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      NOUNIT = AB_LSAME( DIAG, 'N' )
 *
 *     Test the input parameters.
 *
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .N
+     $OT.
+     $         AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.LSAME( NORMIN, 'Y' ) .AND. .NOT.
-     $         LSAME( NORMIN, 'N' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( NORMIN, 'Y' ) .AND. .NOT.
+     $         AB_LSAME( NORMIN, 'N' ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -307,7 +310,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLATBS', -INFO )
+         CALL AB_XERBLA( 'AB_DLATBS', -INFO )
          RETURN
       END IF
 *
@@ -318,11 +321,11 @@
 *
 *     Determine machine dependent parameters to control overflow.
 *
-      SMLNUM = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       SCALE = ONE
 *
-      IF( LSAME( NORMIN, 'N' ) ) THEN
+      IF( AB_LSAME( NORMIN, 'N' ) ) THEN
 *
 *        Compute the 1-norm of each column, not including the diagonal.
 *
@@ -332,7 +335,7 @@
 *
             DO 10 J = 1, N
                JLEN = MIN( KD, J-1 )
-               CNORM( J ) = DASUM( JLEN, AB( KD+1-JLEN, J ), 1 )
+               CNORM( J ) = AB_DASUM( JLEN, AB( KD+1-JLEN, J ), 1 )
    10       CONTINUE
          ELSE
 *
@@ -341,7 +344,7 @@
             DO 20 J = 1, N
                JLEN = MIN( KD, N-J )
                IF( JLEN.GT.0 ) THEN
-                  CNORM( J ) = DASUM( JLEN, AB( 2, J ), 1 )
+                  CNORM( J ) = AB_DASUM( JLEN, AB( 2, J ), 1 )
                ELSE
                   CNORM( J ) = ZERO
                END IF
@@ -352,19 +355,19 @@
 *     Scale the column norms by TSCAL if the maximum element in CNORM is
 *     greater than BIGNUM.
 *
-      IMAX = IDAMAX( N, CNORM, 1 )
+      IMAX = AB_IDAMAX( N, CNORM, 1 )
       TMAX = CNORM( IMAX )
       IF( TMAX.LE.BIGNUM ) THEN
          TSCAL = ONE
       ELSE
          TSCAL = ONE / ( SMLNUM*TMAX )
-         CALL DSCAL( N, TSCAL, CNORM, 1 )
+         CALL AB_DSCAL( N, TSCAL, CNORM, 1 )
       END IF
 *
 *     Compute a bound on the computed solution vector to see if the
-*     Level 2 BLAS routine DTBSV can be used.
+*     Level 2 BLAS routine AB_DTBSV can be used.
 *
-      J = IDAMAX( N, X, 1 )
+      J = AB_IDAMAX( N, X, 1 )
       XMAX = ABS( X( J ) )
       XBND = XMAX
       IF( NOTRAN ) THEN
@@ -519,7 +522,7 @@
 *        Use the Level 2 BLAS solve if the reciprocal of the bound on
 *        elements of X is not too small.
 *
-         CALL DTBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, X, 1 )
+         CALL AB_DTBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, X, 1 )
       ELSE
 *
 *        Use a Level 1 BLAS solve, scaling intermediate results.
@@ -530,7 +533,7 @@
 *           BIGNUM in absolute value.
 *
             SCALE = BIGNUM / XMAX
-            CALL DSCAL( N, SCALE, X, 1 )
+            CALL AB_DSCAL( N, SCALE, X, 1 )
             XMAX = BIGNUM
          END IF
 *
@@ -561,7 +564,7 @@
 *                          Scale x by 1/b(j).
 *
                         REC = ONE / XJ
-                        CALL DSCAL( N, REC, X, 1 )
+                        CALL AB_DSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
@@ -585,7 +588,7 @@
 *
                         REC = REC / CNORM( J )
                      END IF
-                     CALL DSCAL( N, REC, X, 1 )
+                     CALL AB_DSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                      XMAX = XMAX*REC
                   END IF
@@ -616,14 +619,14 @@
 *                    Scale x by 1/(2*abs(x(j))).
 *
                      REC = REC*HALF
-                     CALL DSCAL( N, REC, X, 1 )
+                     CALL AB_DSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                   END IF
                ELSE IF( XJ*CNORM( J ).GT.( BIGNUM-XMAX ) ) THEN
 *
 *                 Scale x by 1/2.
 *
-                  CALL DSCAL( N, HALF, X, 1 )
+                  CALL AB_DSCAL( N, HALF, X, 1 )
                   SCALE = SCALE*HALF
                END IF
 *
@@ -635,9 +638,9 @@
 *                                             x(j)* A(max(1,j-kd):j-1,j)
 *
                      JLEN = MIN( KD, J-1 )
-                     CALL DAXPY( JLEN, -X( J )*TSCAL,
+                     CALL AB_DAXPY( JLEN, -X( J )*TSCAL,
      $                           AB( KD+1-JLEN, J ), 1, X( J-JLEN ), 1 )
-                     I = IDAMAX( J-1, X, 1 )
+                     I = AB_IDAMAX( J-1, X, 1 )
                      XMAX = ABS( X( I ) )
                   END IF
                ELSE IF( J.LT.N ) THEN
@@ -648,9 +651,9 @@
 *
                   JLEN = MIN( KD, N-J )
                   IF( JLEN.GT.0 )
-     $               CALL DAXPY( JLEN, -X( J )*TSCAL, AB( 2, J ), 1,
+     $               CALL AB_DAXPY( JLEN, -X( J )*TSCAL, AB( 2, J ), 1,
      $                           X( J+1 ), 1 )
-                  I = J + IDAMAX( N-J, X( J+1 ), 1 )
+                  I = J + AB_IDAMAX( N-J, X( J+1 ), 1 )
                   XMAX = ABS( X( I ) )
                END IF
   110       CONTINUE
@@ -686,7 +689,7 @@
                      USCAL = USCAL / TJJS
                   END IF
                   IF( REC.LT.ONE ) THEN
-                     CALL DSCAL( N, REC, X, 1 )
+                     CALL AB_DSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                      XMAX = XMAX*REC
                   END IF
@@ -696,16 +699,17 @@
                IF( USCAL.EQ.ONE ) THEN
 *
 *                 If the scaling needed for A in the dot product is 1,
-*                 call DDOT to perform the dot product.
+*                 call AB_DDOT to perform the dot product.
 *
                   IF( UPPER ) THEN
                      JLEN = MIN( KD, J-1 )
-                     SUMJ = DDOT( JLEN, AB( KD+1-JLEN, J ), 1,
+                     SUMJ = AB_DDOT( JLEN, AB( KD+1-JLEN, J ), 1,
      $                      X( J-JLEN ), 1 )
                   ELSE
                      JLEN = MIN( KD, N-J )
                      IF( JLEN.GT.0 )
-     $                  SUMJ = DDOT( JLEN, AB( 2, J ), 1, X( J+1 ), 1 )
+     $                  SUMJ = AB_DDOT( JLEN, AB( 2, J ), 1, X( J+1 ), 1
+     $ )
                   END IF
                ELSE
 *
@@ -753,7 +757,7 @@
 *                             Scale X by 1/abs(x(j)).
 *
                            REC = ONE / XJ
-                           CALL DSCAL( N, REC, X, 1 )
+                           CALL AB_DSCAL( N, REC, X, 1 )
                            SCALE = SCALE*REC
                            XMAX = XMAX*REC
                         END IF
@@ -768,7 +772,7 @@
 *                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM.
 *
                         REC = ( TJJ*BIGNUM ) / XJ
-                        CALL DSCAL( N, REC, X, 1 )
+                        CALL AB_DSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
@@ -802,11 +806,11 @@
 *     Scale the column norms by 1/TSCAL for return.
 *
       IF( TSCAL.NE.ONE ) THEN
-         CALL DSCAL( N, ONE / TSCAL, CNORM, 1 )
+         CALL AB_DSCAL( N, ONE / TSCAL, CNORM, 1 )
       END IF
 *
       RETURN
 *
-*     End of DLATBS
+*     End of AB_DLATBS
 *
       END

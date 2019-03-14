@@ -1,4 +1,4 @@
-*> \brief \b DCHKEC
+*> \brief \b AB_AB_DCHKEC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKEC( THRESH, TSTERR, NIN, NOUT )
+*       SUBROUTINE AB_AB_DCHKEC( THRESH, TSTERR, NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -22,13 +22,13 @@
 *>
 *> \verbatim
 *>
-*> DCHKEC tests eigen- condition estimation routines
-*>        DLALN2, DLASY2, DLANV2, DLAQTR, DLAEXC,
-*>        DTRSYL, DTREXC, DTRSNA, DTRSEN
+*> AB_AB_DCHKEC tests eigen- condition estimation routines
+*>        AB_DLALN2, AB_DLASY2, AB_DLANV2, AB_DLAQTR, AB_DLAEXC,
+*>        AB_DTRSYL, AB_DTREXC, AB_DTRSNA, AB_DTRSEN
 *>
 *> In all cases, the routine runs through a fixed set of numerical
 *> examples, subjects them to various tests, and compares the test
-*> results to a threshold THRESH. In addition, DTREXC, DTRSNA and DTRSEN
+*> results to a threshold THRESH. In addition, AB_DTREXC, AB_DTRSNA and AB_DTRSEN
 *> are tested by reading in precomputed examples from a file (on input
 *> unit NIN).  Output is written to output unit NOUT.
 *> \endverbatim
@@ -74,7 +74,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DCHKEC( THRESH, TSTERR, NIN, NOUT )
+      SUBROUTINE AB_AB_DCHKEC( THRESH, TSTERR, NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -106,21 +106,22 @@
       DOUBLE PRECISION   RTRSEN( 3 ), RTRSNA( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DERREC, DGET31, DGET32, DGET33, DGET34, DGET35,
-     $                   DGET36, DGET37, DGET38, DGET39
+      EXTERNAL           AB_DERREC, AB_DGET31, AB_DGET32, AB_DGET33, AB_
+     $DGET34, AB_DGET35,
+     $                   AB_DGET36, AB_DGET37, AB_DGET38, AB_DGET39
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
       PATH( 1: 1 ) = 'Double precision'
       PATH( 2: 3 ) = 'EC'
-      EPS = DLAMCH( 'P' )
-      SFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SFMIN = AB_DLAMCH( 'S' )
 *
-*     Print header information
+*     Print AB_HEADER information
 *
       WRITE( NOUT, FMT = 9989 )
       WRITE( NOUT, FMT = 9988 )EPS, SFMIN
@@ -129,46 +130,46 @@
 *     Test error exits if TSTERR is .TRUE.
 *
       IF( TSTERR )
-     $   CALL DERREC( PATH, NOUT )
+     $   CALL AB_DERREC( PATH, NOUT )
 *
       OK = .TRUE.
-      CALL DGET31( RLALN2, LLALN2, NLALN2, KLALN2 )
+      CALL AB_DGET31( RLALN2, LLALN2, NLALN2, KLALN2 )
       IF( RLALN2.GT.THRESH .OR. NLALN2( 1 ).NE.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9999 )RLALN2, LLALN2, NLALN2, KLALN2
       END IF
 *
-      CALL DGET32( RLASY2, LLASY2, NLASY2, KLASY2 )
+      CALL AB_DGET32( RLASY2, LLASY2, NLASY2, KLASY2 )
       IF( RLASY2.GT.THRESH ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9998 )RLASY2, LLASY2, NLASY2, KLASY2
       END IF
 *
-      CALL DGET33( RLANV2, LLANV2, NLANV2, KLANV2 )
+      CALL AB_DGET33( RLANV2, LLANV2, NLANV2, KLANV2 )
       IF( RLANV2.GT.THRESH .OR. NLANV2.NE.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9997 )RLANV2, LLANV2, NLANV2, KLANV2
       END IF
 *
-      CALL DGET34( RLAEXC, LLAEXC, NLAEXC, KLAEXC )
+      CALL AB_DGET34( RLAEXC, LLAEXC, NLAEXC, KLAEXC )
       IF( RLAEXC.GT.THRESH .OR. NLAEXC( 2 ).NE.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9996 )RLAEXC, LLAEXC, NLAEXC, KLAEXC
       END IF
 *
-      CALL DGET35( RTRSYL, LTRSYL, NTRSYL, KTRSYL )
+      CALL AB_DGET35( RTRSYL, LTRSYL, NTRSYL, KTRSYL )
       IF( RTRSYL.GT.THRESH ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9995 )RTRSYL, LTRSYL, NTRSYL, KTRSYL
       END IF
 *
-      CALL DGET36( RTREXC, LTREXC, NTREXC, KTREXC, NIN )
+      CALL AB_DGET36( RTREXC, LTREXC, NTREXC, KTREXC, NIN )
       IF( RTREXC.GT.THRESH .OR. NTREXC( 3 ).GT.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9994 )RTREXC, LTREXC, NTREXC, KTREXC
       END IF
 *
-      CALL DGET37( RTRSNA, LTRSNA, NTRSNA, KTRSNA, NIN )
+      CALL AB_DGET37( RTRSNA, LTRSNA, NTRSNA, KTRSNA, NIN )
       IF( RTRSNA( 1 ).GT.THRESH .OR. RTRSNA( 2 ).GT.THRESH .OR.
      $    NTRSNA( 1 ).NE.0 .OR. NTRSNA( 2 ).NE.0 .OR. NTRSNA( 3 ).NE.0 )
      $     THEN
@@ -176,7 +177,7 @@
          WRITE( NOUT, FMT = 9993 )RTRSNA, LTRSNA, NTRSNA, KTRSNA
       END IF
 *
-      CALL DGET38( RTRSEN, LTRSEN, NTRSEN, KTRSEN, NIN )
+      CALL AB_DGET38( RTRSEN, LTRSEN, NTRSEN, KTRSEN, NIN )
       IF( RTRSEN( 1 ).GT.THRESH .OR. RTRSEN( 2 ).GT.THRESH .OR.
      $    NTRSEN( 1 ).NE.0 .OR. NTRSEN( 2 ).NE.0 .OR. NTRSEN( 3 ).NE.0 )
      $     THEN
@@ -184,7 +185,7 @@
          WRITE( NOUT, FMT = 9992 )RTRSEN, LTRSEN, NTRSEN, KTRSEN
       END IF
 *
-      CALL DGET39( RLAQTR, LLAQTR, NLAQTR, KLAQTR )
+      CALL AB_DGET39( RLAQTR, LLAQTR, NLAQTR, KLAQTR )
       IF( RLAQTR.GT.THRESH ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9991 )RLAQTR, LLAQTR, NLAQTR, KLAQTR
@@ -196,34 +197,42 @@
      $   WRITE( NOUT, FMT = 9990 )PATH, NTESTS
 *
       RETURN
- 9999 FORMAT( ' Error in DLALN2: RMAX =', D12.3, / ' LMAX = ', I8, ' N',
+ 9999 FORMAT( ' Error in AB_DLALN2: RMAX =', D12.3, / ' LMAX = ', I8, ' 
+     $N',
      $      'INFO=', 2I8, ' KNT=', I8 )
- 9998 FORMAT( ' Error in DLASY2: RMAX =', D12.3, / ' LMAX = ', I8, ' N',
+ 9998 FORMAT( ' Error in AB_DLASY2: RMAX =', D12.3, / ' LMAX = ', I8, ' 
+     $N',
      $      'INFO=', I8, ' KNT=', I8 )
- 9997 FORMAT( ' Error in DLANV2: RMAX =', D12.3, / ' LMAX = ', I8, ' N',
+ 9997 FORMAT( ' Error in AB_DLANV2: RMAX =', D12.3, / ' LMAX = ', I8, ' 
+     $N',
      $      'INFO=', I8, ' KNT=', I8 )
- 9996 FORMAT( ' Error in DLAEXC: RMAX =', D12.3, / ' LMAX = ', I8, ' N',
+ 9996 FORMAT( ' Error in AB_DLAEXC: RMAX =', D12.3, / ' LMAX = ', I8, ' 
+     $N',
      $      'INFO=', 2I8, ' KNT=', I8 )
- 9995 FORMAT( ' Error in DTRSYL: RMAX =', D12.3, / ' LMAX = ', I8, ' N',
+ 9995 FORMAT( ' Error in AB_DTRSYL: RMAX =', D12.3, / ' LMAX = ', I8, ' 
+     $N',
      $      'INFO=', I8, ' KNT=', I8 )
- 9994 FORMAT( ' Error in DTREXC: RMAX =', D12.3, / ' LMAX = ', I8, ' N',
+ 9994 FORMAT( ' Error in AB_DTREXC: RMAX =', D12.3, / ' LMAX = ', I8, ' 
+     $N',
      $      'INFO=', 3I8, ' KNT=', I8 )
- 9993 FORMAT( ' Error in DTRSNA: RMAX =', 3D12.3, / ' LMAX = ', 3I8,
+ 9993 FORMAT( ' Error in AB_DTRSNA: RMAX =', 3D12.3, / ' LMAX = ', 3I8,
      $      ' NINFO=', 3I8, ' KNT=', I8 )
- 9992 FORMAT( ' Error in DTRSEN: RMAX =', 3D12.3, / ' LMAX = ', 3I8,
+ 9992 FORMAT( ' Error in AB_DTRSEN: RMAX =', 3D12.3, / ' LMAX = ', 3I8,
      $      ' NINFO=', 3I8, ' KNT=', I8 )
- 9991 FORMAT( ' Error in DLAQTR: RMAX =', D12.3, / ' LMAX = ', I8, ' N',
+ 9991 FORMAT( ' Error in AB_DLAQTR: RMAX =', D12.3, / ' LMAX = ', I8, ' 
+     $N',
      $      'INFO=', I8, ' KNT=', I8 )
  9990 FORMAT( / 1X, 'All tests for ', A3, ' routines passed the thresh',
      $      'old ( ', I6, ' tests run)' )
  9989 FORMAT( ' Tests of the Nonsymmetric eigenproblem condition estim',
-     $      'ation routines', / ' DLALN2, DLASY2, DLANV2, DLAEXC, DTRS',
-     $      'YL, DTREXC, DTRSNA, DTRSEN, DLAQTR', / )
+     $      'ation routines', / ' AB_DLALN2, AB_DLASY2, AB_DLANV2, AB_DL
+     $AEXC, DTRS',
+     $      'YL, AB_DTREXC, AB_DTRSNA, AB_DTRSEN, AB_DLAQTR', / )
  9988 FORMAT( ' Relative machine precision (EPS) = ', D16.6, / ' Safe ',
      $      'minimum (SFMIN)             = ', D16.6, / )
  9987 FORMAT( ' Routines pass computational tests if test ratio is les',
      $      's than', F8.2, / / )
 *
-*     End of DCHKEC
+*     End of AB_AB_DCHKEC
 *
       END

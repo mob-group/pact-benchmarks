@@ -1,4 +1,4 @@
-*> \brief \b DLANSF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a symmetric matrix in RFP format.
+*> \brief \b AB_DLANSF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a symmetric matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLANSF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlansf.f">
+*> Download AB_DLANSF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLANSF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlansf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLANSF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLANSF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DLANSF( NORM, TRANSR, UPLO, N, A, WORK )
+*       DOUBLE PRECISION FUNCTION AB_DLANSF( NORM, TRANSR, UPLO, N, A, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM, TRANSR, UPLO
@@ -34,15 +34,15 @@
 *>
 *> \verbatim
 *>
-*> DLANSF returns the value of the one norm, or the Frobenius norm, or
+*> AB_DLANSF returns the value of the one norm, or the Frobenius norm, or
 *> the infinity norm, or the element of largest absolute value of a
 *> real symmetric matrix A in RFP format.
 *> \endverbatim
 *>
-*> \return DLANSF
+*> \return AB_DLANSF
 *> \verbatim
 *>
-*>    DLANSF = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    AB_DLANSF = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -62,7 +62,7 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in DLANSF as described
+*>          Specifies the value to be returned in AB_DLANSF as described
 *>          above.
 *> \endverbatim
 *>
@@ -87,7 +87,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A. N >= 0. When N = 0, DLANSF is
+*>          The order of the matrix A. N >= 0. When N = 0, AB_DLANSF is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -207,7 +207,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLANSF( NORM, TRANSR, UPLO, N, A, WORK )
+      DOUBLE PRECISION FUNCTION AB_DLANSF( NORM, TRANSR, UPLO, N, A, WOR
+     $K )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -233,11 +234,11 @@
       DOUBLE PRECISION   SCALE, S, VALUE, AA, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, DISNAN
-      EXTERNAL           LSAME, DISNAN
+      LOGICAL            AB_LSAME, AB_DISNAN
+      EXTERNAL           AB_LSAME, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASSQ
+      EXTERNAL           AB_DLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -245,10 +246,10 @@
 *     .. Executable Statements ..
 *
       IF( N.EQ.0 ) THEN
-         DLANSF = ZERO
+         AB_DLANSF = ZERO
          RETURN
       ELSE IF( N.EQ.1 ) THEN
-         DLANSF = ABS( A(0) )
+         AB_DLANSF = ABS( A(0) )
          RETURN
       END IF
 *
@@ -261,13 +262,13 @@
 *     set ifm = 0 when form='T or 't' and 1 otherwise
 *
       IFM = 1
-      IF( LSAME( TRANSR, 'T' ) )
+      IF( AB_LSAME( TRANSR, 'T' ) )
      $   IFM = 0
 *
 *     set ilu = 0 when uplo='U or 'u' and 1 otherwise
 *
       ILU = 1
-      IF( LSAME( UPLO, 'U' ) )
+      IF( AB_LSAME( UPLO, 'U' ) )
      $   ILU = 0
 *
 *     set lda = (n+1)/2 when ifm = 0
@@ -286,7 +287,7 @@
          LDA = ( N+1 ) / 2
       END IF
 *
-      IF( LSAME( NORM, 'M' ) ) THEN
+      IF( AB_LSAME( NORM, 'M' ) ) THEN
 *
 *       Find max(abs(A(i,j))).
 *
@@ -299,7 +300,7 @@
                DO J = 0, K - 1
                   DO I = 0, N - 1
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END DO
@@ -308,7 +309,7 @@
                DO J = 0, N - 1
                   DO I = 0, K - 1
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END DO
@@ -320,7 +321,7 @@
                DO J = 0, K - 1
                   DO I = 0, N
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END DO
@@ -329,13 +330,14 @@
                DO J = 0, N
                   DO I = 0, K - 1
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END DO
             END IF
          END IF
-      ELSE IF( ( LSAME( NORM, 'I' ) ) .OR. ( LSAME( NORM, 'O' ) ) .OR.
+      ELSE IF( ( AB_LSAME( NORM, 'I' ) ) .OR. ( AB_LSAME( NORM, 'O' )
+     $ ) .OR.
      $         ( NORM.EQ.'1' ) ) THEN
 *
 *        Find normI(A) ( = norm1(A), since A is symmetric).
@@ -379,7 +381,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                ELSE
@@ -421,7 +423,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END IF
@@ -459,7 +461,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                ELSE
@@ -497,7 +499,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END IF
@@ -563,7 +565,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                ELSE
@@ -628,7 +630,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END IF
@@ -701,7 +703,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                ELSE
@@ -774,13 +776,14 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END IF
             END IF
          END IF
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' )
+     $ ) ) THEN
 *
 *       Find normF(A).
 *
@@ -794,34 +797,37 @@
                IF( ILU.EQ.0 ) THEN
 *                 A is upper
                   DO J = 0, K - 3
-                     CALL DLASSQ( K-J-2, A( K+J+1+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K-J-2, A( K+J+1+J*LDA ), 1, SCALE, 
+     $S )
 *                    L at A(k,0)
                   END DO
                   DO J = 0, K - 1
-                     CALL DLASSQ( K+J-1, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K+J-1, A( 0+J*LDA ), 1, SCALE, S )
 *                    trap U at A(0,0)
                   END DO
                   S = S + S
 *                 double s for the off diagonal elements
-                  CALL DLASSQ( K-1, A( K ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K-1, A( K ), LDA+1, SCALE, S )
 *                 tri L at A(k,0)
-                  CALL DLASSQ( K, A( K-1 ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( K-1 ), LDA+1, SCALE, S )
 *                 tri U at A(k-1,0)
                ELSE
 *                 ilu=1 & A is lower
                   DO J = 0, K - 1
-                     CALL DLASSQ( N-J-1, A( J+1+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( N-J-1, A( J+1+J*LDA ), 1, SCALE, S 
+     $)
 *                    trap L at A(0,0)
                   END DO
                   DO J = 0, K - 2
-                     CALL DLASSQ( J, A( 0+( 1+J )*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( J, A( 0+( 1+J )*LDA ), 1, SCALE, S 
+     $)
 *                    U at A(0,1)
                   END DO
                   S = S + S
 *                 double s for the off diagonal elements
-                  CALL DLASSQ( K, A( 0 ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( 0 ), LDA+1, SCALE, S )
 *                 tri L at A(0,0)
-                  CALL DLASSQ( K-1, A( 0+LDA ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K-1, A( 0+LDA ), LDA+1, SCALE, S )
 *                 tri U at A(0,1)
                END IF
             ELSE
@@ -829,43 +835,46 @@
                IF( ILU.EQ.0 ) THEN
 *                 A**T is upper
                   DO J = 1, K - 2
-                     CALL DLASSQ( J, A( 0+( K+J )*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( J, A( 0+( K+J )*LDA ), 1, SCALE, S 
+     $)
 *                    U at A(0,k)
                   END DO
                   DO J = 0, K - 2
-                     CALL DLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
 *                    k by k-1 rect. at A(0,0)
                   END DO
                   DO J = 0, K - 2
-                     CALL DLASSQ( K-J-1, A( J+1+( J+K-1 )*LDA ), 1,
+                     CALL AB_DLASSQ( K-J-1, A( J+1+( J+K-1 )*LDA ), 1,
      $                            SCALE, S )
 *                    L at A(0,k-1)
                   END DO
                   S = S + S
 *                 double s for the off diagonal elements
-                  CALL DLASSQ( K-1, A( 0+K*LDA ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K-1, A( 0+K*LDA ), LDA+1, SCALE, S )
 *                 tri U at A(0,k)
-                  CALL DLASSQ( K, A( 0+( K-1 )*LDA ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( 0+( K-1 )*LDA ), LDA+1, SCALE, S
+     $ )
 *                 tri L at A(0,k-1)
                ELSE
 *                 A**T is lower
                   DO J = 1, K - 1
-                     CALL DLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
 *                    U at A(0,0)
                   END DO
                   DO J = K, N - 1
-                     CALL DLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
 *                    k by k-1 rect. at A(0,k)
                   END DO
                   DO J = 0, K - 3
-                     CALL DLASSQ( K-J-2, A( J+2+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K-J-2, A( J+2+J*LDA ), 1, SCALE, S 
+     $)
 *                    L at A(1,0)
                   END DO
                   S = S + S
 *                 double s for the off diagonal elements
-                  CALL DLASSQ( K, A( 0 ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( 0 ), LDA+1, SCALE, S )
 *                 tri U at A(0,0)
-                  CALL DLASSQ( K-1, A( 1 ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K-1, A( 1 ), LDA+1, SCALE, S )
 *                 tri L at A(1,0)
                END IF
             END IF
@@ -876,34 +885,36 @@
                IF( ILU.EQ.0 ) THEN
 *                 A is upper
                   DO J = 0, K - 2
-                     CALL DLASSQ( K-J-1, A( K+J+2+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K-J-1, A( K+J+2+J*LDA ), 1, SCALE, 
+     $S )
 *                    L at A(k+1,0)
                   END DO
                   DO J = 0, K - 1
-                     CALL DLASSQ( K+J, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K+J, A( 0+J*LDA ), 1, SCALE, S )
 *                    trap U at A(0,0)
                   END DO
                   S = S + S
 *                 double s for the off diagonal elements
-                  CALL DLASSQ( K, A( K+1 ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( K+1 ), LDA+1, SCALE, S )
 *                 tri L at A(k+1,0)
-                  CALL DLASSQ( K, A( K ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( K ), LDA+1, SCALE, S )
 *                 tri U at A(k,0)
                ELSE
 *                 ilu=1 & A is lower
                   DO J = 0, K - 1
-                     CALL DLASSQ( N-J-1, A( J+2+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( N-J-1, A( J+2+J*LDA ), 1, SCALE, S 
+     $)
 *                    trap L at A(1,0)
                   END DO
                   DO J = 1, K - 1
-                     CALL DLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
 *                    U at A(0,0)
                   END DO
                   S = S + S
 *                 double s for the off diagonal elements
-                  CALL DLASSQ( K, A( 1 ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( 1 ), LDA+1, SCALE, S )
 *                 tri L at A(1,0)
-                  CALL DLASSQ( K, A( 0 ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( 0 ), LDA+1, SCALE, S )
 *                 tri U at A(0,0)
                END IF
             ELSE
@@ -911,43 +922,48 @@
                IF( ILU.EQ.0 ) THEN
 *                 A**T is upper
                   DO J = 1, K - 1
-                     CALL DLASSQ( J, A( 0+( K+1+J )*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( J, A( 0+( K+1+J )*LDA ), 1, SCALE, 
+     $S )
 *                    U at A(0,k+1)
                   END DO
                   DO J = 0, K - 1
-                     CALL DLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
 *                    k by k rect. at A(0,0)
                   END DO
                   DO J = 0, K - 2
-                     CALL DLASSQ( K-J-1, A( J+1+( J+K )*LDA ), 1, SCALE,
+                     CALL AB_DLASSQ( K-J-1, A( J+1+( J+K )*LDA ), 1, SCA
+     $LE,
      $                            S )
 *                    L at A(0,k)
                   END DO
                   S = S + S
 *                 double s for the off diagonal elements
-                  CALL DLASSQ( K, A( 0+( K+1 )*LDA ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( 0+( K+1 )*LDA ), LDA+1, SCALE, S
+     $ )
 *                 tri U at A(0,k+1)
-                  CALL DLASSQ( K, A( 0+K*LDA ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( 0+K*LDA ), LDA+1, SCALE, S )
 *                 tri L at A(0,k)
                ELSE
 *                 A**T is lower
                   DO J = 1, K - 1
-                     CALL DLASSQ( J, A( 0+( J+1 )*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( J, A( 0+( J+1 )*LDA ), 1, SCALE, S 
+     $)
 *                    U at A(0,1)
                   END DO
                   DO J = K + 1, N
-                     CALL DLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
 *                    k by k rect. at A(0,k+1)
                   END DO
                   DO J = 0, K - 2
-                     CALL DLASSQ( K-J-1, A( J+1+J*LDA ), 1, SCALE, S )
+                     CALL AB_DLASSQ( K-J-1, A( J+1+J*LDA ), 1, SCALE, S 
+     $)
 *                    L at A(0,0)
                   END DO
                   S = S + S
 *                 double s for the off diagonal elements
-                  CALL DLASSQ( K, A( LDA ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( LDA ), LDA+1, SCALE, S )
 *                 tri L at A(0,1)
-                  CALL DLASSQ( K, A( 0 ), LDA+1, SCALE, S )
+                  CALL AB_DLASSQ( K, A( 0 ), LDA+1, SCALE, S )
 *                 tri U at A(0,0)
                END IF
             END IF
@@ -955,9 +971,9 @@
          VALUE = SCALE*SQRT( S )
       END IF
 *
-      DLANSF = VALUE
+      AB_DLANSF = VALUE
       RETURN
 *
-*     End of DLANSF
+*     End of AB_DLANSF
 *
       END

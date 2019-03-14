@@ -1,4 +1,4 @@
-*> \brief \b ZUNG2R
+*> \brief \b AB_ZUNG2R
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZUNG2R + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zung2r.f">
+*> Download AB_ZUNG2R + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNG2R.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zung2r.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNG2R.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zung2r.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNG2R.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZUNG2R( M, N, K, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_ZUNG2R( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> ZUNG2R generates an m by n complex matrix Q with orthonormal columns,
+*> AB_ZUNG2R generates an m by n complex matrix Q with orthonormal columns,
 *> which is defined as the first n columns of a product of k elementary
 *> reflectors of order m
 *>
 *>       Q  =  H(1) H(2) . . . H(k)
 *>
-*> as returned by ZGEQRF.
+*> as returned by AB_AB_ZGEQRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the i-th column must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by ZGEQRF in the first k columns of its array
+*>          returned by AB_AB_ZGEQRF in the first k columns of its array
 *>          argument A.
 *>          On exit, the m by n matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by ZGEQRF.
+*>          reflector H(i), as returned by AB_AB_ZGEQRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -112,7 +112,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZUNG2R( M, N, K, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_ZUNG2R( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,7 +137,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZSCAL
+      EXTERNAL           AB_XERBLA, AB_ZLARF, AB_ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -157,7 +157,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZUNG2R', -INFO )
+         CALL AB_XERBLA( 'AB_ZUNG2R', -INFO )
          RETURN
       END IF
 *
@@ -181,11 +181,11 @@
 *
          IF( I.LT.N ) THEN
             A( I, I ) = ONE
-            CALL ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
+            CALL AB_ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
      $                  A( I, I+1 ), LDA, WORK )
          END IF
          IF( I.LT.M )
-     $      CALL ZSCAL( M-I, -TAU( I ), A( I+1, I ), 1 )
+     $      CALL AB_ZSCAL( M-I, -TAU( I ), A( I+1, I ), 1 )
          A( I, I ) = ONE - TAU( I )
 *
 *        Set A(1:i-1,i) to zero
@@ -196,6 +196,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of ZUNG2R
+*     End of AB_ZUNG2R
 *
       END

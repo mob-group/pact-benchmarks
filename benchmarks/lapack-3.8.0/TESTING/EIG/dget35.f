@@ -1,4 +1,4 @@
-*> \brief \b DGET35
+*> \brief \b AB_DGET35
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET35( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE AB_DGET35( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DGET35 tests DTRSYL, a routine for solving the Sylvester matrix
+*> AB_DGET35 tests AB_DTRSYL, a routine for solving the Sylvester matrix
 *> equation
 *>
 *>    op(A)*X + ISGN*X*op(B) = scale*C,
@@ -76,7 +76,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET35( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE AB_DGET35( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -109,11 +109,11 @@
      $                   DUM( 1 ), VM1( 3 ), VM2( 3 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLABAD, DTRSYL
+      EXTERNAL           AB_DGEMM, AB_DLABAD, AB_DTRSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SIN, SQRT
@@ -133,10 +133,10 @@
 *
 *     Get machine parameters
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' )*FOUR / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' )*FOUR / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -213,12 +213,14 @@
    50                               CONTINUE
    60                            CONTINUE
                                  KNT = KNT + 1
-                                 CALL DTRSYL( TRANA, TRANB, ISGN, M, N,
+                                 CALL AB_DTRSYL( TRANA, TRANB, ISGN, M, 
+     $N,
      $                                        A, 6, B, 6, C, 6, SCALE,
      $                                        INFO )
                                  IF( INFO.NE.0 )
      $                              NINFO = NINFO + 1
-                                 XNRM = DLANGE( 'M', M, N, C, 6, DUM )
+                                 XNRM = AB_DLANGE( 'M', M, N, C, 6, DUM 
+     $)
                                  RMUL = ONE
                                  IF( XNRM.GT.ONE .AND. TNRM.GT.ONE )
      $                                THEN
@@ -226,13 +228,15 @@
                                        RMUL = ONE / MAX( XNRM, TNRM )
                                     END IF
                                  END IF
-                                 CALL DGEMM( TRANA, 'N', M, N, M, RMUL,
+                                 CALL AB_DGEMM( TRANA, 'N', M, N, M, RMU
+     $L,
      $                                       A, 6, C, 6, -SCALE*RMUL,
      $                                       CC, 6 )
-                                 CALL DGEMM( 'N', TRANB, M, N, N,
+                                 CALL AB_DGEMM( 'N', TRANB, M, N, N,
      $                                       DBLE( ISGN )*RMUL, C, 6, B,
      $                                       6, ONE, CC, 6 )
-                                 RES1 = DLANGE( 'M', M, N, CC, 6, DUM )
+                                 RES1 = AB_DLANGE( 'M', M, N, CC, 6, DUM
+     $ )
                                  RES = RES1 / MAX( SMLNUM, SMLNUM*XNRM,
      $                                 ( ( RMUL*TNRM )*EPS )*XNRM )
                                  IF( RES.GT.RMAX ) THEN
@@ -251,6 +255,6 @@
 *
       RETURN
 *
-*     End of DGET35
+*     End of AB_DGET35
 *
       END

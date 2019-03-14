@@ -1,4 +1,4 @@
-*> \brief \b CTBMV
+*> \brief \b AB_CTBMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+*       SUBROUTINE AB_CTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,K,LDA,N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CTBMV  performs one of the matrix-vector operations
+*> AB_CTBMV  performs one of the matrix-vector operations
 *>
 *>    x := A*x,   or   x := A**T*x,   or   x := A**H*x,
 *>
@@ -184,7 +184,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+      SUBROUTINE AB_CTBMV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -211,11 +211,11 @@
       LOGICAL NOCONJ,NOUNIT
 *     ..
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG,MAX,MIN
@@ -224,12 +224,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
+      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
           INFO = 1
-      ELSE IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.
-     +         .NOT.LSAME(TRANS,'C')) THEN
+      ELSE IF (.NOT.AB_LSAME(TRANS,'N') .AND. .NOT.AB_LSAME(TRANS,'T'
+     $) .AND.
+     +         .NOT.AB_LSAME(TRANS,'C')) THEN
           INFO = 2
-      ELSE IF (.NOT.LSAME(DIAG,'U') .AND. .NOT.LSAME(DIAG,'N')) THEN
+      ELSE IF (.NOT.AB_LSAME(DIAG,'U') .AND. .NOT.AB_LSAME(DIAG,'N'))
+     $ THEN
           INFO = 3
       ELSE IF (N.LT.0) THEN
           INFO = 4
@@ -241,7 +243,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('CTBMV ',INFO)
+          CALL AB_XERBLA('AB_CTBMV ',INFO)
           RETURN
       END IF
 *
@@ -249,8 +251,8 @@
 *
       IF (N.EQ.0) RETURN
 *
-      NOCONJ = LSAME(TRANS,'T')
-      NOUNIT = LSAME(DIAG,'N')
+      NOCONJ = AB_LSAME(TRANS,'T')
+      NOUNIT = AB_LSAME(DIAG,'N')
 *
 *     Set up the start point in X if the increment is not unity. This
 *     will be  ( N - 1 )*INCX   too small for descending loops.
@@ -264,11 +266,11 @@
 *     Start the operations. In this version the elements of A are
 *     accessed sequentially with one pass through A.
 *
-      IF (LSAME(TRANS,'N')) THEN
+      IF (AB_LSAME(TRANS,'N')) THEN
 *
 *         Form  x := A*x.
 *
-          IF (LSAME(UPLO,'U')) THEN
+          IF (AB_LSAME(UPLO,'U')) THEN
               KPLUS1 = K + 1
               IF (INCX.EQ.1) THEN
                   DO 20 J = 1,N
@@ -333,7 +335,7 @@
 *
 *        Form  x := A**T*x  or  x := A**H*x.
 *
-          IF (LSAME(UPLO,'U')) THEN
+          IF (AB_LSAME(UPLO,'U')) THEN
               KPLUS1 = K + 1
               IF (INCX.EQ.1) THEN
                   DO 110 J = N,1,-1
@@ -424,6 +426,6 @@
 *
       RETURN
 *
-*     End of CTBMV .
+*     End of AB_CTBMV .
 *
       END

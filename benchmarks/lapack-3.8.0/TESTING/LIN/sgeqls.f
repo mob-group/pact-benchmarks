@@ -1,4 +1,4 @@
-*> \brief \b SGEQLS
+*> \brief \b AB_SGEQLS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE AB_SGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the QL factorization
 *>     A = Q*L
-*> computed by SGEQLF.
+*> computed by AB_SGEQLF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          Details of the QL factorization of the original matrix A as
-*>          returned by SGEQLF.
+*>          returned by AB_SGEQLF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,7 +119,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+      SUBROUTINE AB_SGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK
+     $,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -142,7 +143,7 @@
       PARAMETER          ( ONE = 1.0E+0 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SORMQL, STRSM, XERBLA
+      EXTERNAL           AB_SORMQL, AB_STRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -162,12 +163,13 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, M ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
+     $0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGEQLS', -INFO )
+         CALL AB_XERBLA( 'AB_SGEQLS', -INFO )
          RETURN
       END IF
 *
@@ -178,16 +180,18 @@
 *
 *     B := Q' * B
 *
-      CALL SORMQL( 'Left', 'Transpose', M, NRHS, N, A, LDA, TAU, B, LDB,
+      CALL AB_SORMQL( 'Left', 'Transpose', M, NRHS, N, A, LDA, TAU, B, L
+     $DB,
      $             WORK, LWORK, INFO )
 *
 *     Solve L*X = B(m-n+1:m,:)
 *
-      CALL STRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRHS,
+      CALL AB_STRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRH
+     $S,
      $            ONE, A( M-N+1, 1 ), LDA, B( M-N+1, 1 ), LDB )
 *
       RETURN
 *
-*     End of SGEQLS
+*     End of AB_SGEQLS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SLARTGP generates a plane rotation so that the diagonal is nonnegative.
+*> \brief \b AB_AB_SLARTGP generates a plane rotation so that the diagonal is nonnegative.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLARTGP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartgp.f">
+*> Download AB_AB_SLARTGP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SLARTGP.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SLARTGP.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SLARTGP.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARTGP( F, G, CS, SN, R )
+*       SUBROUTINE AB_AB_SLARTGP( F, G, CS, SN, R )
 *
 *       .. Scalar Arguments ..
 *       REAL               CS, F, G, R, SN
@@ -30,12 +30,12 @@
 *>
 *> \verbatim
 *>
-*> SLARTGP generates a plane rotation so that
+*> AB_AB_SLARTGP generates a plane rotation so that
 *>
 *>    [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
 *>    [ -SN  CS  ]     [ G ]     [ 0 ]
 *>
-*> This is a slower, more accurate version of the Level 1 BLAS routine SROTG,
+*> This is a slower, more accurate version of the Level 1 BLAS routine AB_AB_SROTG,
 *> with the following other differences:
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=(+/-)1 and SN=0.
@@ -56,7 +56,7 @@
 *> \param[in] G
 *> \verbatim
 *>          G is REAL
-*>          The second component of vector to be rotated.
+*>          The AB_SECOND component of vector to be rotated.
 *> \endverbatim
 *>
 *> \param[out] CS
@@ -93,7 +93,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLARTGP( F, G, CS, SN, R )
+      SUBROUTINE AB_AB_SLARTGP( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -120,8 +120,8 @@
       REAL               EPS, F1, G1, SAFMIN, SAFMN2, SAFMX2, SCALE
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, SIGN, SQRT
@@ -135,10 +135,10 @@
 *     .. Executable Statements ..
 *
 *     IF( FIRST ) THEN
-         SAFMIN = SLAMCH( 'S' )
-         EPS = SLAMCH( 'E' )
-         SAFMN2 = SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $            LOG( SLAMCH( 'B' ) ) / TWO )
+         SAFMIN = AB_SLAMCH( 'S' )
+         EPS = AB_SLAMCH( 'E' )
+         SAFMN2 = AB_SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $            LOG( AB_SLAMCH( 'B' ) ) / TWO )
          SAFMX2 = ONE / SAFMN2
 *        FIRST = .FALSE.
 *     END IF
@@ -197,6 +197,6 @@
       END IF
       RETURN
 *
-*     End of SLARTG
+*     End of AB_SLARTG
 *
       END

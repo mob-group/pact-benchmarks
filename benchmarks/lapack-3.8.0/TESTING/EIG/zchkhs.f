@@ -1,4 +1,4 @@
-*> \brief \b ZCHKHS
+*> \brief \b AB_ZCHKHS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_ZCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
 *                          W3, EVECTL, EVECTR, EVECTY, EVECTX, UU, TAU,
 *                          WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
@@ -36,35 +36,35 @@
 *>
 *> \verbatim
 *>
-*>    ZCHKHS  checks the nonsymmetric eigenvalue problem routines.
+*>    AB_ZCHKHS  checks the nonsymmetric eigenvalue problem routines.
 *>
-*>            ZGEHRD factors A as  U H U' , where ' means conjugate
+*>            AB_ZGEHRD factors A as  U H U' , where ' means conjugate
 *>            transpose, H is hessenberg, and U is unitary.
 *>
-*>            ZUNGHR generates the unitary matrix U.
+*>            AB_ZUNGHR generates the unitary matrix U.
 *>
-*>            ZUNMHR multiplies a matrix by the unitary matrix U.
+*>            AB_ZUNMHR multiplies a matrix by the unitary matrix U.
 *>
-*>            ZHSEQR factors H as  Z T Z' , where Z is unitary and T
+*>            AB_ZHSEQR factors H as  Z T Z' , where Z is unitary and T
 *>            is upper triangular.  It also computes the eigenvalues,
 *>            w(1), ..., w(n); we define a diagonal matrix W whose
 *>            (diagonal) entries are the eigenvalues.
 *>
-*>            ZTREVC computes the left eigenvector matrix L and the
+*>            AB_ZTREVC computes the left eigenvector matrix L and the
 *>            right eigenvector matrix R for the matrix T.  The
 *>            columns of L are the complex conjugates of the left
 *>            eigenvectors of T.  The columns of R are the right
 *>            eigenvectors of T.  L is lower triangular, and R is
 *>            upper triangular.
 *>
-*>            ZHSEIN computes the left eigenvector matrix Y and the
+*>            AB_ZHSEIN computes the left eigenvector matrix Y and the
 *>            right eigenvector matrix X for the matrix H.  The
 *>            columns of Y are the complex conjugates of the left
 *>            eigenvectors of H.  The columns of X are the right
 *>            eigenvectors of H.  Y is lower triangular, and X is
 *>            upper triangular.
 *>
-*>    When ZCHKHS is called, a number of matrix "sizes" ("n's") and a
+*>    When AB_ZCHKHS is called, a number of matrix "sizes" ("n's") and a
 *>    number of matrix "types" are specified.  For each size ("n")
 *>    and each type of matrix, one matrix will be generated and used
 *>    to test the nonsymmetric eigenroutines.  For each matrix, 14
@@ -173,7 +173,7 @@
 *> \verbatim
 *>  NSIZES - INTEGER
 *>           The number of sizes of matrices to use.  If it is zero,
-*>           ZCHKHS does nothing.  It must be at least zero.
+*>           AB_ZCHKHS does nothing.  It must be at least zero.
 *>           Not modified.
 *>
 *>  NN     - INTEGER array, dimension (NSIZES)
@@ -183,7 +183,7 @@
 *>           Not modified.
 *>
 *>  NTYPES - INTEGER
-*>           The number of elements in DOTYPE.   If it is zero, ZCHKHS
+*>           The number of elements in DOTYPE.   If it is zero, AB_ZCHKHS
 *>           does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>           and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>           defined, which is to use whatever matrix is in A.  This
@@ -209,7 +209,7 @@
 *>           congruential sequence limited to small integers, and so
 *>           should produce machine independent random numbers. The
 *>           values of ISEED are changed on exit, and can be used in the
-*>           next call to ZCHKHS to continue the same random number
+*>           next call to AB_ZCHKHS to continue the same random number
 *>           sequence.
 *>           Modified.
 *>
@@ -239,18 +239,18 @@
 *>           Not modified.
 *>
 *>  H      - COMPLEX*16 array, dimension (LDA,max(NN))
-*>           The upper hessenberg matrix computed by ZGEHRD.  On exit,
+*>           The upper hessenberg matrix computed by AB_ZGEHRD.  On exit,
 *>           H contains the Hessenberg form of the matrix in A.
 *>           Modified.
 *>
 *>  T1     - COMPLEX*16 array, dimension (LDA,max(NN))
-*>           The Schur (="quasi-triangular") matrix computed by ZHSEQR
+*>           The Schur (="quasi-triangular") matrix computed by AB_ZHSEQR
 *>           if Z is computed.  On exit, T1 contains the Schur form of
 *>           the matrix in A.
 *>           Modified.
 *>
 *>  T2     - COMPLEX*16 array, dimension (LDA,max(NN))
-*>           The Schur matrix computed by ZHSEQR when Z is not computed.
+*>           The Schur matrix computed by AB_ZHSEQR when Z is not computed.
 *>           This should be identical to T1.
 *>           Modified.
 *>
@@ -260,11 +260,11 @@
 *>           Not modified.
 *>
 *>  U      - COMPLEX*16 array, dimension (LDU,max(NN))
-*>           The unitary matrix computed by ZGEHRD.
+*>           The unitary matrix computed by AB_ZGEHRD.
 *>           Modified.
 *>
 *>  Z      - COMPLEX*16 array, dimension (LDU,max(NN))
-*>           The unitary matrix computed by ZHSEQR.
+*>           The unitary matrix computed by AB_ZHSEQR.
 *>           Modified.
 *>
 *>  UZ     - COMPLEX*16 array, dimension (LDU,max(NN))
@@ -282,7 +282,7 @@
 *>           decomposition (Z not computed, T only computed as much
 *>           as is necessary for determining eigenvalues).  On exit,
 *>           W3 contains the eigenvalues of the matrix in A, possibly
-*>           perturbed by ZHSEIN.
+*>           perturbed by AB_ZHSEIN.
 *>           Modified.
 *>
 *>  EVECTL - COMPLEX*16 array, dimension (LDU,max(NN))
@@ -305,11 +305,11 @@
 *>           Modified.
 *>
 *>  UU     - COMPLEX*16 array, dimension (LDU,max(NN))
-*>           Details of the unitary matrix computed by ZGEHRD.
+*>           Details of the unitary matrix computed by AB_ZGEHRD.
 *>           Modified.
 *>
 *>  TAU    - COMPLEX*16 array, dimension (max(NN))
-*>           Further details of the unitary matrix computed by ZGEHRD.
+*>           Further details of the unitary matrix computed by AB_ZGEHRD.
 *>           Modified.
 *>
 *>  WORK   - COMPLEX*16 array, dimension (NWORK)
@@ -346,9 +346,9 @@
 *>            -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
 *>           -14: LDU < 1 or LDU < NMAX.
 *>           -26: NWORK too small.
-*>           If  ZLATMR, CLATMS, or CLATME returns an error code, the
+*>           If  AB_ZLATMR, AB_CLATMS, or AB_CLATME returns an error code, the
 *>               absolute value of it is returned.
-*>           If 1, then ZHSEQR could not find all the shifts.
+*>           If 1, then AB_ZHSEQR could not find all the shifts.
 *>           If 2, then the EISPACK code (for small blocks) failed.
 *>           If >2, then 30*N iterations were not enough to find an
 *>               eigenvalue or to decompose the problem.
@@ -373,7 +373,7 @@
 *>     NMAX            Largest value in NN.
 *>     NMATS           The number of matrices generated so far.
 *>     NERRS           The number of tests which have exceeded THRESH
-*>                     so far (computed by DLAFTS).
+*>                     so far (computed by AB_DLAFTS).
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
@@ -406,7 +406,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_ZCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
      $                   W3, EVECTL, EVECTR, EVECTY, EVECTX, UU, TAU,
      $                   WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
@@ -460,14 +460,17 @@
       COMPLEX*16         CDUMMA( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLAFTS, DLASUM, XERBLA, ZCOPY, ZGEHRD,
-     $                   ZGEMM, ZGET10, ZGET22, ZHSEIN, ZHSEQR, ZHST01,
-     $                   ZLACPY, ZLASET, ZLATME, ZLATMR, ZLATMS, ZTREVC,
-     $                   ZUNGHR, ZUNMHR
+      EXTERNAL           AB_DLABAD, AB_DLAFTS, AB_DLASUM, AB_XERBLA, AB_
+     $ZCOPY, AB_ZGEHRD,
+     $                   AB_ZGEMM, AB_ZGET10, AB_ZGET22, AB_ZHSEIN, AB_Z
+     $HSEQR, AB_ZHST01,
+     $                   AB_ZLACPY, AB_ZLASET, AB_ZLATME, AB_ZLATMR, AB_
+     $ZLATMS, AB_ZTREVC,
+     $                   AB_ZUNGHR, AB_ZUNMHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -514,7 +517,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKHS', -INFO )
+         CALL AB_XERBLA( 'AB_ZCHKHS', -INFO )
          RETURN
       END IF
 *
@@ -525,10 +528,10 @@
 *
 *     More important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
-      CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
+      CALL AB_DLABAD( UNFL, OVFL )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -611,7 +614,7 @@
 *
    70       CONTINUE
 *
-            CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -644,7 +647,7 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, IMODE, COND,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, IMODE, COND,
      $                      CONE, 'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -653,7 +656,8 @@
 *
 *              Hermitian, eigenvalues specified
 *
-               CALL ZLATMS( N, N, 'D', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_ZLATMS( N, N, 'D', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, N, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.6 ) THEN
@@ -668,7 +672,7 @@
                   CONDS = ZERO
                END IF
 *
-               CALL ZLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
+               CALL AB_ZLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
      $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N, ANORM,
      $                      A, LDA, WORK( N+1 ), IINFO )
 *
@@ -676,7 +680,8 @@
 *
 *              Diagonal, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -685,7 +690,8 @@
 *
 *              Hermitian, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -694,7 +700,8 @@
 *
 *              General, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -703,7 +710,8 @@
 *
 *              Triangular, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -722,20 +730,20 @@
 *
   100       CONTINUE
 *
-*           Call ZGEHRD to compute H and U, do tests.
+*           Call AB_ZGEHRD to compute H and U, do tests.
 *
-            CALL ZLACPY( ' ', N, N, A, LDA, H, LDA )
+            CALL AB_ZLACPY( ' ', N, N, A, LDA, H, LDA )
             NTEST = 1
 *
             ILO = 1
             IHI = N
 *
-            CALL ZGEHRD( N, ILO, IHI, H, LDA, WORK, WORK( N+1 ),
+            CALL AB_ZGEHRD( N, ILO, IHI, H, LDA, WORK, WORK( N+1 ),
      $                   NWORK-N, IINFO )
 *
             IF( IINFO.NE.0 ) THEN
                RESULT( 1 ) = ULPINV
-               WRITE( NOUNIT, FMT = 9999 )'ZGEHRD', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZGEHRD', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -749,26 +757,27 @@
                   H( I, J ) = CZERO
   110          CONTINUE
   120       CONTINUE
-            CALL ZCOPY( N-1, WORK, 1, TAU, 1 )
-            CALL ZUNGHR( N, ILO, IHI, U, LDU, WORK, WORK( N+1 ),
+            CALL AB_ZCOPY( N-1, WORK, 1, TAU, 1 )
+            CALL AB_ZUNGHR( N, ILO, IHI, U, LDU, WORK, WORK( N+1 ),
      $                   NWORK-N, IINFO )
             NTEST = 2
 *
-            CALL ZHST01( N, ILO, IHI, A, LDA, H, LDA, U, LDU, WORK,
+            CALL AB_ZHST01( N, ILO, IHI, A, LDA, H, LDA, U, LDU, WORK,
      $                   NWORK, RWORK, RESULT( 1 ) )
 *
-*           Call ZHSEQR to compute T1, T2 and Z, do tests.
+*           Call AB_ZHSEQR to compute T1, T2 and Z, do tests.
 *
 *           Eigenvalues only (W3)
 *
-            CALL ZLACPY( ' ', N, N, H, LDA, T2, LDA )
+            CALL AB_ZLACPY( ' ', N, N, H, LDA, T2, LDA )
             NTEST = 3
             RESULT( 3 ) = ULPINV
 *
-            CALL ZHSEQR( 'E', 'N', N, ILO, IHI, T2, LDA, W3, UZ, LDU,
+            CALL AB_ZHSEQR( 'E', 'N', N, ILO, IHI, T2, LDA, W3, UZ, LDU,
      $                   WORK, NWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHSEQR(E)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHSEQR(E)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                IF( IINFO.LE.N+2 ) THEN
                   INFO = ABS( IINFO )
@@ -778,12 +787,13 @@
 *
 *           Eigenvalues (W1) and Full Schur Form (T2)
 *
-            CALL ZLACPY( ' ', N, N, H, LDA, T2, LDA )
+            CALL AB_ZLACPY( ' ', N, N, H, LDA, T2, LDA )
 *
-            CALL ZHSEQR( 'S', 'N', N, ILO, IHI, T2, LDA, W1, UZ, LDU,
+            CALL AB_ZHSEQR( 'S', 'N', N, ILO, IHI, T2, LDA, W1, UZ, LDU,
      $                   WORK, NWORK, IINFO )
             IF( IINFO.NE.0 .AND. IINFO.LE.N+2 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHSEQR(S)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHSEQR(S)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -791,13 +801,14 @@
 *
 *           Eigenvalues (W1), Schur Form (T1), and Schur Vectors (UZ)
 *
-            CALL ZLACPY( ' ', N, N, H, LDA, T1, LDA )
-            CALL ZLACPY( ' ', N, N, U, LDU, UZ, LDU )
+            CALL AB_ZLACPY( ' ', N, N, H, LDA, T1, LDA )
+            CALL AB_ZLACPY( ' ', N, N, U, LDU, UZ, LDU )
 *
-            CALL ZHSEQR( 'S', 'V', N, ILO, IHI, T1, LDA, W1, UZ, LDU,
+            CALL AB_ZHSEQR( 'S', 'V', N, ILO, IHI, T1, LDA, W1, UZ, LDU,
      $                   WORK, NWORK, IINFO )
             IF( IINFO.NE.0 .AND. IINFO.LE.N+2 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHSEQR(V)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHSEQR(V)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -805,25 +816,26 @@
 *
 *           Compute Z = U' UZ
 *
-            CALL ZGEMM( 'C', 'N', N, N, N, CONE, U, LDU, UZ, LDU, CZERO,
+            CALL AB_ZGEMM( 'C', 'N', N, N, N, CONE, U, LDU, UZ, LDU, CZE
+     $RO,
      $                  Z, LDU )
             NTEST = 8
 *
 *           Do Tests 3: | H - Z T Z' | / ( |H| n ulp )
 *                and 4: | I - Z Z' | / ( n ulp )
 *
-            CALL ZHST01( N, ILO, IHI, H, LDA, T1, LDA, Z, LDU, WORK,
+            CALL AB_ZHST01( N, ILO, IHI, H, LDA, T1, LDA, Z, LDU, WORK,
      $                   NWORK, RWORK, RESULT( 3 ) )
 *
 *           Do Tests 5: | A - UZ T (UZ)' | / ( |A| n ulp )
 *                and 6: | I - UZ (UZ)' | / ( n ulp )
 *
-            CALL ZHST01( N, ILO, IHI, A, LDA, T1, LDA, UZ, LDU, WORK,
+            CALL AB_ZHST01( N, ILO, IHI, A, LDA, T1, LDA, UZ, LDU, WORK,
      $                   NWORK, RWORK, RESULT( 5 ) )
 *
 *           Do Test 7: | T2 - T1 | / ( |T| n ulp )
 *
-            CALL ZGET10( N, N, T2, LDA, T1, LDA, WORK, RWORK,
+            CALL AB_ZGET10( N, N, T2, LDA, T1, LDA, WORK, RWORK,
      $                   RESULT( 7 ) )
 *
 *           Do Test 8: | W3 - W1 | / ( max(|W1|,|W3|) ulp )
@@ -852,10 +864,10 @@
             DO 150 J = 1, N, 2
                SELECT( J ) = .TRUE.
   150       CONTINUE
-            CALL ZTREVC( 'Right', 'All', SELECT, N, T1, LDA, CDUMMA,
+            CALL AB_ZTREVC( 'Right', 'All', SELECT, N, T1, LDA, CDUMMA,
      $                   LDU, EVECTR, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZTREVC(R,A)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZTREVC(R,A)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -863,21 +875,21 @@
 *
 *           Test 9:  | TR - RW | / ( |T| |R| ulp )
 *
-            CALL ZGET22( 'N', 'N', 'N', N, T1, LDA, EVECTR, LDU, W1,
+            CALL AB_ZGET22( 'N', 'N', 'N', N, T1, LDA, EVECTR, LDU, W1,
      $                   WORK, RWORK, DUMMA( 1 ) )
             RESULT( 9 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Right', 'ZTREVC',
+               WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_ZTREVC',
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
 *           Compute selected right eigenvectors and confirm that
 *           they agree with previous right eigenvectors
 *
-            CALL ZTREVC( 'Right', 'Some', SELECT, N, T1, LDA, CDUMMA,
+            CALL AB_ZTREVC( 'Right', 'Some', SELECT, N, T1, LDA, CDUMMA,
      $                   LDU, EVECTL, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZTREVC(R,S)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZTREVC(R,S)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -898,17 +910,19 @@
   170       CONTINUE
   180       CONTINUE
             IF( .NOT.MATCH )
-     $         WRITE( NOUNIT, FMT = 9997 )'Right', 'ZTREVC', N, JTYPE,
+     $         WRITE( NOUNIT, FMT = 9997 )'Right', 'AB_ZTREVC', N, JTYPE
+     $,
      $         IOLDSD
 *
 *           Compute the Left eigenvector Matrix:
 *
             NTEST = 10
             RESULT( 10 ) = ULPINV
-            CALL ZTREVC( 'Left', 'All', SELECT, N, T1, LDA, EVECTL, LDU,
+            CALL AB_ZTREVC( 'Left', 'All', SELECT, N, T1, LDA, EVECTL, L
+     $DU,
      $                   CDUMMA, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZTREVC(L,A)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZTREVC(L,A)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -916,21 +930,22 @@
 *
 *           Test 10:  | LT - WL | / ( |T| |L| ulp )
 *
-            CALL ZGET22( 'C', 'N', 'C', N, T1, LDA, EVECTL, LDU, W1,
+            CALL AB_ZGET22( 'C', 'N', 'C', N, T1, LDA, EVECTL, LDU, W1,
      $                   WORK, RWORK, DUMMA( 3 ) )
             RESULT( 10 ) = DUMMA( 3 )
             IF( DUMMA( 4 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Left', 'ZTREVC', DUMMA( 4 ),
+               WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_ZTREVC', DUMMA( 4 
+     $),
      $            N, JTYPE, IOLDSD
             END IF
 *
 *           Compute selected left eigenvectors and confirm that
 *           they agree with previous left eigenvectors
 *
-            CALL ZTREVC( 'Left', 'Some', SELECT, N, T1, LDA, EVECTR,
+            CALL AB_ZTREVC( 'Left', 'Some', SELECT, N, T1, LDA, EVECTR,
      $                   LDU, CDUMMA, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZTREVC(L,S)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZTREVC(L,S)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -951,10 +966,10 @@
   200       CONTINUE
   210       CONTINUE
             IF( .NOT.MATCH )
-     $         WRITE( NOUNIT, FMT = 9997 )'Left', 'ZTREVC', N, JTYPE,
+     $         WRITE( NOUNIT, FMT = 9997 )'Left', 'AB_ZTREVC', N, JTYPE,
      $         IOLDSD
 *
-*           Call ZHSEIN for Right eigenvectors of H, do test 11
+*           Call AB_ZHSEIN for Right eigenvectors of H, do test 11
 *
             NTEST = 11
             RESULT( 11 ) = ULPINV
@@ -962,11 +977,13 @@
                SELECT( J ) = .TRUE.
   220       CONTINUE
 *
-            CALL ZHSEIN( 'Right', 'Qr', 'Ninitv', SELECT, N, H, LDA, W3,
+            CALL AB_ZHSEIN( 'Right', 'Qr', 'Ninitv', SELECT, N, H, LDA, 
+     $W3,
      $                   CDUMMA, LDU, EVECTX, LDU, N1, IN, WORK, RWORK,
      $                   IWORK, IWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHSEIN(R)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHSEIN(R)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 )
@@ -977,17 +994,18 @@
 *
 *                        (from inverse iteration)
 *
-               CALL ZGET22( 'N', 'N', 'N', N, H, LDA, EVECTX, LDU, W3,
+               CALL AB_ZGET22( 'N', 'N', 'N', N, H, LDA, EVECTX, LDU, W3
+     $,
      $                      WORK, RWORK, DUMMA( 1 ) )
                IF( DUMMA( 1 ).LT.ULPINV )
      $            RESULT( 11 ) = DUMMA( 1 )*ANINV
                IF( DUMMA( 2 ).GT.THRESH ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'Right', 'ZHSEIN',
+                  WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_ZHSEIN',
      $               DUMMA( 2 ), N, JTYPE, IOLDSD
                END IF
             END IF
 *
-*           Call ZHSEIN for Left eigenvectors of H, do test 12
+*           Call AB_ZHSEIN for Left eigenvectors of H, do test 12
 *
             NTEST = 12
             RESULT( 12 ) = ULPINV
@@ -995,11 +1013,13 @@
                SELECT( J ) = .TRUE.
   230       CONTINUE
 *
-            CALL ZHSEIN( 'Left', 'Qr', 'Ninitv', SELECT, N, H, LDA, W3,
+            CALL AB_ZHSEIN( 'Left', 'Qr', 'Ninitv', SELECT, N, H, LDA, W
+     $3,
      $                   EVECTY, LDU, CDUMMA, LDU, N1, IN, WORK, RWORK,
      $                   IWORK, IWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHSEIN(L)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHSEIN(L)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 )
@@ -1010,25 +1030,27 @@
 *
 *                        (from inverse iteration)
 *
-               CALL ZGET22( 'C', 'N', 'C', N, H, LDA, EVECTY, LDU, W3,
+               CALL AB_ZGET22( 'C', 'N', 'C', N, H, LDA, EVECTY, LDU, W3
+     $,
      $                      WORK, RWORK, DUMMA( 3 ) )
                IF( DUMMA( 3 ).LT.ULPINV )
      $            RESULT( 12 ) = DUMMA( 3 )*ANINV
                IF( DUMMA( 4 ).GT.THRESH ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'Left', 'ZHSEIN',
+                  WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_ZHSEIN',
      $               DUMMA( 4 ), N, JTYPE, IOLDSD
                END IF
             END IF
 *
-*           Call ZUNMHR for Right eigenvectors of A, do test 13
+*           Call AB_ZUNMHR for Right eigenvectors of A, do test 13
 *
             NTEST = 13
             RESULT( 13 ) = ULPINV
 *
-            CALL ZUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
+            CALL AB_ZUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
      $                   LDU, TAU, EVECTX, LDU, WORK, NWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZUNMHR(L)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZUNMHR(L)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 )
@@ -1039,21 +1061,23 @@
 *
 *                        (from inverse iteration)
 *
-               CALL ZGET22( 'N', 'N', 'N', N, A, LDA, EVECTX, LDU, W3,
+               CALL AB_ZGET22( 'N', 'N', 'N', N, A, LDA, EVECTX, LDU, W3
+     $,
      $                      WORK, RWORK, DUMMA( 1 ) )
                IF( DUMMA( 1 ).LT.ULPINV )
      $            RESULT( 13 ) = DUMMA( 1 )*ANINV
             END IF
 *
-*           Call ZUNMHR for Left eigenvectors of A, do test 14
+*           Call AB_ZUNMHR for Left eigenvectors of A, do test 14
 *
             NTEST = 14
             RESULT( 14 ) = ULPINV
 *
-            CALL ZUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
+            CALL AB_ZUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
      $                   LDU, TAU, EVECTY, LDU, WORK, NWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZUNMHR(L)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZUNMHR(L)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 )
@@ -1064,7 +1088,8 @@
 *
 *                        (from inverse iteration)
 *
-               CALL ZGET22( 'C', 'N', 'C', N, A, LDA, EVECTY, LDU, W3,
+               CALL AB_ZGET22( 'C', 'N', 'C', N, A, LDA, EVECTY, LDU, W3
+     $,
      $                      WORK, RWORK, DUMMA( 3 ) )
                IF( DUMMA( 3 ).LT.ULPINV )
      $            RESULT( 14 ) = DUMMA( 3 )*ANINV
@@ -1075,7 +1100,7 @@
   240       CONTINUE
 *
             NTESTT = NTESTT + NTEST
-            CALL DLAFTS( 'ZHS', N, N, JTYPE, NTEST, RESULT, IOLDSD,
+            CALL AB_DLAFTS( 'ZHS', N, N, JTYPE, NTEST, RESULT, IOLDSD,
      $                   THRESH, NOUNIT, NERRS )
 *
   250    CONTINUE
@@ -1083,20 +1108,21 @@
 *
 *     Summary
 *
-      CALL DLASUM( 'ZHS', NOUNIT, NERRS, NTESTT )
+      CALL AB_DLASUM( 'ZHS', NOUNIT, NERRS, NTESTT )
 *
       RETURN
 *
- 9999 FORMAT( ' ZCHKHS: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_ZCHKHS: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
- 9998 FORMAT( ' ZCHKHS: ', A, ' Eigenvectors from ', A, ' incorrectly ',
+ 9998 FORMAT( ' AB_ZCHKHS: ', A, ' Eigenvectors from ', A, ' incorrectly
+     $ ',
      $      'normalized.', / ' Bits of error=', 0P, G10.3, ',', 9X,
      $      'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5,
      $      ')' )
- 9997 FORMAT( ' ZCHKHS: Selected ', A, ' Eigenvectors from ', A,
+ 9997 FORMAT( ' AB_ZCHKHS: Selected ', A, ' Eigenvectors from ', A,
      $      ' do not match other eigenvectors ', 9X, 'N=', I6,
      $      ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
-*     End of ZCHKHS
+*     End of AB_ZCHKHS
 *
       END

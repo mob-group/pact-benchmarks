@@ -1,4 +1,4 @@
-*> \brief \b DGET36
+*> \brief \b AB_DGET36
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET36( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_DGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NIN
@@ -24,8 +24,8 @@
 *>
 *> \verbatim
 *>
-*> DGET36 tests DTREXC, a routine for moving blocks (either 1 by 1 or
-*> 2 by 2) on the diagonal of a matrix in real Schur form.  Thus, DLAEXC
+*> AB_DGET36 tests AB_DTREXC, a routine for moving blocks (either 1 by 1 or
+*> 2 by 2) on the diagonal of a matrix in real Schur form.  Thus, AB_DLAEXC
 *> computes an orthogonal matrix Q such that
 *>
 *>    Q' * T1 * Q  = T2
@@ -86,7 +86,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET36( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_DGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -119,18 +119,18 @@
      $                   T2( LDT, LDT ), TMP( LDT, LDT ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DHST01, DLACPY, DLASET, DTREXC
+      EXTERNAL           AB_DHST01, AB_DLACPY, AB_DLASET, AB_DTREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'P' )
+      EPS = AB_DLAMCH( 'P' )
       RMAX = ZERO
       LMAX = 0
       KNT = 0
@@ -148,8 +148,8 @@
       DO 20 I = 1, N
          READ( NIN, FMT = * )( TMP( I, J ), J = 1, N )
    20 CONTINUE
-      CALL DLACPY( 'F', N, N, TMP, LDT, T1, LDT )
-      CALL DLACPY( 'F', N, N, TMP, LDT, T2, LDT )
+      CALL AB_DLACPY( 'F', N, N, TMP, LDT, T1, LDT )
+      CALL AB_DLACPY( 'F', N, N, TMP, LDT, T2, LDT )
       IFSTSV = IFST
       ILSTSV = ILST
       IFST1 = IFST
@@ -160,8 +160,9 @@
 *
 *     Test without accumulating Q
 *
-      CALL DLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
-      CALL DTREXC( 'N', N, T1, LDT, Q, LDT, IFST1, ILST1, WORK, INFO1 )
+      CALL AB_DLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
+      CALL AB_DTREXC( 'N', N, T1, LDT, Q, LDT, IFST1, ILST1, WORK, INFO1
+     $ )
       DO 40 I = 1, N
          DO 30 J = 1, N
             IF( I.EQ.J .AND. Q( I, J ).NE.ONE )
@@ -173,8 +174,9 @@
 *
 *     Test with accumulating Q
 *
-      CALL DLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
-      CALL DTREXC( 'V', N, T2, LDT, Q, LDT, IFST2, ILST2, WORK, INFO2 )
+      CALL AB_DLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
+      CALL AB_DTREXC( 'V', N, T2, LDT, Q, LDT, IFST2, ILST2, WORK, INFO2
+     $ )
 *
 *     Compare T1 with T2
 *
@@ -204,7 +206,7 @@
 *
 *     Test for small residual, and orthogonality of Q
 *
-      CALL DHST01( N, 1, N, TMP, LDT, T2, LDT, Q, LDT, WORK, LWORK,
+      CALL AB_DHST01( N, 1, N, TMP, LDT, T2, LDT, Q, LDT, WORK, LWORK,
      $             RESULT )
       RES = RES + RESULT( 1 ) + RESULT( 2 )
 *
@@ -244,6 +246,6 @@
       END IF
       GO TO 10
 *
-*     End of DGET36
+*     End of AB_DGET36
 *
       END

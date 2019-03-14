@@ -1,4 +1,4 @@
-*> \brief \b ZLALS0 applies back multiplying factors in solving the least squares problem using divide and conquer SVD approach. Used by sgelsd.
+*> \brief \b AB_ZLALS0 applies back multiplying factors in solving the least squares problem using divide and conquer SVD approach. Used by AB_AB_SGELSD.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLALS0 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlals0.f">
+*> Download AB_ZLALS0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLALS0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlals0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLALS0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlals0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLALS0.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+*       SUBROUTINE AB_ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
 *                          PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
 *                          POLES, DIFL, DIFR, Z, K, C, S, RWORK, INFO )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> ZLALS0 applies back the multiplying factors of either the left or the
+*> AB_ZLALS0 applies back the multiplying factors of either the left or the
 *> right singular vector matrix of a diagonal matrix appended by a row
 *> to the right hand side matrix B in solving the least squares problem
 *> using the divide-and-conquer SVD approach.
@@ -266,7 +266,8 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+      SUBROUTINE AB_ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX
+     $,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   POLES, DIFL, DIFR, Z, K, C, S, RWORK, INFO )
 *
@@ -299,12 +300,13 @@
       DOUBLE PRECISION   DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, XERBLA, ZCOPY, ZDROT, ZDSCAL, ZLACPY,
-     $                   ZLASCL
+      EXTERNAL           AB_DGEMV, AB_XERBLA, AB_ZCOPY, ZAB_DROT, ZAB_DS
+     $CAL, AB_ZLACPY,
+     $                   AB_ZLASCL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMC3, DNRM2
-      EXTERNAL           DLAMC3, DNRM2
+      DOUBLE PRECISION   AB_DLAMC3, AB_DNRM2
+      EXTERNAL           AB_DLAMC3, AB_DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, DIMAG, MAX
@@ -340,7 +342,7 @@
          INFO = -20
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLALS0', -INFO )
+         CALL AB_XERBLA( 'AB_ZLALS0', -INFO )
          RETURN
       END IF
 *
@@ -354,25 +356,26 @@
 *        Step (1L): apply back the Givens rotations performed.
 *
          DO 10 I = 1, GIVPTR
-            CALL ZDROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
+            CALL ZAB_DROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
      $                  B( GIVCOL( I, 1 ), 1 ), LDB, GIVNUM( I, 2 ),
      $                  GIVNUM( I, 1 ) )
    10    CONTINUE
 *
 *        Step (2L): permute rows of B.
 *
-         CALL ZCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
+         CALL AB_ZCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
          DO 20 I = 2, N
-            CALL ZCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDBX )
+            CALL AB_ZCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDB
+     $X )
    20    CONTINUE
 *
 *        Step (3L): apply the inverse of the left singular vector
 *        matrix to BX.
 *
          IF( K.EQ.1 ) THEN
-            CALL ZCOPY( NRHS, BX, LDBX, B, LDB )
+            CALL AB_ZCOPY( NRHS, BX, LDBX, B, LDB )
             IF( Z( 1 ).LT.ZERO ) THEN
-               CALL ZDSCAL( NRHS, NEGONE, B, LDB )
+               CALL ZAB_DSCAL( NRHS, NEGONE, B, LDB )
             END IF
          ELSE
             DO 100 J = 1, K
@@ -396,7 +399,7 @@
                      RWORK( I ) = ZERO
                   ELSE
                      RWORK( I ) = POLES( I, 2 )*Z( I ) /
-     $                            ( DLAMC3( POLES( I, 2 ), DSIGJ )-
+     $                            ( AB_DLAMC3( POLES( I, 2 ), DSIGJ )-
      $                            DIFLJ ) / ( POLES( I, 2 )+DJ )
                   END IF
    30          CONTINUE
@@ -406,17 +409,17 @@
                      RWORK( I ) = ZERO
                   ELSE
                      RWORK( I ) = POLES( I, 2 )*Z( I ) /
-     $                            ( DLAMC3( POLES( I, 2 ), DSIGJP )+
+     $                            ( AB_DLAMC3( POLES( I, 2 ), DSIGJP )+
      $                            DIFRJ ) / ( POLES( I, 2 )+DJ )
                   END IF
    40          CONTINUE
                RWORK( 1 ) = NEGONE
-               TEMP = DNRM2( K, RWORK, 1 )
+               TEMP = AB_DNRM2( K, RWORK, 1 )
 *
-*              Since B and BX are complex, the following call to DGEMV
+*              Since B and BX are complex, the following call to AB_DGEMV
 *              is performed in two steps (real and imaginary parts).
 *
-*              CALL DGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO,
+*              CALL AB_DGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO,
 *    $                     B( J, 1 ), LDB )
 *
                I = K + NRHS*2
@@ -426,7 +429,7 @@
                      RWORK( I ) = DBLE( BX( JROW, JCOL ) )
    50             CONTINUE
    60          CONTINUE
-               CALL DGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
+               CALL AB_DGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
      $                     RWORK( 1 ), 1, ZERO, RWORK( 1+K ), 1 )
                I = K + NRHS*2
                DO 80 JCOL = 1, NRHS
@@ -435,13 +438,13 @@
                      RWORK( I ) = DIMAG( BX( JROW, JCOL ) )
    70             CONTINUE
    80          CONTINUE
-               CALL DGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
+               CALL AB_DGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
      $                     RWORK( 1 ), 1, ZERO, RWORK( 1+K+NRHS ), 1 )
                DO 90 JCOL = 1, NRHS
                   B( J, JCOL ) = DCMPLX( RWORK( JCOL+K ),
      $                           RWORK( JCOL+K+NRHS ) )
    90          CONTINUE
-               CALL ZLASCL( 'G', 0, 0, TEMP, ONE, 1, NRHS, B( J, 1 ),
+               CALL AB_ZLASCL( 'G', 0, 0, TEMP, ONE, 1, NRHS, B( J, 1 ),
      $                      LDB, INFO )
   100       CONTINUE
          END IF
@@ -449,7 +452,7 @@
 *        Move the deflated rows of BX to B also.
 *
          IF( K.LT.MAX( M, N ) )
-     $      CALL ZLACPY( 'A', N-K, NRHS, BX( K+1, 1 ), LDBX,
+     $      CALL AB_ZLACPY( 'A', N-K, NRHS, BX( K+1, 1 ), LDBX,
      $                   B( K+1, 1 ), LDB )
       ELSE
 *
@@ -459,7 +462,7 @@
 *        to B.
 *
          IF( K.EQ.1 ) THEN
-            CALL ZCOPY( NRHS, B, LDB, BX, LDBX )
+            CALL AB_ZCOPY( NRHS, B, LDB, BX, LDBX )
          ELSE
             DO 180 J = 1, K
                DSIGJ = POLES( J, 2 )
@@ -473,7 +476,8 @@
                   IF( Z( J ).EQ.ZERO ) THEN
                      RWORK( I ) = ZERO
                   ELSE
-                     RWORK( I ) = Z( J ) / ( DLAMC3( DSIGJ, -POLES( I+1,
+                     RWORK( I ) = Z( J ) / ( AB_DLAMC3( DSIGJ, -POLES( I
+     $+1,
      $                            2 ) )-DIFR( I, 1 ) ) /
      $                            ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
@@ -482,16 +486,17 @@
                   IF( Z( J ).EQ.ZERO ) THEN
                      RWORK( I ) = ZERO
                   ELSE
-                     RWORK( I ) = Z( J ) / ( DLAMC3( DSIGJ, -POLES( I,
+                     RWORK( I ) = Z( J ) / ( AB_DLAMC3( DSIGJ, -POLES( I
+     $,
      $                            2 ) )-DIFL( I ) ) /
      $                            ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
   120          CONTINUE
 *
-*              Since B and BX are complex, the following call to DGEMV
+*              Since B and BX are complex, the following call to AB_DGEMV
 *              is performed in two steps (real and imaginary parts).
 *
-*              CALL DGEMV( 'T', K, NRHS, ONE, B, LDB, WORK, 1, ZERO,
+*              CALL AB_DGEMV( 'T', K, NRHS, ONE, B, LDB, WORK, 1, ZERO,
 *    $                     BX( J, 1 ), LDBX )
 *
                I = K + NRHS*2
@@ -501,7 +506,7 @@
                      RWORK( I ) = DBLE( B( JROW, JCOL ) )
   130             CONTINUE
   140          CONTINUE
-               CALL DGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
+               CALL AB_DGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
      $                     RWORK( 1 ), 1, ZERO, RWORK( 1+K ), 1 )
                I = K + NRHS*2
                DO 160 JCOL = 1, NRHS
@@ -510,7 +515,7 @@
                      RWORK( I ) = DIMAG( B( JROW, JCOL ) )
   150             CONTINUE
   160          CONTINUE
-               CALL DGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
+               CALL AB_DGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
      $                     RWORK( 1 ), 1, ZERO, RWORK( 1+K+NRHS ), 1 )
                DO 170 JCOL = 1, NRHS
                   BX( J, JCOL ) = DCMPLX( RWORK( JCOL+K ),
@@ -523,27 +528,30 @@
 *        related to the right null space of the subproblem.
 *
          IF( SQRE.EQ.1 ) THEN
-            CALL ZCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
-            CALL ZDROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, S )
+            CALL AB_ZCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
+            CALL ZAB_DROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, 
+     $S )
          END IF
          IF( K.LT.MAX( M, N ) )
-     $      CALL ZLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB, BX( K+1, 1 ),
+     $      CALL AB_ZLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB, BX( K+1, 1
+     $ ),
      $                   LDBX )
 *
 *        Step (3R): permute rows of B.
 *
-         CALL ZCOPY( NRHS, BX( 1, 1 ), LDBX, B( NLP1, 1 ), LDB )
+         CALL AB_ZCOPY( NRHS, BX( 1, 1 ), LDBX, B( NLP1, 1 ), LDB )
          IF( SQRE.EQ.1 ) THEN
-            CALL ZCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
+            CALL AB_ZCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
          END IF
          DO 190 I = 2, N
-            CALL ZCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LDB )
+            CALL AB_ZCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LD
+     $B )
   190    CONTINUE
 *
 *        Step (4R): apply back the Givens rotations performed.
 *
          DO 200 I = GIVPTR, 1, -1
-            CALL ZDROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
+            CALL ZAB_DROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
      $                  B( GIVCOL( I, 1 ), 1 ), LDB, GIVNUM( I, 2 ),
      $                  -GIVNUM( I, 1 ) )
   200    CONTINUE
@@ -551,6 +559,6 @@
 *
       RETURN
 *
-*     End of ZLALS0
+*     End of AB_ZLALS0
 *
       END

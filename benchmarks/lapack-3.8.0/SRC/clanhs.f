@@ -1,4 +1,4 @@
-*> \brief \b CLANHS returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of an upper Hessenberg matrix.
+*> \brief \b AB_CLANHS returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of an upper Hessenberg matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLANHS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clanhs.f">
+*> Download AB_CLANHS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLANHS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clanhs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLANHS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clanhs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLANHS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION CLANHS( NORM, N, A, LDA, WORK )
+*       REAL             FUNCTION AB_CLANHS( NORM, N, A, LDA, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM
@@ -35,15 +35,15 @@
 *>
 *> \verbatim
 *>
-*> CLANHS  returns the value of the one norm,  or the Frobenius norm, or
+*> AB_CLANHS  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> Hessenberg matrix A.
 *> \endverbatim
 *>
-*> \return CLANHS
+*> \return AB_CLANHS
 *> \verbatim
 *>
-*>    CLANHS = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    AB_CLANHS = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -63,14 +63,14 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in CLANHS as described
+*>          Specifies the value to be returned in AB_CLANHS as described
 *>          above.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, CLANHS is
+*>          The order of the matrix A.  N >= 0.  When N = 0, AB_CLANHS is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -107,7 +107,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      REAL             FUNCTION CLANHS( NORM, N, A, LDA, WORK )
+      REAL             FUNCTION AB_CLANHS( NORM, N, A, LDA, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,11 +134,11 @@
       REAL               SCALE, SUM, VALUE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      EXTERNAL           LSAME, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      EXTERNAL           AB_LSAME, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASSQ
+      EXTERNAL           AB_CLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN, SQRT
@@ -147,7 +147,7 @@
 *
       IF( N.EQ.0 ) THEN
          VALUE = ZERO
-      ELSE IF( LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
@@ -155,10 +155,10 @@
          DO 20 J = 1, N
             DO 10 I = 1, MIN( N, J+1 )
                SUM = ABS( A( I, J ) )
-               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
    10       CONTINUE
    20    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
 *
 *        Find norm1(A).
 *
@@ -168,9 +168,9 @@
             DO 30 I = 1, MIN( N, J+1 )
                SUM = SUM + ABS( A( I, J ) )
    30       CONTINUE
-            IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+            IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
    40    CONTINUE
-      ELSE IF( LSAME( NORM, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'I' ) ) THEN
 *
 *        Find normI(A).
 *
@@ -185,23 +185,24 @@
          VALUE = ZERO
          DO 80 I = 1, N
             SUM = WORK( I )
-            IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+            IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
    80    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' )
+     $ ) ) THEN
 *
 *        Find normF(A).
 *
          SCALE = ZERO
          SUM = ONE
          DO 90 J = 1, N
-            CALL CLASSQ( MIN( N, J+1 ), A( 1, J ), 1, SCALE, SUM )
+            CALL AB_CLASSQ( MIN( N, J+1 ), A( 1, J ), 1, SCALE, SUM )
    90    CONTINUE
          VALUE = SCALE*SQRT( SUM )
       END IF
 *
-      CLANHS = VALUE
+      AB_CLANHS = VALUE
       RETURN
 *
-*     End of CLANHS
+*     End of AB_CLANHS
 *
       END

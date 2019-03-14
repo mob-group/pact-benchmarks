@@ -1,15 +1,15 @@
-c     cdotcsub.f
+c     AB_AB_CDOTCsub.f
 c
-c     The program is a fortran wrapper for cdotc.
+c     The program is a fortran wrapper for AB_CDOTC.
 c     Witten by Keita Teranishi.  2/11/1998
 c
-      subroutine cdotcsub(n,x,incx,y,incy,dotc)
+      subroutine AB_AB_CDOTCsub(n,x,incx,y,incy,dotc)
 c
-      external cdotc
-      complex cdotc,dotc
+      external AB_CDOTC
+      complex AB_CDOTC,dotc
       integer n,incx,incy
       complex x(*),y(*)
 c
-      dotc=cdotc(n,x,incx,y,incy)
+      dotc=AB_CDOTC(n,x,incx,y,incy)
       return
       end

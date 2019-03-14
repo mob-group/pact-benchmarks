@@ -1,4 +1,4 @@
-*> \brief \b ZQPT01
+*> \brief \b AB_ZQPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION ZQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
+*       DOUBLE PRECISION FUNCTION AB_ZQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
 *                        WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> ZQPT01 tests the QR-factorization with pivoting of a matrix A.  The
+*> AB_ZQPT01 tests the QR-factorization with pivoting of a matrix A.  The
 *> array AF contains the (possibly partial) QR-factorization of A, where
 *> the upper triangle of AF(1:k,1:k) is a partial triangular factor,
 *> the entries below the diagonal in the first k columns are the
-*> Householder vectors, and the rest of AF contains a partially updated
+*> HousehoAB_LDEr vectors, and the rest of AF contains a partially updated
 *> matrix.
 *>
 *> This function returns ||A*P - Q*R||/(||norm(A)||*eps*M)
@@ -67,9 +67,9 @@
 *> \param[in] AF
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDA,N)
-*>          The (possibly partial) output of ZGEQPF.  The upper triangle
+*>          The (possibly partial) output of AB_ZGEQPF.  The upper triangle
 *>          of AF(1:k,1:k) is a partial triangular factor, the entries
-*>          below the diagonal in the first k columns are the Householder
+*>          below the diagonal in the first k columns are the HousehoAB_LDEr
 *>          vectors, and the rest of AF contains a partially updated
 *>          matrix.
 *> \endverbatim
@@ -83,14 +83,14 @@
 *> \param[in] TAU
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (K)
-*>          Details of the Householder transformations as returned by
-*>          ZGEQPF.
+*>          Details of the HousehoAB_LDEr transformations as returned by
+*>          AB_ZGEQPF.
 *> \endverbatim
 *>
 *> \param[in] JPVT
 *> \verbatim
 *>          JPVT is INTEGER array, dimension (N)
-*>          Pivot information as returned by ZGEQPF.
+*>          Pivot information as returned by AB_ZGEQPF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -117,7 +117,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION ZQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
+      DOUBLE PRECISION FUNCTION AB_ZQPT01( M, N, K, A, AF, LDA, TAU, JPV
+     $T,
      $                 WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -148,23 +149,23 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZUNMQR
+      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZCOPY, AB_ZUNMQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      ZQPT01 = ZERO
+      AB_ZQPT01 = ZERO
 *
 *     Test if there is enough workspace
 *
       IF( LWORK.LT.M*N+N ) THEN
-         CALL XERBLA( 'ZQPT01', 10 )
+         CALL AB_XERBLA( 'AB_ZQPT01', 10 )
          RETURN
       END IF
 *
@@ -173,7 +174,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      NORMA = ZLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      NORMA = AB_ZLANGE( 'One-norm', M, N, A, LDA, RWORK )
 *
       DO 30 J = 1, K
          DO 10 I = 1, MIN( J, M )
@@ -184,27 +185,28 @@
    20    CONTINUE
    30 CONTINUE
       DO 40 J = K + 1, N
-         CALL ZCOPY( M, AF( 1, J ), 1, WORK( ( J-1 )*M+1 ), 1 )
+         CALL AB_ZCOPY( M, AF( 1, J ), 1, WORK( ( J-1 )*M+1 ), 1 )
    40 CONTINUE
 *
-      CALL ZUNMQR( 'Left', 'No transpose', M, N, K, AF, LDA, TAU, WORK,
+      CALL AB_ZUNMQR( 'Left', 'No transpose', M, N, K, AF, LDA, TAU, WOR
+     $K,
      $             M, WORK( M*N+1 ), LWORK-M*N, INFO )
 *
       DO 50 J = 1, N
 *
 *        Compare i-th column of QR and jpvt(i)-th column of A
 *
-         CALL ZAXPY( M, DCMPLX( -ONE ), A( 1, JPVT( J ) ), 1,
+         CALL AB_ZAXPY( M, DCMPLX( -ONE ), A( 1, JPVT( J ) ), 1,
      $               WORK( ( J-1 )*M+1 ), 1 )
    50 CONTINUE
 *
-      ZQPT01 = ZLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
-     $         ( DBLE( MAX( M, N ) )*DLAMCH( 'Epsilon' ) )
+      AB_ZQPT01 = AB_ZLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
+     $         ( DBLE( MAX( M, N ) )*AB_DLAMCH( 'Epsilon' ) )
       IF( NORMA.NE.ZERO )
-     $   ZQPT01 = ZQPT01 / NORMA
+     $   AB_ZQPT01 = AB_ZQPT01 / NORMA
 *
       RETURN
 *
-*     End of ZQPT01
+*     End of AB_ZQPT01
 *
       END

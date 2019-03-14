@@ -1,4 +1,4 @@
-*> \brief \b DLAORD
+*> \brief \b AB_DLAORD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAORD( JOB, N, X, INCX )
+*       SUBROUTINE AB_DLAORD( JOB, N, X, INCX )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOB
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DLAORD sorts the elements of a vector x in increasing or decreasing
+*> AB_DLAORD sorts the elements of a vector x in increasing or decreasing
 *> order.
 *> \endverbatim
 *
@@ -71,7 +71,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DLAORD( JOB, N, X, INCX )
+      SUBROUTINE AB_DLAORD( JOB, N, X, INCX )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -93,8 +93,8 @@
       DOUBLE PRECISION   TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -102,7 +102,7 @@
 *     .. Executable Statements ..
 *
       INC = ABS( INCX )
-      IF( LSAME( JOB, 'I' ) ) THEN
+      IF( AB_LSAME( JOB, 'I' ) ) THEN
 *
 *        Sort in increasing order
 *
@@ -123,7 +123,7 @@
             GO TO 10
    20    CONTINUE
 *
-      ELSE IF( LSAME( JOB, 'D' ) ) THEN
+      ELSE IF( AB_LSAME( JOB, 'D' ) ) THEN
 *
 *        Sort in decreasing order
 *
@@ -146,6 +146,6 @@
       END IF
       RETURN
 *
-*     End of DLAORD
+*     End of AB_DLAORD
 *
       END

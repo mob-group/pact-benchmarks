@@ -1,4 +1,4 @@
-*> \brief \b SQRT11
+*> \brief \b AB_SQRT11
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION SQRT11( M, K, A, LDA, TAU, WORK, LWORK )
+*       REAL             FUNCTION AB_SQRT11( M, K, A, LDA, TAU, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LWORK, M
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> SQRT11 computes the test ratio
+*> AB_SQRT11 computes the test ratio
 *>
 *>       || Q'*Q - I || / (eps * m)
 *>
@@ -96,7 +96,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      REAL             FUNCTION SQRT11( M, K, A, LDA, TAU, WORK, LWORK )
+      REAL             FUNCTION AB_SQRT11( M, K, A, LDA, TAU, WORK, LWOR
+     $K )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -120,11 +121,11 @@
       INTEGER            INFO, J
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASET, SORM2R, XERBLA
+      EXTERNAL           AB_SLASET, AB_SORM2R, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -134,12 +135,12 @@
 *     ..
 *     .. Executable Statements ..
 *
-      SQRT11 = ZERO
+      AB_SQRT11 = ZERO
 *
 *     Test for sufficient workspace
 *
       IF( LWORK.LT.M*M+M ) THEN
-         CALL XERBLA( 'SQRT11', 7 )
+         CALL AB_XERBLA( 'AB_SQRT11', 7 )
          RETURN
       END IF
 *
@@ -148,27 +149,29 @@
       IF( M.LE.0 )
      $   RETURN
 *
-      CALL SLASET( 'Full', M, M, ZERO, ONE, WORK, M )
+      CALL AB_SLASET( 'Full', M, M, ZERO, ONE, WORK, M )
 *
 *     Form Q
 *
-      CALL SORM2R( 'Left', 'No transpose', M, M, K, A, LDA, TAU, WORK,
+      CALL AB_SORM2R( 'Left', 'No transpose', M, M, K, A, LDA, TAU, WORK
+     $,
      $             M, WORK( M*M+1 ), INFO )
 *
 *     Form Q'*Q
 *
-      CALL SORM2R( 'Left', 'Transpose', M, M, K, A, LDA, TAU, WORK, M,
+      CALL AB_SORM2R( 'Left', 'Transpose', M, M, K, A, LDA, TAU, WORK, M
+     $,
      $             WORK( M*M+1 ), INFO )
 *
       DO 10 J = 1, M
          WORK( ( J-1 )*M+J ) = WORK( ( J-1 )*M+J ) - ONE
    10 CONTINUE
 *
-      SQRT11 = SLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
-     $         ( REAL( M )*SLAMCH( 'Epsilon' ) )
+      AB_SQRT11 = AB_SLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
+     $         ( REAL( M )*AB_SLAMCH( 'Epsilon' ) )
 *
       RETURN
 *
-*     End of SQRT11
+*     End of AB_SQRT11
 *
       END

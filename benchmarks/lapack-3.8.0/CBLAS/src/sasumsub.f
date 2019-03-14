@@ -1,15 +1,15 @@
-c     sasumsub.f
+c     AB_AB_SASUMsub.f
 c
-c     The program is a fortran wrapper for sasum.
+c     The program is a fortran wrapper for AB_SASUM.
 c     Witten by Keita Teranishi.  2/11/1998
 c
-      subroutine sasumsub(n,x,incx,asum)
+      subroutine AB_AB_SASUMsub(n,x,incx,asum)
 c
-      external sasum
-      real sasum,asum
+      external AB_SASUM
+      real AB_SASUM,asum
       integer n,incx
       real x(*)
 c
-      asum=sasum(n,x,incx)
+      asum=AB_SASUM(n,x,incx)
       return
       end

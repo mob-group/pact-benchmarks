@@ -258,7 +258,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the work array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -271,7 +271,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  SBBCSD did not converge. See the description of WORK
+*>          > 0:  AB_SBBCSD did not converge. See the description of WORK
 *>                above for details.
 *> \endverbatim
 *
@@ -343,12 +343,12 @@
      $                   WANTV1T, WANTV2T
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SBBCSD, SLACPY, SLAPMR, SLAPMT,
-     $                   SORBDB, SORGLQ, SORGQR, XERBLA
+      EXTERNAL           AB_SBBCSD, AB_SLACPY, AB_SLAPMR, AB_SLAPMT,
+     $                   AB_SORBDB, AB_SORGLQ, AB_SORGQR, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Intrinsic Functions
       INTRINSIC          INT, MAX, MIN
@@ -358,12 +358,12 @@
 *     Test input arguments
 *
       INFO = 0
-      WANTU1 = LSAME( JOBU1, 'Y' )
-      WANTU2 = LSAME( JOBU2, 'Y' )
-      WANTV1T = LSAME( JOBV1T, 'Y' )
-      WANTV2T = LSAME( JOBV2T, 'Y' )
-      COLMAJOR = .NOT. LSAME( TRANS, 'T' )
-      DEFAULTSIGNS = .NOT. LSAME( SIGNS, 'O' )
+      WANTU1 = AB_LSAME( JOBU1, 'Y' )
+      WANTU2 = AB_LSAME( JOBU2, 'Y' )
+      WANTV1T = AB_LSAME( JOBV1T, 'Y' )
+      WANTV2T = AB_LSAME( JOBV2T, 'Y' )
+      COLMAJOR = .NOT. AB_LSAME( TRANS, 'T' )
+      DEFAULTSIGNS = .NOT. AB_LSAME( SIGNS, 'O' )
       LQUERY = LWORK .EQ. -1
       IF( M .LT. 0 ) THEN
          INFO = -7
@@ -443,17 +443,19 @@
          ITAUQ1 = ITAUP2 + MAX( 1, M - P )
          ITAUQ2 = ITAUQ1 + MAX( 1, Q )
          IORGQR = ITAUQ2 + MAX( 1, M - Q )
-         CALL SORGQR( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK, -1,
+         CALL AB_SORGQR( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK, 
+     $-1,
      $                CHILDINFO )
          LORGQRWORKOPT = INT( WORK(1) )
          LORGQRWORKMIN = MAX( 1, M - Q )
          IORGLQ = ITAUQ2 + MAX( 1, M - Q )
-         CALL SORGLQ( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK, -1,
+         CALL AB_SORGLQ( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK, 
+     $-1,
      $                CHILDINFO )
          LORGLQWORKOPT = INT( WORK(1) )
          LORGLQWORKMIN = MAX( 1, M - Q )
          IORBDB = ITAUQ2 + MAX( 1, M - Q )
-         CALL SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
+         CALL AB_SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
      $        X21, LDX21, X22, LDX22, DUMMY, DUMMY, DUMMY, DUMMY, DUMMY,
      $        DUMMY,WORK,-1,CHILDINFO )
          LORBDBWORKOPT = INT( WORK(1) )
@@ -467,7 +469,7 @@
          IB22D = IB21E + MAX( 1, Q - 1 )
          IB22E = IB22D + MAX( 1, Q )
          IBBCSD = IB22E + MAX( 1, Q - 1 )
-         CALL SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+         CALL AB_SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
      $                DUMMY, DUMMY, U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $                LDV2T, DUMMY, DUMMY, DUMMY, DUMMY, DUMMY, DUMMY,
      $                DUMMY, DUMMY, WORK, -1, CHILDINFO )
@@ -492,7 +494,7 @@
 *     Abort if any illegal arguments
 *
       IF( INFO .NE. 0 ) THEN
-         CALL XERBLA( 'SORCSD', -INFO )
+         CALL AB_XERBLA( 'SORCSD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -500,76 +502,82 @@
 *
 *     Transform to bidiagonal block form
 *
-      CALL SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12, X21,
+      CALL AB_SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12, X21
+     $,
      $             LDX21, X22, LDX22, THETA, WORK(IPHI), WORK(ITAUP1),
      $             WORK(ITAUP2), WORK(ITAUQ1), WORK(ITAUQ2),
      $             WORK(IORBDB), LORBDBWORK, CHILDINFO )
 *
-*     Accumulate Householder reflectors
+*     Accumulate HousehoAB_LDEr reflectors
 *
       IF( COLMAJOR ) THEN
          IF( WANTU1 .AND. P .GT. 0 ) THEN
-            CALL SLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL SORGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
+            CALL AB_SLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
+            CALL AB_SORGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR
+     $),
      $                   LORGQRWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL SLACPY( 'L', M-P, Q, X21, LDX21, U2, LDU2 )
-            CALL SORGQR( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
+            CALL AB_SLACPY( 'L', M-P, Q, X21, LDX21, U2, LDU2 )
+            CALL AB_SORGQR( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
-            CALL SLACPY( 'U', Q-1, Q-1, X11(1,2), LDX11, V1T(2,2),
+            CALL AB_SLACPY( 'U', Q-1, Q-1, X11(1,2), LDX11, V1T(2,2),
      $                   LDV1T )
             V1T(1, 1) = ONE
             DO J = 2, Q
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL SORGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL AB_SORGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1)
+     $,
      $                   WORK(IORGLQ), LORGLQWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
-            CALL SLACPY( 'U', P, M-Q, X12, LDX12, V2T, LDV2T )
-            CALL SLACPY( 'U', M-P-Q, M-P-Q, X22(Q+1,P+1), LDX22,
+            CALL AB_SLACPY( 'U', P, M-Q, X12, LDX12, V2T, LDV2T )
+            CALL AB_SLACPY( 'U', M-P-Q, M-P-Q, X22(Q+1,P+1), LDX22,
      $                   V2T(P+1,P+1), LDV2T )
-            CALL SORGLQ( M-Q, M-Q, M-Q, V2T, LDV2T, WORK(ITAUQ2),
+            CALL AB_SORGLQ( M-Q, M-Q, M-Q, V2T, LDV2T, WORK(ITAUQ2),
      $                   WORK(IORGLQ), LORGLQWORK, INFO )
          END IF
       ELSE
          IF( WANTU1 .AND. P .GT. 0 ) THEN
-            CALL SLACPY( 'U', Q, P, X11, LDX11, U1, LDU1 )
-            CALL SORGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGLQ),
+            CALL AB_SLACPY( 'U', Q, P, X11, LDX11, U1, LDU1 )
+            CALL AB_SORGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGLQ
+     $),
      $                   LORGLQWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL SLACPY( 'U', Q, M-P, X21, LDX21, U2, LDU2 )
-            CALL SORGLQ( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
+            CALL AB_SLACPY( 'U', Q, M-P, X21, LDX21, U2, LDU2 )
+            CALL AB_SORGLQ( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
      $                   WORK(IORGLQ), LORGLQWORK, INFO )
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
-            CALL SLACPY( 'L', Q-1, Q-1, X11(2,1), LDX11, V1T(2,2),
+            CALL AB_SLACPY( 'L', Q-1, Q-1, X11(2,1), LDX11, V1T(2,2),
      $                   LDV1T )
             V1T(1, 1) = ONE
             DO J = 2, Q
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL SORGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
+            CALL AB_SORGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1)
+     $,
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
-            CALL SLACPY( 'L', M-Q, P, X12, LDX12, V2T, LDV2T )
-            CALL SLACPY( 'L', M-P-Q, M-P-Q, X22(P+1,Q+1), LDX22,
+            CALL AB_SLACPY( 'L', M-Q, P, X12, LDX12, V2T, LDV2T )
+            CALL AB_SLACPY( 'L', M-P-Q, M-P-Q, X22(P+1,Q+1), LDX22,
      $                   V2T(P+1,P+1), LDV2T )
-            CALL SORGQR( M-Q, M-Q, M-Q, V2T, LDV2T, WORK(ITAUQ2),
+            CALL AB_SORGQR( M-Q, M-Q, M-Q, V2T, LDV2T, WORK(ITAUQ2),
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
       END IF
 *
 *     Compute the CSD of the matrix in bidiagonal-block form
 *
-      CALL SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q, THETA,
+      CALL AB_SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q, THET
+     $A,
      $             WORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $             LDV2T, WORK(IB11D), WORK(IB11E), WORK(IB12D),
      $             WORK(IB12E), WORK(IB21D), WORK(IB21E), WORK(IB22D),
@@ -588,9 +596,9 @@
             IWORK(I) = I - Q
          END DO
          IF( COLMAJOR ) THEN
-            CALL SLAPMT( .FALSE., M-P, M-P, U2, LDU2, IWORK )
+            CALL AB_SLAPMT( .FALSE., M-P, M-P, U2, LDU2, IWORK )
          ELSE
-            CALL SLAPMR( .FALSE., M-P, M-P, U2, LDU2, IWORK )
+            CALL AB_SLAPMR( .FALSE., M-P, M-P, U2, LDU2, IWORK )
          END IF
       END IF
       IF( M .GT. 0 .AND. WANTV2T ) THEN
@@ -601,9 +609,9 @@
             IWORK(I) = I - P
          END DO
          IF( .NOT. COLMAJOR ) THEN
-            CALL SLAPMT( .FALSE., M-Q, M-Q, V2T, LDV2T, IWORK )
+            CALL AB_SLAPMT( .FALSE., M-Q, M-Q, V2T, LDV2T, IWORK )
          ELSE
-            CALL SLAPMR( .FALSE., M-Q, M-Q, V2T, LDV2T, IWORK )
+            CALL AB_SLAPMR( .FALSE., M-Q, M-Q, V2T, LDV2T, IWORK )
          END IF
       END IF
 *

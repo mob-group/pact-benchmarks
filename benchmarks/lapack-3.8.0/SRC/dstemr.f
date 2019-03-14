@@ -1,4 +1,4 @@
-*> \brief \b DSTEMR
+*> \brief \b AB_DSTEMR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSTEMR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstemr.f">
+*> Download AB_DSTEMR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSTEMR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstemr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSTEMR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstemr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSTEMR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+*       SUBROUTINE AB_DSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
 *                          M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
 *                          IWORK, LIWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> DSTEMR computes selected eigenvalues and, optionally, eigenvectors
+*> AB_DSTEMR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T. Any such unreduced matrix has
 *> a well defined set of pairwise different real eigenvalues, the corresponding
 *> real eigenvectors are pairwise orthogonal.
@@ -86,7 +86,7 @@
 *>   UC Berkeley, May 1997.
 *>
 *> Further Details
-*> 1.DSTEMR works only on machines which follow IEEE-754
+*> 1.AB_DSTEMR works only on machines which follow IEEE-754
 *> floating-point standard in their handling of infinities and NaNs.
 *> This permits the use of efficient inner loops avoiding a check for
 *> zero divisors.
@@ -217,7 +217,7 @@
 *>          routine calculates the number of columns of the array Z that
 *>          are needed to hold the eigenvectors.
 *>          This value is returned as the first entry of the Z array, and
-*>          no error message related to NZC is issued by XERBLA.
+*>          no error message related to NZC is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] ISUPPZ
@@ -240,7 +240,7 @@
 *>          If the matrix does not define its eigenvalues to high relative
 *>          accuracy, the code can uses possibly faster algorithms.
 *>          If TRYRAC.EQ..FALSE., the code is not required to guarantee
-*>          relatively accurate eigenvalues and can use the fastest possible
+*>          relatively accurate eigenvalues and can use the faAB_STEST possible
 *>          techniques.
 *>          On exit, a .TRUE. TRYRAC will be set to .FALSE. if the matrix
 *>          does not define its eigenvalues to high relative accuracy.
@@ -261,7 +261,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -279,7 +279,7 @@
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and
-*>          no error message related to LIWORK is issued by XERBLA.
+*>          no error message related to LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -288,11 +288,11 @@
 *>          On exit, INFO
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = 1X, internal error in DLARRE,
-*>                if INFO = 2X, internal error in DLARRV.
+*>          > 0:  if INFO = 1X, internal error in AB_DLARRE,
+*>                if INFO = 2X, internal error in AB_DLARRV.
 *>                Here, the digit X = ABS( IINFO ) < 10, where IINFO is
-*>                the nonzero error code returned by DLARRE or
-*>                DLARRV, respectively.
+*>                the nonzero error code returned by AB_DLARRE or
+*>                AB_DLARRV, respectively.
 *> \endverbatim
 *
 *  Authors:
@@ -317,7 +317,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+      SUBROUTINE AB_DSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                   M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
 *
@@ -359,13 +359,15 @@
 *     ..
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANST
-      EXTERNAL           LSAME, DLAMCH, DLANST
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAE2, DLAEV2, DLARRC, DLARRE, DLARRJ,
-     $                   DLARRR, DLARRV, DLASRT, DSCAL, DSWAP, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DLAE2, AB_DLAEV2, AB_DLARRC, AB_DL
+     $ARRE, AB_DLARRJ,
+     $                   AB_DLARRR, AB_DLARRV, AB_AB_DLASRT, AB_DSCAL, A
+     $B_DSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -376,17 +378,17 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      ALLEIG = LSAME( RANGE, 'A' )
-      VALEIG = LSAME( RANGE, 'V' )
-      INDEIG = LSAME( RANGE, 'I' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      ALLEIG = AB_LSAME( RANGE, 'A' )
+      VALEIG = AB_LSAME( RANGE, 'V' )
+      INDEIG = AB_LSAME( RANGE, 'I' )
 *
       LQUERY = ( ( LWORK.EQ.-1 ).OR.( LIWORK.EQ.-1 ) )
       ZQUERY = ( NZC.EQ.-1 )
 
-*     DSTEMR needs WORK of size 6*N, IWORK of size 3*N.
-*     In addition, DLARRE needs WORK of size 6*N, IWORK of size 5*N.
-*     Furthermore, DLARRV needs WORK of size 12*N, IWORK of size 7*N.
+*     AB_DSTEMR needs WORK of size 6*N, IWORK of size 3*N.
+*     In addition, AB_DLARRE needs WORK of size 6*N, IWORK of size 5*N.
+*     Furthermore, AB_DLARRV needs WORK of size 12*N, IWORK of size 7*N.
       IF( WANTZ ) THEN
          LWMIN = 18*N
          LIWMIN = 10*N
@@ -405,7 +407,7 @@
       IF( VALEIG ) THEN
 *        We do not reference VL, VU in the cases RANGE = 'I','A'
 *        The interval (WL, WU] contains all the wanted eigenvalues.
-*        It is either given by the user or computed in DLARRE.
+*        It is either given by the user or computed in AB_DLARRE.
          WL = VL
          WU = VU
       ELSEIF( INDEIG ) THEN
@@ -415,7 +417,7 @@
       ENDIF
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
@@ -437,8 +439,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      EPS = DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )
@@ -451,7 +453,7 @@
          IF( WANTZ .AND. ALLEIG ) THEN
             NZCMIN = N
          ELSE IF( WANTZ .AND. VALEIG ) THEN
-            CALL DLARRC( 'T', N, VL, VU, D, E, SAFMIN,
+            CALL AB_DLARRC( 'T', N, VL, VU, D, E, SAFMIN,
      $                            NZCMIN, ITMP, ITMP2, INFO )
          ELSE IF( WANTZ .AND. INDEIG ) THEN
             NZCMIN = IIU-IIL+1
@@ -468,7 +470,7 @@
 
       IF( INFO.NE.0 ) THEN
 *
-         CALL XERBLA( 'DSTEMR', -INFO )
+         CALL AB_XERBLA( 'AB_DSTEMR', -INFO )
 *
          RETURN
       ELSE IF( LQUERY .OR. ZQUERY ) THEN
@@ -501,9 +503,9 @@
 *
       IF( N.EQ.2 ) THEN
          IF( .NOT.WANTZ ) THEN
-            CALL DLAE2( D(1), E(1), D(2), R1, R2 )
+            CALL AB_DLAE2( D(1), E(1), D(2), R1, R2 )
          ELSE IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
-            CALL DLAEV2( D(1), E(1), D(2), R1, R2, CS, SN )
+            CALL AB_DLAEV2( D(1), E(1), D(2), R1, R2, CS, SN )
          END IF
          IF( ALLEIG.OR.
      $      (VALEIG.AND.(R2.GT.WL).AND.
@@ -572,20 +574,20 @@
 *
 *        Scale matrix to allowable range, if necessary.
 *        The allowable range is related to the PIVMIN parameter; see the
-*        comments in DLARRD.  The preference for scaling small values
+*        comments in AB_DLARRD.  The preference for scaling small values
 *        up is heuristic; we expect users' matrices not to be close to the
 *        RMAX threshold.
 *
          SCALE = ONE
-         TNRM = DLANST( 'M', N, D, E )
+         TNRM = AB_DLANST( 'M', N, D, E )
          IF( TNRM.GT.ZERO .AND. TNRM.LT.RMIN ) THEN
             SCALE = RMIN / TNRM
          ELSE IF( TNRM.GT.RMAX ) THEN
             SCALE = RMAX / TNRM
          END IF
          IF( SCALE.NE.ONE ) THEN
-            CALL DSCAL( N, SCALE, D, 1 )
-            CALL DSCAL( N-1, SCALE, E, 1 )
+            CALL AB_DSCAL( N, SCALE, D, 1 )
+            CALL AB_DSCAL( N-1, SCALE, E, 1 )
             TNRM = TNRM*SCALE
             IF( VALEIG ) THEN
 *              If eigenvalues in interval have to be found,
@@ -598,14 +600,14 @@
 *        Compute the desired eigenvalues of the tridiagonal after splitting
 *        into smaller subblocks if the corresponding off-diagonal elements
 *        are small
-*        THRESH is the splitting parameter for DLARRE
+*        THRESH is the splitting parameter for AB_DLARRE
 *        A negative THRESH forces the old splitting criterion based on the
 *        size of the off-diagonal. A positive THRESH switches to splitting
 *        which preserves relative accuracy.
 *
          IF( TRYRAC ) THEN
 *           Test whether the matrix warrants the more expensive relative approach.
-            CALL DLARRR( N, D, E, IINFO )
+            CALL AB_DLARRR( N, D, E, IINFO )
          ELSE
 *           The user does not care about relative accurately eigenvalues
             IINFO = -1
@@ -621,7 +623,7 @@
 *
          IF( TRYRAC ) THEN
 *           Copy original diagonal, needed to guarantee relative accuracy
-            CALL DCOPY(N,D,1,WORK(INDD),1)
+            CALL AB_DCOPY(N,D,1,WORK(INDD),1)
          ENDIF
 *        Store the squares of the offdiagonal values of T
          DO 5 J = 1, N-1
@@ -630,18 +632,18 @@
 
 *        Set the tolerance parameters for bisection
          IF( .NOT.WANTZ ) THEN
-*           DLARRE computes the eigenvalues to full precision.
+*           AB_DLARRE computes the eigenvalues to full precision.
             RTOL1 = FOUR * EPS
             RTOL2 = FOUR * EPS
          ELSE
-*           DLARRE computes the eigenvalues to less than full precision.
-*           DLARRV will refine the eigenvalue approximations, and we can
-*           need less accurate initial bisection in DLARRE.
-*           Note: these settings do only affect the subset case and DLARRE
+*           AB_DLARRE computes the eigenvalues to less than full precision.
+*           AB_DLARRV will refine the eigenvalue approximations, and we can
+*           need less accurate initial bisection in AB_DLARRE.
+*           Note: these settings do only affect the subset case and AB_DLARRE
             RTOL1 = SQRT(EPS)
             RTOL2 = MAX( SQRT(EPS)*5.0D-3, FOUR * EPS )
          ENDIF
-         CALL DLARRE( RANGE, N, WL, WU, IIL, IIU, D, E,
+         CALL AB_DLARRE( RANGE, N, WL, WU, IIL, IIU, D, E,
      $             WORK(INDE2), RTOL1, RTOL2, THRESH, NSPLIT,
      $             IWORK( IINSPL ), M, W, WORK( INDERR ),
      $             WORK( INDGP ), IWORK( IINDBL ),
@@ -651,7 +653,7 @@
             INFO = 10 + ABS( IINFO )
             RETURN
          END IF
-*        Note that if RANGE .NE. 'V', DLARRE computes bounds on the desired
+*        Note that if RANGE .NE. 'V', AB_DLARRE computes bounds on the desired
 *        part of the spectrum. All desired eigenvalues are contained in
 *        (WL,WU]
 
@@ -661,7 +663,7 @@
 *           Compute the desired eigenvectors corresponding to the computed
 *           eigenvalues
 *
-            CALL DLARRV( N, WL, WU, D, E,
+            CALL AB_DLARRV( N, WL, WU, D, E,
      $                PIVMIN, IWORK( IINSPL ), M,
      $                1, M, MINRGP, RTOL1, RTOL2,
      $                W, WORK( INDERR ), WORK( INDGP ), IWORK( IINDBL ),
@@ -672,10 +674,10 @@
                RETURN
             END IF
          ELSE
-*           DLARRE computes eigenvalues of the (shifted) root representation
-*           DLARRV returns the eigenvalues of the unshifted matrix.
+*           AB_DLARRE computes eigenvalues of the (shifted) root representation
+*           AB_DLARRV returns the eigenvalues of the unshifted matrix.
 *           However, if the eigenvectors are not desired by the user, we need
-*           to apply the corresponding shifts from DLARRE to obtain the
+*           to apply the corresponding shifts from AB_DLARRE to obtain the
 *           eigenvalues of the original matrix.
             DO 20 J = 1, M
                ITMP = IWORK( IINDBL+J-1 )
@@ -710,7 +712,7 @@
                IFIRST = IWORK(IINDW+WBEGIN-1)
                ILAST = IWORK(IINDW+WEND-1)
                RTOL2 = FOUR * EPS
-               CALL DLARRJ( IN,
+               CALL AB_DLARRJ( IN,
      $                   WORK(INDD+IBEGIN-1), WORK(INDE2+IBEGIN-1),
      $                   IFIRST, ILAST, RTOL2, OFFSET, W(WBEGIN),
      $                   WORK( INDERR+WBEGIN-1 ),
@@ -724,7 +726,7 @@
 *        If matrix was scaled, then rescale eigenvalues appropriately.
 *
          IF( SCALE.NE.ONE ) THEN
-            CALL DSCAL( M, ONE / SCALE, W, 1 )
+            CALL AB_DSCAL( M, ONE / SCALE, W, 1 )
          END IF
 
       END IF
@@ -735,7 +737,7 @@
 *
       IF( NSPLIT.GT.1 .OR. N.EQ.2 ) THEN
          IF( .NOT. WANTZ ) THEN
-            CALL DLASRT( 'I', M, W, IINFO )
+            CALL AB_AB_DLASRT( 'I', M, W, IINFO )
             IF( IINFO.NE.0 ) THEN
                INFO = 3
                RETURN
@@ -754,7 +756,7 @@
                   W( I ) = W( J )
                   W( J ) = TMP
                   IF( WANTZ ) THEN
-                     CALL DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+                     CALL AB_DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
                      ITMP = ISUPPZ( 2*I-1 )
                      ISUPPZ( 2*I-1 ) = ISUPPZ( 2*J-1 )
                      ISUPPZ( 2*J-1 ) = ITMP
@@ -772,6 +774,6 @@
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of DSTEMR
+*     End of AB_DSTEMR
 *
       END

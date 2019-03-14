@@ -1,4 +1,4 @@
-*> \brief \b SCHKBD
+*> \brief \b AB_SCHKBD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
+*       SUBROUTINE AB_SCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
 *                          ISEED, THRESH, A, LDA, BD, BE, S1, S2, X, LDX,
 *                          Y, Z, Q, LDQ, PT, LDPT, U, VT, WORK, LWORK,
 *                          IWORK, NOUT, INFO )
@@ -33,17 +33,17 @@
 *>
 *> \verbatim
 *>
-*> SCHKBD checks the singular value decomposition (SVD) routines.
+*> AB_SCHKBD checks the singular value decomposition (SVD) routines.
 *>
-*> SGEBRD reduces a real general m by n matrix A to upper or lower
+*> AB_SGEBRD reduces a real general m by n matrix A to upper or lower
 *> bidiagonal form B by an orthogonal transformation:  Q' * A * P = B
 *> (or A = Q * B * P').  The matrix B is upper bidiagonal if m >= n
 *> and lower bidiagonal if m < n.
 *>
-*> SORGBR generates the orthogonal matrices Q and P' from SGEBRD.
+*> AB_SORGBR generates the orthogonal matrices Q and P' from AB_SGEBRD.
 *> Note that Q and P are not necessarily square.
 *>
-*> SBDSQR computes the singular value decomposition of the bidiagonal
+*> AB_SBDSQR computes the singular value decomposition of the bidiagonal
 *> matrix B as B = U S V'.  It is called three times to compute
 *>    1)  B = U S1 V', where S1 is the diagonal matrix of singular
 *>        values and the columns of the matrices U and V are the left
@@ -51,10 +51,10 @@
 *>    2)  Same as 1), but the singular values are stored in S2 and the
 *>        singular vectors are not computed.
 *>    3)  A = (UQ) S (P'V'), the SVD of the original matrix A.
-*> In addition, SBDSQR has an option to apply the left orthogonal matrix
+*> In addition, AB_SBDSQR has an option to apply the left orthogonal matrix
 *> U to a matrix X, useful in least squares applications.
 *>
-*> SBDSDC computes the singular value decomposition of the bidiagonal
+*> AB_SBDSDC computes the singular value decomposition of the bidiagonal
 *> matrix B as B = U S V' using divide-and-conquer. It is called twice
 *> to compute
 *>    1) B = U S1 V', where S1 is the diagonal matrix of singular
@@ -63,7 +63,7 @@
 *>    2) Same as 1), but the singular values are stored in S2 and the
 *>        singular vectors are not computed.
 *>
-*>  SBDSVDX computes the singular value decomposition of the bidiagonal
+*>  AB_SBDSVDX computes the singular value decomposition of the bidiagonal
 *>  matrix B as B = U S V' using bisection and inverse iteration. It is
 *>  called six times to compute
 *>     1) B = U S1 V', RANGE='A', where S1 is the diagonal matrix of singular
@@ -95,7 +95,7 @@
 *>
 *> For each generated matrix, 14 tests are performed:
 *>
-*> Test SGEBRD and SORGBR
+*> Test AB_SGEBRD and AB_SORGBR
 *>
 *> (1)   | A - Q B PT | / ( |A| max(M,N) ulp ), PT = P'
 *>
@@ -103,7 +103,7 @@
 *>
 *> (3)   | I - PT PT' | / ( N ulp )
 *>
-*> Test SBDSQR on bidiagonal matrix B
+*> Test AB_SBDSQR on bidiagonal matrix B
 *>
 *> (4)   | B - U S1 VT | / ( |B| min(M,N) ulp ), VT = V'
 *>
@@ -114,16 +114,16 @@
 *> (7)   | I - VT VT' | / ( min(M,N) ulp )
 *>
 *> (8)   S1 contains min(M,N) nonnegative values in decreasing order.
-*>       (Return 0 if true, 1/ULP if false.)
+*>       (Return 0 if true, 1/ULP if FALSE.)
 *>
 *> (9)   | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
 *>                                   computing U and V.
 *>
 *> (10)  0 if the true singular values of B are within THRESH of
 *>       those in S1.  2*THRESH if they are not.  (Tested using
-*>       SSVDCH)
+*>       AB_SSVDCH)
 *>
-*> Test SBDSQR on matrix A
+*> Test AB_SBDSQR on matrix A
 *>
 *> (11)  | A - (QU) S (VT PT) | / ( |A| max(M,N) ulp )
 *>
@@ -133,7 +133,7 @@
 *>
 *> (14)  | I - (VT PT) (PT'VT') | / ( N ulp )
 *>
-*> Test SBDSDC on bidiagonal matrix B
+*> Test AB_SBDSDC on bidiagonal matrix B
 *>
 *> (15)  | B - U S1 VT | / ( |B| min(M,N) ulp ), VT = V'
 *>
@@ -142,11 +142,11 @@
 *> (17)  | I - VT VT' | / ( min(M,N) ulp )
 *>
 *> (18)  S1 contains min(M,N) nonnegative values in decreasing order.
-*>       (Return 0 if true, 1/ULP if false.)
+*>       (Return 0 if true, 1/ULP if FALSE.)
 *>
 *> (19)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
 *>                                   computing U and V.
-*>  Test SBDSVDX on bidiagonal matrix B
+*>  Test AB_SBDSVDX on bidiagonal matrix B
 *>
 *>  (20)  | B - U S1 VT | / ( |B| min(M,N) ulp ), VT = V'
 *>
@@ -155,31 +155,31 @@
 *>  (22)  | I - VT VT' | / ( min(M,N) ulp )
 *>
 *>  (23)  S1 contains min(M,N) nonnegative values in decreasing order.
-*>        (Return 0 if true, 1/ULP if false.)
+*>        (Return 0 if true, 1/ULP if FALSE.)
 *>
 *>  (24)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
 *>                                    computing U and V.
 *>
-*>  (25)  | S1 - U' B VT' | / ( |S| n ulp )    SBDSVDX('V', 'I')
+*>  (25)  | S1 - U' B VT' | / ( |S| n ulp )    AB_SBDSVDX('V', 'I')
 *>
 *>  (26)  | I - U' U | / ( min(M,N) ulp )
 *>
 *>  (27)  | I - VT VT' | / ( min(M,N) ulp )
 *>
 *>  (28)  S1 contains min(M,N) nonnegative values in decreasing order.
-*>        (Return 0 if true, 1/ULP if false.)
+*>        (Return 0 if true, 1/ULP if FALSE.)
 *>
 *>  (29)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
 *>                                    computing U and V.
 *>
-*>  (30)  | S1 - U' B VT' | / ( |S1| n ulp )   SBDSVDX('V', 'V')
+*>  (30)  | S1 - U' B VT' | / ( |S1| n ulp )   AB_SBDSVDX('V', 'V')
 *>
 *>  (31)  | I - U' U | / ( min(M,N) ulp )
 *>
 *>  (32)  | I - VT VT' | / ( min(M,N) ulp )
 *>
 *>  (33)  S1 contains min(M,N) nonnegative values in decreasing order.
-*>        (Return 0 if true, 1/ULP if false.)
+*>        (Return 0 if true, 1/ULP if FALSE.)
 *>
 *>  (34)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
 *>                                    computing U and V.
@@ -224,7 +224,7 @@
 *>      logarithmic distribution on [ulp^2,ulp^(-2)]  (I.e., each
 *>      entry is  e^x, where x is chosen uniformly on
 *>      [ 2 log(ulp), -2 log(ulp) ] .)  For *this* type:
-*>      (a) SGEBRD is not called to reduce it to bidiagonal form.
+*>      (a) AB_SGEBRD is not called to reduce it to bidiagonal form.
 *>      (b) the bidiagonal is  min(M,N) x min(M,N); if M<N, the
 *>          matrix will be lower bidiagonal, otherwise upper.
 *>      (c) only tests 5--8 and 14 are performed.
@@ -258,7 +258,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, SCHKBD
+*>          The number of elements in DOTYPE.   If it is zero, AB_SCHKBD
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrices are in A and B.
@@ -281,7 +281,7 @@
 *> \verbatim
 *>          NRHS is INTEGER
 *>          The number of columns in the "right-hand side" matrices X, Y,
-*>          and Z, used in testing SBDSQR.  If NRHS = 0, then the
+*>          and Z, used in testing AB_SBDSQR.  If NRHS = 0, then the
 *>          operations on the right-hand side will not be tested.
 *>          NRHS must be at least 0.
 *> \endverbatim
@@ -293,7 +293,7 @@
 *>          generator. The array elements should be between 0 and 4095;
 *>          if not they will be reduced mod 4096.  Also, ISEED(4) must
 *>          be odd.  The values of ISEED are changed on exit, and can be
-*>          used in the next call to SCHKBD to continue the same random
+*>          used in the next call to AB_SCHKBD to continue the same random
 *>          number sequence.
 *> \endverbatim
 *>
@@ -441,7 +441,7 @@
 *>          -21: LDQ < 1 or LDQ < MMAX.
 *>          -23: LDPT< 1 or LDPT< MNMAX.
 *>          -27: LWORK too small.
-*>          If  SLATMR, SLATMS, SGEBRD, SORGBR, or SBDSQR,
+*>          If  AB_SLATMR, AB_SLATMS, AB_SGEBRD, AB_SORGBR, or AB_SBDSQR,
 *>              returns an error code, the
 *>              absolute value of it is returned.
 *>
@@ -488,7 +488,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
+      SUBROUTINE AB_SCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
      $                   ISEED, THRESH, A, LDA, BD, BE, S1, S2, X, LDX,
      $                   Y, Z, Q, LDQ, PT, LDPT, U, VT, WORK, LWORK,
      $                   IWORK, NOUT, INFO )
@@ -541,14 +541,18 @@
       REAL               DUM( 1 ), DUMMA( 1 ), RESULT( 40 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND, SSXT1
-      EXTERNAL           SLAMCH, SLARND, SSXT1
+      REAL               AB_SLAMCH, AB_SLARND, AB_SSXT1
+      EXTERNAL           AB_SLAMCH, AB_SLARND, AB_SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASUM, SBDSDC, SBDSQR, SBDSVDX, SBDT01,
-     $                   SBDT02, SBDT03, SBDT04, SCOPY, SGEBRD,
-     $                   SGEMM, SLABAD, SLACPY, SLAHD2, SLASET,
-     $                   SLATMR, SLATMS, SORGBR, SORT01, XERBLA
+      EXTERNAL           AB_ALASUM, AB_SBDSDC, AB_SBDSQR, AB_SBDSVDX, AB
+     $_SBDT01,
+     $                   AB_SBDT02, AB_SBDT03, AB_SBDT04, AB_SCOPY, AB_S
+     $GEBRD,
+     $                   AB_SGEMM, AB_SLABAD, AB_SLACPY, AB_SLAHD2, AB_S
+     $LASET,
+     $                   AB_SLATMR, AB_SLATMS, AB_SORGBR, AB_SORT01, AB_
+     $XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -618,7 +622,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKBD', -INFO )
+         CALL AB_XERBLA( 'AB_SCHKBD', -INFO )
          RETURN
       END IF
 *
@@ -628,10 +632,10 @@
       PATH( 2: 3 ) = 'BD'
       NFAIL = 0
       NTEST = 0
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
+      CALL AB_SLABAD( UNFL, OVFL )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
       RTUNFL = SQRT( UNFL )
@@ -707,7 +711,7 @@
 *
    70       CONTINUE
 *
-            CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+            CALL AB_SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -730,7 +734,8 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL SLATMS( MNMIN, MNMIN, 'S', ISEED, 'N', WORK, IMODE,
+               CALL AB_SLATMS( MNMIN, MNMIN, 'S', ISEED, 'N', WORK, IMOD
+     $E,
      $                      COND, ANORM, 0, 0, 'N', A, LDA,
      $                      WORK( MNMIN+1 ), IINFO )
 *
@@ -738,7 +743,8 @@
 *
 *              Symmetric, eigenvalues specified
 *
-               CALL SLATMS( MNMIN, MNMIN, 'S', ISEED, 'S', WORK, IMODE,
+               CALL AB_SLATMS( MNMIN, MNMIN, 'S', ISEED, 'S', WORK, IMOD
+     $E,
      $                      COND, ANORM, M, N, 'N', A, LDA,
      $                      WORK( MNMIN+1 ), IINFO )
 *
@@ -746,7 +752,7 @@
 *
 *              Nonsymmetric, singular values specified
 *
-               CALL SLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, COND,
+               CALL AB_SLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, COND,
      $                      ANORM, M, N, 'N', A, LDA, WORK( MNMIN+1 ),
      $                      IINFO )
 *
@@ -754,7 +760,8 @@
 *
 *              Diagonal, random entries
 *
-               CALL SLATMR( MNMIN, MNMIN, 'S', ISEED, 'N', WORK, 6, ONE,
+               CALL AB_SLATMR( MNMIN, MNMIN, 'S', ISEED, 'N', WORK, 6, O
+     $NE,
      $                      ONE, 'T', 'N', WORK( MNMIN+1 ), 1, ONE,
      $                      WORK( 2*MNMIN+1 ), 1, ONE, 'N', IWORK, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -763,7 +770,8 @@
 *
 *              Symmetric, random entries
 *
-               CALL SLATMR( MNMIN, MNMIN, 'S', ISEED, 'S', WORK, 6, ONE,
+               CALL AB_SLATMR( MNMIN, MNMIN, 'S', ISEED, 'S', WORK, 6, O
+     $NE,
      $                      ONE, 'T', 'N', WORK( MNMIN+1 ), 1, ONE,
      $                      WORK( M+MNMIN+1 ), 1, ONE, 'N', IWORK, M, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -772,7 +780,7 @@
 *
 *              Nonsymmetric, random entries
 *
-               CALL SLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
+               CALL AB_SLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( MNMIN+1 ), 1, ONE,
      $                      WORK( M+MNMIN+1 ), 1, ONE, 'N', IWORK, M, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -783,9 +791,9 @@
 *
                TEMP1 = -TWO*LOG( ULP )
                DO 90 J = 1, MNMIN
-                  BD( J ) = EXP( TEMP1*SLARND( 2, ISEED ) )
+                  BD( J ) = EXP( TEMP1*AB_SLARND( 2, ISEED ) )
                   IF( J.LT.MNMIN )
-     $               BE( J ) = EXP( TEMP1*SLARND( 2, ISEED ) )
+     $               BE( J ) = EXP( TEMP1*AB_SLARND( 2, ISEED ) )
    90          CONTINUE
 *
                IINFO = 0
@@ -804,13 +812,14 @@
 *              Generate Right-Hand Side
 *
                IF( BIDIAG ) THEN
-                  CALL SLATMR( MNMIN, NRHS, 'S', ISEED, 'N', WORK, 6,
+                  CALL AB_SLATMR( MNMIN, NRHS, 'S', ISEED, 'N', WORK, 6,
      $                         ONE, ONE, 'T', 'N', WORK( MNMIN+1 ), 1,
      $                         ONE, WORK( 2*MNMIN+1 ), 1, ONE, 'N',
      $                         IWORK, MNMIN, NRHS, ZERO, ONE, 'NO', Y,
      $                         LDX, IWORK, IINFO )
                ELSE
-                  CALL SLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE,
+                  CALL AB_SLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE
+     $,
      $                         ONE, 'T', 'N', WORK( M+1 ), 1, ONE,
      $                         WORK( 2*M+1 ), 1, ONE, 'N', IWORK, M,
      $                         NRHS, ZERO, ONE, 'NO', X, LDX, IWORK,
@@ -829,27 +838,28 @@
 *
   100       CONTINUE
 *
-*           Call SGEBRD and SORGBR to compute B, Q, and P, do tests.
+*           Call AB_SGEBRD and AB_SORGBR to compute B, Q, and P, do tests.
 *
             IF( .NOT.BIDIAG ) THEN
 *
 *              Compute transformations to reduce A to bidiagonal form:
 *              B := Q' * A * P.
 *
-               CALL SLACPY( ' ', M, N, A, LDA, Q, LDQ )
-               CALL SGEBRD( M, N, Q, LDQ, BD, BE, WORK, WORK( MNMIN+1 ),
+               CALL AB_SLACPY( ' ', M, N, A, LDA, Q, LDQ )
+               CALL AB_SGEBRD( M, N, Q, LDQ, BD, BE, WORK, WORK( MNMIN+1
+     $ ),
      $                      WORK( 2*MNMIN+1 ), LWORK-2*MNMIN, IINFO )
 *
-*              Check error code from SGEBRD.
+*              Check error code from AB_SGEBRD.
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUT, FMT = 9998 )'SGEBRD', IINFO, M, N,
+                  WRITE( NOUT, FMT = 9998 )'AB_SGEBRD', IINFO, M, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   RETURN
                END IF
 *
-               CALL SLACPY( ' ', M, N, Q, LDQ, PT, LDPT )
+               CALL AB_SLACPY( ' ', M, N, Q, LDQ, PT, LDPT )
                IF( M.GE.N ) THEN
                   UPLO = 'U'
                ELSE
@@ -861,13 +871,13 @@
                MQ = M
                IF( NRHS.LE.0 )
      $            MQ = MNMIN
-               CALL SORGBR( 'Q', M, MQ, N, Q, LDQ, WORK,
+               CALL AB_SORGBR( 'Q', M, MQ, N, Q, LDQ, WORK,
      $                      WORK( 2*MNMIN+1 ), LWORK-2*MNMIN, IINFO )
 *
-*              Check error code from SORGBR.
+*              Check error code from AB_SORGBR.
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUT, FMT = 9998 )'SORGBR(Q)', IINFO, M, N,
+                  WRITE( NOUT, FMT = 9998 )'AB_SORGBR(Q)', IINFO, M, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   RETURN
@@ -875,13 +885,14 @@
 *
 *              Generate P'
 *
-               CALL SORGBR( 'P', MNMIN, N, M, PT, LDPT, WORK( MNMIN+1 ),
+               CALL AB_SORGBR( 'P', MNMIN, N, M, PT, LDPT, WORK( MNMIN+1
+     $ ),
      $                      WORK( 2*MNMIN+1 ), LWORK-2*MNMIN, IINFO )
 *
-*              Check error code from SORGBR.
+*              Check error code from AB_SORGBR.
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUT, FMT = 9998 )'SORGBR(P)', IINFO, M, N,
+                  WRITE( NOUT, FMT = 9998 )'AB_SORGBR(P)', IINFO, M, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   RETURN
@@ -889,38 +900,41 @@
 *
 *              Apply Q' to an M by NRHS matrix X:  Y := Q' * X.
 *
-               CALL SGEMM( 'Transpose', 'No transpose', M, NRHS, M, ONE,
+               CALL AB_SGEMM( 'Transpose', 'No transpose', M, NRHS, M, O
+     $NE,
      $                     Q, LDQ, X, LDX, ZERO, Y, LDX )
 *
 *              Test 1:  Check the decomposition A := Q * B * PT
 *                   2:  Check the orthogonality of Q
 *                   3:  Check the orthogonality of PT
 *
-               CALL SBDT01( M, N, 1, A, LDA, Q, LDQ, BD, BE, PT, LDPT,
+               CALL AB_SBDT01( M, N, 1, A, LDA, Q, LDQ, BD, BE, PT, LDPT
+     $,
      $                      WORK, RESULT( 1 ) )
-               CALL SORT01( 'Columns', M, MQ, Q, LDQ, WORK, LWORK,
+               CALL AB_SORT01( 'Columns', M, MQ, Q, LDQ, WORK, LWORK,
      $                      RESULT( 2 ) )
-               CALL SORT01( 'Rows', MNMIN, N, PT, LDPT, WORK, LWORK,
+               CALL AB_SORT01( 'Rows', MNMIN, N, PT, LDPT, WORK, LWORK,
      $                      RESULT( 3 ) )
             END IF
 *
-*           Use SBDSQR to form the SVD of the bidiagonal matrix B:
+*           Use AB_SBDSQR to form the SVD of the bidiagonal matrix B:
 *           B := U * S1 * VT, and compute Z = U' * Y.
 *
-            CALL SCOPY( MNMIN, BD, 1, S1, 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, S1, 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK, 1 )
-            CALL SLACPY( ' ', M, NRHS, Y, LDX, Z, LDX )
-            CALL SLASET( 'Full', MNMIN, MNMIN, ZERO, ONE, U, LDPT )
-            CALL SLASET( 'Full', MNMIN, MNMIN, ZERO, ONE, VT, LDPT )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK, 1 )
+            CALL AB_SLACPY( ' ', M, NRHS, Y, LDX, Z, LDX )
+            CALL AB_SLASET( 'Full', MNMIN, MNMIN, ZERO, ONE, U, LDPT )
+            CALL AB_SLASET( 'Full', MNMIN, MNMIN, ZERO, ONE, VT, LDPT )
 *
-            CALL SBDSQR( UPLO, MNMIN, MNMIN, MNMIN, NRHS, S1, WORK, VT,
+            CALL AB_SBDSQR( UPLO, MNMIN, MNMIN, MNMIN, NRHS, S1, WORK, V
+     $T,
      $                   LDPT, U, LDPT, Z, LDX, WORK( MNMIN+1 ), IINFO )
 *
-*           Check error code from SBDSQR.
+*           Check error code from AB_SBDSQR.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSQR(vects)', IINFO, M, N,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSQR(vects)', IINFO, M, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -931,20 +945,21 @@
                END IF
             END IF
 *
-*           Use SBDSQR to compute only the singular values of the
+*           Use AB_SBDSQR to compute only the singular values of the
 *           bidiagonal matrix B;  U, VT, and Z should not be modified.
 *
-            CALL SCOPY( MNMIN, BD, 1, S2, 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, S2, 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK, 1 )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK, 1 )
 *
-            CALL SBDSQR( UPLO, MNMIN, 0, 0, 0, S2, WORK, VT, LDPT, U,
+            CALL AB_SBDSQR( UPLO, MNMIN, 0, 0, 0, S2, WORK, VT, LDPT, U,
      $                   LDPT, Z, LDX, WORK( MNMIN+1 ), IINFO )
 *
-*           Check error code from SBDSQR.
+*           Check error code from AB_SBDSQR.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSQR(values)', IINFO, M, N,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSQR(values)', IINFO, M, N
+     $,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -960,13 +975,15 @@
 *                6:  Check the orthogonality of U
 *                7:  Check the orthogonality of VT
 *
-            CALL SBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT, LDPT,
+            CALL AB_SBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT, LDP
+     $T,
      $                   WORK, RESULT( 4 ) )
-            CALL SBDT02( MNMIN, NRHS, Y, LDX, Z, LDX, U, LDPT, WORK,
+            CALL AB_SBDT02( MNMIN, NRHS, Y, LDX, Z, LDX, U, LDPT, WORK,
      $                   RESULT( 5 ) )
-            CALL SORT01( 'Columns', MNMIN, MNMIN, U, LDPT, WORK, LWORK,
+            CALL AB_SORT01( 'Columns', MNMIN, MNMIN, U, LDPT, WORK, LWOR
+     $K,
      $                   RESULT( 6 ) )
-            CALL SORT01( 'Rows', MNMIN, MNMIN, VT, LDPT, WORK, LWORK,
+            CALL AB_SORT01( 'Rows', MNMIN, MNMIN, VT, LDPT, WORK, LWORK,
      $                   RESULT( 7 ) )
 *
 *           Test 8:  Check that the singular values are sorted in
@@ -984,7 +1001,7 @@
      $            RESULT( 8 ) = ULPINV
             END IF
 *
-*           Test 9:  Compare SBDSQR with and without singular vectors
+*           Test 9:  Compare AB_SBDSQR with and without singular vectors
 *
             TEMP2 = ZERO
 *
@@ -1003,7 +1020,7 @@
             TEMP1 = THRESH*( HALF-ULP )
 *
             DO 130 J = 0, LOG2UI
-*               CALL SSVDCH( MNMIN, BD, BE, S1, TEMP1, IINFO )
+*               CALL AB_SSVDCH( MNMIN, BD, BE, S1, TEMP1, IINFO )
                IF( IINFO.EQ.0 )
      $            GO TO 140
                TEMP1 = TEMP1*TWO
@@ -1012,15 +1029,16 @@
   140       CONTINUE
             RESULT( 10 ) = TEMP1
 *
-*           Use SBDSQR to form the decomposition A := (QU) S (VT PT)
+*           Use AB_SBDSQR to form the decomposition A := (QU) S (VT PT)
 *           from the bidiagonal form A := Q B PT.
 *
             IF( .NOT.BIDIAG ) THEN
-               CALL SCOPY( MNMIN, BD, 1, S2, 1 )
+               CALL AB_SCOPY( MNMIN, BD, 1, S2, 1 )
                IF( MNMIN.GT.0 )
-     $            CALL SCOPY( MNMIN-1, BE, 1, WORK, 1 )
+     $            CALL AB_SCOPY( MNMIN-1, BE, 1, WORK, 1 )
 *
-               CALL SBDSQR( UPLO, MNMIN, N, M, NRHS, S2, WORK, PT, LDPT,
+               CALL AB_SBDSQR( UPLO, MNMIN, N, M, NRHS, S2, WORK, PT, LD
+     $PT,
      $                      Q, LDQ, Y, LDX, WORK( MNMIN+1 ), IINFO )
 *
 *              Test 11:  Check the decomposition A := Q*U * S2 * VT*PT
@@ -1028,32 +1046,33 @@
 *                   13:  Check the orthogonality of Q*U
 *                   14:  Check the orthogonality of VT*PT
 *
-               CALL SBDT01( M, N, 0, A, LDA, Q, LDQ, S2, DUMMA, PT,
+               CALL AB_SBDT01( M, N, 0, A, LDA, Q, LDQ, S2, DUMMA, PT,
      $                      LDPT, WORK, RESULT( 11 ) )
-               CALL SBDT02( M, NRHS, X, LDX, Y, LDX, Q, LDQ, WORK,
+               CALL AB_SBDT02( M, NRHS, X, LDX, Y, LDX, Q, LDQ, WORK,
      $                      RESULT( 12 ) )
-               CALL SORT01( 'Columns', M, MQ, Q, LDQ, WORK, LWORK,
+               CALL AB_SORT01( 'Columns', M, MQ, Q, LDQ, WORK, LWORK,
      $                      RESULT( 13 ) )
-               CALL SORT01( 'Rows', MNMIN, N, PT, LDPT, WORK, LWORK,
+               CALL AB_SORT01( 'Rows', MNMIN, N, PT, LDPT, WORK, LWORK,
      $                      RESULT( 14 ) )
             END IF
 *
-*           Use SBDSDC to form the SVD of the bidiagonal matrix B:
+*           Use AB_SBDSDC to form the SVD of the bidiagonal matrix B:
 *           B := U * S1 * VT
 *
-            CALL SCOPY( MNMIN, BD, 1, S1, 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, S1, 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK, 1 )
-            CALL SLASET( 'Full', MNMIN, MNMIN, ZERO, ONE, U, LDPT )
-            CALL SLASET( 'Full', MNMIN, MNMIN, ZERO, ONE, VT, LDPT )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK, 1 )
+            CALL AB_SLASET( 'Full', MNMIN, MNMIN, ZERO, ONE, U, LDPT )
+            CALL AB_SLASET( 'Full', MNMIN, MNMIN, ZERO, ONE, VT, LDPT )
 *
-            CALL SBDSDC( UPLO, 'I', MNMIN, S1, WORK, U, LDPT, VT, LDPT,
+            CALL AB_SBDSDC( UPLO, 'I', MNMIN, S1, WORK, U, LDPT, VT, LDP
+     $T,
      $                   DUM, IDUM, WORK( MNMIN+1 ), IWORK, IINFO )
 *
-*           Check error code from SBDSDC.
+*           Check error code from AB_SBDSDC.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSDC(vects)', IINFO, M, N,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSDC(vects)', IINFO, M, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1064,20 +1083,21 @@
                END IF
             END IF
 *
-*           Use SBDSDC to compute only the singular values of the
+*           Use AB_SBDSDC to compute only the singular values of the
 *           bidiagonal matrix B;  U and VT should not be modified.
 *
-            CALL SCOPY( MNMIN, BD, 1, S2, 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, S2, 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK, 1 )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK, 1 )
 *
-            CALL SBDSDC( UPLO, 'N', MNMIN, S2, WORK, DUM, 1, DUM, 1,
+            CALL AB_SBDSDC( UPLO, 'N', MNMIN, S2, WORK, DUM, 1, DUM, 1,
      $                   DUM, IDUM, WORK( MNMIN+1 ), IWORK, IINFO )
 *
-*           Check error code from SBDSDC.
+*           Check error code from AB_SBDSDC.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSDC(values)', IINFO, M, N,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSDC(values)', IINFO, M, N
+     $,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1092,11 +1112,13 @@
 *                16:  Check the orthogonality of U
 *                17:  Check the orthogonality of VT
 *
-            CALL SBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT, LDPT,
+            CALL AB_SBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT, LDP
+     $T,
      $                   WORK, RESULT( 15 ) )
-            CALL SORT01( 'Columns', MNMIN, MNMIN, U, LDPT, WORK, LWORK,
+            CALL AB_SORT01( 'Columns', MNMIN, MNMIN, U, LDPT, WORK, LWOR
+     $K,
      $                   RESULT( 16 ) )
-            CALL SORT01( 'Rows', MNMIN, MNMIN, VT, LDPT, WORK, LWORK,
+            CALL AB_SORT01( 'Rows', MNMIN, MNMIN, VT, LDPT, WORK, LWORK,
      $                   RESULT( 17 ) )
 *
 *           Test 18:  Check that the singular values are sorted in
@@ -1114,7 +1136,7 @@
      $            RESULT( 18 ) = ULPINV
             END IF
 *
-*           Test 19:  Compare SBDSQR with and without singular vectors
+*           Test 19:  Compare AB_SBDSQR with and without singular vectors
 *
             TEMP2 = ZERO
 *
@@ -1128,7 +1150,7 @@
             RESULT( 19 ) = TEMP2
 *
 *
-*           Use SBDSVDX to compute the SVD of the bidiagonal matrix B:
+*           Use AB_SBDSVDX to compute the SVD of the bidiagonal matrix B:
 *           B := U * S1 * VT
 *
             IF( JTYPE.EQ.10 .OR. JTYPE.EQ.16 ) THEN
@@ -1146,19 +1168,20 @@
             IWWORK = IWBZ + 2*MNMIN*(MNMIN+1)
             MNMIN2 = MAX( 1,MNMIN*2 )
 *
-            CALL SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL SBDSVDX( UPLO, 'V', 'A', MNMIN, WORK( IWBD ),
+            CALL AB_SBDSVDX( UPLO, 'V', 'A', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), ZERO, ZERO, 0, 0, NS1, S1,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    IWORK, IINFO)
 *
-*           Check error code from SBDSVDX.
+*           Check error code from AB_SBDSVDX.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSVDX(vects,A)', IINFO, M, N,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSVDX(vects,A)', IINFO, M,
+     $ N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1171,13 +1194,13 @@
 *
             J = IWBZ
             DO 170 I = 1, NS1
-               CALL SCOPY( MNMIN, WORK( J ), 1, U( 1,I ), 1 )
+               CALL AB_SCOPY( MNMIN, WORK( J ), 1, U( 1,I ), 1 )
                J = J + MNMIN
-               CALL SCOPY( MNMIN, WORK( J ), 1, VT( I,1 ), LDPT )
+               CALL AB_SCOPY( MNMIN, WORK( J ), 1, VT( I,1 ), LDPT )
                J = J + MNMIN
   170       CONTINUE
 *
-*           Use SBDSVDX to compute only the singular values of the
+*           Use AB_SBDSVDX to compute only the singular values of the
 *           bidiagonal matrix B;  U and VT should not be modified.
 *
             IF( JTYPE.EQ.9 ) THEN
@@ -1188,19 +1211,19 @@
                GO TO 270
             END IF
 *
-            CALL SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL SBDSVDX( UPLO, 'N', 'A', MNMIN, WORK( IWBD ),
+            CALL AB_SBDSVDX( UPLO, 'N', 'A', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), ZERO, ZERO, 0, 0, NS2, S2,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    IWORK, IINFO )
 *
-*           Check error code from SBDSVDX.
+*           Check error code from AB_SBDSVDX.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSVDX(values,A)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSVDX(values,A)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1213,21 +1236,21 @@
 *
 *           Save S1 for tests 30-34.
 *
-            CALL SCOPY( MNMIN, S1, 1, WORK( IWBS ), 1 )
+            CALL AB_SCOPY( MNMIN, S1, 1, WORK( IWBS ), 1 )
 *
 *           Test 20:  Check the decomposition B := U * S1 * VT
 *                21:  Check the orthogonality of U
 *                22:  Check the orthogonality of VT
 *                23:  Check that the singular values are sorted in
 *                     non-increasing order and are non-negative
-*                24:  Compare SBDSVDX with and without singular vectors
+*                24:  Compare AB_SBDSVDX with and without singular vectors
 *
-            CALL SBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT,
+            CALL AB_SBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT,
      $                   LDPT, WORK( IWBS+MNMIN ), RESULT( 20 ) )
-            CALL SORT01( 'Columns', MNMIN, MNMIN, U, LDPT,
+            CALL AB_SORT01( 'Columns', MNMIN, MNMIN, U, LDPT,
      $                   WORK( IWBS+MNMIN ), LWORK-MNMIN,
      $                   RESULT( 21 ) )
-            CALL SORT01( 'Rows', MNMIN, MNMIN, VT, LDPT,
+            CALL AB_SORT01( 'Rows', MNMIN, MNMIN, VT, LDPT,
      $                   WORK( IWBS+MNMIN ), LWORK-MNMIN,
      $                   RESULT( 22) )
 *
@@ -1253,7 +1276,7 @@
             RESULT( 24 ) = TEMP2
             ANORM = S1( 1 )
 *
-*           Use SBDSVDX with RANGE='I': choose random values for IL and
+*           Use AB_SBDSVDX with RANGE='I': choose random values for IL and
 *           IU, and ask for the IL-th through IU-th singular values
 *           and corresponding vectors.
 *
@@ -1264,8 +1287,8 @@
                IL = 1
                IU = MNMIN
             ELSE
-               IL = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( MNMIN-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( MNMIN-1 )*AB_SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( MNMIN-1 )*AB_SLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL
@@ -1273,19 +1296,19 @@
                END IF
             END IF
 *
-            CALL SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL SBDSVDX( UPLO, 'V', 'I', MNMIN, WORK( IWBD ),
+            CALL AB_SBDSVDX( UPLO, 'V', 'I', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), ZERO, ZERO, IL, IU, NS1, S1,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    IWORK, IINFO)
 *
-*           Check error code from SBDSVDX.
+*           Check error code from AB_SBDSVDX.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSVDX(vects,I)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSVDX(vects,I)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1298,28 +1321,28 @@
 *
             J = IWBZ
             DO 210 I = 1, NS1
-               CALL SCOPY( MNMIN, WORK( J ), 1, U( 1,I ), 1 )
+               CALL AB_SCOPY( MNMIN, WORK( J ), 1, U( 1,I ), 1 )
                J = J + MNMIN
-               CALL SCOPY( MNMIN, WORK( J ), 1, VT( I,1 ), LDPT )
+               CALL AB_SCOPY( MNMIN, WORK( J ), 1, VT( I,1 ), LDPT )
                J = J + MNMIN
   210       CONTINUE
 *
-*           Use SBDSVDX to compute only the singular values of the
+*           Use AB_SBDSVDX to compute only the singular values of the
 *           bidiagonal matrix B;  U and VT should not be modified.
 *
-            CALL SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL SBDSVDX( UPLO, 'N', 'I', MNMIN, WORK( IWBD ),
+            CALL AB_SBDSVDX( UPLO, 'N', 'I', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), ZERO, ZERO, IL, IU, NS2, S2,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    IWORK, IINFO )
 *
-*           Check error code from SBDSVDX.
+*           Check error code from AB_SBDSVDX.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSVDX(values,I)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSVDX(values,I)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1335,15 +1358,15 @@
 *                27:  Check the orthogonality of VT
 *                28:  Check that the singular values are sorted in
 *                     non-increasing order and are non-negative
-*                29:  Compare SBDSVDX with and without singular vectors
+*                29:  Compare AB_SBDSVDX with and without singular vectors
 *
-            CALL SBDT04( UPLO, MNMIN, BD, BE, S1, NS1, U,
+            CALL AB_SBDT04( UPLO, MNMIN, BD, BE, S1, NS1, U,
      $                   LDPT, VT, LDPT, WORK( IWBS+MNMIN ),
      $                   RESULT( 25 ) )
-            CALL SORT01( 'Columns', MNMIN, NS1, U, LDPT,
+            CALL AB_SORT01( 'Columns', MNMIN, NS1, U, LDPT,
      $                   WORK( IWBS+MNMIN ), LWORK-MNMIN,
      $                   RESULT( 26 ) )
-            CALL SORT01( 'Rows', NS1, MNMIN, VT, LDPT,
+            CALL AB_SORT01( 'Rows', NS1, MNMIN, VT, LDPT,
      $                   WORK( IWBS+MNMIN ), LWORK-MNMIN,
      $                   RESULT( 27 ) )
 *
@@ -1368,11 +1391,11 @@
   230       CONTINUE
             RESULT( 29 ) = TEMP2
 *
-*           Use SBDSVDX with RANGE='V': determine the values VL and VU
+*           Use AB_SBDSVDX with RANGE='V': determine the values VL and VU
 *           of the IL-th and IU-th singular values and ask for all
 *           singular values in this range.
 *
-            CALL SCOPY( MNMIN, WORK( IWBS ), 1, S1, 1 )
+            CALL AB_SCOPY( MNMIN, WORK( IWBS ), 1, S1, 1 )
 *
             IF( MNMIN.GT.0 ) THEN
                IF( IL.NE.1 ) THEN
@@ -1397,19 +1420,19 @@
                VU = ONE
             END IF
 *
-            CALL SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL SBDSVDX( UPLO, 'V', 'V', MNMIN, WORK( IWBD ),
+            CALL AB_SBDSVDX( UPLO, 'V', 'V', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), VL, VU, 0, 0, NS1, S1,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    IWORK, IINFO )
 *
-*           Check error code from SBDSVDX.
+*           Check error code from AB_SBDSVDX.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSVDX(vects,V)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSVDX(vects,V)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1422,28 +1445,28 @@
 *
             J = IWBZ
             DO 240 I = 1, NS1
-               CALL SCOPY( MNMIN, WORK( J ), 1, U( 1,I ), 1 )
+               CALL AB_SCOPY( MNMIN, WORK( J ), 1, U( 1,I ), 1 )
                J = J + MNMIN
-               CALL SCOPY( MNMIN, WORK( J ), 1, VT( I,1 ), LDPT )
+               CALL AB_SCOPY( MNMIN, WORK( J ), 1, VT( I,1 ), LDPT )
                J = J + MNMIN
   240       CONTINUE
 *
-*           Use SBDSVDX to compute only the singular values of the
+*           Use AB_SBDSVDX to compute only the singular values of the
 *           bidiagonal matrix B;  U and VT should not be modified.
 *
-            CALL SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
+            CALL AB_SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
-     $         CALL SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
+     $         CALL AB_SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 )
 *
-            CALL SBDSVDX( UPLO, 'N', 'V', MNMIN, WORK( IWBD ),
+            CALL AB_SBDSVDX( UPLO, 'N', 'V', MNMIN, WORK( IWBD ),
      $                    WORK( IWBE ), VL, VU, 0, 0, NS2, S2,
      $                    WORK( IWBZ ), MNMIN2, WORK( IWWORK ),
      $                    IWORK, IINFO )
 *
-*           Check error code from SBDSVDX.
+*           Check error code from AB_SBDSVDX.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'SBDSVDX(values,V)', IINFO,
+               WRITE( NOUT, FMT = 9998 )'AB_SBDSVDX(values,V)', IINFO,
      $            M, N, JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1459,15 +1482,15 @@
 *                32:  Check the orthogonality of VT
 *                33:  Check that the singular values are sorted in
 *                     non-increasing order and are non-negative
-*                34:  Compare SBDSVDX with and without singular vectors
+*                34:  Compare AB_SBDSVDX with and without singular vectors
 *
-            CALL SBDT04( UPLO, MNMIN, BD, BE, S1, NS1, U,
+            CALL AB_SBDT04( UPLO, MNMIN, BD, BE, S1, NS1, U,
      $                   LDPT, VT, LDPT, WORK( IWBS+MNMIN ),
      $                   RESULT( 30 ) )
-            CALL SORT01( 'Columns', MNMIN, NS1, U, LDPT,
+            CALL AB_SORT01( 'Columns', MNMIN, NS1, U, LDPT,
      $                   WORK( IWBS+MNMIN ), LWORK-MNMIN,
      $                   RESULT( 31 ) )
-            CALL SORT01( 'Rows', NS1, MNMIN, VT, LDPT,
+            CALL AB_SORT01( 'Rows', NS1, MNMIN, VT, LDPT,
      $                   WORK( IWBS+MNMIN ), LWORK-MNMIN,
      $                   RESULT( 32 ) )
 *
@@ -1499,7 +1522,7 @@
             DO 280 J = 1, 34
                IF( RESULT( J ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 )
-     $               CALL SLAHD2( NOUT, PATH )
+     $               CALL AB_SLAHD2( NOUT, PATH )
                   WRITE( NOUT, FMT = 9999 )M, N, JTYPE, IOLDSD, J,
      $               RESULT( J )
                   NFAIL = NFAIL + 1
@@ -1516,15 +1539,15 @@
 *
 *     Summary
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NTEST, 0 )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NTEST, 0 )
 *
       RETURN
 *
-*     End of SCHKBD
+*     End of AB_SCHKBD
 *
  9999 FORMAT( ' M=', I5, ', N=', I5, ', type ', I2, ', seed=',
      $      4( I4, ',' ), ' test(', I2, ')=', G11.4 )
- 9998 FORMAT( ' SCHKBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
+ 9998 FORMAT( ' AB_SCHKBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
      $      I6, ', N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ),
      $      I5, ')' )
 *

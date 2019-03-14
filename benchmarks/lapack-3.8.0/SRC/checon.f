@@ -1,4 +1,4 @@
-*> \brief \b CHECON
+*> \brief \b AB_CHECON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHECON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/checon.f">
+*> Download AB_CHECON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHECON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/checon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHECON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/checon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHECON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHECON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+*       SUBROUTINE AB_CHECON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> CHECON estimates the reciprocal of the condition number of a complex
+*> AB_CHECON estimates the reciprocal of the condition number of a complex
 *> Hermitian matrix A using the factorization A = U*D*U**H or
-*> A = L*D*L**H computed by CHETRF.
+*> A = L*D*L**H computed by AB_CHETRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by CHETRF.
+*>          obtain the factor U or L as computed by AB_CHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -80,7 +80,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by CHETRF.
+*>          as determined by AB_CHETRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -122,7 +122,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHECON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+      SUBROUTINE AB_CHECON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -155,11 +155,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRS, CLACN2, XERBLA
+      EXTERNAL           AB_CHETRS, AB_CLACN2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -169,8 +169,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -180,7 +180,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHECON', -INFO )
+         CALL AB_XERBLA( 'AB_CHECON', -INFO )
          RETURN
       END IF
 *
@@ -218,12 +218,12 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**H) or inv(U*D*U**H).
 *
-         CALL CHETRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
+         CALL AB_CHETRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
@@ -234,6 +234,6 @@
 *
       RETURN
 *
-*     End of CHECON
+*     End of AB_CHECON
 *
       END

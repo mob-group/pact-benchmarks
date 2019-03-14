@@ -1,4 +1,4 @@
-*> \brief \b ZPPT02
+*> \brief \b AB_ZPPT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE AB_ZPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZPPT02 computes the residual in the solution of a Hermitian system
+*> AB_ZPPT02 computes the residual in the solution of a Hermitian system
 *> of linear equations  A*x = b  when packed storage is used for the
 *> coefficient matrix.  The ratio computed is
 *>
@@ -120,7 +120,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+      SUBROUTINE AB_ZPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,11 +151,11 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANHP
-      EXTERNAL           DLAMCH, DZASUM, ZLANHP
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANHP
+      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANHP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHPMV
+      EXTERNAL           AB_ZHPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -171,8 +171,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANHP( '1', UPLO, N, A, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANHP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -181,7 +181,8 @@
 *     Compute  B - A*X  for the matrix of right hand sides B.
 *
       DO 10 J = 1, NRHS
-         CALL ZHPMV( UPLO, N, -CONE, A, X( 1, J ), 1, CONE, B( 1, J ),
+         CALL AB_ZHPMV( UPLO, N, -CONE, A, X( 1, J ), 1, CONE, B( 1, J )
+     $,
      $               1 )
    10 CONTINUE
 *
@@ -190,8 +191,8 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         BNORM = DZASUM( N, B( 1, J ), 1 )
-         XNORM = DZASUM( N, X( 1, J ), 1 )
+         BNORM = AB_DZASUM( N, B( 1, J ), 1 )
+         XNORM = AB_DZASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -201,6 +202,6 @@
 *
       RETURN
 *
-*     End of ZPPT02
+*     End of AB_ZPPT02
 *
       END

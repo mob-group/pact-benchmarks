@@ -1,4 +1,4 @@
-*> \brief \b CERRVX
+*> \brief \b AB_CERRVX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CERRVX( PATH, NUNIT )
+*       SUBROUTINE AB_CERRVX( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CERRVX tests the error exits for the COMPLEX driver routines
+*> AB_CERRVX tests the error exits for the COMPLEX driver routines
 *> for solving linear systems of equations.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CERRVX( PATH, NUNIT )
+      SUBROUTINE AB_CERRVX( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,16 +85,21 @@
      $                   E( NMAX ), W( 2*NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGBSV, CGBSVX, CGESV, CGESVX, CGTSV, CGTSVX,
-     $                   CHESV, CHESV_RK ,CHESV_ROOK, CHESVX, CHKXER,
-     $                   CHPSV, CHPSVX, CPBSV, CPBSVX, CPOSV, CPOSVX,
-     $                   CPPSV, CPPSVX, CPTSV, CPTSVX, CSPSV, CSPSVX,
-     $                   CSYSV, CSYSV_AA, CSYSV_RK, CSYSV_ROOK,
-     $                   CSYSVX, CSYSV_AA_2STAGE
+      EXTERNAL           AB_CGBSV, AB_AB_CGBSVX, AB_CGESV, AB_AB_CGESVX,
+     $ AB_CGTSV, AB_AB_CGTSVX,
+     $                   AB_CHESV, AB_AB_CHESV_RK ,AB_AB_CHESV_ROOK, AB_
+     $AB_CHESVX, AB_CHKXER,
+     $                   AB_CHPSV, AB_AB_CHPSVX, AB_CPBSV, AB_AB_CPBSVX,
+     $ AB_CPOSV, AB_AB_CPOSVX,
+     $                   AB_CPPSV, AB_AB_CPPSVX, AB_CPTSV, AB_AB_CPTSVX,
+     $ AB_CSPSV, AB_AB_CSPSVX,
+     $                   AB_CSYSV, AB_AB_CSYSV_AA, AB_AB_CSYSV_RK, AB_AB
+     $_CSYSV_ROOK,
+     $                   AB_AB_CSYSVX, AB_AB_AB_CSYSV_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -134,539 +139,606 @@
       EQ = ' '
       OK = .TRUE.
 *
-      IF( LSAMEN( 2, C2, 'GE' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'GE' ) ) THEN
 *
-*        CGESV
+*        AB_CGESV
 *
-         SRNAMT = 'CGESV '
+         SRNAMT = 'AB_CGESV '
          INFOT = 1
-         CALL CGESV( -1, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGESV( -1, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGESV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGESV( 0, -1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGESV( 0, -1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGESV ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGESV( 2, 1, A, 1, IP, B, 2, INFO )
-         CALL CHKXER( 'CGESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGESV( 2, 1, A, 1, IP, B, 2, INFO )
+         CALL AB_CHKXER( 'AB_CGESV ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CGESV( 2, 1, A, 2, IP, B, 1, INFO )
-         CALL CHKXER( 'CGESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGESV( 2, 1, A, 2, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGESV ', INFOT, NOUT, LERR, OK )
 *
-*        CGESVX
+*        AB_AB_CGESVX
 *
-         SRNAMT = 'CGESVX'
+         SRNAMT = 'AB_AB_CGESVX'
          INFOT = 1
-         CALL CGESVX( '/', 'N', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B, 1,
+         CALL AB_AB_CGESVX( '/', 'N', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B
+     $, 1,
      $                X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGESVX( 'N', '/', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B, 1,
+         CALL AB_AB_CGESVX( 'N', '/', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B
+     $, 1,
      $                X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGESVX( 'N', 'N', -1, 0, A, 1, AF, 1, IP, EQ, R, C, B, 1,
+         CALL AB_AB_CGESVX( 'N', 'N', -1, 0, A, 1, AF, 1, IP, EQ, R, C, 
+     $B, 1,
      $                X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGESVX( 'N', 'N', 0, -1, A, 1, AF, 1, IP, EQ, R, C, B, 1,
+         CALL AB_AB_CGESVX( 'N', 'N', 0, -1, A, 1, AF, 1, IP, EQ, R, C, 
+     $B, 1,
      $                X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CGESVX( 'N', 'N', 2, 1, A, 1, AF, 2, IP, EQ, R, C, B, 2,
+         CALL AB_AB_CGESVX( 'N', 'N', 2, 1, A, 1, AF, 2, IP, EQ, R, C, B
+     $, 2,
      $                X, 2, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CGESVX( 'N', 'N', 2, 1, A, 2, AF, 1, IP, EQ, R, C, B, 2,
+         CALL AB_AB_CGESVX( 'N', 'N', 2, 1, A, 2, AF, 1, IP, EQ, R, C, B
+     $, 2,
      $                X, 2, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 10
          EQ = '/'
-         CALL CGESVX( 'F', 'N', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B, 1,
+         CALL AB_AB_CGESVX( 'F', 'N', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B
+     $, 1,
      $                X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
          EQ = 'R'
-         CALL CGESVX( 'F', 'N', 1, 0, A, 1, AF, 1, IP, EQ, R, C, B, 1,
+         CALL AB_AB_CGESVX( 'F', 'N', 1, 0, A, 1, AF, 1, IP, EQ, R, C, B
+     $, 1,
      $                X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 12
          EQ = 'C'
-         CALL CGESVX( 'F', 'N', 1, 0, A, 1, AF, 1, IP, EQ, R, C, B, 1,
+         CALL AB_AB_CGESVX( 'F', 'N', 1, 0, A, 1, AF, 1, IP, EQ, R, C, B
+     $, 1,
      $                X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL CGESVX( 'N', 'N', 2, 1, A, 2, AF, 2, IP, EQ, R, C, B, 1,
+         CALL AB_AB_CGESVX( 'N', 'N', 2, 1, A, 2, AF, 2, IP, EQ, R, C, B
+     $, 1,
      $                X, 2, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL CGESVX( 'N', 'N', 2, 1, A, 2, AF, 2, IP, EQ, R, C, B, 2,
+         CALL AB_AB_CGESVX( 'N', 'N', 2, 1, A, 2, AF, 2, IP, EQ, R, C, B
+     $, 2,
      $                X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGESVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'GB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GB' ) ) THEN
 *
-*        CGBSV
+*        AB_CGBSV
 *
-         SRNAMT = 'CGBSV '
+         SRNAMT = 'AB_CGBSV '
          INFOT = 1
-         CALL CGBSV( -1, 0, 0, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBSV( -1, 0, 0, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGBSV( 1, -1, 0, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBSV( 1, -1, 0, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGBSV( 1, 0, -1, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBSV( 1, 0, -1, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGBSV( 0, 0, 0, -1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBSV( 0, 0, 0, -1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CGBSV( 1, 1, 1, 0, A, 3, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBSV( 1, 1, 1, 0, A, 3, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CGBSV( 2, 0, 0, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBSV( 2, 0, 0, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBSV ', INFOT, NOUT, LERR, OK )
 *
-*        CGBSVX
+*        AB_AB_CGBSVX
 *
-         SRNAMT = 'CGBSVX'
+         SRNAMT = 'AB_AB_CGBSVX'
          INFOT = 1
-         CALL CGBSVX( '/', 'N', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( '/', 'N', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R
+     $, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGBSVX( 'N', '/', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', '/', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R
+     $, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGBSVX( 'N', 'N', -1, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', 'N', -1, 0, 0, 0, A, 1, AF, 1, IP, EQ, 
+     $R, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGBSVX( 'N', 'N', 1, -1, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', 'N', 1, -1, 0, 0, A, 1, AF, 1, IP, EQ, 
+     $R, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CGBSVX( 'N', 'N', 1, 0, -1, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', 'N', 1, 0, -1, 0, A, 1, AF, 1, IP, EQ, 
+     $R, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CGBSVX( 'N', 'N', 0, 0, 0, -1, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', 'N', 0, 0, 0, -1, A, 1, AF, 1, IP, EQ, 
+     $R, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CGBSVX( 'N', 'N', 1, 1, 1, 0, A, 2, AF, 4, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', 'N', 1, 1, 1, 0, A, 2, AF, 4, IP, EQ, R
+     $, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CGBSVX( 'N', 'N', 1, 1, 1, 0, A, 3, AF, 3, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', 'N', 1, 1, 1, 0, A, 3, AF, 3, IP, EQ, R
+     $, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 12
          EQ = '/'
-         CALL CGBSVX( 'F', 'N', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'F', 'N', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R
+     $, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
          EQ = 'R'
-         CALL CGBSVX( 'F', 'N', 1, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'F', 'N', 1, 0, 0, 0, A, 1, AF, 1, IP, EQ, R
+     $, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
          EQ = 'C'
-         CALL CGBSVX( 'F', 'N', 1, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'F', 'N', 1, 0, 0, 0, A, 1, AF, 1, IP, EQ, R
+     $, C,
      $                B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL CGBSVX( 'N', 'N', 2, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', 'N', 2, 0, 0, 0, A, 1, AF, 1, IP, EQ, R
+     $, C,
      $                B, 1, X, 2, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL CGBSVX( 'N', 'N', 2, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
+         CALL AB_AB_CGBSVX( 'N', 'N', 2, 0, 0, 0, A, 1, AF, 1, IP, EQ, R
+     $, C,
      $                B, 2, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGBSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'GT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GT' ) ) THEN
 *
-*        CGTSV
+*        AB_CGTSV
 *
-         SRNAMT = 'CGTSV '
+         SRNAMT = 'AB_CGTSV '
          INFOT = 1
-         CALL CGTSV( -1, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B, 1,
+         CALL AB_CGTSV( -1, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B, 1,
      $               INFO )
-         CALL CHKXER( 'CGTSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGTSV( 0, -1, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B, 1,
+         CALL AB_CGTSV( 0, -1, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B, 1,
      $               INFO )
-         CALL CHKXER( 'CGTSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTSV ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CGTSV( 2, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B, 1, INFO )
-         CALL CHKXER( 'CGTSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CGTSV( 2, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), B, 1, INF
+     $O )
+         CALL AB_CHKXER( 'AB_CGTSV ', INFOT, NOUT, LERR, OK )
 *
-*        CGTSVX
+*        AB_AB_CGTSVX
 *
-         SRNAMT = 'CGTSVX'
+         SRNAMT = 'AB_AB_CGTSVX'
          INFOT = 1
-         CALL CGTSVX( '/', 'N', 0, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+         CALL AB_AB_CGTSVX( '/', 'N', 0, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 
+     $3 ),
      $                AF( 1, 1 ), AF( 1, 2 ), AF( 1, 3 ), AF( 1, 4 ),
      $                IP, B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGTSVX( 'N', '/', 0, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+         CALL AB_AB_CGTSVX( 'N', '/', 0, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 
+     $3 ),
      $                AF( 1, 1 ), AF( 1, 2 ), AF( 1, 3 ), AF( 1, 4 ),
      $                IP, B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGTSVX( 'N', 'N', -1, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+         CALL AB_AB_CGTSVX( 'N', 'N', -1, 0, A( 1, 1 ), A( 1, 2 ), A( 1,
+     $ 3 ),
      $                AF( 1, 1 ), AF( 1, 2 ), AF( 1, 3 ), AF( 1, 4 ),
      $                IP, B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGTSVX( 'N', 'N', 0, -1, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+         CALL AB_AB_CGTSVX( 'N', 'N', 0, -1, A( 1, 1 ), A( 1, 2 ), A( 1,
+     $ 3 ),
      $                AF( 1, 1 ), AF( 1, 2 ), AF( 1, 3 ), AF( 1, 4 ),
      $                IP, B, 1, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL CGTSVX( 'N', 'N', 2, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+         CALL AB_AB_CGTSVX( 'N', 'N', 2, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 
+     $3 ),
      $                AF( 1, 1 ), AF( 1, 2 ), AF( 1, 3 ), AF( 1, 4 ),
      $                IP, B, 1, X, 2, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL CGTSVX( 'N', 'N', 2, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+         CALL AB_AB_CGTSVX( 'N', 'N', 2, 0, A( 1, 1 ), A( 1, 2 ), A( 1, 
+     $3 ),
      $                AF( 1, 1 ), AF( 1, 2 ), AF( 1, 3 ), AF( 1, 4 ),
      $                IP, B, 2, X, 1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CGTSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'PO' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PO' ) ) THEN
 *
-*        CPOSV
+*        AB_CPOSV
 *
-         SRNAMT = 'CPOSV '
+         SRNAMT = 'AB_CPOSV '
          INFOT = 1
-         CALL CPOSV( '/', 0, 0, A, 1, B, 1, INFO )
-         CALL CHKXER( 'CPOSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPOSV( '/', 0, 0, A, 1, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPOSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPOSV( 'U', -1, 0, A, 1, B, 1, INFO )
-         CALL CHKXER( 'CPOSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPOSV( 'U', -1, 0, A, 1, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPOSV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPOSV( 'U', 0, -1, A, 1, B, 1, INFO )
-         CALL CHKXER( 'CPOSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPOSV( 'U', 0, -1, A, 1, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPOSV ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CPOSV( 'U', 2, 0, A, 1, B, 2, INFO )
-         CALL CHKXER( 'CPOSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPOSV( 'U', 2, 0, A, 1, B, 2, INFO )
+         CALL AB_CHKXER( 'AB_CPOSV ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CPOSV( 'U', 2, 0, A, 2, B, 1, INFO )
-         CALL CHKXER( 'CPOSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPOSV( 'U', 2, 0, A, 2, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPOSV ', INFOT, NOUT, LERR, OK )
 *
-*        CPOSVX
+*        AB_AB_CPOSVX
 *
-         SRNAMT = 'CPOSVX'
+         SRNAMT = 'AB_AB_CPOSVX'
          INFOT = 1
-         CALL CPOSVX( '/', 'U', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPOSVX( '/', 'U', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X,
+     $ 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPOSVX( 'N', '/', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPOSVX( 'N', '/', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X,
+     $ 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPOSVX( 'N', 'U', -1, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPOSVX( 'N', 'U', -1, 0, A, 1, AF, 1, EQ, C, B, 1, X
+     $, 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CPOSVX( 'N', 'U', 0, -1, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPOSVX( 'N', 'U', 0, -1, A, 1, AF, 1, EQ, C, B, 1, X
+     $, 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CPOSVX( 'N', 'U', 2, 0, A, 1, AF, 2, EQ, C, B, 2, X, 2,
+         CALL AB_AB_CPOSVX( 'N', 'U', 2, 0, A, 1, AF, 2, EQ, C, B, 2, X,
+     $ 2,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CPOSVX( 'N', 'U', 2, 0, A, 2, AF, 1, EQ, C, B, 2, X, 2,
+         CALL AB_AB_CPOSVX( 'N', 'U', 2, 0, A, 2, AF, 1, EQ, C, B, 2, X,
+     $ 2,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
          EQ = '/'
-         CALL CPOSVX( 'F', 'U', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPOSVX( 'F', 'U', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X,
+     $ 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 10
          EQ = 'Y'
-         CALL CPOSVX( 'F', 'U', 1, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPOSVX( 'F', 'U', 1, 0, A, 1, AF, 1, EQ, C, B, 1, X,
+     $ 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL CPOSVX( 'N', 'U', 2, 0, A, 2, AF, 2, EQ, C, B, 1, X, 2,
+         CALL AB_AB_CPOSVX( 'N', 'U', 2, 0, A, 2, AF, 2, EQ, C, B, 1, X,
+     $ 2,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL CPOSVX( 'N', 'U', 2, 0, A, 2, AF, 2, EQ, C, B, 2, X, 1,
+         CALL AB_AB_CPOSVX( 'N', 'U', 2, 0, A, 2, AF, 2, EQ, C, B, 2, X,
+     $ 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPOSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPOSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'PP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PP' ) ) THEN
 *
-*        CPPSV
+*        AB_CPPSV
 *
-         SRNAMT = 'CPPSV '
+         SRNAMT = 'AB_CPPSV '
          INFOT = 1
-         CALL CPPSV( '/', 0, 0, A, B, 1, INFO )
-         CALL CHKXER( 'CPPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPPSV( '/', 0, 0, A, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPPSV( 'U', -1, 0, A, B, 1, INFO )
-         CALL CHKXER( 'CPPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPPSV( 'U', -1, 0, A, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPPSV( 'U', 0, -1, A, B, 1, INFO )
-         CALL CHKXER( 'CPPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPPSV( 'U', 0, -1, A, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CPPSV( 'U', 2, 0, A, B, 1, INFO )
-         CALL CHKXER( 'CPPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPPSV( 'U', 2, 0, A, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPPSV ', INFOT, NOUT, LERR, OK )
 *
-*        CPPSVX
+*        AB_AB_CPPSVX
 *
-         SRNAMT = 'CPPSVX'
+         SRNAMT = 'AB_AB_CPPSVX'
          INFOT = 1
-         CALL CPPSVX( '/', 'U', 0, 0, A, AF, EQ, C, B, 1, X, 1, RCOND,
+         CALL AB_AB_CPPSVX( '/', 'U', 0, 0, A, AF, EQ, C, B, 1, X, 1, RC
+     $OND,
      $                R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPPSVX( 'N', '/', 0, 0, A, AF, EQ, C, B, 1, X, 1, RCOND,
+         CALL AB_AB_CPPSVX( 'N', '/', 0, 0, A, AF, EQ, C, B, 1, X, 1, RC
+     $OND,
      $                R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPPSVX( 'N', 'U', -1, 0, A, AF, EQ, C, B, 1, X, 1, RCOND,
+         CALL AB_AB_CPPSVX( 'N', 'U', -1, 0, A, AF, EQ, C, B, 1, X, 1, R
+     $COND,
      $                R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CPPSVX( 'N', 'U', 0, -1, A, AF, EQ, C, B, 1, X, 1, RCOND,
+         CALL AB_AB_CPPSVX( 'N', 'U', 0, -1, A, AF, EQ, C, B, 1, X, 1, R
+     $COND,
      $                R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
          EQ = '/'
-         CALL CPPSVX( 'F', 'U', 0, 0, A, AF, EQ, C, B, 1, X, 1, RCOND,
+         CALL AB_AB_CPPSVX( 'F', 'U', 0, 0, A, AF, EQ, C, B, 1, X, 1, RC
+     $OND,
      $                R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
          EQ = 'Y'
-         CALL CPPSVX( 'F', 'U', 1, 0, A, AF, EQ, C, B, 1, X, 1, RCOND,
+         CALL AB_AB_CPPSVX( 'F', 'U', 1, 0, A, AF, EQ, C, B, 1, X, 1, RC
+     $OND,
      $                R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CPPSVX( 'N', 'U', 2, 0, A, AF, EQ, C, B, 1, X, 2, RCOND,
+         CALL AB_AB_CPPSVX( 'N', 'U', 2, 0, A, AF, EQ, C, B, 1, X, 2, RC
+     $OND,
      $                R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL CPPSVX( 'N', 'U', 2, 0, A, AF, EQ, C, B, 2, X, 1, RCOND,
+         CALL AB_AB_CPPSVX( 'N', 'U', 2, 0, A, AF, EQ, C, B, 2, X, 1, RC
+     $OND,
      $                R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPPSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'PB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PB' ) ) THEN
 *
-*        CPBSV
+*        AB_CPBSV
 *
-         SRNAMT = 'CPBSV '
+         SRNAMT = 'AB_CPBSV '
          INFOT = 1
-         CALL CPBSV( '/', 0, 0, 0, A, 1, B, 1, INFO )
-         CALL CHKXER( 'CPBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPBSV( '/', 0, 0, 0, A, 1, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPBSV( 'U', -1, 0, 0, A, 1, B, 1, INFO )
-         CALL CHKXER( 'CPBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPBSV( 'U', -1, 0, 0, A, 1, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPBSV( 'U', 1, -1, 0, A, 1, B, 1, INFO )
-         CALL CHKXER( 'CPBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPBSV( 'U', 1, -1, 0, A, 1, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CPBSV( 'U', 0, 0, -1, A, 1, B, 1, INFO )
-         CALL CHKXER( 'CPBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPBSV( 'U', 0, 0, -1, A, 1, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CPBSV( 'U', 1, 1, 0, A, 1, B, 2, INFO )
-         CALL CHKXER( 'CPBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPBSV( 'U', 1, 1, 0, A, 1, B, 2, INFO )
+         CALL AB_CHKXER( 'AB_CPBSV ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CPBSV( 'U', 2, 0, 0, A, 1, B, 1, INFO )
-         CALL CHKXER( 'CPBSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPBSV( 'U', 2, 0, 0, A, 1, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPBSV ', INFOT, NOUT, LERR, OK )
 *
-*        CPBSVX
+*        AB_AB_CPBSVX
 *
-         SRNAMT = 'CPBSVX'
+         SRNAMT = 'AB_AB_CPBSVX'
          INFOT = 1
-         CALL CPBSVX( '/', 'U', 0, 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPBSVX( '/', 'U', 0, 0, 0, A, 1, AF, 1, EQ, C, B, 1,
+     $ X, 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPBSVX( 'N', '/', 0, 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPBSVX( 'N', '/', 0, 0, 0, A, 1, AF, 1, EQ, C, B, 1,
+     $ X, 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPBSVX( 'N', 'U', -1, 0, 0, A, 1, AF, 1, EQ, C, B, 1, X,
+         CALL AB_AB_CPBSVX( 'N', 'U', -1, 0, 0, A, 1, AF, 1, EQ, C, B, 1
+     $, X,
      $                1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CPBSVX( 'N', 'U', 1, -1, 0, A, 1, AF, 1, EQ, C, B, 1, X,
+         CALL AB_AB_CPBSVX( 'N', 'U', 1, -1, 0, A, 1, AF, 1, EQ, C, B, 1
+     $, X,
      $                1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CPBSVX( 'N', 'U', 0, 0, -1, A, 1, AF, 1, EQ, C, B, 1, X,
+         CALL AB_AB_CPBSVX( 'N', 'U', 0, 0, -1, A, 1, AF, 1, EQ, C, B, 1
+     $, X,
      $                1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CPBSVX( 'N', 'U', 1, 1, 0, A, 1, AF, 2, EQ, C, B, 2, X, 2,
+         CALL AB_AB_CPBSVX( 'N', 'U', 1, 1, 0, A, 1, AF, 2, EQ, C, B, 2,
+     $ X, 2,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CPBSVX( 'N', 'U', 1, 1, 0, A, 2, AF, 1, EQ, C, B, 2, X, 2,
+         CALL AB_AB_CPBSVX( 'N', 'U', 1, 1, 0, A, 2, AF, 1, EQ, C, B, 2,
+     $ X, 2,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 10
          EQ = '/'
-         CALL CPBSVX( 'F', 'U', 0, 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPBSVX( 'F', 'U', 0, 0, 0, A, 1, AF, 1, EQ, C, B, 1,
+     $ X, 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
          EQ = 'Y'
-         CALL CPBSVX( 'F', 'U', 1, 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
+         CALL AB_AB_CPBSVX( 'F', 'U', 1, 0, 0, A, 1, AF, 1, EQ, C, B, 1,
+     $ X, 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL CPBSVX( 'N', 'U', 2, 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 2,
+         CALL AB_AB_CPBSVX( 'N', 'U', 2, 0, 0, A, 1, AF, 1, EQ, C, B, 1,
+     $ X, 2,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL CPBSVX( 'N', 'U', 2, 0, 0, A, 1, AF, 1, EQ, C, B, 2, X, 1,
+         CALL AB_AB_CPBSVX( 'N', 'U', 2, 0, 0, A, 1, AF, 1, EQ, C, B, 2,
+     $ X, 1,
      $                RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPBSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPBSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'PT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PT' ) ) THEN
 *
-*        CPTSV
+*        AB_CPTSV
 *
-         SRNAMT = 'CPTSV '
+         SRNAMT = 'AB_CPTSV '
          INFOT = 1
-         CALL CPTSV( -1, 0, R, A( 1, 1 ), B, 1, INFO )
-         CALL CHKXER( 'CPTSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTSV( -1, 0, R, A( 1, 1 ), B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPTSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPTSV( 0, -1, R, A( 1, 1 ), B, 1, INFO )
-         CALL CHKXER( 'CPTSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTSV( 0, -1, R, A( 1, 1 ), B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPTSV ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CPTSV( 2, 0, R, A( 1, 1 ), B, 1, INFO )
-         CALL CHKXER( 'CPTSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTSV( 2, 0, R, A( 1, 1 ), B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPTSV ', INFOT, NOUT, LERR, OK )
 *
-*        CPTSVX
+*        AB_AB_CPTSVX
 *
-         SRNAMT = 'CPTSVX'
+         SRNAMT = 'AB_AB_CPTSVX'
          INFOT = 1
-         CALL CPTSVX( '/', 0, 0, R, A( 1, 1 ), RF, AF( 1, 1 ), B, 1, X,
+         CALL AB_AB_CPTSVX( '/', 0, 0, R, A( 1, 1 ), RF, AF( 1, 1 ), B, 
+     $1, X,
      $                1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPTSVX( 'N', -1, 0, R, A( 1, 1 ), RF, AF( 1, 1 ), B, 1, X,
+         CALL AB_AB_CPTSVX( 'N', -1, 0, R, A( 1, 1 ), RF, AF( 1, 1 ), B,
+     $ 1, X,
      $                1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPTSVX( 'N', 0, -1, R, A( 1, 1 ), RF, AF( 1, 1 ), B, 1, X,
+         CALL AB_AB_CPTSVX( 'N', 0, -1, R, A( 1, 1 ), RF, AF( 1, 1 ), B,
+     $ 1, X,
      $                1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CPTSVX( 'N', 2, 0, R, A( 1, 1 ), RF, AF( 1, 1 ), B, 1, X,
+         CALL AB_AB_CPTSVX( 'N', 2, 0, R, A( 1, 1 ), RF, AF( 1, 1 ), B, 
+     $1, X,
      $                2, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPTSVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CPTSVX( 'N', 2, 0, R, A( 1, 1 ), RF, AF( 1, 1 ), B, 2, X,
+         CALL AB_AB_CPTSVX( 'N', 2, 0, R, A( 1, 1 ), RF, AF( 1, 1 ), B, 
+     $2, X,
      $                1, RCOND, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CPTSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CPTSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'HE' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HE' ) ) THEN
 *
-*        CHESV
+*        AB_CHESV
 *
-         SRNAMT = 'CHESV '
+         SRNAMT = 'AB_CHESV '
          INFOT = 1
-         CALL CHESV( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHESV( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHESV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHESV( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHESV( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHESV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHESV( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHESV( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHESV ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHESV( 'U', 2, 0, A, 1, IP, B, 2, W, 1, INFO )
-         CALL CHKXER( 'CHESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHESV( 'U', 2, 0, A, 1, IP, B, 2, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHESV ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHESV( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHESV( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHESV ', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CHESV( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
-         CALL CHKXER( 'CHESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHESV( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_CHESV ', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CHESV( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
-         CALL CHKXER( 'CHESV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHESV( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
+         CALL AB_CHKXER( 'AB_CHESV ', INFOT, NOUT, LERR, OK )
 *
-*        CHESVX
+*        AB_AB_CHESVX
 *
-         SRNAMT = 'CHESVX'
+         SRNAMT = 'AB_AB_CHESVX'
          INFOT = 1
-         CALL CHESVX( '/', 'U', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1,
+         CALL AB_AB_CHESVX( '/', 'U', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1,
      $                RCOND, R1, R2, W, 1, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHESVX( 'N', '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1,
+         CALL AB_AB_CHESVX( 'N', '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1,
      $                RCOND, R1, R2, W, 1, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHESVX( 'N', 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1,
+         CALL AB_AB_CHESVX( 'N', 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1
+     $,
      $                RCOND, R1, R2, W, 1, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHESVX( 'N', 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1,
+         CALL AB_AB_CHESVX( 'N', 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1
+     $,
      $                RCOND, R1, R2, W, 1, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CHESVX( 'N', 'U', 2, 0, A, 1, AF, 2, IP, B, 2, X, 2,
+         CALL AB_AB_CHESVX( 'N', 'U', 2, 0, A, 1, AF, 2, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 4, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHESVX( 'N', 'U', 2, 0, A, 2, AF, 1, IP, B, 2, X, 2,
+         CALL AB_AB_CHESVX( 'N', 'U', 2, 0, A, 2, AF, 1, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 4, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CHESVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 1, X, 2,
+         CALL AB_AB_CHESVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 1, X, 2,
      $                RCOND, R1, R2, W, 4, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL CHESVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 1,
+         CALL AB_AB_CHESVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 1,
      $                RCOND, R1, R2, W, 4, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL CHESVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 2,
+         CALL AB_AB_CHESVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 3, RW, INFO )
-         CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHESVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HR' ) ) THEN
 *
-*        CHESV_ROOK
+*        AB_AB_CHESV_ROOK
 *
-         SRNAMT = 'CHESV_ROOK'
+         SRNAMT = 'AB_AB_CHESV_ROOK'
          INFOT = 1
-         CALL CHESV_ROOK( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_ROOK( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHESV_ROOK( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_ROOK( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHESV_ROOK( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_ROOK( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHESV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CHESV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
-         CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CHESV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
-         CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_ROOK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'HK' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HK' ) ) THEN
 *
-*        CHESV_RK
+*        AB_AB_CHESV_RK
 *
 *        Test error exits of the driver that uses factorization
 *        of a symmetric indefinite matrix with rook
@@ -676,244 +748,279 @@
 *        L (or U) is stored in A, diagonal of D is stored on the
 *        diagonal of A, subdiagonal of D is stored in a separate array E.
 *
-         SRNAMT = 'CHESV_RK'
+         SRNAMT = 'AB_AB_CHESV_RK'
          INFOT = 1
-         CALL CHESV_RK( '/', 0, 0, A, 1, E, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_RK( '/', 0, 0, A, 1, E, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHESV_RK( 'U', -1, 0, A, 1, E, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_RK( 'U', -1, 0, A, 1, E, IP, B, 1, W, 1, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CHESV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHESV_RK( 'U', 0, -1, A, 1, E, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_RK( 'U', 0, -1, A, 1, E, IP, B, 1, W, 1, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CHESV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHESV_RK( 'U', 2, 0, A, 1, E, IP, B, 2, W, 1, INFO )
-         CALL CHKXER( 'CHESV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_RK( 'U', 2, 0, A, 1, E, IP, B, 2, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CHESV_RK( 'U', 2, 0, A, 2, E, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_RK( 'U', 2, 0, A, 2, E, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CHESV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, 0, INFO )
-         CALL CHKXER( 'CHESV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CHESV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, -2, INFO )
-         CALL CHKXER( 'CHESV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, -2, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CHESV_RK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HA' ) ) THEN
 *
-*        CHESV_AASEN
+*        AB_AB_CHESV_AASEN
 *
-         SRNAMT = 'CHESV_AA'
+         SRNAMT = 'AB_AB_CHESV_AA'
          INFOT = 1
-         CALL CHESV_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_AA', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHESV_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_AA', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHESV_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_AA', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHESV_AA( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHESV_AA( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHESV_AA', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'H2' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'H2' ) ) THEN
 *
-*        CHESV_AASEN_2STAGE
+*        AB_AB_CHESV_AASEN_2STAGE
 *
-         SRNAMT = 'CHESV_AA_2STAGE'
+         SRNAMT = 'AB_AB_AB_CHESV_AA_2STAGE'
          INFOT = 1
-         CALL CHESV_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP, B, 1,
+         CALL AB_AB_AB_CHESV_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP, B
+     $, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHESV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 2
-         CALL CHESV_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP, B, 1,
+         CALL AB_AB_AB_CHESV_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP, 
+     $B, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHESV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 3
-         CALL CHESV_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP, B, 1,
+         CALL AB_AB_AB_CHESV_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP, 
+     $B, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHESV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 5
-         CALL CHESV_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP, B, 1,
+         CALL AB_AB_AB_CHESV_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP, B
+     $, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHESV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 11
-         CALL CHESV_AA_2STAGE( 'U', 2, 1, A, 2, A, 2, IP, IP, B, 1,
+         CALL AB_AB_AB_CHESV_AA_2STAGE( 'U', 2, 1, A, 2, A, 2, IP, IP, B
+     $, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHESV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 7
-         CALL CHESV_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP, B, 2,
+         CALL AB_AB_AB_CHESV_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP, B
+     $, 2,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHESV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'S2' ) ) THEN
 *
-*        CSYSV_AASEN_2STAGE
+*        AB_AB_CSYSV_AASEN_2STAGE
 *
-         SRNAMT = 'CSYSV_AA_2STAGE'
+         SRNAMT = 'AB_AB_AB_CSYSV_AA_2STAGE'
          INFOT = 1
-         CALL CSYSV_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP, B, 1,
+         CALL AB_AB_AB_CSYSV_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP, B
+     $, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CSYSV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 2
-         CALL CSYSV_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP, B, 1,
+         CALL AB_AB_AB_CSYSV_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP, 
+     $B, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CSYSV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 3
-         CALL CSYSV_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP, B, 1,
+         CALL AB_AB_AB_CSYSV_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP, 
+     $B, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CSYSV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 5
-         CALL CSYSV_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP, B, 1,
+         CALL AB_AB_AB_CSYSV_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP, B
+     $, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CSYSV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 11
-         CALL CSYSV_AA_2STAGE( 'U', 2, 1, A, 2, A, 2, IP, IP, B, 1,
+         CALL AB_AB_AB_CSYSV_AA_2STAGE( 'U', 2, 1, A, 2, A, 2, IP, IP, B
+     $, 1,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CSYSV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
          INFOT = 7
-         CALL CSYSV_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP, B, 2,
+         CALL AB_AB_AB_CSYSV_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP, B
+     $, 2,
      $                         W, 1, INFO )
-         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CSYSV_AA_2STAGE', INFOT, NOUT, LERR, 
+     $OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HP' ) ) THEN
 *
-*        CHPSV
+*        AB_CHPSV
 *
-         SRNAMT = 'CHPSV '
+         SRNAMT = 'AB_CHPSV '
          INFOT = 1
-         CALL CHPSV( '/', 0, 0, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CHPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPSV( '/', 0, 0, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHPSV( 'U', -1, 0, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CHPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPSV( 'U', -1, 0, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHPSV( 'U', 0, -1, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CHPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPSV( 'U', 0, -1, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHPSV( 'U', 2, 0, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CHPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPSV( 'U', 2, 0, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHPSV ', INFOT, NOUT, LERR, OK )
 *
-*        CHPSVX
+*        AB_AB_CHPSVX
 *
-         SRNAMT = 'CHPSVX'
+         SRNAMT = 'AB_AB_CHPSVX'
          INFOT = 1
-         CALL CHPSVX( '/', 'U', 0, 0, A, AF, IP, B, 1, X, 1, RCOND, R1,
+         CALL AB_AB_CHPSVX( '/', 'U', 0, 0, A, AF, IP, B, 1, X, 1, RCOND
+     $, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CHPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHPSVX( 'N', '/', 0, 0, A, AF, IP, B, 1, X, 1, RCOND, R1,
+         CALL AB_AB_CHPSVX( 'N', '/', 0, 0, A, AF, IP, B, 1, X, 1, RCOND
+     $, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CHPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHPSVX( 'N', 'U', -1, 0, A, AF, IP, B, 1, X, 1, RCOND, R1,
+         CALL AB_AB_CHPSVX( 'N', 'U', -1, 0, A, AF, IP, B, 1, X, 1, RCON
+     $D, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CHPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHPSVX( 'N', 'U', 0, -1, A, AF, IP, B, 1, X, 1, RCOND, R1,
+         CALL AB_AB_CHPSVX( 'N', 'U', 0, -1, A, AF, IP, B, 1, X, 1, RCON
+     $D, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CHPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CHPSVX( 'N', 'U', 2, 0, A, AF, IP, B, 1, X, 2, RCOND, R1,
+         CALL AB_AB_CHPSVX( 'N', 'U', 2, 0, A, AF, IP, B, 1, X, 2, RCOND
+     $, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CHPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CHPSVX( 'N', 'U', 2, 0, A, AF, IP, B, 2, X, 1, RCOND, R1,
+         CALL AB_AB_CHPSVX( 'N', 'U', 2, 0, A, AF, IP, B, 2, X, 1, RCOND
+     $, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CHPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SY' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SY' ) ) THEN
 *
-*        CSYSV
+*        AB_CSYSV
 *
-         SRNAMT = 'CSYSV '
+         SRNAMT = 'AB_CSYSV '
          INFOT = 1
-         CALL CSYSV( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSYSV( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CSYSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CSYSV( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSYSV( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CSYSV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CSYSV( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSYSV( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CSYSV ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CSYSV( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSYSV( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CSYSV ', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CSYSV( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
-         CALL CHKXER( 'CSYSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSYSV( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_CSYSV ', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CSYSV( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
-         CALL CHKXER( 'CSYSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSYSV( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
+         CALL AB_CHKXER( 'AB_CSYSV ', INFOT, NOUT, LERR, OK )
 *
-*        CSYSVX
+*        AB_AB_CSYSVX
 *
-         SRNAMT = 'CSYSVX'
+         SRNAMT = 'AB_AB_CSYSVX'
          INFOT = 1
-         CALL CSYSVX( '/', 'U', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1,
+         CALL AB_AB_CSYSVX( '/', 'U', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1,
      $                RCOND, R1, R2, W, 1, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CSYSVX( 'N', '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1,
+         CALL AB_AB_CSYSVX( 'N', '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1,
      $                RCOND, R1, R2, W, 1, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CSYSVX( 'N', 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1,
+         CALL AB_AB_CSYSVX( 'N', 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1
+     $,
      $                RCOND, R1, R2, W, 1, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CSYSVX( 'N', 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1,
+         CALL AB_AB_CSYSVX( 'N', 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1
+     $,
      $                RCOND, R1, R2, W, 1, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CSYSVX( 'N', 'U', 2, 0, A, 1, AF, 2, IP, B, 2, X, 2,
+         CALL AB_AB_CSYSVX( 'N', 'U', 2, 0, A, 1, AF, 2, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 4, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 1, IP, B, 2, X, 2,
+         CALL AB_AB_CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 1, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 4, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 1, X, 2,
+         CALL AB_AB_CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 1, X, 2,
      $                RCOND, R1, R2, W, 4, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 1,
+         CALL AB_AB_CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 1,
      $                RCOND, R1, R2, W, 4, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 2,
+         CALL AB_AB_CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 3, RW, INFO )
-         CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSYSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SR' ) ) THEN
 *
-*        CSYSV_ROOK
+*        AB_AB_CSYSV_ROOK
 *
-         SRNAMT = 'CSYSV_ROOK'
+         SRNAMT = 'AB_AB_CSYSV_ROOK'
          INFOT = 1
-         CALL CSYSV_ROOK( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_ROOK( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CSYSV_ROOK( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_ROOK( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CSYSV_ROOK( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_ROOK( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CSYSV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CSYSV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
-         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CSYSV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
-         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_ROOK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SK' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SK' ) ) THEN
 *
-*        CSYSV_RK
+*        AB_AB_CSYSV_RK
 *
 *        Test error exits of the driver that uses factorization
 *        of a symmetric indefinite matrix with rook
@@ -923,74 +1030,83 @@
 *        L (or U) is stored in A, diagonal of D is stored on the
 *        diagonal of A, subdiagonal of D is stored in a separate array E.
 *
-         SRNAMT = 'CSYSV_RK'
+         SRNAMT = 'AB_AB_CSYSV_RK'
          INFOT = 1
-         CALL CSYSV_RK( '/', 0, 0, A, 1, E, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_RK( '/', 0, 0, A, 1, E, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CSYSV_RK( 'U', -1, 0, A, 1, E, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_RK( 'U', -1, 0, A, 1, E, IP, B, 1, W, 1, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CSYSV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CSYSV_RK( 'U', 0, -1, A, 1, E, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_RK( 'U', 0, -1, A, 1, E, IP, B, 1, W, 1, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CSYSV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CSYSV_RK( 'U', 2, 0, A, 1, E, IP, B, 2, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_RK( 'U', 2, 0, A, 1, E, IP, B, 2, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CSYSV_RK( 'U', 2, 0, A, 2, E, IP, B, 1, W, 1, INFO )
-         CALL CHKXER( 'CSYSV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_RK( 'U', 2, 0, A, 2, E, IP, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CSYSV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, 0, INFO )
-         CALL CHKXER( 'CSYSV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_AB_CSYSV_RK', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CSYSV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, -2, INFO )
-         CALL CHKXER( 'CSYSV_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CSYSV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, -2, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CSYSV_RK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SP' ) ) THEN
 *
-*        CSPSV
+*        AB_CSPSV
 *
-         SRNAMT = 'CSPSV '
+         SRNAMT = 'AB_CSPSV '
          INFOT = 1
-         CALL CSPSV( '/', 0, 0, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CSPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSPSV( '/', 0, 0, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CSPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CSPSV( 'U', -1, 0, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CSPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSPSV( 'U', -1, 0, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CSPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CSPSV( 'U', 0, -1, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CSPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSPSV( 'U', 0, -1, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CSPSV ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CSPSV( 'U', 2, 0, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CSPSV ', INFOT, NOUT, LERR, OK )
+         CALL AB_CSPSV( 'U', 2, 0, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CSPSV ', INFOT, NOUT, LERR, OK )
 *
-*        CSPSVX
+*        AB_AB_CSPSVX
 *
-         SRNAMT = 'CSPSVX'
+         SRNAMT = 'AB_AB_CSPSVX'
          INFOT = 1
-         CALL CSPSVX( '/', 'U', 0, 0, A, AF, IP, B, 1, X, 1, RCOND, R1,
+         CALL AB_AB_CSPSVX( '/', 'U', 0, 0, A, AF, IP, B, 1, X, 1, RCOND
+     $, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CSPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CSPSVX( 'N', '/', 0, 0, A, AF, IP, B, 1, X, 1, RCOND, R1,
+         CALL AB_AB_CSPSVX( 'N', '/', 0, 0, A, AF, IP, B, 1, X, 1, RCOND
+     $, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CSPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CSPSVX( 'N', 'U', -1, 0, A, AF, IP, B, 1, X, 1, RCOND, R1,
+         CALL AB_AB_CSPSVX( 'N', 'U', -1, 0, A, AF, IP, B, 1, X, 1, RCON
+     $D, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CSPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CSPSVX( 'N', 'U', 0, -1, A, AF, IP, B, 1, X, 1, RCOND, R1,
+         CALL AB_AB_CSPSVX( 'N', 'U', 0, -1, A, AF, IP, B, 1, X, 1, RCON
+     $D, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CSPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CSPSVX( 'N', 'U', 2, 0, A, AF, IP, B, 1, X, 2, RCOND, R1,
+         CALL AB_AB_CSPSVX( 'N', 'U', 2, 0, A, AF, IP, B, 1, X, 2, RCOND
+     $, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CSPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSPSVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CSPSVX( 'N', 'U', 2, 0, A, AF, IP, B, 2, X, 1, RCOND, R1,
+         CALL AB_AB_CSPSVX( 'N', 'U', 2, 0, A, AF, IP, B, 2, X, 1, RCOND
+     $, R1,
      $                R2, W, RW, INFO )
-         CALL CHKXER( 'CSPSVX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CSPSVX', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
@@ -1007,6 +1123,6 @@
 *
       RETURN
 *
-*     End of CERRVX
+*     End of AB_CERRVX
 *
       END

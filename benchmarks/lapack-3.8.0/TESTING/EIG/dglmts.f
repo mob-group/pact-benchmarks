@@ -1,4 +1,4 @@
-*> \brief \b DGLMTS
+*> \brief \b AB_DGLMTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF, X, U,
+*       SUBROUTINE AB_DGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF, X, U,
 *                          WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> DGLMTS tests DGGGLM - a subroutine for solving the generalized
+*> AB_DGLMTS tests AB_DGGGLM - a subroutine for solving the generalized
 *> linear model problem.
 *> \endverbatim
 *
@@ -143,7 +143,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF, X, U,
+      SUBROUTINE AB_DGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF, X, U
+     $,
      $                   WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -172,48 +173,50 @@
       DOUBLE PRECISION   ANORM, BNORM, DNORM, EPS, UNFL, XNORM, YNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           DASUM, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
 *
-      EXTERNAL           DCOPY, DGEMV, DGGGLM, DLACPY
+      EXTERNAL           AB_DCOPY, AB_DGEMV, AB_DGGGLM, AB_DLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
-      ANORM = MAX( DLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( DLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ANORM = MAX( AB_DLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( AB_DLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *
 *     Copy the matrices A and B to the arrays AF and BF,
 *     and the vector D the array DF.
 *
-      CALL DLACPY( 'Full', N, M, A, LDA, AF, LDA )
-      CALL DLACPY( 'Full', N, P, B, LDB, BF, LDB )
-      CALL DCOPY( N, D, 1, DF, 1 )
+      CALL AB_DLACPY( 'Full', N, M, A, LDA, AF, LDA )
+      CALL AB_DLACPY( 'Full', N, P, B, LDB, BF, LDB )
+      CALL AB_DCOPY( N, D, 1, DF, 1 )
 *
 *     Solve GLM problem
 *
-      CALL DGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
+      CALL AB_DGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
      $             INFO )
 *
-*     Test the residual for the solution of LSE
+*     Test the residual for the solution of AB_LSE
 *
 *                       norm( d - A*x - B*u )
 *       RESULT = -----------------------------------------
 *                (norm(A)+norm(B))*(norm(x)+norm(u))*EPS
 *
-      CALL DCOPY( N, D, 1, DF, 1 )
-      CALL DGEMV( 'No transpose', N, M, -ONE, A, LDA, X, 1, ONE, DF, 1 )
+      CALL AB_DCOPY( N, D, 1, DF, 1 )
+      CALL AB_DGEMV( 'No transpose', N, M, -ONE, A, LDA, X, 1, ONE, DF, 
+     $1 )
 *
-      CALL DGEMV( 'No transpose', N, P, -ONE, B, LDB, U, 1, ONE, DF, 1 )
+      CALL AB_DGEMV( 'No transpose', N, P, -ONE, B, LDB, U, 1, ONE, DF, 
+     $1 )
 *
-      DNORM = DASUM( N, DF, 1 )
-      XNORM = DASUM( M, X, 1 ) + DASUM( P, U, 1 )
+      DNORM = AB_DASUM( N, DF, 1 )
+      XNORM = AB_DASUM( M, X, 1 ) + AB_DASUM( P, U, 1 )
       YNORM = ANORM + BNORM
 *
       IF( XNORM.LE.ZERO ) THEN
@@ -224,6 +227,6 @@
 *
       RETURN
 *
-*     End of DGLMTS
+*     End of AB_DGLMTS
 *
       END

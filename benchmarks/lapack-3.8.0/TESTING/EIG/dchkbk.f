@@ -1,4 +1,4 @@
-*> \brief \b DCHKBK
+*> \brief \b AB_DCHKBK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKBK( NIN, NOUT )
+*       SUBROUTINE AB_DCHKBK( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,9 +20,9 @@
 *>
 *> \verbatim
 *>
-*> DCHKBK tests DGEBAK, a routine for backward transformation of
+*> AB_DCHKBK tests AB_DGEBAK, a routine for backward transformation of
 *> the computed right or left eigenvectors if the original matrix
-*> was preprocessed by balance subroutine DGEBAL.
+*> was preprocessed by balance subroutine AB_DGEBAL.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DCHKBK( NIN, NOUT )
+      SUBROUTINE AB_DCHKBK( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -67,8 +67,8 @@
 * ======================================================================
 *
 *     .. Parameters ..
-      INTEGER            LDE
-      PARAMETER          ( LDE = 20 )
+      INTEGER            AB_LDE
+      PARAMETER          ( AB_LDE = 20 )
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D0 )
 *     ..
@@ -78,14 +78,15 @@
 *     ..
 *     .. Local Arrays ..
       INTEGER            LMAX( 2 )
-      DOUBLE PRECISION   E( LDE, LDE ), EIN( LDE, LDE ), SCALE( LDE )
+      DOUBLE PRECISION   E( AB_LDE, AB_LDE ), EIN( AB_LDE, AB_LDE ), SCA
+     $LE( AB_LDE )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEBAK
+      EXTERNAL           AB_DGEBAK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -97,8 +98,8 @@
       NINFO = 0
       KNT = 0
       RMAX = ZERO
-      EPS = DLAMCH( 'E' )
-      SAFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'E' )
+      SAFMIN = AB_DLAMCH( 'S' )
 *
    10 CONTINUE
 *
@@ -116,7 +117,7 @@
    30 CONTINUE
 *
       KNT = KNT + 1
-      CALL DGEBAK( 'B', 'R', N, ILO, IHI, SCALE, N, E, LDE, INFO )
+      CALL AB_DGEBAK( 'B', 'R', N, ILO, IHI, SCALE, N, E, AB_LDE, INFO )
 *
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
@@ -143,7 +144,7 @@
    60 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of DGEBAK .. ' )
+ 9999 FORMAT( 1X, '.. test output of AB_DGEBAK .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error             = ', D12.3 )
@@ -158,6 +159,6 @@
 *
       RETURN
 *
-*     End of DCHKBK
+*     End of AB_DCHKBK
 *
       END

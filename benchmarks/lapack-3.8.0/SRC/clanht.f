@@ -1,4 +1,4 @@
-*> \brief \b CLANHT returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a complex Hermitian tridiagonal matrix.
+*> \brief \b AB_CLANHT returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a complex Hermitian tridiagonal matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLANHT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clanht.f">
+*> Download AB_CLANHT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLANHT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clanht.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLANHT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clanht.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLANHT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION CLANHT( NORM, N, D, E )
+*       REAL             FUNCTION AB_CLANHT( NORM, N, D, E )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM
@@ -35,15 +35,15 @@
 *>
 *> \verbatim
 *>
-*> CLANHT  returns the value of the one norm,  or the Frobenius norm, or
+*> AB_CLANHT  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> complex Hermitian tridiagonal matrix A.
 *> \endverbatim
 *>
-*> \return CLANHT
+*> \return AB_CLANHT
 *> \verbatim
 *>
-*>    CLANHT = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    AB_CLANHT = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -63,14 +63,14 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in CLANHT as described
+*>          Specifies the value to be returned in AB_CLANHT as described
 *>          above.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, CLANHT is
+*>          The order of the matrix A.  N >= 0.  When N = 0, AB_CLANHT is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -99,7 +99,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      REAL             FUNCTION CLANHT( NORM, N, D, E )
+      REAL             FUNCTION AB_CLANHT( NORM, N, D, E )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,11 +126,11 @@
       REAL               ANORM, SCALE, SUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      EXTERNAL           LSAME, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      EXTERNAL           AB_LSAME, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASSQ, SLASSQ
+      EXTERNAL           AB_CLASSQ, AB_SLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -139,19 +139,19 @@
 *
       IF( N.LE.0 ) THEN
          ANORM = ZERO
-      ELSE IF( LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
          ANORM = ABS( D( N ) )
          DO 10 I = 1, N - 1
             SUM = ABS( D( I ) )
-            IF( ANORM .LT. SUM .OR. SISNAN( SUM ) ) ANORM = SUM
+            IF( ANORM .LT. SUM .OR. AB_SISNAN( SUM ) ) ANORM = SUM
             SUM = ABS( E( I ) )
-            IF( ANORM .LT. SUM .OR. SISNAN( SUM ) ) ANORM = SUM
+            IF( ANORM .LT. SUM .OR. AB_SISNAN( SUM ) ) ANORM = SUM
    10    CONTINUE
-      ELSE IF( LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' .OR.
-     $         LSAME( NORM, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' .OR.
+     $         AB_LSAME( NORM, 'I' ) ) THEN
 *
 *        Find norm1(A).
 *
@@ -160,29 +160,30 @@
          ELSE
             ANORM = ABS( D( 1 ) )+ABS( E( 1 ) )
             SUM = ABS( E( N-1 ) )+ABS( D( N ) )
-            IF( ANORM .LT. SUM .OR. SISNAN( SUM ) ) ANORM = SUM
+            IF( ANORM .LT. SUM .OR. AB_SISNAN( SUM ) ) ANORM = SUM
             DO 20 I = 2, N - 1
                SUM = ABS( D( I ) )+ABS( E( I ) )+ABS( E( I-1 ) )
-               IF( ANORM .LT. SUM .OR. SISNAN( SUM ) ) ANORM = SUM
+               IF( ANORM .LT. SUM .OR. AB_SISNAN( SUM ) ) ANORM = SUM
    20       CONTINUE
          END IF
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' )
+     $ ) ) THEN
 *
 *        Find normF(A).
 *
          SCALE = ZERO
          SUM = ONE
          IF( N.GT.1 ) THEN
-            CALL CLASSQ( N-1, E, 1, SCALE, SUM )
+            CALL AB_CLASSQ( N-1, E, 1, SCALE, SUM )
             SUM = 2*SUM
          END IF
-         CALL SLASSQ( N, D, 1, SCALE, SUM )
+         CALL AB_SLASSQ( N, D, 1, SCALE, SUM )
          ANORM = SCALE*SQRT( SUM )
       END IF
 *
-      CLANHT = ANORM
+      AB_CLANHT = ANORM
       RETURN
 *
-*     End of CLANHT
+*     End of AB_CLANHT
 *
       END

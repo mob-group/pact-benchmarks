@@ -1,4 +1,4 @@
-*> \brief \b CPTTRF
+*> \brief \b AB_CPTTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPTTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpttrf.f">
+*> Download AB_CPTTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPTTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpttrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPTTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpttrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPTTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPTTRF( N, D, E, INFO )
+*       SUBROUTINE AB_CPTTRF( N, D, E, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CPTTRF computes the L*D*L**H factorization of a complex Hermitian
+*> AB_CPTTRF computes the L*D*L**H factorization of a complex Hermitian
 *> positive definite tridiagonal matrix A.  The factorization may also
 *> be regarded as having the form A = U**H *D*U.
 *> \endverbatim
@@ -90,7 +90,7 @@
 *> \ingroup complexPTcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPTTRF( N, D, E, INFO )
+      SUBROUTINE AB_CPTTRF( N, D, E, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -116,7 +116,7 @@
       REAL               EII, EIR, F, G
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, CMPLX, MOD, REAL
@@ -128,7 +128,7 @@
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL XERBLA( 'CPTTRF', -INFO )
+         CALL AB_XERBLA( 'AB_CPTTRF', -INFO )
          RETURN
       END IF
 *
@@ -223,6 +223,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of CPTTRF
+*     End of AB_CPTTRF
 *
       END

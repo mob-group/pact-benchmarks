@@ -1,4 +1,4 @@
-*> \brief \b SSYT01_AA
+*> \brief \b AB_AB_SSYT01_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
+*       SUBROUTINE AB_AB_SSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
 *                             C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> SSYT01_AA reconstructs a symmetric indefinite matrix A from its
+*> AB_AB_SSYT01_AA reconstructs a symmetric indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -70,7 +70,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by SSYTRF.
+*>          as computed by AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from SSYTRF.
+*>          The pivot indices from AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -122,7 +122,8 @@
 *> \ingroup real_lin
 *
 *  =====================================================================
-      SUBROUTINE SSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE AB_AB_SSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C
+     $,
      $                      LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.8.0) --
@@ -152,12 +153,13 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSY
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANSY
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASET, SLAVSY, SSWAP, STRMM, SLACPY
+      EXTERNAL           AB_SLASET, AB_SLAVSY, AB_SSWAP, AB_STRMM, AB_SL
+     $ACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -173,43 +175,49 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_SLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.
 *
-      CALL SLASET( 'Full', N, N, ZERO, ZERO, C, LDC )
-      CALL SLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+1 )
+      CALL AB_SLASET( 'Full', N, N, ZERO, ZERO, C, LDC )
+      CALL AB_SLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+
+     $1 )
       IF( N.GT.1 ) THEN
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL SLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2 ),
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_SLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2
+     $ ),
      $                   LDC+1 )
-            CALL SLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1 ),
+            CALL AB_SLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1
+     $ ),
      $                   LDC+1 )
          ELSE
-            CALL SLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2 ),
+            CALL AB_SLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2
+     $ ),
      $                   LDC+1 )
-            CALL SLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
+            CALL AB_SLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1
+     $ ),
      $                   LDC+1 )
          ENDIF
 *
-*        Call STRMM to form the product U' * D (or L * D ).
+*        Call AB_STRMM to form the product U' * D (or L * D ).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL STRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_STRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
      $                  ONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
          ELSE
-            CALL STRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+            CALL AB_STRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
      $                  ONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
          END IF
 *
-*        Call STRMM again to multiply by U (or L ).
+*        Call AB_STRMM again to multiply by U (or L ).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL STRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_STRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1
+     $,
      $                  ONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
          ELSE
-            CALL STRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
+            CALL AB_STRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
      $                  ONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
          END IF
       ENDIF
@@ -219,18 +227,18 @@
       DO J = N, 1, -1
          I = IPIV( J )
          IF( I.NE.J )
-     $      CALL SSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
+     $      CALL AB_SSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
       END DO
       DO J = N, 1, -1
          I = IPIV( J )
          IF( I.NE.J )
-     $      CALL SSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
+     $      CALL AB_SSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
       END DO
 *
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO J = 1, N
             DO I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -246,7 +254,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = SLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_SLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -257,6 +265,6 @@
 *
       RETURN
 *
-*     End of SSYT01_AA
+*     End of AB_AB_SSYT01_AA
 *
       END

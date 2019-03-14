@@ -1,4 +1,4 @@
-*> \brief \b DLAGTM performs a matrix-matrix product of the form C = αAB+βC, where A is a tridiagonal matrix, B and C are rectangular matrices, and α and β are scalars, which may be 0, 1, or -1.
+*> \brief \b AB_DLAGTM performs a matrix-matrix product of the form C = αAB+βC, where A is a tridiagonal matrix, B and C are rectangular matrices, and α and β are scalars, which may be 0, 1, or -1.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAGTM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagtm.f">
+*> Download AB_DLAGTM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAGTM.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagtm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAGTM.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagtm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAGTM.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
+*       SUBROUTINE AB_DLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
 *                          B, LDB )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> DLAGTM performs a matrix-vector product of the form
+*> AB_DLAGTM performs a matrix-vector product of the form
 *>
 *>    B := alpha * A * X + beta * B
 *>
@@ -142,7 +142,8 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
+      SUBROUTINE AB_DLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BE
+     $TA,
      $                   B, LDB )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -170,8 +171,8 @@
       INTEGER            I, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
@@ -195,7 +196,7 @@
       END IF
 *
       IF( ALPHA.EQ.ONE ) THEN
-         IF( LSAME( TRANS, 'N' ) ) THEN
+         IF( AB_LSAME( TRANS, 'N' ) ) THEN
 *
 *           Compute B := B + A*X
 *
@@ -233,7 +234,7 @@
    80       CONTINUE
          END IF
       ELSE IF( ALPHA.EQ.-ONE ) THEN
-         IF( LSAME( TRANS, 'N' ) ) THEN
+         IF( AB_LSAME( TRANS, 'N' ) ) THEN
 *
 *           Compute B := B - A*X
 *
@@ -273,6 +274,6 @@
       END IF
       RETURN
 *
-*     End of DLAGTM
+*     End of AB_DLAGTM
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CCOPY
+*> \brief \b AB_CCOPY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCOPY(N,CX,INCX,CY,INCY)
+*       SUBROUTINE AB_CCOPY(N,CX,INCX,CY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    CCOPY copies a vector x to a vector y.
+*>    AB_CCOPY copies a vector x to a vector y.
 *> \endverbatim
 *
 *  Arguments:
@@ -79,7 +79,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CCOPY(N,CX,INCX,CY,INCY)
+      SUBROUTINE AB_CCOPY(N,CX,INCX,CY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

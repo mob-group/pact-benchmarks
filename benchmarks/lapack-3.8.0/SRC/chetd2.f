@@ -1,4 +1,4 @@
-*> \brief \b CHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary similarity transformation (unblocked algorithm).
+*> \brief \b AB_CHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary similarity transformation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetd2.f">
+*> Download AB_CHETD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHETD2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHETD2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHETD2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
+*       SUBROUTINE AB_CHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CHETD2 reduces a complex Hermitian matrix A to real symmetric
+*> AB_CHETD2 reduces a complex Hermitian matrix A to real symmetric
 *> tridiagonal form T by a unitary similarity transformation:
 *> Q**H * A * Q = T.
 *> \endverbatim
@@ -173,7 +173,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
+      SUBROUTINE AB_CHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -203,12 +203,13 @@
       COMPLEX            ALPHA, TAUI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CHEMV, CHER2, CLARFG, XERBLA
+      EXTERNAL           AB_CAXPY, AB_CHEMV, AB_AB_CHER2, AB_AB_CLARFG, 
+     $AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CDOTC
+      LOGICAL            AB_LSAME
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -218,8 +219,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -227,7 +228,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETD2', -INFO )
+         CALL AB_XERBLA( 'AB_CHETD2', -INFO )
          RETURN
       END IF
 *
@@ -247,7 +248,7 @@
 *           to annihilate A(1:i-1,i+1)
 *
             ALPHA = A( I, I+1 )
-            CALL CLARFG( I, ALPHA, A( 1, I+1 ), 1, TAUI )
+            CALL AB_AB_CLARFG( I, ALPHA, A( 1, I+1 ), 1, TAUI )
             E( I ) = ALPHA
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -258,18 +259,20 @@
 *
 *              Compute  x := tau * A * v  storing x in TAU(1:i)
 *
-               CALL CHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZERO,
+               CALL AB_CHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZER
+     $O,
      $                     TAU, 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**H * v) * v
 *
-               ALPHA = -HALF*TAUI*CDOTC( I, TAU, 1, A( 1, I+1 ), 1 )
-               CALL CAXPY( I, ALPHA, A( 1, I+1 ), 1, TAU, 1 )
+               ALPHA = -HALF*TAUI*AB_CDOTC( I, TAU, 1, A( 1, I+1 ), 1 )
+               CALL AB_CAXPY( I, ALPHA, A( 1, I+1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL CHER2( UPLO, I, -ONE, A( 1, I+1 ), 1, TAU, 1, A,
+               CALL AB_AB_CHER2( UPLO, I, -ONE, A( 1, I+1 ), 1, TAU, 1, 
+     $A,
      $                     LDA )
 *
             ELSE
@@ -291,7 +294,8 @@
 *           to annihilate A(i+2:n,i)
 *
             ALPHA = A( I+1, I )
-            CALL CLARFG( N-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAUI )
+            CALL AB_AB_CLARFG( N-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAU
+     $I )
             E( I ) = ALPHA
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -302,19 +306,21 @@
 *
 *              Compute  x := tau * A * v  storing y in TAU(i:n-1)
 *
-               CALL CHEMV( UPLO, N-I, TAUI, A( I+1, I+1 ), LDA,
+               CALL AB_CHEMV( UPLO, N-I, TAUI, A( I+1, I+1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, TAU( I ), 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**H * v) * v
 *
-               ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1, A( I+1, I ),
+               ALPHA = -HALF*TAUI*AB_CDOTC( N-I, TAU( I ), 1, A( I+1, I 
+     $),
      $                 1 )
-               CALL CAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
+               CALL AB_CAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL CHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
+               CALL AB_AB_CHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I
+     $ ), 1,
      $                     A( I+1, I+1 ), LDA )
 *
             ELSE
@@ -329,6 +335,6 @@
 *
       RETURN
 *
-*     End of CHETD2
+*     End of AB_CHETD2
 *
       END

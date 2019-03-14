@@ -1,4 +1,4 @@
-*> \brief \b SSYT01
+*> \brief \b AB_SSYT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*       SUBROUTINE AB_SSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> SSYT01 reconstructs a symmetric indefinite matrix A from its
+*> AB_SSYT01 reconstructs a symmetric indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -70,7 +70,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by SSYTRF.
+*>          as computed by AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from SSYTRF.
+*>          The pivot indices from AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -121,7 +121,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+      SUBROUTINE AB_SSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.5.0) --
@@ -151,12 +151,12 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSY
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANSY
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASET, SLAVSY
+      EXTERNAL           AB_SLASET, AB_SLAVSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -172,26 +172,26 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_SLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the identity matrix.
 *
-      CALL SLASET( 'Full', N, N, ZERO, ONE, C, LDC )
+      CALL AB_SLASET( 'Full', N, N, ZERO, ONE, C, LDC )
 *
-*     Call SLAVSY to form the product D * U' (or D * L' ).
+*     Call AB_SLAVSY to form the product D * U' (or D * L' ).
 *
-      CALL SLAVSY( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, LDAFAC,
+      CALL AB_SLAVSY( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, LDAFAC,
      $             IPIV, C, LDC, INFO )
 *
-*     Call SLAVSY again to multiply by U (or L ).
+*     Call AB_SLAVSY again to multiply by U (or L ).
 *
-      CALL SLAVSY( UPLO, 'No transpose', 'Unit', N, N, AFAC, LDAFAC,
+      CALL AB_SLAVSY( UPLO, 'No transpose', 'Unit', N, N, AFAC, LDAFAC,
      $             IPIV, C, LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -207,7 +207,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = SLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_SLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -218,6 +218,6 @@
 *
       RETURN
 *
-*     End of SSYT01
+*     End of AB_SSYT01
 *
       END

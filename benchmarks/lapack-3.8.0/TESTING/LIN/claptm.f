@@ -1,4 +1,4 @@
-*> \brief \b CLAPTM
+*> \brief \b AB_CLAPTM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAPTM( UPLO, N, NRHS, ALPHA, D, E, X, LDX, BETA, B,
+*       SUBROUTINE AB_CLAPTM( UPLO, N, NRHS, ALPHA, D, E, X, LDX, BETA, B,
 *                          LDB )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CLAPTM multiplies an N by NRHS matrix X by a Hermitian tridiagonal
+*> AB_CLAPTM multiplies an N by NRHS matrix X by a Hermitian tridiagonal
 *> matrix A and stores the result in a matrix B.  The operation has the
 *> form
 *>
@@ -126,7 +126,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CLAPTM( UPLO, N, NRHS, ALPHA, D, E, X, LDX, BETA, B,
+      SUBROUTINE AB_CLAPTM( UPLO, N, NRHS, ALPHA, D, E, X, LDX, BETA, B,
      $                   LDB )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -154,8 +154,8 @@
       INTEGER            I, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG
@@ -180,7 +180,7 @@
       END IF
 *
       IF( ALPHA.EQ.ONE ) THEN
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Compute B := B + A*X, where E is the superdiagonal of A.
 *
@@ -220,7 +220,7 @@
    80       CONTINUE
          END IF
       ELSE IF( ALPHA.EQ.-ONE ) THEN
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Compute B := B - A*X, where E is the superdiagonal of A.
 *
@@ -262,6 +262,6 @@
       END IF
       RETURN
 *
-*     End of CLAPTM
+*     End of AB_CLAPTM
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SQRT17
+*> \brief \b AB_SQRT17
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION SQRT17( TRANS, IRESID, M, N, NRHS, A,
+*       REAL             FUNCTION AB_SQRT17( TRANS, IRESID, M, N, NRHS, A,
 *                        LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SQRT17 computes the ratio
+*> AB_SQRT17 computes the ratio
 *>
 *>    || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
 *>
@@ -147,7 +147,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      REAL             FUNCTION SQRT17( TRANS, IRESID, M, N, NRHS, A,
+      REAL             FUNCTION AB_SQRT17( TRANS, IRESID, M, N, NRHS, A,
      $                 LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -178,33 +178,33 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, SLAMCH, SLANGE
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLASCL, XERBLA
+      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_SLASCL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      SQRT17 = ZERO
+      AB_SQRT17 = ZERO
 *
-      IF( LSAME( TRANS, 'N' ) ) THEN
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
          NROWS = M
          NCOLS = N
-      ELSE IF( LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
          NROWS = N
          NCOLS = M
       ELSE
-         CALL XERBLA( 'SQRT17', 1 )
+         CALL AB_XERBLA( 'AB_SQRT17', 1 )
          RETURN
       END IF
 *
       IF( LWORK.LT.NCOLS*NRHS ) THEN
-         CALL XERBLA( 'SQRT17', 13 )
+         CALL AB_XERBLA( 'AB_SQRT17', 13 )
          RETURN
       END IF
 *
@@ -212,31 +212,33 @@
          RETURN
       END IF
 *
-      NORMA = SLANGE( 'One-norm', M, N, A, LDA, RWORK )
-      SMLNUM = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
+      NORMA = AB_SLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' ) / AB_SLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
 *     compute residual and scale it
 *
-      CALL SLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
-      CALL SGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS, -ONE, A,
+      CALL AB_SLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
+      CALL AB_SGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS, -ONE, A,
      $            LDA, X, LDX, ONE, C, LDB )
-      NORMRS = SLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
+      NORMRS = AB_SLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
       IF( NORMRS.GT.SMLNUM ) THEN
          ISCL = 1
-         CALL SLASCL( 'General', 0, 0, NORMRS, ONE, NROWS, NRHS, C, LDB,
+         CALL AB_SLASCL( 'General', 0, 0, NORMRS, ONE, NROWS, NRHS, C, L
+     $DB,
      $                INFO )
       END IF
 *
 *     compute R'*A
 *
-      CALL SGEMM( 'Transpose', TRANS, NRHS, NCOLS, NROWS, ONE, C, LDB,
+      CALL AB_SGEMM( 'Transpose', TRANS, NRHS, NCOLS, NROWS, ONE, C, LDB
+     $,
      $            A, LDA, ZERO, WORK, NRHS )
 *
 *     compute and properly scale error
 *
-      ERR = SLANGE( 'One-norm', NRHS, NCOLS, WORK, NRHS, RWORK )
+      ERR = AB_SLANGE( 'One-norm', NRHS, NCOLS, WORK, NRHS, RWORK )
       IF( NORMA.NE.ZERO )
      $   ERR = ERR / NORMA
 *
@@ -244,7 +246,7 @@
      $   ERR = ERR*NORMRS
 *
       IF( IRESID.EQ.1 ) THEN
-         NORMB = SLANGE( 'One-norm', NROWS, NRHS, B, LDB, RWORK )
+         NORMB = AB_SLANGE( 'One-norm', NROWS, NRHS, B, LDB, RWORK )
          IF( NORMB.NE.ZERO )
      $      ERR = ERR / NORMB
       ELSE
@@ -252,9 +254,10 @@
      $      ERR = ERR / NORMRS
       END IF
 *
-      SQRT17 = ERR / ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N, NRHS ) ) )
+      AB_SQRT17 = ERR / ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N, NRHS )
+     $ ) )
       RETURN
 *
-*     End of SQRT17
+*     End of AB_SQRT17
 *
       END

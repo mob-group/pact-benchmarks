@@ -1,4 +1,4 @@
-*> \brief \b SLAG2D converts a single precision matrix to a double precision matrix.
+*> \brief \b AB_AB_SLAG2D converts a single precision matrix to a double precision matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAG2D + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slag2d.f">
+*> Download AB_AB_SLAG2D + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SLAG2D.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slag2d.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SLAG2D.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slag2d.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SLAG2D.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
+*       SUBROUTINE AB_AB_SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDSA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SLAG2D converts a SINGLE PRECISION matrix, SA, to a DOUBLE
+*> AB_AB_SLAG2D converts a SINGLE PRECISION matrix, SA, to a DOUBLE
 *> PRECISION matrix, A.
 *>
 *> Note that while it is possible to overflow while converting
@@ -102,7 +102,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
+      SUBROUTINE AB_AB_SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -132,6 +132,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of SLAG2D
+*     End of AB_AB_SLAG2D
 *
       END

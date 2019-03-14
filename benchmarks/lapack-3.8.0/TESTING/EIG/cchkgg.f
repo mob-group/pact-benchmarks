@@ -1,4 +1,4 @@
-*> \brief \b CCHKGG
+*> \brief \b AB_CCHKGG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_CCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          TSTDIF, THRSHN, NOUNIT, A, LDA, B, H, T, S1,
 *                          S2, P1, P2, U, LDU, V, Q, Z, ALPHA1, BETA1,
 *                          ALPHA3, BETA3, EVECTL, EVECTR, WORK, LWORK,
@@ -38,14 +38,14 @@
 *>
 *> \verbatim
 *>
-*> CCHKGG  checks the nonsymmetric generalized eigenvalue problem
+*> AB_CCHKGG  checks the nonsymmetric generalized eigenvalue problem
 *> routines.
 *>                                H          H        H
-*> CGGHRD factors A and B as U H V  and U T V , where   means conjugate
+*> AB_CGGHRD factors A and B as U H V  and U T V , where   means conjugate
 *> transpose, H is hessenberg, T is triangular and U and V are unitary.
 *>
 *>                                 H          H
-*> CHGEQZ factors H and T as  Q S Z  and Q P Z , where P and S are upper
+*> AB_CHGEQZ factors H and T as  Q S Z  and Q P Z , where P and S are upper
 *> triangular and Q and Z are unitary.  It also computes the generalized
 *> eigenvalues (alpha(1),beta(1)),...,(alpha(n),beta(n)), where
 *> alpha(j)=S(j,j) and beta(j)=P(j,j) -- thus, w(j) = alpha(j)/beta(j)
@@ -58,12 +58,12 @@
 *>
 *>     det( m(j) A - B ) = 0
 *>
-*> CTGEVC computes the matrix L of left eigenvectors and the matrix R
+*> AB_CTGEVC computes the matrix L of left eigenvectors and the matrix R
 *> of right eigenvectors for the matrix pair ( S, P ).  In the
 *> description below,  l and r are left and right eigenvectors
 *> corresponding to the generalized eigenvalues (alpha,beta).
 *>
-*> When CCHKGG is called, a number of matrix "sizes" ("n's") and a
+*> When AB_CCHKGG is called, a number of matrix "sizes" ("n's") and a
 *> number of matrix "types" are specified.  For each size ("n")
 *> and each type of matrix, one matrix will be generated and used
 *> to test the nonsymmetric eigenroutines.  For each matrix, 13
@@ -103,7 +103,7 @@
 *>       | (beta H - alpha T) l' | / ( ulp max( |beta H|, |alpha T| ) )
 *>
 *>       where the eigenvectors l' are the result of passing Q to
-*>       STGEVC and back transforming (JOB='B').
+*>       AB_STGEVC and back transforming (JOB='B').
 *>
 *> (11)  max over all right eigenvalue/-vector pairs (beta/alpha,r) of
 *>
@@ -114,7 +114,7 @@
 *>       | (beta H - alpha T) r' | / ( ulp max( |beta H|, |alpha T| ) )
 *>
 *>       where the eigenvectors r' are the result of passing Z to
-*>       STGEVC and back transforming (JOB='B').
+*>       AB_STGEVC and back transforming (JOB='B').
 *>
 *> The last three test ratios will usually be small, but there is no
 *> mathematical requirement that they be so.  They are therefore
@@ -225,7 +225,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          CCHKGG does nothing.  It must be at least zero.
+*>          AB_CCHKGG does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -239,7 +239,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, CCHKGG
+*>          The number of elements in DOTYPE.   If it is zero, AB_CCHKGG
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -269,7 +269,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to CCHKGG to continue the same random number
+*>          next call to AB_CCHKGG to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -339,47 +339,47 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX array, dimension (LDA, max(NN))
-*>          The upper Hessenberg matrix computed from A by CGGHRD.
+*>          The upper Hessenberg matrix computed from A by AB_CGGHRD.
 *> \endverbatim
 *>
 *> \param[out] T
 *> \verbatim
 *>          T is COMPLEX array, dimension (LDA, max(NN))
-*>          The upper triangular matrix computed from B by CGGHRD.
+*>          The upper triangular matrix computed from B by AB_CGGHRD.
 *> \endverbatim
 *>
 *> \param[out] S1
 *> \verbatim
 *>          S1 is COMPLEX array, dimension (LDA, max(NN))
-*>          The Schur (upper triangular) matrix computed from H by CHGEQZ
+*>          The Schur (upper triangular) matrix computed from H by AB_CHGEQZ
 *>          when Q and Z are also computed.
 *> \endverbatim
 *>
 *> \param[out] S2
 *> \verbatim
 *>          S2 is COMPLEX array, dimension (LDA, max(NN))
-*>          The Schur (upper triangular) matrix computed from H by CHGEQZ
+*>          The Schur (upper triangular) matrix computed from H by AB_CHGEQZ
 *>          when Q and Z are not computed.
 *> \endverbatim
 *>
 *> \param[out] P1
 *> \verbatim
 *>          P1 is COMPLEX array, dimension (LDA, max(NN))
-*>          The upper triangular matrix computed from T by CHGEQZ
+*>          The upper triangular matrix computed from T by AB_CHGEQZ
 *>          when Q and Z are also computed.
 *> \endverbatim
 *>
 *> \param[out] P2
 *> \verbatim
 *>          P2 is COMPLEX array, dimension (LDA, max(NN))
-*>          The upper triangular matrix computed from T by CHGEQZ
+*>          The upper triangular matrix computed from T by AB_CHGEQZ
 *>          when Q and Z are not computed.
 *> \endverbatim
 *>
 *> \param[out] U
 *> \verbatim
 *>          U is COMPLEX array, dimension (LDU, max(NN))
-*>          The (left) unitary matrix computed by CGGHRD.
+*>          The (left) unitary matrix computed by AB_CGGHRD.
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -392,19 +392,19 @@
 *> \param[out] V
 *> \verbatim
 *>          V is COMPLEX array, dimension (LDU, max(NN))
-*>          The (right) unitary matrix computed by CGGHRD.
+*>          The (right) unitary matrix computed by AB_CGGHRD.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is COMPLEX array, dimension (LDU, max(NN))
-*>          The (left) unitary matrix computed by CHGEQZ.
+*>          The (left) unitary matrix computed by AB_CHGEQZ.
 *> \endverbatim
 *>
 *> \param[out] Z
 *> \verbatim
 *>          Z is COMPLEX array, dimension (LDU, max(NN))
-*>          The (left) unitary matrix computed by CHGEQZ.
+*>          The (left) unitary matrix computed by AB_CHGEQZ.
 *> \endverbatim
 *>
 *> \param[out] ALPHA1
@@ -415,7 +415,7 @@
 *> \param[out] BETA1
 *> \verbatim
 *>          BETA1 is COMPLEX array, dimension (max(NN))
-*>          The generalized eigenvalues of (A,B) computed by CHGEQZ
+*>          The generalized eigenvalues of (A,B) computed by AB_CHGEQZ
 *>          when Q, Z, and the full Schur matrices are computed.
 *> \endverbatim
 *>
@@ -427,7 +427,7 @@
 *> \param[out] BETA3
 *> \verbatim
 *>          BETA3 is COMPLEX array, dimension (max(NN))
-*>          The generalized eigenvalues of (A,B) computed by CHGEQZ
+*>          The generalized eigenvalues of (A,B) computed by AB_CHGEQZ
 *>          when neither Q, Z, nor the Schur matrices are computed.
 *> \endverbatim
 *>
@@ -497,7 +497,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_CCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   TSTDIF, THRSHN, NOUNIT, A, LDA, B, H, T, S1,
      $                   S2, P1, P2, U, LDU, V, Q, Z, ALPHA1, BETA1,
      $                   ALPHA3, BETA3, EVECTL, EVECTR, WORK, LWORK,
@@ -557,14 +557,16 @@
       COMPLEX            CDUMMA( 4 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      COMPLEX            CLARND
-      EXTERNAL           CLANGE, SLAMCH, CLARND
+      REAL               AB_CLANGE, AB_SLAMCH
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_CLANGE, AB_SLAMCH, AB_CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQR2, CGET51, CGET52, CGGHRD, CHGEQZ, CLACPY,
-     $                   CLARFG, CLASET, CLATM4, CTGEVC, CUNM2R, SLABAD,
-     $                   SLASUM, XERBLA
+      EXTERNAL           AB_AB_CGEQR2, AB_CGET51, AB_CGET52, AB_CGGHRD, 
+     $AB_CHGEQZ, AB_CLACPY,
+     $                   AB_AB_CLARFG, AB_CLASET, AB_CLATM4, AB_CTGEVC, 
+     $AB_CUNM2R, AB_SLABAD,
+     $                   AB_SLASUM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, REAL, SIGN
@@ -587,11 +589,13 @@
       DATA               KBMAGN / 8*1, 3, 2, 3, 2, 2, 3, 7*1, 3, 2, 3,
      $                   2, 1 /
       DATA               KTRIAN / 16*0, 10*1 /
-      DATA               LASIGN / 6*.FALSE., .TRUE., .FALSE., 2*.TRUE.,
+      DATA               LASIGN / 6*.FALSE., .TRUE., .FALSE., 2*.T
+     $RUE.,
      $                   2*.FALSE., 3*.TRUE., .FALSE., .TRUE.,
      $                   3*.FALSE., 5*.TRUE., .FALSE. /
       DATA               LBSIGN / 7*.FALSE., .TRUE., 2*.FALSE.,
-     $                   2*.TRUE., 2*.FALSE., .TRUE., .FALSE., .TRUE.,
+     $                   2*.TRUE., 2*.FALSE., .TRUE., .FALSE., .TR
+     $UE.,
      $                   9*.FALSE. /
 *     ..
 *     .. Executable Statements ..
@@ -629,7 +633,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CCHKGG', -INFO )
+         CALL AB_XERBLA( 'AB_CCHKGG', -INFO )
          RETURN
       END IF
 *
@@ -638,11 +642,11 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
+      CALL AB_SLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.
@@ -692,7 +696,7 @@
 *
 *           KCLASS: =1 means w/o rotation, =2 means w/ rotation,
 *                   =3 means random.
-*           KATYPE: the "type" to be passed to CLATM4 for computing A.
+*           KATYPE: the "type" to be passed to AB_CLATM4 for computing A.
 *           KAZERO: the pattern of zeros on the diagonal for A:
 *                   =1: ( xxx ), =2: (0, xxx ) =3: ( 0, 0, xxx, 0 ),
 *                   =4: ( 0, xxx, 0, 0 ), =5: ( 0, 0, 1, xxx, 0 ),
@@ -717,11 +721,13 @@
                IF( ABS( KATYPE( JTYPE ) ).EQ.3 ) THEN
                   IN = 2*( ( N-1 ) / 2 ) + 1
                   IF( IN.NE.N )
-     $               CALL CLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
+     $               CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, A, LDA 
+     $)
                ELSE
                   IN = N
                END IF
-               CALL CLATM4( KATYPE( JTYPE ), IN, KZ1( KAZERO( JTYPE ) ),
+               CALL AB_CLATM4( KATYPE( JTYPE ), IN, KZ1( KAZERO( JTYPE )
+     $ ),
      $                      KZ2( KAZERO( JTYPE ) ), LASIGN( JTYPE ),
      $                      RMAGN( KAMAGN( JTYPE ) ), ULP,
      $                      RMAGN( KTRIAN( JTYPE )*KAMAGN( JTYPE ) ), 4,
@@ -735,11 +741,13 @@
                IF( ABS( KBTYPE( JTYPE ) ).EQ.3 ) THEN
                   IN = 2*( ( N-1 ) / 2 ) + 1
                   IF( IN.NE.N )
-     $               CALL CLASET( 'Full', N, N, CZERO, CZERO, B, LDA )
+     $               CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, B, LDA 
+     $)
                ELSE
                   IN = N
                END IF
-               CALL CLATM4( KBTYPE( JTYPE ), IN, KZ1( KBZERO( JTYPE ) ),
+               CALL AB_CLATM4( KBTYPE( JTYPE ), IN, KZ1( KBZERO( JTYPE )
+     $ ),
      $                      KZ2( KBZERO( JTYPE ) ), LBSIGN( JTYPE ),
      $                      RMAGN( KBMAGN( JTYPE ) ), ONE,
      $                      RMAGN( KTRIAN( JTYPE )*KBMAGN( JTYPE ) ), 4,
@@ -752,29 +760,31 @@
 *
 *                 Include rotations
 *
-*                 Generate U, V as Householder transformations times a
-*                 diagonal matrix.  (Note that CLARFG makes U(j,j) and
+*                 Generate U, V as HousehoAB_LDEr transformations times a
+*                 diagonal matrix.  (Note that AB_AB_CLARFG makes U(j,j) and
 *                 V(j,j) real.)
 *
                   DO 50 JC = 1, N - 1
                      DO 40 JR = JC, N
-                        U( JR, JC ) = CLARND( 3, ISEED )
-                        V( JR, JC ) = CLARND( 3, ISEED )
+                        U( JR, JC ) = AB_CLARND( 3, ISEED )
+                        V( JR, JC ) = AB_CLARND( 3, ISEED )
    40                CONTINUE
-                     CALL CLARFG( N+1-JC, U( JC, JC ), U( JC+1, JC ), 1,
+                     CALL AB_AB_CLARFG( N+1-JC, U( JC, JC ), U( JC+1, JC
+     $ ), 1,
      $                            WORK( JC ) )
                      WORK( 2*N+JC ) = SIGN( ONE, REAL( U( JC, JC ) ) )
                      U( JC, JC ) = CONE
-                     CALL CLARFG( N+1-JC, V( JC, JC ), V( JC+1, JC ), 1,
+                     CALL AB_AB_CLARFG( N+1-JC, V( JC, JC ), V( JC+1, JC
+     $ ), 1,
      $                            WORK( N+JC ) )
                      WORK( 3*N+JC ) = SIGN( ONE, REAL( V( JC, JC ) ) )
                      V( JC, JC ) = CONE
    50             CONTINUE
-                  CTEMP = CLARND( 3, ISEED )
+                  CTEMP = AB_CLARND( 3, ISEED )
                   U( N, N ) = CONE
                   WORK( N ) = CZERO
                   WORK( 3*N ) = CTEMP / ABS( CTEMP )
-                  CTEMP = CLARND( 3, ISEED )
+                  CTEMP = AB_CLARND( 3, ISEED )
                   V( N, N ) = CONE
                   WORK( 2*N ) = CZERO
                   WORK( 4*N ) = CTEMP / ABS( CTEMP )
@@ -791,19 +801,21 @@
      $                                B( JR, JC )
    60                CONTINUE
    70             CONTINUE
-                  CALL CUNM2R( 'L', 'N', N, N, N-1, U, LDU, WORK, A,
+                  CALL AB_CUNM2R( 'L', 'N', N, N, N-1, U, LDU, WORK, A,
      $                         LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL CUNM2R( 'R', 'C', N, N, N-1, V, LDU, WORK( N+1 ),
+                  CALL AB_CUNM2R( 'R', 'C', N, N, N-1, V, LDU, WORK( N+1
+     $ ),
      $                         A, LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL CUNM2R( 'L', 'N', N, N, N-1, U, LDU, WORK, B,
+                  CALL AB_CUNM2R( 'L', 'N', N, N, N-1, U, LDU, WORK, B,
      $                         LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL CUNM2R( 'R', 'C', N, N, N-1, V, LDU, WORK( N+1 ),
+                  CALL AB_CUNM2R( 'R', 'C', N, N, N-1, V, LDU, WORK( N+1
+     $ ),
      $                         B, LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
@@ -815,15 +827,15 @@
                DO 90 JC = 1, N
                   DO 80 JR = 1, N
                      A( JR, JC ) = RMAGN( KAMAGN( JTYPE ) )*
-     $                             CLARND( 4, ISEED )
+     $                             AB_CLARND( 4, ISEED )
                      B( JR, JC ) = RMAGN( KBMAGN( JTYPE ) )*
-     $                             CLARND( 4, ISEED )
+     $                             AB_CLARND( 4, ISEED )
    80             CONTINUE
    90          CONTINUE
             END IF
 *
-            ANORM = CLANGE( '1', N, N, A, LDA, RWORK )
-            BNORM = CLANGE( '1', N, N, B, LDA, RWORK )
+            ANORM = AB_CLANGE( '1', N, N, A, LDA, RWORK )
+            BNORM = AB_CLANGE( '1', N, N, B, LDA, RWORK )
 *
   100       CONTINUE
 *
@@ -836,44 +848,46 @@
 *
   110       CONTINUE
 *
-*           Call CGEQR2, CUNM2R, and CGGHRD to compute H, T, U, and V
+*           Call AB_AB_CGEQR2, AB_CUNM2R, and AB_CGGHRD to compute H, T, U, and V
 *
-            CALL CLACPY( ' ', N, N, A, LDA, H, LDA )
-            CALL CLACPY( ' ', N, N, B, LDA, T, LDA )
+            CALL AB_CLACPY( ' ', N, N, A, LDA, H, LDA )
+            CALL AB_CLACPY( ' ', N, N, B, LDA, T, LDA )
             NTEST = 1
             RESULT( 1 ) = ULPINV
 *
-            CALL CGEQR2( N, N, T, LDA, WORK, WORK( N+1 ), IINFO )
+            CALL AB_AB_CGEQR2( N, N, T, LDA, WORK, WORK( N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CGEQR2', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEQR2', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL CUNM2R( 'L', 'C', N, N, N, T, LDA, WORK, H, LDA,
+            CALL AB_CUNM2R( 'L', 'C', N, N, N, T, LDA, WORK, H, LDA,
      $                   WORK( N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CUNM2R', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CUNM2R', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL CLASET( 'Full', N, N, CZERO, CONE, U, LDU )
-            CALL CUNM2R( 'R', 'N', N, N, N, T, LDA, WORK, U, LDU,
+            CALL AB_CLASET( 'Full', N, N, CZERO, CONE, U, LDU )
+            CALL AB_CUNM2R( 'R', 'N', N, N, N, T, LDA, WORK, U, LDU,
      $                   WORK( N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CUNM2R', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CUNM2R', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL CGGHRD( 'V', 'I', N, 1, N, H, LDA, T, LDA, U, LDU, V,
+            CALL AB_CGGHRD( 'V', 'I', N, 1, N, H, LDA, T, LDA, U, LDU, V
+     $,
      $                   LDU, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CGGHRD', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CGGHRD', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -882,31 +896,32 @@
 *
 *           Do tests 1--4
 *
-            CALL CGET51( 1, N, A, LDA, H, LDA, U, LDU, V, LDU, WORK,
+            CALL AB_CGET51( 1, N, A, LDA, H, LDA, U, LDU, V, LDU, WORK,
      $                   RWORK, RESULT( 1 ) )
-            CALL CGET51( 1, N, B, LDA, T, LDA, U, LDU, V, LDU, WORK,
+            CALL AB_CGET51( 1, N, B, LDA, T, LDA, U, LDU, V, LDU, WORK,
      $                   RWORK, RESULT( 2 ) )
-            CALL CGET51( 3, N, B, LDA, T, LDA, U, LDU, U, LDU, WORK,
+            CALL AB_CGET51( 3, N, B, LDA, T, LDA, U, LDU, U, LDU, WORK,
      $                   RWORK, RESULT( 3 ) )
-            CALL CGET51( 3, N, B, LDA, T, LDA, V, LDU, V, LDU, WORK,
+            CALL AB_CGET51( 3, N, B, LDA, T, LDA, V, LDU, V, LDU, WORK,
      $                   RWORK, RESULT( 4 ) )
 *
-*           Call CHGEQZ to compute S1, P1, S2, P2, Q, and Z, do tests.
+*           Call AB_CHGEQZ to compute S1, P1, S2, P2, Q, and Z, do tests.
 *
 *           Compute T1 and UZ
 *
 *           Eigenvalues only
 *
-            CALL CLACPY( ' ', N, N, H, LDA, S2, LDA )
-            CALL CLACPY( ' ', N, N, T, LDA, P2, LDA )
+            CALL AB_CLACPY( ' ', N, N, H, LDA, S2, LDA )
+            CALL AB_CLACPY( ' ', N, N, T, LDA, P2, LDA )
             NTEST = 5
             RESULT( 5 ) = ULPINV
 *
-            CALL CHGEQZ( 'E', 'N', 'N', N, 1, N, S2, LDA, P2, LDA,
+            CALL AB_CHGEQZ( 'E', 'N', 'N', N, 1, N, S2, LDA, P2, LDA,
      $                   ALPHA3, BETA3, Q, LDU, Z, LDU, WORK, LWORK,
      $                   RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CHGEQZ(E)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CHGEQZ(E)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -914,14 +929,15 @@
 *
 *           Eigenvalues and Full Schur Form
 *
-            CALL CLACPY( ' ', N, N, H, LDA, S2, LDA )
-            CALL CLACPY( ' ', N, N, T, LDA, P2, LDA )
+            CALL AB_CLACPY( ' ', N, N, H, LDA, S2, LDA )
+            CALL AB_CLACPY( ' ', N, N, T, LDA, P2, LDA )
 *
-            CALL CHGEQZ( 'S', 'N', 'N', N, 1, N, S2, LDA, P2, LDA,
+            CALL AB_CHGEQZ( 'S', 'N', 'N', N, 1, N, S2, LDA, P2, LDA,
      $                   ALPHA1, BETA1, Q, LDU, Z, LDU, WORK, LWORK,
      $                   RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CHGEQZ(S)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CHGEQZ(S)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -929,14 +945,15 @@
 *
 *           Eigenvalues, Schur Form, and Schur Vectors
 *
-            CALL CLACPY( ' ', N, N, H, LDA, S1, LDA )
-            CALL CLACPY( ' ', N, N, T, LDA, P1, LDA )
+            CALL AB_CLACPY( ' ', N, N, H, LDA, S1, LDA )
+            CALL AB_CLACPY( ' ', N, N, T, LDA, P1, LDA )
 *
-            CALL CHGEQZ( 'S', 'I', 'I', N, 1, N, S1, LDA, P1, LDA,
+            CALL AB_CHGEQZ( 'S', 'I', 'I', N, 1, N, S1, LDA, P1, LDA,
      $                   ALPHA1, BETA1, Q, LDU, Z, LDU, WORK, LWORK,
      $                   RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CHGEQZ(V)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CHGEQZ(V)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -946,13 +963,13 @@
 *
 *           Do Tests 5--8
 *
-            CALL CGET51( 1, N, H, LDA, S1, LDA, Q, LDU, Z, LDU, WORK,
+            CALL AB_CGET51( 1, N, H, LDA, S1, LDA, Q, LDU, Z, LDU, WORK,
      $                   RWORK, RESULT( 5 ) )
-            CALL CGET51( 1, N, T, LDA, P1, LDA, Q, LDU, Z, LDU, WORK,
+            CALL AB_CGET51( 1, N, T, LDA, P1, LDA, Q, LDU, Z, LDU, WORK,
      $                   RWORK, RESULT( 6 ) )
-            CALL CGET51( 3, N, T, LDA, P1, LDA, Q, LDU, Q, LDU, WORK,
+            CALL AB_CGET51( 3, N, T, LDA, P1, LDA, Q, LDU, Q, LDU, WORK,
      $                   RWORK, RESULT( 7 ) )
-            CALL CGET51( 3, N, T, LDA, P1, LDA, Z, LDU, Z, LDU, WORK,
+            CALL AB_CGET51( 3, N, T, LDA, P1, LDA, Z, LDU, Z, LDU, WORK,
      $                   RWORK, RESULT( 8 ) )
 *
 *           Compute the Left and Right Eigenvectors of (S1,P1)
@@ -974,10 +991,11 @@
                LLWORK( J ) = .FALSE.
   130       CONTINUE
 *
-            CALL CTGEVC( 'L', 'S', LLWORK, N, S1, LDA, P1, LDA, EVECTL,
+            CALL AB_CTGEVC( 'L', 'S', LLWORK, N, S1, LDA, P1, LDA, EVECT
+     $L,
      $                   LDU, CDUMMA, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CTGEVC(L,S1)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CTGEVC(L,S1)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -991,21 +1009,21 @@
                LLWORK( J ) = .TRUE.
   150       CONTINUE
 *
-            CALL CTGEVC( 'L', 'S', LLWORK, N, S1, LDA, P1, LDA,
+            CALL AB_CTGEVC( 'L', 'S', LLWORK, N, S1, LDA, P1, LDA,
      $                   EVECTL( 1, I1+1 ), LDU, CDUMMA, LDU, N, IN,
      $                   WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CTGEVC(L,S2)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CTGEVC(L,S2)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL CGET52( .TRUE., N, S1, LDA, P1, LDA, EVECTL, LDU,
+            CALL AB_CGET52( .TRUE., N, S1, LDA, P1, LDA, EVECTL, LDU,
      $                   ALPHA1, BETA1, WORK, RWORK, DUMMA( 1 ) )
             RESULT( 9 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRSHN ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Left', 'CTGEVC(HOWMNY=S)',
+               WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_CTGEVC(HOWMNY=S)',
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
@@ -1014,21 +1032,23 @@
 *
             NTEST = 10
             RESULT( 10 ) = ULPINV
-            CALL CLACPY( 'F', N, N, Q, LDU, EVECTL, LDU )
-            CALL CTGEVC( 'L', 'B', LLWORK, N, S1, LDA, P1, LDA, EVECTL,
+            CALL AB_CLACPY( 'F', N, N, Q, LDU, EVECTL, LDU )
+            CALL AB_CTGEVC( 'L', 'B', LLWORK, N, S1, LDA, P1, LDA, EVECT
+     $L,
      $                   LDU, CDUMMA, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CTGEVC(L,B)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CTGEVC(L,B)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL CGET52( .TRUE., N, H, LDA, T, LDA, EVECTL, LDU, ALPHA1,
+            CALL AB_CGET52( .TRUE., N, H, LDA, T, LDA, EVECTL, LDU, ALPH
+     $A1,
      $                   BETA1, WORK, RWORK, DUMMA( 1 ) )
             RESULT( 10 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRSHN ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Left', 'CTGEVC(HOWMNY=B)',
+               WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_CTGEVC(HOWMNY=B)',
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
@@ -1049,10 +1069,11 @@
                LLWORK( J ) = .FALSE.
   170       CONTINUE
 *
-            CALL CTGEVC( 'R', 'S', LLWORK, N, S1, LDA, P1, LDA, CDUMMA,
+            CALL AB_CTGEVC( 'R', 'S', LLWORK, N, S1, LDA, P1, LDA, CDUMM
+     $A,
      $                   LDU, EVECTR, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CTGEVC(R,S1)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CTGEVC(R,S1)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -1066,21 +1087,24 @@
                LLWORK( J ) = .TRUE.
   190       CONTINUE
 *
-            CALL CTGEVC( 'R', 'S', LLWORK, N, S1, LDA, P1, LDA, CDUMMA,
+            CALL AB_CTGEVC( 'R', 'S', LLWORK, N, S1, LDA, P1, LDA, CDUMM
+     $A,
      $                   LDU, EVECTR( 1, I1+1 ), LDU, N, IN, WORK,
      $                   RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CTGEVC(R,S2)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CTGEVC(R,S2)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL CGET52( .FALSE., N, S1, LDA, P1, LDA, EVECTR, LDU,
+            CALL AB_CGET52( .FALSE., N, S1, LDA, P1, LDA, EVECTR, LDU
+     $,
      $                   ALPHA1, BETA1, WORK, RWORK, DUMMA( 1 ) )
             RESULT( 11 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Right', 'CTGEVC(HOWMNY=S)',
+               WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_CTGEVC(HOWMNY=S)'
+     $,
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
@@ -1089,21 +1113,23 @@
 *
             NTEST = 12
             RESULT( 12 ) = ULPINV
-            CALL CLACPY( 'F', N, N, Z, LDU, EVECTR, LDU )
-            CALL CTGEVC( 'R', 'B', LLWORK, N, S1, LDA, P1, LDA, CDUMMA,
+            CALL AB_CLACPY( 'F', N, N, Z, LDU, EVECTR, LDU )
+            CALL AB_CTGEVC( 'R', 'B', LLWORK, N, S1, LDA, P1, LDA, CDUMM
+     $A,
      $                   LDU, EVECTR, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'CTGEVC(R,B)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_CTGEVC(R,B)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL CGET52( .FALSE., N, H, LDA, T, LDA, EVECTR, LDU,
+            CALL AB_CGET52( .FALSE., N, H, LDA, T, LDA, EVECTR, LDU,
      $                   ALPHA1, BETA1, WORK, RWORK, DUMMA( 1 ) )
             RESULT( 12 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Right', 'CTGEVC(HOWMNY=B)',
+               WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_CTGEVC(HOWMNY=B)'
+     $,
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
@@ -1113,9 +1139,9 @@
 *
 *              Do Tests 13--14
 *
-               CALL CGET51( 2, N, S1, LDA, S2, LDA, Q, LDU, Z, LDU,
+               CALL AB_CGET51( 2, N, S1, LDA, S2, LDA, Q, LDU, Z, LDU,
      $                      WORK, RWORK, RESULT( 13 ) )
-               CALL CGET51( 2, N, P1, LDA, P2, LDA, Q, LDU, Z, LDU,
+               CALL AB_CGET51( 2, N, P1, LDA, P2, LDA, Q, LDU, Z, LDU,
      $                      WORK, RWORK, RESULT( 14 ) )
 *
 *              Do Test 15
@@ -1150,7 +1176,7 @@
                IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                 If this is the first test to fail,
-*                 print a header to the data file.
+*                 print a AB_HEADER to the data file.
 *
                   IF( NERRS.EQ.0 ) THEN
                      WRITE( NOUNIT, FMT = 9997 )'CGG'
@@ -1183,20 +1209,21 @@
 *
 *     Summary
 *
-      CALL SLASUM( 'CGG', NOUNIT, NERRS, NTESTT )
+      CALL AB_SLASUM( 'CGG', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' CCHKGG: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_CCHKGG: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
- 9998 FORMAT( ' CCHKGG: ', A, ' Eigenvectors from ', A, ' incorrectly ',
+ 9998 FORMAT( ' AB_CCHKGG: ', A, ' Eigenvectors from ', A, ' incorrectly
+     $ ',
      $      'normalized.', / ' Bits of error=', 0P, G10.3, ',', 9X,
      $      'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5,
      $      ')' )
 *
  9997 FORMAT( 1X, A3, ' -- Complex Generalized eigenvalue problem' )
 *
- 9996 FORMAT( ' Matrix types (see CCHKGG for details): ' )
+ 9996 FORMAT( ' Matrix types (see AB_CCHKGG for details): ' )
 *
  9995 FORMAT( ' Special Matrices:', 23X,
      $      '(J''=transposed Jordan block)',
@@ -1239,6 +1266,6 @@
  9991 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I2, ' is', 1P, E10.3 )
 *
-*     End of CCHKGG
+*     End of AB_CCHKGG
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZHSEIN
+*> \brief \b AB_ZHSEIN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHSEIN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhsein.f">
+*> Download AB_ZHSEIN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHSEIN.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhsein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHSEIN.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhsein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHSEIN.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W, VL,
+*       SUBROUTINE AB_ZHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W, VL,
 *                          LDVL, VR, LDVR, MM, M, WORK, RWORK, IFAILL,
 *                          IFAILR, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> ZHSEIN uses inverse iteration to find specified right and/or left
+*> AB_ZHSEIN uses inverse iteration to find specified right and/or left
 *> eigenvectors of a complex upper Hessenberg matrix H.
 *>
 *> The right eigenvector x and the left eigenvector y of the matrix H
@@ -66,15 +66,15 @@
 *> \verbatim
 *>          EIGSRC is CHARACTER*1
 *>          Specifies the source of eigenvalues supplied in W:
-*>          = 'Q': the eigenvalues were found using ZHSEQR; thus, if
+*>          = 'Q': the eigenvalues were found using AB_ZHSEQR; thus, if
 *>                 H has zero subdiagonal elements, and so is
 *>                 block-triangular, then the j-th eigenvalue can be
 *>                 assumed to be an eigenvalue of the block containing
-*>                 the j-th row/column.  This property allows ZHSEIN to
+*>                 the j-th row/column.  This property allows AB_ZHSEIN to
 *>                 perform inverse iteration on just one diagonal block.
 *>          = 'N': no assumptions are made on the correspondence
 *>                 between eigenvalues and diagonal blocks.  In this
-*>                 case, ZHSEIN must always perform inverse iteration
+*>                 case, AB_ZHSEIN must always perform inverse iteration
 *>                 using the whole matrix H.
 *> \endverbatim
 *>
@@ -241,7 +241,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W, VL,
+      SUBROUTINE AB_ZHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W, V
+     $L,
      $                   LDVL, VR, LDVR, MM, M, WORK, RWORK, IFAILL,
      $                   IFAILR, INFO )
 *
@@ -277,12 +278,12 @@
       COMPLEX*16         CDUM, WK
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, DISNAN
-      DOUBLE PRECISION   DLAMCH, ZLANHS
-      EXTERNAL           LSAME, DLAMCH, ZLANHS, DISNAN
+      LOGICAL            AB_LSAME, AB_DISNAN
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHS
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHS, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLAEIN
+      EXTERNAL           AB_XERBLA, AB_ZLAEIN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -297,13 +298,13 @@
 *
 *     Decode and test the input parameters.
 *
-      BOTHV = LSAME( SIDE, 'B' )
-      RIGHTV = LSAME( SIDE, 'R' ) .OR. BOTHV
-      LEFTV = LSAME( SIDE, 'L' ) .OR. BOTHV
+      BOTHV = AB_LSAME( SIDE, 'B' )
+      RIGHTV = AB_LSAME( SIDE, 'R' ) .OR. BOTHV
+      LEFTV = AB_LSAME( SIDE, 'L' ) .OR. BOTHV
 *
-      FROMQR = LSAME( EIGSRC, 'Q' )
+      FROMQR = AB_LSAME( EIGSRC, 'Q' )
 *
-      NOINIT = LSAME( INITV, 'N' )
+      NOINIT = AB_LSAME( INITV, 'N' )
 *
 *     Set M to the number of columns required to store the selected
 *     eigenvectors.
@@ -317,9 +318,9 @@
       INFO = 0
       IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -1
-      ELSE IF( .NOT.FROMQR .AND. .NOT.LSAME( EIGSRC, 'N' ) ) THEN
+      ELSE IF( .NOT.FROMQR .AND. .NOT.AB_LSAME( EIGSRC, 'N' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOINIT .AND. .NOT.LSAME( INITV, 'U' ) ) THEN
+      ELSE IF( .NOT.NOINIT .AND. .NOT.AB_LSAME( INITV, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -333,7 +334,7 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHSEIN', -INFO )
+         CALL AB_XERBLA( 'AB_ZHSEIN', -INFO )
          RETURN
       END IF
 *
@@ -344,8 +345,8 @@
 *
 *     Set machine-dependent constants.
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *
       LDWORK = N
@@ -399,8 +400,9 @@
 *              Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it
 *              has not ben computed before.
 *
-               HNORM = ZLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, RWORK )
-               IF( DISNAN( HNORM ) ) THEN
+               HNORM = AB_ZLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, RWORK 
+     $)
+               IF( AB_DISNAN( HNORM ) ) THEN
                   INFO = -6
                   RETURN
                ELSE IF( HNORM.GT.RZERO ) THEN
@@ -428,7 +430,8 @@
 *
 *              Compute left eigenvector.
 *
-               CALL ZLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), LDH,
+               CALL AB_ZLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), 
+     $LDH,
      $                      WK, VL( KL, KS ), WORK, LDWORK, RWORK, EPS3,
      $                      SMLNUM, IINFO )
                IF( IINFO.GT.0 ) THEN
@@ -445,7 +448,8 @@
 *
 *              Compute right eigenvector.
 *
-               CALL ZLAEIN( .TRUE., NOINIT, KR, H, LDH, WK, VR( 1, KS ),
+               CALL AB_ZLAEIN( .TRUE., NOINIT, KR, H, LDH, WK, VR( 1, KS
+     $ ),
      $                      WORK, LDWORK, RWORK, EPS3, SMLNUM, IINFO )
                IF( IINFO.GT.0 ) THEN
                   INFO = INFO + 1
@@ -463,6 +467,6 @@
 *
       RETURN
 *
-*     End of ZHSEIN
+*     End of AB_ZHSEIN
 *
       END

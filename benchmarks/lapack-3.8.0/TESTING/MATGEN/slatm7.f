@@ -1,4 +1,4 @@
-*> \brief \b SLATM7
+*> \brief \b AB_SLATM7
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
+*       SUBROUTINE AB_SLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
 *                          RANK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -26,9 +26,9 @@
 *>
 *> \verbatim
 *>
-*>    SLATM7 computes the entries of D as specified by MODE
+*>    AB_SLATM7 computes the entries of D as specified by MODE
 *>    COND and IRSIGN. IDIST and ISEED determine the generation
-*>    of random numbers. SLATM7 is called by SLATMT to generate
+*>    of random numbers. AB_SLATM7 is called by AB_SLATMT to generate
 *>    random test matrices.
 *> \endverbatim
 *
@@ -80,7 +80,7 @@
 *>           linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to SLATM7
+*>           exit, and can be used in the next call to AB_SLATM7
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *>
@@ -119,7 +119,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
+      SUBROUTINE AB_SLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
      $                   RANK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -151,11 +151,11 @@
       INTEGER            I
 *     ..
 *     .. External Functions ..
-      REAL               SLARAN
-      EXTERNAL           SLARAN
+      REAL               AB_SLARAN
+      EXTERNAL           AB_SLARAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARNV, XERBLA
+      EXTERNAL           AB_SLARNV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, LOG, REAL
@@ -189,7 +189,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLATM7', -INFO )
+         CALL AB_XERBLA( 'AB_SLATM7', -INFO )
          RETURN
       END IF
 *
@@ -255,14 +255,14 @@
   210    CONTINUE
          ALPHA = LOG( ONE / COND )
          DO 220 I = 1, N
-            D( I ) = EXP( ALPHA*SLARAN( ISEED ) )
+            D( I ) = EXP( ALPHA*AB_SLARAN( ISEED ) )
   220    CONTINUE
          GO TO 240
 *
 *        Randomly distributed D values from IDIST
 *
   230    CONTINUE
-         CALL SLARNV( IDIST, ISEED, N, D )
+         CALL AB_SLARNV( IDIST, ISEED, N, D )
 *
   240    CONTINUE
 *
@@ -272,7 +272,7 @@
          IF( ( MODE.NE.-6 .AND. MODE.NE.0 .AND. MODE.NE.6 ) .AND.
      $       IRSIGN.EQ.1 ) THEN
             DO 250 I = 1, N
-               TEMP = SLARAN( ISEED )
+               TEMP = AB_SLARAN( ISEED )
                IF( TEMP.GT.HALF )
      $            D( I ) = -D( I )
   250       CONTINUE
@@ -292,6 +292,6 @@
 *
       RETURN
 *
-*     End of SLATM7
+*     End of AB_SLATM7
 *
       END

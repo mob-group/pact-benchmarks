@@ -1,4 +1,4 @@
-*> \brief \b SCHKGK
+*> \brief \b AB_SCHKGK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKGK( NIN, NOUT )
+*       SUBROUTINE AB_SCHKGK( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> SCHKGK tests SGGBAK, a routine for backward balancing  of
+*> AB_SCHKGK tests AB_SGGBAK, a routine for backward balancing  of
 *> a matrix pair (A, B).
 *> \endverbatim
 *
@@ -52,7 +52,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SCHKGK( NIN, NOUT )
+      SUBROUTINE AB_SCHKGK( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -68,8 +68,8 @@
 *     .. Parameters ..
       INTEGER            LDA, LDB, LDVL, LDVR
       PARAMETER          ( LDA = 50, LDB = 50, LDVL = 50, LDVR = 50 )
-      INTEGER            LDE, LDF, LDWORK
-      PARAMETER          ( LDE = 50, LDF = 50, LDWORK = 50 )
+      INTEGER            AB_LDE, LDF, LDWORK
+      PARAMETER          ( AB_LDE = 50, LDF = 50, LDWORK = 50 )
       REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
@@ -80,17 +80,18 @@
 *     .. Local Arrays ..
       INTEGER            LMAX( 4 )
       REAL               A( LDA, LDA ), AF( LDA, LDA ), B( LDB, LDB ),
-     $                   BF( LDB, LDB ), E( LDE, LDE ), F( LDF, LDF ),
+     $                   BF( LDB, LDB ), E( AB_LDE, AB_LDE ), F( LDF, LD
+     $F ),
      $                   LSCALE( LDA ), RSCALE( LDA ), VL( LDVL, LDVL ),
      $                   VLF( LDVL, LDVL ), VR( LDVR, LDVR ),
      $                   VRF( LDVR, LDVR ), WORK( LDWORK, LDWORK )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SGGBAK, SGGBAL, SLACPY
+      EXTERNAL           AB_SGEMM, AB_SGGBAK, AB_SGGBAL, AB_SLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -107,7 +108,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
    10 CONTINUE
       READ( NIN, FMT = * )N, M
@@ -132,49 +133,55 @@
 *
       KNT = KNT + 1
 *
-      ANORM = SLANGE( 'M', N, N, A, LDA, WORK )
-      BNORM = SLANGE( 'M', N, N, B, LDB, WORK )
+      ANORM = AB_SLANGE( 'M', N, N, A, LDA, WORK )
+      BNORM = AB_SLANGE( 'M', N, N, B, LDB, WORK )
 *
-      CALL SLACPY( 'FULL', N, N, A, LDA, AF, LDA )
-      CALL SLACPY( 'FULL', N, N, B, LDB, BF, LDB )
+      CALL AB_SLACPY( 'FULL', N, N, A, LDA, AF, LDA )
+      CALL AB_SLACPY( 'FULL', N, N, B, LDB, BF, LDB )
 *
-      CALL SGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL AB_SGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
      $             WORK, INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 1 ) = KNT
       END IF
 *
-      CALL SLACPY( 'FULL', N, M, VL, LDVL, VLF, LDVL )
-      CALL SLACPY( 'FULL', N, M, VR, LDVR, VRF, LDVR )
+      CALL AB_SLACPY( 'FULL', N, M, VL, LDVL, VLF, LDVL )
+      CALL AB_SLACPY( 'FULL', N, M, VR, LDVR, VRF, LDVR )
 *
-      CALL SGGBAK( 'B', 'L', N, ILO, IHI, LSCALE, RSCALE, M, VL, LDVL,
+      CALL AB_SGGBAK( 'B', 'L', N, ILO, IHI, LSCALE, RSCALE, M, VL, LDVL
+     $,
      $             INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 2 ) = KNT
       END IF
 *
-      CALL SGGBAK( 'B', 'R', N, ILO, IHI, LSCALE, RSCALE, M, VR, LDVR,
+      CALL AB_SGGBAK( 'B', 'R', N, ILO, IHI, LSCALE, RSCALE, M, VR, LDVR
+     $,
      $             INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 3 ) = KNT
       END IF
 *
-*     Test of SGGBAK
+*     Test of AB_SGGBAK
 *
-*     Check tilde(VL)'*A*tilde(VR) - VL'*tilde(A)*VR
-*     where tilde(A) denotes the transformed matrix.
+*     Check tiAB_LDE(VL)'*A*tiAB_LDE(VR) - VL'*tiAB_LDE(A)*VR
+*     where tiAB_LDE(A) denotes the transformed matrix.
 *
-      CALL SGEMM( 'N', 'N', N, M, N, ONE, AF, LDA, VR, LDVR, ZERO, WORK,
+      CALL AB_SGEMM( 'N', 'N', N, M, N, ONE, AF, LDA, VR, LDVR, ZERO, WO
+     $RK,
      $            LDWORK )
-      CALL SGEMM( 'T', 'N', M, M, N, ONE, VL, LDVL, WORK, LDWORK, ZERO,
-     $            E, LDE )
+      CALL AB_SGEMM( 'T', 'N', M, M, N, ONE, VL, LDVL, WORK, LDWORK, ZER
+     $O,
+     $            E, AB_LDE )
 *
-      CALL SGEMM( 'N', 'N', N, M, N, ONE, A, LDA, VRF, LDVR, ZERO, WORK,
+      CALL AB_SGEMM( 'N', 'N', N, M, N, ONE, A, LDA, VRF, LDVR, ZERO, WO
+     $RK,
      $            LDWORK )
-      CALL SGEMM( 'T', 'N', M, M, N, ONE, VLF, LDVL, WORK, LDWORK, ZERO,
+      CALL AB_SGEMM( 'T', 'N', M, M, N, ONE, VLF, LDVL, WORK, LDWORK, ZE
+     $RO,
      $            F, LDF )
 *
       VMAX = ZERO
@@ -189,16 +196,20 @@
          RMAX = VMAX
       END IF
 *
-*     Check tilde(VL)'*B*tilde(VR) - VL'*tilde(B)*VR
+*     Check tiAB_LDE(VL)'*B*tiAB_LDE(VR) - VL'*tiAB_LDE(B)*VR
 *
-      CALL SGEMM( 'N', 'N', N, M, N, ONE, BF, LDB, VR, LDVR, ZERO, WORK,
+      CALL AB_SGEMM( 'N', 'N', N, M, N, ONE, BF, LDB, VR, LDVR, ZERO, WO
+     $RK,
      $            LDWORK )
-      CALL SGEMM( 'T', 'N', M, M, N, ONE, VL, LDVL, WORK, LDWORK, ZERO,
-     $            E, LDE )
+      CALL AB_SGEMM( 'T', 'N', M, M, N, ONE, VL, LDVL, WORK, LDWORK, ZER
+     $O,
+     $            E, AB_LDE )
 *
-      CALL SGEMM( 'N', 'N', N, M, N, ONE, B, LDB, VRF, LDVR, ZERO, WORK,
+      CALL AB_SGEMM( 'N', 'N', N, M, N, ONE, B, LDB, VRF, LDVR, ZERO, WO
+     $RK,
      $            LDWORK )
-      CALL SGEMM( 'T', 'N', M, M, N, ONE, VLF, LDVL, WORK, LDWORK, ZERO,
+      CALL AB_SGEMM( 'T', 'N', M, M, N, ONE, VLF, LDVL, WORK, LDWORK, ZE
+     $RO,
      $            F, LDF )
 *
       VMAX = ZERO
@@ -218,16 +229,16 @@
   100 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of SGGBAK .. ' )
+ 9999 FORMAT( 1X, '.. test output of AB_SGGBAK .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( ' value of largest test error                  =', E12.3 )
       WRITE( NOUT, FMT = 9997 )LMAX( 1 )
- 9997 FORMAT( ' example number where SGGBAL info is not 0    =', I4 )
+ 9997 FORMAT( ' example number where AB_SGGBAL info is not 0    =', I4 )
       WRITE( NOUT, FMT = 9996 )LMAX( 2 )
- 9996 FORMAT( ' example number where SGGBAK(L) info is not 0 =', I4 )
+ 9996 FORMAT( ' example number where AB_SGGBAK(L) info is not 0 =', I4 )
       WRITE( NOUT, FMT = 9995 )LMAX( 3 )
- 9995 FORMAT( ' example number where SGGBAK(R) info is not 0 =', I4 )
+ 9995 FORMAT( ' example number where AB_SGGBAK(R) info is not 0 =', I4 )
       WRITE( NOUT, FMT = 9994 )LMAX( 4 )
  9994 FORMAT( ' example number having largest error          =', I4 )
       WRITE( NOUT, FMT = 9992 )NINFO
@@ -237,6 +248,6 @@
 *
       RETURN
 *
-*     End of SCHKGK
+*     End of AB_SCHKGK
 *
       END

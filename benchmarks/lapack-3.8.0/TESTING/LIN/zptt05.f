@@ -1,4 +1,4 @@
-*> \brief \b ZPTT05
+*> \brief \b AB_ZPTT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
+*       SUBROUTINE AB_ZPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
 *                          FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> ZPTT05 tests the error bounds from iterative refinement for the
+*> AB_ZPTT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> Hermitian tridiagonal matrix of order n.
 *>
@@ -147,7 +147,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
+      SUBROUTINE AB_ZPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
      $                   FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -176,9 +176,9 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           IZAMAX, DLAMCH
+      INTEGER            AB_IZAMAX
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_IZAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -199,8 +199,8 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       NZ = 4
 *
@@ -210,7 +210,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = IZAMAX( N, X( 1, J ), 1 )
+         IMAX = AB_IZAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -264,6 +264,6 @@
 *
       RETURN
 *
-*     End of ZPTT05
+*     End of AB_ZPTT05
 *
       END

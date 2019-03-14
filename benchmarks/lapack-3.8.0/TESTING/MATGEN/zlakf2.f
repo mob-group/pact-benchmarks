@@ -1,4 +1,4 @@
-*> \brief \b ZLAKF2
+*> \brief \b AB_ZLAKF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
+*       SUBROUTINE AB_ZLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDZ, M, N
@@ -103,7 +103,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE ZLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
+      SUBROUTINE AB_ZLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,7 +128,7 @@
       INTEGER            I, IK, J, JK, L, MN, MN2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASET
+      EXTERNAL           AB_ZLASET
 *     ..
 *     .. Executable Statements ..
 *
@@ -136,7 +136,7 @@
 *
       MN = M*N
       MN2 = 2*MN
-      CALL ZLASET( 'Full', MN2, MN2, ZERO, ZERO, Z, LDZ )
+      CALL AB_ZLASET( 'Full', MN2, MN2, ZERO, ZERO, Z, LDZ )
 *
       IK = 1
       DO 50 L = 1, N
@@ -186,6 +186,6 @@
 *
       RETURN
 *
-*     End of ZLAKF2
+*     End of AB_ZLAKF2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZDRVEV
+*> \brief \b AB_ZDRVEV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_ZDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, W, W1, VL, LDVL, VR, LDVR,
 *                          LRE, LDLRE, RESULT, WORK, NWORK, RWORK, IWORK,
 *                          INFO )
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*>    ZDRVEV  checks the nonsymmetric eigenvalue problem driver ZGEEV.
+*>    AB_ZDRVEV  checks the nonsymmetric eigenvalue problem driver AB_ZGEEV.
 *>
-*>    When ZDRVEV is called, a number of matrix "sizes" ("n's") and a
+*>    When AB_ZDRVEV is called, a number of matrix "sizes" ("n's") and a
 *>    number of matrix "types" are specified.  For each size ("n")
 *>    and each type of matrix, one matrix will be generated and used
 *>    to test the nonsymmetric eigenroutines.  For each matrix, 7
@@ -162,7 +162,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          ZDRVEV does nothing.  It must be at least zero.
+*>          AB_ZDRVEV does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -176,7 +176,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, ZDRVEV
+*>          The number of elements in DOTYPE.   If it is zero, AB_ZDRVEV
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -206,7 +206,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to ZDRVEV to continue the same random number
+*>          next call to AB_ZDRVEV to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -245,7 +245,7 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX*16 array, dimension (LDA, max(NN))
-*>          Another copy of the test matrix A, modified by ZGEEV.
+*>          Another copy of the test matrix A, modified by AB_ZGEEV.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -259,7 +259,7 @@
 *> \verbatim
 *>          W1 is COMPLEX*16 array, dimension (max(NN))
 *>          Like W, this array contains the eigenvalues of A,
-*>          but those computed when ZGEEV only computes a partial
+*>          but those computed when AB_ZGEEV only computes a partial
 *>          eigendecomposition, i.e. not the eigenvalues and left
 *>          and right eigenvectors.
 *> \endverbatim
@@ -343,7 +343,7 @@
 *>          -16: LDVR < 1 or LDVR < NMAX, where NMAX is max( NN(j) ).
 *>          -18: LDLRE < 1 or LDLRE < NMAX, where NMAX is max( NN(j) ).
 *>          -21: NWORK too small.
-*>          If  ZLATMR, CLATMS, CLATME or ZGEEV returns an error code,
+*>          If  AB_ZLATMR, AB_CLATMS, AB_CLATME or AB_ZGEEV returns an error code,
 *>              the absolute value of it is returned.
 *>
 *>-----------------------------------------------------------------------
@@ -386,7 +386,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_ZDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, W, W1, VL, LDVL, VR, LDVR,
      $                   LRE, LDLRE, RESULT, WORK, NWORK, RWORK, IWORK,
      $                   INFO )
@@ -441,12 +441,13 @@
       COMPLEX*16         DUM( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZNRM2
-      EXTERNAL           DLAMCH, DZNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZNRM2
+      EXTERNAL           AB_DLAMCH, AB_DZNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLASUM, XERBLA, ZGEEV, ZGET22, ZLACPY,
-     $                   ZLASET, ZLATME, ZLATMR, ZLATMS
+      EXTERNAL           AB_DLABAD, AB_DLASUM, AB_XERBLA, AB_ZGEEV, AB_Z
+     $GET22, AB_ZLACPY,
+     $                   AB_ZLASET, AB_ZLATME, AB_ZLATMR, AB_ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, MAX, MIN, SQRT
@@ -505,7 +506,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRVEV', -INFO )
+         CALL AB_XERBLA( 'AB_ZDRVEV', -INFO )
          RETURN
       END IF
 *
@@ -516,10 +517,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      CALL AB_DLABAD( UNFL, OVFL )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP
@@ -586,7 +587,7 @@
 *
    60       CONTINUE
 *
-            CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -619,7 +620,8 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -627,7 +629,8 @@
 *
 *              Hermitian, eigenvalues specified
 *
-               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, N, N, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -643,7 +646,7 @@
                   CONDS = ZERO
                END IF
 *
-               CALL ZLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
+               CALL AB_ZLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
      $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N, ANORM,
      $                      A, LDA, WORK( 2*N+1 ), IINFO )
 *
@@ -651,7 +654,8 @@
 *
 *              Diagonal, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -660,7 +664,8 @@
 *
 *              Symmetric, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -669,17 +674,19 @@
 *
 *              General, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
                IF( N.GE.4 ) THEN
-                  CALL ZLASET( 'Full', 2, N, CZERO, CZERO, A, LDA )
-                  CALL ZLASET( 'Full', N-3, 1, CZERO, CZERO, A( 3, 1 ),
+                  CALL AB_ZLASET( 'Full', 2, N, CZERO, CZERO, A, LDA )
+                  CALL AB_ZLASET( 'Full', N-3, 1, CZERO, CZERO, A( 3, 1 
+     $),
      $                         LDA )
-                  CALL ZLASET( 'Full', N-3, 2, CZERO, CZERO,
+                  CALL AB_ZLASET( 'Full', N-3, 2, CZERO, CZERO,
      $                         A( 3, N-1 ), LDA )
-                  CALL ZLASET( 'Full', 1, N, CZERO, CZERO, A( N, 1 ),
+                  CALL AB_ZLASET( 'Full', 1, N, CZERO, CZERO, A( N, 1 ),
      $                         LDA )
                END IF
 *
@@ -687,7 +694,8 @@
 *
 *              Triangular, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -724,12 +732,14 @@
 *
 *              Compute eigenvalues and eigenvectors, and test them
 *
-               CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
-               CALL ZGEEV( 'V', 'V', N, H, LDA, W, VL, LDVL, VR, LDVR,
+               CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
+               CALL AB_ZGEEV( 'V', 'V', N, H, LDA, W, VL, LDVL, VR, LDVR
+     $,
      $                     WORK, NNWORK, RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   RESULT( 1 ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9993 )'ZGEEV1', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9993 )'AB_ZGEEV1', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 220
@@ -737,20 +747,22 @@
 *
 *              Do Test (1)
 *
-               CALL ZGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, W, WORK,
+               CALL AB_ZGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, W, WO
+     $RK,
      $                      RWORK, RES )
                RESULT( 1 ) = RES( 1 )
 *
 *              Do Test (2)
 *
-               CALL ZGET22( 'C', 'N', 'C', N, A, LDA, VL, LDVL, W, WORK,
+               CALL AB_ZGET22( 'C', 'N', 'C', N, A, LDA, VL, LDVL, W, WO
+     $RK,
      $                      RWORK, RES )
                RESULT( 2 ) = RES( 1 )
 *
 *              Do Test (3)
 *
                DO 120 J = 1, N
-                  TNRM = DZNRM2( N, VR( 1, J ), 1 )
+                  TNRM = AB_DZNRM2( N, VR( 1, J ), 1 )
                   RESULT( 3 ) = MAX( RESULT( 3 ),
      $                          MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
                   VMX = ZERO
@@ -770,7 +782,7 @@
 *              Do Test (4)
 *
                DO 140 J = 1, N
-                  TNRM = DZNRM2( N, VL( 1, J ), 1 )
+                  TNRM = AB_DZNRM2( N, VL( 1, J ), 1 )
                   RESULT( 4 ) = MAX( RESULT( 4 ),
      $                          MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
                   VMX = ZERO
@@ -789,12 +801,13 @@
 *
 *              Compute eigenvalues only, and test them
 *
-               CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
-               CALL ZGEEV( 'N', 'N', N, H, LDA, W1, DUM, 1, DUM, 1,
+               CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
+               CALL AB_ZGEEV( 'N', 'N', N, H, LDA, W1, DUM, 1, DUM, 1,
      $                     WORK, NNWORK, RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   RESULT( 1 ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9993 )'ZGEEV2', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9993 )'AB_ZGEEV2', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 220
@@ -809,12 +822,14 @@
 *
 *              Compute eigenvalues and right eigenvectors, and test them
 *
-               CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
-               CALL ZGEEV( 'N', 'V', N, H, LDA, W1, DUM, 1, LRE, LDLRE,
+               CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
+               CALL AB_ZGEEV( 'N', 'V', N, H, LDA, W1, DUM, 1, LRE, LDLR
+     $E,
      $                     WORK, NNWORK, RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   RESULT( 1 ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9993 )'ZGEEV3', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9993 )'AB_ZGEEV3', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 220
@@ -838,12 +853,14 @@
 *
 *              Compute eigenvalues and left eigenvectors, and test them
 *
-               CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
-               CALL ZGEEV( 'V', 'N', N, H, LDA, W1, LRE, LDLRE, DUM, 1,
+               CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
+               CALL AB_ZGEEV( 'V', 'N', N, H, LDA, W1, LRE, LDLRE, DUM, 
+     $1,
      $                     WORK, NNWORK, RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   RESULT( 1 ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9993 )'ZGEEV4', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9993 )'AB_ZGEEV4', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 220
@@ -905,11 +922,11 @@
 *
 *     Summary
 *
-      CALL DLASUM( PATH, NOUNIT, NERRS, NTESTT )
+      CALL AB_DLASUM( PATH, NOUNIT, NERRS, NTESTT )
 *
  9999 FORMAT( / 1X, A3, ' -- Complex Eigenvalue-Eigenvector ',
      $      'Decomposition Driver', /
-     $      ' Matrix types (see ZDRVEV for details): ' )
+     $      ' Matrix types (see AB_ZDRVEV for details): ' )
 *
  9998 FORMAT( / ' Special Matrices:', / '  1=Zero matrix.             ',
      $      '           ', '  5=Diagonal: geometr. spaced entries.',
@@ -943,11 +960,11 @@
      $      '  1/ulp otherwise', / )
  9994 FORMAT( ' N=', I5, ', IWK=', I2, ', seed=', 4( I4, ',' ),
      $      ' type ', I2, ', test(', I2, ')=', G10.3 )
- 9993 FORMAT( ' ZDRVEV: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9993 FORMAT( ' AB_ZDRVEV: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of ZDRVEV
+*     End of AB_ZDRVEV
 *
       END

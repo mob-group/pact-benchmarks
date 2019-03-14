@@ -1,15 +1,15 @@
-c     zdotusub.f
+c     AB_AB_ZDOTUsub.f
 c
-c     The program is a fortran wrapper for zdotu.
+c     The program is a fortran wrapper for AB_ZDOTU.
 c     Witten by Keita Teranishi.  2/11/1998
 c
-      subroutine zdotusub(n,x,incx,y,incy,dotu)
+      subroutine AB_AB_ZDOTUsub(n,x,incx,y,incy,dotu)
 c
-      external zdotu
-      double complex zdotu,dotu
+      external AB_ZDOTU
+      double complex AB_ZDOTU,dotu
       integer n,incx,incy
       double complex x(*),y(*)
 c
-      dotu=zdotu(n,x,incx,y,incy)
+      dotu=AB_ZDOTU(n,x,incx,y,incy)
       return
       end

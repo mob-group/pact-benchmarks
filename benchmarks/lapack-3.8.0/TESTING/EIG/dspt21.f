@@ -1,4 +1,4 @@
-*> \brief \b DSPT21
+*> \brief \b AB_DSPT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
+*       SUBROUTINE AB_DSPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
 *                          TAU, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DSPT21  generally checks a decomposition of the form
+*> AB_DSPT21  generally checks a decomposition of the form
 *>
 *>         A = U S U'
 *>
@@ -34,9 +34,9 @@
 *> is orthogonal, and S is diagonal (if KBAND=0) or symmetric
 *> tridiagonal (if KBAND=1).  If ITYPE=1, then U is represented as a
 *> dense matrix, otherwise the U is expressed as a product of
-*> Householder transformations, whose vectors are stored in the array
+*> HousehoAB_LDEr transformations, whose vectors are stored in the array
 *> "V" and whose scaling constants are in "TAU"; we shall use the
-*> letter "V" to refer to the product of Householder transformations
+*> letter "V" to refer to the product of HousehoAB_LDEr transformations
 *> (which should be equal to U).
 *>
 *> Specifically, if ITYPE=1, then:
@@ -66,7 +66,7 @@
 *> AP.
 *>
 *> For ITYPE > 1, the transformation U is expressed as a product
-*> of Householder transformations:
+*> of HousehoAB_LDEr transformations:
 *>
 *>    If UPLO='U', then  V = H(n-1)...H(1),  where
 *>
@@ -95,11 +95,11 @@
 *>          1: U expressed as a dense orthogonal matrix:
 *>             RESULT(1) = | A - U S U' | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU' | / ( n ulp )
 *>
-*>          2: U expressed as a product V of Housholder transformations:
+*>          2: U expressed as a product V of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | A - V S V' | / ( |A| n ulp )
 *>
 *>          3: U expressed both as a dense orthogonal matrix and
-*>             as a product of Housholder transformations:
+*>             as a product of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | I - VU' | / ( n ulp )
 *> \endverbatim
 *>
@@ -115,7 +115,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, DSPT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_DSPT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -170,7 +170,7 @@
 *> \verbatim
 *>          VP is DOUBLE PRECISION array, dimension (N*(N+1)/2)
 *>          If ITYPE=2 or 3, the columns of this array contain the
-*>          Householder vectors used to describe the orthogonal matrix
+*>          HousehoAB_LDEr vectors used to describe the orthogonal matrix
 *>          in the decomposition, as described in purpose.
 *>          *NOTE* If ITYPE=2 or 3, V is modified and restored.  The
 *>          subdiagonal (if UPLO='L') or the superdiagonal (if UPLO='U')
@@ -183,7 +183,7 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)' in the Householder transformation H(j) of
+*>          v(j) v(j)' in the HousehoAB_LDEr transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *> \endverbatim
@@ -216,7 +216,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DSPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
+      SUBROUTINE AB_DSPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
      $                   TAU, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -248,13 +248,15 @@
       DOUBLE PRECISION   ANORM, TEMP, ULP, UNFL, VSAVE, WNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT, DLAMCH, DLANGE, DLANSP
-      EXTERNAL           LSAME, DDOT, DLAMCH, DLANGE, DLANSP
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DLANGE, AB_DLANSP
+      EXTERNAL           AB_LSAME, AB_DDOT, AB_DLAMCH, AB_DLANGE, AB_DLA
+     $NSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGEMM, DLACPY, DLASET, DOPMTR,
-     $                   DSPMV, DSPR, DSPR2
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGEMM, AB_DLACPY, AB_DLA
+     $SET, AB_DOPMTR,
+     $                   AB_DSPMV, AB_DSPR, AB_AB_DSPR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -271,7 +273,7 @@
 *
       LAP = ( N*( N+1 ) ) / 2
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -279,8 +281,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -296,7 +298,7 @@
       IF( ITYPE.EQ.3 ) THEN
          ANORM = ONE
       ELSE
-         ANORM = MAX( DLANSP( '1', CUPLO, N, AP, WORK ), UNFL )
+         ANORM = MAX( AB_DLANSP( '1', CUPLO, N, AP, WORK ), UNFL )
       END IF
 *
 *     Compute error matrix:
@@ -305,26 +307,27 @@
 *
 *        ITYPE=1: error = A - U S U'
 *
-         CALL DLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
-         CALL DCOPY( LAP, AP, 1, WORK, 1 )
+         CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+         CALL AB_DCOPY( LAP, AP, 1, WORK, 1 )
 *
          DO 10 J = 1, N
-            CALL DSPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
+            CALL AB_DSPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
             DO 20 J = 1, N - 1
-               CALL DSPR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, J+1 ),
+               CALL AB_AB_DSPR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, 
+     $J+1 ),
      $                     1, WORK )
    20       CONTINUE
          END IF
-         WNORM = DLANSP( '1', CUPLO, N, WORK, WORK( N**2+1 ) )
+         WNORM = AB_DLANSP( '1', CUPLO, N, WORK, WORK( N**2+1 ) )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        ITYPE=2: error = V S V' - A
 *
-         CALL DLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+         CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
 *
          IF( LOWER ) THEN
             WORK( LAP ) = D( N )
@@ -341,13 +344,15 @@
                IF( TAU( J ).NE.ZERO ) THEN
                   VSAVE = VP( JP+J+1 )
                   VP( JP+J+1 ) = ONE
-                  CALL DSPMV( 'L', N-J, ONE, WORK( JP1+J+1 ),
+                  CALL AB_DSPMV( 'L', N-J, ONE, WORK( JP1+J+1 ),
      $                        VP( JP+J+1 ), 1, ZERO, WORK( LAP+1 ), 1 )
-                  TEMP = -HALF*TAU( J )*DDOT( N-J, WORK( LAP+1 ), 1,
+                  TEMP = -HALF*TAU( J )*AB_DDOT( N-J, WORK( LAP+1 ), 1,
      $                   VP( JP+J+1 ), 1 )
-                  CALL DAXPY( N-J, TEMP, VP( JP+J+1 ), 1, WORK( LAP+1 ),
+                  CALL AB_DAXPY( N-J, TEMP, VP( JP+J+1 ), 1, WORK( LAP+1
+     $ ),
      $                        1 )
-                  CALL DSPR2( 'L', N-J, -TAU( J ), VP( JP+J+1 ), 1,
+                  CALL AB_AB_DSPR2( 'L', N-J, -TAU( J ), VP( JP+J+1 ), 1
+     $,
      $                        WORK( LAP+1 ), 1, WORK( JP1+J+1 ) )
                   VP( JP+J+1 ) = VSAVE
                END IF
@@ -368,13 +373,14 @@
                IF( TAU( J ).NE.ZERO ) THEN
                   VSAVE = VP( JP1+J )
                   VP( JP1+J ) = ONE
-                  CALL DSPMV( 'U', J, ONE, WORK, VP( JP1+1 ), 1, ZERO,
+                  CALL AB_DSPMV( 'U', J, ONE, WORK, VP( JP1+1 ), 1, ZERO
+     $,
      $                        WORK( LAP+1 ), 1 )
-                  TEMP = -HALF*TAU( J )*DDOT( J, WORK( LAP+1 ), 1,
+                  TEMP = -HALF*TAU( J )*AB_DDOT( J, WORK( LAP+1 ), 1,
      $                   VP( JP1+1 ), 1 )
-                  CALL DAXPY( J, TEMP, VP( JP1+1 ), 1, WORK( LAP+1 ),
+                  CALL AB_DAXPY( J, TEMP, VP( JP1+1 ), 1, WORK( LAP+1 ),
      $                        1 )
-                  CALL DSPR2( 'U', J, -TAU( J ), VP( JP1+1 ), 1,
+                  CALL AB_AB_DSPR2( 'U', J, -TAU( J ), VP( JP1+1 ), 1,
      $                        WORK( LAP+1 ), 1, WORK )
                   VP( JP1+J ) = VSAVE
                END IF
@@ -385,7 +391,7 @@
          DO 70 J = 1, LAP
             WORK( J ) = WORK( J ) - AP( J )
    70    CONTINUE
-         WNORM = DLANSP( '1', CUPLO, N, WORK, WORK( LAP+1 ) )
+         WNORM = AB_DLANSP( '1', CUPLO, N, WORK, WORK( LAP+1 ) )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -393,8 +399,8 @@
 *
          IF( N.LT.2 )
      $      RETURN
-         CALL DLACPY( ' ', N, N, U, LDU, WORK, N )
-         CALL DOPMTR( 'R', CUPLO, 'T', N, N, VP, TAU, WORK, N,
+         CALL AB_DLACPY( ' ', N, N, U, LDU, WORK, N )
+         CALL AB_DOPMTR( 'R', CUPLO, 'T', N, N, VP, TAU, WORK, N,
      $                WORK( N**2+1 ), IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = TEN / ULP
@@ -405,7 +411,7 @@
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
    80    CONTINUE
 *
-         WNORM = DLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
+         WNORM = AB_DLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
       END IF
 *
       IF( ANORM.GT.WNORM ) THEN
@@ -423,19 +429,20 @@
 *     Compute  UU' - I
 *
       IF( ITYPE.EQ.1 ) THEN
-         CALL DGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+         CALL AB_DGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WO
+     $RK,
      $               N )
 *
          DO 90 J = 1, N
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
    90    CONTINUE
 *
-         RESULT( 2 ) = MIN( DLANGE( '1', N, N, WORK, N,
+         RESULT( 2 ) = MIN( AB_DLANGE( '1', N, N, WORK, N,
      $                 WORK( N**2+1 ) ), DBLE( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of DSPT21
+*     End of AB_DSPT21
 *
       END

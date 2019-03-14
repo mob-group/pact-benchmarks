@@ -1,4 +1,4 @@
-*> \brief \b SERRBD
+*> \brief \b AB_SERRBD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SERRBD( PATH, NUNIT )
+*       SUBROUTINE AB_SERRBD( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> SERRBD tests the error exits for SGEBD2, SGEBRD, SORGBR, SORMBR,
-*> SBDSQR, SBDSDC and SBDSVDX.
+*> AB_SERRBD tests the error exits for AB_SGEBD2, AB_SGEBRD, AB_SORGBR, AB_SORMBR,
+*> AB_SBDSQR, AB_SBDSDC and AB_SBDSVDX.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SERRBD( PATH, NUNIT )
+      SUBROUTINE AB_SERRBD( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,12 +85,13 @@
      $                   V( NMAX, NMAX ), W( LW )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, SBDSDC, SBDSQR, SBDSVDX, SGEBD2,
-     $                   SGEBRD, SORGBR, SORMBR
+      EXTERNAL           AB_CHKXER, AB_SBDSDC, AB_SBDSQR, AB_SBDSVDX, AB
+     $_SGEBD2,
+     $                   AB_SGEBRD, AB_SORGBR, AB_SORMBR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -122,240 +123,244 @@
 *
 *     Test error exits of the SVD routines.
 *
-      IF( LSAMEN( 2, C2, 'BD' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'BD' ) ) THEN
 *
-*        SGEBRD
+*        AB_SGEBRD
 *
-         SRNAMT = 'SGEBRD'
+         SRNAMT = 'AB_SGEBRD'
          INFOT = 1
-         CALL SGEBRD( -1, 0, A, 1, D, E, TQ, TP, W, 1, INFO )
-         CALL CHKXER( 'SGEBRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBRD( -1, 0, A, 1, D, E, TQ, TP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGEBRD( 0, -1, A, 1, D, E, TQ, TP, W, 1, INFO )
-         CALL CHKXER( 'SGEBRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBRD( 0, -1, A, 1, D, E, TQ, TP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBRD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SGEBRD( 2, 1, A, 1, D, E, TQ, TP, W, 2, INFO )
-         CALL CHKXER( 'SGEBRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBRD( 2, 1, A, 1, D, E, TQ, TP, W, 2, INFO )
+         CALL AB_CHKXER( 'AB_SGEBRD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL SGEBRD( 2, 1, A, 2, D, E, TQ, TP, W, 1, INFO )
-         CALL CHKXER( 'SGEBRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBRD( 2, 1, A, 2, D, E, TQ, TP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBRD', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        SGEBD2
+*        AB_SGEBD2
 *
-         SRNAMT = 'SGEBD2'
+         SRNAMT = 'AB_SGEBD2'
          INFOT = 1
-         CALL SGEBD2( -1, 0, A, 1, D, E, TQ, TP, W, INFO )
-         CALL CHKXER( 'SGEBD2', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBD2( -1, 0, A, 1, D, E, TQ, TP, W, INFO )
+         CALL AB_CHKXER( 'AB_SGEBD2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGEBD2( 0, -1, A, 1, D, E, TQ, TP, W, INFO )
-         CALL CHKXER( 'SGEBD2', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBD2( 0, -1, A, 1, D, E, TQ, TP, W, INFO )
+         CALL AB_CHKXER( 'AB_SGEBD2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SGEBD2( 2, 1, A, 1, D, E, TQ, TP, W, INFO )
-         CALL CHKXER( 'SGEBD2', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBD2( 2, 1, A, 1, D, E, TQ, TP, W, INFO )
+         CALL AB_CHKXER( 'AB_SGEBD2', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        SORGBR
+*        AB_SORGBR
 *
-         SRNAMT = 'SORGBR'
+         SRNAMT = 'AB_SORGBR'
          INFOT = 1
-         CALL SORGBR( '/', 0, 0, 0, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( '/', 0, 0, 0, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SORGBR( 'Q', -1, 0, 0, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'Q', -1, 0, 0, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORGBR( 'Q', 0, -1, 0, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'Q', 0, -1, 0, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORGBR( 'Q', 0, 1, 0, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'Q', 0, 1, 0, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORGBR( 'Q', 1, 0, 1, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'Q', 1, 0, 1, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORGBR( 'P', 1, 0, 0, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'P', 1, 0, 0, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORGBR( 'P', 0, 1, 1, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'P', 0, 1, 1, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SORGBR( 'Q', 0, 0, -1, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'Q', 0, 0, -1, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL SORGBR( 'Q', 2, 1, 1, A, 1, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'Q', 2, 1, 1, A, 1, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL SORGBR( 'Q', 2, 2, 1, A, 2, TQ, W, 1, INFO )
-         CALL CHKXER( 'SORGBR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGBR( 'Q', 2, 2, 1, A, 2, TQ, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGBR', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        SORMBR
+*        AB_SORMBR
 *
-         SRNAMT = 'SORMBR'
+         SRNAMT = 'AB_SORMBR'
          INFOT = 1
-         CALL SORMBR( '/', 'L', 'T', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( '/', 'L', 'T', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SORMBR( 'Q', '/', 'T', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'Q', '/', 'T', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORMBR( 'Q', 'L', '/', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'Q', 'L', '/', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SORMBR( 'Q', 'L', 'T', -1, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'Q', 'L', 'T', -1, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SORMBR( 'Q', 'L', 'T', 0, -1, 0, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'Q', 'L', 'T', 0, -1, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL SORMBR( 'Q', 'L', 'T', 0, 0, -1, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'Q', 'L', 'T', 0, 0, -1, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SORMBR( 'Q', 'L', 'T', 2, 0, 0, A, 1, TQ, U, 2, W, 1,
+         CALL AB_SORMBR( 'Q', 'L', 'T', 2, 0, 0, A, 1, TQ, U, 2, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SORMBR( 'Q', 'R', 'T', 0, 2, 0, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'Q', 'R', 'T', 0, 2, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SORMBR( 'P', 'L', 'T', 2, 0, 2, A, 1, TQ, U, 2, W, 1,
+         CALL AB_SORMBR( 'P', 'L', 'T', 2, 0, 2, A, 1, TQ, U, 2, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SORMBR( 'P', 'R', 'T', 0, 2, 2, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'P', 'R', 'T', 0, 2, 2, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL SORMBR( 'Q', 'R', 'T', 2, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'Q', 'R', 'T', 2, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL SORMBR( 'Q', 'L', 'T', 0, 2, 0, A, 1, TQ, U, 1, W, 1,
+         CALL AB_SORMBR( 'Q', 'L', 'T', 0, 2, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL SORMBR( 'Q', 'R', 'T', 2, 0, 0, A, 1, TQ, U, 2, W, 1,
+         CALL AB_SORMBR( 'Q', 'R', 'T', 2, 0, 0, A, 1, TQ, U, 2, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMBR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMBR', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
-*        SBDSQR
+*        AB_SBDSQR
 *
-         SRNAMT = 'SBDSQR'
+         SRNAMT = 'AB_SBDSQR'
          INFOT = 1
-         CALL SBDSQR( '/', 0, 0, 0, 0, D, E, V, 1, U, 1, A, 1, W, INFO )
-         CALL CHKXER( 'SBDSQR', INFOT, NOUT, LERR, OK )
+         CALL AB_SBDSQR( '/', 0, 0, 0, 0, D, E, V, 1, U, 1, A, 1, W, INF
+     $O )
+         CALL AB_CHKXER( 'AB_SBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SBDSQR( 'U', -1, 0, 0, 0, D, E, V, 1, U, 1, A, 1, W,
+         CALL AB_SBDSQR( 'U', -1, 0, 0, 0, D, E, V, 1, U, 1, A, 1, W,
      $                INFO )
-         CALL CHKXER( 'SBDSQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SBDSQR( 'U', 0, -1, 0, 0, D, E, V, 1, U, 1, A, 1, W,
+         CALL AB_SBDSQR( 'U', 0, -1, 0, 0, D, E, V, 1, U, 1, A, 1, W,
      $                INFO )
-         CALL CHKXER( 'SBDSQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SBDSQR( 'U', 0, 0, -1, 0, D, E, V, 1, U, 1, A, 1, W,
+         CALL AB_SBDSQR( 'U', 0, 0, -1, 0, D, E, V, 1, U, 1, A, 1, W,
      $                INFO )
-         CALL CHKXER( 'SBDSQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SBDSQR( 'U', 0, 0, 0, -1, D, E, V, 1, U, 1, A, 1, W,
+         CALL AB_SBDSQR( 'U', 0, 0, 0, -1, D, E, V, 1, U, 1, A, 1, W,
      $                INFO )
-         CALL CHKXER( 'SBDSQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL SBDSQR( 'U', 2, 1, 0, 0, D, E, V, 1, U, 1, A, 1, W, INFO )
-         CALL CHKXER( 'SBDSQR', INFOT, NOUT, LERR, OK )
+         CALL AB_SBDSQR( 'U', 2, 1, 0, 0, D, E, V, 1, U, 1, A, 1, W, INF
+     $O )
+         CALL AB_CHKXER( 'AB_SBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL SBDSQR( 'U', 0, 0, 2, 0, D, E, V, 1, U, 1, A, 1, W, INFO )
-         CALL CHKXER( 'SBDSQR', INFOT, NOUT, LERR, OK )
+         CALL AB_SBDSQR( 'U', 0, 0, 2, 0, D, E, V, 1, U, 1, A, 1, W, INF
+     $O )
+         CALL AB_CHKXER( 'AB_SBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL SBDSQR( 'U', 2, 0, 0, 1, D, E, V, 1, U, 1, A, 1, W, INFO )
-         CALL CHKXER( 'SBDSQR', INFOT, NOUT, LERR, OK )
+         CALL AB_SBDSQR( 'U', 2, 0, 0, 1, D, E, V, 1, U, 1, A, 1, W, INF
+     $O )
+         CALL AB_CHKXER( 'AB_SBDSQR', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
-*        SBDSDC
+*        AB_SBDSDC
 *
-         SRNAMT = 'SBDSDC'
+         SRNAMT = 'AB_SBDSDC'
          INFOT = 1
-         CALL SBDSDC( '/', 'N', 0, D, E, U, 1, V, 1, Q, IQ, W, IW,
+         CALL AB_SBDSDC( '/', 'N', 0, D, E, U, 1, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL CHKXER( 'SBDSDC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSDC', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SBDSDC( 'U', '/', 0, D, E, U, 1, V, 1, Q, IQ, W, IW,
+         CALL AB_SBDSDC( 'U', '/', 0, D, E, U, 1, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL CHKXER( 'SBDSDC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSDC', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SBDSDC( 'U', 'N', -1, D, E, U, 1, V, 1, Q, IQ, W, IW,
+         CALL AB_SBDSDC( 'U', 'N', -1, D, E, U, 1, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL CHKXER( 'SBDSDC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSDC', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL SBDSDC( 'U', 'I', 2, D, E, U, 1, V, 1, Q, IQ, W, IW,
+         CALL AB_SBDSDC( 'U', 'I', 2, D, E, U, 1, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL CHKXER( 'SBDSDC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSDC', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL SBDSDC( 'U', 'I', 2, D, E, U, 2, V, 1, Q, IQ, W, IW,
+         CALL AB_SBDSDC( 'U', 'I', 2, D, E, U, 2, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL CHKXER( 'SBDSDC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSDC', INFOT, NOUT, LERR, OK )
          NT = NT + 5
 *
-*        SBDSVDX
+*        AB_SBDSVDX
 *
-         SRNAMT = 'SBDSVDX'
+         SRNAMT = 'AB_SBDSVDX'
          INFOT = 1
-         CALL SBDSVDX( 'X', 'N', 'A', 1, D, E, ZERO, ONE, 0, 0,
+         CALL AB_SBDSVDX( 'X', 'N', 'A', 1, D, E, ZERO, ONE, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SBDSVDX( 'U', 'X', 'A', 1, D, E, ZERO, ONE, 0, 0,
+         CALL AB_SBDSVDX( 'U', 'X', 'A', 1, D, E, ZERO, ONE, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SBDSVDX( 'U', 'V', 'X', 1, D, E, ZERO, ONE, 0, 0,
+         CALL AB_SBDSVDX( 'U', 'V', 'X', 1, D, E, ZERO, ONE, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SBDSVDX( 'U', 'V', 'A', -1, D, E, ZERO, ONE, 0, 0,
+         CALL AB_SBDSVDX( 'U', 'V', 'A', -1, D, E, ZERO, ONE, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL SBDSVDX( 'U', 'V', 'V', 2, D, E, -ONE, ZERO, 0, 0,
+         CALL AB_SBDSVDX( 'U', 'V', 'V', 2, D, E, -ONE, ZERO, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SBDSVDX( 'U', 'V', 'V', 2, D, E, ONE, ZERO, 0, 0,
+         CALL AB_SBDSVDX( 'U', 'V', 'V', 2, D, E, ONE, ZERO, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL SBDSVDX( 'L', 'V', 'I', 2, D, E, ZERO, ZERO, 0, 2,
+         CALL AB_SBDSVDX( 'L', 'V', 'I', 2, D, E, ZERO, ZERO, 0, 2,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL SBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 5, 2,
+         CALL AB_SBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 5, 2,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL SBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 2,
+         CALL AB_SBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 2,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL SBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 5,
+         CALL AB_SBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 5,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL SBDSVDX( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0,
+         CALL AB_SBDSVDX( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0,
      $                    NS, S, Q, 0, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL SBDSVDX( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0,
+         CALL AB_SBDSVDX( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0,
      $                    NS, S, Q, 2, W, IW, INFO)
-         CALL CHKXER( 'SBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SBDSVDX', INFOT, NOUT, LERR, OK )
          NT = NT + 12
       END IF
 *
@@ -374,6 +379,6 @@
 *
       RETURN
 *
-*     End of SERRBD
+*     End of AB_SERRBD
 *
       END

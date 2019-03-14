@@ -1,4 +1,4 @@
-*> \brief \b SGEMQRT
+*> \brief \b AB_AB_SGEMQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGEMQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgemqrt.f">
+*> Download AB_AB_SGEMQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SGEMQRT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgemqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SGEMQRT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgemqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SGEMQRT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGEMQRT( SIDE, TRANS, M, N, K, NB, V, LDV, T, LDT,
+*       SUBROUTINE AB_AB_SGEMQRT( SIDE, TRANS, M, N, K, NB, V, LDV, T, LDT,
 *                          C, LDC, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SGEMQRT overwrites the general real M-by-N matrix C with
+*> AB_AB_SGEMQRT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
@@ -46,7 +46,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(K) = I - V T V**T
 *>
-*> generated using the compact WY representation as returned by SGEQRT.
+*> generated using the compact WY representation as returned by AB_AB_SGEQRT.
 *>
 *> Q is of order M if SIDE = 'L' and of order N  if SIDE = 'R'.
 *> \endverbatim
@@ -94,7 +94,7 @@
 *>          NB is INTEGER
 *>          The block size used for the storage of T.  K >= NB >= 1.
 *>          This must be the same value of NB used to generate T
-*>          in CGEQRT.
+*>          in AB_AB_CGEQRT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -102,7 +102,7 @@
 *>          V is REAL array, dimension (LDV,K)
 *>          The i-th column must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          CGEQRT in the first K columns of its array argument A.
+*>          AB_AB_CGEQRT in the first K columns of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -117,7 +117,7 @@
 *> \verbatim
 *>          T is REAL array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by CGEQRT, stored as a NB-by-N matrix.
+*>          as returned by AB_AB_CGEQRT, stored as a NB-by-N matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -165,7 +165,8 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE SGEMQRT( SIDE, TRANS, M, N, K, NB, V, LDV, T, LDT,
+      SUBROUTINE AB_AB_SGEMQRT( SIDE, TRANS, M, N, K, NB, V, LDV, T, LDT
+     $,
      $                   C, LDC, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -189,11 +190,11 @@
       INTEGER            I, IB, LDWORK, KF, Q
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, SLARFB
+      EXTERNAL           AB_XERBLA, AB_AB_SLARFB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -203,10 +204,10 @@
 *     .. Test the input arguments ..
 *
       INFO   = 0
-      LEFT   = LSAME( SIDE,  'L' )
-      RIGHT  = LSAME( SIDE,  'R' )
-      TRAN   = LSAME( TRANS, 'T' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT   = AB_LSAME( SIDE,  'L' )
+      RIGHT  = AB_LSAME( SIDE,  'R' )
+      TRAN   = AB_LSAME( TRANS, 'T' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
 *
       IF( LEFT ) THEN
          LDWORK = MAX( 1, N )
@@ -236,7 +237,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGEMQRT', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SGEMQRT', -INFO )
          RETURN
       END IF
 *
@@ -248,7 +249,7 @@
 *
          DO I = 1, K, NB
             IB = MIN( NB, K-I+1 )
-            CALL SLARFB( 'L', 'T', 'F', 'C', M-I+1, N, IB,
+            CALL AB_AB_SLARFB( 'L', 'T', 'F', 'C', M-I+1, N, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( I, 1 ), LDC, WORK, LDWORK )
          END DO
@@ -257,7 +258,7 @@
 *
          DO I = 1, K, NB
             IB = MIN( NB, K-I+1 )
-            CALL SLARFB( 'R', 'N', 'F', 'C', M, N-I+1, IB,
+            CALL AB_AB_SLARFB( 'R', 'N', 'F', 'C', M, N-I+1, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( 1, I ), LDC, WORK, LDWORK )
          END DO
@@ -267,7 +268,7 @@
          KF = ((K-1)/NB)*NB+1
          DO I = KF, 1, -NB
             IB = MIN( NB, K-I+1 )
-            CALL SLARFB( 'L', 'N', 'F', 'C', M-I+1, N, IB,
+            CALL AB_AB_SLARFB( 'L', 'N', 'F', 'C', M-I+1, N, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( I, 1 ), LDC, WORK, LDWORK )
          END DO
@@ -277,7 +278,7 @@
          KF = ((K-1)/NB)*NB+1
          DO I = KF, 1, -NB
             IB = MIN( NB, K-I+1 )
-            CALL SLARFB( 'R', 'T', 'F', 'C', M, N-I+1, IB,
+            CALL AB_AB_SLARFB( 'R', 'T', 'F', 'C', M, N-I+1, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( 1, I ), LDC, WORK, LDWORK )
          END DO
@@ -286,6 +287,6 @@
 *
       RETURN
 *
-*     End of SGEMQRT
+*     End of AB_AB_SGEMQRT
 *
       END

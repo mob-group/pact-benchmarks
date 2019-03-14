@@ -1,4 +1,4 @@
-*> \brief \b ZTBRFS
+*> \brief \b AB_ZTBRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTBRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztbrfs.f">
+*> Download AB_ZTBRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTBRFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTBRFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTBRFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+*       SUBROUTINE AB_ZTBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
 *                          LDB, X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,12 +37,12 @@
 *>
 *> \verbatim
 *>
-*> ZTBRFS provides error bounds and backward error estimates for the
+*> AB_ZTBRFS provides error bounds and backward error estimates for the
 *> solution to a system of linear equations with a triangular band
 *> coefficient matrix.
 *>
-*> The solution matrix X must be computed by ZTBTRS or some other
-*> means before entering this routine.  ZTBRFS does not do iterative
+*> The solution matrix X must be computed by AB_ZTBTRS or some other
+*> means before entering this routine.  AB_ZTBRFS does not do iterative
 *> refinement because doing so cannot improve the backward error.
 *> \endverbatim
 *
@@ -185,7 +185,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZTBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+      SUBROUTINE AB_ZTBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
      $                   LDB, X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -222,15 +222,16 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZLACN2, ZTBMV, ZTBSV
+      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZCOPY, AB_ZLACN2, AB_ZT
+     $BMV, AB_ZTBSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -243,16 +244,17 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      NOTRAN = LSAME( TRANS, 'N' )
-      NOUNIT = LSAME( DIAG, 'N' )
+      UPPER = AB_LSAME( UPLO, 'U' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      NOUNIT = AB_LSAME( DIAG, 'N' )
 *
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .N
+     $OT.
+     $         AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -268,7 +270,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTBRFS', -INFO )
+         CALL AB_XERBLA( 'AB_ZTBRFS', -INFO )
          RETURN
       END IF
 *
@@ -293,8 +295,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = KD + 2
-      EPS = DLAMCH( 'Epsilon' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -305,9 +307,9 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
-         CALL ZCOPY( N, X( 1, J ), 1, WORK, 1 )
-         CALL ZTBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK, 1 )
-         CALL ZAXPY( N, -ONE, B( 1, J ), 1, WORK, 1 )
+         CALL AB_ZCOPY( N, X( 1, J ), 1, WORK, 1 )
+         CALL AB_ZTBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK, 1 )
+         CALL AB_ZAXPY( N, -ONE, B( 1, J ), 1, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -440,7 +442,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use ZLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_ZLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -455,13 +457,13 @@
 *
          KASE = 0
   210    CONTINUE
-         CALL ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL AB_ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**H).
 *
-               CALL ZTBSV( UPLO, TRANST, DIAG, N, KD, AB, LDAB, WORK,
+               CALL AB_ZTBSV( UPLO, TRANST, DIAG, N, KD, AB, LDAB, WORK,
      $                     1 )
                DO 220 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
@@ -473,7 +475,7 @@
                DO 230 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   230          CONTINUE
-               CALL ZTBSV( UPLO, TRANSN, DIAG, N, KD, AB, LDAB, WORK,
+               CALL AB_ZTBSV( UPLO, TRANSN, DIAG, N, KD, AB, LDAB, WORK,
      $                     1 )
             END IF
             GO TO 210
@@ -492,6 +494,6 @@
 *
       RETURN
 *
-*     End of ZTBRFS
+*     End of AB_ZTBRFS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DORT01
+*> \brief \b AB_DORT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
+*       SUBROUTINE AB_DORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          ROWCOL
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DORT01 checks that the matrix U is orthogonal by computing the ratio
+*> AB_DORT01 checks that the matrix U is orthogonal by computing the ratio
 *>
 *>    RESID = norm( I - U*U' ) / ( n * EPS ), if ROWCOL = 'R',
 *> or
@@ -114,7 +114,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
+      SUBROUTINE AB_DORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,12 +142,12 @@
       DOUBLE PRECISION   EPS, TMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT, DLAMCH, DLANSY
-      EXTERNAL           LSAME, DDOT, DLAMCH, DLANSY
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DLANSY
+      EXTERNAL           AB_LSAME, AB_DDOT, AB_DLAMCH, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASET, DSYRK
+      EXTERNAL           AB_DLASET, AB_AB_DSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -161,8 +161,8 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      EPS = DLAMCH( 'Precision' )
-      IF( M.LT.N .OR. ( M.EQ.N .AND. LSAME( ROWCOL, 'R' ) ) ) THEN
+      EPS = AB_DLAMCH( 'Precision' )
+      IF( M.LT.N .OR. ( M.EQ.N .AND. AB_LSAME( ROWCOL, 'R' ) ) ) THEN
          TRANSU = 'N'
          K = N
       ELSE
@@ -180,13 +180,15 @@
 *
 *        Compute I - U*U' or I - U'*U.
 *
-         CALL DLASET( 'Upper', MNMIN, MNMIN, ZERO, ONE, WORK, LDWORK )
-         CALL DSYRK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE, WORK,
+         CALL AB_DLASET( 'Upper', MNMIN, MNMIN, ZERO, ONE, WORK, LDWORK 
+     $)
+         CALL AB_AB_DSYRK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE,
+     $ WORK,
      $               LDWORK )
 *
 *        Compute norm( I - U*U' ) / ( K * EPS ) .
 *
-         RESID = DLANSY( '1', 'Upper', MNMIN, WORK, LDWORK,
+         RESID = AB_DLANSY( '1', 'Upper', MNMIN, WORK, LDWORK,
      $           WORK( LDWORK*MNMIN+1 ) )
          RESID = ( RESID / DBLE( K ) ) / EPS
       ELSE IF( TRANSU.EQ.'T' ) THEN
@@ -200,7 +202,7 @@
                ELSE
                   TMP = ONE
                END IF
-               TMP = TMP - DDOT( M, U( 1, I ), 1, U( 1, J ), 1 )
+               TMP = TMP - AB_DDOT( M, U( 1, I ), 1, U( 1, J ), 1 )
                RESID = MAX( RESID, ABS( TMP ) )
    10       CONTINUE
    20    CONTINUE
@@ -216,7 +218,7 @@
                ELSE
                   TMP = ONE
                END IF
-               TMP = TMP - DDOT( N, U( J, 1 ), LDU, U( I, 1 ), LDU )
+               TMP = TMP - AB_DDOT( N, U( J, 1 ), LDU, U( I, 1 ), LDU )
                RESID = MAX( RESID, ABS( TMP ) )
    30       CONTINUE
    40    CONTINUE
@@ -224,6 +226,6 @@
       END IF
       RETURN
 *
-*     End of DORT01
+*     End of AB_DORT01
 *
       END

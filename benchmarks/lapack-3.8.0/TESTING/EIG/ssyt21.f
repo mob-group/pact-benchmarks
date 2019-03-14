@@ -1,4 +1,4 @@
-*> \brief \b SSYT21
+*> \brief \b AB_SSYT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYT21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
+*       SUBROUTINE AB_SSYT21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
 *                          LDV, TAU, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SSYT21 generally checks a decomposition of the form
+*> AB_SSYT21 generally checks a decomposition of the form
 *>
 *>    A = U S U'
 *>
@@ -34,9 +34,9 @@
 *> diagonal (if KBAND=0) or symmetric tridiagonal (if KBAND=1).
 *>
 *> If ITYPE=1, then U is represented as a dense matrix; otherwise U is
-*> expressed as a product of Householder transformations, whose vectors
+*> expressed as a product of HousehoAB_LDEr transformations, whose vectors
 *> are stored in the array "V" and whose scaling constants are in "TAU".
-*> We shall use the letter "V" to refer to the product of Householder
+*> We shall use the letter "V" to refer to the product of HousehoAB_LDEr
 *> transformations (which should be equal to U).
 *>
 *> Specifically, if ITYPE=1, then:
@@ -67,11 +67,11 @@
 *>          1: U expressed as a dense orthogonal matrix:
 *>             RESULT(1) = | A - U S U' | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU' | / ( n ulp )
 *>
-*>          2: U expressed as a product V of Housholder transformations:
+*>          2: U expressed as a product V of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | A - V S V' | / ( |A| n ulp )
 *>
 *>          3: U expressed both as a dense orthogonal matrix and
-*>             as a product of Housholder transformations:
+*>             as a product of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | I - VU' | / ( n ulp )
 *> \endverbatim
 *>
@@ -87,7 +87,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, SSYT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_SSYT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -148,7 +148,7 @@
 *> \verbatim
 *>          V is REAL array, dimension (LDV, N)
 *>          If ITYPE=2 or 3, the columns of this array contain the
-*>          Householder vectors used to describe the orthogonal matrix
+*>          HousehoAB_LDEr vectors used to describe the orthogonal matrix
 *>          in the decomposition.  If UPLO='L', then the vectors are in
 *>          the lower triangle, if UPLO='U', then in the upper
 *>          triangle.
@@ -170,7 +170,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)' in the Householder transformation H(j) of
+*>          v(j) v(j)' in the HousehoAB_LDEr transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *> \endverbatim
@@ -202,7 +202,8 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SSYT21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
+      SUBROUTINE AB_SSYT21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU,
+     $ V,
      $                   LDV, TAU, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -232,13 +233,14 @@
       REAL               ANORM, ULP, UNFL, VSAVE, WNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANGE, SLANSY
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE, AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLARFY, SLASET, SORM2L, SORM2R,
-     $                   SSYR, SSYR2
+      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_AB_SLARFY, AB_SLASET, A
+     $B_SORM2L, AB_SORM2R,
+     $                   AB_SSYR, AB_AB_SSYR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -251,7 +253,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -259,8 +261,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -276,7 +278,7 @@
       IF( ITYPE.EQ.3 ) THEN
          ANORM = ONE
       ELSE
-         ANORM = MAX( SLANSY( '1', CUPLO, N, A, LDA, WORK ), UNFL )
+         ANORM = MAX( AB_SLANSY( '1', CUPLO, N, A, LDA, WORK ), UNFL )
       END IF
 *
 *     Compute error matrix:
@@ -285,26 +287,27 @@
 *
 *        ITYPE=1: error = A - U S U'
 *
-         CALL SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
-         CALL SLACPY( CUPLO, N, N, A, LDA, WORK, N )
+         CALL AB_SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+         CALL AB_SLACPY( CUPLO, N, N, A, LDA, WORK, N )
 *
          DO 10 J = 1, N
-            CALL SSYR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK, N )
+            CALL AB_SSYR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK, N )
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
             DO 20 J = 1, N - 1
-               CALL SSYR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, J+1 ),
+               CALL AB_AB_SSYR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, 
+     $J+1 ),
      $                     1, WORK, N )
    20       CONTINUE
          END IF
-         WNORM = SLANSY( '1', CUPLO, N, WORK, N, WORK( N**2+1 ) )
+         WNORM = AB_SLANSY( '1', CUPLO, N, WORK, N, WORK( N**2+1 ) )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        ITYPE=2: error = V S V' - A
 *
-         CALL SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+         CALL AB_SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
 *
          IF( LOWER ) THEN
             WORK( N**2 ) = D( N )
@@ -318,7 +321,7 @@
 *
                VSAVE = V( J+1, J )
                V( J+1, J ) = ONE
-               CALL SLARFY( 'L', N-J, V( J+1, J ), 1, TAU( J ),
+               CALL AB_AB_SLARFY( 'L', N-J, V( J+1, J ), 1, TAU( J ),
      $                      WORK( ( N+1 )*J+1 ), N, WORK( N**2+1 ) )
                V( J+1, J ) = VSAVE
                WORK( ( N+1 )*( J-1 )+1 ) = D( J )
@@ -335,7 +338,8 @@
 *
                VSAVE = V( J, J+1 )
                V( J, J+1 ) = ONE
-               CALL SLARFY( 'U', J, V( 1, J+1 ), 1, TAU( J ), WORK, N,
+               CALL AB_AB_SLARFY( 'U', J, V( 1, J+1 ), 1, TAU( J ), WORK
+     $, N,
      $                      WORK( N**2+1 ) )
                V( J, J+1 ) = VSAVE
                WORK( ( N+1 )*J+1 ) = D( J+1 )
@@ -355,7 +359,7 @@
    80          CONTINUE
             END IF
    90    CONTINUE
-         WNORM = SLANSY( '1', CUPLO, N, WORK, N, WORK( N**2+1 ) )
+         WNORM = AB_SLANSY( '1', CUPLO, N, WORK, N, WORK( N**2+1 ) )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -363,12 +367,12 @@
 *
          IF( N.LT.2 )
      $      RETURN
-         CALL SLACPY( ' ', N, N, U, LDU, WORK, N )
+         CALL AB_SLACPY( ' ', N, N, U, LDU, WORK, N )
          IF( LOWER ) THEN
-            CALL SORM2R( 'R', 'T', N, N-1, N-1, V( 2, 1 ), LDV, TAU,
+            CALL AB_SORM2R( 'R', 'T', N, N-1, N-1, V( 2, 1 ), LDV, TAU,
      $                   WORK( N+1 ), N, WORK( N**2+1 ), IINFO )
          ELSE
-            CALL SORM2L( 'R', 'T', N, N-1, N-1, V( 1, 2 ), LDV, TAU,
+            CALL AB_SORM2L( 'R', 'T', N, N-1, N-1, V( 1, 2 ), LDV, TAU,
      $                   WORK, N, WORK( N**2+1 ), IINFO )
          END IF
          IF( IINFO.NE.0 ) THEN
@@ -380,7 +384,7 @@
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
   100    CONTINUE
 *
-         WNORM = SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
+         WNORM = AB_SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
       END IF
 *
       IF( ANORM.GT.WNORM ) THEN
@@ -398,19 +402,20 @@
 *     Compute  UU' - I
 *
       IF( ITYPE.EQ.1 ) THEN
-         CALL SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+         CALL AB_SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WO
+     $RK,
      $               N )
 *
          DO 110 J = 1, N
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
   110    CONTINUE
 *
-         RESULT( 2 ) = MIN( SLANGE( '1', N, N, WORK, N,
+         RESULT( 2 ) = MIN( AB_SLANGE( '1', N, N, WORK, N,
      $                 WORK( N**2+1 ) ), REAL( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of SSYT21
+*     End of AB_SSYT21
 *
       END

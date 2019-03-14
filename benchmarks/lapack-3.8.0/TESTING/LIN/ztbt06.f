@@ -1,4 +1,4 @@
-*> \brief \b ZTBT06
+*> \brief \b AB_ZTBT06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
+*       SUBROUTINE AB_ZTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
 *                          RWORK, RAT )
 *
 *       .. Scalar Arguments ..
@@ -27,9 +27,9 @@
 *>
 *> \verbatim
 *>
-*> ZTBT06 computes a test ratio comparing RCOND (the reciprocal
+*> AB_ZTBT06 computes a test ratio comparing RCOND (the reciprocal
 *> condition number of a triangular matrix A) and RCONDC, the estimate
-*> computed by ZTBCON.  Information about the triangular matrix A is
+*> computed by AB_ZTBCON.  Information about the triangular matrix A is
 *> used if one estimate is zero and the other is non-zero to decide if
 *> underflow in the estimate is justified.
 *> \endverbatim
@@ -49,7 +49,7 @@
 *> \verbatim
 *>          RCONDC is DOUBLE PRECISION
 *>          The estimate of the reciprocal condition number computed by
-*>          ZTBCON.
+*>          AB_ZTBCON.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -123,7 +123,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
+      SUBROUTINE AB_ZTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
      $                   RWORK, RAT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,15 +151,15 @@
       DOUBLE PRECISION   ANORM, BIGNUM, EPS, RMAX, RMIN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANTB
-      EXTERNAL           DLAMCH, ZLANTB
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANTB
+      EXTERNAL           AB_DLAMCH, AB_ZLANTB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       RMAX = MAX( RCOND, RCONDC )
       RMIN = MIN( RCOND, RCONDC )
 *
@@ -191,14 +191,14 @@
 *        estimate multiplied by BIGNUM/TMAX, where TMAX is the maximum
 *        element in absolute value in A.
 *
-         BIGNUM = ONE / DLAMCH( 'Safe minimum' )
-         ANORM = ZLANTB( 'M', UPLO, DIAG, N, KD, AB, LDAB, RWORK )
+         BIGNUM = ONE / AB_DLAMCH( 'Safe minimum' )
+         ANORM = AB_ZLANTB( 'M', UPLO, DIAG, N, KD, AB, LDAB, RWORK )
 *
          RAT = RMAX*( MIN( BIGNUM / MAX( ONE, ANORM ), ONE / EPS ) )
       END IF
 *
       RETURN
 *
-*     End of ZTBT06
+*     End of AB_ZTBT06
 *
       END

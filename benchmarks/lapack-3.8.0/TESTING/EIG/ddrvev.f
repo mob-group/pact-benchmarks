@@ -1,4 +1,4 @@
-*> \brief \b DDRVEV
+*> \brief \b AB_DDRVEV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_DDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, WR, WI, WR1, WI1, VL, LDVL,
 *                          VR, LDVR, LRE, LDLRE, RESULT, WORK, NWORK,
 *                          IWORK, INFO )
@@ -32,9 +32,9 @@
 *>
 *> \verbatim
 *>
-*>    DDRVEV  checks the nonsymmetric eigenvalue problem driver DGEEV.
+*>    AB_DDRVEV  checks the nonsymmetric eigenvalue problem driver AB_DGEEV.
 *>
-*>    When DDRVEV is called, a number of matrix "sizes" ("n's") and a
+*>    When AB_DDRVEV is called, a number of matrix "sizes" ("n's") and a
 *>    number of matrix "types" are specified.  For each size ("n")
 *>    and each type of matrix, one matrix will be generated and used
 *>    to test the nonsymmetric eigenroutines.  For each matrix, 7
@@ -171,7 +171,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          DDRVEV does nothing.  It must be at least zero.
+*>          AB_DDRVEV does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -185,7 +185,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, DDRVEV
+*>          The number of elements in DOTYPE.   If it is zero, AB_DDRVEV
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -215,7 +215,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to DDRVEV to continue the same random number
+*>          next call to AB_DDRVEV to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -254,7 +254,7 @@
 *> \param[out] H
 *> \verbatim
 *>          H is DOUBLE PRECISION array, dimension (LDA, max(NN))
-*>          Another copy of the test matrix A, modified by DGEEV.
+*>          Another copy of the test matrix A, modified by AB_DGEEV.
 *> \endverbatim
 *>
 *> \param[out] WR
@@ -280,7 +280,7 @@
 *>          WI1 is DOUBLE PRECISION array, dimension (max(NN))
 *>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
-*>          but those computed when DGEEV only computes a partial
+*>          but those computed when AB_DGEEV only computes a partial
 *>          eigendecomposition, i.e. not the eigenvalues and left
 *>          and right eigenvectors.
 *> \endverbatim
@@ -358,7 +358,7 @@
 *>          -18: LDVR < 1 or LDVR < NMAX, where NMAX is max( NN(j) ).
 *>          -20: LDLRE < 1 or LDLRE < NMAX, where NMAX is max( NN(j) ).
 *>          -23: NWORK too small.
-*>          If  DLATMR, SLATMS, SLATME or DGEEV returns an error code,
+*>          If  AB_DLATMR, AB_SLATMS, AB_SLATME or AB_DGEEV returns an error code,
 *>              the absolute value of it is returned.
 *>
 *>-----------------------------------------------------------------------
@@ -401,7 +401,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_DDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, WR, WI, WR1, WI1, VL, LDVL,
      $                   VR, LDVR, LRE, LDLRE, RESULT, WORK, NWORK,
      $                   IWORK, INFO )
@@ -451,12 +451,13 @@
       DOUBLE PRECISION   DUM( 1 ), RES( 2 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLAPY2, DNRM2
-      EXTERNAL           DLAMCH, DLAPY2, DNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2, AB_DNRM2
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEEV, DGET22, DLABAD, DLACPY, DLASET, DLASUM,
-     $                   DLATME, DLATMR, DLATMS, XERBLA
+      EXTERNAL           AB_DGEEV, AB_DGET22, AB_DLABAD, AB_DLACPY, AB_D
+     $LASET, AB_DLASUM,
+     $                   AB_DLATME, AB_DLATMR, AB_DLATMS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -515,7 +516,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DDRVEV', -INFO )
+         CALL AB_XERBLA( 'AB_DDRVEV', -INFO )
          RETURN
       END IF
 *
@@ -526,10 +527,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      CALL AB_DLABAD( UNFL, OVFL )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP
@@ -596,7 +597,7 @@
 *
    60       CONTINUE
 *
-            CALL DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+            CALL AB_DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -629,7 +630,7 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL AB_DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -637,7 +638,7 @@
 *
 *              Symmetric, eigenvalues specified
 *
-               CALL DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL AB_DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -654,7 +655,7 @@
                END IF
 *
                ADUMMA( 1 ) = ' '
-               CALL DLATME( N, 'S', ISEED, WORK, IMODE, COND, ONE,
+               CALL AB_DLATME( N, 'S', ISEED, WORK, IMODE, COND, ONE,
      $                      ADUMMA, 'T', 'T', 'T', WORK( N+1 ), 4,
      $                      CONDS, N, N, ANORM, A, LDA, WORK( 2*N+1 ),
      $                      IINFO )
@@ -663,7 +664,7 @@
 *
 *              Diagonal, random eigenvalues
 *
-               CALL DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+               CALL AB_DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -672,7 +673,7 @@
 *
 *              Symmetric, random eigenvalues
 *
-               CALL DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+               CALL AB_DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -681,17 +682,18 @@
 *
 *              General, random eigenvalues
 *
-               CALL DLATMR( N, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
+               CALL AB_DLATMR( N, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
                IF( N.GE.4 ) THEN
-                  CALL DLASET( 'Full', 2, N, ZERO, ZERO, A, LDA )
-                  CALL DLASET( 'Full', N-3, 1, ZERO, ZERO, A( 3, 1 ),
+                  CALL AB_DLASET( 'Full', 2, N, ZERO, ZERO, A, LDA )
+                  CALL AB_DLASET( 'Full', N-3, 1, ZERO, ZERO, A( 3, 1 ),
      $                         LDA )
-                  CALL DLASET( 'Full', N-3, 2, ZERO, ZERO, A( 3, N-1 ),
+                  CALL AB_DLASET( 'Full', N-3, 2, ZERO, ZERO, A( 3, N-1 
+     $),
      $                         LDA )
-                  CALL DLASET( 'Full', 1, N, ZERO, ZERO, A( N, 1 ),
+                  CALL AB_DLASET( 'Full', 1, N, ZERO, ZERO, A( N, 1 ),
      $                         LDA )
                END IF
 *
@@ -699,7 +701,7 @@
 *
 *              Triangular, random eigenvalues
 *
-               CALL DLATMR( N, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
+               CALL AB_DLATMR( N, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -736,12 +738,13 @@
 *
 *              Compute eigenvalues and eigenvectors, and test them
 *
-               CALL DLACPY( 'F', N, N, A, LDA, H, LDA )
-               CALL DGEEV( 'V', 'V', N, H, LDA, WR, WI, VL, LDVL, VR,
+               CALL AB_DLACPY( 'F', N, N, A, LDA, H, LDA )
+               CALL AB_DGEEV( 'V', 'V', N, H, LDA, WR, WI, VL, LDVL, VR,
      $                     LDVR, WORK, NNWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   RESULT( 1 ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9993 )'DGEEV1', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9993 )'AB_DGEEV1', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 220
@@ -749,13 +752,15 @@
 *
 *              Do Test (1)
 *
-               CALL DGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, WR, WI,
+               CALL AB_DGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, WR, W
+     $I,
      $                      WORK, RES )
                RESULT( 1 ) = RES( 1 )
 *
 *              Do Test (2)
 *
-               CALL DGET22( 'T', 'N', 'T', N, A, LDA, VL, LDVL, WR, WI,
+               CALL AB_DGET22( 'T', 'N', 'T', N, A, LDA, VL, LDVL, WR, W
+     $I,
      $                      WORK, RES )
                RESULT( 2 ) = RES( 1 )
 *
@@ -764,10 +769,10 @@
                DO 120 J = 1, N
                   TNRM = ONE
                   IF( WI( J ).EQ.ZERO ) THEN
-                     TNRM = DNRM2( N, VR( 1, J ), 1 )
+                     TNRM = AB_DNRM2( N, VR( 1, J ), 1 )
                   ELSE IF( WI( J ).GT.ZERO ) THEN
-                     TNRM = DLAPY2( DNRM2( N, VR( 1, J ), 1 ),
-     $                      DNRM2( N, VR( 1, J+1 ), 1 ) )
+                     TNRM = AB_DLAPY2( AB_DNRM2( N, VR( 1, J ), 1 ),
+     $                      AB_DNRM2( N, VR( 1, J+1 ), 1 ) )
                   END IF
                   RESULT( 3 ) = MAX( RESULT( 3 ),
      $                          MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
@@ -775,7 +780,7 @@
                      VMX = ZERO
                      VRMX = ZERO
                      DO 110 JJ = 1, N
-                        VTST = DLAPY2( VR( JJ, J ), VR( JJ, J+1 ) )
+                        VTST = AB_DLAPY2( VR( JJ, J ), VR( JJ, J+1 ) )
                         IF( VTST.GT.VMX )
      $                     VMX = VTST
                         IF( VR( JJ, J+1 ).EQ.ZERO .AND.
@@ -792,10 +797,10 @@
                DO 140 J = 1, N
                   TNRM = ONE
                   IF( WI( J ).EQ.ZERO ) THEN
-                     TNRM = DNRM2( N, VL( 1, J ), 1 )
+                     TNRM = AB_DNRM2( N, VL( 1, J ), 1 )
                   ELSE IF( WI( J ).GT.ZERO ) THEN
-                     TNRM = DLAPY2( DNRM2( N, VL( 1, J ), 1 ),
-     $                      DNRM2( N, VL( 1, J+1 ), 1 ) )
+                     TNRM = AB_DLAPY2( AB_DNRM2( N, VL( 1, J ), 1 ),
+     $                      AB_DNRM2( N, VL( 1, J+1 ), 1 ) )
                   END IF
                   RESULT( 4 ) = MAX( RESULT( 4 ),
      $                          MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
@@ -803,7 +808,7 @@
                      VMX = ZERO
                      VRMX = ZERO
                      DO 130 JJ = 1, N
-                        VTST = DLAPY2( VL( JJ, J ), VL( JJ, J+1 ) )
+                        VTST = AB_DLAPY2( VL( JJ, J ), VL( JJ, J+1 ) )
                         IF( VTST.GT.VMX )
      $                     VMX = VTST
                         IF( VL( JJ, J+1 ).EQ.ZERO .AND.
@@ -817,12 +822,14 @@
 *
 *              Compute eigenvalues only, and test them
 *
-               CALL DLACPY( 'F', N, N, A, LDA, H, LDA )
-               CALL DGEEV( 'N', 'N', N, H, LDA, WR1, WI1, DUM, 1, DUM,
+               CALL AB_DLACPY( 'F', N, N, A, LDA, H, LDA )
+               CALL AB_DGEEV( 'N', 'N', N, H, LDA, WR1, WI1, DUM, 1, DUM
+     $,
      $                     1, WORK, NNWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   RESULT( 1 ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9993 )'DGEEV2', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9993 )'AB_DGEEV2', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 220
@@ -837,12 +844,14 @@
 *
 *              Compute eigenvalues and right eigenvectors, and test them
 *
-               CALL DLACPY( 'F', N, N, A, LDA, H, LDA )
-               CALL DGEEV( 'N', 'V', N, H, LDA, WR1, WI1, DUM, 1, LRE,
+               CALL AB_DLACPY( 'F', N, N, A, LDA, H, LDA )
+               CALL AB_DGEEV( 'N', 'V', N, H, LDA, WR1, WI1, DUM, 1, LRE
+     $,
      $                     LDLRE, WORK, NNWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   RESULT( 1 ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9993 )'DGEEV3', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9993 )'AB_DGEEV3', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 220
@@ -866,12 +875,13 @@
 *
 *              Compute eigenvalues and left eigenvectors, and test them
 *
-               CALL DLACPY( 'F', N, N, A, LDA, H, LDA )
-               CALL DGEEV( 'V', 'N', N, H, LDA, WR1, WI1, LRE, LDLRE,
+               CALL AB_DLACPY( 'F', N, N, A, LDA, H, LDA )
+               CALL AB_DGEEV( 'V', 'N', N, H, LDA, WR1, WI1, LRE, LDLRE,
      $                     DUM, 1, WORK, NNWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   RESULT( 1 ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9993 )'DGEEV4', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9993 )'AB_DGEEV4', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 220
@@ -933,10 +943,10 @@
 *
 *     Summary
 *
-      CALL DLASUM( PATH, NOUNIT, NERRS, NTESTT )
+      CALL AB_DLASUM( PATH, NOUNIT, NERRS, NTESTT )
 *
  9999 FORMAT( / 1X, A3, ' -- Real Eigenvalue-Eigenvector Decomposition',
-     $      ' Driver', / ' Matrix types (see DDRVEV for details): ' )
+     $      ' Driver', / ' Matrix types (see AB_DDRVEV for details): ' )
 *
  9998 FORMAT( / ' Special Matrices:', / '  1=Zero matrix.             ',
      $      '           ', '  5=Diagonal: geometr. spaced entries.',
@@ -970,11 +980,11 @@
      $      '  1/ulp otherwise', / )
  9994 FORMAT( ' N=', I5, ', IWK=', I2, ', seed=', 4( I4, ',' ),
      $      ' type ', I2, ', test(', I2, ')=', G10.3 )
- 9993 FORMAT( ' DDRVEV: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9993 FORMAT( ' AB_DDRVEV: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of DDRVEV
+*     End of AB_DDRVEV
 *
       END

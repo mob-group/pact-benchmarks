@@ -1,4 +1,4 @@
-*> \brief \b ZSYT01_ROOK
+*> \brief \b AB_AB_ZSYT01_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSYT01_ROOK( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*       SUBROUTINE AB_AB_ZSYT01_ROOK( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> ZSYT01_ROOK reconstructs a complex symmetric indefinite matrix A from its
+*> AB_AB_ZSYT01_ROOK reconstructs a complex symmetric indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
@@ -71,7 +71,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by ZSYTRF_ROOK.
+*>          as computed by AB_AB_ZSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -83,7 +83,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from ZSYTRF_ROOK.
+*>          The pivot indices from AB_AB_ZSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -122,7 +122,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZSYT01_ROOK( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE AB_AB_ZSYT01_ROOK( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
+     $ C,
      $                    LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.5.0) --
@@ -155,12 +156,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANSY
-      EXTERNAL           LSAME, DLAMCH, ZLANSY
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANSY
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASET, ZLAVSY_ROOK
+      EXTERNAL           AB_ZLASET, AB_AB_ZLAVSY_ROOK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -176,26 +177,26 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the identity matrix.
 *
-      CALL ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     Call ZLAVSY_ROOK to form the product D * U' (or D * L' ).
+*     Call AB_AB_ZLAVSY_ROOK to form the product D * U' (or D * L' ).
 *
-      CALL ZLAVSY_ROOK( UPLO, 'Transpose', 'Non-unit', N, N, AFAC,
+      CALL AB_AB_ZLAVSY_ROOK( UPLO, 'Transpose', 'Non-unit', N, N, AFAC,
      $              LDAFAC, IPIV, C, LDC, INFO )
 *
-*     Call ZLAVSY_ROOK again to multiply by U (or L ).
+*     Call AB_AB_ZLAVSY_ROOK again to multiply by U (or L ).
 *
-      CALL ZLAVSY_ROOK( UPLO, 'No transpose', 'Unit', N, N, AFAC,
+      CALL AB_AB_ZLAVSY_ROOK( UPLO, 'No transpose', 'Unit', N, N, AFAC,
      $              LDAFAC, IPIV, C, LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -211,7 +212,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = ZLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_ZLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -222,6 +223,6 @@
 *
       RETURN
 *
-*     End of ZSYT01_ROOK
+*     End of AB_AB_ZSYT01_ROOK
 *
       END

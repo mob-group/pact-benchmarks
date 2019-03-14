@@ -1,4 +1,4 @@
-*> \brief \b CDRVRF4
+*> \brief \b AB_CDRVRF4
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
-*      +                    LDA, S_WORK_CLANGE )
+*       SUBROUTINE AB_CDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
+*      +                    LDA, S_WORK_AB_CLANGE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDC, NN, NOUT
@@ -17,7 +17,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            NVAL( NN )
-*       REAL               S_WORK_CLANGE( * )
+*       REAL               S_WORK_AB_CLANGE( * )
 *       COMPLEX            A( LDA, * ), C1( LDC, * ), C2( LDC, *),
 *      +                   CRF( * )
 *       ..
@@ -28,8 +28,8 @@
 *>
 *> \verbatim
 *>
-*> CDRVRF4 tests the LAPACK RFP routines:
-*>     CHFRK
+*> AB_CDRVRF4 tests the LAPACK RFP routines:
+*>     AB_CHFRK
 *> \endverbatim
 *
 *  Arguments:
@@ -93,9 +93,9 @@
 *>                The leading dimension of the array A.  LDA >= max(1,NMAX).
 *> \endverbatim
 *>
-*> \param[out] S_WORK_CLANGE
+*> \param[out] S_WORK_AB_CLANGE
 *> \verbatim
-*>          S_WORK_CLANGE is REAL array, dimension (NMAX)
+*>          S_WORK_AB_CLANGE is REAL array, dimension (NMAX)
 *> \endverbatim
 *
 *  Authors:
@@ -111,8 +111,9 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
-     +                    LDA, S_WORK_CLANGE )
+      SUBROUTINE AB_CDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A
+     $,
+     +                    LDA, S_WORK_AB_CLANGE )
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -125,7 +126,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            NVAL( NN )
-      REAL               S_WORK_CLANGE( * )
+      REAL               S_WORK_AB_CLANGE( * )
       COMPLEX            A( LDA, * ), C1( LDC, * ), C2( LDC, *),
      +                   CRF( * )
 *     ..
@@ -150,12 +151,12 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND, CLANGE
-      COMPLEX            CLARND
-      EXTERNAL           SLAMCH, SLARND, CLANGE, CLARND
+      REAL               AB_SLAMCH, AB_SLARND, AB_CLANGE
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_SLAMCH, AB_SLARND, AB_CLANGE, AB_CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHERK, CHFRK, CTFTTR, CTRTTF
+      EXTERNAL           AB_AB_CHERK, AB_CHFRK, AB_CTFTTR, AB_CTRTTF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -182,7 +183,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
       DO 150 IIN = 1, NN
 *
@@ -216,8 +217,8 @@
                            ALPHA = ZERO
                            BETA = ONE
                         ELSE
-                           ALPHA = SLARND( 2, ISEED )
-                           BETA = SLARND( 2, ISEED )
+                           ALPHA = AB_SLARND( 2, ISEED )
+                           BETA = AB_SLARND( 2, ISEED )
                         END IF
 *
 *                       All the parameters are set:
@@ -233,12 +234,12 @@
 *
                            DO J = 1, K
                               DO I = 1, N
-                                 A( I, J) = CLARND( 4, ISEED )
+                                 A( I, J) = AB_CLARND( 4, ISEED )
                               END DO
                            END DO
 *
-                           NORMA = CLANGE( 'I', N, K, A, LDA,
-     +                                      S_WORK_CLANGE )
+                           NORMA = AB_CLANGE( 'I', N, K, A, LDA,
+     +                                      S_WORK_AB_CLANGE )
 *
                         ELSE
 *
@@ -246,12 +247,12 @@
 *
                            DO J = 1,N
                               DO I = 1, K
-                                 A( I, J) = CLARND( 4, ISEED )
+                                 A( I, J) = AB_CLARND( 4, ISEED )
                               END DO
                            END DO
 *
-                           NORMA = CLANGE( 'I', K, N, A, LDA,
-     +                                      S_WORK_CLANGE )
+                           NORMA = AB_CLANGE( 'I', K, N, A, LDA,
+     +                                      S_WORK_AB_CLANGE )
 *
                         END IF
 *
@@ -263,37 +264,39 @@
 *
                         DO J = 1, N
                            DO I = 1, N
-                              C1( I, J) = CLARND( 4, ISEED )
+                              C1( I, J) = AB_CLARND( 4, ISEED )
                               C2(I,J) = C1(I,J)
                            END DO
                         END DO
 *
-*                       (See comment later on for why we use CLANGE and
-*                       not CLANHE for C1.)
+*                       (See comment later on for why we use AB_CLANGE and
+*                       not AB_CLANHE for C1.)
 *
-                        NORMC = CLANGE( 'I', N, N, C1, LDC,
-     +                                      S_WORK_CLANGE )
+                        NORMC = AB_CLANGE( 'I', N, N, C1, LDC,
+     +                                      S_WORK_AB_CLANGE )
 *
-                        SRNAMT = 'CTRTTF'
-                        CALL CTRTTF( CFORM, UPLO, N, C1, LDC, CRF,
+                        SRNAMT = 'AB_CTRTTF'
+                        CALL AB_CTRTTF( CFORM, UPLO, N, C1, LDC, CRF,
      +                               INFO )
 *
-*                       call zherk the BLAS routine -> gives C1
+*                       call AB_AB_ZHERK the BLAS routine -> gives C1
 *
-                        SRNAMT = 'CHERK '
-                        CALL CHERK( UPLO, TRANS, N, K, ALPHA, A, LDA,
+                        SRNAMT = 'AB_AB_CHERK '
+                        CALL AB_AB_CHERK( UPLO, TRANS, N, K, ALPHA, A, L
+     $DA,
      +                              BETA, C1, LDC )
 *
-*                       call zhfrk the RFP routine -> gives CRF
+*                       call AB_ZHFRK the RFP routine -> gives CRF
 *
-                        SRNAMT = 'CHFRK '
-                        CALL CHFRK( CFORM, UPLO, TRANS, N, K, ALPHA, A,
+                        SRNAMT = 'AB_CHFRK '
+                        CALL AB_CHFRK( CFORM, UPLO, TRANS, N, K, ALPHA, 
+     $A,
      +                              LDA, BETA, CRF )
 *
 *                       convert CRF in full format -> gives C2
 *
-                        SRNAMT = 'CTFTTR'
-                        CALL CTFTTR( CFORM, UPLO, N, CRF, C2, LDC,
+                        SRNAMT = 'AB_CTFTTR'
+                        CALL AB_CTFTTR( CFORM, UPLO, N, CRF, C2, LDC,
      +                               INFO )
 *
 *                       compare C1 and C2
@@ -304,13 +307,13 @@
                            END DO
                         END DO
 *
-*                       Yes, C1 is Hermitian so we could call CLANHE,
+*                       Yes, C1 is Hermitian so we could call AB_CLANHE,
 *                       but we want to check the upper part that is
 *                       supposed to be unchanged and the diagonal that
-*                       is supposed to be real -> CLANGE
+*                       is supposed to be real -> AB_CLANGE
 *
-                        RESULT(1) = CLANGE( 'I', N, N, C1, LDC,
-     +                                      S_WORK_CLANGE )
+                        RESULT(1) = AB_CLANGE( 'I', N, N, C1, LDC,
+     +                                      S_WORK_AB_CLANGE )
                         RESULT(1) = RESULT(1)
      +                              / MAX( ABS( ALPHA ) * NORMA * NORMA
      +                                   + ABS( BETA ) * NORMC, ONE )
@@ -321,7 +324,7 @@
                               WRITE( NOUT, * )
                               WRITE( NOUT, FMT = 9999 )
                            END IF
-                           WRITE( NOUT, FMT = 9997 ) 'CHFRK',
+                           WRITE( NOUT, FMT = 9997 ) 'AB_CHFRK',
      +                        CFORM, UPLO, TRANS, N, K, RESULT(1)
                            NFAIL = NFAIL + 1
                         END IF
@@ -336,12 +339,12 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'CHFRK', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'AB_CHFRK', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'CHFRK', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'AB_CHFRK', NFAIL, NRUN
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing CHFRK
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_CHFRK
      +         ***')
  9997 FORMAT( 1X, '     Failure in ',A5,', CFORM=''',A1,''',',
      + ' UPLO=''',A1,''',',' TRANS=''',A1,''',', ' N=',I3,', K =', I3,
@@ -353,6 +356,6 @@
 *
       RETURN
 *
-*     End of CDRVRF4
+*     End of AB_CDRVRF4
 *
       END

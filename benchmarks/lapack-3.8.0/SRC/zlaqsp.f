@@ -1,4 +1,4 @@
-*> \brief \b ZLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by sppequ.
+*> \brief \b AB_ZLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by AB_SPPEQU.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAQSP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqsp.f">
+*> Download AB_ZLAQSP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQSP.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqsp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQSP.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqsp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQSP.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE AB_ZLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAQSP equilibrates a symmetric matrix A using the scaling factors
+*> AB_ZLAQSP equilibrates a symmetric matrix A using the scaling factors
 *> in the vector S.
 *> \endverbatim
 *
@@ -124,7 +124,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+      SUBROUTINE AB_ZLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,9 +152,9 @@
       DOUBLE PRECISION   CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -167,7 +167,7 @@
 *
 *     Initialize LARGE and SMALL.
 *
-      SMALL = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
+      SMALL = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
       LARGE = ONE / SMALL
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN
@@ -179,7 +179,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored.
 *
@@ -209,6 +209,6 @@
 *
       RETURN
 *
-*     End of ZLAQSP
+*     End of AB_ZLAQSP
 *
       END

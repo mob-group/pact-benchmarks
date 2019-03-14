@@ -1,4 +1,4 @@
-*> \brief \b SPBT01
+*> \brief \b AB_SPBT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
+*       SUBROUTINE AB_SPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SPBT01 reconstructs a symmetric positive definite band matrix A from
+*> AB_SPBT01 reconstructs a symmetric positive definite band matrix A from
 *> its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -67,7 +67,7 @@
 *>          UPLO = 'L', the lower triangular part of A is stored.  The
 *>          columns of the appropriate triangle are stored in the columns
 *>          of A and the diagonals of the triangle are stored in the rows
-*>          of A.  See SPBTRF for further details.
+*>          of A.  See AB_SPBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -81,7 +81,7 @@
 *>          AFAC is REAL array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the factor
 *>          L or U from the L*L' or U'*U factorization in band storage
-*>          format, as computed by SPBTRF.
+*>          format, as computed by AB_SPBTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -116,7 +116,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
+      SUBROUTINE AB_SPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -145,12 +145,12 @@
       REAL               ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLANSB
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLANSB
+      LOGICAL            AB_LSAME
+      REAL               AB_SDOT, AB_SLAMCH, AB_SLANSB
+      EXTERNAL           AB_LSAME, AB_SDOT, AB_SLAMCH, AB_SLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSYR, STRMV
+      EXTERNAL           AB_SSCAL, AB_SSYR, AB_STRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -166,8 +166,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = SLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_SLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -175,20 +175,20 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 10 K = N, 1, -1
             KC = MAX( 1, KD+2-K )
             KLEN = KD + 1 - KC
 *
 *           Compute the (K,K) element of the result.
 *
-            T = SDOT( KLEN+1, AFAC( KC, K ), 1, AFAC( KC, K ), 1 )
+            T = AB_SDOT( KLEN+1, AFAC( KC, K ), 1, AFAC( KC, K ), 1 )
             AFAC( KD+1, K ) = T
 *
 *           Compute the rest of column K.
 *
             IF( KLEN.GT.0 )
-     $         CALL STRMV( 'Upper', 'Transpose', 'Non-unit', KLEN,
+     $         CALL AB_STRMV( 'Upper', 'Transpose', 'Non-unit', KLEN,
      $                     AFAC( KD+1, K-KLEN ), LDAFAC-1,
      $                     AFAC( KC, K ), 1 )
 *
@@ -204,20 +204,20 @@
 *           columns K+1 through N.
 *
             IF( KLEN.GT.0 )
-     $         CALL SSYR( 'Lower', KLEN, ONE, AFAC( 2, K ), 1,
+     $         CALL AB_SSYR( 'Lower', KLEN, ONE, AFAC( 2, K ), 1,
      $                    AFAC( 1, K+1 ), LDAFAC-1 )
 *
 *           Scale column K by the diagonal element.
 *
             T = AFAC( 1, K )
-            CALL SSCAL( KLEN+1, T, AFAC( 1, K ), 1 )
+            CALL AB_SSCAL( KLEN+1, T, AFAC( 1, K ), 1 )
 *
    20    CONTINUE
       END IF
 *
 *     Compute the difference  L*L' - A  or  U'*U - A.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 40 J = 1, N
             MU = MAX( 1, KD+2-J )
             DO 30 I = MU, KD + 1
@@ -235,12 +235,12 @@
 *
 *     Compute norm( L*L' - A ) / ( N * norm(A) * EPS )
 *
-      RESID = SLANSB( 'I', UPLO, N, KD, AFAC, LDAFAC, RWORK )
+      RESID = AB_SLANSB( 'I', UPLO, N, KD, AFAC, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / REAL( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of SPBT01
+*     End of AB_SPBT01
 *
       END

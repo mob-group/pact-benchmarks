@@ -1,4 +1,4 @@
-*> \brief \b ZERRAB
+*> \brief \b AB_ZERRAB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZERRAB( NUNIT )
+*       SUBROUTINE AB_ZERRAB( NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> DERRAB tests the error exits for ZCGESV.
+*> AB_DERRAB tests the error exits for ZAB_CGESV.
 *> \endverbatim
 *
 *  Arguments:
@@ -45,7 +45,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZERRAB( NUNIT )
+      SUBROUTINE AB_ZERRAB( NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -77,7 +77,7 @@
 *     .. External Functions ..
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, ZCGESV
+      EXTERNAL           AB_CHKXER, ZAB_CGESV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,29 +114,29 @@
    20 CONTINUE
       OK = .TRUE.
 *
-      SRNAMT = 'ZCGESV'
+      SRNAMT = 'ZAB_CGESV'
       INFOT = 1
-      CALL ZCGESV(-1,0,A,1,IP,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
-      CALL CHKXER( 'ZCGESV', INFOT, NOUT, LERR, OK )
+      CALL ZAB_CGESV(-1,0,A,1,IP,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
+      CALL AB_CHKXER( 'ZAB_CGESV', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZCGESV(0,-1,A,1,IP,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
-      CALL CHKXER( 'ZCGESV', INFOT, NOUT, LERR, OK )
+      CALL ZAB_CGESV(0,-1,A,1,IP,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
+      CALL AB_CHKXER( 'ZAB_CGESV', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZCGESV(2,1,A,1,IP,B,2,X,2,WORK,SWORK,RWORK,ITER,INFO)
-      CALL CHKXER( 'ZCGESV', INFOT, NOUT, LERR, OK )
+      CALL ZAB_CGESV(2,1,A,1,IP,B,2,X,2,WORK,SWORK,RWORK,ITER,INFO)
+      CALL AB_CHKXER( 'ZAB_CGESV', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZCGESV(2,1,A,2,IP,B,1,X,2,WORK,SWORK,RWORK,ITER,INFO)
-      CALL CHKXER( 'ZCGESV', INFOT, NOUT, LERR, OK )
+      CALL ZAB_CGESV(2,1,A,2,IP,B,1,X,2,WORK,SWORK,RWORK,ITER,INFO)
+      CALL AB_CHKXER( 'ZAB_CGESV', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL ZCGESV(2,1,A,2,IP,B,2,X,1,WORK,SWORK,RWORK,ITER,INFO)
-      CALL CHKXER( 'ZCGESV', INFOT, NOUT, LERR, OK )
+      CALL ZAB_CGESV(2,1,A,2,IP,B,2,X,1,WORK,SWORK,RWORK,ITER,INFO)
+      CALL AB_CHKXER( 'ZAB_CGESV', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
       IF( OK ) THEN
-         WRITE( NOUT, FMT = 9999 )'ZCGESV'
+         WRITE( NOUT, FMT = 9999 )'ZAB_CGESV'
       ELSE
-         WRITE( NOUT, FMT = 9998 )'ZCGESV'
+         WRITE( NOUT, FMT = 9998 )'ZAB_CGESV'
       END IF
 *
  9999 FORMAT( 1X, A6, ' drivers passed the tests of the error exits' )
@@ -145,6 +145,6 @@
 *
       RETURN
 *
-*     End of ZERRAB
+*     End of AB_ZERRAB
 *
       END

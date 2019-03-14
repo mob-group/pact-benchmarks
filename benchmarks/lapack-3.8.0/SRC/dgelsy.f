@@ -1,4 +1,4 @@
-*> \brief <b> DGELSY solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> AB_AB_DGELSY solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGELSY + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgelsy.f">
+*> Download AB_AB_DGELSY + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DGELSY.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgelsy.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DGELSY.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgelsy.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DGELSY.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
+*       SUBROUTINE AB_AB_DGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DGELSY computes the minimum-norm solution to a real linear least
+*> AB_AB_DGELSY computes the minimum-norm solution to a real linear least
 *> squares problem:
 *>     minimize || A * X - B ||
 *> using a complete orthogonal factorization of A.  A is an M-by-N
@@ -165,13 +165,13 @@
 *>          The block algorithm requires that:
 *>             LWORK >= MAX( MN+2*N+NB*(N+1), 2*MN+NB*NRHS ),
 *>          where NB is an upper bound on the blocksize returned
-*>          by ILAENV for the routines DGEQP3, DTZRZF, STZRQF, DORMQR,
-*>          and DORMRZ.
+*>          by AB_ILAENV for the routines AB_DGEQP3, AB_DTZRZF, AB_STZRQF, AB_DORMQR,
+*>          and AB_DORMRZ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -201,7 +201,8 @@
 *>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
 *>
 *  =====================================================================
-      SUBROUTINE DGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
+      SUBROUTINE AB_AB_DGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, 
+     $RANK,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -234,13 +235,15 @@
      $                   SMAXPR, SMIN, SMINPR, SMLNUM, WSIZE
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           ILAENV, DLAMCH, DLANGE
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_ILAENV, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEQP3, DLABAD, DLAIC1, DLASCL, DLASET,
-     $                   DORMQR, DORMRZ, DTRSM, DTZRZF, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DGEQP3, AB_DLABAD, AB_DLAIC1, AB_D
+     $LASCL, AB_DLASET,
+     $                   AB_DORMQR, AB_DORMRZ, AB_DTRSM, AB_DTZRZF, AB_X
+     $ERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -274,10 +277,10 @@
             LWKMIN = 1
             LWKOPT = 1
          ELSE
-            NB1 = ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-            NB2 = ILAENV( 1, 'DGERQF', ' ', M, N, -1, -1 )
-            NB3 = ILAENV( 1, 'DORMQR', ' ', M, N, NRHS, -1 )
-            NB4 = ILAENV( 1, 'DORMRQ', ' ', M, N, NRHS, -1 )
+            NB1 = AB_ILAENV( 1, 'AB_AB_DGEQRF', ' ', M, N, -1, -1 )
+            NB2 = AB_ILAENV( 1, 'AB_AB_DGERQF', ' ', M, N, -1, -1 )
+            NB3 = AB_ILAENV( 1, 'AB_DORMQR', ' ', M, N, NRHS, -1 )
+            NB4 = AB_ILAENV( 1, 'AB_DORMRQ', ' ', M, N, NRHS, -1 )
             NB = MAX( NB1, NB2, NB3, NB4 )
             LWKMIN = MN + MAX( 2*MN, N + 1, MN + NRHS )
             LWKOPT = MAX( LWKMIN,
@@ -291,7 +294,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGELSY', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DGELSY', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -306,60 +309,62 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max entries outside range [SMLNUM,BIGNUM]
 *
-      ANRM = DLANGE( 'M', M, N, A, LDA, WORK )
+      ANRM = AB_DLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL DLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL AB_DLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          RANK = 0
          GO TO 70
       END IF
 *
-      BNRM = DLANGE( 'M', M, NRHS, B, LDB, WORK )
+      BNRM = AB_DLANGE( 'M', M, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL DLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO 
+     $)
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL DLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO 
+     $)
          IBSCL = 2
       END IF
 *
 *     Compute QR factorization with column pivoting of A:
 *        A * P = Q * R
 *
-      CALL DGEQP3( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ),
+      CALL AB_DGEQP3( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ),
      $             LWORK-MN, INFO )
       WSIZE = MN + WORK( MN+1 )
 *
 *     workspace: MN+2*N+NB*(N+1).
-*     Details of Householder rotations stored in WORK(1:MN).
+*     Details of HousehoAB_LDEr rotations stored in WORK(1:MN).
 *
 *     Determine RANK using incremental condition estimation
 *
@@ -369,7 +374,7 @@
       SMIN = SMAX
       IF( ABS( A( 1, 1 ) ).EQ.ZERO ) THEN
          RANK = 0
-         CALL DLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL AB_DLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          GO TO 70
       ELSE
          RANK = 1
@@ -378,9 +383,9 @@
    10 CONTINUE
       IF( RANK.LT.MN ) THEN
          I = RANK + 1
-         CALL DLAIC1( IMIN, RANK, WORK( ISMIN ), SMIN, A( 1, I ),
+         CALL AB_DLAIC1( IMIN, RANK, WORK( ISMIN ), SMIN, A( 1, I ),
      $                A( I, I ), SMINPR, S1, C1 )
-         CALL DLAIC1( IMAX, RANK, WORK( ISMAX ), SMAX, A( 1, I ),
+         CALL AB_DLAIC1( IMAX, RANK, WORK( ISMAX ), SMAX, A( 1, I ),
      $                A( I, I ), SMAXPR, S2, C2 )
 *
          IF( SMAXPR*RCOND.LE.SMINPR ) THEN
@@ -406,15 +411,16 @@
 *     [R11,R12] = [ T11, 0 ] * Y
 *
       IF( RANK.LT.N )
-     $   CALL DTZRZF( RANK, N, A, LDA, WORK( MN+1 ), WORK( 2*MN+1 ),
+     $   CALL AB_DTZRZF( RANK, N, A, LDA, WORK( MN+1 ), WORK( 2*MN+1 ),
      $                LWORK-2*MN, INFO )
 *
 *     workspace: 2*MN.
-*     Details of Householder rotations stored in WORK(MN+1:2*MN)
+*     Details of HousehoAB_LDEr rotations stored in WORK(MN+1:2*MN)
 *
 *     B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-      CALL DORMQR( 'Left', 'Transpose', M, NRHS, MN, A, LDA, WORK( 1 ),
+      CALL AB_DORMQR( 'Left', 'Transpose', M, NRHS, MN, A, LDA, WORK( 1 
+     $),
      $             B, LDB, WORK( 2*MN+1 ), LWORK-2*MN, INFO )
       WSIZE = MAX( WSIZE, 2*MN+WORK( 2*MN+1 ) )
 *
@@ -422,7 +428,7 @@
 *
 *     B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS)
 *
-      CALL DTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', RANK,
+      CALL AB_DTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', RANK,
      $            NRHS, ONE, A, LDA, B, LDB )
 *
       DO 40 J = 1, NRHS
@@ -434,7 +440,7 @@
 *     B(1:N,1:NRHS) := Y**T * B(1:N,1:NRHS)
 *
       IF( RANK.LT.N ) THEN
-         CALL DORMRZ( 'Left', 'Transpose', N, NRHS, RANK, N-RANK, A,
+         CALL AB_DORMRZ( 'Left', 'Transpose', N, NRHS, RANK, N-RANK, A,
      $                LDA, WORK( MN+1 ), B, LDB, WORK( 2*MN+1 ),
      $                LWORK-2*MN, INFO )
       END IF
@@ -447,7 +453,7 @@
          DO 50 I = 1, N
             WORK( JPVT( I ) ) = B( I, J )
    50    CONTINUE
-         CALL DCOPY( N, WORK( 1 ), 1, B( 1, J ), 1 )
+         CALL AB_DCOPY( N, WORK( 1 ), 1, B( 1, J ), 1 )
    60 CONTINUE
 *
 *     workspace: N.
@@ -455,18 +461,22 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
-         CALL DLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO 
+     $)
+         CALL AB_DLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
-         CALL DLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO 
+     $)
+         CALL AB_DLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL DLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO 
+     $)
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO 
+     $)
       END IF
 *
    70 CONTINUE
@@ -474,6 +484,6 @@
 *
       RETURN
 *
-*     End of DGELSY
+*     End of AB_AB_DGELSY
 *
       END

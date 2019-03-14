@@ -1,4 +1,4 @@
-*> \brief \b ALADHD
+*> \brief \b AB_ALADHD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ALADHD( IOUNIT, PATH )
+*       SUBROUTINE AB_ALADHD( IOUNIT, PATH )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> ALADHD prints header information for the driver routines test paths.
+*> AB_ALADHD prints AB_HEADER information for the driver routines test paths.
 *> \endverbatim
 *
 *  Arguments:
@@ -30,14 +30,14 @@
 *> \param[in] IOUNIT
 *> \verbatim
 *>          IOUNIT is INTEGER
-*>          The unit number to which the header information should be
+*>          The unit number to which the AB_HEADER information should be
 *>          printed.
 *> \endverbatim
 *>
 *> \param[in] PATH
 *> \verbatim
 *>          PATH is CHARACTER*3
-*>          The name of the path for which the header information is to
+*>          The name of the path for which the AB_HEADER information is to
 *>          be printed.  Current paths are
 *>             _GE:  General matrices
 *>             _GB:  General band
@@ -88,7 +88,7 @@
 *> \ingroup aux_lin
 *
 *  =====================================================================
-      SUBROUTINE ALADHD( IOUNIT, PATH )
+      SUBROUTINE AB_ALADHD( IOUNIT, PATH )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -109,8 +109,8 @@
       CHARACTER*9        SYM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, LSAMEN
-      EXTERNAL           LSAME, LSAMEN
+      LOGICAL            AB_LSAME, AB_AB_LSAMEN
+      EXTERNAL           AB_LSAME, AB_AB_LSAMEN
 *     ..
 *     .. Executable Statements ..
 *
@@ -119,12 +119,12 @@
       C1 = PATH( 1: 1 )
       C3 = PATH( 3: 3 )
       P2 = PATH( 2: 3 )
-      SORD = LSAME( C1, 'S' ) .OR. LSAME( C1, 'D' )
-      CORZ = LSAME( C1, 'C' ) .OR. LSAME( C1, 'Z' )
+      SORD = AB_LSAME( C1, 'S' ) .OR. AB_LSAME( C1, 'D' )
+      CORZ = AB_LSAME( C1, 'C' ) .OR. AB_LSAME( C1, 'Z' )
       IF( .NOT.( SORD .OR. CORZ ) )
      $   RETURN
 *
-      IF( LSAMEN( 2, P2, 'GE' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, P2, 'GE' ) ) THEN
 *
 *        GE: General dense
 *
@@ -141,7 +141,7 @@
          WRITE( IOUNIT, FMT = 9972 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'GB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'GB' ) ) THEN
 *
 *        GB: General band
 *
@@ -158,7 +158,7 @@
          WRITE( IOUNIT, FMT = 9972 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'GT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'GT' ) ) THEN
 *
 *        GT: General tridiagonal
 *
@@ -173,8 +173,9 @@
          WRITE( IOUNIT, FMT = 9976 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'PO' ) .OR. LSAMEN( 2, P2, 'PP' )
-     $         .OR. LSAMEN( 2, P2, 'PS' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PO' ) .OR. AB_AB_LSAMEN( 2, P2, 
+     $'PP' )
+     $         .OR. AB_AB_LSAMEN( 2, P2, 'PS' ) ) THEN
 *
 *        PO: Positive definite full
 *        PS: Positive definite full
@@ -185,7 +186,7 @@
          ELSE
             SYM = 'Hermitian'
          END IF
-         IF( LSAME( C3, 'O' ) ) THEN
+         IF( AB_LSAME( C3, 'O' ) ) THEN
             WRITE( IOUNIT, FMT = 9996 )PATH, SYM
          ELSE
             WRITE( IOUNIT, FMT = 9995 )PATH, SYM
@@ -201,7 +202,7 @@
          WRITE( IOUNIT, FMT = 9976 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'PB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PB' ) ) THEN
 *
 *        PB: Positive definite band
 *
@@ -221,7 +222,7 @@
          WRITE( IOUNIT, FMT = 9976 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'PT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PT' ) ) THEN
 *
 *        PT: Positive definite tridiagonal
 *
@@ -240,14 +241,15 @@
          WRITE( IOUNIT, FMT = 9976 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'SY' ) .OR. LSAMEN( 2, P2, 'SP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'SY' ) .OR. AB_AB_LSAMEN( 2, P2, 
+     $'SP' ) ) THEN
 *
 *        SY: Symmetric indefinite full
 *            with partial (Bunch-Kaufman) pivoting algorithm
 *        SP: Symmetric indefinite packed
 *            with partial (Bunch-Kaufman) pivoting algorithm
 *
-         IF( LSAME( C3, 'Y' ) ) THEN
+         IF( AB_LSAME( C3, 'Y' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Symmetric'
          ELSE
             WRITE( IOUNIT, FMT = 9991 )PATH, 'Symmetric'
@@ -267,7 +269,8 @@
          WRITE( IOUNIT, FMT = 9976 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'SR' ) .OR. LSAMEN( 2, P2, 'SK') ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'SR' ) .OR. AB_AB_LSAMEN( 2, P2, 
+     $'SK') ) THEN
 *
 *        SR: Symmetric indefinite full,
 *            with rook (bounded Bunch-Kaufman) pivoting algorithm
@@ -293,7 +296,7 @@
          WRITE( IOUNIT, FMT = 9979 )3
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'HA' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'HA' ) ) THEN
 *
 *        HA: Hermitian
 *            Aasen algorithm
@@ -312,15 +315,15 @@
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 
 
-      ELSE IF( LSAMEN( 2, P2, 'HE' ) .OR.
-     $         LSAMEN( 2, P2, 'HP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'HE' ) .OR.
+     $         AB_AB_LSAMEN( 2, P2, 'HP' ) ) THEN
 *
 *        HE: Hermitian indefinite full
 *            with partial (Bunch-Kaufman) pivoting algorithm
 *        HP: Hermitian indefinite packed
 *            with partial (Bunch-Kaufman) pivoting algorithm
 *
-         IF( LSAME( C3, 'E' ) ) THEN
+         IF( AB_LSAME( C3, 'E' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
          ELSE
             WRITE( IOUNIT, FMT = 9991 )PATH, 'Hermitian'
@@ -338,7 +341,8 @@
          WRITE( IOUNIT, FMT = 9976 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'HR' ) .OR. LSAMEN( 2, P2, 'HK' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'HR' ) .OR. AB_AB_LSAMEN( 2, P2, 
+     $'HK' ) ) THEN
 *
 *        HR: Hermitian indefinite full,
 *            with rook (bounded Bunch-Kaufman) pivoting algorithm
@@ -362,12 +366,12 @@
 *
       ELSE
 *
-*        Print error message if no header is available.
+*        Print error message if no AB_HEADER is available.
 *
          WRITE( IOUNIT, FMT = 9990 )PATH
       END IF
 *
-*     First line of header
+*     First line of AB_HEADER
 *
  9999 FORMAT( / 1X, A3, ' drivers:  General dense matrices' )
  9998 FORMAT( / 1X, A3, ' drivers:  General band matrices' )
@@ -390,7 +394,7 @@
  9891 FORMAT( / 1X, A3, ' drivers:  ', A9,
      $      ' indefinite packed matrices',
      $      ', "rook" (bounded Bunch-Kaufman) pivoting' )
- 9990 FORMAT( / 1X, A3, ':  No header available' )
+ 9990 FORMAT( / 1X, A3, ':  No AB_HEADER available' )
 *
 *     GE matrix types
 *
@@ -515,6 +519,6 @@
 *
       RETURN
 *
-*     End of ALADHD
+*     End of AB_ALADHD
 *
       END

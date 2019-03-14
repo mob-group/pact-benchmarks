@@ -1,4 +1,4 @@
-*> \brief \b CBDT02
+*> \brief \b AB_CBDT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RWORK,
+*       SUBROUTINE AB_CBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CBDT02 tests the change of basis C = U' * B by computing the residual
+*> AB_CBDT02 tests the change of basis C = U' * B by computing the residual
 *>
 *>    RESID = norm( B - U * C ) / ( max(m,n) * norm(B) * EPS ),
 *>
@@ -116,7 +116,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RWORK,
+      SUBROUTINE AB_CBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -145,11 +145,11 @@
       REAL               BNORM, EPS, REALMN
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SCASUM, SLAMCH
-      EXTERNAL           CLANGE, SCASUM, SLAMCH
+      REAL               AB_CLANGE, AB_SCASUM, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CGEMV
+      EXTERNAL           AB_CCOPY, AB_CGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -162,20 +162,20 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
       REALMN = REAL( MAX( M, N ) )
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
 *     Compute norm( B - U * C )
 *
       DO 10 J = 1, N
-         CALL CCOPY( M, B( 1, J ), 1, WORK, 1 )
-         CALL CGEMV( 'No transpose', M, M, -CMPLX( ONE ), U, LDU,
+         CALL AB_CCOPY( M, B( 1, J ), 1, WORK, 1 )
+         CALL AB_CGEMV( 'No transpose', M, M, -CMPLX( ONE ), U, LDU,
      $               C( 1, J ), 1, CMPLX( ONE ), WORK, 1 )
-         RESID = MAX( RESID, SCASUM( M, WORK, 1 ) )
+         RESID = MAX( RESID, AB_SCASUM( M, WORK, 1 ) )
    10 CONTINUE
 *
 *     Compute norm of B.
 *
-      BNORM = CLANGE( '1', M, N, B, LDB, RWORK )
+      BNORM = AB_CLANGE( '1', M, N, B, LDB, RWORK )
 *
       IF( BNORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -194,6 +194,6 @@
       END IF
       RETURN
 *
-*     End of CBDT02
+*     End of AB_CBDT02
 *
       END

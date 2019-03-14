@@ -1,4 +1,4 @@
-*> \brief \b CLAVHE_ROOK
+*> \brief \b AB_AB_CLAVHE_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAVHE_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
+*       SUBROUTINE AB_AB_CLAVHE_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
 *                               LDB, INFO )
 *
 *       .. Scalar Arguments ..
@@ -26,10 +26,10 @@
 *>
 *> \verbatim
 *>
-*> CLAVHE_ROOK performs one of the matrix-vector operations
+*> AB_AB_CLAVHE_ROOK performs one of the matrix-vector operations
 *>    x := A*x  or  x := A^H*x,
 *> where x is an N element vector and  A is one of the factors
-*> from the block U*D*U' or L*D*L' factorization computed by CHETRF_ROOK.
+*> from the block U*D*U' or L*D*L' factorization computed by AB_AB_CHETRF_ROOK.
 *>
 *> If TRANS = 'N', multiplies by U  or U * D  (or L  or L * D)
 *> If TRANS = 'C', multiplies by U' or D * U' (or L' or D * L')
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by CHETRF_ROOK.
+*>          obtain the factor U or L as computed by AB_AB_CHETRF_ROOK.
 *>          Stored as a 2-D triangular matrix.
 *> \endverbatim
 *>
@@ -96,7 +96,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D,
-*>          as determined by CHETRF_ROOK.
+*>          as determined by AB_AB_CHETRF_ROOK.
 *>          If UPLO = 'U':
 *>             Only the last KB elements of IPIV are set.
 *>
@@ -153,7 +153,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CLAVHE_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV,
+      SUBROUTINE AB_AB_CLAVHE_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, 
+     $IPIV,
      $                        B, LDB, INFO )
 *
 *  -- LAPACK test routine (version 3.5.0) --
@@ -182,11 +183,12 @@
       COMPLEX            D11, D12, D21, D22, T1, T2
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGERU, CLACGV, CSCAL, CSWAP, XERBLA
+      EXTERNAL           AB_CGEMV, AB_CGERU, AB_CLACGV, AB_CSCAL, AB_CSW
+     $AP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX
@@ -196,12 +198,15 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
+     $THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.LSAME( TRANS, 'C' ) )
+      ELSE IF( .NOT.AB_LSAME( TRANS, 'N' ) .AND. .NOT.AB_LSAME( TRANS
+     $, 'C' ) )
      $          THEN
          INFO = -2
-      ELSE IF( .NOT.LSAME( DIAG, 'U' ) .AND. .NOT.LSAME( DIAG, 'N' ) )
+      ELSE IF( .NOT.AB_LSAME( DIAG, 'U' ) .AND. .NOT.AB_LSAME( DIAG, 
+     $'N' ) )
      $          THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
@@ -212,7 +217,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAVHE_ROOK ', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CLAVHE_ROOK ', -INFO )
          RETURN
       END IF
 *
@@ -221,18 +226,18 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      NOUNIT = LSAME( DIAG, 'N' )
+      NOUNIT = AB_LSAME( DIAG, 'N' )
 *------------------------------------------
 *
 *     Compute  B := A * B  (No transpose)
 *
 *------------------------------------------
-      IF( LSAME( TRANS, 'N' ) ) THEN
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
 *
 *        Compute  B := U*B
 *        where U = P(m)*inv(U(m))* ... *P(1)*inv(U(1))
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *        Loop forward applying the transformations.
 *
@@ -247,7 +252,7 @@
 *              Multiply by the diagonal element if forming U * D.
 *
                IF( NOUNIT )
-     $            CALL CSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL AB_CSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
 *
 *              Multiply by  P(K) * inv(U(K))  if K > 1.
 *
@@ -255,14 +260,16 @@
 *
 *                 Apply the transformation.
 *
-                  CALL CGERU( K-1, NRHS, CONE, A( 1, K ), 1, B( K, 1 ),
+                  CALL AB_CGERU( K-1, NRHS, CONE, A( 1, K ), 1, B( K, 1 
+     $),
      $                        LDB, B( 1, 1 ), LDB )
 *
 *                 Interchange if P(K) != I.
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
+     $B )
                END IF
                K = K + 1
             ELSE
@@ -290,9 +297,10 @@
 *
 *                 Apply the transformations.
 *
-                  CALL CGERU( K-1, NRHS, CONE, A( 1, K ), 1, B( K, 1 ),
+                  CALL AB_CGERU( K-1, NRHS, CONE, A( 1, K ), 1, B( K, 1 
+     $),
      $                        LDB, B( 1, 1 ), LDB )
-                  CALL CGERU( K-1, NRHS, CONE, A( 1, K+1 ), 1,
+                  CALL AB_CGERU( K-1, NRHS, CONE, A( 1, K+1 ), 1,
      $                        B( K+1, 1 ), LDB, B( 1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
@@ -302,13 +310,14 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
+     $B )
 *
 *                 NOW swap the first of pair with Pth
 *
                   KP = ABS( IPIV( K+1 ) )
                   IF( KP.NE.K+1 )
-     $               CALL CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
+     $               CALL AB_CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
                END IF
                K = K + 2
@@ -338,7 +347,7 @@
 *              Multiply by the diagonal element if forming L * D.
 *
                IF( NOUNIT )
-     $            CALL CSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL AB_CSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
 *
 *              Multiply by  P(K) * inv(L(K))  if K < N.
 *
@@ -347,14 +356,15 @@
 *
 *                 Apply the transformation.
 *
-                  CALL CGERU( N-K, NRHS, CONE, A( K+1, K ), 1,
+                  CALL AB_CGERU( N-K, NRHS, CONE, A( K+1, K ), 1,
      $                        B( K, 1 ), LDB, B( K+1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
 *                 K-th step of the factorization.
 *
                   IF( KP.NE.K )
-     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
+     $B )
                END IF
                K = K - 1
 *
@@ -383,26 +393,27 @@
 *
 *                 Apply the transformation.
 *
-                  CALL CGERU( N-K, NRHS, CONE, A( K+1, K ), 1,
+                  CALL AB_CGERU( N-K, NRHS, CONE, A( K+1, K ), 1,
      $                        B( K, 1 ), LDB, B( K+1, 1 ), LDB )
-                  CALL CGERU( N-K, NRHS, CONE, A( K+1, K-1 ), 1,
+                  CALL AB_CGERU( N-K, NRHS, CONE, A( K+1, K-1 ), 1,
      $                        B( K-1, 1 ), LDB, B( K+1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
 *                 K-th step of the factorization.
 *
 *
-*                 Swap the second of pair with IMAXth
+*                 Swap the AB_SECOND of pair with IMAXth
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
+     $B )
 *
 *                 NOW swap the first of pair with Pth
 *
                   KP = ABS( IPIV( K-1 ) )
                   IF( KP.NE.K-1 )
-     $               CALL CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
+     $               CALL AB_CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
                END IF
@@ -422,7 +433,7 @@
 *        where U  = P(m)*inv(U(m))* ... *P(1)*inv(U(1))
 *        and   U^H = inv(U^H(1))*P(1)* ... *inv(U^H(m))*P(m)
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Loop backward applying the transformations.
 *
@@ -439,19 +450,20 @@
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
+     $B )
 *
 *                 Apply the transformation
 *                    y = y - B' conjg(x),
 *                 where x is a column of A and y is a row of B.
 *
-                  CALL CLACGV( NRHS, B( K, 1 ), LDB )
-                  CALL CGEMV( 'Conjugate', K-1, NRHS, CONE, B, LDB,
+                  CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
+                  CALL AB_CGEMV( 'Conjugate', K-1, NRHS, CONE, B, LDB,
      $                        A( 1, K ), 1, CONE, B( K, 1 ), LDB )
-                  CALL CLACGV( NRHS, B( K, 1 ), LDB )
+                  CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
                END IF
                IF( NOUNIT )
-     $            CALL CSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL AB_CSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
                K = K - 1
 *
 *           2 x 2 pivot block.
@@ -459,17 +471,18 @@
             ELSE
                IF( K.GT.2 ) THEN
 *
-*                 Swap the second of pair with Pth
+*                 Swap the AB_SECOND of pair with Pth
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
+     $B )
 *
 *                 Now swap the first of pair with IMAX(r)th
 *
                   KP = ABS( IPIV( K-1 ) )
                   IF( KP.NE.K-1 )
-     $               CALL CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
+     $               CALL AB_CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
 *                 Apply the transformations
@@ -477,15 +490,15 @@
 *                 where x is a block column of A and y is a block
 *                 row of B.
 *
-                  CALL CLACGV( NRHS, B( K, 1 ), LDB )
-                  CALL CGEMV( 'Conjugate', K-2, NRHS, CONE, B, LDB,
+                  CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
+                  CALL AB_CGEMV( 'Conjugate', K-2, NRHS, CONE, B, LDB,
      $                        A( 1, K ), 1, CONE, B( K, 1 ), LDB )
-                  CALL CLACGV( NRHS, B( K, 1 ), LDB )
+                  CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
 *
-                  CALL CLACGV( NRHS, B( K-1, 1 ), LDB )
-                  CALL CGEMV( 'Conjugate', K-2, NRHS, CONE, B, LDB,
+                  CALL AB_CLACGV( NRHS, B( K-1, 1 ), LDB )
+                  CALL AB_CGEMV( 'Conjugate', K-2, NRHS, CONE, B, LDB,
      $                        A( 1, K-1 ), 1, CONE, B( K-1, 1 ), LDB )
-                  CALL CLACGV( NRHS, B( K-1, 1 ), LDB )
+                  CALL AB_CLACGV( NRHS, B( K-1, 1 ), LDB )
                END IF
 *
 *              Multiply by the diagonal block if non-unit.
@@ -529,17 +542,19 @@
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
+     $B )
 *
 *                 Apply the transformation
 *
-                  CALL CLACGV( NRHS, B( K, 1 ), LDB )
-                  CALL CGEMV( 'Conjugate', N-K, NRHS, CONE, B( K+1, 1 ),
+                  CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
+                  CALL AB_CGEMV( 'Conjugate', N-K, NRHS, CONE, B( K+1, 1
+     $ ),
      $                       LDB, A( K+1, K ), 1, CONE, B( K, 1 ), LDB )
-                  CALL CLACGV( NRHS, B( K, 1 ), LDB )
+                  CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
                END IF
                IF( NOUNIT )
-     $            CALL CSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL AB_CSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
                K = K + 1
 *
 *           2 x 2 pivot block.
@@ -551,28 +566,29 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
+     $B )
 *
-*                 Now swap the second of pair with IMAX(r)th
+*                 Now swap the AB_SECOND of pair with IMAX(r)th
 *
                   KP = ABS( IPIV( K+1 ) )
                   IF( KP.NE.K+1 )
-     $               CALL CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
+     $               CALL AB_CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
 *                 Apply the transformation
 *
-                  CALL CLACGV( NRHS, B( K+1, 1 ), LDB )
-                  CALL CGEMV( 'Conjugate', N-K-1, NRHS, CONE,
+                  CALL AB_CLACGV( NRHS, B( K+1, 1 ), LDB )
+                  CALL AB_CGEMV( 'Conjugate', N-K-1, NRHS, CONE,
      $                        B( K+2, 1 ), LDB, A( K+2, K+1 ), 1, CONE,
      $                        B( K+1, 1 ), LDB )
-                  CALL CLACGV( NRHS, B( K+1, 1 ), LDB )
+                  CALL AB_CLACGV( NRHS, B( K+1, 1 ), LDB )
 *
-                  CALL CLACGV( NRHS, B( K, 1 ), LDB )
-                  CALL CGEMV( 'Conjugate', N-K-1, NRHS, CONE,
+                  CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
+                  CALL AB_CGEMV( 'Conjugate', N-K-1, NRHS, CONE,
      $                        B( K+2, 1 ), LDB, A( K+2, K ), 1, CONE,
      $                        B( K, 1 ), LDB )
-                  CALL CLACGV( NRHS, B( K, 1 ), LDB )
+                  CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
                END IF
 *
 *              Multiply by the diagonal block if non-unit.
@@ -598,6 +614,6 @@
       END IF
       RETURN
 *
-*     End of CLAVHE_ROOK
+*     End of AB_AB_CLAVHE_ROOK
 *
       END

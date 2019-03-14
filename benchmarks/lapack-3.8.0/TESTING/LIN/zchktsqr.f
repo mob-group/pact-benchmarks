@@ -1,4 +1,4 @@
-*> \brief \b DCHKQRT
+*> \brief \b AB_AB_DCHKQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+*       SUBROUTINE AB_ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
 *                           NBVAL, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKTSQR tests ZGEQR and ZGEMQR.
+*> AB_ZCHKTSQR tests AB_ZGEQR and AB_ZGEMQR.
 *> \endverbatim
 *
 *  Arguments:
@@ -99,7 +99,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+      SUBROUTINE AB_ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
       IMPLICIT NONE
 *
@@ -132,8 +132,8 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRTSQR,
-     $                   ZTSQR01, XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_ZERRTSQR,
+     $                   AB_ZTSQR01, AB_XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
@@ -159,7 +159,7 @@
 *
 *     Test the error exits
 *
-      IF( TSTERR ) CALL ZERRTSQR( PATH, NOUT )
+      IF( TSTERR ) CALL AB_ZERRTSQR( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of M in MVAL.
@@ -174,14 +174,14 @@
               IF (MIN(M,N).NE.0) THEN
               DO INB = 1, NNB
                 MB = NBVAL( INB )
-                  CALL XLAENV( 1, MB )
+                  CALL AB_XLAENV( 1, MB )
                   DO IMB = 1, NNB
                     NB = NBVAL( IMB )
-                    CALL XLAENV( 2, NB )
+                    CALL AB_XLAENV( 2, NB )
 *
-*                 Test ZGEQR and ZGEMQR
+*                 Test AB_ZGEQR and AB_ZGEMQR
 *
-                    CALL ZTSQR01( 'TS', M, N, MB, NB, RESULT )
+                    CALL AB_ZTSQR01( 'TS', M, N, MB, NB, RESULT )
 *
 *                 Print information about the tests that did not
 *                 pass the threshold.
@@ -189,7 +189,7 @@
                     DO T = 1, NTESTS
                       IF( RESULT( T ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )M, N, MB, NB,
      $                       T, RESULT( T )
                         NFAIL = NFAIL + 1
@@ -214,14 +214,14 @@
               IF (MIN(M,N).NE.0) THEN
               DO INB = 1, NNB
                 MB = NBVAL( INB )
-                  CALL XLAENV( 1, MB )
+                  CALL AB_XLAENV( 1, MB )
                   DO IMB = 1, NNB
                     NB = NBVAL( IMB )
-                    CALL XLAENV( 2, NB )
+                    CALL AB_XLAENV( 2, NB )
 *
-*                 Test ZGELQ and ZGEMLQ
+*                 Test AB_ZGELQ and AB_ZGEMLQ
 *
-                    CALL ZTSQR01( 'SW', M, N, MB, NB, RESULT )
+                    CALL AB_ZTSQR01( 'SW', M, N, MB, NB, RESULT )
 *
 *                 Print information about the tests that did not
 *                 pass the threshold.
@@ -229,7 +229,7 @@
                     DO T = 1, NTESTS
                       IF( RESULT( T ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9998 )M, N, MB, NB,
      $                       T, RESULT( T )
                         NFAIL = NFAIL + 1
@@ -244,7 +244,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 'TS: M=', I5, ', N=', I5, ', MB=', I5,
      $      ', NB=', I5,' test(', I2, ')=', G12.5 )
@@ -252,6 +252,6 @@
      $      ', NB=', I5,' test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of ZCHKQRT
+*     End of AB_AB_ZCHKQRT
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SERRHS
+*> \brief \b AB_SERRHS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SERRHS( PATH, NUNIT )
+*       SUBROUTINE AB_SERRHS( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> SERRHS tests the error exits for SGEBAK, SGEBAL, SGEHRD, SORGHR,
-*> SORMHR, SHSEQR, SHSEIN, and STREVC.
+*> AB_SERRHS tests the error exits for AB_SGEBAK, AB_SGEBAL, AB_SGEHRD, AB_SORGHR,
+*> AB_SORMHR, AB_SHSEQR, AB_SHSEIN, and AB_STREVC.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SERRHS( PATH, NUNIT )
+      SUBROUTINE AB_SERRHS( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,12 +83,13 @@
      $                   WI( NMAX ), WR( NMAX ), S( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, SGEBAK, SGEBAL, SGEHRD, SHSEIN, SHSEQR,
-     $                   SORGHR, SORMHR, STREVC
+      EXTERNAL           AB_CHKXER, AB_SGEBAK, AB_SGEBAL, AB_SGEHRD, AB_
+     $SHSEIN, AB_SHSEQR,
+     $                   AB_SORGHR, AB_SORMHR, AB_STREVC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -122,284 +123,292 @@
 *
 *     Test error exits of the nonsymmetric eigenvalue routines.
 *
-      IF( LSAMEN( 2, C2, 'HS' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'HS' ) ) THEN
 *
-*        SGEBAL
+*        AB_SGEBAL
 *
-         SRNAMT = 'SGEBAL'
+         SRNAMT = 'AB_SGEBAL'
          INFOT = 1
-         CALL SGEBAL( '/', 0, A, 1, ILO, IHI, S, INFO )
-         CALL CHKXER( 'SGEBAL', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAL( '/', 0, A, 1, ILO, IHI, S, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAL', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGEBAL( 'N', -1, A, 1, ILO, IHI, S, INFO )
-         CALL CHKXER( 'SGEBAL', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAL( 'N', -1, A, 1, ILO, IHI, S, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAL', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SGEBAL( 'N', 2, A, 1, ILO, IHI, S, INFO )
-         CALL CHKXER( 'SGEBAL', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAL( 'N', 2, A, 1, ILO, IHI, S, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAL', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        SGEBAK
+*        AB_SGEBAK
 *
-         SRNAMT = 'SGEBAK'
+         SRNAMT = 'AB_SGEBAK'
          INFOT = 1
-         CALL SGEBAK( '/', 'R', 0, 1, 0, S, 0, A, 1, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( '/', 'R', 0, 1, 0, S, 0, A, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGEBAK( 'N', '/', 0, 1, 0, S, 0, A, 1, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( 'N', '/', 0, 1, 0, S, 0, A, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SGEBAK( 'N', 'R', -1, 1, 0, S, 0, A, 1, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( 'N', 'R', -1, 1, 0, S, 0, A, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SGEBAK( 'N', 'R', 0, 0, 0, S, 0, A, 1, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( 'N', 'R', 0, 0, 0, S, 0, A, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SGEBAK( 'N', 'R', 0, 2, 0, S, 0, A, 1, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( 'N', 'R', 0, 2, 0, S, 0, A, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SGEBAK( 'N', 'R', 2, 2, 1, S, 0, A, 2, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( 'N', 'R', 2, 2, 1, S, 0, A, 2, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SGEBAK( 'N', 'R', 0, 1, 1, S, 0, A, 1, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( 'N', 'R', 0, 1, 1, S, 0, A, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL SGEBAK( 'N', 'R', 0, 1, 0, S, -1, A, 1, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( 'N', 'R', 0, 1, 0, S, -1, A, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL SGEBAK( 'N', 'R', 2, 1, 2, S, 0, A, 1, INFO )
-         CALL CHKXER( 'SGEBAK', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEBAK( 'N', 'R', 2, 1, 2, S, 0, A, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEBAK', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        SGEHRD
+*        AB_SGEHRD
 *
-         SRNAMT = 'SGEHRD'
+         SRNAMT = 'AB_SGEHRD'
          INFOT = 1
-         CALL SGEHRD( -1, 1, 1, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SGEHRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEHRD( -1, 1, 1, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEHRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGEHRD( 0, 0, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SGEHRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEHRD( 0, 0, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEHRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGEHRD( 0, 2, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SGEHRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEHRD( 0, 2, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEHRD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SGEHRD( 1, 1, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SGEHRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEHRD( 1, 1, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEHRD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SGEHRD( 0, 1, 1, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SGEHRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEHRD( 0, 1, 1, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEHRD', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SGEHRD( 2, 1, 1, A, 1, TAU, W, 2, INFO )
-         CALL CHKXER( 'SGEHRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEHRD( 2, 1, 1, A, 1, TAU, W, 2, INFO )
+         CALL AB_CHKXER( 'AB_SGEHRD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SGEHRD( 2, 1, 2, A, 2, TAU, W, 1, INFO )
-         CALL CHKXER( 'SGEHRD', INFOT, NOUT, LERR, OK )
+         CALL AB_SGEHRD( 2, 1, 2, A, 2, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGEHRD', INFOT, NOUT, LERR, OK )
          NT = NT + 7
 *
-*        SORGHR
+*        AB_SORGHR
 *
-         SRNAMT = 'SORGHR'
+         SRNAMT = 'AB_SORGHR'
          INFOT = 1
-         CALL SORGHR( -1, 1, 1, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SORGHR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGHR( -1, 1, 1, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGHR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SORGHR( 0, 0, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SORGHR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGHR( 0, 0, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGHR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SORGHR( 0, 2, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SORGHR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGHR( 0, 2, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGHR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORGHR( 1, 1, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SORGHR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGHR( 1, 1, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGHR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORGHR( 0, 1, 1, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SORGHR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGHR( 0, 1, 1, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGHR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SORGHR( 2, 1, 1, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'SORGHR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGHR( 2, 1, 1, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGHR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SORGHR( 3, 1, 3, A, 3, TAU, W, 1, INFO )
-         CALL CHKXER( 'SORGHR', INFOT, NOUT, LERR, OK )
+         CALL AB_SORGHR( 3, 1, 3, A, 3, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SORGHR', INFOT, NOUT, LERR, OK )
          NT = NT + 7
 *
-*        SORMHR
+*        AB_SORMHR
 *
-         SRNAMT = 'SORMHR'
+         SRNAMT = 'AB_SORMHR'
          INFOT = 1
-         CALL SORMHR( '/', 'N', 0, 0, 1, 0, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( '/', 'N', 0, 0, 1, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SORMHR( 'L', '/', 0, 0, 1, 0, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', '/', 0, 0, 1, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SORMHR( 'L', 'N', -1, 0, 1, 0, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', 'N', -1, 0, 1, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SORMHR( 'L', 'N', 0, -1, 1, 0, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', 'N', 0, -1, 1, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SORMHR( 'L', 'N', 0, 0, 0, 0, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', 'N', 0, 0, 0, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SORMHR( 'L', 'N', 0, 0, 2, 0, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', 'N', 0, 0, 2, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SORMHR( 'L', 'N', 1, 2, 2, 1, A, 1, TAU, C, 1, W, 2,
+         CALL AB_SORMHR( 'L', 'N', 1, 2, 2, 1, A, 1, TAU, C, 1, W, 2,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SORMHR( 'R', 'N', 2, 1, 2, 1, A, 1, TAU, C, 2, W, 2,
+         CALL AB_SORMHR( 'R', 'N', 2, 1, 2, 1, A, 1, TAU, C, 2, W, 2,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL SORMHR( 'L', 'N', 1, 1, 1, 0, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', 'N', 1, 1, 1, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL SORMHR( 'L', 'N', 0, 1, 1, 1, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', 'N', 0, 1, 1, 1, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL SORMHR( 'R', 'N', 1, 0, 1, 1, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'R', 'N', 1, 0, 1, 1, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SORMHR( 'L', 'N', 2, 1, 1, 1, A, 1, TAU, C, 2, W, 1,
+         CALL AB_SORMHR( 'L', 'N', 2, 1, 1, 1, A, 1, TAU, C, 2, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SORMHR( 'R', 'N', 1, 2, 1, 1, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'R', 'N', 1, 2, 1, 1, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL SORMHR( 'L', 'N', 2, 1, 1, 1, A, 2, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', 'N', 2, 1, 1, 1, A, 2, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL SORMHR( 'L', 'N', 1, 2, 1, 1, A, 1, TAU, C, 1, W, 1,
+         CALL AB_SORMHR( 'L', 'N', 1, 2, 1, 1, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL SORMHR( 'R', 'N', 2, 1, 1, 1, A, 1, TAU, C, 2, W, 1,
+         CALL AB_SORMHR( 'R', 'N', 2, 1, 1, 1, A, 1, TAU, C, 2, W, 1,
      $                INFO )
-         CALL CHKXER( 'SORMHR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SORMHR', INFOT, NOUT, LERR, OK )
          NT = NT + 16
 *
-*        SHSEQR
+*        AB_SHSEQR
 *
-         SRNAMT = 'SHSEQR'
+         SRNAMT = 'AB_SHSEQR'
          INFOT = 1
-         CALL SHSEQR( '/', 'N', 0, 1, 0, A, 1, WR, WI, C, 1, W, 1,
+         CALL AB_SHSEQR( '/', 'N', 0, 1, 0, A, 1, WR, WI, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SHSEQR( 'E', '/', 0, 1, 0, A, 1, WR, WI, C, 1, W, 1,
+         CALL AB_SHSEQR( 'E', '/', 0, 1, 0, A, 1, WR, WI, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SHSEQR( 'E', 'N', -1, 1, 0, A, 1, WR, WI, C, 1, W, 1,
+         CALL AB_SHSEQR( 'E', 'N', -1, 1, 0, A, 1, WR, WI, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SHSEQR( 'E', 'N', 0, 0, 0, A, 1, WR, WI, C, 1, W, 1,
+         CALL AB_SHSEQR( 'E', 'N', 0, 0, 0, A, 1, WR, WI, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SHSEQR( 'E', 'N', 0, 2, 0, A, 1, WR, WI, C, 1, W, 1,
+         CALL AB_SHSEQR( 'E', 'N', 0, 2, 0, A, 1, WR, WI, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SHSEQR( 'E', 'N', 1, 1, 0, A, 1, WR, WI, C, 1, W, 1,
+         CALL AB_SHSEQR( 'E', 'N', 1, 1, 0, A, 1, WR, WI, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SHSEQR( 'E', 'N', 1, 1, 2, A, 1, WR, WI, C, 1, W, 1,
+         CALL AB_SHSEQR( 'E', 'N', 1, 1, 2, A, 1, WR, WI, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL SHSEQR( 'E', 'N', 2, 1, 2, A, 1, WR, WI, C, 2, W, 1,
+         CALL AB_SHSEQR( 'E', 'N', 2, 1, 2, A, 1, WR, WI, C, 2, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL SHSEQR( 'E', 'V', 2, 1, 2, A, 2, WR, WI, C, 1, W, 1,
+         CALL AB_SHSEQR( 'E', 'V', 2, 1, 2, A, 2, WR, WI, C, 1, W, 1,
      $                INFO )
-         CALL CHKXER( 'SHSEQR', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEQR', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        SHSEIN
+*        AB_SHSEIN
 *
-         SRNAMT = 'SHSEIN'
+         SRNAMT = 'AB_SHSEIN'
          INFOT = 1
-         CALL SHSEIN( '/', 'N', 'N', SEL, 0, A, 1, WR, WI, VL, 1, VR, 1,
+         CALL AB_SHSEIN( '/', 'N', 'N', SEL, 0, A, 1, WR, WI, VL, 1, VR,
+     $ 1,
      $                0, M, W, IFAILL, IFAILR, INFO )
-         CALL CHKXER( 'SHSEIN', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEIN', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SHSEIN( 'R', '/', 'N', SEL, 0, A, 1, WR, WI, VL, 1, VR, 1,
+         CALL AB_SHSEIN( 'R', '/', 'N', SEL, 0, A, 1, WR, WI, VL, 1, VR,
+     $ 1,
      $                0, M, W, IFAILL, IFAILR, INFO )
-         CALL CHKXER( 'SHSEIN', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEIN', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SHSEIN( 'R', 'N', '/', SEL, 0, A, 1, WR, WI, VL, 1, VR, 1,
+         CALL AB_SHSEIN( 'R', 'N', '/', SEL, 0, A, 1, WR, WI, VL, 1, VR,
+     $ 1,
      $                0, M, W, IFAILL, IFAILR, INFO )
-         CALL CHKXER( 'SHSEIN', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEIN', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SHSEIN( 'R', 'N', 'N', SEL, -1, A, 1, WR, WI, VL, 1, VR,
+         CALL AB_SHSEIN( 'R', 'N', 'N', SEL, -1, A, 1, WR, WI, VL, 1, VR
+     $,
      $                1, 0, M, W, IFAILL, IFAILR, INFO )
-         CALL CHKXER( 'SHSEIN', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEIN', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL SHSEIN( 'R', 'N', 'N', SEL, 2, A, 1, WR, WI, VL, 1, VR, 2,
+         CALL AB_SHSEIN( 'R', 'N', 'N', SEL, 2, A, 1, WR, WI, VL, 1, VR,
+     $ 2,
      $                4, M, W, IFAILL, IFAILR, INFO )
-         CALL CHKXER( 'SHSEIN', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEIN', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL SHSEIN( 'L', 'N', 'N', SEL, 2, A, 2, WR, WI, VL, 1, VR, 1,
+         CALL AB_SHSEIN( 'L', 'N', 'N', SEL, 2, A, 2, WR, WI, VL, 1, VR,
+     $ 1,
      $                4, M, W, IFAILL, IFAILR, INFO )
-         CALL CHKXER( 'SHSEIN', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEIN', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL SHSEIN( 'R', 'N', 'N', SEL, 2, A, 2, WR, WI, VL, 1, VR, 1,
+         CALL AB_SHSEIN( 'R', 'N', 'N', SEL, 2, A, 2, WR, WI, VL, 1, VR,
+     $ 1,
      $                4, M, W, IFAILL, IFAILR, INFO )
-         CALL CHKXER( 'SHSEIN', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEIN', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL SHSEIN( 'R', 'N', 'N', SEL, 2, A, 2, WR, WI, VL, 1, VR, 2,
+         CALL AB_SHSEIN( 'R', 'N', 'N', SEL, 2, A, 2, WR, WI, VL, 1, VR,
+     $ 2,
      $                1, M, W, IFAILL, IFAILR, INFO )
-         CALL CHKXER( 'SHSEIN', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_SHSEIN', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
-*        STREVC
+*        AB_STREVC
 *
-         SRNAMT = 'STREVC'
+         SRNAMT = 'AB_STREVC'
          INFOT = 1
-         CALL STREVC( '/', 'A', SEL, 0, A, 1, VL, 1, VR, 1, 0, M, W,
+         CALL AB_STREVC( '/', 'A', SEL, 0, A, 1, VL, 1, VR, 1, 0, M, W,
      $                INFO )
-         CALL CHKXER( 'STREVC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_STREVC', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL STREVC( 'L', '/', SEL, 0, A, 1, VL, 1, VR, 1, 0, M, W,
+         CALL AB_STREVC( 'L', '/', SEL, 0, A, 1, VL, 1, VR, 1, 0, M, W,
      $                INFO )
-         CALL CHKXER( 'STREVC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_STREVC', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL STREVC( 'L', 'A', SEL, -1, A, 1, VL, 1, VR, 1, 0, M, W,
+         CALL AB_STREVC( 'L', 'A', SEL, -1, A, 1, VL, 1, VR, 1, 0, M, W,
      $                INFO )
-         CALL CHKXER( 'STREVC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_STREVC', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL STREVC( 'L', 'A', SEL, 2, A, 1, VL, 2, VR, 1, 4, M, W,
+         CALL AB_STREVC( 'L', 'A', SEL, 2, A, 1, VL, 2, VR, 1, 4, M, W,
      $                INFO )
-         CALL CHKXER( 'STREVC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_STREVC', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL STREVC( 'L', 'A', SEL, 2, A, 2, VL, 1, VR, 1, 4, M, W,
+         CALL AB_STREVC( 'L', 'A', SEL, 2, A, 2, VL, 1, VR, 1, 4, M, W,
      $                INFO )
-         CALL CHKXER( 'STREVC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_STREVC', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL STREVC( 'R', 'A', SEL, 2, A, 2, VL, 1, VR, 1, 4, M, W,
+         CALL AB_STREVC( 'R', 'A', SEL, 2, A, 2, VL, 1, VR, 1, 4, M, W,
      $                INFO )
-         CALL CHKXER( 'STREVC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_STREVC', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL STREVC( 'L', 'A', SEL, 2, A, 2, VL, 2, VR, 1, 1, M, W,
+         CALL AB_STREVC( 'L', 'A', SEL, 2, A, 2, VL, 2, VR, 1, 1, M, W,
      $                INFO )
-         CALL CHKXER( 'STREVC', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_STREVC', INFOT, NOUT, LERR, OK )
          NT = NT + 7
       END IF
 *
@@ -418,6 +427,6 @@
 *
       RETURN
 *
-*     End of SERRHS
+*     End of AB_SERRHS
 *
       END

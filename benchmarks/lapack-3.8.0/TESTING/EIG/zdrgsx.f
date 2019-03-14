@@ -1,4 +1,4 @@
-*> \brief \b ZDRGSX
+*> \brief \b AB_ZDRGSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, AI,
+*       SUBROUTINE AB_ZDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, AI,
 *                          BI, Z, Q, ALPHA, BETA, C, LDC, S, WORK, LWORK,
 *                          RWORK, IWORK, LIWORK, BWORK, INFO )
 *
@@ -33,10 +33,10 @@
 *>
 *> \verbatim
 *>
-*> ZDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
-*> problem expert driver ZGGESX.
+*> AB_ZDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
+*> problem expert driver AB_AB_ZGGESX.
 *>
-*> ZGGES factors A and B as Q*S*Z'  and Q*T*Z' , where ' means conjugate
+*> AB_ZGGES factors A and B as Q*S*Z'  and Q*T*Z' , where ' means conjugate
 *> transpose, S and T are  upper triangular (i.e., in generalized Schur
 *> form), and Q and Z are unitary. It also computes the generalized
 *> eigenvalues (alpha(j),beta(j)), j=1,...,n.  Thus,
@@ -51,11 +51,11 @@
 *> number for the right and left deflating subspaces corresponding to
 *> the selected eigenvalues.
 *>
-*> When ZDRGSX is called with NSIZE > 0, five (5) types of built-in
-*> matrix pairs are used to test the routine ZGGESX.
+*> When AB_ZDRGSX is called with NSIZE > 0, five (5) types of built-in
+*> matrix pairs are used to test the routine AB_AB_ZGGESX.
 *>
-*> When ZDRGSX is called with NSIZE = 0, it reads in test matrix data
-*> to test ZGGESX.
+*> When AB_ZDRGSX is called with NSIZE = 0, it reads in test matrix data
+*> to test AB_AB_ZGGESX.
 *> (need more details on what kind of read-in data are needed).
 *>
 *> For each matrix pair, the following tests will be performed and
@@ -87,7 +87,7 @@
 *>       and Difl equal zero, the estimate DIF should be less than
 *>       EPS*norm(A, B).
 *>
-*> (9)   If INFO = N+3 is returned by ZGGESX, the reordering "failed"
+*> (9)   If INFO = N+3 is returned by AB_AB_ZGGESX, the reordering "failed"
 *>       and we check that DIF = PL = PR = 0 and that the true value of
 *>       Difu and Difl is < EPS*norm(A, B). We count the events when
 *>       INFO=N+3.
@@ -105,7 +105,7 @@
 *> Note that for the built-in tests, a total of 10*NSIZE*(NSIZE-1)
 *> matrix pairs are generated and tested. NSIZE should be kept small.
 *>
-*> SVD (routine ZGESVD) is used for computing the true value of DIF_u
+*> SVD (routine AB_AB_ZGESVD) is used for computing the true value of DIF_u
 *> and DIF_l when testing the built-in test problems.
 *>
 *> Built-in Test Matrices
@@ -136,7 +136,7 @@
 *>          B22 = (b_ij) = ( 2(.5-sin(ij)) ) for i=m+1,...,k, j=i,...,k
 *>
 *> Type 3:  A11, A22 and B11, B22 are chosen as for Type 2, but each
-*>          second diagonal block in A_11 and each third diagonal block
+*>          AB_SECOND diagonal block in A_11 and each third diagonal block
 *>          in A_22 are made as 2 by 2 blocks.
 *>
 *> Type 4:  A11 = ( 20(.5 - sin(ij)) ) and B22 = ( 2(.5 - sin(i+j)) )
@@ -166,7 +166,7 @@
 *>                  |                       -d  1+b    |
 *>                  |                      -1+b  -d    |
 *>                  |                              1-d |
-*>          and matrix B are chosen as identity matrices (see DLATM5).
+*>          and matrix B are chosen as identity matrices (see AB_DLATM5).
 *>
 *> \endverbatim
 *
@@ -178,14 +178,14 @@
 *>          NSIZE is INTEGER
 *>          The maximum size of the matrices to use. NSIZE >= 0.
 *>          If NSIZE = 0, no built-in tests matrices are used, but
-*>          read-in test matrices are used to test DGGESX.
+*>          read-in test matrices are used to test AB_AB_DGGESX.
 *> \endverbatim
 *>
 *> \param[in] NCMAX
 *> \verbatim
 *>          NCMAX is INTEGER
 *>          Maximum allowable NMAX for generating Kroneker matrix
-*>          in call to ZLAKF2
+*>          in call to AB_ZLAKF2
 *> \endverbatim
 *>
 *> \param[in] THRESH
@@ -238,25 +238,25 @@
 *> \param[out] AI
 *> \verbatim
 *>          AI is COMPLEX*16 array, dimension (LDA, NSIZE)
-*>          Copy of A, modified by ZGGESX.
+*>          Copy of A, modified by AB_AB_ZGGESX.
 *> \endverbatim
 *>
 *> \param[out] BI
 *> \verbatim
 *>          BI is COMPLEX*16 array, dimension (LDA, NSIZE)
-*>          Copy of B, modified by ZGGESX.
+*>          Copy of B, modified by AB_AB_ZGGESX.
 *> \endverbatim
 *>
 *> \param[out] Z
 *> \verbatim
 *>          Z is COMPLEX*16 array, dimension (LDA, NSIZE)
-*>          Z holds the left Schur vectors computed by ZGGESX.
+*>          Z holds the left Schur vectors computed by AB_AB_ZGGESX.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is COMPLEX*16 array, dimension (LDA, NSIZE)
-*>          Q holds the right Schur vectors computed by ZGGESX.
+*>          Q holds the right Schur vectors computed by AB_AB_ZGGESX.
 *> \endverbatim
 *>
 *> \param[out] ALPHA
@@ -274,7 +274,7 @@
 *> \param[out] C
 *> \verbatim
 *>          C is COMPLEX*16 array, dimension (LDC, LDC)
-*>          Store the matrix generated by subroutine ZLAKF2, this is the
+*>          Store the matrix generated by subroutine AB_ZLAKF2, this is the
 *>          matrix formed by Kronecker products used for estimating
 *>          DIF.
 *> \endverbatim
@@ -345,7 +345,8 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, AI,
+      SUBROUTINE AB_ZDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, 
+     $AI,
      $                   BI, Z, Q, ALPHA, BETA, C, LDC, S, WORK, LWORK,
      $                   RWORK, IWORK, LIWORK, BWORK, INFO )
 *
@@ -391,14 +392,15 @@
       DOUBLE PRECISION   DIFEST( 2 ), PL( 2 ), RESULT( 10 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            ZLCTSX
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           ZLCTSX, ILAENV, DLAMCH, ZLANGE
+      LOGICAL            AB_ZLCTSX
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_ZLCTSX, AB_ILAENV, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, DLABAD, XERBLA, ZGESVD, ZGET51, ZGGESX,
-     $                   ZLACPY, ZLAKF2, ZLASET, ZLATM5
+      EXTERNAL           AB_ALASVM, AB_DLABAD, AB_XERBLA, AB_AB_ZGESVD, 
+     $AB_ZGET51, AB_AB_ZGGESX,
+     $                   AB_ZLACPY, AB_ZLAKF2, AB_ZLASET, AB_ZLATM5
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            FS
@@ -442,24 +444,25 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by ILAENV.)
+*       following subroutine, as returned by AB_ILAENV.)
 *
       MINWRK = 1
       IF( INFO.EQ.0 .AND. LWORK.GE.1 ) THEN
          MINWRK = 3*NSIZE*NSIZE / 2
 *
-*        workspace for cggesx
+*        workspace for AB_AB_CGGESX
 *
-         MAXWRK = NSIZE*( 1+ILAENV( 1, 'ZGEQRF', ' ', NSIZE, 1, NSIZE,
+         MAXWRK = NSIZE*( 1+AB_ILAENV( 1, 'AB_AB_ZGEQRF', ' ', NSIZE, 1,
+     $ NSIZE,
      $            0 ) )
-         MAXWRK = MAX( MAXWRK, NSIZE*( 1+ILAENV( 1, 'ZUNGQR', ' ',
+         MAXWRK = MAX( MAXWRK, NSIZE*( 1+AB_ILAENV( 1, 'AB_ZUNGQR', ' ',
      $            NSIZE, 1, NSIZE, -1 ) ) )
 *
-*        workspace for zgesvd
+*        workspace for AB_AB_ZGESVD
 *
          BDSPAC = 3*NSIZE*NSIZE / 2
          MAXWRK = MAX( MAXWRK, NSIZE*NSIZE*
-     $            ( 1+ILAENV( 1, 'ZGEBRD', ' ', NSIZE*NSIZE / 2,
+     $            ( 1+AB_ILAENV( 1, 'AB_ZGEBRD', ' ', NSIZE*NSIZE / 2,
      $            NSIZE*NSIZE / 2, -1, -1 ) ) )
          MAXWRK = MAX( MAXWRK, BDSPAC )
 *
@@ -472,17 +475,17 @@
      $   INFO = -18
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZDRGSX', -INFO )
+         CALL AB_XERBLA( 'AB_ZDRGSX', -INFO )
          RETURN
       END IF
 *
 *     Important constants
 *
-      ULP = DLAMCH( 'P' )
+      ULP = AB_DLAMCH( 'P' )
       ULPINV = ONE / ULP
-      SMLNUM = DLAMCH( 'S' ) / ULP
+      SMLNUM = AB_DLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH
       NTESTT = 0
       NERRS = 0
@@ -494,7 +497,7 @@
      $   GO TO 70
 *
 *     Test the built-in matrix pairs.
-*     Loop over different functions (IFUNC) of ZGGESX, types (PRTYPE)
+*     Loop over different functions (IFUNC) of AB_AB_ZGGESX, types (PRTYPE)
 *     of test matrices, different size (M+N)
 *
       PRTYPE = 0
@@ -515,19 +518,21 @@
                   FS = .TRUE.
                   K = 0
 *
-                  CALL ZLASET( 'Full', MPLUSN, MPLUSN, CZERO, CZERO, AI,
+                  CALL AB_ZLASET( 'Full', MPLUSN, MPLUSN, CZERO, CZERO, 
+     $AI,
      $                         LDA )
-                  CALL ZLASET( 'Full', MPLUSN, MPLUSN, CZERO, CZERO, BI,
+                  CALL AB_ZLASET( 'Full', MPLUSN, MPLUSN, CZERO, CZERO, 
+     $BI,
      $                         LDA )
 *
-                  CALL ZLATM5( PRTYPE, M, N, AI, LDA, AI( M+1, M+1 ),
+                  CALL AB_ZLATM5( PRTYPE, M, N, AI, LDA, AI( M+1, M+1 ),
      $                         LDA, AI( 1, M+1 ), LDA, BI, LDA,
      $                         BI( M+1, M+1 ), LDA, BI( 1, M+1 ), LDA,
      $                         Q, LDA, Z, LDA, WEIGHT, QBA, QBB )
 *
 *                 Compute the Schur factorization and swapping the
 *                 m-by-m (1,1)-blocks with n-by-n (2,2)-blocks.
-*                 Swapping is accomplished via the function ZLCTSX
+*                 Swapping is accomplished via the function AB_ZLCTSX
 *                 which is supplied below.
 *
                   IF( IFUNC.EQ.0 ) THEN
@@ -540,17 +545,21 @@
                      SENSE = 'B'
                   END IF
 *
-                  CALL ZLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
-                  CALL ZLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
+                  CALL AB_ZLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LD
+     $A )
+                  CALL AB_ZLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LD
+     $A )
 *
-                  CALL ZGGESX( 'V', 'V', 'S', ZLCTSX, SENSE, MPLUSN, AI,
+                  CALL AB_AB_ZGGESX( 'V', 'V', 'S', AB_ZLCTSX, SENSE, MP
+     $LUSN, AI,
      $                         LDA, BI, LDA, MM, ALPHA, BETA, Q, LDA, Z,
      $                         LDA, PL, DIFEST, WORK, LWORK, RWORK,
      $                         IWORK, LIWORK, BWORK, LINFO )
 *
                   IF( LINFO.NE.0 .AND. LINFO.NE.MPLUSN+2 ) THEN
                      RESULT( 1 ) = ULPINV
-                     WRITE( NOUT, FMT = 9999 )'ZGGESX', LINFO, MPLUSN,
+                     WRITE( NOUT, FMT = 9999 )'AB_AB_ZGGESX', LINFO, MPL
+     $USN,
      $                  PRTYPE
                      INFO = LINFO
                      GO TO 30
@@ -558,23 +567,24 @@
 *
 *                 Compute the norm(A, B)
 *
-                  CALL ZLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK,
+                  CALL AB_ZLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK,
      $                         MPLUSN )
-                  CALL ZLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
+                  CALL AB_ZLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
      $                         WORK( MPLUSN*MPLUSN+1 ), MPLUSN )
-                  ABNRM = ZLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN,
+                  ABNRM = AB_ZLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLU
+     $SN,
      $                    RWORK )
 *
 *                 Do tests (1) to (4)
 *
                   RESULT( 2 ) = ZERO
-                  CALL ZGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z,
+                  CALL AB_ZGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z,
      $                         LDA, WORK, RWORK, RESULT( 1 ) )
-                  CALL ZGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z,
+                  CALL AB_ZGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z,
      $                         LDA, WORK, RWORK, RESULT( 2 ) )
-                  CALL ZGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q,
+                  CALL AB_ZGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q,
      $                         LDA, WORK, RWORK, RESULT( 3 ) )
-                  CALL ZGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z,
+                  CALL AB_ZGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z,
      $                         LDA, WORK, RWORK, RESULT( 4 ) )
                   NTEST = 4
 *
@@ -633,11 +643,12 @@
 *                    Note: for either following two cases, there are
 *                    almost same number of test cases fail the test.
 *
-                     CALL ZLAKF2( MM, MPLUSN-MM, AI, LDA,
+                     CALL AB_ZLAKF2( MM, MPLUSN-MM, AI, LDA,
      $                            AI( MM+1, MM+1 ), BI,
      $                            BI( MM+1, MM+1 ), C, LDC )
 *
-                     CALL ZGESVD( 'N', 'N', MN2, MN2, C, LDC, S, WORK,
+                     CALL AB_AB_ZGESVD( 'N', 'N', MN2, MN2, C, LDC, S, W
+     $ORK,
      $                            1, WORK( 2 ), 1, WORK( 3 ), LWORK-2,
      $                            RWORK, INFO )
                      DIFTRU = S( MN2 )
@@ -677,7 +688,7 @@
                      IF( RESULT( J ).GE.THRESH ) THEN
 *
 *                       If this is the first test to fail,
-*                       print a header to the data file.
+*                       print a AB_HEADER to the data file.
 *
                         IF( NERRS.EQ.0 ) THEN
                            WRITE( NOUT, FMT = 9996 )'ZGX'
@@ -735,39 +746,40 @@
       K = 0
       M = MPLUSN - N
 *
-      CALL ZLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
-      CALL ZLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
+      CALL AB_ZLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
+      CALL AB_ZLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
 *
 *     Compute the Schur factorization while swaping the
 *     m-by-m (1,1)-blocks with n-by-n (2,2)-blocks.
 *
-      CALL ZGGESX( 'V', 'V', 'S', ZLCTSX, 'B', MPLUSN, AI, LDA, BI, LDA,
+      CALL AB_AB_ZGGESX( 'V', 'V', 'S', AB_ZLCTSX, 'B', MPLUSN, AI, LDA,
+     $ BI, LDA,
      $             MM, ALPHA, BETA, Q, LDA, Z, LDA, PL, DIFEST, WORK,
      $             LWORK, RWORK, IWORK, LIWORK, BWORK, LINFO )
 *
       IF( LINFO.NE.0 .AND. LINFO.NE.MPLUSN+2 ) THEN
          RESULT( 1 ) = ULPINV
-         WRITE( NOUT, FMT = 9998 )'ZGGESX', LINFO, MPLUSN, NPTKNT
+         WRITE( NOUT, FMT = 9998 )'AB_AB_ZGGESX', LINFO, MPLUSN, NPTKNT
          GO TO 130
       END IF
 *
 *     Compute the norm(A, B)
 *        (should this be norm of (A,B) or (AI,BI)?)
 *
-      CALL ZLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK, MPLUSN )
-      CALL ZLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
+      CALL AB_ZLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK, MPLUSN )
+      CALL AB_ZLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
      $             WORK( MPLUSN*MPLUSN+1 ), MPLUSN )
-      ABNRM = ZLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN, RWORK )
+      ABNRM = AB_ZLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN, RWORK )
 *
 *     Do tests (1) to (4)
 *
-      CALL ZGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z, LDA, WORK,
+      CALL AB_ZGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z, LDA, WORK,
      $             RWORK, RESULT( 1 ) )
-      CALL ZGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z, LDA, WORK,
+      CALL AB_ZGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z, LDA, WORK,
      $             RWORK, RESULT( 2 ) )
-      CALL ZGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q, LDA, WORK,
+      CALL AB_ZGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q, LDA, WORK,
      $             RWORK, RESULT( 3 ) )
-      CALL ZGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z, LDA, WORK,
+      CALL AB_ZGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z, LDA, WORK,
      $             RWORK, RESULT( 4 ) )
 *
 *     Do tests (5) and (6): check Schur form of A and compare
@@ -862,7 +874,7 @@
          IF( RESULT( J ).GE.THRESH ) THEN
 *
 *           If this is the first test to fail,
-*           print a header to the data file.
+*           print a AB_HEADER to the data file.
 *
             IF( NERRS.EQ.0 ) THEN
                WRITE( NOUT, FMT = 9996 )'ZGX'
@@ -895,19 +907,19 @@
 *
 *     Summary
 *
-      CALL ALASVM( 'ZGX', NOUT, NERRS, NTESTT, 0 )
+      CALL AB_ALASVM( 'ZGX', NOUT, NERRS, NTESTT, 0 )
 *
       WORK( 1 ) = MAXWRK
 *
       RETURN
 *
- 9999 FORMAT( ' ZDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_ZDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ')' )
 *
- 9998 FORMAT( ' ZDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' AB_ZDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', Input Example #', I2, ')' )
 *
- 9997 FORMAT( ' ZDRGSX: S not in Schur form at eigenvalue ', I6, '.',
+ 9997 FORMAT( ' AB_ZDRGSX: S not in Schur form at eigenvalue ', I6, '.',
      $      / 9X, 'N=', I6, ', JTYPE=', I6, ')' )
 *
  9996 FORMAT( / 1X, A3, ' -- Complex Expert Generalized Schur form',
@@ -919,7 +931,8 @@
      $      '  1:  A is a block diagonal matrix of Jordan blocks ',
      $      'and B is the identity ', / '      matrix, ',
      $      / '  2:  A and B are upper triangular matrices, ',
-     $      / '  3:  A and B are as type 2, but each second diagonal ',
+     $      / '  3:  A and B are as type 2, but each AB_SECOND diagonal 
+     $',
      $      'block in A_11 and ', /
      $      '      each third diaongal block in A_22 are 2x2 blocks,',
      $      / '  4:  A and B are block diagonal matrices, ',
@@ -954,6 +967,6 @@
  9989 FORMAT( ' Input example #', I2, ', matrix order=', I4, ',',
      $      ' result ', I2, ' is', 1P, D10.3 )
 *
-*     End of ZDRGSX
+*     End of AB_ZDRGSX
 *
       END

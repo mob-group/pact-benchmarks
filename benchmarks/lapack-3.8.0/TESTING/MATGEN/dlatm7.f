@@ -1,4 +1,4 @@
-*> \brief \b DLATM7
+*> \brief \b AB_DLATM7
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
+*       SUBROUTINE AB_DLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
 *                          RANK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -26,9 +26,9 @@
 *>
 *> \verbatim
 *>
-*>    DLATM7 computes the entries of D as specified by MODE
+*>    AB_DLATM7 computes the entries of D as specified by MODE
 *>    COND and IRSIGN. IDIST and ISEED determine the generation
-*>    of random numbers. DLATM7 is called by DLATMT to generate
+*>    of random numbers. AB_DLATM7 is called by AB_DLATMT to generate
 *>    random test matrices.
 *> \endverbatim
 *
@@ -80,7 +80,7 @@
 *>           linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to DLATM7
+*>           exit, and can be used in the next call to AB_DLATM7
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *>
@@ -119,7 +119,7 @@
 *> \ingroup double_matgen
 *
 *  =====================================================================
-      SUBROUTINE DLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
+      SUBROUTINE AB_DLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
      $                   RANK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -151,11 +151,11 @@
       INTEGER            I
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLARAN
-      EXTERNAL           DLARAN
+      DOUBLE PRECISION   AB_DLARAN
+      EXTERNAL           AB_DLARAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARNV, XERBLA
+      EXTERNAL           AB_DLARNV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, EXP, LOG
@@ -189,7 +189,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLATM7', -INFO )
+         CALL AB_XERBLA( 'AB_DLATM7', -INFO )
          RETURN
       END IF
 *
@@ -255,14 +255,14 @@
   210    CONTINUE
          ALPHA = LOG( ONE / COND )
          DO 220 I = 1, N
-            D( I ) = EXP( ALPHA*DLARAN( ISEED ) )
+            D( I ) = EXP( ALPHA*AB_DLARAN( ISEED ) )
   220    CONTINUE
          GO TO 240
 *
 *        Randomly distributed D values from IDIST
 *
   230    CONTINUE
-         CALL DLARNV( IDIST, ISEED, N, D )
+         CALL AB_DLARNV( IDIST, ISEED, N, D )
 *
   240    CONTINUE
 *
@@ -272,7 +272,7 @@
          IF( ( MODE.NE.-6 .AND. MODE.NE.0 .AND. MODE.NE.6 ) .AND.
      $       IRSIGN.EQ.1 ) THEN
             DO 250 I = 1, N
-               TEMP = DLARAN( ISEED )
+               TEMP = AB_DLARAN( ISEED )
                IF( TEMP.GT.HALF )
      $            D( I ) = -D( I )
   250       CONTINUE
@@ -292,6 +292,6 @@
 *
       RETURN
 *
-*     End of DLATM7
+*     End of AB_DLATM7
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DPPCON
+*> \brief \b AB_DPPCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPPCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dppcon.f">
+*> Download AB_DPPCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPPCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dppcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPPCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dppcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPPCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO )
+*       SUBROUTINE AB_DPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> DPPCON estimates the reciprocal of the condition number (in the
+*> AB_DPPCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a real symmetric positive definite packed matrix using
 *> the Cholesky factorization A = U**T*U or A = L*L**T computed by
-*> DPPTRF.
+*> AB_DPPTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -116,7 +116,8 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO )
+      SUBROUTINE AB_DPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO
+     $ )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -149,13 +150,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IDAMAX, DLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACN2, DLATPS, DRSCL, XERBLA
+      EXTERNAL           AB_DLACN2, AB_DLATPS, AB_DRSCL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -165,8 +166,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -174,7 +175,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPPCON', -INFO )
+         CALL AB_XERBLA( 'AB_DPPCON', -INFO )
          RETURN
       END IF
 *
@@ -188,38 +189,40 @@
          RETURN
       END IF
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
 *
 *     Estimate the 1-norm of the inverse.
 *
       KASE = 0
       NORMIN = 'N'
    10 CONTINUE
-      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
 *           Multiply by inv(U**T).
 *
-            CALL DLATPS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
+            CALL AB_DLATPS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
      $                   AP, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(U).
 *
-            CALL DLATPS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_DLATPS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   AP, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL DLATPS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_DLATPS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   AP, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(L**T).
 *
-            CALL DLATPS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
+            CALL AB_DLATPS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
      $                   AP, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          END IF
 *
@@ -227,10 +230,10 @@
 *
          SCALE = SCALEL*SCALEU
          IF( SCALE.NE.ONE ) THEN
-            IX = IDAMAX( N, WORK, 1 )
+            IX = AB_IDAMAX( N, WORK, 1 )
             IF( SCALE.LT.ABS( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL DRSCL( N, SCALE, WORK, 1 )
+            CALL AB_DRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -243,6 +246,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of DPPCON
+*     End of AB_DPPCON
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZPSTRF computes the Cholesky factorization with complete pivoting of a complex Hermitian positive semidefinite matrix.
+*> \brief \b AB_ZPSTRF computes the Cholesky factorization with complete pivoting of a complex Hermitian positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPSTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpstrf.f">
+*> Download AB_ZPSTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPSTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpstrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPSTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpstrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPSTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+*       SUBROUTINE AB_ZPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   TOL
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> ZPSTRF computes the Cholesky factorization with complete
+*> AB_ZPSTRF computes the Cholesky factorization with complete
 *> pivoting of a complex Hermitian positive semidefinite matrix A.
 *>
 *> The factorization has the form
@@ -140,7 +140,8 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE AB_ZPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO 
+     $)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -173,14 +174,15 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      INTEGER            ILAENV
-      LOGICAL            LSAME, DISNAN
-      EXTERNAL           DLAMCH, ILAENV, LSAME, DISNAN
+      DOUBLE PRECISION   AB_DLAMCH
+      INTEGER            AB_ILAENV
+      LOGICAL            AB_LSAME, AB_DISNAN
+      EXTERNAL           AB_DLAMCH, AB_ILAENV, AB_LSAME, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZDSCAL, ZGEMV, ZHERK, ZLACGV, ZPSTF2, ZSWAP,
-     $                   XERBLA
+      EXTERNAL           ZAB_DSCAL, AB_ZGEMV, AB_AB_ZHERK, AB_ZLACGV, AB
+     $_ZPSTF2, AB_ZSWAP,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG, MAX, MIN, SQRT, MAXLOC
@@ -190,8 +192,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -199,7 +201,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPSTRF', -INFO )
+         CALL AB_XERBLA( 'AB_ZPSTRF', -INFO )
          RETURN
       END IF
 *
@@ -210,12 +212,12 @@
 *
 *     Get block size
 *
-      NB = ILAENV( 1, 'ZPOTRF', UPLO, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_ZPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL ZPSTF2( UPLO, N, A( 1, 1 ), LDA, PIV, RANK, TOL, WORK,
+         CALL AB_ZPSTF2( UPLO, N, A( 1, 1 ), LDA, PIV, RANK, TOL, WORK,
      $                INFO )
          GO TO 230
 *
@@ -234,7 +236,7 @@
   110    CONTINUE
          PVT = MAXLOC( WORK( 1:N ), 1 )
          AJJ = DBLE( A( PVT, PVT ) )
-         IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
+         IF( AJJ.LE.ZERO.OR.AB_DISNAN( AJJ ) ) THEN
             RANK = 0
             INFO = 1
             GO TO 230
@@ -243,7 +245,7 @@
 *     Compute stopping value if not supplied
 *
          IF( TOL.LT.ZERO ) THEN
-            DSTOP = N * DLAMCH( 'Epsilon' ) * AJJ
+            DSTOP = N * AB_DLAMCH( 'Epsilon' ) * AJJ
          ELSE
             DSTOP = TOL
          END IF
@@ -268,9 +270,9 @@
 *
                DO 150 J = K, K + JB - 1
 *
-*              Find pivot, test for exit, else swap rows and columns
+*              Find pivot, test for exit, ELSE swap rows and columns
 *              Update dot products, compute possible pivots which are
-*              stored in the second half of WORK
+*              stored in the AB_SECOND half of WORK
 *
                   DO 130 I = J, N
 *
@@ -287,7 +289,7 @@
                      ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                      PVT = ITEMP + J - 1
                      AJJ = WORK( N+PVT )
-                     IF( AJJ.LE.DSTOP.OR.DISNAN( AJJ ) ) THEN
+                     IF( AJJ.LE.DSTOP.OR.AB_DISNAN( AJJ ) ) THEN
                         A( J, J ) = AJJ
                         GO TO 220
                      END IF
@@ -298,9 +300,9 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL ZSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
+                     CALL AB_ZSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
                      IF( PVT.LT.N )
-     $                  CALL ZSWAP( N-PVT, A( J, PVT+1 ), LDA,
+     $                  CALL AB_ZSWAP( N-PVT, A( J, PVT+1 ), LDA,
      $                              A( PVT, PVT+1 ), LDA )
                      DO 140 I = J + 1, PVT - 1
                         ZTEMP = DCONJG( A( J, I ) )
@@ -325,12 +327,13 @@
 *                 Compute elements J+1:N of row J.
 *
                   IF( J.LT.N ) THEN
-                     CALL ZLACGV( J-1, A( 1, J ), 1 )
-                     CALL ZGEMV( 'Trans', J-K, N-J, -CONE, A( K, J+1 ),
+                     CALL AB_ZLACGV( J-1, A( 1, J ), 1 )
+                     CALL AB_ZGEMV( 'Trans', J-K, N-J, -CONE, A( K, J+1 
+     $),
      $                           LDA, A( K, J ), 1, CONE, A( J, J+1 ),
      $                           LDA )
-                     CALL ZLACGV( J-1, A( 1, J ), 1 )
-                     CALL ZDSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
+                     CALL AB_ZLACGV( J-1, A( 1, J ), 1 )
+                     CALL ZAB_DSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
                   END IF
 *
   150          CONTINUE
@@ -338,7 +341,8 @@
 *              Update trailing matrix, J already incremented
 *
                IF( K+JB.LE.N ) THEN
-                  CALL ZHERK( 'Upper', 'Conj Trans', N-J+1, JB, -ONE,
+                  CALL AB_AB_ZHERK( 'Upper', 'Conj Trans', N-J+1, JB, -O
+     $NE,
      $                        A( K, J ), LDA, ONE, A( J, J ), LDA )
                END IF
 *
@@ -363,9 +367,9 @@
 *
                DO 200 J = K, K + JB - 1
 *
-*              Find pivot, test for exit, else swap rows and columns
+*              Find pivot, test for exit, ELSE swap rows and columns
 *              Update dot products, compute possible pivots which are
-*              stored in the second half of WORK
+*              stored in the AB_SECOND half of WORK
 *
                   DO 180 I = J, N
 *
@@ -382,7 +386,7 @@
                      ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                      PVT = ITEMP + J - 1
                      AJJ = WORK( N+PVT )
-                     IF( AJJ.LE.DSTOP.OR.DISNAN( AJJ ) ) THEN
+                     IF( AJJ.LE.DSTOP.OR.AB_DISNAN( AJJ ) ) THEN
                         A( J, J ) = AJJ
                         GO TO 220
                      END IF
@@ -393,9 +397,10 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL ZSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
+                     CALL AB_ZSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LD
+     $A )
                      IF( PVT.LT.N )
-     $                  CALL ZSWAP( N-PVT, A( PVT+1, J ), 1,
+     $                  CALL AB_ZSWAP( N-PVT, A( PVT+1, J ), 1,
      $                              A( PVT+1, PVT ), 1 )
                      DO 190 I = J + 1, PVT - 1
                         ZTEMP = DCONJG( A( I, J ) )
@@ -421,12 +426,12 @@
 *                 Compute elements J+1:N of column J.
 *
                   IF( J.LT.N ) THEN
-                     CALL ZLACGV( J-1, A( J, 1 ), LDA )
-                     CALL ZGEMV( 'No Trans', N-J, J-K, -CONE,
+                     CALL AB_ZLACGV( J-1, A( J, 1 ), LDA )
+                     CALL AB_ZGEMV( 'No Trans', N-J, J-K, -CONE,
      $                           A( J+1, K ), LDA, A( J, K ), LDA, CONE,
      $                           A( J+1, J ), 1 )
-                     CALL ZLACGV( J-1, A( J, 1 ), LDA )
-                     CALL ZDSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
+                     CALL AB_ZLACGV( J-1, A( J, 1 ), LDA )
+                     CALL ZAB_DSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
                   END IF
 *
   200          CONTINUE
@@ -434,7 +439,8 @@
 *              Update trailing matrix, J already incremented
 *
                IF( K+JB.LE.N ) THEN
-                  CALL ZHERK( 'Lower', 'No Trans', N-J+1, JB, -ONE,
+                  CALL AB_AB_ZHERK( 'Lower', 'No Trans', N-J+1, JB, -ONE
+     $,
      $                        A( J, K ), LDA, ONE, A( J, J ), LDA )
                END IF
 *
@@ -459,6 +465,6 @@
   230 CONTINUE
       RETURN
 *
-*     End of ZPSTRF
+*     End of AB_ZPSTRF
 *
       END

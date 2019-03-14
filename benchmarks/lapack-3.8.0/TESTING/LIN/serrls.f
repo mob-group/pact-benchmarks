@@ -1,4 +1,4 @@
-*> \brief \b SERRLS
+*> \brief \b AB_SERRLS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SERRLS( PATH, NUNIT )
+*       SUBROUTINE AB_SERRLS( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> SERRLS tests the error exits for the REAL least squares
-*> driver routines (SGELS, SGELSS, SGELSY, SGELSD).
+*> AB_SERRLS tests the error exits for the REAL least squares
+*> driver routines (AB_SGELS, AB_AB_SGELSS, AB_AB_SGELSY, AB_AB_SGELSD).
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SERRLS( PATH, NUNIT )
+      SUBROUTINE AB_SERRLS( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -82,11 +82,12 @@
      $                   W( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, SGELS, SGELSD, SGELSS, SGELSY
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_SGELS, AB_AB_SGELSD, A
+     $B_AB_SGELSS, AB_AB_SGELSY
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -108,116 +109,126 @@
       A( 2, 1 ) = 4.0E+0
       OK = .TRUE.
 *
-      IF( LSAMEN( 2, C2, 'LS' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'LS' ) ) THEN
 *
 *        Test error exits for the least squares driver routines.
 *
-*        SGELS
+*        AB_SGELS
 *
-         SRNAMT = 'SGELS '
+         SRNAMT = 'AB_SGELS '
          INFOT = 1
-         CALL SGELS( '/', 0, 0, 0, A, 1, B, 1, W, 1, INFO )
-         CALL CHKXER( 'SGELS ', INFOT, NOUT, LERR, OK )
+         CALL AB_SGELS( '/', 0, 0, 0, A, 1, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGELS ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGELS( 'N', -1, 0, 0, A, 1, B, 1, W, 1, INFO )
-         CALL CHKXER( 'SGELS ', INFOT, NOUT, LERR, OK )
+         CALL AB_SGELS( 'N', -1, 0, 0, A, 1, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGELS ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SGELS( 'N', 0, -1, 0, A, 1, B, 1, W, 1, INFO )
-         CALL CHKXER( 'SGELS ', INFOT, NOUT, LERR, OK )
+         CALL AB_SGELS( 'N', 0, -1, 0, A, 1, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGELS ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SGELS( 'N', 0, 0, -1, A, 1, B, 1, W, 1, INFO )
-         CALL CHKXER( 'SGELS ', INFOT, NOUT, LERR, OK )
+         CALL AB_SGELS( 'N', 0, 0, -1, A, 1, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGELS ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL SGELS( 'N', 2, 0, 0, A, 1, B, 2, W, 2, INFO )
-         CALL CHKXER( 'SGELS ', INFOT, NOUT, LERR, OK )
+         CALL AB_SGELS( 'N', 2, 0, 0, A, 1, B, 2, W, 2, INFO )
+         CALL AB_CHKXER( 'AB_SGELS ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SGELS( 'N', 2, 0, 0, A, 2, B, 1, W, 2, INFO )
-         CALL CHKXER( 'SGELS ', INFOT, NOUT, LERR, OK )
+         CALL AB_SGELS( 'N', 2, 0, 0, A, 2, B, 1, W, 2, INFO )
+         CALL AB_CHKXER( 'AB_SGELS ', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL SGELS( 'N', 1, 1, 0, A, 1, B, 1, W, 1, INFO )
-         CALL CHKXER( 'SGELS ', INFOT, NOUT, LERR, OK )
+         CALL AB_SGELS( 'N', 1, 1, 0, A, 1, B, 1, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_SGELS ', INFOT, NOUT, LERR, OK )
 *
-*        SGELSS
+*        AB_AB_SGELSS
 *
-         SRNAMT = 'SGELSS'
+         SRNAMT = 'AB_AB_SGELSS'
          INFOT = 1
-         CALL SGELSS( -1, 0, 0, A, 1, B, 1, S, RCOND, IRNK, W, 1, INFO )
-         CALL CHKXER( 'SGELSS', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_SGELSS( -1, 0, 0, A, 1, B, 1, S, RCOND, IRNK, W, 1, 
+     $INFO )
+         CALL AB_CHKXER( 'AB_AB_SGELSS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGELSS( 0, -1, 0, A, 1, B, 1, S, RCOND, IRNK, W, 1, INFO )
-         CALL CHKXER( 'SGELSS', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_SGELSS( 0, -1, 0, A, 1, B, 1, S, RCOND, IRNK, W, 1, 
+     $INFO )
+         CALL AB_CHKXER( 'AB_AB_SGELSS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SGELSS( 0, 0, -1, A, 1, B, 1, S, RCOND, IRNK, W, 1, INFO )
-         CALL CHKXER( 'SGELSS', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_SGELSS( 0, 0, -1, A, 1, B, 1, S, RCOND, IRNK, W, 1, 
+     $INFO )
+         CALL AB_CHKXER( 'AB_AB_SGELSS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SGELSS( 2, 0, 0, A, 1, B, 2, S, RCOND, IRNK, W, 2, INFO )
-         CALL CHKXER( 'SGELSS', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_SGELSS( 2, 0, 0, A, 1, B, 2, S, RCOND, IRNK, W, 2, I
+     $NFO )
+         CALL AB_CHKXER( 'AB_AB_SGELSS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL SGELSS( 2, 0, 0, A, 2, B, 1, S, RCOND, IRNK, W, 2, INFO )
-         CALL CHKXER( 'SGELSS', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_SGELSS( 2, 0, 0, A, 2, B, 1, S, RCOND, IRNK, W, 2, I
+     $NFO )
+         CALL AB_CHKXER( 'AB_AB_SGELSS', INFOT, NOUT, LERR, OK )
 *
-*        SGELSY
+*        AB_AB_SGELSY
 *
-         SRNAMT = 'SGELSY'
+         SRNAMT = 'AB_AB_SGELSY'
          INFOT = 1
-         CALL SGELSY( -1, 0, 0, A, 1, B, 1, IP, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSY( -1, 0, 0, A, 1, B, 1, IP, RCOND, IRNK, W, 10
+     $,
      $                INFO )
-         CALL CHKXER( 'SGELSY', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSY', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGELSY( 0, -1, 0, A, 1, B, 1, IP, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSY( 0, -1, 0, A, 1, B, 1, IP, RCOND, IRNK, W, 10
+     $,
      $                INFO )
-         CALL CHKXER( 'SGELSY', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSY', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SGELSY( 0, 0, -1, A, 1, B, 1, IP, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSY( 0, 0, -1, A, 1, B, 1, IP, RCOND, IRNK, W, 10
+     $,
      $                INFO )
-         CALL CHKXER( 'SGELSY', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSY', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SGELSY( 2, 0, 0, A, 1, B, 2, IP, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSY( 2, 0, 0, A, 1, B, 2, IP, RCOND, IRNK, W, 10,
      $                INFO )
-         CALL CHKXER( 'SGELSY', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSY', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL SGELSY( 2, 0, 0, A, 2, B, 1, IP, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSY( 2, 0, 0, A, 2, B, 1, IP, RCOND, IRNK, W, 10,
      $                INFO )
-         CALL CHKXER( 'SGELSY', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSY', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL SGELSY( 2, 2, 1, A, 2, B, 2, IP, RCOND, IRNK, W, 1, INFO )
-         CALL CHKXER( 'SGELSY', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_SGELSY( 2, 2, 1, A, 2, B, 2, IP, RCOND, IRNK, W, 1, 
+     $INFO )
+         CALL AB_CHKXER( 'AB_AB_SGELSY', INFOT, NOUT, LERR, OK )
 *
-*        SGELSD
+*        AB_AB_SGELSD
 *
-         SRNAMT = 'SGELSD'
+         SRNAMT = 'AB_AB_SGELSD'
          INFOT = 1
-         CALL SGELSD( -1, 0, 0, A, 1, B, 1, S, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSD( -1, 0, 0, A, 1, B, 1, S, RCOND, IRNK, W, 10,
      $                IP, INFO )
-         CALL CHKXER( 'SGELSD', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL SGELSD( 0, -1, 0, A, 1, B, 1, S, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSD( 0, -1, 0, A, 1, B, 1, S, RCOND, IRNK, W, 10,
      $                IP, INFO )
-         CALL CHKXER( 'SGELSD', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL SGELSD( 0, 0, -1, A, 1, B, 1, S, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSD( 0, 0, -1, A, 1, B, 1, S, RCOND, IRNK, W, 10,
      $                IP, INFO )
-         CALL CHKXER( 'SGELSD', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSD', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL SGELSD( 2, 0, 0, A, 1, B, 2, S, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSD( 2, 0, 0, A, 1, B, 2, S, RCOND, IRNK, W, 10,
      $                IP, INFO )
-         CALL CHKXER( 'SGELSD', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSD', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL SGELSD( 2, 0, 0, A, 2, B, 1, S, RCOND, IRNK, W, 10,
+         CALL AB_AB_SGELSD( 2, 0, 0, A, 2, B, 1, S, RCOND, IRNK, W, 10,
      $                IP, INFO )
-         CALL CHKXER( 'SGELSD', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSD', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL SGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, 1, IP,
+         CALL AB_AB_SGELSD( 2, 2, 1, A, 2, B, 2, S, RCOND, IRNK, W, 1, I
+     $P,
      $                INFO )
-         CALL CHKXER( 'SGELSD', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_SGELSD', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of SERRLS
+*     End of AB_SERRLS
 *
       END

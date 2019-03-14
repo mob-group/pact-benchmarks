@@ -33,9 +33,9 @@
       INTEGER MAJOR, MINOR, PATCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL ILAVER
+      EXTERNAL AB_ILAVER
 *
-      CALL ILAVER ( MAJOR, MINOR, PATCH )
+      CALL AB_ILAVER ( MAJOR, MINOR, PATCH )
       WRITE(*,*) "LAPACK ",MAJOR,".",MINOR,".",PATCH
 *
       END

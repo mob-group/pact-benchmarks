@@ -1,4 +1,4 @@
-*> \brief \b SGLMTS
+*> \brief \b AB_SGLMTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
+*       SUBROUTINE AB_SGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
 *                          X, U, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SGLMTS tests SGGGLM - a subroutine for solving the generalized
+*> AB_SGLMTS tests AB_SGGGLM - a subroutine for solving the generalized
 *> linear model problem.
 *> \endverbatim
 *
@@ -146,7 +146,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
+      SUBROUTINE AB_SGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
      $                   X, U, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -174,49 +174,49 @@
       REAL               ANORM, BNORM, EPS, XNORM, YNORM, DNORM, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           SASUM, SLAMCH, SLANGE
+      REAL               AB_SASUM, AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY
+      EXTERNAL           AB_SLACPY
 *
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
-      ANORM = MAX( SLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( SLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ANORM = MAX( AB_SLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( AB_SLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *
 *     Copy the matrices A and B to the arrays AF and BF,
 *     and the vector D the array DF.
 *
-      CALL SLACPY( 'Full', N, M, A, LDA, AF, LDA )
-      CALL SLACPY( 'Full', N, P, B, LDB, BF, LDB )
-      CALL SCOPY( N, D, 1, DF, 1 )
+      CALL AB_SLACPY( 'Full', N, M, A, LDA, AF, LDA )
+      CALL AB_SLACPY( 'Full', N, P, B, LDB, BF, LDB )
+      CALL AB_SCOPY( N, D, 1, DF, 1 )
 *
 *     Solve GLM problem
 *
-      CALL SGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
+      CALL AB_SGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
      $             INFO )
 *
-*     Test the residual for the solution of LSE
+*     Test the residual for the solution of AB_LSE
 *
 *                       norm( d - A*x - B*u )
 *       RESULT = -----------------------------------------
 *                (norm(A)+norm(B))*(norm(x)+norm(u))*EPS
 *
-      CALL SCOPY( N, D, 1, DF, 1 )
-      CALL SGEMV( 'No transpose', N, M, -ONE, A, LDA, X, 1,
+      CALL AB_SCOPY( N, D, 1, DF, 1 )
+      CALL AB_SGEMV( 'No transpose', N, M, -ONE, A, LDA, X, 1,
      $             ONE, DF, 1 )
 *
-      CALL SGEMV( 'No transpose', N, P, -ONE, B, LDB, U, 1,
+      CALL AB_SGEMV( 'No transpose', N, P, -ONE, B, LDB, U, 1,
      $             ONE, DF, 1 )
 *
-      DNORM = SASUM( N, DF, 1 )
-      XNORM = SASUM( M, X, 1 ) + SASUM( P, U, 1 )
+      DNORM = AB_SASUM( N, DF, 1 )
+      XNORM = AB_SASUM( M, X, 1 ) + AB_SASUM( P, U, 1 )
       YNORM = ANORM + BNORM
 *
       IF( XNORM.LE.ZERO ) THEN
@@ -227,6 +227,6 @@
 *
       RETURN
 *
-*     End of SGLMTS
+*     End of AB_SGLMTS
 *
       END

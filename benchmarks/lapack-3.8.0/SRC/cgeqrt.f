@@ -1,4 +1,4 @@
-*> \brief \b CGEQRT
+*> \brief \b AB_AB_CGEQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGEQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeqrt.f">
+*> Download AB_AB_CGEQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CGEQRT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CGEQRT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CGEQRT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+*       SUBROUTINE AB_AB_CGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER INFO, LDA, LDT, M, N, NB
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CGEQRT computes a blocked QR factorization of a complex M-by-N matrix A
+*> AB_AB_CGEQRT computes a blocked QR factorization of a complex M-by-N matrix A
 *> using the compact WY representation of Q.
 *> \endverbatim
 *
@@ -139,7 +139,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+      SUBROUTINE AB_AB_CGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,7 +162,8 @@
       PARAMETER( USE_RECURSIVE_QR=.TRUE. )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   CGEQRT2, CGEQRT3, CLARFB, XERBLA
+      EXTERNAL   AB_AB_AB_CGEQRT2, AB_AB_CGEQRT3, AB_AB_CLARFB, AB_XERBL
+     $A
 *     ..
 *     .. Executable Statements ..
 *
@@ -173,7 +174,8 @@
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
-      ELSE IF( NB.LT.1 .OR. ( NB.GT.MIN(M,N) .AND. MIN(M,N).GT.0 ) )THEN
+      ELSE IF( NB.LT.1 .OR. ( NB.GT.MIN(M,N) .AND. MIN(M,N).GT.0 ) )T
+     $HEN
          INFO = -3
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -5
@@ -181,7 +183,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGEQRT', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CGEQRT', -INFO )
          RETURN
       END IF
 *
@@ -198,21 +200,23 @@
 *     Compute the QR factorization of the current block A(I:M,I:I+IB-1)
 *
          IF( USE_RECURSIVE_QR ) THEN
-            CALL CGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
+            CALL AB_AB_CGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IIN
+     $FO )
          ELSE
-            CALL CGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
+            CALL AB_AB_AB_CGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, 
+     $IINFO )
          END IF
          IF( I+IB.LE.N ) THEN
 *
 *     Update by applying H**H to A(I:M,I+IB:N) from the left
 *
-            CALL CLARFB( 'L', 'C', 'F', 'C', M-I+1, N-I-IB+1, IB,
+            CALL AB_AB_CLARFB( 'L', 'C', 'F', 'C', M-I+1, N-I-IB+1, IB,
      $                   A( I, I ), LDA, T( 1, I ), LDT,
      $                   A( I, I+IB ), LDA, WORK , N-I-IB+1 )
          END IF
       END DO
       RETURN
 *
-*     End of CGEQRT
+*     End of AB_AB_CGEQRT
 *
       END

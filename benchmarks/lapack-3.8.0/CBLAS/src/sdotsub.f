@@ -1,15 +1,15 @@
-c     sdotsub.f
+c     AB_AB_SDOTsub.f
 c
-c     The program is a fortran wrapper for sdot.
+c     The program is a fortran wrapper for AB_SDOT.
 c     Witten by Keita Teranishi.  2/11/1998
 c
-      subroutine sdotsub(n,x,incx,y,incy,dot)
+      subroutine AB_AB_SDOTsub(n,x,incx,y,incy,dot)
 c
-      external sdot
-      real sdot
+      external AB_SDOT
+      real AB_SDOT
       integer n,incx,incy
       real x(*),y(*),dot
 c
-      dot=sdot(n,x,incx,y,incy)
+      dot=AB_SDOT(n,x,incx,y,incy)
       return
       end

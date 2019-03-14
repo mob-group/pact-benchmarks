@@ -1,4 +1,4 @@
-*> \brief \b DSTT21
+*> \brief \b AB_DSTT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+*       SUBROUTINE AB_DSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
 *                          RESULT )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DSTT21 checks a decomposition of the form
+*> AB_DSTT21 checks a decomposition of the form
 *>
 *>    A = U S U'
 *>
@@ -44,7 +44,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, DSTT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_DSTT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -124,7 +124,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+      SUBROUTINE AB_DSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,11 +151,11 @@
       DOUBLE PRECISION   ANORM, TEMP1, TEMP2, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSY
+      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLASET, DSYR, DSYR2
+      EXTERNAL           AB_DGEMM, AB_DLASET, AB_DSYR, AB_AB_DSYR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -169,14 +169,14 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
 *
 *     Do Test 1
 *
 *     Copy A & Compute its 1-Norm:
 *
-      CALL DLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+      CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
 *
       ANORM = ZERO
       TEMP1 = ZERO
@@ -195,17 +195,18 @@
 *     Norm of A - USU'
 *
       DO 20 J = 1, N
-         CALL DSYR( 'L', N, -SD( J ), U( 1, J ), 1, WORK, N )
+         CALL AB_DSYR( 'L', N, -SD( J ), U( 1, J ), 1, WORK, N )
    20 CONTINUE
 *
       IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
          DO 30 J = 1, N - 1
-            CALL DSYR2( 'L', N, -SE( J ), U( 1, J ), 1, U( 1, J+1 ), 1,
+            CALL AB_AB_DSYR2( 'L', N, -SE( J ), U( 1, J ), 1, U( 1, J+1 
+     $), 1,
      $                  WORK, N )
    30    CONTINUE
       END IF
 *
-      WNORM = DLANSY( '1', 'L', N, WORK, N, WORK( N**2+1 ) )
+      WNORM = AB_DLANSY( '1', 'L', N, WORK, N, WORK( N**2+1 ) )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -221,18 +222,18 @@
 *
 *     Compute  UU' - I
 *
-      CALL DGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+      CALL AB_DGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
      $            N )
 *
       DO 40 J = 1, N
          WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
    40 CONTINUE
 *
-      RESULT( 2 ) = MIN( DBLE( N ), DLANGE( '1', N, N, WORK, N,
+      RESULT( 2 ) = MIN( DBLE( N ), AB_DLANGE( '1', N, N, WORK, N,
      $              WORK( N**2+1 ) ) ) / ( N*ULP )
 *
       RETURN
 *
-*     End of DSTT21
+*     End of AB_DSTT21
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SPPT03
+*> \brief \b AB_SPPT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
+*       SUBROUTINE AB_SPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> SPPT03 computes the residual for a symmetric packed matrix times its
+*> AB_SPPT03 computes the residual for a symmetric packed matrix times its
 *> inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -107,7 +107,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
+      SUBROUTINE AB_SPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND
+     $,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -136,15 +137,15 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE, SLANSP
-      EXTERNAL           LSAME, SLAMCH, SLANGE, SLANSP
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSP
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE, AB_SLANSP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSPMV
+      EXTERNAL           AB_SCOPY, AB_SSPMV
 *     ..
 *     .. Executable Statements ..
 *
@@ -158,9 +159,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = SLANSP( '1', UPLO, N, A, RWORK )
-      AINVNM = SLANSP( '1', UPLO, N, AINV, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_SLANSP( '1', UPLO, N, A, RWORK )
+      AINVNM = AB_SLANSP( '1', UPLO, N, AINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.EQ.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -173,26 +174,26 @@
 *     expand it to a full matrix, then multiply by A one column at a
 *     time, moving the result one column to the left.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *        Copy AINV
 *
          JJ = 1
          DO 10 J = 1, N - 1
-            CALL SCOPY( J, AINV( JJ ), 1, WORK( 1, J+1 ), 1 )
-            CALL SCOPY( J-1, AINV( JJ ), 1, WORK( J, 2 ), LDWORK )
+            CALL AB_SCOPY( J, AINV( JJ ), 1, WORK( 1, J+1 ), 1 )
+            CALL AB_SCOPY( J-1, AINV( JJ ), 1, WORK( J, 2 ), LDWORK )
             JJ = JJ + J
    10    CONTINUE
          JJ = ( ( N-1 )*N ) / 2 + 1
-         CALL SCOPY( N-1, AINV( JJ ), 1, WORK( N, 2 ), LDWORK )
+         CALL AB_SCOPY( N-1, AINV( JJ ), 1, WORK( N, 2 ), LDWORK )
 *
 *        Multiply by A
 *
          DO 20 J = 1, N - 1
-            CALL SSPMV( 'Upper', N, -ONE, A, WORK( 1, J+1 ), 1, ZERO,
+            CALL AB_SSPMV( 'Upper', N, -ONE, A, WORK( 1, J+1 ), 1, ZERO,
      $                  WORK( 1, J ), 1 )
    20    CONTINUE
-         CALL SSPMV( 'Upper', N, -ONE, A, AINV( JJ ), 1, ZERO,
+         CALL AB_SSPMV( 'Upper', N, -ONE, A, AINV( JJ ), 1, ZERO,
      $               WORK( 1, N ), 1 )
 *
 *     UPLO = 'L':
@@ -203,21 +204,21 @@
 *
 *        Copy AINV
 *
-         CALL SCOPY( N-1, AINV( 2 ), 1, WORK( 1, 1 ), LDWORK )
+         CALL AB_SCOPY( N-1, AINV( 2 ), 1, WORK( 1, 1 ), LDWORK )
          JJ = N + 1
          DO 30 J = 2, N
-            CALL SCOPY( N-J+1, AINV( JJ ), 1, WORK( J, J-1 ), 1 )
-            CALL SCOPY( N-J, AINV( JJ+1 ), 1, WORK( J, J ), LDWORK )
+            CALL AB_SCOPY( N-J+1, AINV( JJ ), 1, WORK( J, J-1 ), 1 )
+            CALL AB_SCOPY( N-J, AINV( JJ+1 ), 1, WORK( J, J ), LDWORK )
             JJ = JJ + N - J + 1
    30    CONTINUE
 *
 *        Multiply by A
 *
          DO 40 J = N, 2, -1
-            CALL SSPMV( 'Lower', N, -ONE, A, WORK( 1, J-1 ), 1, ZERO,
+            CALL AB_SSPMV( 'Lower', N, -ONE, A, WORK( 1, J-1 ), 1, ZERO,
      $                  WORK( 1, J ), 1 )
    40    CONTINUE
-         CALL SSPMV( 'Lower', N, -ONE, A, AINV( 1 ), 1, ZERO,
+         CALL AB_SSPMV( 'Lower', N, -ONE, A, AINV( 1 ), 1, ZERO,
      $               WORK( 1, 1 ), 1 )
 *
       END IF
@@ -230,12 +231,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = SLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = AB_SLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / REAL( N )
 *
       RETURN
 *
-*     End of SPPT03
+*     End of AB_SPPT03
 *
       END

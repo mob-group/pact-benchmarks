@@ -1,4 +1,4 @@
-*> \brief <b> SGELSD computes the minimum-norm solution to a linear least squares problem for GE matrices</b>
+*> \brief <b> AB_AB_SGELSD computes the minimum-norm solution to a linear least squares problem for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGELSD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelsd.f">
+*> Download AB_AB_SGELSD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SGELSD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SGELSD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SGELSD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND,
+*       SUBROUTINE AB_AB_SGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND,
 *                          RANK, WORK, LWORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SGELSD computes the minimum-norm solution to a real linear least
+*> AB_AB_SGELSD computes the minimum-norm solution to a real linear least
 *> squares problem:
 *>     minimize 2-norm(| b - A*x |)
 *> using the singular value decomposition (SVD) of A. A is an M-by-N
@@ -49,10 +49,10 @@
 *>
 *> The problem is solved in three steps:
 *> (1) Reduce the coefficient matrix A to bidiagonal form with
-*>     Householder transformations, reducing the original problem
+*>     HousehoAB_LDEr transformations, reducing the original problem
 *>     into a "bidiagonal least squares problem" (BLS)
 *> (2) Solve the BLS using a divide and conquer approach.
-*> (3) Apply back all the Householder transformations to solve
+*> (3) Apply back all the HousehoAB_LDEr transformations to solve
 *>     the original least squares problem.
 *>
 *> The effective rank of A is determined by treating as zero those
@@ -156,7 +156,7 @@
 *>          if M is greater than or equal to N or
 *>              12*M + 2*M*SMLSIZ + 8*M*NLVL + M*NRHS + (SMLSIZ+1)**2,
 *>          if M is less than N, the code will execute correctly.
-*>          SMLSIZ is returned by ILAENV and is equal to the maximum
+*>          SMLSIZ is returned by AB_ILAENV and is equal to the maximum
 *>          size of the subproblems at the bottom of the computation
 *>          tree (usually about 25), and
 *>             NLVL = MAX( 0, INT( LOG_2( MIN( M,N )/(SMLSIZ+1) ) ) + 1 )
@@ -166,7 +166,7 @@
 *>          only calculates the optimal size of the array WORK and the
 *>          minimum size of the array IWORK, and returns these values as
 *>          the first entries of the WORK and IWORK arrays, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -207,7 +207,7 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE SGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND,
+      SUBROUTINE AB_AB_SGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND,
      $                   RANK, WORK, LWORK, IWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.1) --
@@ -238,13 +238,15 @@
       REAL               ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEBRD, SGELQF, SGEQRF, SLABAD, SLACPY, SLALSD,
-     $                   SLASCL, SLASET, SORMBR, SORMLQ, SORMQR, XERBLA
+      EXTERNAL           AB_SGEBRD, AB_AB_SGELQF, AB_AB_SGEQRF, AB_SLABA
+     $D, AB_SLACPY, AB_SLALSD,
+     $                   AB_SLASCL, AB_SLASET, AB_SORMBR, AB_SORMLQ, AB_
+     $SORMQR, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE, ILAENV
+      INTEGER            AB_ILAENV
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, LOG, MAX, MIN, REAL
@@ -274,15 +276,15 @@
 *     minimal amount of workspace needed at that point in the code,
 *     as well as the preferred amount for good performance.
 *     NB refers to the optimal block size for the immediately
-*     following subroutine, as returned by ILAENV.)
+*     following subroutine, as returned by AB_ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
          MAXWRK = 1
          LIWORK = 1
          IF( MINMN.GT.0 ) THEN
-            SMLSIZ = ILAENV( 9, 'SGELSD', ' ', 0, 0, 0, 0 )
-            MNTHR = ILAENV( 6, 'SGELSD', ' ', M, N, NRHS, -1 )
+            SMLSIZ = AB_ILAENV( 9, 'AB_AB_SGELSD', ' ', 0, 0, 0, 0 )
+            MNTHR = AB_ILAENV( 6, 'AB_AB_SGELSD', ' ', M, N, NRHS, -1 )
             NLVL = MAX( INT( LOG( REAL( MINMN ) / REAL( SMLSIZ + 1 ) ) /
      $                  LOG( TWO ) ) + 1, 0 )
             LIWORK = 3*MINMN*NLVL + 11*MINMN
@@ -293,21 +295,24 @@
 *                        columns.
 *
                MM = N
-               MAXWRK = MAX( MAXWRK, N + N*ILAENV( 1, 'SGEQRF', ' ', M,
+               MAXWRK = MAX( MAXWRK, N + N*AB_ILAENV( 1, 'AB_AB_SGEQRF',
+     $ ' ', M,
      $                       N, -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, N + NRHS*ILAENV( 1, 'SORMQR', 'LT',
+               MAXWRK = MAX( MAXWRK, N + NRHS*AB_ILAENV( 1, 'AB_SORMQR',
+     $ 'LT',
      $                       M, NRHS, N, -1 ) )
             END IF
             IF( M.GE.N ) THEN
 *
 *              Path 1 - overdetermined or exactly determined.
 *
-               MAXWRK = MAX( MAXWRK, 3*N + ( MM + N )*ILAENV( 1,
-     $                       'SGEBRD', ' ', MM, N, -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, 3*N + NRHS*ILAENV( 1, 'SORMBR',
+               MAXWRK = MAX( MAXWRK, 3*N + ( MM + N )*AB_ILAENV( 1,
+     $                       'AB_SGEBRD', ' ', MM, N, -1, -1 ) )
+               MAXWRK = MAX( MAXWRK, 3*N + NRHS*AB_ILAENV( 1, 'AB_SORMBR
+     $',
      $                       'QLT', MM, NRHS, N, -1 ) )
-               MAXWRK = MAX( MAXWRK, 3*N + ( N - 1 )*ILAENV( 1,
-     $                       'SORMBR', 'PLN', N, NRHS, N, -1 ) )
+               MAXWRK = MAX( MAXWRK, 3*N + ( N - 1 )*AB_ILAENV( 1,
+     $                       'AB_SORMBR', 'PLN', N, NRHS, N, -1 ) )
                WLALSD = 9*N + 2*N*SMLSIZ + 8*N*NLVL + N*NRHS +
      $                  ( SMLSIZ + 1 )**2
                MAXWRK = MAX( MAXWRK, 3*N + WLALSD )
@@ -321,20 +326,23 @@
 *                 Path 2a - underdetermined, with many more columns
 *                           than rows.
 *
-                  MAXWRK = M + M*ILAENV( 1, 'SGELQF', ' ', M, N, -1,
+                  MAXWRK = M + M*AB_ILAENV( 1, 'AB_AB_SGELQF', ' ', M, N
+     $, -1,
      $                                  -1 )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + 2*M*ILAENV( 1,
-     $                          'SGEBRD', ' ', M, M, -1, -1 ) )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + NRHS*ILAENV( 1,
-     $                          'SORMBR', 'QLT', M, NRHS, M, -1 ) )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + ( M - 1 )*ILAENV( 1,
-     $                          'SORMBR', 'PLN', M, NRHS, M, -1 ) )
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + 2*M*AB_ILAENV( 1,
+     $                          'AB_SGEBRD', ' ', M, M, -1, -1 ) )
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + NRHS*AB_ILAENV( 1,
+     $                          'AB_SORMBR', 'QLT', M, NRHS, M, -1 ) )
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + ( M - 1 )*AB_ILAENV(
+     $ 1,
+     $                          'AB_SORMBR', 'PLN', M, NRHS, M, -1 ) )
                   IF( NRHS.GT.1 ) THEN
                      MAXWRK = MAX( MAXWRK, M*M + M + M*NRHS )
                   ELSE
                      MAXWRK = MAX( MAXWRK, M*M + 2*M )
                   END IF
-                  MAXWRK = MAX( MAXWRK, M + NRHS*ILAENV( 1, 'SORMLQ',
+                  MAXWRK = MAX( MAXWRK, M + NRHS*AB_ILAENV( 1, 'AB_SORML
+     $Q',
      $                          'LT', N, NRHS, M, -1 ) )
                   MAXWRK = MAX( MAXWRK, M*M + 4*M + WLALSD )
 !     XXX: Ensure the Path 2a case below is triggered.  The workspace
@@ -345,11 +353,14 @@
 *
 *                 Path 2 - remaining underdetermined cases.
 *
-                  MAXWRK = 3*M + ( N + M )*ILAENV( 1, 'SGEBRD', ' ', M,
+                  MAXWRK = 3*M + ( N + M )*AB_ILAENV( 1, 'AB_SGEBRD', ' 
+     $', M,
      $                     N, -1, -1 )
-                  MAXWRK = MAX( MAXWRK, 3*M + NRHS*ILAENV( 1, 'SORMBR',
+                  MAXWRK = MAX( MAXWRK, 3*M + NRHS*AB_ILAENV( 1, 'AB_SOR
+     $MBR',
      $                          'QLT', M, NRHS, N, -1 ) )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*ILAENV( 1, 'SORMBR',
+                  MAXWRK = MAX( MAXWRK, 3*M + M*AB_ILAENV( 1, 'AB_SORMBR
+     $',
      $                          'PLN', N, NRHS, M, -1 ) )
                   MAXWRK = MAX( MAXWRK, 3*M + WLALSD )
                END IF
@@ -366,7 +377,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGELSD', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SGELSD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -381,60 +392,62 @@
 *
 *     Get machine parameters.
 *
-      EPS = SLAMCH( 'P' )
-      SFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SFMIN = AB_SLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max entry outside range [SMLNUM,BIGNUM].
 *
-      ANRM = SLANGE( 'M', M, N, A, LDA, WORK )
+      ANRM = AB_SLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM.
 *
-         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM.
 *
-         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
-         CALL SLASET( 'F', MINMN, 1, ZERO, ZERO, S, 1 )
+         CALL AB_SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL AB_SLASET( 'F', MINMN, 1, ZERO, ZERO, S, 1 )
          RANK = 0
          GO TO 10
       END IF
 *
 *     Scale B if max entry outside range [SMLNUM,BIGNUM].
 *
-      BNRM = SLANGE( 'M', M, NRHS, B, LDB, WORK )
+      BNRM = AB_SLANGE( 'M', M, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM.
 *
-         CALL SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO 
+     $)
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM.
 *
-         CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO 
+     $)
          IBSCL = 2
       END IF
 *
 *     If M < N make sure certain entries of B are zero.
 *
       IF( M.LT.N )
-     $   CALL SLASET( 'F', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ), LDB )
+     $   CALL AB_SLASET( 'F', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ), LDB )
 *
 *     Overdetermined case.
 *
@@ -454,19 +467,22 @@
 *           Compute A=Q*R.
 *           (Workspace: need 2*N, prefer N+N*NB)
 *
-            CALL SGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+            CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK )
+     $,
      $                   LWORK-NWORK+1, INFO )
 *
 *           Multiply B by transpose(Q).
 *           (Workspace: need N+NRHS, prefer N+NRHS*NB)
 *
-            CALL SORMQR( 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAU ), B,
+            CALL AB_SORMQR( 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAU ), 
+     $B,
      $                   LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
 *           Zero out below R.
 *
             IF( N.GT.1 ) THEN
-               CALL SLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ), LDA )
+               CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ), LDA
+     $ )
             END IF
          END IF
 *
@@ -478,19 +494,20 @@
 *        Bidiagonalize R in A.
 *        (Workspace: need 3*N+MM, prefer 3*N+(MM+N)*NB)
 *
-         CALL SGEBRD( MM, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+         CALL AB_SGEBRD( MM, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
      $                WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                INFO )
 *
 *        Multiply B by transpose of left bidiagonalizing vectors of R.
 *        (Workspace: need 3*N+NRHS, prefer 3*N+NRHS*NB)
 *
-         CALL SORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL AB_SORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, WORK( ITAUQ
+     $ ),
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
 *        Solve the bidiagonal least squares problem.
 *
-         CALL SLALSD( 'U', SMLSIZ, N, NRHS, S, WORK( IE ), B, LDB,
+         CALL AB_SLALSD( 'U', SMLSIZ, N, NRHS, S, WORK( IE ), B, LDB,
      $                RCOND, RANK, WORK( NWORK ), IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             GO TO 10
@@ -498,7 +515,8 @@
 *
 *        Multiply B by right bidiagonalizing vectors of R.
 *
-         CALL SORMBR( 'P', 'L', 'N', N, NRHS, N, A, LDA, WORK( ITAUP ),
+         CALL AB_SORMBR( 'P', 'L', 'N', N, NRHS, N, A, LDA, WORK( ITAUP 
+     $),
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
       ELSE IF( N.GE.MNTHR .AND. LWORK.GE.4*M+M*M+
@@ -516,14 +534,14 @@
 *        Compute A=L*Q.
 *        (Workspace: need 2*M, prefer M+M*NB)
 *
-         CALL SGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
+         CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                LWORK-NWORK+1, INFO )
          IL = NWORK
 *
 *        Copy L to WORK(IL), zeroing out above its diagonal.
 *
-         CALL SLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWORK )
-         CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( IL+LDWORK ),
+         CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWORK )
+         CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( IL+LDWORK ),
      $                LDWORK )
          IE = IL + LDWORK*M
          ITAUQ = IE + M
@@ -533,20 +551,20 @@
 *        Bidiagonalize L in WORK(IL).
 *        (Workspace: need M*M+5*M, prefer M*M+4*M+2*M*NB)
 *
-         CALL SGEBRD( M, M, WORK( IL ), LDWORK, S, WORK( IE ),
+         CALL AB_SGEBRD( M, M, WORK( IL ), LDWORK, S, WORK( IE ),
      $                WORK( ITAUQ ), WORK( ITAUP ), WORK( NWORK ),
      $                LWORK-NWORK+1, INFO )
 *
 *        Multiply B by transpose of left bidiagonalizing vectors of L.
 *        (Workspace: need M*M+4*M+NRHS, prefer M*M+4*M+NRHS*NB)
 *
-         CALL SORMBR( 'Q', 'L', 'T', M, NRHS, M, WORK( IL ), LDWORK,
+         CALL AB_SORMBR( 'Q', 'L', 'T', M, NRHS, M, WORK( IL ), LDWORK,
      $                WORK( ITAUQ ), B, LDB, WORK( NWORK ),
      $                LWORK-NWORK+1, INFO )
 *
 *        Solve the bidiagonal least squares problem.
 *
-         CALL SLALSD( 'U', SMLSIZ, M, NRHS, S, WORK( IE ), B, LDB,
+         CALL AB_SLALSD( 'U', SMLSIZ, M, NRHS, S, WORK( IE ), B, LDB,
      $                RCOND, RANK, WORK( NWORK ), IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             GO TO 10
@@ -554,19 +572,19 @@
 *
 *        Multiply B by right bidiagonalizing vectors of L.
 *
-         CALL SORMBR( 'P', 'L', 'N', M, NRHS, M, WORK( IL ), LDWORK,
+         CALL AB_SORMBR( 'P', 'L', 'N', M, NRHS, M, WORK( IL ), LDWORK,
      $                WORK( ITAUP ), B, LDB, WORK( NWORK ),
      $                LWORK-NWORK+1, INFO )
 *
 *        Zero out below first M rows of B.
 *
-         CALL SLASET( 'F', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ), LDB )
+         CALL AB_SLASET( 'F', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ), LDB )
          NWORK = ITAU + M
 *
 *        Multiply transpose(Q) by B.
 *        (Workspace: need M+NRHS, prefer M+NRHS*NB)
 *
-         CALL SORMLQ( 'L', 'T', N, NRHS, M, A, LDA, WORK( ITAU ), B,
+         CALL AB_SORMLQ( 'L', 'T', N, NRHS, M, A, LDA, WORK( ITAU ), B,
      $                LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
       ELSE
@@ -581,19 +599,20 @@
 *        Bidiagonalize A.
 *        (Workspace: need 3*M+N, prefer 3*M+(M+N)*NB)
 *
-         CALL SGEBRD( M, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+         CALL AB_SGEBRD( M, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
      $                WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                INFO )
 *
 *        Multiply B by transpose of left bidiagonalizing vectors.
 *        (Workspace: need 3*M+NRHS, prefer 3*M+NRHS*NB)
 *
-         CALL SORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL AB_SORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAUQ 
+     $),
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
 *        Solve the bidiagonal least squares problem.
 *
-         CALL SLALSD( 'L', SMLSIZ, M, NRHS, S, WORK( IE ), B, LDB,
+         CALL AB_SLALSD( 'L', SMLSIZ, M, NRHS, S, WORK( IE ), B, LDB,
      $                RCOND, RANK, WORK( NWORK ), IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             GO TO 10
@@ -601,7 +620,8 @@
 *
 *        Multiply B by right bidiagonalizing vectors of A.
 *
-         CALL SORMBR( 'P', 'L', 'N', N, NRHS, M, A, LDA, WORK( ITAUP ),
+         CALL AB_SORMBR( 'P', 'L', 'N', N, NRHS, M, A, LDA, WORK( ITAUP 
+     $),
      $                B, LDB, WORK( NWORK ), LWORK-NWORK+1, INFO )
 *
       END IF
@@ -609,18 +629,22 @@
 *     Undo scaling.
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
-         CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
+         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO 
+     $)
+         CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
-         CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
+         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO 
+     $)
+         CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO 
+     $)
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO 
+     $)
       END IF
 *
    10 CONTINUE
@@ -628,6 +652,6 @@
       IWORK( 1 ) = LIWORK
       RETURN
 *
-*     End of SGELSD
+*     End of AB_AB_SGELSD
 *
       END

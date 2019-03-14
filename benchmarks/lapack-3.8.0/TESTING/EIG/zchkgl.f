@@ -1,4 +1,4 @@
-*> \brief \b ZCHKGL
+*> \brief \b AB_ZCHKGL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKGL( NIN, NOUT )
+*       SUBROUTINE AB_ZCHKGL( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKGL tests ZGGBAL, a routine for balancing a matrix pair (A, B).
+*> AB_ZCHKGL tests AB_ZGGBAL, a routine for balancing a matrix pair (A, B).
 *> \endverbatim
 *
 *  Arguments:
@@ -51,7 +51,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZCHKGL( NIN, NOUT )
+      SUBROUTINE AB_ZCHKGL( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,11 +83,11 @@
      $                   BIN( LDB, LDB )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGGBAL
+      EXTERNAL           AB_ZGGBAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -101,7 +101,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
    10 CONTINUE
 *
@@ -127,12 +127,12 @@
       READ( NIN, FMT = * )( LSCLIN( I ), I = 1, N )
       READ( NIN, FMT = * )( RSCLIN( I ), I = 1, N )
 *
-      ANORM = ZLANGE( 'M', N, N, A, LDA, WORK )
-      BNORM = ZLANGE( 'M', N, N, B, LDB, WORK )
+      ANORM = AB_ZLANGE( 'M', N, N, A, LDA, WORK )
+      BNORM = AB_ZLANGE( 'M', N, N, B, LDB, WORK )
 *
       KNT = KNT + 1
 *
-      CALL ZGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL AB_ZGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
      $             WORK, INFO )
 *
       IF( INFO.NE.0 ) THEN
@@ -170,7 +170,7 @@
    90 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( ' .. test output of ZGGBAL .. ' )
+ 9999 FORMAT( ' .. test output of AB_ZGGBAL .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( ' ratio of largest test error              = ', D12.3 )
@@ -187,6 +187,6 @@
 *
       RETURN
 *
-*     End of ZCHKGL
+*     End of AB_ZCHKGL
 *
       END

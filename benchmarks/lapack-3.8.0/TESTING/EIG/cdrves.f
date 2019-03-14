@@ -1,4 +1,4 @@
-*> \brief \b CDRVES
+*> \brief \b AB_CDRVES
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_CDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, HT, W, WT, VS, LDVS, RESULT,
 *                          WORK, NWORK, RWORK, IWORK, BWORK, INFO )
 *
@@ -30,10 +30,10 @@
 *>
 *> \verbatim
 *>
-*>    CDRVES checks the nonsymmetric eigenvalue (Schur form) problem
-*>    driver CGEES.
+*>    AB_CDRVES checks the nonsymmetric eigenvalue (Schur form) problem
+*>    driver AB_CGEES.
 *>
-*>    When CDRVES is called, a number of matrix "sizes" ("n's") and a
+*>    When AB_CDRVES is called, a number of matrix "sizes" ("n's") and a
 *>    number of matrix "types" are specified.  For each size ("n")
 *>    and each type of matrix, one matrix will be generated and used
 *>    to test the nonsymmetric eigenroutines.  For each matrix, 13
@@ -170,7 +170,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          CDRVES does nothing.  It must be at least zero.
+*>          AB_CDRVES does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -184,7 +184,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, CDRVES
+*>          The number of elements in DOTYPE.   If it is zero, AB_CDRVES
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -214,7 +214,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to CDRVES to continue the same random number
+*>          next call to AB_CDRVES to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -253,13 +253,13 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX array, dimension (LDA, max(NN))
-*>          Another copy of the test matrix A, modified by CGEES.
+*>          Another copy of the test matrix A, modified by AB_CGEES.
 *> \endverbatim
 *>
 *> \param[out] HT
 *> \verbatim
 *>          HT is COMPLEX array, dimension (LDA, max(NN))
-*>          Yet another copy of the test matrix A, modified by CGEES.
+*>          Yet another copy of the test matrix A, modified by AB_CGEES.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -272,7 +272,7 @@
 *> \verbatim
 *>          WT is COMPLEX array, dimension (max(NN))
 *>          Like W, this array contains the eigenvalues of A,
-*>          but those computed when CGEES only computes a partial
+*>          but those computed when AB_CGEES only computes a partial
 *>          eigendecomposition, i.e. not Schur vectors
 *> \endverbatim
 *>
@@ -333,7 +333,7 @@
 *>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
 *>          -15: LDVS < 1 or LDVS < NMAX, where NMAX is max( NN(j) ).
 *>          -18: NWORK too small.
-*>          If  CLATMR, CLATMS, CLATME or CGEES returns an error code,
+*>          If  AB_CLATMR, AB_CLATMS, AB_CLATME or AB_CGEES returns an error code,
 *>              the absolute value of it is returned.
 *>
 *>-----------------------------------------------------------------------
@@ -374,7 +374,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_CDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, HT, W, WT, VS, LDVS, RESULT,
      $                   WORK, NWORK, RWORK, IWORK, BWORK, INFO )
 *
@@ -435,13 +435,14 @@
       COMMON             / SSLCT / SELOPT, SELDIM, SELVAL, SELWR, SELWI
 *     ..
 *     .. External Functions ..
-      LOGICAL            CSLECT
-      REAL               SLAMCH
-      EXTERNAL           CSLECT, SLAMCH
+      LOGICAL            AB_CSLECT
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_CSLECT, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEES, CHST01, CLACPY, CLATME, CLATMR, CLATMS,
-     $                   CLASET, SLABAD, SLASUM, XERBLA
+      EXTERNAL           AB_CGEES, AB_CHST01, AB_CLACPY, AB_CLATME, AB_C
+     $LATMR, AB_CLATMS,
+     $                   AB_CLASET, AB_SLABAD, AB_SLASUM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN, SQRT
@@ -497,7 +498,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVES', -INFO )
+         CALL AB_XERBLA( 'AB_CDRVES', -INFO )
          RETURN
       END IF
 *
@@ -508,10 +509,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      CALL AB_SLABAD( UNFL, OVFL )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP
@@ -578,7 +579,7 @@
 *
    60       CONTINUE
 *
-            CALL CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL AB_CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -612,7 +613,8 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -620,7 +622,8 @@
 *
 *              Symmetric, eigenvalues specified
 *
-               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, N, N, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -636,7 +639,7 @@
                   CONDS = ZERO
                END IF
 *
-               CALL CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
+               CALL AB_CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
      $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N, ANORM,
      $                      A, LDA, WORK( 2*N+1 ), IINFO )
 *
@@ -644,7 +647,8 @@
 *
 *              Diagonal, random eigenvalues
 *
-               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -653,7 +657,8 @@
 *
 *              Symmetric, random eigenvalues
 *
-               CALL CLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -662,17 +667,19 @@
 *
 *              General, random eigenvalues
 *
-               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
                IF( N.GE.4 ) THEN
-                  CALL CLASET( 'Full', 2, N, CZERO, CZERO, A, LDA )
-                  CALL CLASET( 'Full', N-3, 1, CZERO, CZERO, A( 3, 1 ),
+                  CALL AB_CLASET( 'Full', 2, N, CZERO, CZERO, A, LDA )
+                  CALL AB_CLASET( 'Full', N-3, 1, CZERO, CZERO, A( 3, 1 
+     $),
      $                         LDA )
-                  CALL CLASET( 'Full', N-3, 2, CZERO, CZERO,
+                  CALL AB_CLASET( 'Full', N-3, 2, CZERO, CZERO,
      $                         A( 3, N-1 ), LDA )
-                  CALL CLASET( 'Full', 1, N, CZERO, CZERO, A( N, 1 ),
+                  CALL AB_CLASET( 'Full', 1, N, CZERO, CZERO, A( N, 1 ),
      $                         LDA )
                END IF
 *
@@ -680,7 +687,8 @@
 *
 *              Triangular, random eigenvalues
 *
-               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -728,12 +736,13 @@
 *
 *                 Compute Schur form and Schur vectors, and test them
 *
-                  CALL CLACPY( 'F', N, N, A, LDA, H, LDA )
-                  CALL CGEES( 'V', SORT, CSLECT, N, H, LDA, SDIM, W, VS,
+                  CALL AB_CLACPY( 'F', N, N, A, LDA, H, LDA )
+                  CALL AB_CGEES( 'V', SORT, AB_CSLECT, N, H, LDA, SDIM, 
+     $W, VS,
      $                        LDVS, WORK, NNWORK, RWORK, BWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      RESULT( 1+RSUB ) = ULPINV
-                     WRITE( NOUNIT, FMT = 9992 )'CGEES1', IINFO, N,
+                     WRITE( NOUNIT, FMT = 9992 )'AB_CGEES1', IINFO, N,
      $                  JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      GO TO 190
@@ -752,7 +761,8 @@
 *                 Do Tests (2) and (3) or Tests (8) and (9)
 *
                   LWORK = MAX( 1, 2*N*N )
-                  CALL CHST01( N, 1, N, A, LDA, H, LDA, VS, LDVS, WORK,
+                  CALL AB_CHST01( N, 1, N, A, LDA, H, LDA, VS, LDVS, WOR
+     $K,
      $                         LWORK, RWORK, RES )
                   RESULT( 2+RSUB ) = RES( 1 )
                   RESULT( 3+RSUB ) = RES( 2 )
@@ -767,13 +777,14 @@
 *
 *                 Do Test (5) or Test (11)
 *
-                  CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
-                  CALL CGEES( 'N', SORT, CSLECT, N, HT, LDA, SDIM, WT,
+                  CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
+                  CALL AB_CGEES( 'N', SORT, AB_CSLECT, N, HT, LDA, SDIM,
+     $ WT,
      $                        VS, LDVS, WORK, NNWORK, RWORK, BWORK,
      $                        IINFO )
                   IF( IINFO.NE.0 ) THEN
                      RESULT( 5+RSUB ) = ULPINV
-                     WRITE( NOUNIT, FMT = 9992 )'CGEES2', IINFO, N,
+                     WRITE( NOUNIT, FMT = 9992 )'AB_CGEES2', IINFO, N,
      $                  JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      GO TO 190
@@ -801,11 +812,12 @@
                      RESULT( 13 ) = ZERO
                      KNTEIG = 0
                      DO 170 I = 1, N
-                        IF( CSLECT( W( I ) ) )
+                        IF( AB_CSLECT( W( I ) ) )
      $                     KNTEIG = KNTEIG + 1
                         IF( I.LT.N ) THEN
-                           IF( CSLECT( W( I+1 ) ) .AND.
-     $                         ( .NOT.CSLECT( W( I ) ) ) )RESULT( 13 )
+                           IF( AB_CSLECT( W( I+1 ) ) .AND.
+     $                         ( .NOT.AB_CSLECT( W( I ) ) ) )RESULT( 13 
+     $)
      $                         = ULPINV
                         END IF
   170                CONTINUE
@@ -856,10 +868,10 @@
 *
 *     Summary
 *
-      CALL SLASUM( PATH, NOUNIT, NERRS, NTESTT )
+      CALL AB_SLASUM( PATH, NOUNIT, NERRS, NTESTT )
 *
  9999 FORMAT( / 1X, A3, ' -- Complex Schur Form Decomposition Driver',
-     $      / ' Matrix types (see CDRVES for details): ' )
+     $      / ' Matrix types (see AB_CDRVES for details): ' )
 *
  9998 FORMAT( / ' Special Matrices:', / '  1=Zero matrix.             ',
      $      '           ', '  5=Diagonal: geometr. spaced entries.',
@@ -904,11 +916,11 @@
      $      ' 13 = 0 if sorting successful, 1/ulp otherwise', / )
  9993 FORMAT( ' N=', I5, ', IWK=', I2, ', seed=', 4( I4, ',' ),
      $      ' type ', I2, ', test(', I2, ')=', G10.3 )
- 9992 FORMAT( ' CDRVES: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9992 FORMAT( ' AB_CDRVES: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of CDRVES
+*     End of AB_CDRVES
 *
       END

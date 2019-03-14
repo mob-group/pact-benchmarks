@@ -1,4 +1,4 @@
-*> \brief \b DORMHR
+*> \brief \b AB_DORMHR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORMHR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormhr.f">
+*> Download AB_DORMHR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORMHR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormhr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORMHR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormhr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORMHR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORMHR( SIDE, TRANS, M, N, ILO, IHI, A, LDA, TAU, C,
+*       SUBROUTINE AB_DORMHR( SIDE, TRANS, M, N, ILO, IHI, A, LDA, TAU, C,
 *                          LDC, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DORMHR overwrites the general real M-by-N matrix C with
+*> AB_DORMHR overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
@@ -43,7 +43,7 @@
 *>
 *> where Q is a real orthogonal matrix of order nq, with nq = m if
 *> SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of
-*> IHI-ILO elementary reflectors, as returned by DGEHRD:
+*> IHI-ILO elementary reflectors, as returned by AB_DGEHRD:
 *>
 *> Q = H(ilo) H(ilo+1) . . . H(ihi-1).
 *> \endverbatim
@@ -87,7 +87,7 @@
 *>          IHI is INTEGER
 *>
 *>          ILO and IHI must have the same values as in the previous call
-*>          of DGEHRD. Q is equal to the unit matrix except in the
+*>          of AB_DGEHRD. Q is equal to the unit matrix except in the
 *>          submatrix Q(ilo+1:ihi,ilo+1:ihi).
 *>          If SIDE = 'L', then 1 <= ILO <= IHI <= M, if M > 0, and
 *>          ILO = 1 and IHI = 0, if M = 0;
@@ -101,7 +101,7 @@
 *>                               (LDA,M) if SIDE = 'L'
 *>                               (LDA,N) if SIDE = 'R'
 *>          The vectors which define the elementary reflectors, as
-*>          returned by DGEHRD.
+*>          returned by AB_DGEHRD.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -117,7 +117,7 @@
 *>                               (M-1) if SIDE = 'L'
 *>                               (N-1) if SIDE = 'R'
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by DGEHRD.
+*>          reflector H(i), as returned by AB_DGEHRD.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -152,7 +152,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -175,7 +175,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DORMHR( SIDE, TRANS, M, N, ILO, IHI, A, LDA, TAU, C,
+      SUBROUTINE AB_DORMHR( SIDE, TRANS, M, N, ILO, IHI, A, LDA, TAU, C,
      $                   LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -198,12 +198,12 @@
       INTEGER            I1, I2, IINFO, LWKOPT, MI, NB, NH, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DORMQR, XERBLA
+      EXTERNAL           AB_DORMQR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -214,7 +214,7 @@
 *
       INFO = 0
       NH = IHI - ILO
-      LEFT = LSAME( SIDE, 'L' )
+      LEFT = AB_LSAME( SIDE, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q and NW is the minimum dimension of WORK
@@ -226,9 +226,10 @@
          NQ = N
          NW = M
       END IF
-      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.LSAME( TRANS, 'T' ) )
+      ELSE IF( .NOT.AB_LSAME( TRANS, 'N' ) .AND. .NOT.AB_LSAME( TRANS
+     $, 'T' ) )
      $          THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
@@ -249,16 +250,18 @@
 *
       IF( INFO.EQ.0 ) THEN
          IF( LEFT ) THEN
-            NB = ILAENV( 1, 'DORMQR', SIDE // TRANS, NH, N, NH, -1 )
+            NB = AB_ILAENV( 1, 'AB_DORMQR', SIDE // TRANS, NH, N, NH, -1
+     $ )
          ELSE
-            NB = ILAENV( 1, 'DORMQR', SIDE // TRANS, M, NH, NH, -1 )
+            NB = AB_ILAENV( 1, 'AB_DORMQR', SIDE // TRANS, M, NH, NH, -1
+     $ )
          END IF
          LWKOPT = MAX( 1, NW )*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORMHR', -INFO )
+         CALL AB_XERBLA( 'AB_DORMHR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -283,12 +286,12 @@
          I2 = ILO + 1
       END IF
 *
-      CALL DORMQR( SIDE, TRANS, MI, NI, NH, A( ILO+1, ILO ), LDA,
+      CALL AB_DORMQR( SIDE, TRANS, MI, NI, NH, A( ILO+1, ILO ), LDA,
      $             TAU( ILO ), C( I1, I2 ), LDC, WORK, LWORK, IINFO )
 *
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of DORMHR
+*     End of AB_DORMHR
 *
       END

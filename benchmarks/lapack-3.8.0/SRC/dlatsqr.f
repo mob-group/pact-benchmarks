@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
+*       SUBROUTINE AB_DLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
 *                           LWORK, INFO)
 *
 *       .. Scalar Arguments ..
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*> DLATSQR computes a blocked Tall-Skinny QR factorization of
+*> AB_DLATSQR computes a blocked Tall-Skinny QR factorization of
 *> an M-by-N matrix A, where M >= N:
 *> A = Q * R .
 *> \endverbatim
@@ -95,7 +95,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -126,12 +126,12 @@
 *>   Q(3) zeros out the bottom MB-N rows of rows [1:N,2*MB-N+1:3*MB-2*N] of A
 *>   . . .
 *>
-*> Q(1) is computed by GEQRT, which represents Q(1) by Householder vectors
+*> Q(1) is computed by GEQRT, which represents Q(1) by HousehoAB_LDEr vectors
 *> stored under the diagonal of rows 1:MB of A, and by upper triangular
 *> block reflectors, stored in array T(1:LDT,1:N).
 *> For more information see Further Details in GEQRT.
 *>
-*> Q(i) for i>1 is computed by TPQRT, which represents Q(i) by Householder vectors
+*> Q(i) for i>1 is computed by TPQRT, which represents Q(i) by HousehoAB_LDEr vectors
 *> stored in rows [(i-1)*(MB-N)+N+1:i*(MB-N)+N] of A, and by upper triangular
 *> block reflectors, stored in array T(1:LDT,(i-1)*N+1:i*N).
 *> The last Q(k) may use fewer rows.
@@ -146,7 +146,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
+      SUBROUTINE AB_DLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
      $                    LWORK, INFO)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -169,10 +169,10 @@
       INTEGER    I, II, KK, CTR
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     .. EXTERNAL SUBROUTINES ..
-      EXTERNAL           DGEQRT, DTPQRT, XERBLA
+      EXTERNAL           AB_AB_DGEQRT, AB_DTPQRT, AB_XERBLA
 *     .. INTRINSIC FUNCTIONS ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
@@ -203,7 +203,7 @@
         WORK(1) = NB*N
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'DLATSQR', -INFO )
+        CALL AB_XERBLA( 'AB_DLATSQR', -INFO )
         RETURN
       ELSE IF (LQUERY) THEN
        RETURN
@@ -218,7 +218,7 @@
 *     The QR Decomposition
 *
        IF ((MB.LE.N).OR.(MB.GE.M)) THEN
-         CALL DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO)
+         CALL AB_AB_DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO)
          RETURN
        END IF
 *
@@ -227,14 +227,14 @@
 *
 *      Compute the QR factorization of the first block A(1:MB,1:N)
 *
-       CALL DGEQRT( MB, N, NB, A(1,1), LDA, T, LDT, WORK, INFO )
+       CALL AB_AB_DGEQRT( MB, N, NB, A(1,1), LDA, T, LDT, WORK, INFO )
 *
        CTR = 1
        DO I = MB+1, II-MB+N ,  (MB-N)
 *
 *      Compute the QR factorization of the current block A(I:I+MB-N,1:N)
 *
-         CALL DTPQRT( MB-N, N, 0, NB, A(1,1), LDA, A( I, 1 ), LDA,
+         CALL AB_DTPQRT( MB-N, N, 0, NB, A(1,1), LDA, A( I, 1 ), LDA,
      $                 T(1, CTR * N + 1),
      $                  LDT, WORK, INFO )
          CTR = CTR + 1
@@ -243,7 +243,7 @@
 *      Compute the QR factorization of the last block A(II:M,1:N)
 *
        IF (II.LE.M) THEN
-         CALL DTPQRT( KK, N, 0, NB, A(1,1), LDA, A( II, 1 ), LDA,
+         CALL AB_DTPQRT( KK, N, 0, NB, A(1,1), LDA, A( II, 1 ), LDA,
      $                 T(1, CTR * N + 1), LDT,
      $                  WORK, INFO )
        END IF
@@ -251,6 +251,6 @@
       WORK( 1 ) = N*NB
       RETURN
 *
-*     End of DLATSQR
+*     End of AB_DLATSQR
 *
       END

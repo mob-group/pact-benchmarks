@@ -1,4 +1,4 @@
-*> \brief \b CGTRFS
+*> \brief \b AB_CGTRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGTRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgtrfs.f">
+*> Download AB_CGTRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGTRFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgtrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGTRFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGTRFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+*       SUBROUTINE AB_CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
 *                          IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
 *                          INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> CGTRFS improves the computed solution to a system of linear
+*> AB_CGTRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is tridiagonal, and provides
 *> error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -92,7 +92,7 @@
 *> \verbatim
 *>          DLF is COMPLEX array, dimension (N-1)
 *>          The (n-1) multipliers that define the matrix L from the
-*>          LU factorization of A as computed by CGTTRF.
+*>          LU factorization of A as computed by AB_CGTTRF.
 *> \endverbatim
 *>
 *> \param[in] DF
@@ -111,7 +111,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is COMPLEX array, dimension (N-2)
-*>          The (n-2) elements of the second superdiagonal of U.
+*>          The (n-2) elements of the AB_SECOND superdiagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -138,7 +138,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by CGTTRS.
+*>          On entry, the solution matrix X, as computed by AB_CGTTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -206,7 +206,8 @@
 *> \ingroup complexGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+      SUBROUTINE AB_CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2
+     $,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
 *
@@ -250,15 +251,16 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGTTRS, CLACN2, CLAGTM, XERBLA
+      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CGTTRS, AB_CLACN2, AB_CL
+     $AGTM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, MAX, REAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -271,9 +273,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -285,7 +287,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGTRFS', -INFO )
+         CALL AB_XERBLA( 'AB_CGTRFS', -INFO )
          RETURN
       END IF
 *
@@ -310,8 +312,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = 4
-      EPS = SLAMCH( 'Epsilon' )
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -328,8 +330,9 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
-         CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL CLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, ONE,
+         CALL AB_CCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL AB_CLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, O
+     $NE,
      $                WORK, N )
 *
 *        Compute abs(op(A))*abs(x) + abs(b) for use in the backward
@@ -404,9 +407,10 @@
 *
 *           Update solution and try again.
 *
-            CALL CGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK, N,
+            CALL AB_CGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK, 
+     $N,
      $                   INFO )
-            CALL CAXPY( N, CMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
+            CALL AB_CAXPY( N, CMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -430,7 +434,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use CLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_CLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -445,13 +449,14 @@
 *
          KASE = 0
    70    CONTINUE
-         CALL CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL AB_CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**H).
 *
-               CALL CGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
+               CALL AB_CGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV, WO
+     $RK,
      $                      N, INFO )
                DO 80 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
@@ -463,7 +468,8 @@
                DO 90 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
    90          CONTINUE
-               CALL CGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
+               CALL AB_CGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV, WO
+     $RK,
      $                      N, INFO )
             END IF
             GO TO 70
@@ -482,6 +488,6 @@
 *
       RETURN
 *
-*     End of CGTRFS
+*     End of AB_CGTRFS
 *
       END

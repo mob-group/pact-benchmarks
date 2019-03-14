@@ -1,4 +1,4 @@
-*> \brief \b CSSCAL
+*> \brief \b AB_CAB_SSCAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSSCAL(N,SA,CX,INCX)
+*       SUBROUTINE AB_CAB_SSCAL(N,SA,CX,INCX)
 *
 *       .. Scalar Arguments ..
 *       REAL SA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    CSSCAL scales a complex vector by a real constant.
+*>    AB_CAB_SSCAL scales a complex vector by a real constant.
 *> \endverbatim
 *
 *  Arguments:
@@ -76,7 +76,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CSSCAL(N,SA,CX,INCX)
+      SUBROUTINE AB_CAB_SSCAL(N,SA,CX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

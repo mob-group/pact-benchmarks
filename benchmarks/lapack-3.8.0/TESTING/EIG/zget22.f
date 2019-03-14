@@ -1,4 +1,4 @@
-*> \brief \b ZGET22
+*> \brief \b AB_ZGET22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,16 +8,16 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, W,
+*       SUBROUTINE AB_ZGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, AB_LDE, W,
 *                          WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSA, TRANSE, TRANSW
-*       INTEGER            LDA, LDE, N
+*       INTEGER            LDA, AB_LDE, N
 *       ..
 *       .. Array Arguments ..
 *       DOUBLE PRECISION   RESULT( 2 ), RWORK( * )
-*       COMPLEX*16         A( LDA, * ), E( LDE, * ), W( * ), WORK( * )
+*       COMPLEX*16         A( LDA, * ), E( AB_LDE, * ), W( * ), WORK( * )
 *       ..
 *
 *
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> ZGET22 does an eigenvector check.
+*> AB_ZGET22 does an eigenvector check.
 *>
 *> The basic test is:
 *>
@@ -92,16 +92,16 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is COMPLEX*16 array, dimension (LDE,N)
+*>          E is COMPLEX*16 array, dimension (AB_LDE,N)
 *>          The matrix of eigenvectors. If TRANSE = 'N', the eigenvectors
 *>          are stored in the columns of E, if TRANSE = 'T' or 'C', the
 *>          eigenvectors are stored in the rows of E.
 *> \endverbatim
 *>
-*> \param[in] LDE
+*> \param[in] AB_LDE
 *> \verbatim
-*>          LDE is INTEGER
-*>          The leading dimension of the array E.  LDE >= max(1,N).
+*>          AB_LDE is INTEGER
+*>          The leading dimension of the array E.  AB_LDE >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in] W
@@ -140,7 +140,8 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, W,
+      SUBROUTINE AB_ZGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, AB_LDE
+     $, W,
      $                   WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -150,11 +151,11 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANSA, TRANSE, TRANSW
-      INTEGER            LDA, LDE, N
+      INTEGER            LDA, AB_LDE, N
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION   RESULT( 2 ), RWORK( * )
-      COMPLEX*16         A( LDA, * ), E( LDE, * ), W( * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), E( AB_LDE, * ), W( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -174,12 +175,12 @@
       COMPLEX*16         WTEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, DLAMCH, ZLANGE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZLASET
+      EXTERNAL           AB_ZGEMM, AB_ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN
@@ -193,27 +194,27 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
 *
       ITRNSE = 0
       ITRNSW = 0
       NORMA = 'O'
       NORME = 'O'
 *
-      IF( LSAME( TRANSA, 'T' ) .OR. LSAME( TRANSA, 'C' ) ) THEN
+      IF( AB_LSAME( TRANSA, 'T' ) .OR. AB_LSAME( TRANSA, 'C' ) ) THEN
          NORMA = 'I'
       END IF
 *
-      IF( LSAME( TRANSE, 'T' ) ) THEN
+      IF( AB_LSAME( TRANSE, 'T' ) ) THEN
          ITRNSE = 1
          NORME = 'I'
-      ELSE IF( LSAME( TRANSE, 'C' ) ) THEN
+      ELSE IF( AB_LSAME( TRANSE, 'C' ) ) THEN
          ITRNSE = 2
          NORME = 'I'
       END IF
 *
-      IF( LSAME( TRANSW, 'C' ) ) THEN
+      IF( AB_LSAME( TRANSW, 'C' ) ) THEN
          ITRNSW = 1
       END IF
 *
@@ -252,17 +253,17 @@
 *
 *     Norm of A:
 *
-      ANORM = MAX( ZLANGE( NORMA, N, N, A, LDA, RWORK ), UNFL )
+      ANORM = MAX( AB_ZLANGE( NORMA, N, N, A, LDA, RWORK ), UNFL )
 *
 *     Norm of E:
 *
-      ENORM = MAX( ZLANGE( NORME, N, N, E, LDE, RWORK ), ULP )
+      ENORM = MAX( AB_ZLANGE( NORME, N, N, E, AB_LDE, RWORK ), ULP )
 *
 *     Norm of error:
 *
 *     Error =  AE - EW
 *
-      CALL ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+      CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
       JOFF = 0
       DO 100 JCOL = 1, N
@@ -288,10 +289,11 @@
          JOFF = JOFF + N
   100 CONTINUE
 *
-      CALL ZGEMM( TRANSA, TRANSE, N, N, N, CONE, A, LDA, E, LDE, -CONE,
+      CALL AB_ZGEMM( TRANSA, TRANSE, N, N, N, CONE, A, LDA, E, AB_LDE, -
+     $CONE,
      $            WORK, N )
 *
-      ERRNRM = ZLANGE( 'One', N, N, WORK, N, RWORK ) / ENORM
+      ERRNRM = AB_ZLANGE( 'One', N, N, WORK, N, RWORK ) / ENORM
 *
 *     Compute RESULT(1) (avoiding under/overflow)
 *
@@ -312,6 +314,6 @@
 *
       RETURN
 *
-*     End of ZGET22
+*     End of AB_ZGET22
 *
       END

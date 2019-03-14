@@ -1,4 +1,4 @@
-*> \brief \b ZUNM2R multiplies a general matrix by the unitary matrix from a QR factorization determined by cgeqrf (unblocked algorithm).
+*> \brief \b AB_ZUNM2R multiplies a general matrix by the unitary matrix from a QR factorization determined by AB_AB_CGEQRF (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZUNM2R + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunm2r.f">
+*> Download AB_ZUNM2R + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNM2R.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunm2r.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNM2R.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunm2r.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNM2R.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZUNM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+*       SUBROUTINE AB_ZUNM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZUNM2R overwrites the general complex m-by-n matrix C with
+*> AB_ZUNM2R overwrites the general complex m-by-n matrix C with
 *>
 *>       Q * C  if SIDE = 'L' and TRANS = 'N', or
 *>
@@ -50,7 +50,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(k)
 *>
-*> as returned by ZGEQRF. Q is of order m if SIDE = 'L' and of order n
+*> as returned by AB_AB_ZGEQRF. Q is of order m if SIDE = 'L' and of order n
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -97,7 +97,7 @@
 *>          A is COMPLEX*16 array, dimension (LDA,K)
 *>          The i-th column must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          ZGEQRF in the first k columns of its array argument A.
+*>          AB_AB_ZGEQRF in the first k columns of its array argument A.
 *>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
@@ -113,7 +113,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by ZGEQRF.
+*>          reflector H(i), as returned by AB_AB_ZGEQRF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -156,7 +156,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZUNM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+      SUBROUTINE AB_ZUNM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -184,11 +184,11 @@
       COMPLEX*16         AII, TAUI
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF
+      EXTERNAL           AB_XERBLA, AB_ZLARF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -198,8 +198,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = LSAME( SIDE, 'L' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT = AB_LSAME( SIDE, 'L' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
 *
 *     NQ is the order of Q
 *
@@ -208,9 +208,9 @@
       ELSE
          NQ = N
       END IF
-      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -224,7 +224,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZUNM2R', -INFO )
+         CALL AB_XERBLA( 'AB_ZUNM2R', -INFO )
          RETURN
       END IF
 *
@@ -275,12 +275,13 @@
          END IF
          AII = A( I, I )
          A( I, I ) = ONE
-         CALL ZLARF( SIDE, MI, NI, A( I, I ), 1, TAUI, C( IC, JC ), LDC,
+         CALL AB_ZLARF( SIDE, MI, NI, A( I, I ), 1, TAUI, C( IC, JC ), L
+     $DC,
      $               WORK )
          A( I, I ) = AII
    10 CONTINUE
       RETURN
 *
-*     End of ZUNM2R
+*     End of AB_ZUNM2R
 *
       END

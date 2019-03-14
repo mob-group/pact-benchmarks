@@ -1,4 +1,4 @@
-*> \brief \b SDSDOT
+*> \brief \b SAB_DAB_SDOT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SDSDOT(N,SB,SX,INCX,SY,INCY)
+*       REAL FUNCTION SAB_DAB_SDOT(N,SB,SX,INCX,SY,INCY)
 *
 *       .. Scalar Arguments ..
 *       REAL SB
@@ -27,8 +27,8 @@
 *    precision accumulation.
 *
 *    Returns S.P. result with dot product accumulated in D.P.
-*    SDSDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
-*    where LX = 1 if INCX .GE. 0, else LX = 1+(1-N)*INCX, and LY is
+*    SAB_DAB_SDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
+*    where LX = 1 if INCX .GE. 0, ELSE LX = 1+(1-N)*INCX, and LY is
 *    defined in a similar way using INCY.
 *> \endverbatim
 *
@@ -106,15 +106,15 @@
 *    =====================================================================
 *
 *       .. Local Scalars ..
-*       DOUBLE PRECISION DSDOT
+*       DOUBLE PRECISION AB_DAB_SDOT
 *       INTEGER I,KX,KY,NS
 *       ..
 *       .. Intrinsic Functions ..
 *       INTRINSIC DBLE
 *       ..
-*       DSDOT = SB
+*       AB_DAB_SDOT = SB
 *       IF (N.LE.0) THEN
-*          SDSDOT = DSDOT
+*          SAB_DAB_SDOT = AB_DAB_SDOT
 *          RETURN
 *       END IF
 *       IF (INCX.EQ.INCY .AND. INCX.GT.0) THEN
@@ -123,7 +123,7 @@
 *
 *          NS = N*INCX
 *          DO I = 1,NS,INCX
-*             DSDOT = DSDOT + DBLE(SX(I))*DBLE(SY(I))
+*             AB_DAB_SDOT = AB_DAB_SDOT + DBLE(SX(I))*DBLE(SY(I))
 *          END DO
 *       ELSE
 *
@@ -134,12 +134,12 @@
 *          IF (INCX.LT.0) KX = 1 + (1-N)*INCX
 *          IF (INCY.LT.0) KY = 1 + (1-N)*INCY
 *          DO I = 1,N
-*             DSDOT = DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
+*             AB_DAB_SDOT = AB_DAB_SDOT + DBLE(SX(KX))*DBLE(SY(KY))
 *             KX = KX + INCX
 *             KY = KY + INCY
 *          END DO
 *       END IF
-*       SDSDOT = DSDOT
+*       SAB_DAB_SDOT = AB_DAB_SDOT
 *       RETURN
 *       END
 *
@@ -162,7 +162,7 @@
 *> \ingroup single_blas_level1
 *
 *  =====================================================================
-      REAL FUNCTION SDSDOT(N,SB,SX,INCX,SY,INCY)
+      REAL FUNCTION SAB_DAB_SDOT(N,SB,SX,INCX,SY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -184,8 +184,8 @@
 *  precision accumulation.
 *
 *  Returns S.P. result with dot product accumulated in D.P.
-*  SDSDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
-*  where LX = 1 if INCX .GE. 0, else LX = 1+(1-N)*INCX, and LY is
+*  SAB_DAB_SDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
+*  where LX = 1 if INCX .GE. 0, ELSE LX = 1+(1-N)*INCX, and LY is
 *  defined in a similar way using INCY.
 *
 *  AUTHOR
@@ -214,7 +214,7 @@
 *  INCY   (input) INTEGER
 *         storage spacing between elements of SY
 *
-*  SDSDOT (output) REAL
+*  SAB_DAB_SDOT (output) REAL
 *         single precision dot product (SB if N .LE. 0)
 *
 *  Further Details
@@ -241,15 +241,15 @@
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      DOUBLE PRECISION DSDOT
+      DOUBLE PRECISION AB_DAB_SDOT
       INTEGER I,KX,KY,NS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE
 *     ..
-      DSDOT = SB
+      AB_DAB_SDOT = SB
       IF (N.LE.0) THEN
-         SDSDOT = DSDOT
+         SAB_DAB_SDOT = AB_DAB_SDOT
          RETURN
       END IF
       IF (INCX.EQ.INCY .AND. INCX.GT.0) THEN
@@ -258,7 +258,7 @@
 *
          NS = N*INCX
          DO I = 1,NS,INCX
-            DSDOT = DSDOT + DBLE(SX(I))*DBLE(SY(I))
+            AB_DAB_SDOT = AB_DAB_SDOT + DBLE(SX(I))*DBLE(SY(I))
          END DO
       ELSE
 *
@@ -269,11 +269,11 @@
          IF (INCX.LT.0) KX = 1 + (1-N)*INCX
          IF (INCY.LT.0) KY = 1 + (1-N)*INCY
          DO I = 1,N
-            DSDOT = DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
+            AB_DAB_SDOT = AB_DAB_SDOT + DBLE(SX(KX))*DBLE(SY(KY))
             KX = KX + INCX
             KY = KY + INCY
          END DO
       END IF
-      SDSDOT = DSDOT
+      SAB_DAB_SDOT = AB_DAB_SDOT
       RETURN
       END

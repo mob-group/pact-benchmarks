@@ -1,4 +1,4 @@
-*> \brief \b SLAG2 computes the eigenvalues of a 2-by-2 generalized eigenvalue problem, with scaling as necessary to avoid over-/underflow.
+*> \brief \b AB_SLAG2 computes the eigenvalues of a 2-by-2 generalized eigenvalue problem, with scaling as necessary to avoid over-/underflow.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAG2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slag2.f">
+*> Download AB_SLAG2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAG2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slag2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAG2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slag2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAG2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1,
+*       SUBROUTINE AB_SLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1,
 *                         WR2, WI )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SLAG2 computes the eigenvalues of a 2 x 2 generalized eigenvalue
+*> AB_SLAG2 computes the eigenvalues of a 2 x 2 generalized eigenvalue
 *> problem  A - w B, with scaling as necessary to avoid over-/underflow.
 *>
 *> The scaling factor "s" results in a modified eigenvalue equation
@@ -84,8 +84,8 @@
 *> \verbatim
 *>          SAFMIN is REAL
 *>          The smallest positive number s.t. 1/SAFMIN does not
-*>          overflow.  (This should always be SLAMCH('S') -- it is an
-*>          argument in order to avoid having to call SLAMCH frequently.)
+*>          overflow.  (This should always be AB_SLAMCH('S') -- it is an
+*>          argument in order to avoid having to call AB_SLAMCH frequently.)
 *> \endverbatim
 *>
 *> \param[out] SCALE1
@@ -107,9 +107,9 @@
 *> \verbatim
 *>          SCALE2 is REAL
 *>          A scaling factor used to avoid over-/underflow in the
-*>          eigenvalue equation which defines the second eigenvalue.  If
+*>          eigenvalue equation which defines the AB_SECOND eigenvalue.  If
 *>          the eigenvalues are complex, then SCALE2=SCALE1.  If the
-*>          eigenvalues are real, then the second (real) eigenvalue is
+*>          eigenvalues are real, then the AB_SECOND (real) eigenvalue is
 *>          WR2 / SCALE2 , but this may overflow or underflow, and in
 *>          fact, SCALE2 may be zero or less than the underflow
 *>          threshold if the exact eigenvalue is sufficiently large.
@@ -153,7 +153,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1,
+      SUBROUTINE AB_SLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1,
      $                  WR2, WI )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -353,7 +353,7 @@
          SCALE2 = SCALE1
       END IF
 *
-*     Scale second eigenvalue (if real)
+*     Scale AB_SECOND eigenvalue (if real)
 *
       IF( WI.EQ.ZERO ) THEN
          WSIZE = MAX( SAFMIN, C1, FUZZY1*( ABS( WR2 )*C2+C3 ),
@@ -373,7 +373,7 @@
          END IF
       END IF
 *
-*     End of SLAG2
+*     End of AB_SLAG2
 *
       RETURN
       END

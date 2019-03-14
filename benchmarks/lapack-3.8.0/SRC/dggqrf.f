@@ -1,4 +1,4 @@
-*> \brief \b DGGQRF
+*> \brief \b AB_DGGQRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGGQRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggqrf.f">
+*> Download AB_DGGQRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGGQRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggqrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGGQRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggqrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGGQRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGGQRF( N, M, P, A, LDA, TAUA, B, LDB, TAUB, WORK,
+*       SUBROUTINE AB_DGGQRF( N, M, P, A, LDA, TAUA, B, LDB, TAUB, WORK,
 *                          LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGGQRF computes a generalized QR factorization of an N-by-M matrix A
+*> AB_DGGQRF computes a generalized QR factorization of an N-by-M matrix A
 *> and an N-by-P matrix B:
 *>
 *>             A = Q*R,        B = Q*T*Z,
@@ -150,12 +150,12 @@
 *>          where NB1 is the optimal blocksize for the QR factorization
 *>          of an N-by-M matrix, NB2 is the optimal blocksize for the
 *>          RQ factorization of an N-by-P matrix, and NB3 is the optimal
-*>          blocksize for a call of DORMQR.
+*>          blocksize for a call of AB_DORMQR.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -193,8 +193,8 @@
 *>  where taua is a real scalar, and v is a real vector with
 *>  v(1:i-1) = 0 and v(i) = 1; v(i+1:n) is stored on exit in A(i+1:n,i),
 *>  and taua in TAUA(i).
-*>  To form Q explicitly, use LAPACK subroutine DORGQR.
-*>  To use Q to update another matrix, use LAPACK subroutine DORMQR.
+*>  To form Q explicitly, use LAPACK subroutine AB_DORGQR.
+*>  To use Q to update another matrix, use LAPACK subroutine AB_DORMQR.
 *>
 *>  The matrix Z is represented as a product of elementary reflectors
 *>
@@ -207,12 +207,12 @@
 *>  where taub is a real scalar, and v is a real vector with
 *>  v(p-k+i+1:p) = 0 and v(p-k+i) = 1; v(1:p-k+i-1) is stored on exit in
 *>  B(n-k+i,1:p-k+i-1), and taub in TAUB(i).
-*>  To form Z explicitly, use LAPACK subroutine DORGRQ.
-*>  To use Z to update another matrix, use LAPACK subroutine DORMRQ.
+*>  To form Z explicitly, use LAPACK subroutine AB_DORGRQ.
+*>  To use Z to update another matrix, use LAPACK subroutine AB_DORMRQ.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGGQRF( N, M, P, A, LDA, TAUA, B, LDB, TAUB, WORK,
+      SUBROUTINE AB_DGGQRF( N, M, P, A, LDA, TAUA, B, LDB, TAUB, WORK,
      $                   LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -235,11 +235,12 @@
       INTEGER            LOPT, LWKOPT, NB, NB1, NB2, NB3
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGERQF, DORMQR, XERBLA
+      EXTERNAL           AB_AB_DGEQRF, AB_AB_DGERQF, AB_DORMQR, AB_XERBL
+     $A
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -249,9 +250,9 @@
 *     Test the input parameters
 *
       INFO = 0
-      NB1 = ILAENV( 1, 'DGEQRF', ' ', N, M, -1, -1 )
-      NB2 = ILAENV( 1, 'DGERQF', ' ', N, P, -1, -1 )
-      NB3 = ILAENV( 1, 'DORMQR', ' ', N, M, P, -1 )
+      NB1 = AB_ILAENV( 1, 'AB_AB_DGEQRF', ' ', N, M, -1, -1 )
+      NB2 = AB_ILAENV( 1, 'AB_AB_DGERQF', ' ', N, P, -1, -1 )
+      NB3 = AB_ILAENV( 1, 'AB_DORMQR', ' ', N, M, P, -1 )
       NB = MAX( NB1, NB2, NB3 )
       LWKOPT = MAX( N, M, P )*NB
       WORK( 1 ) = LWKOPT
@@ -270,7 +271,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGGQRF', -INFO )
+         CALL AB_XERBLA( 'AB_DGGQRF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -278,22 +279,23 @@
 *
 *     QR factorization of N-by-M matrix A: A = Q*R
 *
-      CALL DGEQRF( N, M, A, LDA, TAUA, WORK, LWORK, INFO )
+      CALL AB_AB_DGEQRF( N, M, A, LDA, TAUA, WORK, LWORK, INFO )
       LOPT = WORK( 1 )
 *
 *     Update B := Q**T*B.
 *
-      CALL DORMQR( 'Left', 'Transpose', N, P, MIN( N, M ), A, LDA, TAUA,
+      CALL AB_DORMQR( 'Left', 'Transpose', N, P, MIN( N, M ), A, LDA, TA
+     $UA,
      $             B, LDB, WORK, LWORK, INFO )
       LOPT = MAX( LOPT, INT( WORK( 1 ) ) )
 *
 *     RQ factorization of N-by-P matrix B: B = T*Z.
 *
-      CALL DGERQF( N, P, B, LDB, TAUB, WORK, LWORK, INFO )
+      CALL AB_AB_DGERQF( N, P, B, LDB, TAUB, WORK, LWORK, INFO )
       WORK( 1 ) = MAX( LOPT, INT( WORK( 1 ) ) )
 *
       RETURN
 *
-*     End of DGGQRF
+*     End of AB_DGGQRF
 *
       END

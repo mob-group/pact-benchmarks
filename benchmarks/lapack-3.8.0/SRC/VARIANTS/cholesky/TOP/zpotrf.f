@@ -1,4 +1,5 @@
-C> \brief \b ZPOTRF VARIANT: top-looking block version of the algorithm, calling Level 3 BLAS.
+C> \brief \b AB_ZPOTRF VARIANT: top-looking block version of the algorit
+     $hm, calling Level 3 BLAS.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +9,7 @@ C> \brief \b ZPOTRF VARIANT: top-looking block version of the algorithm, calling
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPOTRF ( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_ZPOTRF ( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -24,7 +25,7 @@ C> \brief \b ZPOTRF VARIANT: top-looking block version of the algorithm, calling
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> ZPOTRF computes the Cholesky factorization of a real symmetric
+C> AB_ZPOTRF computes the Cholesky factorization of a real symmetric
 C> positive definite matrix A.
 C>
 C> The factorization has the form
@@ -32,7 +33,8 @@ C>    A = U**H * U,  if UPLO = 'U', or
 C>    A = L  * L**H,  if UPLO = 'L',
 C> where U is an upper triangular matrix and L is lower triangular.
 C>
-C> This is the top-looking block version of the algorithm, calling Level 3 BLAS.
+C> This is the top-looking block version of the algorithm, calling Level
+     $ 3 BLAS.
 C>
 C>\endverbatim
 *
@@ -55,7 +57,8 @@ C>
 C> \param[in,out] A
 C> \verbatim
 C>          A is COMPLEX*16 array, dimension (LDA,N)
-C>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
+C>          On entry, the symmetric matrix A.  If UPLO = 'U', the leadin
+     $g
 C>          N-by-N upper triangular part of A contains the upper
 C>          triangular part of the matrix A, and the strictly lower
 C>          triangular part of A is not referenced.  If UPLO = 'L', the
@@ -98,7 +101,7 @@ C> \date December 2016
 C> \ingroup variantsPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZPOTRF ( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_ZPOTRF ( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -125,12 +128,13 @@ C> \ingroup variantsPOcomputational
       INTEGER            J, JB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZPOTF2, ZHERK, ZTRSM, XERBLA
+      EXTERNAL           AB_ZGEMM, AB_ZPOTF2, AB_AB_ZHERK, AB_ZTRSM, AB_
+     $XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -140,8 +144,8 @@ C> \ingroup variantsPOcomputational
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -149,7 +153,7 @@ C> \ingroup variantsPOcomputational
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPOTRF', -INFO )
+         CALL AB_XERBLA( 'AB_ZPOTRF', -INFO )
          RETURN
       END IF
 *
@@ -160,12 +164,12 @@ C> \ingroup variantsPOcomputational
 *
 *     Determine the block size for this environment.
 *
-      NB = ILAENV( 1, 'ZPOTRF', UPLO, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_ZPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code.
 *
-         CALL ZPOTF2( UPLO, N, A, LDA, INFO )
+         CALL AB_ZPOTF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -180,17 +184,18 @@ C> \ingroup variantsPOcomputational
 *
 *              Compute the current block.
 *
-               CALL ZTRSM( 'Left', 'Upper', 'Conjugate Transpose',
+               CALL AB_ZTRSM( 'Left', 'Upper', 'Conjugate Transpose',
      $                      'Non-unit', J-1, JB, CONE, A( 1, 1 ), LDA,
      $                      A( 1, J ), LDA )
 
-               CALL ZHERK( 'Upper', 'Conjugate Transpose', JB, J-1,
+               CALL AB_AB_ZHERK( 'Upper', 'Conjugate Transpose', JB, J-1
+     $,
      $                      -ONE, A( 1, J ), LDA, ONE, A( J, J ), LDA )
 *
 *              Update and factorize the current diagonal block and test
 *              for non-positive-definiteness.
 *
-               CALL ZPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL AB_ZPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
 
@@ -206,18 +211,18 @@ C> \ingroup variantsPOcomputational
 *
 *              Compute the current block.
 *
-               CALL ZTRSM( 'Right', 'Lower', 'Conjugate Transpose',
+               CALL AB_ZTRSM( 'Right', 'Lower', 'Conjugate Transpose',
      $                     'Non-unit', JB, J-1, CONE, A( 1, 1 ), LDA,
      $                     A( J, 1 ), LDA )
 
-               CALL ZHERK( 'Lower', 'No Transpose', JB, J-1,
+               CALL AB_AB_ZHERK( 'Lower', 'No Transpose', JB, J-1,
      $                     -ONE, A( J, 1 ), LDA,
      $                     ONE, A( J, J ), LDA )
 *
 *              Update and factorize the current diagonal block and test
 *              for non-positive-definiteness.
 *
-               CALL ZPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL AB_ZPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
 
@@ -232,6 +237,6 @@ C> \ingroup variantsPOcomputational
    40 CONTINUE
       RETURN
 *
-*     End of ZPOTRF
+*     End of AB_ZPOTRF
 *
       END

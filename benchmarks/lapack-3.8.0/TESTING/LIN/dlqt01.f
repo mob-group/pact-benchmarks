@@ -1,4 +1,4 @@
-*> \brief \b DLQT01
+*> \brief \b AB_DLQT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLQT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_DLQT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> DLQT01 tests DGELQF, which computes the LQ factorization of an m-by-n
-*> matrix A, and partially tests DORGLQ which forms the n-by-n
+*> AB_DLQT01 tests AB_AB_DGELQF, which computes the LQ factorization of an m-by-n
+*> matrix A, and partially tests AB_DORGLQ which forms the n-by-n
 *> orthogonal matrix Q.
 *>
-*> DLQT01 compares L with A*Q', and checks that Q is orthogonal.
+*> AB_DLQT01 compares L with A*Q', and checks that Q is orthogonal.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,8 +57,8 @@
 *> \param[out] AF
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDA,N)
-*>          Details of the LQ factorization of A, as returned by DGELQF.
-*>          See DGELQF for further details.
+*>          Details of the LQ factorization of A, as returned by AB_AB_DGELQF.
+*>          See AB_AB_DGELQF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (min(M,N))
 *>          The scalar factors of the elementary reflectors, as returned
-*>          by DGELQF.
+*>          by AB_AB_DGELQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -123,7 +123,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DLQT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_DLQT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -153,11 +153,12 @@
       DOUBLE PRECISION   ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSY
+      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGELQF, DGEMM, DLACPY, DLASET, DORGLQ, DSYRK
+      EXTERNAL           AB_AB_DGELQF, AB_DGEMM, AB_DLACPY, AB_DLASET, A
+     $B_DORGLQ, AB_AB_DSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -171,42 +172,44 @@
 *     .. Executable Statements ..
 *
       MINMN = MIN( M, N )
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL DLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL AB_DLACPY( 'Full', M, N, A, LDA, AF, LDA )
 *
 *     Factorize the matrix A in the array AF.
 *
-      SRNAMT = 'DGELQF'
-      CALL DGELQF( M, N, AF, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_AB_DGELQF'
+      CALL AB_AB_DGELQF( M, N, AF, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy details of Q
 *
-      CALL DLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
+      CALL AB_DLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
       IF( N.GT.1 )
-     $   CALL DLACPY( 'Upper', M, N-1, AF( 1, 2 ), LDA, Q( 1, 2 ), LDA )
+     $   CALL AB_DLACPY( 'Upper', M, N-1, AF( 1, 2 ), LDA, Q( 1, 2 ), LD
+     $A )
 *
 *     Generate the n-by-n matrix Q
 *
-      SRNAMT = 'DORGLQ'
-      CALL DORGLQ( N, N, MINMN, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_DORGLQ'
+      CALL AB_DORGLQ( N, N, MINMN, Q, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy L
 *
-      CALL DLASET( 'Full', M, N, ZERO, ZERO, L, LDA )
-      CALL DLACPY( 'Lower', M, N, AF, LDA, L, LDA )
+      CALL AB_DLASET( 'Full', M, N, ZERO, ZERO, L, LDA )
+      CALL AB_DLACPY( 'Lower', M, N, AF, LDA, L, LDA )
 *
 *     Compute L - A*Q'
 *
-      CALL DGEMM( 'No transpose', 'Transpose', M, N, N, -ONE, A, LDA, Q,
+      CALL AB_DGEMM( 'No transpose', 'Transpose', M, N, N, -ONE, A, LDA,
+     $ Q,
      $            LDA, ONE, L, LDA )
 *
 *     Compute norm( L - Q'*A ) / ( N * norm(A) * EPS ) .
 *
-      ANORM = DLANGE( '1', M, N, A, LDA, RWORK )
-      RESID = DLANGE( '1', M, N, L, LDA, RWORK )
+      ANORM = AB_DLANGE( '1', M, N, A, LDA, RWORK )
+      RESID = AB_DLANGE( '1', M, N, L, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / DBLE( MAX( 1, N ) ) ) / ANORM ) / EPS
       ELSE
@@ -215,18 +218,19 @@
 *
 *     Compute I - Q*Q'
 *
-      CALL DLASET( 'Full', N, N, ZERO, ONE, L, LDA )
-      CALL DSYRK( 'Upper', 'No transpose', N, N, -ONE, Q, LDA, ONE, L,
+      CALL AB_DLASET( 'Full', N, N, ZERO, ONE, L, LDA )
+      CALL AB_AB_DSYRK( 'Upper', 'No transpose', N, N, -ONE, Q, LDA, ONE
+     $, L,
      $            LDA )
 *
 *     Compute norm( I - Q*Q' ) / ( N * EPS ) .
 *
-      RESID = DLANSY( '1', 'Upper', N, L, LDA, RWORK )
+      RESID = AB_DLANSY( '1', 'Upper', N, L, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / DBLE( MAX( 1, N ) ) ) / EPS
 *
       RETURN
 *
-*     End of DLQT01
+*     End of AB_DLQT01
 *
       END

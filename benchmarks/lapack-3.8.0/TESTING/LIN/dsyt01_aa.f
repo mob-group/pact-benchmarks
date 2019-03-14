@@ -1,4 +1,4 @@
-*> \brief \b DSYT01
+*> \brief \b AB_DSYT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*       SUBROUTINE AB_AB_DSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                             RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> DSYT01 reconstructs a symmetric indefinite matrix A from its
+*> AB_DSYT01 reconstructs a symmetric indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -70,7 +70,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by DSYTRF.
+*>          as computed by AB_DSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from DSYTRF.
+*>          The pivot indices from AB_DSYTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -123,7 +123,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE AB_AB_DSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C
+     $,
      $                         LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -153,12 +154,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           LSAME, DLAMCH, DLANSY
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSY
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASET, DLAVSY
+      EXTERNAL           AB_DLASET, AB_DLAVSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -174,43 +175,49 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_DLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.
 *
-      CALL DLASET( 'Full', N, N, ZERO, ZERO, C, LDC )
-      CALL DLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+1 )
+      CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, C, LDC )
+      CALL AB_DLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+
+     $1 )
       IF( N.GT.1 ) THEN
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL DLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2 ),
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_DLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2
+     $ ),
      $                   LDC+1 )
-            CALL DLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1 ),
+            CALL AB_DLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1
+     $ ),
      $                   LDC+1 )
          ELSE
-            CALL DLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2 ),
+            CALL AB_DLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2
+     $ ),
      $                   LDC+1 )
-            CALL DLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
+            CALL AB_DLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1
+     $ ),
      $                   LDC+1 )
          ENDIF
 *
-*        Call DTRMM to form the product U' * D (or L * D ).
+*        Call AB_DTRMM to form the product U' * D (or L * D ).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL DTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_DTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
      $                  ONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
          ELSE
-            CALL DTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+            CALL AB_DTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
      $                  ONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
          END IF
 *
-*        Call DTRMM again to multiply by U (or L ).
+*        Call AB_DTRMM again to multiply by U (or L ).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL DTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_DTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1
+     $,
      $                  ONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
          ELSE
-            CALL DTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
+            CALL AB_DTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
      $                  ONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
          END IF
       ENDIF
@@ -220,18 +227,18 @@
       DO J = N, 1, -1
          I = IPIV( J )
          IF( I.NE.J )
-     $      CALL DSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
+     $      CALL AB_DSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
       END DO
       DO J = N, 1, -1
          I = IPIV( J )
          IF( I.NE.J )
-     $      CALL DSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
+     $      CALL AB_DSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
       END DO
 *
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO J = 1, N
             DO I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -247,7 +254,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = DLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_DLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -258,6 +265,6 @@
 *
       RETURN
 *
-*     End of DSYT01
+*     End of AB_DSYT01
 *
       END

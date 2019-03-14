@@ -1,4 +1,4 @@
-*> \brief \b DGTCON
+*> \brief \b AB_DGTCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGTCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtcon.f">
+*> Download AB_DGTCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGTCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGTCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGTCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
+*       SUBROUTINE AB_DGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
 *                          WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> DGTCON estimates the reciprocal of the condition number of a real
+*> AB_DGTCON estimates the reciprocal of the condition number of a real
 *> tridiagonal matrix A using the LU factorization as computed by
-*> DGTTRF.
+*> AB_DGTTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          DL is DOUBLE PRECISION array, dimension (N-1)
 *>          The (n-1) multipliers that define the matrix L from the
-*>          LU factorization of A as computed by DGTTRF.
+*>          LU factorization of A as computed by AB_DGTTRF.
 *> \endverbatim
 *>
 *> \param[in] D
@@ -86,7 +86,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is DOUBLE PRECISION array, dimension (N-2)
-*>          The (n-2) elements of the second superdiagonal of U.
+*>          The (n-2) elements of the AB_SECOND superdiagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -143,7 +143,7 @@
 *> \ingroup doubleGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
+      SUBROUTINE AB_DGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
      $                   WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -176,19 +176,19 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGTTRS, DLACN2, XERBLA
+      EXTERNAL           AB_DGTTRS, AB_DLACN2, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments.
 *
       INFO = 0
-      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
-      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
+      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
+      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -196,7 +196,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGTCON', -INFO )
+         CALL AB_XERBLA( 'AB_DGTCON', -INFO )
          RETURN
       END IF
 *
@@ -225,19 +225,20 @@
       END IF
       KASE = 0
    20 CONTINUE
-      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.KASE1 ) THEN
 *
 *           Multiply by inv(U)*inv(L).
 *
-            CALL DGTTRS( 'No transpose', N, 1, DL, D, DU, DU2, IPIV,
+            CALL AB_DGTTRS( 'No transpose', N, 1, DL, D, DU, DU2, IPIV,
      $                   WORK, N, INFO )
          ELSE
 *
 *           Multiply by inv(L**T)*inv(U**T).
 *
-            CALL DGTTRS( 'Transpose', N, 1, DL, D, DU, DU2, IPIV, WORK,
+            CALL AB_DGTTRS( 'Transpose', N, 1, DL, D, DU, DU2, IPIV, WOR
+     $K,
      $                   N, INFO )
          END IF
          GO TO 20
@@ -250,6 +251,6 @@
 *
       RETURN
 *
-*     End of DGTCON
+*     End of AB_DGTCON
 *
       END

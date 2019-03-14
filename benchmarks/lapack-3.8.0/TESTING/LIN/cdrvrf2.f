@@ -1,4 +1,4 @@
-*> \brief \b CDRVRF2
+*> \brief \b AB_CDRVRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
+*       SUBROUTINE AB_CDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CDRVRF2 tests the LAPACK RFP conversion routines.
+*> AB_CDRVRF2 tests the LAPACK RFP conversion routines.
 *> \endverbatim
 *
 *  Arguments:
@@ -87,7 +87,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
+      SUBROUTINE AB_CDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,11 +115,12 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
 *     ..
 *     .. External Functions ..
-      COMPLEX            CLARND
-      EXTERNAL           CLARND
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTFTTR, CTFTTP, CTRTTF, CTRTTP, CTPTTR, CTPTTF
+      EXTERNAL           AB_CTFTTR, AB_CTFTTP, AB_CTRTTF, AB_CTRTTP, AB_
+     $CTPTTR, AB_CTPTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -165,18 +166,18 @@
 *
                DO J = 1, N
                   DO I = 1, N
-                     A( I, J) = CLARND( 4, ISEED )
+                     A( I, J) = AB_CLARND( 4, ISEED )
                   END DO
                END DO
 *
-               SRNAMT = 'CTRTTF'
-               CALL CTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
+               SRNAMT = 'AB_CTRTTF'
+               CALL AB_CTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
 *
-               SRNAMT = 'CTFTTP'
-               CALL CTFTTP( CFORM, UPLO, N, ARF, AP, INFO )
+               SRNAMT = 'AB_CTFTTP'
+               CALL AB_CTFTTP( CFORM, UPLO, N, ARF, AP, INFO )
 *
-               SRNAMT = 'CTPTTR'
-               CALL CTPTTR( UPLO, N, AP, ASAV, LDA, INFO )
+               SRNAMT = 'AB_CTPTTR'
+               CALL AB_CTPTTR( UPLO, N, AP, ASAV, LDA, INFO )
 *
                OK1 = .TRUE.
                IF ( LOWER ) THEN
@@ -199,14 +200,14 @@
 *
                NRUN = NRUN + 1
 *
-               SRNAMT = 'CTRTTP'
-               CALL CTRTTP( UPLO, N, A, LDA, AP, INFO )
+               SRNAMT = 'AB_CTRTTP'
+               CALL AB_CTRTTP( UPLO, N, A, LDA, AP, INFO )
 *
-               SRNAMT = 'CTPTTF'
-               CALL CTPTTF( CFORM, UPLO, N, AP, ARF, INFO )
+               SRNAMT = 'AB_CTPTTF'
+               CALL AB_CTPTTF( CFORM, UPLO, N, AP, ARF, INFO )
 *
-               SRNAMT = 'CTFTTR'
-               CALL CTFTTR( CFORM, UPLO, N, ARF, ASAV, LDA, INFO )
+               SRNAMT = 'AB_CTFTTR'
+               CALL AB_CTFTTR( CFORM, UPLO, N, ARF, ASAV, LDA, INFO )
 *
                OK2 = .TRUE.
                IF ( LOWER ) THEN
@@ -259,6 +260,6 @@
 *
       RETURN
 *
-*     End of CDRVRF2
+*     End of AB_CDRVRF2
 *
       END

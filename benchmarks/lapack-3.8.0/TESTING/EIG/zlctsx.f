@@ -1,4 +1,4 @@
-*> \brief \b ZLCTSX
+*> \brief \b AB_ZLCTSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION ZLCTSX( ALPHA, BETA )
+*       LOGICAL          FUNCTION AB_ZLCTSX( ALPHA, BETA )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16         ALPHA, BETA
@@ -21,7 +21,7 @@
 *> \verbatim
 *>
 *> This function is used to determine what eigenvalues will be
-*> selected.  If this is part of the test driver ZDRGSX, do not
+*> selected.  If this is part of the test driver AB_ZDRGSX, do not
 *> change the code UNLESS you are testing input examples and not
 *> using the built-in examples.
 *> \endverbatim
@@ -55,7 +55,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION ZLCTSX( ALPHA, BETA )
+      LOGICAL          FUNCTION AB_ZLCTSX( ALPHA, BETA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -89,9 +89,9 @@
       IF( FS ) THEN
          I = I + 1
          IF( I.LE.M ) THEN
-            ZLCTSX = .FALSE.
+            AB_ZLCTSX = .FALSE.
          ELSE
-            ZLCTSX = .TRUE.
+            AB_ZLCTSX = .TRUE.
          END IF
          IF( I.EQ.MPLUSN ) THEN
             FS = .FALSE.
@@ -100,9 +100,9 @@
       ELSE
          I = I + 1
          IF( I.LE.N ) THEN
-            ZLCTSX = .TRUE.
+            AB_ZLCTSX = .TRUE.
          ELSE
-            ZLCTSX = .FALSE.
+            AB_ZLCTSX = .FALSE.
          END IF
          IF( I.EQ.MPLUSN ) THEN
             FS = .TRUE.
@@ -111,13 +111,13 @@
       END IF
 *
 *      IF( BETA.EQ.CZERO ) THEN
-*         ZLCTSX = ( DBLE( ALPHA ).GT.ZERO )
+*         AB_ZLCTSX = ( DBLE( ALPHA ).GT.ZERO )
 *      ELSE
-*         ZLCTSX = ( DBLE( ALPHA/BETA ).GT.ZERO )
+*         AB_ZLCTSX = ( DBLE( ALPHA/BETA ).GT.ZERO )
 *      END IF
 *
       RETURN
 *
-*     End of ZLCTSX
+*     End of AB_ZLCTSX
 *
       END

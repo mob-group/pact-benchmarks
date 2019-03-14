@@ -1,4 +1,4 @@
-*> \brief \b DPOT02
+*> \brief \b AB_DPOT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE AB_DPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> DPOT02 computes the residual for the solution of a symmetric system
+*> AB_DPOT02 computes the residual for the solution of a symmetric system
 *> of linear equations  A*x = b:
 *>
 *>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
@@ -124,7 +124,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
+      SUBROUTINE AB_DPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK
+     $,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -153,11 +154,11 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANSY
-      EXTERNAL           DASUM, DLAMCH, DLANSY
+      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANSY
+      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYMM
+      EXTERNAL           AB_DSYMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -173,8 +174,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_DLANSY( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -182,7 +183,8 @@
 *
 *     Compute  B - A*X
 *
-      CALL DSYMM( 'Left', UPLO, N, NRHS, -ONE, A, LDA, X, LDX, ONE, B,
+      CALL AB_DSYMM( 'Left', UPLO, N, NRHS, -ONE, A, LDA, X, LDX, ONE, B
+     $,
      $            LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -190,8 +192,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = DASUM( N, B( 1, J ), 1 )
-         XNORM = DASUM( N, X( 1, J ), 1 )
+         BNORM = AB_DASUM( N, B( 1, J ), 1 )
+         XNORM = AB_DASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -201,6 +203,6 @@
 *
       RETURN
 *
-*     End of DPOT02
+*     End of AB_DPOT02
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CSROT
+*> \brief \b AB_CAB_SROT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSROT( N, CX, INCX, CY, INCY, C, S )
+*       SUBROUTINE AB_CAB_SROT( N, CX, INCX, CY, INCY, C, S )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           INCX, INCY, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CSROT applies a plane rotation, where the cos and sin (c and s) are real
+*> AB_CAB_SROT applies a plane rotation, where the cos and sin (c and s) are real
 *> and the vectors cx and cy are complex.
 *> jack dongarra, linpack, 3/11/78.
 *> \endverbatim
@@ -96,7 +96,7 @@
 *> \ingroup complex_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE CSROT( N, CX, INCX, CY, INCY, C, S )
+      SUBROUTINE AB_CAB_SROT( N, CX, INCX, CY, INCY, C, S )
 *
 *  -- Reference BLAS level1 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

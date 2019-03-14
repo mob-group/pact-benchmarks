@@ -1,4 +1,4 @@
-*> \brief \b ZCKGQR
+*> \brief \b AB_ZCKGQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
+*       SUBROUTINE AB_ZCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
 *                          THRESH, NMAX, A, AF, AQ, AR, TAUA, B, BF, BZ,
 *                          BT, BWK, TAUB, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -30,9 +30,9 @@
 *>
 *> \verbatim
 *>
-*> ZCKGQR tests
-*> ZGGQRF: GQR factorization for N-by-M matrix A and N-by-P matrix B,
-*> ZGGRQF: GRQ factorization for M-by-N matrix A and P-by-N matrix B.
+*> AB_ZCKGQR tests
+*> AB_ZGGQRF: GQR factorization for N-by-M matrix A and N-by-P matrix B,
+*> AB_ZGGRQF: GRQ factorization for M-by-N matrix A and P-by-N matrix B.
 *> \endverbatim
 *
 *  Arguments:
@@ -190,7 +190,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If ZLATMS returns an error code, the absolute value
+*>          > 0 :  If AB_ZLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -207,7 +207,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
+      SUBROUTINE AB_ZCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
      $                   THRESH, NMAX, A, AF, AQ, AR, TAUA, B, BF, BZ,
      $                   BT, BWK, TAUB, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -250,8 +250,9 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DLATB9, ZGQRTS, ZGRQTS,
-     $                   ZLATMS
+      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_DLATB9, 
+     $AB_ZGQRTS, AB_ZGRQTS,
+     $                   AB_ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -265,7 +266,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDA = NMAX
       LDB = NMAX
       LWORK = NMAX*NMAX
@@ -292,16 +293,17 @@
                   IF( .NOT.DOTYPE( IMAT ) )
      $               GO TO 30
 *
-*                 Test ZGGRQF
+*                 Test AB_ZGGRQF
 *
-*                 Set up parameters with DLATB9 and generate test
-*                 matrices A and B with ZLATMS.
+*                 Set up parameters with AB_DLATB9 and generate test
+*                 matrices A and B with AB_ZLATMS.
 *
-                  CALL DLATB9( 'GRQ', IMAT, M, P, N, TYPE, KLA, KUA,
+                  CALL AB_DLATB9( 'GRQ', IMAT, M, P, N, TYPE, KLA, KUA,
      $                         KLB, KUB, ANORM, BNORM, MODEA, MODEB,
      $                         CNDNMA, CNDNMB, DISTA, DISTB )
 *
-                  CALL ZLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA,
+                  CALL AB_ZLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA
+     $,
      $                         CNDNMA, ANORM, KLA, KUA, 'No packing', A,
      $                         LDA, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -310,7 +312,8 @@
                      GO TO 30
                   END IF
 *
-                  CALL ZLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB,
+                  CALL AB_ZLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB
+     $,
      $                         CNDNMB, BNORM, KLB, KUB, 'No packing', B,
      $                         LDB, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -321,7 +324,8 @@
 *
                   NT = 4
 *
-                  CALL ZGRQTS( M, P, N, A, AF, AQ, AR, LDA, TAUA, B, BF,
+                  CALL AB_ZGRQTS( M, P, N, A, AF, AQ, AR, LDA, TAUA, B, 
+     $BF,
      $                         BZ, BT, BWK, LDB, TAUB, WORK, LWORK,
      $                         RWORK, RESULT )
 *
@@ -332,7 +336,7 @@
                      IF( RESULT( I ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                            FIRSTT = .FALSE.
-                           CALL ALAHDG( NOUT, 'GRQ' )
+                           CALL AB_AB_ALAHDG( NOUT, 'GRQ' )
                         END IF
                         WRITE( NOUT, FMT = 9998 )M, P, N, IMAT, I,
      $                     RESULT( I )
@@ -341,16 +345,17 @@
    10             CONTINUE
                   NRUN = NRUN + NT
 *
-*                 Test ZGGQRF
+*                 Test AB_ZGGQRF
 *
-*                 Set up parameters with DLATB9 and generate test
-*                 matrices A and B with ZLATMS.
+*                 Set up parameters with AB_DLATB9 and generate test
+*                 matrices A and B with AB_ZLATMS.
 *
-                  CALL DLATB9( 'GQR', IMAT, M, P, N, TYPE, KLA, KUA,
+                  CALL AB_DLATB9( 'GQR', IMAT, M, P, N, TYPE, KLA, KUA,
      $                         KLB, KUB, ANORM, BNORM, MODEA, MODEB,
      $                         CNDNMA, CNDNMB, DISTA, DISTB )
 *
-                  CALL ZLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA,
+                  CALL AB_ZLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA
+     $,
      $                         CNDNMA, ANORM, KLA, KUA, 'No packing', A,
      $                         LDA, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -359,7 +364,8 @@
                      GO TO 30
                   END IF
 *
-                  CALL ZLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEA,
+                  CALL AB_ZLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEA
+     $,
      $                         CNDNMA, BNORM, KLB, KUB, 'No packing', B,
      $                         LDB, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -370,7 +376,8 @@
 *
                   NT = 4
 *
-                  CALL ZGQRTS( N, M, P, A, AF, AQ, AR, LDA, TAUA, B, BF,
+                  CALL AB_ZGQRTS( N, M, P, A, AF, AQ, AR, LDA, TAUA, B, 
+     $BF,
      $                         BZ, BT, BWK, LDB, TAUB, WORK, LWORK,
      $                         RWORK, RESULT )
 *
@@ -381,7 +388,7 @@
                      IF( RESULT( I ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                            FIRSTT = .FALSE.
-                           CALL ALAHDG( NOUT, PATH )
+                           CALL AB_AB_ALAHDG( NOUT, PATH )
                         END IF
                         WRITE( NOUT, FMT = 9997 )N, M, P, IMAT, I,
      $                     RESULT( I )
@@ -397,15 +404,15 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' ZLATMS in ZCKGQR:    INFO = ', I5 )
+ 9999 FORMAT( ' AB_ZLATMS in AB_ZCKGQR:    INFO = ', I5 )
  9998 FORMAT( ' M=', I4, ' P=', I4, ', N=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
  9997 FORMAT( ' N=', I4, ' M=', I4, ', P=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
       RETURN
 *
-*     End of ZCKGQR
+*     End of AB_ZCKGQR
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CLAGHE
+*> \brief \b AB_CLAGHE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAGHE( N, K, D, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE AB_CLAGHE( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> CLAGHE generates a complex hermitian matrix A, by pre- and post-
+*> AB_CLAGHE generates a complex hermitian matrix A, by pre- and post-
 *> multiplying a real diagonal matrix D with a random unitary matrix:
 *> A = U*D*U'. The semi-bandwidth may then be reduced to k by additional
 *> unitary transformations.
@@ -100,7 +100,7 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE CLAGHE( N, K, D, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE AB_CLAGHE( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,13 +130,14 @@
       COMPLEX            ALPHA, TAU, WA, WB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGEMV, CGERC, CHEMV, CHER2, CLARNV,
-     $                   CSCAL, XERBLA
+      EXTERNAL           AB_CAXPY, AB_CGEMV, AB_CGERC, AB_CHEMV, AB_AB_C
+     $HER2, AB_CLARNV,
+     $                   AB_CSCAL, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SCNRM2
-      COMPLEX            CDOTC
-      EXTERNAL           SCNRM2, CDOTC
+      REAL               AB_SCNRM2
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_SCNRM2, AB_CDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, REAL
@@ -154,7 +155,7 @@
          INFO = -5
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL XERBLA( 'CLAGHE', -INFO )
+         CALL AB_XERBLA( 'AB_CLAGHE', -INFO )
          RETURN
       END IF
 *
@@ -175,14 +176,14 @@
 *
 *        generate random reflection
 *
-         CALL CLARNV( 3, ISEED, N-I+1, WORK )
-         WN = SCNRM2( N-I+1, WORK, 1 )
+         CALL AB_CLARNV( 3, ISEED, N-I+1, WORK )
+         WN = AB_SCNRM2( N-I+1, WORK, 1 )
          WA = ( WN / ABS( WORK( 1 ) ) )*WORK( 1 )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = WORK( 1 ) + WA
-            CALL CSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+            CALL AB_CSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
             TAU = REAL( WB / WA )
          END IF
@@ -192,17 +193,19 @@
 *
 *        compute  y := tau * A * u
 *
-         CALL CHEMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZERO,
+         CALL AB_CHEMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZE
+     $RO,
      $               WORK( N+1 ), 1 )
 *
 *        compute  v := y - 1/2 * tau * ( y, u ) * u
 *
-         ALPHA = -HALF*TAU*CDOTC( N-I+1, WORK( N+1 ), 1, WORK, 1 )
-         CALL CAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
+         ALPHA = -HALF*TAU*AB_CDOTC( N-I+1, WORK( N+1 ), 1, WORK, 1 )
+         CALL AB_CAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
 *
 *        apply the transformation as a rank-2 update to A(i:n,i:n)
 *
-         CALL CHER2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1,
+         CALL AB_AB_CHER2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1
+     $,
      $               A( I, I ), LDA )
    40 CONTINUE
 *
@@ -212,39 +215,40 @@
 *
 *        generate reflection to annihilate A(k+i+1:n,i)
 *
-         WN = SCNRM2( N-K-I+1, A( K+I, I ), 1 )
+         WN = AB_SCNRM2( N-K-I+1, A( K+I, I ), 1 )
          WA = ( WN / ABS( A( K+I, I ) ) )*A( K+I, I )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = A( K+I, I ) + WA
-            CALL CSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
+            CALL AB_CSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
             A( K+I, I ) = ONE
             TAU = REAL( WB / WA )
          END IF
 *
 *        apply reflection to A(k+i:n,i+1:k+i-1) from the left
 *
-         CALL CGEMV( 'Conjugate transpose', N-K-I+1, K-1, ONE,
+         CALL AB_CGEMV( 'Conjugate transpose', N-K-I+1, K-1, ONE,
      $               A( K+I, I+1 ), LDA, A( K+I, I ), 1, ZERO, WORK, 1 )
-         CALL CGERC( N-K-I+1, K-1, -TAU, A( K+I, I ), 1, WORK, 1,
+         CALL AB_CGERC( N-K-I+1, K-1, -TAU, A( K+I, I ), 1, WORK, 1,
      $               A( K+I, I+1 ), LDA )
 *
 *        apply reflection to A(k+i:n,k+i:n) from the left and the right
 *
 *        compute  y := tau * A * u
 *
-         CALL CHEMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
+         CALL AB_CHEMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
      $               A( K+I, I ), 1, ZERO, WORK, 1 )
 *
 *        compute  v := y - 1/2 * tau * ( y, u ) * u
 *
-         ALPHA = -HALF*TAU*CDOTC( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
-         CALL CAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
+         ALPHA = -HALF*TAU*AB_CDOTC( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
+         CALL AB_CAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
 *
 *        apply hermitian rank-2 update to A(k+i:n,k+i:n)
 *
-         CALL CHER2( 'Lower', N-K-I+1, -ONE, A( K+I, I ), 1, WORK, 1,
+         CALL AB_AB_CHER2( 'Lower', N-K-I+1, -ONE, A( K+I, I ), 1, WORK,
+     $ 1,
      $               A( K+I, K+I ), LDA )
 *
          A( K+I, I ) = -WA
@@ -262,6 +266,6 @@
    80 CONTINUE
       RETURN
 *
-*     End of CLAGHE
+*     End of AB_CLAGHE
 *
       END

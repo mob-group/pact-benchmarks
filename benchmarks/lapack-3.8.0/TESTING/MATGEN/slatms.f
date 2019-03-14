@@ -1,4 +1,4 @@
-*> \brief \b SLATMS
+*> \brief \b AB_SLATMS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLATMS( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+*       SUBROUTINE AB_SLATMS( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
 *                          KL, KU, PACK, A, LDA, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,11 +27,11 @@
 *>
 *> \verbatim
 *>
-*>    SLATMS generates random matrices with specified singular values
+*>    AB_SLATMS generates random matrices with specified singular values
 *>    (or symmetric/hermitian with specified eigenvalues)
 *>    for testing LAPACK programs.
 *>
-*>    SLATMS operates by applying the following sequence of
+*>    AB_SLATMS operates by applying the following sequence of
 *>    operations:
 *>
 *>      Set the diagonal to D, where D may be input or
@@ -46,7 +46,7 @@
 *>              and the right by random unitary matrices, then:
 *>
 *>          Reduce the bandwidth according to KL and KU, using
-*>          Householder transformations.
+*>          HousehoAB_LDEr transformations.
 *>
 *>      Method B:
 *>          Convert the bandwidth-0 (i.e., diagonal) matrix to a
@@ -118,7 +118,7 @@
 *>           uses a linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to SLATMS
+*>           exit, and can be used in the next call to AB_SLATMS
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -241,7 +241,7 @@
 *>           PB, SB or TB     - use 'B' or 'Q'
 *>           PP, SP or TP     - use 'C' or 'R'
 *>
-*>           If two calls to SLATMS differ only in the PACK parameter,
+*>           If two calls to AB_SLATMS differ only in the PACK parameter,
 *>           they will generate mathematically equivalent matrices.
 *>           Not modified.
 *> \endverbatim
@@ -300,9 +300,9 @@
 *>                  N.
 *>           -14 => LDA is less than M, or PACK='Z' and LDA is less than
 *>                  MIN(KU,N-1) + MIN(KL,M-1) + 1.
-*>            1  => Error return from SLATM1
+*>            1  => Error return from AB_SLATM1
 *>            2  => Cannot scale to DMAX (max. sing. value is 0)
-*>            3  => Error return from SLAGGE or SLAGSY
+*>            3  => Error return from AB_SLAGGE or AB_SLAGSY
 *> \endverbatim
 *
 *  Authors:
@@ -318,7 +318,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLATMS( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+      SUBROUTINE AB_SLATMS( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
      $                   KL, KU, PACK, A, LDA, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -356,13 +356,14 @@
       REAL               ALPHA, ANGLE, C, DUMMY, EXTRA, S, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLARND
-      EXTERNAL           LSAME, SLARND
+      LOGICAL            AB_LSAME
+      REAL               AB_SLARND
+      EXTERNAL           AB_LSAME, AB_SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAGGE, SLAGSY, SLAROT, SLARTG, SLATM1,
-     $                   SLASET, SSCAL, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SLAGGE, AB_SLAGSY, AB_SLAROT, AB_S
+     $LARTG, AB_SLATM1,
+     $                   AB_SLASET, AB_SSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, COS, MAX, MIN, MOD, REAL, SIN
@@ -381,11 +382,11 @@
 *
 *     Decode DIST
 *
-      IF( LSAME( DIST, 'U' ) ) THEN
+      IF( AB_LSAME( DIST, 'U' ) ) THEN
          IDIST = 1
-      ELSE IF( LSAME( DIST, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'S' ) ) THEN
          IDIST = 2
-      ELSE IF( LSAME( DIST, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'N' ) ) THEN
          IDIST = 3
       ELSE
          IDIST = -1
@@ -393,16 +394,16 @@
 *
 *     Decode SYM
 *
-      IF( LSAME( SYM, 'N' ) ) THEN
+      IF( AB_LSAME( SYM, 'N' ) ) THEN
          ISYM = 1
          IRSIGN = 0
-      ELSE IF( LSAME( SYM, 'P' ) ) THEN
+      ELSE IF( AB_LSAME( SYM, 'P' ) ) THEN
          ISYM = 2
          IRSIGN = 0
-      ELSE IF( LSAME( SYM, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( SYM, 'S' ) ) THEN
          ISYM = 2
          IRSIGN = 1
-      ELSE IF( LSAME( SYM, 'H' ) ) THEN
+      ELSE IF( AB_LSAME( SYM, 'H' ) ) THEN
          ISYM = 2
          IRSIGN = 1
       ELSE
@@ -412,27 +413,27 @@
 *     Decode PACK
 *
       ISYMPK = 0
-      IF( LSAME( PACK, 'N' ) ) THEN
+      IF( AB_LSAME( PACK, 'N' ) ) THEN
          IPACK = 0
-      ELSE IF( LSAME( PACK, 'U' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'U' ) ) THEN
          IPACK = 1
          ISYMPK = 1
-      ELSE IF( LSAME( PACK, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'L' ) ) THEN
          IPACK = 2
          ISYMPK = 1
-      ELSE IF( LSAME( PACK, 'C' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'C' ) ) THEN
          IPACK = 3
          ISYMPK = 2
-      ELSE IF( LSAME( PACK, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'R' ) ) THEN
          IPACK = 4
          ISYMPK = 3
-      ELSE IF( LSAME( PACK, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'B' ) ) THEN
          IPACK = 5
          ISYMPK = 3
-      ELSE IF( LSAME( PACK, 'Q' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'Q' ) ) THEN
          IPACK = 6
          ISYMPK = 2
-      ELSE IF( LSAME( PACK, 'Z' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'Z' ) ) THEN
          IPACK = 7
       ELSE
          IPACK = -1
@@ -482,7 +483,8 @@
          INFO = -5
       ELSE IF( ABS( MODE ).GT.6 ) THEN
          INFO = -7
-      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE )
+      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE
+     $ )
      $          THEN
          INFO = -8
       ELSE IF( KL.LT.0 ) THEN
@@ -499,7 +501,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLATMS', -INFO )
+         CALL AB_XERBLA( 'AB_SLATMS', -INFO )
          RETURN
       END IF
 *
@@ -516,7 +518,8 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, IINFO )
+      CALL AB_SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, IINFO 
+     $)
       IF( IINFO.NE.0 ) THEN
          INFO = 1
          RETURN
@@ -547,7 +550,7 @@
             RETURN
          END IF
 *
-         CALL SSCAL( MNMIN, ALPHA, D, 1 )
+         CALL AB_SSCAL( MNMIN, ALPHA, D, 1 )
 *
       END IF
 *
@@ -579,20 +582,20 @@
 *     end.  It also signals how to compute the norm, for scaling.
 *
       IPACKG = 0
-      CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+      CALL AB_SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
 *
 *     Diagonal Matrix -- We are done, unless it
 *     is to be stored SP/PP/TP (PACK='R' or 'C')
 *
       IF( LLB.EQ.0 .AND. UUB.EQ.0 ) THEN
-         CALL SCOPY( MNMIN, D, 1, A( 1-ISKEW+IOFFST, 1 ), ILDA+1 )
+         CALL AB_SCOPY( MNMIN, D, 1, A( 1-ISKEW+IOFFST, 1 ), ILDA+1 )
          IF( IPACK.LE.2 .OR. IPACK.GE.5 )
      $      IPACKG = IPACK
 *
       ELSE IF( GIVENS ) THEN
 *
 *        Check whether to use Givens rotations,
-*        Householder transformations, or nothing.
+*        HousehoAB_LDEr transformations, or nothing.
 *
          IF( ISYM.EQ.1 ) THEN
 *
@@ -604,7 +607,7 @@
                IPACKG = 0
             END IF
 *
-            CALL SCOPY( MNMIN, D, 1, A( 1-ISKEW+IOFFST, 1 ), ILDA+1 )
+            CALL AB_SCOPY( MNMIN, D, 1, A( 1-ISKEW+IOFFST, 1 ), ILDA+1 )
 *
             IF( TOPDWN ) THEN
                JKL = 0
@@ -617,13 +620,14 @@
 *
                   DO 40 JR = 1, MIN( M+JKU, N ) + JKL - 1
                      EXTRA = ZERO
-                     ANGLE = TWOPI*SLARND( 1, ISEED )
+                     ANGLE = TWOPI*AB_SLARND( 1, ISEED )
                      C = COS( ANGLE )
                      S = SIN( ANGLE )
                      ICOL = MAX( 1, JR-JKL )
                      IF( JR.LT.M ) THEN
                         IL = MIN( N, JR+JKU ) + 1 - ICOL
-                        CALL SLAROT( .TRUE., JR.GT.JKL, .FALSE., IL, C,
+                        CALL AB_SLAROT( .TRUE., JR.GT.JKL, .FALSE., I
+     $L, C,
      $                               S, A( JR-ISKEW*ICOL+IOFFST, ICOL ),
      $                               ILDA, EXTRA, DUMMY )
                      END IF
@@ -634,23 +638,27 @@
                      IC = ICOL
                      DO 30 JCH = JR - JKL, 1, -JKL - JKU
                         IF( IR.LT.M ) THEN
-                           CALL SLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST,
+                           CALL AB_SLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST
+     $,
      $                                  IC+1 ), EXTRA, C, S, DUMMY )
                         END IF
                         IROW = MAX( 1, JCH-JKU )
                         IL = IR + 2 - IROW
                         TEMP = ZERO
                         ILTEMP = JCH.GT.JKU
-                        CALL SLAROT( .FALSE., ILTEMP, .TRUE., IL, C, -S,
+                        CALL AB_SLAROT( .FALSE., ILTEMP, .TRUE., IL, 
+     $C, -S,
      $                               A( IROW-ISKEW*IC+IOFFST, IC ),
      $                               ILDA, TEMP, EXTRA )
                         IF( ILTEMP ) THEN
-                           CALL SLARTG( A( IROW+1-ISKEW*( IC+1 )+IOFFST,
+                           CALL AB_SLARTG( A( IROW+1-ISKEW*( IC+1 )+IOFF
+     $ST,
      $                                  IC+1 ), TEMP, C, S, DUMMY )
                            ICOL = MAX( 1, JCH-JKU-JKL )
                            IL = IC + 2 - ICOL
                            EXTRA = ZERO
-                           CALL SLAROT( .TRUE., JCH.GT.JKU+JKL, .TRUE.,
+                           CALL AB_SLAROT( .TRUE., JCH.GT.JKU+JKL, .TRUE
+     $.,
      $                                  IL, C, -S, A( IROW-ISKEW*ICOL+
      $                                  IOFFST, ICOL ), ILDA, EXTRA,
      $                                  TEMP )
@@ -668,13 +676,14 @@
 *
                   DO 70 JC = 1, MIN( N+JKL, M ) + JKU - 1
                      EXTRA = ZERO
-                     ANGLE = TWOPI*SLARND( 1, ISEED )
+                     ANGLE = TWOPI*AB_SLARND( 1, ISEED )
                      C = COS( ANGLE )
                      S = SIN( ANGLE )
                      IROW = MAX( 1, JC-JKU )
                      IF( JC.LT.N ) THEN
                         IL = MIN( M, JC+JKL ) + 1 - IROW
-                        CALL SLAROT( .FALSE., JC.GT.JKU, .FALSE., IL, C,
+                        CALL AB_SLAROT( .FALSE., JC.GT.JKU, .FALSE
+     $., IL, C,
      $                               S, A( IROW-ISKEW*JC+IOFFST, JC ),
      $                               ILDA, EXTRA, DUMMY )
                      END IF
@@ -685,23 +694,27 @@
                      IR = IROW
                      DO 60 JCH = JC - JKU, 1, -JKL - JKU
                         IF( IC.LT.N ) THEN
-                           CALL SLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST,
+                           CALL AB_SLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST
+     $,
      $                                  IC+1 ), EXTRA, C, S, DUMMY )
                         END IF
                         ICOL = MAX( 1, JCH-JKL )
                         IL = IC + 2 - ICOL
                         TEMP = ZERO
                         ILTEMP = JCH.GT.JKL
-                        CALL SLAROT( .TRUE., ILTEMP, .TRUE., IL, C, -S,
+                        CALL AB_SLAROT( .TRUE., ILTEMP, .TRUE., IL, C, -
+     $S,
      $                               A( IR-ISKEW*ICOL+IOFFST, ICOL ),
      $                               ILDA, TEMP, EXTRA )
                         IF( ILTEMP ) THEN
-                           CALL SLARTG( A( IR+1-ISKEW*( ICOL+1 )+IOFFST,
+                           CALL AB_SLARTG( A( IR+1-ISKEW*( ICOL+1 )+IOFF
+     $ST,
      $                                  ICOL+1 ), TEMP, C, S, DUMMY )
                            IROW = MAX( 1, JCH-JKL-JKU )
                            IL = IR + 2 - IROW
                            EXTRA = ZERO
-                           CALL SLAROT( .FALSE., JCH.GT.JKL+JKU, .TRUE.,
+                           CALL AB_SLAROT( .FALSE., JCH.GT.JKL+JKU, .
+     $TRUE.,
      $                                  IL, C, -S, A( IROW-ISKEW*ICOL+
      $                                  IOFFST, ICOL ), ILDA, EXTRA,
      $                                  TEMP )
@@ -727,13 +740,14 @@
                   IENDCH = MIN( M, N+JKL ) - 1
                   DO 100 JC = MIN( M+JKU, N ) - 1, 1 - JKL, -1
                      EXTRA = ZERO
-                     ANGLE = TWOPI*SLARND( 1, ISEED )
+                     ANGLE = TWOPI*AB_SLARND( 1, ISEED )
                      C = COS( ANGLE )
                      S = SIN( ANGLE )
                      IROW = MAX( 1, JC-JKU+1 )
                      IF( JC.GT.0 ) THEN
                         IL = MIN( M, JC+JKL+1 ) + 1 - IROW
-                        CALL SLAROT( .FALSE., .FALSE., JC+JKL.LT.M, IL,
+                        CALL AB_SLAROT( .FALSE., .FALSE., JC+JKL.L
+     $T.M, IL,
      $                               C, S, A( IROW-ISKEW*JC+IOFFST,
      $                               JC ), ILDA, DUMMY, EXTRA )
                      END IF
@@ -744,22 +758,23 @@
                      DO 90 JCH = JC + JKL, IENDCH, JKL + JKU
                         ILEXTR = IC.GT.0
                         IF( ILEXTR ) THEN
-                           CALL SLARTG( A( JCH-ISKEW*IC+IOFFST, IC ),
+                           CALL AB_SLARTG( A( JCH-ISKEW*IC+IOFFST, IC ),
      $                                  EXTRA, C, S, DUMMY )
                         END IF
                         IC = MAX( 1, IC )
                         ICOL = MIN( N-1, JCH+JKU )
                         ILTEMP = JCH + JKU.LT.N
                         TEMP = ZERO
-                        CALL SLAROT( .TRUE., ILEXTR, ILTEMP, ICOL+2-IC,
+                        CALL AB_SLAROT( .TRUE., ILEXTR, ILTEMP, ICOL+2-I
+     $C,
      $                               C, S, A( JCH-ISKEW*IC+IOFFST, IC ),
      $                               ILDA, EXTRA, TEMP )
                         IF( ILTEMP ) THEN
-                           CALL SLARTG( A( JCH-ISKEW*ICOL+IOFFST,
+                           CALL AB_SLARTG( A( JCH-ISKEW*ICOL+IOFFST,
      $                                  ICOL ), TEMP, C, S, DUMMY )
                            IL = MIN( IENDCH, JCH+JKL+JKU ) + 2 - JCH
                            EXTRA = ZERO
-                           CALL SLAROT( .FALSE., .TRUE.,
+                           CALL AB_SLAROT( .FALSE., .TRUE.,
      $                                  JCH+JKL+JKU.LE.IENDCH, IL, C, S,
      $                                  A( JCH-ISKEW*ICOL+IOFFST,
      $                                  ICOL ), ILDA, TEMP, EXTRA )
@@ -780,13 +795,14 @@
                   IENDCH = MIN( N, M+JKU ) - 1
                   DO 130 JR = MIN( N+JKL, M ) - 1, 1 - JKU, -1
                      EXTRA = ZERO
-                     ANGLE = TWOPI*SLARND( 1, ISEED )
+                     ANGLE = TWOPI*AB_SLARND( 1, ISEED )
                      C = COS( ANGLE )
                      S = SIN( ANGLE )
                      ICOL = MAX( 1, JR-JKL+1 )
                      IF( JR.GT.0 ) THEN
                         IL = MIN( N, JR+JKU+1 ) + 1 - ICOL
-                        CALL SLAROT( .TRUE., .FALSE., JR+JKU.LT.N, IL,
+                        CALL AB_SLAROT( .TRUE., .FALSE., JR+JKU.LT.N,
+     $ IL,
      $                               C, S, A( JR-ISKEW*ICOL+IOFFST,
      $                               ICOL ), ILDA, DUMMY, EXTRA )
                      END IF
@@ -797,22 +813,25 @@
                      DO 120 JCH = JR + JKU, IENDCH, JKL + JKU
                         ILEXTR = IR.GT.0
                         IF( ILEXTR ) THEN
-                           CALL SLARTG( A( IR-ISKEW*JCH+IOFFST, JCH ),
+                           CALL AB_SLARTG( A( IR-ISKEW*JCH+IOFFST, JCH )
+     $,
      $                                  EXTRA, C, S, DUMMY )
                         END IF
                         IR = MAX( 1, IR )
                         IROW = MIN( M-1, JCH+JKL )
                         ILTEMP = JCH + JKL.LT.M
                         TEMP = ZERO
-                        CALL SLAROT( .FALSE., ILEXTR, ILTEMP, IROW+2-IR,
+                        CALL AB_SLAROT( .FALSE., ILEXTR, ILTEMP, IROW
+     $+2-IR,
      $                               C, S, A( IR-ISKEW*JCH+IOFFST,
      $                               JCH ), ILDA, EXTRA, TEMP )
                         IF( ILTEMP ) THEN
-                           CALL SLARTG( A( IROW-ISKEW*JCH+IOFFST, JCH ),
+                           CALL AB_SLARTG( A( IROW-ISKEW*JCH+IOFFST, JCH
+     $ ),
      $                                  TEMP, C, S, DUMMY )
                            IL = MIN( IENDCH, JCH+JKL+JKU ) + 2 - JCH
                            EXTRA = ZERO
-                           CALL SLAROT( .TRUE., .TRUE.,
+                           CALL AB_SLAROT( .TRUE., .TRUE.,
      $                                  JCH+JKL+JKU.LE.IENDCH, IL, C, S,
      $                                  A( IROW-ISKEW*JCH+IOFFST, JCH ),
      $                                  ILDA, TEMP, EXTRA )
@@ -840,7 +859,8 @@
                ELSE
                   IPACKG = 1
                END IF
-               CALL SCOPY( MNMIN, D, 1, A( 1-ISKEW+IOFFG, 1 ), ILDA+1 )
+               CALL AB_SCOPY( MNMIN, D, 1, A( 1-ISKEW+IOFFG, 1 ), ILDA+1
+     $ )
 *
                DO 170 K = 1, UUB
                   DO 160 JC = 1, N - 1
@@ -848,13 +868,14 @@
                      IL = MIN( JC+1, K+2 )
                      EXTRA = ZERO
                      TEMP = A( JC-ISKEW*( JC+1 )+IOFFG, JC+1 )
-                     ANGLE = TWOPI*SLARND( 1, ISEED )
+                     ANGLE = TWOPI*AB_SLARND( 1, ISEED )
                      C = COS( ANGLE )
                      S = SIN( ANGLE )
-                     CALL SLAROT( .FALSE., JC.GT.K, .TRUE., IL, C, S,
+                     CALL AB_SLAROT( .FALSE., JC.GT.K, .TRUE., IL, C,
+     $ S,
      $                            A( IROW-ISKEW*JC+IOFFG, JC ), ILDA,
      $                            EXTRA, TEMP )
-                     CALL SLAROT( .TRUE., .TRUE., .FALSE.,
+                     CALL AB_SLAROT( .TRUE., .TRUE., .FALSE.,
      $                            MIN( K, N-JC )+1, C, S,
      $                            A( ( 1-ISKEW )*JC+IOFFG, JC ), ILDA,
      $                            TEMP, DUMMY )
@@ -863,16 +884,18 @@
 *
                      ICOL = JC
                      DO 150 JCH = JC - K, 1, -K
-                        CALL SLARTG( A( JCH+1-ISKEW*( ICOL+1 )+IOFFG,
+                        CALL AB_SLARTG( A( JCH+1-ISKEW*( ICOL+1 )+IOFFG,
      $                               ICOL+1 ), EXTRA, C, S, DUMMY )
                         TEMP = A( JCH-ISKEW*( JCH+1 )+IOFFG, JCH+1 )
-                        CALL SLAROT( .TRUE., .TRUE., .TRUE., K+2, C, -S,
+                        CALL AB_SLAROT( .TRUE., .TRUE., .TRUE., K+2, C, 
+     $-S,
      $                               A( ( 1-ISKEW )*JCH+IOFFG, JCH ),
      $                               ILDA, TEMP, EXTRA )
                         IROW = MAX( 1, JCH-K )
                         IL = MIN( JCH+1, K+2 )
                         EXTRA = ZERO
-                        CALL SLAROT( .FALSE., JCH.GT.K, .TRUE., IL, C,
+                        CALL AB_SLAROT( .FALSE., JCH.GT.K, .TRUE., IL
+     $, C,
      $                               -S, A( IROW-ISKEW*JCH+IOFFG, JCH ),
      $                               ILDA, EXTRA, TEMP )
                         ICOL = JCH
@@ -914,21 +937,24 @@
                ELSE
                   IPACKG = 2
                END IF
-               CALL SCOPY( MNMIN, D, 1, A( 1-ISKEW+IOFFG, 1 ), ILDA+1 )
+               CALL AB_SCOPY( MNMIN, D, 1, A( 1-ISKEW+IOFFG, 1 ), ILDA+1
+     $ )
 *
                DO 240 K = 1, UUB
                   DO 230 JC = N - 1, 1, -1
                      IL = MIN( N+1-JC, K+2 )
                      EXTRA = ZERO
                      TEMP = A( 1+( 1-ISKEW )*JC+IOFFG, JC )
-                     ANGLE = TWOPI*SLARND( 1, ISEED )
+                     ANGLE = TWOPI*AB_SLARND( 1, ISEED )
                      C = COS( ANGLE )
                      S = -SIN( ANGLE )
-                     CALL SLAROT( .FALSE., .TRUE., N-JC.GT.K, IL, C, S,
+                     CALL AB_SLAROT( .FALSE., .TRUE., N-JC.GT.K, IL, 
+     $C, S,
      $                            A( ( 1-ISKEW )*JC+IOFFG, JC ), ILDA,
      $                            TEMP, EXTRA )
                      ICOL = MAX( 1, JC-K+1 )
-                     CALL SLAROT( .TRUE., .FALSE., .TRUE., JC+2-ICOL, C,
+                     CALL AB_SLAROT( .TRUE., .FALSE., .TRUE., JC+2-IC
+     $OL, C,
      $                            S, A( JC-ISKEW*ICOL+IOFFG, ICOL ),
      $                            ILDA, DUMMY, TEMP )
 *
@@ -936,15 +962,17 @@
 *
                      ICOL = JC
                      DO 220 JCH = JC + K, N - 1, K
-                        CALL SLARTG( A( JCH-ISKEW*ICOL+IOFFG, ICOL ),
+                        CALL AB_SLARTG( A( JCH-ISKEW*ICOL+IOFFG, ICOL ),
      $                               EXTRA, C, S, DUMMY )
                         TEMP = A( 1+( 1-ISKEW )*JCH+IOFFG, JCH )
-                        CALL SLAROT( .TRUE., .TRUE., .TRUE., K+2, C, S,
+                        CALL AB_SLAROT( .TRUE., .TRUE., .TRUE., K+2, C, 
+     $S,
      $                               A( JCH-ISKEW*ICOL+IOFFG, ICOL ),
      $                               ILDA, EXTRA, TEMP )
                         IL = MIN( N+1-JCH, K+2 )
                         EXTRA = ZERO
-                        CALL SLAROT( .FALSE., .TRUE., N-JCH.GT.K, IL, C,
+                        CALL AB_SLAROT( .FALSE., .TRUE., N-JCH.GT.K, 
+     $IL, C,
      $                               S, A( ( 1-ISKEW )*JCH+IOFFG, JCH ),
      $                               ILDA, TEMP, EXTRA )
                         ICOL = JCH
@@ -982,7 +1010,7 @@
 *
 *        4)      Generate Banded Matrix by first
 *                Rotating by random Unitary matrices,
-*                then reducing the bandwidth using Householder
+*                then reducing the bandwidth using HousehoAB_LDEr
 *                transformations.
 *
 *                Note: we should get here only if LDA .ge. N
@@ -991,13 +1019,13 @@
 *
 *           Non-symmetric -- A = U D V
 *
-            CALL SLAGGE( MR, NC, LLB, UUB, D, A, LDA, ISEED, WORK,
+            CALL AB_SLAGGE( MR, NC, LLB, UUB, D, A, LDA, ISEED, WORK,
      $                   IINFO )
          ELSE
 *
 *           Symmetric -- A = U D U'
 *
-            CALL SLAGSY( M, LLB, D, A, LDA, ISEED, WORK, IINFO )
+            CALL AB_SLAGSY( M, LLB, D, A, LDA, ISEED, WORK, IINFO )
 *
          END IF
          IF( IINFO.NE.0 ) THEN
@@ -1123,6 +1151,6 @@
 *
       RETURN
 *
-*     End of SLATMS
+*     End of AB_SLATMS
 *
       END

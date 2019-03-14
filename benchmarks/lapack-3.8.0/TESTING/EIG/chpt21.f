@@ -1,4 +1,4 @@
-*> \brief \b CHPT21
+*> \brief \b AB_CHPT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
+*       SUBROUTINE AB_CHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
 *                          TAU, WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,16 +27,16 @@
 *>
 *> \verbatim
 *>
-*> CHPT21  generally checks a decomposition of the form
+*> AB_CHPT21  generally checks a decomposition of the form
 *>
 *>         A = U S UC>
 *> where * means conjugate transpose, A is hermitian, U is
 *> unitary, and S is diagonal (if KBAND=0) or (real) symmetric
 *> tridiagonal (if KBAND=1).  If ITYPE=1, then U is represented as
 *> a dense matrix, otherwise the U is expressed as a product of
-*> Householder transformations, whose vectors are stored in the
+*> HousehoAB_LDEr transformations, whose vectors are stored in the
 *> array "V" and whose scaling constants are in "TAU"; we shall
-*> use the letter "V" to refer to the product of Householder
+*> use the letter "V" to refer to the product of HousehoAB_LDEr
 *> transformations (which should be equal to U).
 *>
 *> Specifically, if ITYPE=1, then:
@@ -66,7 +66,7 @@
 *> AP.
 *>
 *> For ITYPE > 1, the transformation U is expressed as a product
-*> of Householder transformations:
+*> of HousehoAB_LDEr transformations:
 *>
 *>    If UPLO='U', then  V = H(n-1)...H(1),  where
 *>
@@ -93,11 +93,11 @@
 *>          1: U expressed as a dense unitary matrix:
 *>             RESULT(1) = | A - U S U* | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU* | / ( n ulp )
 *>
-*>          2: U expressed as a product V of Housholder transformations:
+*>          2: U expressed as a product V of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | A - V S V* | / ( |A| n ulp )
 *>
 *>          3: U expressed both as a dense unitary matrix and
-*>             as a product of Housholder transformations:
+*>             as a product of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | I - UV* | / ( n ulp )
 *> \endverbatim
 *>
@@ -113,7 +113,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, CHPT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_CHPT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -168,7 +168,7 @@
 *> \verbatim
 *>          VP is REAL array, dimension (N*(N+1)/2)
 *>          If ITYPE=2 or 3, the columns of this array contain the
-*>          Householder vectors used to describe the unitary matrix
+*>          HousehoAB_LDEr vectors used to describe the unitary matrix
 *>          in the decomposition, as described in purpose.
 *>          *NOTE* If ITYPE=2 or 3, V is modified and restored.  The
 *>          subdiagonal (if UPLO='L') or the superdiagonal (if UPLO='U')
@@ -181,7 +181,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)* in the Householder transformation H(j) of
+*>          v(j) v(j)* in the HousehoAB_LDEr transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *> \endverbatim
@@ -220,7 +220,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
+      SUBROUTINE AB_CHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
      $                   TAU, WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -257,14 +257,16 @@
       COMPLEX            TEMP, VSAVE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE, CLANHP, SLAMCH
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CLANGE, CLANHP, SLAMCH, CDOTC
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE, AB_CLANHP, AB_SLAMCH
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_CLANHP, AB_SLAMCH, AB_C
+     $DOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGEMM, CHPMV, CHPR, CHPR2,
-     $                   CLACPY, CLASET, CUPMTR
+      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CGEMM, AB_CHPMV, AB_CHPR
+     $, AB_AB_CHPR2,
+     $                   AB_CLACPY, AB_CLASET, AB_CUPMTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -281,7 +283,7 @@
 *
       LAP = ( N*( N+1 ) ) / 2
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -289,8 +291,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -306,7 +308,7 @@
       IF( ITYPE.EQ.3 ) THEN
          ANORM = ONE
       ELSE
-         ANORM = MAX( CLANHP( '1', CUPLO, N, AP, RWORK ), UNFL )
+         ANORM = MAX( AB_CLANHP( '1', CUPLO, N, AP, RWORK ), UNFL )
       END IF
 *
 *     Compute error matrix:
@@ -315,26 +317,27 @@
 *
 *        ITYPE=1: error = A - U S U*
 *
-         CALL CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
-         CALL CCOPY( LAP, AP, 1, WORK, 1 )
+         CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+         CALL AB_CCOPY( LAP, AP, 1, WORK, 1 )
 *
          DO 10 J = 1, N
-            CALL CHPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
+            CALL AB_CHPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
             DO 20 J = 1, N - 1
-               CALL CHPR2( CUPLO, N, -CMPLX( E( J ) ), U( 1, J ), 1,
+               CALL AB_AB_CHPR2( CUPLO, N, -CMPLX( E( J ) ), U( 1, J ), 
+     $1,
      $                     U( 1, J-1 ), 1, WORK )
    20       CONTINUE
          END IF
-         WNORM = CLANHP( '1', CUPLO, N, WORK, RWORK )
+         WNORM = AB_CLANHP( '1', CUPLO, N, WORK, RWORK )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        ITYPE=2: error = V S V* - A
 *
-         CALL CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+         CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
          IF( LOWER ) THEN
             WORK( LAP ) = D( N )
@@ -351,13 +354,15 @@
                IF( TAU( J ).NE.CZERO ) THEN
                   VSAVE = VP( JP+J+1 )
                   VP( JP+J+1 ) = CONE
-                  CALL CHPMV( 'L', N-J, CONE, WORK( JP1+J+1 ),
+                  CALL AB_CHPMV( 'L', N-J, CONE, WORK( JP1+J+1 ),
      $                        VP( JP+J+1 ), 1, CZERO, WORK( LAP+1 ), 1 )
-                  TEMP = -HALF*TAU( J )*CDOTC( N-J, WORK( LAP+1 ), 1,
+                  TEMP = -HALF*TAU( J )*AB_CDOTC( N-J, WORK( LAP+1 ), 1,
      $                   VP( JP+J+1 ), 1 )
-                  CALL CAXPY( N-J, TEMP, VP( JP+J+1 ), 1, WORK( LAP+1 ),
+                  CALL AB_CAXPY( N-J, TEMP, VP( JP+J+1 ), 1, WORK( LAP+1
+     $ ),
      $                        1 )
-                  CALL CHPR2( 'L', N-J, -TAU( J ), VP( JP+J+1 ), 1,
+                  CALL AB_AB_CHPR2( 'L', N-J, -TAU( J ), VP( JP+J+1 ), 1
+     $,
      $                        WORK( LAP+1 ), 1, WORK( JP1+J+1 ) )
 *
                   VP( JP+J+1 ) = VSAVE
@@ -379,13 +384,14 @@
                IF( TAU( J ).NE.CZERO ) THEN
                   VSAVE = VP( JP1+J )
                   VP( JP1+J ) = CONE
-                  CALL CHPMV( 'U', J, CONE, WORK, VP( JP1+1 ), 1, CZERO,
+                  CALL AB_CHPMV( 'U', J, CONE, WORK, VP( JP1+1 ), 1, CZE
+     $RO,
      $                        WORK( LAP+1 ), 1 )
-                  TEMP = -HALF*TAU( J )*CDOTC( J, WORK( LAP+1 ), 1,
+                  TEMP = -HALF*TAU( J )*AB_CDOTC( J, WORK( LAP+1 ), 1,
      $                   VP( JP1+1 ), 1 )
-                  CALL CAXPY( J, TEMP, VP( JP1+1 ), 1, WORK( LAP+1 ),
+                  CALL AB_CAXPY( J, TEMP, VP( JP1+1 ), 1, WORK( LAP+1 ),
      $                        1 )
-                  CALL CHPR2( 'U', J, -TAU( J ), VP( JP1+1 ), 1,
+                  CALL AB_AB_CHPR2( 'U', J, -TAU( J ), VP( JP1+1 ), 1,
      $                        WORK( LAP+1 ), 1, WORK )
                   VP( JP1+J ) = VSAVE
                END IF
@@ -396,7 +402,7 @@
          DO 70 J = 1, LAP
             WORK( J ) = WORK( J ) - AP( J )
    70    CONTINUE
-         WNORM = CLANHP( '1', CUPLO, N, WORK, RWORK )
+         WNORM = AB_CLANHP( '1', CUPLO, N, WORK, RWORK )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -404,8 +410,8 @@
 *
          IF( N.LT.2 )
      $      RETURN
-         CALL CLACPY( ' ', N, N, U, LDU, WORK, N )
-         CALL CUPMTR( 'R', CUPLO, 'C', N, N, VP, TAU, WORK, N,
+         CALL AB_CLACPY( ' ', N, N, U, LDU, WORK, N )
+         CALL AB_CUPMTR( 'R', CUPLO, 'C', N, N, VP, TAU, WORK, N,
      $                WORK( N**2+1 ), IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = TEN / ULP
@@ -416,7 +422,7 @@
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
    80    CONTINUE
 *
-         WNORM = CLANGE( '1', N, N, WORK, N, RWORK )
+         WNORM = AB_CLANGE( '1', N, N, WORK, N, RWORK )
       END IF
 *
       IF( ANORM.GT.WNORM ) THEN
@@ -434,19 +440,19 @@
 *     Compute  UU* - I
 *
       IF( ITYPE.EQ.1 ) THEN
-         CALL CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
+         CALL AB_CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
      $               WORK, N )
 *
          DO 90 J = 1, N
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
    90    CONTINUE
 *
-         RESULT( 2 ) = MIN( CLANGE( '1', N, N, WORK, N, RWORK ),
+         RESULT( 2 ) = MIN( AB_CLANGE( '1', N, N, WORK, N, RWORK ),
      $                 REAL( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of CHPT21
+*     End of AB_CHPT21
 *
       END

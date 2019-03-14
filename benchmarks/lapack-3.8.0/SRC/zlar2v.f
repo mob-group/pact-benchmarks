@@ -1,4 +1,4 @@
-*> \brief \b ZLAR2V applies a vector of plane rotations with real cosines and complex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices.
+*> \brief \b AB_ZLAR2V applies a vector of plane rotations with real cosines and complex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAR2V + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlar2v.f">
+*> Download AB_ZLAR2V + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAR2V.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlar2v.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAR2V.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlar2v.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAR2V.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAR2V( N, X, Y, Z, INCX, C, S, INCC )
+*       SUBROUTINE AB_ZLAR2V( N, X, Y, Z, INCX, C, S, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAR2V applies a vector of complex plane rotations with real cosines
+*> AB_ZLAR2V applies a vector of complex plane rotations with real cosines
 *> from both sides to a sequence of 2-by-2 complex Hermitian matrices,
 *> defined by the elements of the vectors x, y and z. For i = 1,2,...,n
 *>
@@ -109,7 +109,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZLAR2V( N, X, Y, Z, INCX, C, S, INCC )
+      SUBROUTINE AB_ZLAR2V( N, X, Y, Z, INCX, C, S, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -164,6 +164,6 @@
    10 CONTINUE
       RETURN
 *
-*     End of ZLAR2V
+*     End of AB_ZLAR2V
 *
       END

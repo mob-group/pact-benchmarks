@@ -1,4 +1,4 @@
-*> \brief \b CDRVST
+*> \brief \b AB_CDRVST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_CDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, D1, D2, D3, WA1, WA2, WA3, U,
 *                          LDU, V, TAU, Z, WORK, LWORK, RWORK, LRWORK,
 *                          IWORK, LIWORK, RESULT, INFO )
@@ -33,45 +33,45 @@
 *>
 *> \verbatim
 *>
-*>      CDRVST  checks the Hermitian eigenvalue problem drivers.
+*>      AB_CDRVST  checks the Hermitian eigenvalue problem drivers.
 *>
-*>              CHEEVD computes all eigenvalues and, optionally,
+*>              AB_AB_CHEEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix,
 *>              using a divide-and-conquer algorithm.
 *>
-*>              CHEEVX computes selected eigenvalues and, optionally,
+*>              AB_AB_CHEEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix.
 *>
-*>              CHEEVR computes selected eigenvalues and, optionally,
+*>              AB_AB_CHEEVR computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix
 *>              using the Relatively Robust Representation where it can.
 *>
-*>              CHPEVD computes all eigenvalues and, optionally,
+*>              AB_AB_CHPEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix in packed
 *>              storage, using a divide-and-conquer algorithm.
 *>
-*>              CHPEVX computes selected eigenvalues and, optionally,
+*>              AB_AB_CHPEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix in packed
 *>              storage.
 *>
-*>              CHBEVD computes all eigenvalues and, optionally,
+*>              AB_AB_CHBEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian band matrix,
 *>              using a divide-and-conquer algorithm.
 *>
-*>              CHBEVX computes selected eigenvalues and, optionally,
+*>              AB_AB_CHBEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian band matrix.
 *>
-*>              CHEEV computes all eigenvalues and, optionally,
+*>              AB_CHEEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix.
 *>
-*>              CHPEV computes all eigenvalues and, optionally,
+*>              AB_CHPEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix in packed
 *>              storage.
 *>
-*>              CHBEV computes all eigenvalues and, optionally,
+*>              AB_CHBEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian band matrix.
 *>
-*>      When CDRVST is called, a number of matrix "sizes" ("n's") and a
+*>      When AB_CDRVST is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix will be generated and used
 *>      to test the appropriate drivers.  For each matrix and each
@@ -138,7 +138,7 @@
 *> \verbatim
 *>  NSIZES  INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          CDRVST does nothing.  It must be at least zero.
+*>          AB_CDRVST does nothing.  It must be at least zero.
 *>          Not modified.
 *>
 *>  NN      INTEGER array, dimension (NSIZES)
@@ -148,7 +148,7 @@
 *>          Not modified.
 *>
 *>  NTYPES  INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, CDRVST
+*>          The number of elements in DOTYPE.   If it is zero, AB_CDRVST
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -174,7 +174,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to CDRVST to continue the same random number
+*>          next call to AB_CDRVST to continue the same random number
 *>          sequence.
 *>          Modified.
 *>
@@ -204,19 +204,19 @@
 *>          Not modified.
 *>
 *>  D1      REAL array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by CSTEQR simlutaneously
+*>          The eigenvalues of A, as computed by AB_CSTEQR simlutaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *>          Modified.
 *>
 *>  D2      REAL array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by CSTEQR if Z is not
+*>          The eigenvalues of A, as computed by AB_CSTEQR if Z is not
 *>          computed.  On exit, the eigenvalues in D2 correspond with
 *>          the matrix in A.
 *>          Modified.
 *>
 *>  D3      REAL array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by SSTERF.  On exit, the
+*>          The eigenvalues of A, as computed by AB_SSTERF.  On exit, the
 *>          eigenvalues in D3 correspond with the matrix in A.
 *>          Modified.
 *>
@@ -227,7 +227,7 @@
 *>  WA3     REAL array, dimension
 *>
 *>  U       COMPLEX array, dimension (LDU, max(NN))
-*>          The unitary matrix computed by CHETRD + CUNGC3.
+*>          The unitary matrix computed by AB_CHETRD + CUNGC3.
 *>          Modified.
 *>
 *>  LDU     INTEGER
@@ -236,18 +236,18 @@
 *>          Not modified.
 *>
 *>  V       COMPLEX array, dimension (LDU, max(NN))
-*>          The Housholder vectors computed by CHETRD in reducing A to
+*>          The HoushoAB_LDEr vectors computed by AB_CHETRD in reducing A to
 *>          tridiagonal form.
 *>          Modified.
 *>
 *>  TAU     COMPLEX array, dimension (max(NN))
-*>          The Householder factors computed by CHETRD in reducing A
+*>          The HousehoAB_LDEr factors computed by AB_CHETRD in reducing A
 *>          to tridiagonal form.
 *>          Modified.
 *>
 *>  Z       COMPLEX array, dimension (LDU, max(NN))
-*>          The unitary matrix of eigenvectors computed by CHEEVD,
-*>          CHEEVX, CHPEVD, CHPEVX, CHBEVD, and CHBEVX.
+*>          The unitary matrix of eigenvectors computed by AB_AB_CHEEVD,
+*>          AB_AB_CHEEVX, AB_AB_CHPEVD, AB_AB_CHPEVX, AB_AB_CHBEVD, and AB_AB_CHBEVX.
 *>          Modified.
 *>
 *>  WORK  - COMPLEX array of dimension ( LWORK )
@@ -288,7 +288,7 @@
 *>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
 *>          -16: LDU < 1 or LDU < NMAX.
 *>          -21: LWORK too small.
-*>          If  SLATMR, SLATMS, CHETRD, SORGC3, CSTEQR, SSTERF,
+*>          If  AB_SLATMR, AB_SLATMS, AB_CHETRD, SORGC3, AB_CSTEQR, AB_SSTERF,
 *>              or SORMC2 returns an error code, the
 *>              absolute value of it is returned.
 *>          Modified.
@@ -305,7 +305,7 @@
 *>       NMAX            Largest value in NN.
 *>       NMATS           The number of matrices generated so far.
 *>       NERRS           The number of tests which have exceeded THRESH
-*>                       so far (computed by SLAFTS).
+*>                       so far (computed by AB_SLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
 *>
@@ -333,7 +333,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_CDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, D1, D2, D3, WA1, WA2, WA3, U,
      $                   LDU, V, TAU, Z, WORK, LWORK, RWORK, LRWORK,
      $                   IWORK, LIWORK, RESULT, INFO )
@@ -390,14 +390,17 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND, SSXT1
-      EXTERNAL           SLAMCH, SLARND, SSXT1
+      REAL               AB_SLAMCH, AB_SLARND, AB_SSXT1
+      EXTERNAL           AB_SLAMCH, AB_SLARND, AB_SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, CHBEV, CHBEVD, CHBEVX, CHEEV, CHEEVD,
-     $                   CHEEVR, CHEEVX, CHET21, CHET22, CHPEV, CHPEVD,
-     $                   CHPEVX, CLACPY, CLASET, CLATMR, CLATMS, SLABAD,
-     $                   SLAFTS, XERBLA
+      EXTERNAL           AB_ALASVM, AB_CHBEV, AB_AB_CHBEVD, AB_AB_CHBEVX
+     $, AB_CHEEV, AB_AB_CHEEVD,
+     $                   AB_AB_CHEEVR, AB_AB_CHEEVX, AB_CHET21, AB_CHET2
+     $2, AB_CHPEV, AB_AB_CHPEVD,
+     $                   AB_AB_CHPEVX, AB_CLACPY, AB_CLASET, AB_CLATMR, 
+     $AB_CLATMS, AB_SLABAD,
+     $                   AB_SLAFTS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MIN, REAL, SQRT
@@ -441,7 +444,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVST', -INFO )
+         CALL AB_XERBLA( 'AB_CDRVST', -INFO )
          RETURN
       END IF
 *
@@ -452,10 +455,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
+      CALL AB_SLABAD( UNFL, OVFL )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -543,7 +546,7 @@
 *
    70       CONTINUE
 *
-            CALL CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL AB_CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -566,21 +569,24 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.5 ) THEN
 *
 *              Hermitian, eigenvalues specified
 *
-               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, N, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.7 ) THEN
 *
 *              Diagonal, random eigenvalues
 *
-               CALL CLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -589,7 +595,8 @@
 *
 *              Hermitian, random eigenvalues
 *
-               CALL CLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -598,14 +605,15 @@
 *
 *              Hermitian banded, eigenvalues specified
 *
-               IHBW = INT( ( N-1 )*SLARND( 1, ISEED3 ) )
-               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               IHBW = INT( ( N-1 )*AB_SLARND( 1, ISEED3 ) )
+               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, IHBW, IHBW, 'Z', U, LDU, WORK,
      $                      IINFO )
 *
 *              Store as dense matrix for most routines.
 *
-               CALL CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+               CALL AB_CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
                DO 100 IDIAG = -IHBW, IHBW
                   IROW = IHBW - IDIAG + 1
                   J1 = MAX( 1, IDIAG+1 )
@@ -633,8 +641,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( N-1 )*AB_SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( N-1 )*AB_SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -652,15 +660,16 @@
                   UPLO = 'U'
                END IF
 *
-*              Call CHEEVD and CHEEVX.
+*              Call AB_AB_CHEEVD and AB_AB_CHEEVX.
 *
-               CALL CLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL AB_CLACPY( ' ', N, N, A, LDA, V, LDU )
 *
                NTEST = NTEST + 1
-               CALL CHEEVD( 'V', UPLO, N, A, LDU, D1, WORK, LWEDC,
+               CALL AB_AB_CHEEVD( 'V', UPLO, N, A, LDU, D1, WORK, LWEDC,
      $                      RWORK, LRWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVD(V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVD(V,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -675,16 +684,17 @@
 *
 *              Do tests 1 and 2.
 *
-               CALL CHET21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
+               CALL AB_CHET21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 2
-               CALL CHEEVD( 'N', UPLO, N, A, LDU, D3, WORK, LWEDC,
+               CALL AB_AB_CHEEVD( 'N', UPLO, N, A, LDU, D3, WORK, LWEDC,
      $                      RWORK, LRWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVD(N,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVD(N,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -707,7 +717,7 @@
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
   130          CONTINUE
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 1
 *
@@ -733,11 +743,13 @@
                   VU = ONE
                END IF
 *
-               CALL CHEEVX( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_AB_CHEEVX( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M, WA1, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVX(V,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVX(V,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -752,17 +764,20 @@
 *
 *              Do tests 4 and 5.
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL CHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
+               CALL AB_CHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
+     $,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL CHEEVX( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_AB_CHEEVX( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVX(N,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVX(N,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -785,15 +800,17 @@
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
   150          CONTINUE
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 1
 *
-               CALL CHEEVX( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_AB_CHEEVX( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVX(V,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVX(V,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -806,18 +823,21 @@
 *
 *              Do tests 7 and 8.
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
 *
-               CALL CHEEVX( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_AB_CHEEVX( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M3, WA3, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVX(N,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVX(N,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -830,8 +850,10 @@
 *
 *              Do test 9.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -841,15 +863,17 @@
      $                           MAX( UNFL, TEMP3*ULP )
 *
   160          CONTINUE
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 1
 *
-               CALL CHEEVX( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_AB_CHEEVX( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVX(V,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVX(V,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -862,18 +886,21 @@
 *
 *              Do tests 10 and 11.
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
 *
-               CALL CHEEVX( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_AB_CHEEVX( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M3, WA3, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVX(N,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVX(N,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -891,8 +918,10 @@
 *
 *              Do test 12.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -903,9 +932,9 @@
 *
   170          CONTINUE
 *
-*              Call CHPEVD and CHPEVX.
+*              Call AB_AB_CHPEVD and AB_AB_CHPEVX.
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
 *              Load array WORK with the upper or lower triangular
 *              part of the matrix in packed form.
@@ -930,11 +959,12 @@
 *
                NTEST = NTEST + 1
                INDWRK = N*( N+1 ) / 2 + 1
-               CALL CHPEVD( 'V', UPLO, N, WORK, D1, Z, LDU,
+               CALL AB_AB_CHPEVD( 'V', UPLO, N, WORK, D1, Z, LDU,
      $                      WORK( INDWRK ), LWEDC, RWORK, LRWEDC, IWORK,
      $                      LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEVD(V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPEVD(V,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -949,7 +979,7 @@
 *
 *              Do tests 13 and 14.
 *
-               CALL CHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL AB_CHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -972,11 +1002,12 @@
 *
                NTEST = NTEST + 2
                INDWRK = N*( N+1 ) / 2 + 1
-               CALL CHPEVD( 'N', UPLO, N, WORK, D3, Z, LDU,
+               CALL AB_AB_CHPEVD( 'N', UPLO, N, WORK, D3, Z, LDU,
      $                      WORK( INDWRK ), LWEDC, RWORK, LRWEDC, IWORK,
      $                      LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEVD(N,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPEVD(N,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1044,11 +1075,13 @@
                   VU = ONE
                END IF
 *
-               CALL CHPEVX( 'V', 'A', UPLO, N, WORK, VL, VU, IL, IU,
+               CALL AB_AB_CHPEVX( 'V', 'A', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M, WA1, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEVX(V,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPEVX(V,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1063,7 +1096,8 @@
 *
 *              Do tests 16 and 17.
 *
-               CALL CHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
+               CALL AB_CHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
+     $,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1086,11 +1120,13 @@
   350             CONTINUE
                END IF
 *
-               CALL CHPEVX( 'N', 'A', UPLO, N, WORK, VL, VU, IL, IU,
+               CALL AB_AB_CHPEVX( 'N', 'A', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M2, WA2, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEVX(N,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPEVX(N,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1132,11 +1168,13 @@
   410             CONTINUE
                END IF
 *
-               CALL CHPEVX( 'V', 'I', UPLO, N, WORK, VL, VU, IL, IU,
+               CALL AB_AB_CHPEVX( 'V', 'I', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M2, WA2, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEVX(V,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPEVX(V,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1151,7 +1189,8 @@
 *
 *              Do tests 19 and 20.
 *
-               CALL CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1174,11 +1213,13 @@
   450             CONTINUE
                END IF
 *
-               CALL CHPEVX( 'N', 'I', UPLO, N, WORK, VL, VU, IL, IU,
+               CALL AB_AB_CHPEVX( 'N', 'I', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M3, WA3, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEVX(N,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPEVX(N,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1191,8 +1232,10 @@
 *
 *              Do test 21.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1221,11 +1264,13 @@
   500             CONTINUE
                END IF
 *
-               CALL CHPEVX( 'V', 'V', UPLO, N, WORK, VL, VU, IL, IU,
+               CALL AB_AB_CHPEVX( 'V', 'V', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M2, WA2, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEVX(V,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPEVX(V,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1240,7 +1285,8 @@
 *
 *              Do tests 22 and 23.
 *
-               CALL CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1263,11 +1309,13 @@
   540             CONTINUE
                END IF
 *
-               CALL CHPEVX( 'N', 'V', UPLO, N, WORK, VL, VU, IL, IU,
+               CALL AB_AB_CHPEVX( 'N', 'V', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M3, WA3, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEVX(N,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPEVX(N,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1285,8 +1333,10 @@
 *
 *              Do test 24.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1297,7 +1347,7 @@
 *
   550          CONTINUE
 *
-*              Call CHBEVD and CHBEVX.
+*              Call AB_AB_CHBEVD and AB_AB_CHBEVX.
 *
                IF( JTYPE.LE.7 ) THEN
                   KD = 0
@@ -1325,10 +1375,12 @@
                END IF
 *
                NTEST = NTEST + 1
-               CALL CHBEVD( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK,
+               CALL AB_AB_CHBEVD( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, 
+     $WORK,
      $                      LWEDC, RWORK, LRWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEVD(V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_CHBEVD(V,' // UPLO /
+     $/
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1343,7 +1395,7 @@
 *
 *              Do tests 25 and 26.
 *
-               CALL CHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL AB_CHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -1361,10 +1413,12 @@
                END IF
 *
                NTEST = NTEST + 2
-               CALL CHBEVD( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK,
+               CALL AB_AB_CHBEVD( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, 
+     $WORK,
      $                      LWEDC, RWORK, LRWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEVD(N,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_CHBEVD(N,' // UPLO /
+     $/
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1405,11 +1459,13 @@
                END IF
 *
                NTEST = NTEST + 1
-               CALL CHBEVX( 'V', 'A', UPLO, N, KD, V, LDU, U, LDU, VL,
+               CALL AB_AB_CHBEVX( 'V', 'A', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M, WA1, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHBEVX(V,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHBEVX(V,A,' // UPLO
+     $ //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1424,7 +1480,8 @@
 *
 *              Do tests 28 and 29.
 *
-               CALL CHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
+               CALL AB_CHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
+     $,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1443,11 +1500,13 @@
   730             CONTINUE
                END IF
 *
-               CALL CHBEVX( 'N', 'A', UPLO, N, KD, V, LDU, U, LDU, VL,
+               CALL AB_AB_CHBEVX( 'N', 'A', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M2, WA2, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEVX(N,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_CHBEVX(N,A,' // UPLO
+     $ //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1488,11 +1547,13 @@
   790             CONTINUE
                END IF
 *
-               CALL CHBEVX( 'V', 'I', UPLO, N, KD, V, LDU, U, LDU, VL,
+               CALL AB_AB_CHBEVX( 'V', 'I', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M2, WA2, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEVX(V,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_CHBEVX(V,I,' // UPLO
+     $ //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1507,7 +1568,8 @@
 *
 *              Do tests 31 and 32.
 *
-               CALL CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1525,11 +1587,13 @@
   820                CONTINUE
   830             CONTINUE
                END IF
-               CALL CHBEVX( 'N', 'I', UPLO, N, KD, V, LDU, U, LDU, VL,
+               CALL AB_AB_CHBEVX( 'N', 'I', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M3, WA3, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEVX(N,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_CHBEVX(N,I,' // UPLO
+     $ //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1542,8 +1606,10 @@
 *
 *              Do test 33.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1570,11 +1636,13 @@
   870                CONTINUE
   880             CONTINUE
                END IF
-               CALL CHBEVX( 'V', 'V', UPLO, N, KD, V, LDU, U, LDU, VL,
+               CALL AB_AB_CHBEVX( 'V', 'V', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M2, WA2, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEVX(V,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_CHBEVX(V,V,' // UPLO
+     $ //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1589,7 +1657,8 @@
 *
 *              Do tests 34 and 35.
 *
-               CALL CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1607,11 +1676,13 @@
   910                CONTINUE
   920             CONTINUE
                END IF
-               CALL CHBEVX( 'N', 'V', UPLO, N, KD, V, LDU, U, LDU, VL,
+               CALL AB_AB_CHBEVX( 'N', 'V', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M3, WA3, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEVX(N,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_CHBEVX(N,V,' // UPLO
+     $ //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1629,8 +1700,10 @@
 *
 *              Do test 36.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1641,15 +1714,17 @@
 *
   930          CONTINUE
 *
-*              Call CHEEV
+*              Call AB_CHEEV
 *
-               CALL CLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL AB_CLACPY( ' ', N, N, A, LDA, V, LDU )
 *
                NTEST = NTEST + 1
-               CALL CHEEV( 'V', UPLO, N, A, LDU, D1, WORK, LWORK, RWORK,
+               CALL AB_CHEEV( 'V', UPLO, N, A, LDU, D1, WORK, LWORK, RWO
+     $RK,
      $                     IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEV(V,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_CHEEV(V,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1664,16 +1739,18 @@
 *
 *              Do tests 37 and 38
 *
-               CALL CHET21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
+               CALL AB_CHET21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 2
-               CALL CHEEV( 'N', UPLO, N, A, LDU, D3, WORK, LWORK, RWORK,
+               CALL AB_CHEEV( 'N', UPLO, N, A, LDU, D3, WORK, LWORK, RWO
+     $RK,
      $                     IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEV(N,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_CHEEV(N,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1697,9 +1774,9 @@
 *
   950          CONTINUE
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-*              Call CHPEV
+*              Call AB_CHPEV
 *
 *              Load array WORK with the upper or lower triangular
 *              part of the matrix in packed form.
@@ -1724,10 +1801,11 @@
 *
                NTEST = NTEST + 1
                INDWRK = N*( N+1 ) / 2 + 1
-               CALL CHPEV( 'V', UPLO, N, WORK, D1, Z, LDU,
+               CALL AB_CHPEV( 'V', UPLO, N, WORK, D1, Z, LDU,
      $                     WORK( INDWRK ), RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEV(V,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_CHPEV(V,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1742,7 +1820,7 @@
 *
 *              Do tests 40 and 41.
 *
-               CALL CHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL AB_CHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -1765,10 +1843,11 @@
 *
                NTEST = NTEST + 2
                INDWRK = N*( N+1 ) / 2 + 1
-               CALL CHPEV( 'N', UPLO, N, WORK, D3, Z, LDU,
+               CALL AB_CHPEV( 'N', UPLO, N, WORK, D3, Z, LDU,
      $                     WORK( INDWRK ), RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHPEV(N,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_CHPEV(N,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1792,7 +1871,7 @@
 *
  1050          CONTINUE
 *
-*              Call CHBEV
+*              Call AB_CHBEV
 *
                IF( JTYPE.LE.7 ) THEN
                   KD = 0
@@ -1820,10 +1899,12 @@
                END IF
 *
                NTEST = NTEST + 1
-               CALL CHBEV( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK,
+               CALL AB_CHBEV( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK
+     $,
      $                     RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEV(V,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9998 )'AB_CHBEV(V,' // UPLO // ')
+     $',
      $               IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1838,7 +1919,7 @@
 *
 *              Do tests 43 and 44.
 *
-               CALL CHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL AB_CHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -1856,10 +1937,12 @@
                END IF
 *
                NTEST = NTEST + 2
-               CALL CHBEV( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK,
+               CALL AB_CHBEV( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK
+     $,
      $                     RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'CHBEV(N,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9998 )'AB_CHBEV(N,' // UPLO // ')
+     $',
      $               IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1883,14 +1966,16 @@
                RESULT( NTEST ) = TEMP2 / MAX( UNFL,
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
-               CALL CLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL AB_CLACPY( ' ', N, N, A, LDA, V, LDU )
                NTEST = NTEST + 1
-               CALL CHEEVR( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_AB_CHEEVR( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M, WA1, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVR(V,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVR(V,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1905,18 +1990,21 @@
 *
 *              Do tests 45 and 46 (or ... )
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL CHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
+               CALL AB_CHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
+     $,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL CHEEVR( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_AB_CHEEVR( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVR(N,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVR(N,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1941,13 +2029,15 @@
  1170          CONTINUE
 *
                NTEST = NTEST + 1
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
-               CALL CHEEVR( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_AB_CHEEVR( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVR(V,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVR(V,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1962,19 +2052,22 @@
 *
 *              Do tests 48 and 49 (or +??)
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
-               CALL CHEEVR( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_AB_CHEEVR( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M3, WA3, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVR(N,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVR(N,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1987,20 +2080,24 @@
 *
 *              Do test 50 (or +??)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
      $                           MAX( UNFL, ULP*TEMP3 )
  1180          CONTINUE
 *
                NTEST = NTEST + 1
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
-               CALL CHEEVR( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_AB_CHEEVR( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVR(V,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVR(V,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2015,19 +2112,22 @@
 *
 *              Do tests 51 and 52 (or +??)
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_CHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
-               CALL CHEEVR( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_AB_CHEEVR( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M3, WA3, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'CHEEVR(N,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEEVR(N,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2045,8 +2145,10 @@
 *
 *              Do test 52 (or +??)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -2055,7 +2157,7 @@
                RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
      $                           MAX( UNFL, TEMP3*ULP )
 *
-               CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
 *
 *
@@ -2070,7 +2172,7 @@
 *           End of Loop -- Check for RESULT(j) > THRESH
 *
             NTESTT = NTESTT + NTEST
-            CALL SLAFTS( 'CST', N, N, JTYPE, NTEST, RESULT, IOLDSD,
+            CALL AB_SLAFTS( 'CST', N, N, JTYPE, NTEST, RESULT, IOLDSD,
      $                   THRESH, NOUNIT, NERRS )
 *
  1210    CONTINUE
@@ -2078,16 +2180,16 @@
 *
 *     Summary
 *
-      CALL ALASVM( 'CST', NOUNIT, NERRS, NTESTT, 0 )
+      CALL AB_ALASVM( 'CST', NOUNIT, NERRS, NTESTT, 0 )
 *
- 9999 FORMAT( ' CDRVST: ', A, ' returned INFO=', I6, / 9X, 'N=', I6,
+ 9999 FORMAT( ' AB_CDRVST: ', A, ' returned INFO=', I6, / 9X, 'N=', I6,
      $      ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
- 9998 FORMAT( ' CDRVST: ', A, ' returned INFO=', I6, / 9X, 'N=', I6,
+ 9998 FORMAT( ' AB_CDRVST: ', A, ' returned INFO=', I6, / 9X, 'N=', I6,
      $      ', KD=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5,
      $      ')' )
 *
       RETURN
 *
-*     End of CDRVST
+*     End of AB_CDRVST
 *
       END

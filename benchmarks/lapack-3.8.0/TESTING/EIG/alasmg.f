@@ -1,4 +1,4 @@
-*> \brief \b ALASMG
+*> \brief \b AB_ALASMG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ALASMG( TYPE, NOUT, NFAIL, NRUN, NERRS )
+*       SUBROUTINE AB_ALASMG( TYPE, NOUT, NFAIL, NRUN, NERRS )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        TYPE
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> ALASMG prints a summary of results from one of the -CHK- routines.
+*> AB_ALASMG prints a summary of results from one of the -CHK- routines.
 *> \endverbatim
 *
 *  Arguments:
@@ -71,7 +71,7 @@
 *> \ingroup aux_eig
 *
 *  =====================================================================
-      SUBROUTINE ALASMG( TYPE, NOUT, NFAIL, NRUN, NERRS )
+      SUBROUTINE AB_ALASMG( TYPE, NOUT, NFAIL, NRUN, NERRS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -103,6 +103,6 @@
  9997 FORMAT( 6X, I6, ' error messages recorded' )
       RETURN
 *
-*     End of ALASMG
+*     End of AB_ALASMG
 *
       END

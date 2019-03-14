@@ -1,4 +1,4 @@
-*> \brief \b ZHETRS2
+*> \brief \b AB_AB_ZHETRS2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHETRS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrs2.f">
+*> Download AB_AB_ZHETRS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZHETRS2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrs2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZHETRS2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrs2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZHETRS2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHETRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+*       SUBROUTINE AB_AB_ZHETRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                           WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> ZHETRS2 solves a system of linear equations A*X = B with a complex
+*> AB_AB_ZHETRS2 solves a system of linear equations A*X = B with a complex
 *> Hermitian matrix A using the factorization A = U*D*U**H or
-*> A = L*D*L**H computed by ZHETRF and converted by ZSYCONV.
+*> A = L*D*L**H computed by AB_ZHETRF and converted by AB_AB_ZSYCONV.
 *> \endverbatim
 *
 *  Arguments:
@@ -70,7 +70,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by ZHETRF.
+*>          obtain the factor U or L as computed by AB_ZHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by ZHETRF.
+*>          as determined by AB_ZHETRF.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -124,7 +124,7 @@
 *> \ingroup complex16HEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZHETRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE AB_AB_ZHETRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                    WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -154,11 +154,12 @@
       COMPLEX*16         AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZDSCAL, ZSYCONV, ZSWAP, ZTRSM, XERBLA
+      EXTERNAL           ZAB_DSCAL, AB_AB_ZSYCONV, AB_ZSWAP, AB_ZTRSM, A
+     $B_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG, MAX
@@ -166,8 +167,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -179,7 +180,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHETRS2', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZHETRS2', -INFO )
          RETURN
       END IF
 *
@@ -190,7 +191,7 @@
 *
 *     Convert A
 *
-      CALL ZSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
+      CALL AB_AB_ZSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
 *
       IF( UPPER ) THEN
 *
@@ -204,21 +205,21 @@
 *           Interchange rows K and IPIV(K).
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K-1
          ELSE
 *           2 x 2 diagonal block
 *           Interchange rows K-1 and -IPIV(K).
             KP = -IPIV( K )
             IF( KP.EQ.-IPIV( K-1 ) )
-     $         CALL ZSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_ZSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
             K=K-2
          END IF
         END DO
 *
 *  Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-        CALL ZTRSM('L','U','N','U',N,NRHS,ONE,A,LDA,B,LDB)
+        CALL AB_ZTRSM('L','U','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *  Compute D \ B -> B   [ D \ (U \P**T * B) ]
 *
@@ -226,7 +227,7 @@
          DO WHILE ( I .GE. 1 )
             IF( IPIV(I) .GT. 0 ) THEN
               S = DBLE( ONE ) / DBLE( A( I, I ) )
-              CALL ZDSCAL( NRHS, S, B( I, 1 ), LDB )
+              CALL ZAB_DSCAL( NRHS, S, B( I, 1 ), LDB )
             ELSEIF ( I .GT. 1) THEN
                IF ( IPIV(I-1) .EQ. IPIV(I) ) THEN
                   AKM1K = WORK(I)
@@ -247,7 +248,7 @@
 *
 *      Compute (U**H \ B) -> B   [ U**H \ (D \ (U \P**T * B) ) ]
 *
-         CALL ZTRSM('L','U','C','U',N,NRHS,ONE,A,LDA,B,LDB)
+         CALL AB_ZTRSM('L','U','C','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *       P * B  [ P * (U**H \ (D \ (U \P**T * B) )) ]
 *
@@ -258,14 +259,14 @@
 *           Interchange rows K and IPIV(K).
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K+1
          ELSE
 *           2 x 2 diagonal block
 *           Interchange rows K-1 and -IPIV(K).
             KP = -IPIV( K )
             IF( K .LT. N .AND. KP.EQ.-IPIV( K+1 ) )
-     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K+2
          ENDIF
         END DO
@@ -282,21 +283,21 @@
 *           Interchange rows K and IPIV(K).
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K+1
          ELSE
 *           2 x 2 diagonal block
 *           Interchange rows K and -IPIV(K+1).
             KP = -IPIV( K+1 )
             IF( KP.EQ.-IPIV( K ) )
-     $         CALL ZSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_ZSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
             K=K+2
          ENDIF
         END DO
 *
 *  Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-        CALL ZTRSM('L','L','N','U',N,NRHS,ONE,A,LDA,B,LDB)
+        CALL AB_ZTRSM('L','L','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *  Compute D \ B -> B   [ D \ (L \P**T * B) ]
 *
@@ -304,7 +305,7 @@
          DO WHILE ( I .LE. N )
             IF( IPIV(I) .GT. 0 ) THEN
               S = DBLE( ONE ) / DBLE( A( I, I ) )
-              CALL ZDSCAL( NRHS, S, B( I, 1 ), LDB )
+              CALL ZAB_DSCAL( NRHS, S, B( I, 1 ), LDB )
             ELSE
                   AKM1K = WORK(I)
                   AKM1 = A( I, I ) / DCONJG( AKM1K )
@@ -323,7 +324,7 @@
 *
 *  Compute (L**H \ B) -> B   [ L**H \ (D \ (L \P**T * B) ) ]
 *
-        CALL ZTRSM('L','L','C','U',N,NRHS,ONE,A,LDA,B,LDB)
+        CALL AB_ZTRSM('L','L','C','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *       P * B  [ P * (L**H \ (D \ (L \P**T * B) )) ]
 *
@@ -334,14 +335,14 @@
 *           Interchange rows K and IPIV(K).
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K-1
          ELSE
 *           2 x 2 diagonal block
 *           Interchange rows K-1 and -IPIV(K).
             KP = -IPIV( K )
             IF( K.GT.1 .AND. KP.EQ.-IPIV( K-1 ) )
-     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K-2
          ENDIF
         END DO
@@ -350,10 +351,10 @@
 *
 *     Revert A
 *
-      CALL ZSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
+      CALL AB_AB_ZSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       RETURN
 *
-*     End of ZHETRS2
+*     End of AB_AB_ZHETRS2
 *
       END

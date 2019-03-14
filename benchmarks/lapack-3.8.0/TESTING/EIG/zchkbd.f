@@ -1,4 +1,4 @@
-*> \brief \b ZCHKBD
+*> \brief \b AB_ZCHKBD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
+*       SUBROUTINE AB_ZCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
 *                          ISEED, THRESH, A, LDA, BD, BE, S1, S2, X, LDX,
 *                          Y, Z, Q, LDQ, PT, LDPT, U, VT, WORK, LWORK,
 *                          RWORK, NOUT, INFO )
@@ -33,17 +33,17 @@
 *>
 *> \verbatim
 *>
-*> ZCHKBD checks the singular value decomposition (SVD) routines.
+*> AB_ZCHKBD checks the singular value decomposition (SVD) routines.
 *>
-*> ZGEBRD reduces a complex general m by n matrix A to real upper or
+*> AB_ZGEBRD reduces a complex general m by n matrix A to real upper or
 *> lower bidiagonal form by an orthogonal transformation: Q' * A * P = B
 *> (or A = Q * B * P').  The matrix B is upper bidiagonal if m >= n
 *> and lower bidiagonal if m < n.
 *>
-*> ZUNGBR generates the orthogonal matrices Q and P' from ZGEBRD.
+*> AB_ZUNGBR generates the orthogonal matrices Q and P' from AB_ZGEBRD.
 *> Note that Q and P are not necessarily square.
 *>
-*> ZBDSQR computes the singular value decomposition of the bidiagonal
+*> AB_ZBDSQR computes the singular value decomposition of the bidiagonal
 *> matrix B as B = U S V'.  It is called three times to compute
 *>    1)  B = U S1 V', where S1 is the diagonal matrix of singular
 *>        values and the columns of the matrices U and V are the left
@@ -51,7 +51,7 @@
 *>    2)  Same as 1), but the singular values are stored in S2 and the
 *>        singular vectors are not computed.
 *>    3)  A = (UQ) S (P'V'), the SVD of the original matrix A.
-*> In addition, ZBDSQR has an option to apply the left orthogonal matrix
+*> In addition, AB_ZBDSQR has an option to apply the left orthogonal matrix
 *> U to a matrix X, useful in least squares applications.
 *>
 *> For each pair of matrix dimensions (M,N) and each selected matrix
@@ -67,7 +67,7 @@
 *>
 *> For each generated matrix, 14 tests are performed:
 *>
-*> Test ZGEBRD and ZUNGBR
+*> Test AB_ZGEBRD and AB_ZUNGBR
 *>
 *> (1)   | A - Q B PT | / ( |A| max(M,N) ulp ), PT = P'
 *>
@@ -75,7 +75,7 @@
 *>
 *> (3)   | I - PT PT' | / ( N ulp )
 *>
-*> Test ZBDSQR on bidiagonal matrix B
+*> Test AB_ZBDSQR on bidiagonal matrix B
 *>
 *> (4)   | B - U S1 VT | / ( |B| min(M,N) ulp ), VT = V'
 *>
@@ -86,16 +86,16 @@
 *> (7)   | I - VT VT' | / ( min(M,N) ulp )
 *>
 *> (8)   S1 contains min(M,N) nonnegative values in decreasing order.
-*>       (Return 0 if true, 1/ULP if false.)
+*>       (Return 0 if true, 1/ULP if FALSE.)
 *>
 *> (9)   0 if the true singular values of B are within THRESH of
 *>       those in S1.  2*THRESH if they are not.  (Tested using
-*>       DSVDCH)
+*>       AB_DSVDCH)
 *>
 *> (10)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
 *>                                   computing U and V.
 *>
-*> Test ZBDSQR on matrix A
+*> Test AB_ZBDSQR on matrix A
 *>
 *> (11)  | A - (QU) S (VT PT) | / ( |A| max(M,N) ulp )
 *>
@@ -145,7 +145,7 @@
 *>      logarithmic distribution on [ulp^2,ulp^(-2)]  (I.e., each
 *>      entry is  e^x, where x is chosen uniformly on
 *>      [ 2 log(ulp), -2 log(ulp) ] .)  For *this* type:
-*>      (a) ZGEBRD is not called to reduce it to bidiagonal form.
+*>      (a) AB_ZGEBRD is not called to reduce it to bidiagonal form.
 *>      (b) the bidiagonal is  min(M,N) x min(M,N); if M<N, the
 *>          matrix will be lower bidiagonal, otherwise upper.
 *>      (c) only tests 5--8 and 14 are performed.
@@ -179,7 +179,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, ZCHKBD
+*>          The number of elements in DOTYPE.   If it is zero, AB_ZCHKBD
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrices are in A and B.
@@ -202,7 +202,7 @@
 *> \verbatim
 *>          NRHS is INTEGER
 *>          The number of columns in the "right-hand side" matrices X, Y,
-*>          and Z, used in testing ZBDSQR.  If NRHS = 0, then the
+*>          and Z, used in testing AB_ZBDSQR.  If NRHS = 0, then the
 *>          operations on the right-hand side will not be tested.
 *>          NRHS must be at least 0.
 *> \endverbatim
@@ -214,7 +214,7 @@
 *>          generator. The array elements should be between 0 and 4095;
 *>          if not they will be reduced mod 4096.  Also, ISEED(4) must
 *>          be odd.  The values of ISEED are changed on exit, and can be
-*>          used in the next call to ZCHKBD to continue the same random
+*>          used in the next call to AB_ZCHKBD to continue the same random
 *>          number sequence.
 *> \endverbatim
 *>
@@ -363,7 +363,7 @@
 *>          -21: LDQ < 1 or LDQ < MMAX.
 *>          -23: LDP < 1 or LDP < MNMAX.
 *>          -27: LWORK too small.
-*>          If  ZLATMR, CLATMS, ZGEBRD, ZUNGBR, or ZBDSQR,
+*>          If  AB_ZLATMR, AB_CLATMS, AB_ZGEBRD, AB_ZUNGBR, or AB_ZBDSQR,
 *>              returns an error code, the
 *>              absolute value of it is returned.
 *>
@@ -410,7 +410,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
+      SUBROUTINE AB_ZCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
      $                   ISEED, THRESH, A, LDA, BD, BE, S1, S2, X, LDX,
      $                   Y, Z, Q, LDQ, PT, LDPT, U, VT, WORK, LWORK,
      $                   RWORK, NOUT, INFO )
@@ -462,13 +462,16 @@
       DOUBLE PRECISION   DUMMA( 1 ), RESULT( 14 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARND
-      EXTERNAL           DLAMCH, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND
+      EXTERNAL           AB_DLAMCH, AB_DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASUM, DCOPY, DLABAD, DLAHD2, DSVDCH, XERBLA,
-     $                   ZBDSQR, ZBDT01, ZBDT02, ZBDT03, ZGEBRD, ZGEMM,
-     $                   ZLACPY, ZLASET, ZLATMR, ZLATMS, ZUNGBR, ZUNT01
+      EXTERNAL           AB_ALASUM, AB_DCOPY, AB_DLABAD, AB_DLAHD2, AB_D
+     $SVDCH, AB_XERBLA,
+     $                   AB_ZBDSQR, AB_ZBDT01, AB_ZBDT02, AB_ZBDT03, AB_
+     $ZGEBRD, AB_ZGEMM,
+     $                   AB_ZLACPY, AB_ZLASET, AB_ZLATMR, AB_ZLATMS, AB_
+     $ZUNGBR, AB_ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -538,7 +541,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKBD', -INFO )
+         CALL AB_XERBLA( 'AB_ZCHKBD', -INFO )
          RETURN
       END IF
 *
@@ -548,10 +551,10 @@
       PATH( 2: 3 ) = 'BD'
       NFAIL = 0
       NTEST = 0
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
-      CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
+      CALL AB_DLABAD( UNFL, OVFL )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
       RTUNFL = SQRT( UNFL )
@@ -626,7 +629,7 @@
 *
    70       CONTINUE
 *
-            CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -649,7 +652,8 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL ZLATMS( MNMIN, MNMIN, 'S', ISEED, 'N', RWORK, IMODE,
+               CALL AB_ZLATMS( MNMIN, MNMIN, 'S', ISEED, 'N', RWORK, IMO
+     $DE,
      $                      COND, ANORM, 0, 0, 'N', A, LDA, WORK,
      $                      IINFO )
 *
@@ -657,7 +661,8 @@
 *
 *              Symmetric, eigenvalues specified
 *
-               CALL ZLATMS( MNMIN, MNMIN, 'S', ISEED, 'S', RWORK, IMODE,
+               CALL AB_ZLATMS( MNMIN, MNMIN, 'S', ISEED, 'S', RWORK, IMO
+     $DE,
      $                      COND, ANORM, M, N, 'N', A, LDA, WORK,
      $                      IINFO )
 *
@@ -665,14 +670,16 @@
 *
 *              Nonsymmetric, singular values specified
 *
-               CALL ZLATMS( M, N, 'S', ISEED, 'N', RWORK, IMODE, COND,
+               CALL AB_ZLATMS( M, N, 'S', ISEED, 'N', RWORK, IMODE, COND
+     $,
      $                      ANORM, M, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.7 ) THEN
 *
 *              Diagonal, random entries
 *
-               CALL ZLATMR( MNMIN, MNMIN, 'S', ISEED, 'N', WORK, 6, ONE,
+               CALL AB_ZLATMR( MNMIN, MNMIN, 'S', ISEED, 'N', WORK, 6, O
+     $NE,
      $                      CONE, 'T', 'N', WORK( MNMIN+1 ), 1, ONE,
      $                      WORK( 2*MNMIN+1 ), 1, ONE, 'N', IWORK, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -681,7 +688,8 @@
 *
 *              Symmetric, random entries
 *
-               CALL ZLATMR( MNMIN, MNMIN, 'S', ISEED, 'S', WORK, 6, ONE,
+               CALL AB_ZLATMR( MNMIN, MNMIN, 'S', ISEED, 'S', WORK, 6, O
+     $NE,
      $                      CONE, 'T', 'N', WORK( MNMIN+1 ), 1, ONE,
      $                      WORK( M+MNMIN+1 ), 1, ONE, 'N', IWORK, M, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -690,7 +698,8 @@
 *
 *              Nonsymmetric, random entries
 *
-               CALL ZLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( MNMIN+1 ), 1, ONE,
      $                      WORK( M+MNMIN+1 ), 1, ONE, 'N', IWORK, M, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -701,9 +710,9 @@
 *
                TEMP1 = -TWO*LOG( ULP )
                DO 90 J = 1, MNMIN
-                  BD( J ) = EXP( TEMP1*DLARND( 2, ISEED ) )
+                  BD( J ) = EXP( TEMP1*AB_DLARND( 2, ISEED ) )
                   IF( J.LT.MNMIN )
-     $               BE( J ) = EXP( TEMP1*DLARND( 2, ISEED ) )
+     $               BE( J ) = EXP( TEMP1*AB_DLARND( 2, ISEED ) )
    90          CONTINUE
 *
                IINFO = 0
@@ -722,13 +731,14 @@
 *              Generate Right-Hand Side
 *
                IF( BIDIAG ) THEN
-                  CALL ZLATMR( MNMIN, NRHS, 'S', ISEED, 'N', WORK, 6,
+                  CALL AB_ZLATMR( MNMIN, NRHS, 'S', ISEED, 'N', WORK, 6,
      $                         ONE, CONE, 'T', 'N', WORK( MNMIN+1 ), 1,
      $                         ONE, WORK( 2*MNMIN+1 ), 1, ONE, 'N',
      $                         IWORK, MNMIN, NRHS, ZERO, ONE, 'NO', Y,
      $                         LDX, IWORK, IINFO )
                ELSE
-                  CALL ZLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE,
+                  CALL AB_ZLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE
+     $,
      $                         CONE, 'T', 'N', WORK( M+1 ), 1, ONE,
      $                         WORK( 2*M+1 ), 1, ONE, 'N', IWORK, M,
      $                         NRHS, ZERO, ONE, 'NO', X, LDX, IWORK,
@@ -747,27 +757,28 @@
 *
   100       CONTINUE
 *
-*           Call ZGEBRD and ZUNGBR to compute B, Q, and P, do tests.
+*           Call AB_ZGEBRD and AB_ZUNGBR to compute B, Q, and P, do tests.
 *
             IF( .NOT.BIDIAG ) THEN
 *
 *              Compute transformations to reduce A to bidiagonal form:
 *              B := Q' * A * P.
 *
-               CALL ZLACPY( ' ', M, N, A, LDA, Q, LDQ )
-               CALL ZGEBRD( M, N, Q, LDQ, BD, BE, WORK, WORK( MNMIN+1 ),
+               CALL AB_ZLACPY( ' ', M, N, A, LDA, Q, LDQ )
+               CALL AB_ZGEBRD( M, N, Q, LDQ, BD, BE, WORK, WORK( MNMIN+1
+     $ ),
      $                      WORK( 2*MNMIN+1 ), LWORK-2*MNMIN, IINFO )
 *
-*              Check error code from ZGEBRD.
+*              Check error code from AB_ZGEBRD.
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUT, FMT = 9998 )'ZGEBRD', IINFO, M, N,
+                  WRITE( NOUT, FMT = 9998 )'AB_ZGEBRD', IINFO, M, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   RETURN
                END IF
 *
-               CALL ZLACPY( ' ', M, N, Q, LDQ, PT, LDPT )
+               CALL AB_ZLACPY( ' ', M, N, Q, LDQ, PT, LDPT )
                IF( M.GE.N ) THEN
                   UPLO = 'U'
                ELSE
@@ -779,13 +790,13 @@
                MQ = M
                IF( NRHS.LE.0 )
      $            MQ = MNMIN
-               CALL ZUNGBR( 'Q', M, MQ, N, Q, LDQ, WORK,
+               CALL AB_ZUNGBR( 'Q', M, MQ, N, Q, LDQ, WORK,
      $                      WORK( 2*MNMIN+1 ), LWORK-2*MNMIN, IINFO )
 *
-*              Check error code from ZUNGBR.
+*              Check error code from AB_ZUNGBR.
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUT, FMT = 9998 )'ZUNGBR(Q)', IINFO, M, N,
+                  WRITE( NOUT, FMT = 9998 )'AB_ZUNGBR(Q)', IINFO, M, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   RETURN
@@ -793,13 +804,14 @@
 *
 *              Generate P'
 *
-               CALL ZUNGBR( 'P', MNMIN, N, M, PT, LDPT, WORK( MNMIN+1 ),
+               CALL AB_ZUNGBR( 'P', MNMIN, N, M, PT, LDPT, WORK( MNMIN+1
+     $ ),
      $                      WORK( 2*MNMIN+1 ), LWORK-2*MNMIN, IINFO )
 *
-*              Check error code from ZUNGBR.
+*              Check error code from AB_ZUNGBR.
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUT, FMT = 9998 )'ZUNGBR(P)', IINFO, M, N,
+                  WRITE( NOUT, FMT = 9998 )'AB_ZUNGBR(P)', IINFO, M, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   RETURN
@@ -807,7 +819,7 @@
 *
 *              Apply Q' to an M by NRHS matrix X:  Y := Q' * X.
 *
-               CALL ZGEMM( 'Conjugate transpose', 'No transpose', M,
+               CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', M,
      $                     NRHS, M, CONE, Q, LDQ, X, LDX, CZERO, Y,
      $                     LDX )
 *
@@ -815,32 +827,35 @@
 *                   2:  Check the orthogonality of Q
 *                   3:  Check the orthogonality of PT
 *
-               CALL ZBDT01( M, N, 1, A, LDA, Q, LDQ, BD, BE, PT, LDPT,
+               CALL AB_ZBDT01( M, N, 1, A, LDA, Q, LDQ, BD, BE, PT, LDPT
+     $,
      $                      WORK, RWORK, RESULT( 1 ) )
-               CALL ZUNT01( 'Columns', M, MQ, Q, LDQ, WORK, LWORK,
+               CALL AB_ZUNT01( 'Columns', M, MQ, Q, LDQ, WORK, LWORK,
      $                      RWORK, RESULT( 2 ) )
-               CALL ZUNT01( 'Rows', MNMIN, N, PT, LDPT, WORK, LWORK,
+               CALL AB_ZUNT01( 'Rows', MNMIN, N, PT, LDPT, WORK, LWORK,
      $                      RWORK, RESULT( 3 ) )
             END IF
 *
-*           Use ZBDSQR to form the SVD of the bidiagonal matrix B:
+*           Use AB_ZBDSQR to form the SVD of the bidiagonal matrix B:
 *           B := U * S1 * VT, and compute Z = U' * Y.
 *
-            CALL DCOPY( MNMIN, BD, 1, S1, 1 )
+            CALL AB_DCOPY( MNMIN, BD, 1, S1, 1 )
             IF( MNMIN.GT.0 )
-     $         CALL DCOPY( MNMIN-1, BE, 1, RWORK, 1 )
-            CALL ZLACPY( ' ', M, NRHS, Y, LDX, Z, LDX )
-            CALL ZLASET( 'Full', MNMIN, MNMIN, CZERO, CONE, U, LDPT )
-            CALL ZLASET( 'Full', MNMIN, MNMIN, CZERO, CONE, VT, LDPT )
+     $         CALL AB_DCOPY( MNMIN-1, BE, 1, RWORK, 1 )
+            CALL AB_ZLACPY( ' ', M, NRHS, Y, LDX, Z, LDX )
+            CALL AB_ZLASET( 'Full', MNMIN, MNMIN, CZERO, CONE, U, LDPT )
+            CALL AB_ZLASET( 'Full', MNMIN, MNMIN, CZERO, CONE, VT, LDPT 
+     $)
 *
-            CALL ZBDSQR( UPLO, MNMIN, MNMIN, MNMIN, NRHS, S1, RWORK, VT,
+            CALL AB_ZBDSQR( UPLO, MNMIN, MNMIN, MNMIN, NRHS, S1, RWORK, 
+     $VT,
      $                   LDPT, U, LDPT, Z, LDX, RWORK( MNMIN+1 ),
      $                   IINFO )
 *
-*           Check error code from ZBDSQR.
+*           Check error code from AB_ZBDSQR.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'ZBDSQR(vects)', IINFO, M, N,
+               WRITE( NOUT, FMT = 9998 )'AB_ZBDSQR(vects)', IINFO, M, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -851,20 +866,22 @@
                END IF
             END IF
 *
-*           Use ZBDSQR to compute only the singular values of the
+*           Use AB_ZBDSQR to compute only the singular values of the
 *           bidiagonal matrix B;  U, VT, and Z should not be modified.
 *
-            CALL DCOPY( MNMIN, BD, 1, S2, 1 )
+            CALL AB_DCOPY( MNMIN, BD, 1, S2, 1 )
             IF( MNMIN.GT.0 )
-     $         CALL DCOPY( MNMIN-1, BE, 1, RWORK, 1 )
+     $         CALL AB_DCOPY( MNMIN-1, BE, 1, RWORK, 1 )
 *
-            CALL ZBDSQR( UPLO, MNMIN, 0, 0, 0, S2, RWORK, VT, LDPT, U,
+            CALL AB_ZBDSQR( UPLO, MNMIN, 0, 0, 0, S2, RWORK, VT, LDPT, U
+     $,
      $                   LDPT, Z, LDX, RWORK( MNMIN+1 ), IINFO )
 *
-*           Check error code from ZBDSQR.
+*           Check error code from AB_ZBDSQR.
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUT, FMT = 9998 )'ZBDSQR(values)', IINFO, M, N,
+               WRITE( NOUT, FMT = 9998 )'AB_ZBDSQR(values)', IINFO, M, N
+     $,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -880,13 +897,15 @@
 *                6:  Check the orthogonality of U
 *                7:  Check the orthogonality of VT
 *
-            CALL ZBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT, LDPT,
+            CALL AB_ZBDT03( UPLO, MNMIN, 1, BD, BE, U, LDPT, S1, VT, LDP
+     $T,
      $                   WORK, RESULT( 4 ) )
-            CALL ZBDT02( MNMIN, NRHS, Y, LDX, Z, LDX, U, LDPT, WORK,
+            CALL AB_ZBDT02( MNMIN, NRHS, Y, LDX, Z, LDX, U, LDPT, WORK,
      $                   RWORK, RESULT( 5 ) )
-            CALL ZUNT01( 'Columns', MNMIN, MNMIN, U, LDPT, WORK, LWORK,
+            CALL AB_ZUNT01( 'Columns', MNMIN, MNMIN, U, LDPT, WORK, LWOR
+     $K,
      $                   RWORK, RESULT( 6 ) )
-            CALL ZUNT01( 'Rows', MNMIN, MNMIN, VT, LDPT, WORK, LWORK,
+            CALL AB_ZUNT01( 'Rows', MNMIN, MNMIN, VT, LDPT, WORK, LWORK,
      $                   RWORK, RESULT( 7 ) )
 *
 *           Test 8:  Check that the singular values are sorted in
@@ -904,7 +923,7 @@
      $            RESULT( 8 ) = ULPINV
             END IF
 *
-*           Test 9:  Compare ZBDSQR with and without singular vectors
+*           Test 9:  Compare AB_ZBDSQR with and without singular vectors
 *
             TEMP2 = ZERO
 *
@@ -923,7 +942,7 @@
             TEMP1 = THRESH*( HALF-ULP )
 *
             DO 130 J = 0, LOG2UI
-               CALL DSVDCH( MNMIN, BD, BE, S1, TEMP1, IINFO )
+               CALL AB_DSVDCH( MNMIN, BD, BE, S1, TEMP1, IINFO )
                IF( IINFO.EQ.0 )
      $            GO TO 140
                TEMP1 = TEMP1*TWO
@@ -932,15 +951,15 @@
   140       CONTINUE
             RESULT( 10 ) = TEMP1
 *
-*           Use ZBDSQR to form the decomposition A := (QU) S (VT PT)
+*           Use AB_ZBDSQR to form the decomposition A := (QU) S (VT PT)
 *           from the bidiagonal form A := Q B PT.
 *
             IF( .NOT.BIDIAG ) THEN
-               CALL DCOPY( MNMIN, BD, 1, S2, 1 )
+               CALL AB_DCOPY( MNMIN, BD, 1, S2, 1 )
                IF( MNMIN.GT.0 )
-     $            CALL DCOPY( MNMIN-1, BE, 1, RWORK, 1 )
+     $            CALL AB_DCOPY( MNMIN-1, BE, 1, RWORK, 1 )
 *
-               CALL ZBDSQR( UPLO, MNMIN, N, M, NRHS, S2, RWORK, PT,
+               CALL AB_ZBDSQR( UPLO, MNMIN, N, M, NRHS, S2, RWORK, PT,
      $                      LDPT, Q, LDQ, Y, LDX, RWORK( MNMIN+1 ),
      $                      IINFO )
 *
@@ -949,13 +968,13 @@
 *                   13:  Check the orthogonality of Q*U
 *                   14:  Check the orthogonality of VT*PT
 *
-               CALL ZBDT01( M, N, 0, A, LDA, Q, LDQ, S2, DUMMA, PT,
+               CALL AB_ZBDT01( M, N, 0, A, LDA, Q, LDQ, S2, DUMMA, PT,
      $                      LDPT, WORK, RWORK, RESULT( 11 ) )
-               CALL ZBDT02( M, NRHS, X, LDX, Y, LDX, Q, LDQ, WORK,
+               CALL AB_ZBDT02( M, NRHS, X, LDX, Y, LDX, Q, LDQ, WORK,
      $                      RWORK, RESULT( 12 ) )
-               CALL ZUNT01( 'Columns', M, MQ, Q, LDQ, WORK, LWORK,
+               CALL AB_ZUNT01( 'Columns', M, MQ, Q, LDQ, WORK, LWORK,
      $                      RWORK, RESULT( 13 ) )
-               CALL ZUNT01( 'Rows', MNMIN, N, PT, LDPT, WORK, LWORK,
+               CALL AB_ZUNT01( 'Rows', MNMIN, N, PT, LDPT, WORK, LWORK,
      $                      RWORK, RESULT( 14 ) )
             END IF
 *
@@ -965,7 +984,7 @@
             DO 160 J = 1, 14
                IF( RESULT( J ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 )
-     $               CALL DLAHD2( NOUT, PATH )
+     $               CALL AB_DLAHD2( NOUT, PATH )
                   WRITE( NOUT, FMT = 9999 )M, N, JTYPE, IOLDSD, J,
      $               RESULT( J )
                   NFAIL = NFAIL + 1
@@ -982,15 +1001,15 @@
 *
 *     Summary
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NTEST, 0 )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NTEST, 0 )
 *
       RETURN
 *
-*     End of ZCHKBD
+*     End of AB_ZCHKBD
 *
  9999 FORMAT( ' M=', I5, ', N=', I5, ', type ', I2, ', seed=',
      $      4( I4, ',' ), ' test(', I2, ')=', G11.4 )
- 9998 FORMAT( ' ZCHKBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
+ 9998 FORMAT( ' AB_ZCHKBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
      $      I6, ', N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ),
      $      I5, ')' )
 *

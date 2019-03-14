@@ -1,4 +1,4 @@
-*> \brief \b SPORFSX
+*> \brief \b AB_AB_SPORFSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPORFSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sporfsx.f">
+*> Download AB_AB_SPORFSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SPORFSX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sporfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SPORFSX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sporfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SPORFSX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
+*       SUBROUTINE AB_AB_SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
 *                           LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
 *                           ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
 *                           WORK, IWORK, INFO )
@@ -44,7 +44,7 @@
 *>
 *> \verbatim
 *>
-*>    SPORFSX improves the computed solution to a system of linear
+*>    AB_AB_SPORFSX improves the computed solution to a system of linear
 *>    equations when the coefficient matrix is symmetric positive
 *>    definite, and provides error bounds and backward error estimates
 *>    for the solution.  In addition to normwise error bound, the code
@@ -123,7 +123,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>     The triangular factor U or L from the Cholesky factorization
-*>     A = U**T*U or A = L*L**T, as computed by SPOTRF.
+*>     A = U**T*U or A = L*L**T, as computed by AB_SPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -163,7 +163,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>     On entry, the solution matrix X, as computed by SGETRS.
+*>     On entry, the solution matrix X, as computed by AB_SGETRS.
 *>     On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -221,21 +221,21 @@
 *>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The second index in ERR_BNDS_NORM(:,err) contains the following
+*>     The AB_SECOND index in ERR_BNDS_NORM(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * slamch('Epsilon').
+*>              sqrt(n) * AB_SLAMCH('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * slamch('Epsilon'). This error bound should only
+*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * slamch('Epsilon') to determine if the error
+*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -269,21 +269,21 @@
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The second index in ERR_BNDS_COMP(:,err) contains the following
+*>     The AB_SECOND index in ERR_BNDS_COMP(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * slamch('Epsilon').
+*>              sqrt(n) * AB_SLAMCH('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * slamch('Epsilon'). This error bound should only
+*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * slamch('Epsilon') to determine if the error
+*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -335,7 +335,7 @@
 *>       PARAMS(LA_LINRX_CWISE_I = 3) : Flag determining if the code
 *>            will attempt to find a solution with small componentwise
 *>            relative error in the double-precision algorithm.  Positive
-*>            is true, 0.0 is false.
+*>            is true, 0.0 is FALSE.
 *>         Default: 1.0 (attempt componentwise convergence)
 *> \endverbatim
 *>
@@ -389,7 +389,8 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
+      SUBROUTINE AB_AB_SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, 
+     $S, B,
      $                    LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, IWORK, INFO )
@@ -449,17 +450,17 @@
       REAL               RTHRESH, UNSTABLE_THRESH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, SPOCON, SLA_PORFSX_EXTENDED
+      EXTERNAL           AB_XERBLA, AB_SPOCON, AB_SLA_PORFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, ILAPREC
-      EXTERNAL           SLAMCH, SLANSY, SLA_PORCOND
-      REAL               SLAMCH, SLANSY, SLA_PORCOND
-      LOGICAL            LSAME
-      INTEGER            ILAPREC
+      EXTERNAL           AB_LSAME, AB_ILAPREC
+      EXTERNAL           AB_SLAMCH, AB_SLANSY, AB_SLA_PORCOND
+      REAL               AB_SLAMCH, AB_SLANSY, AB_SLA_PORCOND
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAPREC
 *     ..
 *     .. Executable Statements ..
 *
@@ -477,7 +478,7 @@
 *
 *     Set default parameters.
 *
-      ILLRCOND_THRESH = REAL( N ) * SLAMCH( 'Epsilon' )
+      ILLRCOND_THRESH = REAL( N ) * AB_SLAMCH( 'Epsilon' )
       ITHRESH = INT( ITHRESH_DEFAULT )
       RTHRESH = RTHRESH_DEFAULT
       UNSTABLE_THRESH = DZTHRESH_DEFAULT
@@ -509,13 +510,13 @@
          N_NORMS = 2
       END IF
 *
-      RCEQU = LSAME( EQUED, 'Y' )
+      RCEQU = AB_LSAME( EQUED, 'Y' )
 *
 *     Test input parameters.
 *
-      IF (.NOT.LSAME(UPLO, 'U') .AND. .NOT.LSAME(UPLO, 'L')) THEN
+      IF (.NOT.AB_LSAME(UPLO, 'U') .AND. .NOT.AB_LSAME(UPLO, 'L')) THEN
         INFO = -1
-      ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
+      ELSE IF( .NOT.RCEQU .AND. .NOT.AB_LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
       ELSE IF( N.LT.0 ) THEN
         INFO = -3
@@ -531,7 +532,7 @@
         INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'SPORFSX', -INFO )
+        CALL AB_XERBLA( 'AB_AB_SPORFSX', -INFO )
         RETURN
       END IF
 *
@@ -580,17 +581,17 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = SLANSY( NORM, UPLO, N, A, LDA, WORK )
-      CALL SPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK,
+      ANORM = AB_SLANSY( NORM, UPLO, N, A, LDA, WORK )
+      CALL AB_SPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK,
      $     IWORK, INFO )
 *
 *     Perform refinement on each right-hand side
 *
       IF ( REF_TYPE .NE. 0 ) THEN
 
-         PREC_TYPE = ILAPREC( 'D' )
+         PREC_TYPE = AB_ILAPREC( 'D' )
 
-         CALL SLA_PORFSX_EXTENDED( PREC_TYPE, UPLO,  N,
+         CALL AB_SLA_PORFSX_EXTENDED( PREC_TYPE, UPLO,  N,
      $        NRHS, A, LDA, AF, LDAF, RCEQU, S, B,
      $        LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $        WORK( N+1 ), WORK( 1 ), WORK( 2*N+1 ), WORK( 1 ), RCOND,
@@ -598,16 +599,16 @@
      $        INFO )
       END IF
 
-      ERR_LBND = MAX( 10.0, SQRT( REAL( N ) ) ) * SLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0, SQRT( REAL( N ) ) ) * AB_SLAMCH( 'Epsilon' )
       IF ( N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1 ) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( RCEQU ) THEN
-            RCOND_TMP = SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
+            RCOND_TMP = AB_SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
      $           -1, S, INFO, WORK, IWORK )
          ELSE
-            RCOND_TMP = SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
+            RCOND_TMP = AB_SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
      $           0, S, INFO, WORK, IWORK )
          END IF
          DO J = 1, NRHS
@@ -624,7 +625,8 @@
                ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) = 1.0
                ERR_BNDS_NORM( J, LA_LINRX_TRUST_I ) = 0.0
                IF ( INFO .LE. N ) INFO = N + J
-            ELSE IF ( ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) .LT. ERR_LBND )
+            ELSE IF ( ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) .LT. ERR_LBN
+     $D )
      $              THEN
                ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) = ERR_LBND
                ERR_BNDS_NORM( J, LA_LINRX_TRUST_I ) = 1.0
@@ -648,11 +650,11 @@
 *     the inverse condition number is set to 0.0 when the estimated
 *     cwise error is at least CWISE_WRONG.
 *
-         CWISE_WRONG = SQRT( SLAMCH( 'Epsilon' ) )
+         CWISE_WRONG = SQRT( AB_SLAMCH( 'Epsilon' ) )
          DO J = 1, NRHS
             IF (ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
-               RCOND_TMP = SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF, 1,
+               RCOND_TMP = AB_SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF, 1,
      $              X( 1, J ), INFO, WORK, IWORK )
             ELSE
                RCOND_TMP = 0.0
@@ -688,6 +690,6 @@
 *
       RETURN
 *
-*     End of SPORFSX
+*     End of AB_AB_SPORFSX
 *
       END

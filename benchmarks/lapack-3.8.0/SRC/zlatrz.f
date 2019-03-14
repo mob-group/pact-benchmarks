@@ -1,4 +1,4 @@
-*> \brief \b ZLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
+*> \brief \b AB_ZLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLATRZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatrz.f">
+*> Download AB_ZLATRZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLATRZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLATRZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLATRZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLATRZ( M, N, L, A, LDA, TAU, WORK )
+*       SUBROUTINE AB_ZLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            L, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZLATRZ factors the M-by-(M+L) complex upper trapezoidal matrix
+*> AB_ZLATRZ factors the M-by-(M+L) complex upper trapezoidal matrix
 *> [ A1 A2 ] = [ A(1:M,1:M) A(1:M,N-L+1:N) ] as ( R  0 ) * Z by means
 *> of unitary transformations, where  Z is an (M+L)-by-(M+L) unitary
 *> matrix and, R and A1 are M-by-M upper triangular matrices.
@@ -58,7 +58,7 @@
 *> \verbatim
 *>          L is INTEGER
 *>          The number of columns of the matrix A containing the
-*>          meaningful part of the Householder vectors. N-M >= L >= 0.
+*>          meaningful part of the HousehoAB_LDEr vectors. N-M >= L >= 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -111,7 +111,7 @@
 *>
 *> \verbatim
 *>
-*>  The factorization is obtained by Householder's method.  The kth
+*>  The factorization is obtained by HousehoAB_LDEr's method.  The kth
 *>  transformation matrix, Z( k ), which is used to introduce zeros into
 *>  the ( m - k + 1 )th row of A, is given in the form
 *>
@@ -138,7 +138,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLATRZ( M, N, L, A, LDA, TAU, WORK )
+      SUBROUTINE AB_ZLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,7 +163,7 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLACGV, ZLARFG, ZLARZ
+      EXTERNAL           AB_ZLACGV, AB_AB_ZLARFG, AB_ZLARZ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG
@@ -186,14 +186,14 @@
 *        Generate elementary reflector H(i) to annihilate
 *        [ A(i,i) A(i,n-l+1:n) ]
 *
-         CALL ZLACGV( L, A( I, N-L+1 ), LDA )
+         CALL AB_ZLACGV( L, A( I, N-L+1 ), LDA )
          ALPHA = DCONJG( A( I, I ) )
-         CALL ZLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
+         CALL AB_AB_ZLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
          TAU( I ) = DCONJG( TAU( I ) )
 *
 *        Apply H(i) to A(1:i-1,i:n) from the right
 *
-         CALL ZLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
+         CALL AB_ZLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
      $               DCONJG( TAU( I ) ), A( 1, I ), LDA, WORK )
          A( I, I ) = DCONJG( ALPHA )
 *
@@ -201,6 +201,6 @@
 *
       RETURN
 *
-*     End of ZLATRZ
+*     End of AB_ZLATRZ
 *
       END

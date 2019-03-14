@@ -1,4 +1,4 @@
-*> \brief \b ZGET01
+*> \brief \b AB_ZGET01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+*       SUBROUTINE AB_ZGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZGET01 reconstructs a matrix A from its L*U factorization and
+*> AB_ZGET01 reconstructs a matrix A from its L*U factorization and
 *> computes the residual
 *>    norm(L*U - A) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -64,7 +64,7 @@
 *> \verbatim
 *>          AFAC is COMPLEX*16 array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the factors
-*>          L and U from the L*U factorization as computed by ZGETRF.
+*>          L and U from the L*U factorization as computed by AB_ZGETRF.
 *>          Overwritten with the reconstructed matrix, and then with the
 *>          difference L*U - A.
 *> \endverbatim
@@ -78,7 +78,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from ZGETRF.
+*>          The pivot indices from AB_ZGETRF.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -105,7 +105,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+      SUBROUTINE AB_ZGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -137,12 +137,12 @@
       COMPLEX*16         T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      COMPLEX*16         ZDOTU
-      EXTERNAL           DLAMCH, ZLANGE, ZDOTU
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      COMPLEX*16         AB_ZDOTU
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE, AB_ZDOTU
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZLASWP, ZSCAL, ZTRMV
+      EXTERNAL           AB_ZGEMV, AB_ZLASWP, AB_ZSCAL, AB_ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MIN
@@ -158,8 +158,8 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANGE( '1', M, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANGE( '1', M, N, A, LDA, RWORK )
 *
 *     Compute the product L*U and overwrite AFAC with the result.
 *     A column at a time of the product is obtained, starting with
@@ -167,7 +167,7 @@
 *
       DO 10 K = N, 1, -1
          IF( K.GT.M ) THEN
-            CALL ZTRMV( 'Lower', 'No transpose', 'Unit', M, AFAC,
+            CALL AB_ZTRMV( 'Lower', 'No transpose', 'Unit', M, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
          ELSE
 *
@@ -175,24 +175,24 @@
 *
             T = AFAC( K, K )
             IF( K+1.LE.M ) THEN
-               CALL ZSCAL( M-K, T, AFAC( K+1, K ), 1 )
-               CALL ZGEMV( 'No transpose', M-K, K-1, CONE,
+               CALL AB_ZSCAL( M-K, T, AFAC( K+1, K ), 1 )
+               CALL AB_ZGEMV( 'No transpose', M-K, K-1, CONE,
      $                     AFAC( K+1, 1 ), LDAFAC, AFAC( 1, K ), 1,
      $                     CONE, AFAC( K+1, K ), 1 )
             END IF
 *
 *           Compute the (K,K) element
 *
-            AFAC( K, K ) = T + ZDOTU( K-1, AFAC( K, 1 ), LDAFAC,
+            AFAC( K, K ) = T + AB_ZDOTU( K-1, AFAC( K, 1 ), LDAFAC,
      $                     AFAC( 1, K ), 1 )
 *
 *           Compute elements (1:K-1,K)
 *
-            CALL ZTRMV( 'Lower', 'No transpose', 'Unit', K-1, AFAC,
+            CALL AB_ZTRMV( 'Lower', 'No transpose', 'Unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
          END IF
    10 CONTINUE
-      CALL ZLASWP( N, AFAC, LDAFAC, 1, MIN( M, N ), IPIV, -1 )
+      CALL AB_ZLASWP( N, AFAC, LDAFAC, 1, MIN( M, N ), IPIV, -1 )
 *
 *     Compute the difference  L*U - A  and store in AFAC.
 *
@@ -204,7 +204,7 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = ZLANGE( '1', M, N, AFAC, LDAFAC, RWORK )
+      RESID = AB_ZLANGE( '1', M, N, AFAC, LDAFAC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -215,6 +215,6 @@
 *
       RETURN
 *
-*     End of ZGET01
+*     End of AB_ZGET01
 *
       END

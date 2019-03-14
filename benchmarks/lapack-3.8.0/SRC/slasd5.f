@@ -1,4 +1,4 @@
-*> \brief \b SLASD5 computes the square root of the i-th eigenvalue of a positive symmetric rank-one modification of a 2-by-2 diagonal matrix. Used by sbdsdc.
+*> \brief \b AB_SLASD5 computes the square root of the i-th eigenvalue of a positive symmetric rank-one modification of a 2-by-2 diagonal matrix. Used by AB_SBDSDC.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASD5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd5.f">
+*> Download AB_SLASD5 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASD5.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASD5.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASD5.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASD5( I, D, Z, DELTA, RHO, DSIGMA, WORK )
+*       SUBROUTINE AB_SLASD5( I, D, Z, DELTA, RHO, DSIGMA, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            I
@@ -114,7 +114,7 @@
 *>     at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLASD5( I, D, Z, DELTA, RHO, DSIGMA, WORK )
+      SUBROUTINE AB_SLASD5( I, D, Z, DELTA, RHO, DSIGMA, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -226,6 +226,6 @@
       END IF
       RETURN
 *
-*     End of SLASD5
+*     End of AB_SLASD5
 *
       END

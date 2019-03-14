@@ -1,4 +1,4 @@
-*> \brief <b> DSGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (mixed precision with iterative refinement)
+*> \brief <b> AB_DAB_SGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (mixed precision with iterative refinement)
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSGESV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsgesv.f">
+*> Download AB_DAB_SGESV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DAB_SGESV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DAB_SGESV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DAB_SGESV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
+*       SUBROUTINE AB_DAB_SGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
 *                          SWORK, ITER, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,11 +37,11 @@
 *>
 *> \verbatim
 *>
-*> DSGESV computes the solution to a real system of linear equations
+*> AB_DAB_SGESV computes the solution to a real system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N matrix and X and B are N-by-NRHS matrices.
 *>
-*> DSGESV first attempts to factorize the matrix in SINGLE PRECISION
+*> AB_DAB_SGESV first attempts to factorize the matrix in SINGLE PRECISION
 *> and use this factorization within an iterative refinement procedure
 *> to produce a solution with DOUBLE PRECISION normwise backward error
 *> quality (see below). If the approach fails the method switches to a
@@ -51,7 +51,7 @@
 *> the ratio SINGLE PRECISION performance over DOUBLE PRECISION
 *> performance is too small. A reasonable strategy should take the
 *> number of right-hand sides and the size of the matrix into account.
-*> This might be done with a call to ILAENV in the future. Up to now, we
+*> This might be done with a call to AB_ILAENV in the future. Up to now, we
 *> always try iterative refinement.
 *>
 *> The iterative refinement process is stopped if
@@ -64,7 +64,7 @@
 *>     o RNRM is the infinity-norm of the residual
 *>     o XNRM is the infinity-norm of the solution
 *>     o ANRM is the infinity-operator-norm of the matrix A
-*>     o EPS is the machine epsilon returned by DLAMCH('Epsilon')
+*>     o EPS is the machine epsilon returned by AB_DLAMCH('Epsilon')
 *> The value ITERMAX and BWDMAX are fixed to 30 and 1.0D+00
 *> respectively.
 *> \endverbatim
@@ -161,7 +161,7 @@
 *>                    implementation- or machine-specific reasons
 *>               -2 : narrowing the precision induced an overflow,
 *>                    the routine fell back to full precision
-*>               -3 : failure of SGETRF
+*>               -3 : failure of AB_SGETRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
 *>          > 0: iterative refinement has been successfully used.
@@ -192,7 +192,8 @@
 *> \ingroup doubleGEsolve
 *
 *  =====================================================================
-      SUBROUTINE DSGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
+      SUBROUTINE AB_DAB_SGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WO
+     $RK,
      $                   SWORK, ITER, INFO )
 *
 *  -- LAPACK driver routine (version 3.8.0) --
@@ -230,13 +231,14 @@
       DOUBLE PRECISION   ANRM, CTE, EPS, RNRM, XNRM
 *
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DGEMM, DLACPY, DLAG2S, DGETRF, DGETRS,
-     $                   SGETRF, SGETRS, SLAG2D, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DGEMM, AB_DLACPY, AB_AB_DLAG2S, AB
+     $_DGETRF, AB_DGETRS,
+     $                   AB_SGETRF, AB_SGETRS, AB_AB_SLAG2D, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           IDAMAX, DLAMCH, DLANGE
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -260,7 +262,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSGESV', -INFO )
+         CALL AB_XERBLA( 'AB_DAB_SGESV', -INFO )
          RETURN
       END IF
 *
@@ -279,8 +281,8 @@
 *
 *     Compute some constants.
 *
-      ANRM = DLANGE( 'I', N, N, A, LDA, WORK )
-      EPS = DLAMCH( 'Epsilon' )
+      ANRM = AB_DLANGE( 'I', N, N, A, LDA, WORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
       CTE = ANRM*EPS*SQRT( DBLE( N ) )*BWDMAX
 *
 *     Set the indices PTSA, PTSX for referencing SA and SX in SWORK.
@@ -291,7 +293,7 @@
 *     Convert B from double precision to single precision and store the
 *     result in SX.
 *
-      CALL DLAG2S( N, NRHS, B, LDB, SWORK( PTSX ), N, INFO )
+      CALL AB_AB_DLAG2S( N, NRHS, B, LDB, SWORK( PTSX ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -2
@@ -301,7 +303,7 @@
 *     Convert A from double precision to single precision and store the
 *     result in SA.
 *
-      CALL DLAG2S( N, N, A, LDA, SWORK( PTSA ), N, INFO )
+      CALL AB_AB_DLAG2S( N, N, A, LDA, SWORK( PTSA ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -2
@@ -310,7 +312,7 @@
 *
 *     Compute the LU factorization of SA.
 *
-      CALL SGETRF( N, N, SWORK( PTSA ), N, IPIV, INFO )
+      CALL AB_SGETRF( N, N, SWORK( PTSA ), N, IPIV, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -3
@@ -319,26 +321,27 @@
 *
 *     Solve the system SA*SX = SB.
 *
-      CALL SGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
+      CALL AB_SGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
      $             SWORK( PTSX ), N, INFO )
 *
 *     Convert SX back to double precision
 *
-      CALL SLAG2D( N, NRHS, SWORK( PTSX ), N, X, LDX, INFO )
+      CALL AB_AB_SLAG2D( N, NRHS, SWORK( PTSX ), N, X, LDX, INFO )
 *
 *     Compute R = B - AX (R is WORK).
 *
-      CALL DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
+      CALL AB_DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-      CALL DGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE, A,
+      CALL AB_DGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE,
+     $ A,
      $            LDA, X, LDX, ONE, WORK, N )
 *
 *     Check whether the NRHS normwise backward errors satisfy the
 *     stopping criterion. If yes, set ITER=0 and return.
 *
       DO I = 1, NRHS
-         XNRM = ABS( X( IDAMAX( N, X( 1, I ), 1 ), I ) )
-         RNRM = ABS( WORK( IDAMAX( N, WORK( 1, I ), 1 ), I ) )
+         XNRM = ABS( X( AB_IDAMAX( N, X( 1, I ), 1 ), I ) )
+         RNRM = ABS( WORK( AB_IDAMAX( N, WORK( 1, I ), 1 ), I ) )
          IF( RNRM.GT.XNRM*CTE )
      $      GO TO 10
       END DO
@@ -356,7 +359,7 @@
 *        Convert R (in WORK) from double precision to single precision
 *        and store the result in SX.
 *
-         CALL DLAG2S( N, NRHS, WORK, N, SWORK( PTSX ), N, INFO )
+         CALL AB_AB_DLAG2S( N, NRHS, WORK, N, SWORK( PTSX ), N, INFO )
 *
          IF( INFO.NE.0 ) THEN
             ITER = -2
@@ -365,31 +368,33 @@
 *
 *        Solve the system SA*SX = SR.
 *
-         CALL SGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
+         CALL AB_SGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV
+     $,
      $                SWORK( PTSX ), N, INFO )
 *
 *        Convert SX back to double precision and update the current
 *        iterate.
 *
-         CALL SLAG2D( N, NRHS, SWORK( PTSX ), N, WORK, N, INFO )
+         CALL AB_AB_SLAG2D( N, NRHS, SWORK( PTSX ), N, WORK, N, INFO )
 *
          DO I = 1, NRHS
-            CALL DAXPY( N, ONE, WORK( 1, I ), 1, X( 1, I ), 1 )
+            CALL AB_DAXPY( N, ONE, WORK( 1, I ), 1, X( 1, I ), 1 )
          END DO
 *
 *        Compute R = B - AX (R is WORK).
 *
-         CALL DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
+         CALL AB_DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-         CALL DGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE,
+         CALL AB_DGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGO
+     $NE,
      $               A, LDA, X, LDX, ONE, WORK, N )
 *
 *        Check whether the NRHS normwise backward errors satisfy the
 *        stopping criterion. If yes, set ITER=IITER>0 and return.
 *
          DO I = 1, NRHS
-            XNRM = ABS( X( IDAMAX( N, X( 1, I ), 1 ), I ) )
-            RNRM = ABS( WORK( IDAMAX( N, WORK( 1, I ), 1 ), I ) )
+            XNRM = ABS( X( AB_IDAMAX( N, X( 1, I ), 1 ), I ) )
+            RNRM = ABS( WORK( AB_IDAMAX( N, WORK( 1, I ), 1 ), I ) )
             IF( RNRM.GT.XNRM*CTE )
      $         GO TO 20
          END DO
@@ -417,17 +422,17 @@
 *     Single-precision iterative refinement failed to converge to a
 *     satisfactory solution, so we resort to double precision.
 *
-      CALL DGETRF( N, N, A, LDA, IPIV, INFO )
+      CALL AB_DGETRF( N, N, A, LDA, IPIV, INFO )
 *
       IF( INFO.NE.0 )
      $   RETURN
 *
-      CALL DLACPY( 'All', N, NRHS, B, LDB, X, LDX )
-      CALL DGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, X, LDX,
+      CALL AB_DLACPY( 'All', N, NRHS, B, LDB, X, LDX )
+      CALL AB_DGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, X, LDX,
      $             INFO )
 *
       RETURN
 *
-*     End of DSGESV.
+*     End of AB_DAB_SGESV.
 *
       END

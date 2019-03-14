@@ -1,4 +1,4 @@
-*> \brief \b CPPT01
+*> \brief \b AB_CPPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPPT01( UPLO, N, A, AFAC, RWORK, RESID )
+*       SUBROUTINE AB_CPPT01( UPLO, N, A, AFAC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> CPPT01 reconstructs a Hermitian positive definite packed matrix A
+*> AB_CPPT01 reconstructs a Hermitian positive definite packed matrix A
 *> from its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -93,7 +93,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CPPT01( UPLO, N, A, AFAC, RWORK, RESID )
+      SUBROUTINE AB_CPPT01( UPLO, N, A, AFAC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -122,13 +122,13 @@
       COMPLEX            TC
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANHP, SLAMCH
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CLANHP, SLAMCH, CDOTC
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANHP, AB_SLAMCH
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CLANHP, AB_SLAMCH, AB_CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPR, CSCAL, CTPMV
+      EXTERNAL           AB_CHPR, AB_CSCAL, AB_CTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, REAL
@@ -144,8 +144,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANHP( '1', UPLO, N, A, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_CLANHP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -155,7 +155,7 @@
 *     an error code if any are nonzero.
 *
       KC = 1
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 10 K = 1, N
             IF( AIMAG( AFAC( KC ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
@@ -175,19 +175,20 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          KC = ( N*( N-1 ) ) / 2 + 1
          DO 30 K = N, 1, -1
 *
 *           Compute the (K,K) element of the result.
 *
-            TR = CDOTC( K, AFAC( KC ), 1, AFAC( KC ), 1 )
+            TR = AB_CDOTC( K, AFAC( KC ), 1, AFAC( KC ), 1 )
             AFAC( KC+K-1 ) = TR
 *
 *           Compute the rest of column K.
 *
             IF( K.GT.1 ) THEN
-               CALL CTPMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
+               CALL AB_CTPMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFA
+     $C,
      $                     AFAC( KC ), 1 )
                KC = KC - ( K-1 )
             END IF
@@ -214,13 +215,13 @@
 *           columns K+1 through N.
 *
             IF( K.LT.N )
-     $         CALL CHPR( 'Lower', N-K, ONE, AFAC( KC+1 ), 1,
+     $         CALL AB_CHPR( 'Lower', N-K, ONE, AFAC( KC+1 ), 1,
      $                    AFAC( KC+N-K+1 ) )
 *
 *           Scale column K by the diagonal element.
 *
             TC = AFAC( KC )
-            CALL CSCAL( N-K+1, TC, AFAC( KC ), 1 )
+            CALL AB_CSCAL( N-K+1, TC, AFAC( KC ), 1 )
 *
             KC = KC - ( N-K+2 )
    60    CONTINUE
@@ -239,12 +240,12 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = CLANHP( '1', UPLO, N, AFAC, RWORK )
+      RESID = AB_CLANHP( '1', UPLO, N, AFAC, RWORK )
 *
       RESID = ( ( RESID / REAL( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of CPPT01
+*     End of AB_CPPT01
 *
       END

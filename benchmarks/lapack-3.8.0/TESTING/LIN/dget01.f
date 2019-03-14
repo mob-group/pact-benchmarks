@@ -1,4 +1,4 @@
-*> \brief \b DGET01
+*> \brief \b AB_DGET01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+*       SUBROUTINE AB_DGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DGET01 reconstructs a matrix A from its L*U factorization and
+*> AB_DGET01 reconstructs a matrix A from its L*U factorization and
 *> computes the residual
 *>    norm(L*U - A) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -63,7 +63,7 @@
 *> \verbatim
 *>          AFAC is DOUBLE PRECISION array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the factors
-*>          L and U from the L*U factorization as computed by DGETRF.
+*>          L and U from the L*U factorization as computed by AB_DGETRF.
 *>          Overwritten with the reconstructed matrix, and then with the
 *>          difference L*U - A.
 *> \endverbatim
@@ -77,7 +77,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from DGETRF.
+*>          The pivot indices from AB_DGETRF.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -104,7 +104,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+      SUBROUTINE AB_DGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -133,11 +133,11 @@
       DOUBLE PRECISION   ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DDOT, DLAMCH, DLANGE
-      EXTERNAL           DDOT, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DDOT, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DLASWP, DSCAL, DTRMV
+      EXTERNAL           AB_DGEMV, AB_DLASWP, AB_DSCAL, AB_DTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MIN
@@ -153,8 +153,8 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANGE( '1', M, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_DLANGE( '1', M, N, A, LDA, RWORK )
 *
 *     Compute the product L*U and overwrite AFAC with the result.
 *     A column at a time of the product is obtained, starting with
@@ -162,7 +162,7 @@
 *
       DO 10 K = N, 1, -1
          IF( K.GT.M ) THEN
-            CALL DTRMV( 'Lower', 'No transpose', 'Unit', M, AFAC,
+            CALL AB_DTRMV( 'Lower', 'No transpose', 'Unit', M, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
          ELSE
 *
@@ -170,24 +170,24 @@
 *
             T = AFAC( K, K )
             IF( K+1.LE.M ) THEN
-               CALL DSCAL( M-K, T, AFAC( K+1, K ), 1 )
-               CALL DGEMV( 'No transpose', M-K, K-1, ONE,
+               CALL AB_DSCAL( M-K, T, AFAC( K+1, K ), 1 )
+               CALL AB_DGEMV( 'No transpose', M-K, K-1, ONE,
      $                     AFAC( K+1, 1 ), LDAFAC, AFAC( 1, K ), 1, ONE,
      $                     AFAC( K+1, K ), 1 )
             END IF
 *
 *           Compute the (K,K) element
 *
-            AFAC( K, K ) = T + DDOT( K-1, AFAC( K, 1 ), LDAFAC,
+            AFAC( K, K ) = T + AB_DDOT( K-1, AFAC( K, 1 ), LDAFAC,
      $                     AFAC( 1, K ), 1 )
 *
 *           Compute elements (1:K-1,K)
 *
-            CALL DTRMV( 'Lower', 'No transpose', 'Unit', K-1, AFAC,
+            CALL AB_DTRMV( 'Lower', 'No transpose', 'Unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
          END IF
    10 CONTINUE
-      CALL DLASWP( N, AFAC, LDAFAC, 1, MIN( M, N ), IPIV, -1 )
+      CALL AB_DLASWP( N, AFAC, LDAFAC, 1, MIN( M, N ), IPIV, -1 )
 *
 *     Compute the difference  L*U - A  and store in AFAC.
 *
@@ -199,7 +199,7 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = DLANGE( '1', M, N, AFAC, LDAFAC, RWORK )
+      RESID = AB_DLANGE( '1', M, N, AFAC, LDAFAC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -210,6 +210,6 @@
 *
       RETURN
 *
-*     End of DGET01
+*     End of AB_DGET01
 *
       END

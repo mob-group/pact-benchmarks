@@ -1,4 +1,4 @@
-*> \brief \b ZCHKBL
+*> \brief \b AB_ZCHKBL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKBL( NIN, NOUT )
+*       SUBROUTINE AB_ZCHKBL( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKBL tests ZGEBAL, a routine for balancing a general complex
+*> AB_ZCHKBL tests AB_ZGEBAL, a routine for balancing a general complex
 *> matrix and isolating some of its eigenvalues.
 *> \endverbatim
 *
@@ -52,7 +52,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZCHKBL( NIN, NOUT )
+      SUBROUTINE AB_ZCHKBL( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,11 +83,11 @@
       COMPLEX*16         A( LDA, LDA ), AIN( LDA, LDA )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEBAL
+      EXTERNAL           AB_ZGEBAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -107,8 +107,8 @@
       KNT = 0
       RMAX = ZERO
       VMAX = ZERO
-      SFMIN = DLAMCH( 'S' )
-      MEPS = DLAMCH( 'E' )
+      SFMIN = AB_DLAMCH( 'S' )
+      MEPS = AB_DLAMCH( 'E' )
 *
    10 CONTINUE
 *
@@ -125,9 +125,9 @@
    30 CONTINUE
       READ( NIN, FMT = * )( SCALIN( I ), I = 1, N )
 *
-      ANORM = ZLANGE( 'M', N, N, A, LDA, DUMMY )
+      ANORM = AB_ZLANGE( 'M', N, N, A, LDA, DUMMY )
       KNT = KNT + 1
-      CALL ZGEBAL( 'B', N, A, LDA, ILO, IHI, SCALE, INFO )
+      CALL AB_ZGEBAL( 'B', N, A, LDA, ILO, IHI, SCALE, INFO )
 *
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
@@ -163,7 +163,7 @@
    70 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of ZGEBAL .. ' )
+ 9999 FORMAT( 1X, '.. test output of AB_ZGEBAL .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error            = ', D12.3 )
@@ -180,6 +180,6 @@
 *
       RETURN
 *
-*     End of ZCHKBL
+*     End of AB_ZCHKBL
 *
       END

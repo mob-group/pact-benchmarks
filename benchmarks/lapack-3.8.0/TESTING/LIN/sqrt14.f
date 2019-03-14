@@ -1,4 +1,4 @@
-*> \brief \b SQRT14
+*> \brief \b AB_SQRT14
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION SQRT14( TRANS, M, N, NRHS, A, LDA, X,
+*       REAL             FUNCTION AB_SQRT14( TRANS, M, N, NRHS, A, LDA, X,
 *                        LDX, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> SQRT14 checks whether X is in the row space of A or A'.  It does so
+*> AB_SQRT14 checks whether X is in the row space of A or A'.  It does so
 *> by scaling both X and A such that their norms are in the range
 *> [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
 *> (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
@@ -113,7 +113,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      REAL             FUNCTION SQRT14( TRANS, M, N, NRHS, A, LDA, X,
+      REAL             FUNCTION AB_SQRT14( TRANS, M, N, NRHS, A, LDA, X,
      $                 LDX, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -144,48 +144,50 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, SLAMCH, SLANGE
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGELQ2, SGEQR2, SLACPY, SLASCL, XERBLA
+      EXTERNAL           AB_AB_SGELQ2, AB_AB_SGEQR2, AB_SLACPY, AB_SLASC
+     $L, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      SQRT14 = ZERO
-      IF( LSAME( TRANS, 'N' ) ) THEN
+      AB_SQRT14 = ZERO
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
          LDWORK = M + NRHS
          TPSD = .FALSE.
          IF( LWORK.LT.( M+NRHS )*( N+2 ) ) THEN
-            CALL XERBLA( 'SQRT14', 10 )
+            CALL AB_XERBLA( 'AB_SQRT14', 10 )
             RETURN
          ELSE IF( N.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
-      ELSE IF( LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
          LDWORK = M
          TPSD = .TRUE.
          IF( LWORK.LT.( N+NRHS )*( M+2 ) ) THEN
-            CALL XERBLA( 'SQRT14', 10 )
+            CALL AB_XERBLA( 'AB_SQRT14', 10 )
             RETURN
          ELSE IF( M.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
       ELSE
-         CALL XERBLA( 'SQRT14', 1 )
+         CALL AB_XERBLA( 'AB_SQRT14', 1 )
          RETURN
       END IF
 *
 *     Copy and scale A
 *
-      CALL SLACPY( 'All', M, N, A, LDA, WORK, LDWORK )
-      ANRM = SLANGE( 'M', M, N, WORK, LDWORK, RWORK )
+      CALL AB_SLACPY( 'All', M, N, A, LDA, WORK, LDWORK )
+      ANRM = AB_SLANGE( 'M', M, N, WORK, LDWORK, RWORK )
       IF( ANRM.NE.ZERO )
-     $   CALL SLASCL( 'G', 0, 0, ANRM, ONE, M, N, WORK, LDWORK, INFO )
+     $   CALL AB_SLASCL( 'G', 0, 0, ANRM, ONE, M, N, WORK, LDWORK, INFO 
+     $)
 *
 *     Copy X or X' into the right place and scale it
 *
@@ -193,18 +195,18 @@
 *
 *        Copy X into columns n+1:n+nrhs of work
 *
-         CALL SLACPY( 'All', M, NRHS, X, LDX, WORK( N*LDWORK+1 ),
+         CALL AB_SLACPY( 'All', M, NRHS, X, LDX, WORK( N*LDWORK+1 ),
      $                LDWORK )
-         XNRM = SLANGE( 'M', M, NRHS, WORK( N*LDWORK+1 ), LDWORK,
+         XNRM = AB_SLANGE( 'M', M, NRHS, WORK( N*LDWORK+1 ), LDWORK,
      $          RWORK )
          IF( XNRM.NE.ZERO )
-     $      CALL SLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
+     $      CALL AB_SLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
      $                   WORK( N*LDWORK+1 ), LDWORK, INFO )
-         ANRM = SLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
+         ANRM = AB_SLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
 *
 *        Compute QR factorization of X
 *
-         CALL SGEQR2( M, N+NRHS, WORK, LDWORK,
+         CALL AB_AB_SGEQR2( M, N+NRHS, WORK, LDWORK,
      $                WORK( LDWORK*( N+NRHS )+1 ),
      $                WORK( LDWORK*( N+NRHS )+MIN( M, N+NRHS )+1 ),
      $                INFO )
@@ -229,14 +231,14 @@
    30       CONTINUE
    40    CONTINUE
 *
-         XNRM = SLANGE( 'M', NRHS, N, WORK( M+1 ), LDWORK, RWORK )
+         XNRM = AB_SLANGE( 'M', NRHS, N, WORK( M+1 ), LDWORK, RWORK )
          IF( XNRM.NE.ZERO )
-     $      CALL SLASCL( 'G', 0, 0, XNRM, ONE, NRHS, N, WORK( M+1 ),
+     $      CALL AB_SLASCL( 'G', 0, 0, XNRM, ONE, NRHS, N, WORK( M+1 ),
      $                   LDWORK, INFO )
 *
 *        Compute LQ factorization of work
 *
-         CALL SGELQ2( LDWORK, N, WORK, LDWORK, WORK( LDWORK*N+1 ),
+         CALL AB_AB_SGELQ2( LDWORK, N, WORK, LDWORK, WORK( LDWORK*N+1 ),
      $                WORK( LDWORK*( N+1 )+1 ), INFO )
 *
 *        Compute largest entry in lower triangle in
@@ -251,10 +253,11 @@
 *
       END IF
 *
-      SQRT14 = ERR / ( REAL( MAX( M, N, NRHS ) )*SLAMCH( 'Epsilon' ) )
+      AB_SQRT14 = ERR / ( REAL( MAX( M, N, NRHS ) )*AB_SLAMCH( 'Epsilon'
+     $ ) )
 *
       RETURN
 *
-*     End of SQRT14
+*     End of AB_SQRT14
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> ZSPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
+*> \brief <b> AB_AB_ZSPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZSPSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zspsvx.f">
+*> Download AB_AB_ZSPSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZSPSVX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zspsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZSPSVX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZSPSVX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+*       SUBROUTINE AB_AB_ZSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
 *                          LDX, RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> ZSPSVX uses the diagonal pivoting factorization A = U*D*U**T or
+*> AB_AB_ZSPSVX uses the diagonal pivoting factorization A = U*D*U**T or
 *> A = L*D*L**T to compute the solution to a complex system of linear
 *> equations A * X = B, where A is an N-by-N symmetric matrix stored
 *> in packed format and X and B are N-by-NRHS matrices.
@@ -128,13 +128,13 @@
 *>          If FACT = 'F', then AFP is an input argument and on entry
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**T or A = L*D*L**T as computed by ZSPTRF, stored as
+*>          A = U*D*U**T or A = L*D*L**T as computed by AB_ZSPTRF, stored as
 *>          a packed triangular matrix in the same storage format as A.
 *>
 *>          If FACT = 'N', then AFP is an output argument and on exit
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**T or A = L*D*L**T as computed by ZSPTRF, stored as
+*>          A = U*D*U**T or A = L*D*L**T as computed by AB_ZSPTRF, stored as
 *>          a packed triangular matrix in the same storage format as A.
 *> \endverbatim
 *>
@@ -143,7 +143,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by ZSPTRF.
+*>          of D, as determined by AB_ZSPTRF.
 *>          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
 *>          interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and
@@ -154,7 +154,7 @@
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by ZSPTRF.
+*>          of D, as determined by AB_ZSPTRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -274,7 +274,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+      SUBROUTINE AB_AB_ZSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LD
+     $B, X,
      $                   LDX, RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -305,13 +306,14 @@
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANSP
-      EXTERNAL           LSAME, DLAMCH, ZLANSP
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANSP
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZLACPY, ZSPCON, ZSPRFS, ZSPTRF,
-     $                   ZSPTRS
+      EXTERNAL           AB_XERBLA, AB_ZCOPY, AB_ZLACPY, AB_ZSPCON, AB_A
+     $B_ZSPRFS, AB_ZSPTRF,
+     $                   AB_ZSPTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -321,10 +323,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
+      NOFACT = AB_LSAME( FACT, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 
+     $'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -337,7 +340,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZSPSVX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZSPSVX', -INFO )
          RETURN
       END IF
 *
@@ -345,8 +348,8 @@
 *
 *        Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
-         CALL ZCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
-         CALL ZSPTRF( UPLO, N, AFP, IPIV, INFO )
+         CALL AB_ZCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
+         CALL AB_ZSPTRF( UPLO, N, AFP, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -358,30 +361,31 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = ZLANSP( 'I', UPLO, N, AP, RWORK )
+      ANORM = AB_ZLANSP( 'I', UPLO, N, AP, RWORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL ZSPCON( UPLO, N, AFP, IPIV, ANORM, RCOND, WORK, INFO )
+      CALL AB_ZSPCON( UPLO, N, AFP, IPIV, ANORM, RCOND, WORK, INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL ZSPTRS( UPLO, N, NRHS, AFP, IPIV, X, LDX, INFO )
+      CALL AB_ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_ZSPTRS( UPLO, N, NRHS, AFP, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL ZSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX, FERR,
+      CALL AB_AB_ZSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX, F
+     $ERR,
      $             BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.DLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_DLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       RETURN
 *
-*     End of ZSPSVX
+*     End of AB_AB_ZSPSVX
 *
       END

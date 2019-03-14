@@ -1,4 +1,4 @@
-*> \brief \b CGEBAL
+*> \brief \b AB_CGEBAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGEBAL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebal.f">
+*> Download AB_CGEBAL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEBAL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebal.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEBAL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebal.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEBAL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+*       SUBROUTINE AB_CGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOB
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> CGEBAL balances a general complex matrix A.  This involves, first,
+*> AB_CGEBAL balances a general complex matrix A.  This involves, first,
 *> permuting A by a similarity transformation to isolate eigenvalues
 *> in the first 1 to ILO-1 and last IHI+1 to N elements on the
-*> diagonal; and second, applying a diagonal similarity transformation
+*> diagonal; and AB_SECOND, applying a diagonal similarity transformation
 *> to rows and columns ILO to IHI to make the rows and columns as
 *> close in norm as possible.  Both steps are optional.
 *>
@@ -159,7 +159,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+      SUBROUTINE AB_CGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -192,13 +192,14 @@
      $                   SFMIN2
 *     ..
 *     .. External Functions ..
-      LOGICAL            SISNAN, LSAME
-      INTEGER            ICAMAX
-      REAL               SLAMCH, SCNRM2
-      EXTERNAL           SISNAN, LSAME, ICAMAX, SLAMCH, SCNRM2
+      LOGICAL            AB_SISNAN, AB_LSAME
+      INTEGER            AB_ICAMAX
+      REAL               AB_SLAMCH, AB_SCNRM2
+      EXTERNAL           AB_SISNAN, AB_LSAME, AB_ICAMAX, AB_SLAMCH, AB_S
+     $CNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSSCAL, CSWAP, XERBLA
+      EXTERNAL           AB_CAB_SSCAL, AB_CSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -206,8 +207,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.AB_LSAME( JOB, 'P' ) .AND
+     $.
+     $    .NOT.AB_LSAME( JOB, 'S' ) .AND. .NOT.AB_LSAME( JOB, 'B' ) ) TH
+     $EN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -215,7 +218,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGEBAL', -INFO )
+         CALL AB_XERBLA( 'AB_CGEBAL', -INFO )
          RETURN
       END IF
 *
@@ -225,14 +228,14 @@
       IF( N.EQ.0 )
      $   GO TO 210
 *
-      IF( LSAME( JOB, 'N' ) ) THEN
+      IF( AB_LSAME( JOB, 'N' ) ) THEN
          DO 10 I = 1, N
             SCALE( I ) = ONE
    10    CONTINUE
          GO TO 210
       END IF
 *
-      IF( LSAME( JOB, 'S' ) )
+      IF( AB_LSAME( JOB, 'S' ) )
      $   GO TO 120
 *
 *     Permutation to isolate eigenvalues if possible
@@ -246,8 +249,8 @@
       IF( J.EQ.M )
      $   GO TO 30
 *
-      CALL CSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
-      CALL CSWAP( N-K+1, A( J, K ), LDA, A( M, K ), LDA )
+      CALL AB_CSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
+      CALL AB_CSWAP( N-K+1, A( J, K ), LDA, A( M, K ), LDA )
 *
    30 CONTINUE
       GO TO ( 40, 80 )IEXC
@@ -301,14 +304,14 @@
          SCALE( I ) = ONE
   130 CONTINUE
 *
-      IF( LSAME( JOB, 'P' ) )
+      IF( AB_LSAME( JOB, 'P' ) )
      $   GO TO 210
 *
 *     Balance the submatrix in rows K to L.
 *
 *     Iterative loop for norm reduction
 *
-      SFMIN1 = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      SFMIN1 = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
       SFMAX1 = ONE / SFMIN1
       SFMIN2 = SFMIN1*SCLFAC
       SFMAX2 = ONE / SFMIN2
@@ -317,11 +320,11 @@
 *
       DO 200 I = K, L
 *
-         C = SCNRM2( L-K+1, A( K, I ), 1 )
-         R = SCNRM2( L-K+1, A( I , K ), LDA )
-         ICA = ICAMAX( L, A( 1, I ), 1 )
+         C = AB_SCNRM2( L-K+1, A( K, I ), 1 )
+         R = AB_SCNRM2( L-K+1, A( I , K ), LDA )
+         ICA = AB_ICAMAX( L, A( 1, I ), 1 )
          CA = ABS( A( ICA, I ) )
-         IRA = ICAMAX( N-K+1, A( I, K ), LDA )
+         IRA = AB_ICAMAX( N-K+1, A( I, K ), LDA )
          RA = ABS( A( I, IRA+K-1 ) )
 *
 *        Guard against zero C or R due to underflow.
@@ -334,12 +337,12 @@
   160    CONTINUE
          IF( C.GE.G .OR. MAX( F, C, CA ).GE.SFMAX2 .OR.
      $       MIN( R, G, RA ).LE.SFMIN2 )GO TO 170
-            IF( SISNAN( C+F+CA+R+G+RA ) ) THEN
+            IF( AB_SISNAN( C+F+CA+R+G+RA ) ) THEN
 *
 *           Exit if NaN to avoid infinite loop
 *
             INFO = -3
-            CALL XERBLA( 'CGEBAL', -INFO )
+            CALL AB_XERBLA( 'AB_CGEBAL', -INFO )
             RETURN
          END IF
          F = F*SCLFAC
@@ -380,8 +383,8 @@
          SCALE( I ) = SCALE( I )*F
          NOCONV = .TRUE.
 *
-         CALL CSSCAL( N-K+1, G, A( I, K ), LDA )
-         CALL CSSCAL( L, F, A( 1, I ), 1 )
+         CALL AB_CAB_SSCAL( N-K+1, G, A( I, K ), LDA )
+         CALL AB_CAB_SSCAL( L, F, A( 1, I ), 1 )
 *
   200 CONTINUE
 *
@@ -394,6 +397,6 @@
 *
       RETURN
 *
-*     End of CGEBAL
+*     End of AB_CGEBAL
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CHET01_ROOK
+*> \brief \b AB_AB_CHET01_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHET01_ROOK( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*       SUBROUTINE AB_AB_CHET01_ROOK( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                               RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> CHET01_ROOK reconstructs a complex Hermitian indefinite matrix A from its
+*> AB_AB_CHET01_ROOK reconstructs a complex Hermitian indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
@@ -71,7 +71,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by CSYTRF_ROOK.
+*>          as computed by AB_AB_CSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -83,7 +83,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from CSYTRF_ROOK.
+*>          The pivot indices from AB_AB_CSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -122,7 +122,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CHET01_ROOK( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE AB_AB_CHET01_ROOK( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
+     $ C,
      $                        LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.5.0) --
@@ -155,12 +156,12 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANHE, SLAMCH
-      EXTERNAL           LSAME, CLANHE, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANHE, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET, CLAVHE_ROOK
+      EXTERNAL           AB_CLASET, AB_AB_CLAVHE_ROOK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, REAL
@@ -176,8 +177,8 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Check the imaginary parts of the diagonal elements and return with
 *     an error code if any are nonzero.
@@ -191,21 +192,21 @@
 *
 *     Initialize C to the identity matrix.
 *
-      CALL CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL AB_CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     Call CLAVHE_ROOK to form the product D * U' (or D * L' ).
+*     Call AB_AB_CLAVHE_ROOK to form the product D * U' (or D * L' ).
 *
-      CALL CLAVHE_ROOK( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC,
+      CALL AB_AB_CLAVHE_ROOK( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC,
      $                  LDAFAC, IPIV, C, LDC, INFO )
 *
-*     Call CLAVHE_ROOK again to multiply by U (or L ).
+*     Call AB_AB_CLAVHE_ROOK again to multiply by U (or L ).
 *
-      CALL CLAVHE_ROOK( UPLO, 'No transpose', 'Unit', N, N, AFAC,
+      CALL AB_AB_CLAVHE_ROOK( UPLO, 'No transpose', 'Unit', N, N, AFAC,
      $                  LDAFAC, IPIV, C, LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 30 J = 1, N
             DO 20 I = 1, J - 1
                C( I, J ) = C( I, J ) - A( I, J )
@@ -223,7 +224,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = CLANHE( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_CLANHE( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -234,6 +235,6 @@
 *
       RETURN
 *
-*     End of CHET01_ROOK
+*     End of AB_AB_CHET01_ROOK
 *
       END

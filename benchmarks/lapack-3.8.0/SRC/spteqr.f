@@ -1,4 +1,4 @@
-*> \brief \b SPTEQR
+*> \brief \b AB_SPTEQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPTEQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spteqr.f">
+*> Download AB_SPTEQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPTEQR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spteqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPTEQR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spteqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPTEQR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+*       SUBROUTINE AB_SPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          COMPZ
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> SPTEQR computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_SPTEQR computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric positive definite tridiagonal matrix by first factoring the
-*> matrix using SPTTRF, and then calling SBDSQR to compute the singular
+*> matrix using AB_SPTTRF, and then calling AB_SBDSQR to compute the singular
 *> values of the bidiagonal factor.
 *>
 *> This routine computes the eigenvalues of the positive definite
@@ -46,7 +46,7 @@
 *> more accurately than, for example, with the standard QR method.
 *>
 *> The eigenvectors of a full or band symmetric positive definite matrix
-*> can also be found if SSYTRD, SSPTRD, or SSBTRD has been used to
+*> can also be found if AB_SSYTRD, AB_SSPTRD, or AB_SSBTRD has been used to
 *> reduce this matrix to tridiagonal form. (The reduction to tridiagonal
 *> form, however, may preclude the possibility of obtaining high
 *> relative accuracy in the small eigenvalues of the original matrix, if
@@ -143,7 +143,7 @@
 *> \ingroup realPTcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+      SUBROUTINE AB_SPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -165,11 +165,11 @@
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SBDSQR, SLASET, SPTTRF, XERBLA
+      EXTERNAL           AB_SBDSQR, AB_SLASET, AB_SPTTRF, AB_XERBLA
 *     ..
 *     .. Local Arrays ..
       REAL               C( 1, 1 ), VT( 1, 1 )
@@ -186,11 +186,11 @@
 *
       INFO = 0
 *
-      IF( LSAME( COMPZ, 'N' ) ) THEN
+      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
          ICOMPZ = 0
-      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
          ICOMPZ = 1
-      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
          ICOMPZ = 2
       ELSE
          ICOMPZ = -1
@@ -204,7 +204,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPTEQR', -INFO )
+         CALL AB_XERBLA( 'AB_SPTEQR', -INFO )
          RETURN
       END IF
 *
@@ -219,11 +219,11 @@
          RETURN
       END IF
       IF( ICOMPZ.EQ.2 )
-     $   CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
+     $   CALL AB_SLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
 *
-*     Call SPTTRF to factor the matrix.
+*     Call AB_SPTTRF to factor the matrix.
 *
-      CALL SPTTRF( N, D, E, INFO )
+      CALL AB_SPTTRF( N, D, E, INFO )
       IF( INFO.NE.0 )
      $   RETURN
       DO 10 I = 1, N
@@ -233,7 +233,7 @@
          E( I ) = E( I )*D( I )
    20 CONTINUE
 *
-*     Call SBDSQR to compute the singular values/vectors of the
+*     Call AB_SBDSQR to compute the singular values/vectors of the
 *     bidiagonal factor.
 *
       IF( ICOMPZ.GT.0 ) THEN
@@ -241,7 +241,7 @@
       ELSE
          NRU = 0
       END IF
-      CALL SBDSQR( 'Lower', N, 0, NRU, 0, D, E, VT, 1, Z, LDZ, C, 1,
+      CALL AB_SBDSQR( 'Lower', N, 0, NRU, 0, D, E, VT, 1, Z, LDZ, C, 1,
      $             WORK, INFO )
 *
 *     Square the singular values.
@@ -256,6 +256,6 @@
 *
       RETURN
 *
-*     End of SPTEQR
+*     End of AB_SPTEQR
 *
       END

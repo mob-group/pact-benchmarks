@@ -1,4 +1,4 @@
-*> \brief \b DGEQP3
+*> \brief \b AB_DGEQP3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEQP3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqp3.f">
+*> Download AB_DGEQP3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEQP3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqp3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEQP3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqp3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEQP3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE AB_DGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LWORK, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DGEQP3 computes a QR factorization with column pivoting of a
+*> AB_DGEQP3 computes a QR factorization with column pivoting of a
 *> matrix A:  A*P = Q*R  using Level 3 BLAS.
 *> \endverbatim
 *
@@ -102,7 +102,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -149,7 +149,7 @@
 *>    X. Sun, Computer Science Dept., Duke University, USA
 *>
 *  =====================================================================
-      SUBROUTINE DGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
+      SUBROUTINE AB_DGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -176,12 +176,13 @@
      $                   NBMIN, NFXD, NX, SM, SMINMN, SN, TOPBMN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DLAQP2, DLAQPS, DORMQR, DSWAP, XERBLA
+      EXTERNAL           AB_AB_DGEQRF, AB_DLAQP2, AB_DLAQPS, AB_DORMQR, 
+     $AB_DSWAP, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DNRM2
-      EXTERNAL           ILAENV, DNRM2
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   AB_DNRM2
+      EXTERNAL           AB_ILAENV, AB_DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -208,7 +209,7 @@
             LWKOPT = 1
          ELSE
             IWS = 3*N + 1
-            NB = ILAENV( INB, 'DGEQRF', ' ', M, N, -1, -1 )
+            NB = AB_ILAENV( INB, 'AB_AB_DGEQRF', ' ', M, N, -1, -1 )
             LWKOPT = 2*N + ( N + 1 )*NB
          END IF
          WORK( 1 ) = LWKOPT
@@ -219,7 +220,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEQP3', -INFO )
+         CALL AB_XERBLA( 'AB_DGEQP3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -231,7 +232,7 @@
       DO 10 J = 1, N
          IF( JPVT( J ).NE.0 ) THEN
             IF( J.NE.NFXD ) THEN
-               CALL DSWAP( M, A( 1, J ), 1, A( 1, NFXD ), 1 )
+               CALL AB_DSWAP( M, A( 1, J ), 1, A( 1, NFXD ), 1 )
                JPVT( J ) = JPVT( NFXD )
                JPVT( NFXD ) = J
             ELSE
@@ -252,13 +253,14 @@
 *
       IF( NFXD.GT.0 ) THEN
          NA = MIN( M, NFXD )
-*CC      CALL DGEQR2( M, NA, A, LDA, TAU, WORK, INFO )
-         CALL DGEQRF( M, NA, A, LDA, TAU, WORK, LWORK, INFO )
+*CC      CALL AB_AB_DGEQR2( M, NA, A, LDA, TAU, WORK, INFO )
+         CALL AB_AB_DGEQRF( M, NA, A, LDA, TAU, WORK, LWORK, INFO )
          IWS = MAX( IWS, INT( WORK( 1 ) ) )
          IF( NA.LT.N ) THEN
-*CC         CALL DORM2R( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
+*CC         CALL AB_DORM2R( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
 *CC  $                   TAU, A( 1, NA+1 ), LDA, WORK, INFO )
-            CALL DORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA, TAU,
+            CALL AB_DORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA, TA
+     $U,
      $                   A( 1, NA+1 ), LDA, WORK, LWORK, INFO )
             IWS = MAX( IWS, INT( WORK( 1 ) ) )
          END IF
@@ -275,7 +277,7 @@
 *
 *        Determine the block size.
 *
-         NB = ILAENV( INB, 'DGEQRF', ' ', SM, SN, -1, -1 )
+         NB = AB_ILAENV( INB, 'AB_AB_DGEQRF', ' ', SM, SN, -1, -1 )
          NBMIN = 2
          NX = 0
 *
@@ -283,7 +285,8 @@
 *
 *           Determine when to cross over from blocked to unblocked code.
 *
-            NX = MAX( 0, ILAENV( IXOVER, 'DGEQRF', ' ', SM, SN, -1,
+            NX = MAX( 0, AB_ILAENV( IXOVER, 'AB_AB_DGEQRF', ' ', SM, SN,
+     $ -1,
      $           -1 ) )
 *
 *
@@ -299,7 +302,8 @@
 *                 determine the minimum value of NB.
 *
                   NB = ( LWORK-2*SN ) / ( SN+1 )
-                  NBMIN = MAX( 2, ILAENV( INBMIN, 'DGEQRF', ' ', SM, SN,
+                  NBMIN = MAX( 2, AB_ILAENV( INBMIN, 'AB_AB_DGEQRF', ' '
+     $, SM, SN,
      $                    -1, -1 ) )
 *
 *
@@ -311,7 +315,7 @@
 *        store the exact column norms.
 *
          DO 20 J = NFXD + 1, N
-            WORK( J ) = DNRM2( SM, A( NFXD+1, J ), 1 )
+            WORK( J ) = AB_DNRM2( SM, A( NFXD+1, J ), 1 )
             WORK( N+J ) = WORK( J )
    20    CONTINUE
 *
@@ -332,7 +336,7 @@
 *
 *              Factorize JB columns among columns J:N.
 *
-               CALL DLAQPS( M, N-J+1, J-1, JB, FJB, A( 1, J ), LDA,
+               CALL AB_DLAQPS( M, N-J+1, J-1, JB, FJB, A( 1, J ), LDA,
      $                      JPVT( J ), TAU( J ), WORK( J ), WORK( N+J ),
      $                      WORK( 2*N+1 ), WORK( 2*N+JB+1 ), N-J+1 )
 *
@@ -347,7 +351,7 @@
 *
 *
          IF( J.LE.MINMN )
-     $      CALL DLAQP2( M, N-J+1, J-1, A( 1, J ), LDA, JPVT( J ),
+     $      CALL AB_DLAQP2( M, N-J+1, J-1, A( 1, J ), LDA, JPVT( J ),
      $                   TAU( J ), WORK( J ), WORK( N+J ),
      $                   WORK( 2*N+1 ) )
 *
@@ -356,6 +360,6 @@
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of DGEQP3
+*     End of AB_DGEQP3
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZGTT01
+*> \brief \b AB_ZGTT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+*       SUBROUTINE AB_ZGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
 *                          LDWORK, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> ZGTT01 reconstructs a tridiagonal matrix A from its LU factorization
+*> AB_ZGTT01 reconstructs a tridiagonal matrix A from its LU factorization
 *> and computes the residual
 *>    norm(L*U - A) / ( norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -84,7 +84,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is COMPLEX*16 array, dimension (N-2)
-*>          The (n-2) elements of the second super-diagonal of U.
+*>          The (n-2) elements of the AB_SECOND super-diagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -131,7 +131,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+      SUBROUTINE AB_ZGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
      $                   LDWORK, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -162,14 +162,14 @@
       COMPLEX*16         LI
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGT, ZLANHS
-      EXTERNAL           DLAMCH, ZLANGT, ZLANHS
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGT, AB_ZLANHS
+      EXTERNAL           AB_DLAMCH, AB_ZLANGT, AB_ZLANHS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZSWAP
+      EXTERNAL           AB_ZAXPY, AB_ZSWAP
 *     ..
 *     .. Executable Statements ..
 *
@@ -180,7 +180,7 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the matrix U to WORK.
 *
@@ -211,13 +211,14 @@
       LASTJ = N
       DO 40 I = N - 1, 1, -1
          LI = DLF( I )
-         CALL ZAXPY( LASTJ-I+1, LI, WORK( I, I ), LDWORK,
+         CALL AB_ZAXPY( LASTJ-I+1, LI, WORK( I, I ), LDWORK,
      $               WORK( I+1, I ), LDWORK )
          IP = IPIV( I )
          IF( IP.EQ.I ) THEN
             LASTJ = MIN( I+2, N )
          ELSE
-            CALL ZSWAP( LASTJ-I+1, WORK( I, I ), LDWORK, WORK( I+1, I ),
+            CALL AB_ZSWAP( LASTJ-I+1, WORK( I, I ), LDWORK, WORK( I+1, I
+     $ ),
      $                  LDWORK )
          END IF
    40 CONTINUE
@@ -238,12 +239,12 @@
 *
 *     Compute the 1-norm of the tridiagonal matrix A.
 *
-      ANORM = ZLANGT( '1', N, DL, D, DU )
+      ANORM = AB_ZLANGT( '1', N, DL, D, DU )
 *
 *     Compute the 1-norm of WORK, which is only guaranteed to be
 *     upper Hessenberg.
 *
-      RESID = ZLANHS( '1', N, WORK, LDWORK, RWORK )
+      RESID = AB_ZLANHS( '1', N, WORK, LDWORK, RWORK )
 *
 *     Compute norm(L*U - A) / (norm(A) * EPS)
 *
@@ -256,6 +257,6 @@
 *
       RETURN
 *
-*     End of ZGTT01
+*     End of AB_ZGTT01
 *
       END

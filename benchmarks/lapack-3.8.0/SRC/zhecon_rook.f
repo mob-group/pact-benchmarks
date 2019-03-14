@@ -1,4 +1,4 @@
-*> \brief <b> ZHECON_ROOK estimates the reciprocal of the condition number fort HE matrices using factorization obtained with one of the bounded diagonal pivoting methods (max 2 interchanges) </b>
+*> \brief <b> AB_AB_ZHECON_ROOK estimates the reciprocal of the condition number fort HE matrices using factorization obtained with one of the bounded diagonal pivoting methods (max 2 interchanges) </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHECON_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhecon_rook.f">
+*> Download AB_AB_ZHECON_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZHECON_ROOK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhecon_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZHECON_ROOK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhecon_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZHECON_ROOK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+*       SUBROUTINE AB_AB_ZHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
 *                               INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> ZHECON_ROOK estimates the reciprocal of the condition number of a complex
+*> AB_AB_ZHECON_ROOK estimates the reciprocal of the condition number of a complex
 *> Hermitian matrix A using the factorization A = U*D*U**H or
-*> A = L*D*L**H computed by CHETRF_ROOK.
+*> A = L*D*L**H computed by AB_AB_CHETRF_ROOK.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by CHETRF_ROOK.
+*>          obtain the factor U or L as computed by AB_AB_CHETRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -80,7 +80,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by CHETRF_ROOK.
+*>          as determined by AB_AB_CHETRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -136,7 +136,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+      SUBROUTINE AB_AB_ZHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND,
+     $ WORK,
      $                        INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -169,11 +170,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHETRS_ROOK, ZLACN2, XERBLA
+      EXTERNAL           AB_AB_ZHETRS_ROOK, AB_ZLACN2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -183,8 +184,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -194,7 +195,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHECON_ROOK', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZHECON_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -232,12 +233,13 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**H) or inv(U*D*U**H).
 *
-         CALL ZHETRS_ROOK( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
+         CALL AB_AB_ZHETRS_ROOK( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO
+     $ )
          GO TO 30
       END IF
 *
@@ -248,6 +250,6 @@
 *
       RETURN
 *
-*     End of ZHECON_ROOK
+*     End of AB_AB_ZHECON_ROOK
 *
       END

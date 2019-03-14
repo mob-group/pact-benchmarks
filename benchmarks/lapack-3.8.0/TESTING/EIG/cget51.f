@@ -1,4 +1,4 @@
-*> \brief \b CGET51
+*> \brief \b AB_CGET51
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
+*       SUBROUTINE AB_CGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*>      CGET51  generally checks a decomposition of the form
+*>      AB_CGET51  generally checks a decomposition of the form
 *>
 *>              A = U B VC>
 *>      where * means conjugate transpose and U and V are unitary.
@@ -60,7 +60,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, CGET51 does nothing.
+*>          The size of the matrix.  If it is zero, AB_CGET51 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -151,7 +151,8 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
+      SUBROUTINE AB_CGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WO
+     $RK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -183,11 +184,11 @@
       REAL               ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY
+      EXTERNAL           AB_CGEMM, AB_CLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -200,8 +201,8 @@
 *
 *     Constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -214,24 +215,26 @@
 *
 *        Tests scaled by the norm(A)
 *
-         ANORM = MAX( CLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
+         ANORM = MAX( AB_CLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
 *
          IF( ITYPE.EQ.1 ) THEN
 *
 *           ITYPE=1: Compute W = A - UBV'
 *
-            CALL CLACPY( ' ', N, N, A, LDA, WORK, N )
-            CALL CGEMM( 'N', 'N', N, N, N, CONE, U, LDU, B, LDB, CZERO,
+            CALL AB_CLACPY( ' ', N, N, A, LDA, WORK, N )
+            CALL AB_CGEMM( 'N', 'N', N, N, N, CONE, U, LDU, B, LDB, CZER
+     $O,
      $                  WORK( N**2+1 ), N )
 *
-            CALL CGEMM( 'N', 'C', N, N, N, -CONE, WORK( N**2+1 ), N, V,
+            CALL AB_CGEMM( 'N', 'C', N, N, N, -CONE, WORK( N**2+1 ), N, 
+     $V,
      $                  LDV, CONE, WORK, N )
 *
          ELSE
 *
 *           ITYPE=2: Compute W = A - B
 *
-            CALL CLACPY( ' ', N, N, B, LDB, WORK, N )
+            CALL AB_CLACPY( ' ', N, N, B, LDB, WORK, N )
 *
             DO 20 JCOL = 1, N
                DO 10 JROW = 1, N
@@ -243,7 +246,7 @@
 *
 *        Compute norm(W)/ ( ulp*norm(A) )
 *
-         WNORM = CLANGE( '1', N, N, WORK, N, RWORK )
+         WNORM = AB_CLANGE( '1', N, N, WORK, N, RWORK )
 *
          IF( ANORM.GT.WNORM ) THEN
             RESULT = ( WNORM / ANORM ) / ( N*ULP )
@@ -261,7 +264,7 @@
 *
 *        ITYPE=3: Compute  UU' - I
 *
-         CALL CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
+         CALL AB_CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
      $               WORK, N )
 *
          DO 30 JDIAG = 1, N
@@ -269,12 +272,12 @@
      $         1 ) - CONE
    30    CONTINUE
 *
-         RESULT = MIN( CLANGE( '1', N, N, WORK, N, RWORK ),
+         RESULT = MIN( AB_CLANGE( '1', N, N, WORK, N, RWORK ),
      $            REAL( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of CGET51
+*     End of AB_CGET51
 *
       END

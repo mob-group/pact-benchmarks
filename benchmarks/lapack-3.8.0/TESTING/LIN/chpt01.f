@@ -1,4 +1,4 @@
-*> \brief \b CHPT01
+*> \brief \b AB_CHPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+*       SUBROUTINE AB_CHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CHPT01 reconstructs a Hermitian indefinite packed matrix A from its
+*> AB_CHPT01 reconstructs a Hermitian indefinite packed matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
@@ -66,13 +66,13 @@
 *>          The factored form of the matrix A, stored as a packed
 *>          triangular matrix.  AFAC contains the block diagonal matrix D
 *>          and the multipliers used to obtain the factor L or U from the
-*>          block L*D*L' or U*D*U' factorization as computed by CHPTRF.
+*>          block L*D*L' or U*D*U' factorization as computed by AB_CHPTRF.
 *> \endverbatim
 *>
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from CHPTRF.
+*>          The pivot indices from AB_CHPTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -111,7 +111,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+      SUBROUTINE AB_CHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID
+     $ )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -143,12 +144,12 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANHE, CLANHP, SLAMCH
-      EXTERNAL           LSAME, CLANHE, CLANHP, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANHE, AB_CLANHP, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANHE, AB_CLANHP, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLAVHP, CLASET
+      EXTERNAL           AB_CLAVHP, AB_CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, REAL
@@ -164,14 +165,14 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANHP( '1', UPLO, N, A, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_CLANHP( '1', UPLO, N, A, RWORK )
 *
 *     Check the imaginary parts of the diagonal elements and return with
 *     an error code if any are nonzero.
 *
       JC = 1
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 10 J = 1, N
             IF( AIMAG( AFAC( JC ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
@@ -191,21 +192,22 @@
 *
 *     Initialize C to the identity matrix.
 *
-      CALL CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL AB_CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     Call CLAVHP to form the product D * U' (or D * L' ).
+*     Call AB_CLAVHP to form the product D * U' (or D * L' ).
 *
-      CALL CLAVHP( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC, IPIV, C,
+      CALL AB_CLAVHP( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC, IPIV, C
+     $,
      $             LDC, INFO )
 *
-*     Call CLAVHP again to multiply by U ( or L ).
+*     Call AB_CLAVHP again to multiply by U ( or L ).
 *
-      CALL CLAVHP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
+      CALL AB_CLAVHP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
      $             LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          JC = 0
          DO 40 J = 1, N
             DO 30 I = 1, J - 1
@@ -227,7 +229,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = CLANHE( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_CLANHE( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -238,6 +240,6 @@
 *
       RETURN
 *
-*     End of CHPT01
+*     End of AB_CHPT01
 *
       END

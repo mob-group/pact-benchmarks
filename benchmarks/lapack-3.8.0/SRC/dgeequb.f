@@ -1,4 +1,4 @@
-*> \brief \b DGEEQUB
+*> \brief \b AB_AB_DGEEQUB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEEQUB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeequb.f">
+*> Download AB_AB_DGEEQUB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DGEEQUB.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeequb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DGEEQUB.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeequb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DGEEQUB.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+*       SUBROUTINE AB_AB_DGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                           INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGEEQUB computes row and column scalings intended to equilibrate an
+*> AB_AB_DGEEQUB computes row and column scalings intended to equilibrate an
 *> M-by-N matrix A and reduce its condition number.  R returns the row
 *> scale factors and C the column scale factors, chosen to try to make
 *> the largest element in each row and column of the matrix B with
@@ -47,7 +47,7 @@
 *> of these scaling factors is not guaranteed to reduce the condition
 *> number of A but works well in practice.
 *>
-*> This routine differs from DGEEQU by restricting the scaling factors
+*> This routine differs from AB_DGEEQU by restricting the scaling factors
 *> to a power of the radix.  Barring over- and underflow, scaling by
 *> these factors introduces no additional rounding errors.  However, the
 *> scaled entries' magnitudes are no longer approximately 1 but lie
@@ -143,7 +143,8 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+      SUBROUTINE AB_AB_DGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX
+     $,
      $                    INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -170,11 +171,11 @@
       DOUBLE PRECISION   BIGNUM, RCMAX, RCMIN, SMLNUM, RADIX, LOGRDX
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, LOG
@@ -192,7 +193,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEEQUB', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DGEEQUB', -INFO )
          RETURN
       END IF
 *
@@ -207,9 +208,9 @@
 *
 *     Get machine constants.  Assume SMLNUM is a power of the radix.
 *
-      SMLNUM = DLAMCH( 'S' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      RADIX = DLAMCH( 'B' )
+      RADIX = AB_DLAMCH( 'B' )
       LOGRDX = LOG( RADIX )
 *
 *     Compute row scale factors.
@@ -316,6 +317,6 @@
 *
       RETURN
 *
-*     End of DGEEQUB
+*     End of AB_AB_DGEEQUB
 *
       END

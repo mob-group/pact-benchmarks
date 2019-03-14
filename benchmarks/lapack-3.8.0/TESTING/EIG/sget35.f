@@ -1,4 +1,4 @@
-*> \brief \b SGET35
+*> \brief \b AB_SGET35
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGET35( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE AB_SGET35( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> SGET35 tests STRSYL, a routine for solving the Sylvester matrix
+*> AB_SGET35 tests AB_STRSYL, a routine for solving the Sylvester matrix
 *> equation
 *>
 *>    op(A)*X + ISGN*X*op(B) = scale*C,
@@ -76,7 +76,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SGET35( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE AB_SGET35( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -109,11 +109,11 @@
      $                   DUM( 1 ), VM1( 3 ), VM2( 3 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, STRSYL
+      EXTERNAL           AB_SGEMM, AB_STRSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL, SIN, SQRT
@@ -133,10 +133,10 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )*FOUR / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )*FOUR / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -213,12 +213,14 @@
    50                               CONTINUE
    60                            CONTINUE
                                  KNT = KNT + 1
-                                 CALL STRSYL( TRANA, TRANB, ISGN, M, N,
+                                 CALL AB_STRSYL( TRANA, TRANB, ISGN, M, 
+     $N,
      $                                        A, 6, B, 6, C, 6, SCALE,
      $                                        INFO )
                                  IF( INFO.NE.0 )
      $                              NINFO = NINFO + 1
-                                 XNRM = SLANGE( 'M', M, N, C, 6, DUM )
+                                 XNRM = AB_SLANGE( 'M', M, N, C, 6, DUM 
+     $)
                                  RMUL = ONE
                                  IF( XNRM.GT.ONE .AND. TNRM.GT.ONE )
      $                                THEN
@@ -226,13 +228,15 @@
                                        RMUL = ONE / MAX( XNRM, TNRM )
                                     END IF
                                  END IF
-                                 CALL SGEMM( TRANA, 'N', M, N, M, RMUL,
+                                 CALL AB_SGEMM( TRANA, 'N', M, N, M, RMU
+     $L,
      $                                       A, 6, C, 6, -SCALE*RMUL,
      $                                       CC, 6 )
-                                 CALL SGEMM( 'N', TRANB, M, N, N,
+                                 CALL AB_SGEMM( 'N', TRANB, M, N, N,
      $                                       REAL( ISGN )*RMUL, C, 6, B,
      $                                       6, ONE, CC, 6 )
-                                 RES1 = SLANGE( 'M', M, N, CC, 6, DUM )
+                                 RES1 = AB_SLANGE( 'M', M, N, CC, 6, DUM
+     $ )
                                  RES = RES1 / MAX( SMLNUM, SMLNUM*XNRM,
      $                                 ( ( RMUL*TNRM )*EPS )*XNRM )
                                  IF( RES.GT.RMAX ) THEN
@@ -251,6 +255,6 @@
 *
       RETURN
 *
-*     End of SGET35
+*     End of AB_SGET35
 *
       END

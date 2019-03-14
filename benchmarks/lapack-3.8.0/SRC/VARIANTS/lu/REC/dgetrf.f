@@ -1,4 +1,5 @@
-C> \brief \b DGETRF VARIANT: iterative version of Sivan Toledo's recursive LU algorithm
+C> \brief \b AB_DGETRF VARIANT: iterative version of Sivan Toledo's recu
+     $rsive LU algorithm
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +9,7 @@ C> \brief \b DGETRF VARIANT: iterative version of Sivan Toledo's recursive LU al
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE AB_DGETRF( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -24,7 +25,7 @@ C> \brief \b DGETRF VARIANT: iterative version of Sivan Toledo's recursive LU al
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> DGETRF computes an LU factorization of a general M-by-N matrix A
+C> AB_DGETRF computes an LU factorization of a general M-by-N matrix A
 C> using partial pivoting with row interchanges.
 C>
 C> The factorization has the form
@@ -38,7 +39,7 @@ C> LU algorithm[1].  For square matrices, this iterative versions should
 C> be within a factor of two of the optimum number of memory transfers.
 C>
 C> The pattern is as follows, with the large blocks of U being updated
-C> in one call to DTRSM, and the dotted lines denoting sections that
+C> in one call to AB_DTRSM, and the dotted lines denoting sections that
 C> have had all pending permutations applied:
 C>
 C>  1 2 3 4 5 6 7 8
@@ -114,7 +115,8 @@ C>          = 0:  successful exit
 C>          < 0:  if INFO = -i, the i-th argument had an illegal value
 C>          > 0:  if INFO = i, U(i,i) is exactly zero. The factorization
 C>                has been completed, but the factor U is exactly
-C>                singular, and division by zero will occur if it is used
+C>                singular, and division by zero will occur if it is use
+     $d
 C>                to solve a system of equations.
 C> \endverbatim
 C>
@@ -132,7 +134,7 @@ C> \date December 2016
 C> \ingroup variantsGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
+      SUBROUTINE AB_DGETRF( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.X) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -160,13 +162,13 @@ C> \ingroup variantsGEcomputational
       INTEGER            KSTART, IPIVSTART, JPIVSTART, KCOLS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      INTEGER            IDAMAX
-      LOGICAL            DISNAN
-      EXTERNAL           DLAMCH, IDAMAX, DISNAN
+      DOUBLE PRECISION   AB_DLAMCH
+      INTEGER            AB_IDAMAX
+      LOGICAL            AB_DISNAN
+      EXTERNAL           AB_DLAMCH, AB_IDAMAX, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DTRSM, DSCAL, XERBLA, DLASWP
+      EXTERNAL           AB_DTRSM, AB_DSCAL, AB_XERBLA, AB_DLASWP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, IAND
@@ -184,7 +186,7 @@ C> \ingroup variantsGEcomputational
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGETRF', -INFO )
+         CALL AB_XERBLA( 'AB_DGETRF', -INFO )
          RETURN
       END IF
 *
@@ -195,7 +197,7 @@ C> \ingroup variantsGEcomputational
 *
 *     Compute machine safe minimum
 *
-      SFMIN = DLAMCH( 'S' )
+      SFMIN = AB_DLAMCH( 'S' )
 *
       NSTEP = MIN( M, N )
       DO J = 1, NSTEP
@@ -205,7 +207,7 @@ C> \ingroup variantsGEcomputational
 *
 *        Find pivot.
 *
-         JP = J - 1 + IDAMAX( M-J+1, A( J, J ), 1 )
+         JP = J - 1 + AB_IDAMAX( M-J+1, A( J, J ), 1 )
          IPIV( J ) = JP
 
 *        Permute just this column.
@@ -220,7 +222,8 @@ C> \ingroup variantsGEcomputational
          IPIVSTART = J
          JPIVSTART = J - NTOPIV
          DO WHILE ( NTOPIV .LT. KAHEAD )
-            CALL DLASWP( NTOPIV, A( 1, JPIVSTART ), LDA, IPIVSTART, J,
+            CALL AB_DLASWP( NTOPIV, A( 1, JPIVSTART ), LDA, IPIVSTART, J
+     $,
      $           IPIV, 1 )
             IPIVSTART = IPIVSTART - NTOPIV;
             NTOPIV = NTOPIV * 2;
@@ -228,12 +231,12 @@ C> \ingroup variantsGEcomputational
          END DO
 
 *        Permute U block to match L
-         CALL DLASWP( KCOLS, A( 1,J+1 ), LDA, KSTART, J, IPIV, 1 )
+         CALL AB_DLASWP( KCOLS, A( 1,J+1 ), LDA, KSTART, J, IPIV, 1 )
 
 *        Factor the current column
-         IF( A( J, J ).NE.ZERO .AND. .NOT.DISNAN( A( J, J ) ) ) THEN
+         IF( A( J, J ).NE.ZERO .AND. .NOT.AB_DISNAN( A( J, J ) ) ) THEN
                IF( ABS(A( J, J )) .GE. SFMIN ) THEN
-                  CALL DSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 )
+                  CALL AB_DSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 )
                ELSE
                  DO I = 1, M-J
                     A( J+I, J ) = A( J+I, J ) / A( J, J )
@@ -244,11 +247,11 @@ C> \ingroup variantsGEcomputational
          END IF
 
 *        Solve for U block.
-         CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', KAHEAD,
+         CALL AB_DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', KAHEAD,
      $        KCOLS, ONE, A( KSTART, KSTART ), LDA,
      $        A( KSTART, J+1 ), LDA )
 *        Schur complement.
-         CALL DGEMM( 'No transpose', 'No transpose', M-J,
+         CALL AB_DGEMM( 'No transpose', 'No transpose', M-J,
      $        KCOLS, KAHEAD, NEGONE, A( J+1, KSTART ), LDA,
      $        A( KSTART, J+1 ), LDA, ONE, A( J+1, J+1 ), LDA )
       END DO
@@ -258,20 +261,20 @@ C> \ingroup variantsGEcomputational
       J = NSTEP - NPIVED
       DO WHILE ( J .GT. 0 )
          NTOPIV = IAND( J, -J )
-         CALL DLASWP( NTOPIV, A( 1, J-NTOPIV+1 ), LDA, J+1, NSTEP,
+         CALL AB_DLASWP( NTOPIV, A( 1, J-NTOPIV+1 ), LDA, J+1, NSTEP,
      $        IPIV, 1 )
          J = J - NTOPIV
       END DO
 
 *     If short and wide, handle the rest of the columns.
       IF ( M .LT. N ) THEN
-         CALL DLASWP( N-M, A( 1, M+KCOLS+1 ), LDA, 1, M, IPIV, 1 )
-         CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', M,
+         CALL AB_DLASWP( N-M, A( 1, M+KCOLS+1 ), LDA, 1, M, IPIV, 1 )
+         CALL AB_DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', M,
      $        N-M, ONE, A, LDA, A( 1,M+KCOLS+1 ), LDA )
       END IF
 
       RETURN
 *
-*     End of DGETRF
+*     End of AB_DGETRF
 *
       END

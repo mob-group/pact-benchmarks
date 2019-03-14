@@ -1,4 +1,4 @@
-*> \brief \b DTREVC3
+*> \brief \b AB_AB_DTREVC3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTREVC3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrevc3.f">
+*> Download AB_AB_DTREVC3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DTREVC3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrevc3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DTREVC3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrevc3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DTREVC3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+*       SUBROUTINE AB_AB_DTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
 *                           VR, LDVR, MM, M, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,10 +37,10 @@
 *>
 *> \verbatim
 *>
-*> DTREVC3 computes some or all of the right and/or left eigenvectors of
+*> AB_AB_DTREVC3 computes some or all of the right and/or left eigenvectors of
 *> a real upper quasi-triangular matrix T.
 *> Matrices of this type are produced by the Schur factorization of
-*> a real general matrix:  A = Q*T*Q**T, as computed by DHSEQR.
+*> a real general matrix:  A = Q*T*Q**T, as computed by AB_DHSEQR.
 *>
 *> The right eigenvector x and the left eigenvector y of T corresponding
 *> to an eigenvalue w are defined by:
@@ -119,7 +119,7 @@
 *>          VL is DOUBLE PRECISION array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the orthogonal matrix Q
-*>          of Schur vectors returned by DHSEQR).
+*>          of Schur vectors returned by AB_DHSEQR).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -129,7 +129,7 @@
 *>                           eigenvalues.
 *>          A complex eigenvector corresponding to a complex eigenvalue
 *>          is stored in two consecutive columns, the first holding the
-*>          real part, and the second the imaginary part.
+*>          real part, and the AB_SECOND the imaginary part.
 *>          Not referenced if SIDE = 'R'.
 *> \endverbatim
 *>
@@ -145,7 +145,7 @@
 *>          VR is DOUBLE PRECISION array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Q (usually the orthogonal matrix Q
-*>          of Schur vectors returned by DHSEQR).
+*>          of Schur vectors returned by AB_DHSEQR).
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*X;
@@ -155,7 +155,7 @@
 *>                           eigenvalues.
 *>          A complex eigenvector corresponding to a complex eigenvalue
 *>          is stored in two consecutive columns, the first holding the
-*>          real part and the second the imaginary part.
+*>          real part and the AB_SECOND the imaginary part.
 *>          Not referenced if SIDE = 'L'.
 *> \endverbatim
 *>
@@ -197,7 +197,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -236,7 +236,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+      SUBROUTINE AB_AB_DTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDV
+     $L,
      $                    VR, LDVR, MM, M, WORK, LWORK, INFO )
       IMPLICIT NONE
 *
@@ -273,14 +274,16 @@
      $                   XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX, ILAENV
-      DOUBLE PRECISION   DDOT, DLAMCH
-      EXTERNAL           LSAME, IDAMAX, ILAENV, DDOT, DLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IDAMAX, AB_ILAENV
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_ILAENV, AB_DDOT, AB_DLA
+     $MCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGEMV, DLALN2, DSCAL, XERBLA,
-     $                   DGEMM, DLASET, DLABAD, DLACPY
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGEMV, AB_DLALN2, AB_DSC
+     $AL, AB_XERBLA,
+     $                   AB_DGEMM, AB_DLASET, AB_DLABAD, AB_DLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -293,16 +296,16 @@
 *
 *     Decode and test the input parameters
 *
-      BOTHV  = LSAME( SIDE, 'B' )
-      RIGHTV = LSAME( SIDE, 'R' ) .OR. BOTHV
-      LEFTV  = LSAME( SIDE, 'L' ) .OR. BOTHV
+      BOTHV  = AB_LSAME( SIDE, 'B' )
+      RIGHTV = AB_LSAME( SIDE, 'R' ) .OR. BOTHV
+      LEFTV  = AB_LSAME( SIDE, 'L' ) .OR. BOTHV
 *
-      ALLV  = LSAME( HOWMNY, 'A' )
-      OVER  = LSAME( HOWMNY, 'B' )
-      SOMEV = LSAME( HOWMNY, 'S' )
+      ALLV  = AB_LSAME( HOWMNY, 'A' )
+      OVER  = AB_LSAME( HOWMNY, 'B' )
+      SOMEV = AB_LSAME( HOWMNY, 'S' )
 *
       INFO = 0
-      NB = ILAENV( 1, 'DTREVC', SIDE // HOWMNY, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_DTREVC', SIDE // HOWMNY, N, -1, -1, -1 )
       MAXWRK = N + 2*N*NB
       WORK(1) = MAXWRK
       LQUERY = ( LWORK.EQ.-1 )
@@ -360,7 +363,7 @@
          END IF
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DTREVC3', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DTREVC3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -377,17 +380,17 @@
       IF( OVER .AND. LWORK .GE. N + 2*N*NBMIN ) THEN
          NB = (LWORK - N) / (2*N)
          NB = MIN( NB, NBMAX )
-         CALL DLASET( 'F', N, 1+2*NB, ZERO, ZERO, WORK, N )
+         CALL AB_DLASET( 'F', N, 1+2*NB, ZERO, ZERO, WORK, N )
       ELSE
          NB = 1
       END IF
 *
 *     Set the constants to control overflow.
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      CALL AB_DLABAD( UNFL, OVFL )
+      ULP = AB_DLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *
@@ -405,7 +408,7 @@
 *     Index IP is used to specify the real or complex eigenvalue:
 *       IP = 0, real eigenvalue,
 *            1, first  of conjugate complex pair: (wr,wi)
-*           -1, second of conjugate complex pair: (wr,wi)
+*           -1, AB_SECOND of conjugate complex pair: (wr,wi)
 *       ISCOMPLEX array stores IP for each column in current block.
 *
       IF( RIGHTV ) THEN
@@ -427,7 +430,7 @@
          IS = M
          DO 140 KI = N, 1, -1
             IF( IP.EQ.-1 ) THEN
-*              previous iteration (ki+1) was second of conjugate pair,
+*              previous iteration (ki+1) was AB_SECOND of conjugate pair,
 *              so this ki is first of conjugate pair; skip to end of loop
                IP = 1
                GO TO 140
@@ -438,7 +441,7 @@
 *              zero on sub-diagonal, so this ki is real eigenvalue
                IP = 0
             ELSE
-*              non-zero on sub-diagonal, so this ki is second of conjugate pair
+*              non-zero on sub-diagonal, so this ki is AB_SECOND of conjugate pair
                IP = -1
             END IF
 
@@ -495,7 +498,8 @@
 *
 *                    1-by-1 diagonal block
 *
-                     CALL DLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
+                     CALL AB_DLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, 
+     $J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
@@ -512,19 +516,19 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL DSCAL( KI, SCALE, WORK( 1+IV*N ), 1 )
+     $                  CALL AB_DSCAL( KI, SCALE, WORK( 1+IV*N ), 1 )
                      WORK( J+IV*N ) = X( 1, 1 )
 *
 *                    Update right-hand side
 *
-                     CALL DAXPY( J-1, -X( 1, 1 ), T( 1, J ), 1,
+                     CALL AB_DAXPY( J-1, -X( 1, 1 ), T( 1, J ), 1,
      $                           WORK( 1+IV*N ), 1 )
 *
                   ELSE
 *
 *                    2-by-2 diagonal block
 *
-                     CALL DLALN2( .FALSE., 2, 1, SMIN, ONE,
+                     CALL AB_DLALN2( .FALSE., 2, 1, SMIN, ONE,
      $                            T( J-1, J-1 ), LDT, ONE, ONE,
      $                            WORK( J-1+IV*N ), N, WR, ZERO, X, 2,
      $                            SCALE, XNORM, IERR )
@@ -544,15 +548,15 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL DSCAL( KI, SCALE, WORK( 1+IV*N ), 1 )
+     $                  CALL AB_DSCAL( KI, SCALE, WORK( 1+IV*N ), 1 )
                      WORK( J-1+IV*N ) = X( 1, 1 )
                      WORK( J  +IV*N ) = X( 2, 1 )
 *
 *                    Update right-hand side
 *
-                     CALL DAXPY( J-2, -X( 1, 1 ), T( 1, J-1 ), 1,
+                     CALL AB_DAXPY( J-2, -X( 1, 1 ), T( 1, J-1 ), 1,
      $                           WORK( 1+IV*N ), 1 )
-                     CALL DAXPY( J-2, -X( 2, 1 ), T( 1, J ), 1,
+                     CALL AB_DAXPY( J-2, -X( 2, 1 ), T( 1, J ), 1,
      $                           WORK( 1+IV*N ), 1 )
                   END IF
    60          CONTINUE
@@ -562,11 +566,12 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VR and normalize.
-                  CALL DCOPY( KI, WORK( 1 + IV*N ), 1, VR( 1, IS ), 1 )
+                  CALL AB_DCOPY( KI, WORK( 1 + IV*N ), 1, VR( 1, IS ), 1
+     $ )
 *
-                  II = IDAMAX( KI, VR( 1, IS ), 1 )
+                  II = AB_IDAMAX( KI, VR( 1, IS ), 1 )
                   REMAX = ONE / ABS( VR( II, IS ) )
-                  CALL DSCAL( KI, REMAX, VR( 1, IS ), 1 )
+                  CALL AB_DSCAL( KI, REMAX, VR( 1, IS ), 1 )
 *
                   DO 70 K = KI + 1, N
                      VR( K, IS ) = ZERO
@@ -576,13 +581,13 @@
 *                 ------------------------------
 *                 version 1: back-transform each vector with GEMV, Q*x.
                   IF( KI.GT.1 )
-     $               CALL DGEMV( 'N', N, KI-1, ONE, VR, LDVR,
+     $               CALL AB_DGEMV( 'N', N, KI-1, ONE, VR, LDVR,
      $                           WORK( 1 + IV*N ), 1, WORK( KI + IV*N ),
      $                           VR( 1, KI ), 1 )
 *
-                  II = IDAMAX( N, VR( 1, KI ), 1 )
+                  II = AB_IDAMAX( N, VR( 1, KI ), 1 )
                   REMAX = ONE / ABS( VR( II, KI ) )
-                  CALL DSCAL( N, REMAX, VR( 1, KI ), 1 )
+                  CALL AB_DSCAL( N, REMAX, VR( 1, KI ), 1 )
 *
                ELSE
 *                 ------------------------------
@@ -641,7 +646,8 @@
 *
 *                    1-by-1 diagonal block
 *
-                     CALL DLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J ),
+                     CALL AB_DLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, 
+     $J ),
      $                            LDT, ONE, ONE, WORK( J+(IV-1)*N ), N,
      $                            WR, WI, X, 2, SCALE, XNORM, IERR )
 *
@@ -659,24 +665,26 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL DSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 )
-                        CALL DSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 )
+                        CALL AB_DSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 
+     $)
+                        CALL AB_DSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 
+     $)
                      END IF
                      WORK( J+(IV-1)*N ) = X( 1, 1 )
                      WORK( J+(IV  )*N ) = X( 1, 2 )
 *
 *                    Update the right-hand side
 *
-                     CALL DAXPY( J-1, -X( 1, 1 ), T( 1, J ), 1,
+                     CALL AB_DAXPY( J-1, -X( 1, 1 ), T( 1, J ), 1,
      $                           WORK( 1+(IV-1)*N ), 1 )
-                     CALL DAXPY( J-1, -X( 1, 2 ), T( 1, J ), 1,
+                     CALL AB_DAXPY( J-1, -X( 1, 2 ), T( 1, J ), 1,
      $                           WORK( 1+(IV  )*N ), 1 )
 *
                   ELSE
 *
 *                    2-by-2 diagonal block
 *
-                     CALL DLALN2( .FALSE., 2, 2, SMIN, ONE,
+                     CALL AB_DLALN2( .FALSE., 2, 2, SMIN, ONE,
      $                            T( J-1, J-1 ), LDT, ONE, ONE,
      $                            WORK( J-1+(IV-1)*N ), N, WR, WI, X, 2,
      $                            SCALE, XNORM, IERR )
@@ -699,8 +707,10 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL DSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 )
-                        CALL DSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 )
+                        CALL AB_DSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 
+     $)
+                        CALL AB_DSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 
+     $)
                      END IF
                      WORK( J-1+(IV-1)*N ) = X( 1, 1 )
                      WORK( J  +(IV-1)*N ) = X( 2, 1 )
@@ -709,13 +719,13 @@
 *
 *                    Update the right-hand side
 *
-                     CALL DAXPY( J-2, -X( 1, 1 ), T( 1, J-1 ), 1,
+                     CALL AB_DAXPY( J-2, -X( 1, 1 ), T( 1, J-1 ), 1,
      $                           WORK( 1+(IV-1)*N   ), 1 )
-                     CALL DAXPY( J-2, -X( 2, 1 ), T( 1, J ), 1,
+                     CALL AB_DAXPY( J-2, -X( 2, 1 ), T( 1, J ), 1,
      $                           WORK( 1+(IV-1)*N   ), 1 )
-                     CALL DAXPY( J-2, -X( 1, 2 ), T( 1, J-1 ), 1,
+                     CALL AB_DAXPY( J-2, -X( 1, 2 ), T( 1, J-1 ), 1,
      $                           WORK( 1+(IV  )*N ), 1 )
-                     CALL DAXPY( J-2, -X( 2, 2 ), T( 1, J ), 1,
+                     CALL AB_DAXPY( J-2, -X( 2, 2 ), T( 1, J ), 1,
      $                           WORK( 1+(IV  )*N ), 1 )
                   END IF
    90          CONTINUE
@@ -725,8 +735,10 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VR and normalize.
-                  CALL DCOPY( KI, WORK( 1+(IV-1)*N ), 1, VR(1,IS-1), 1 )
-                  CALL DCOPY( KI, WORK( 1+(IV  )*N ), 1, VR(1,IS  ), 1 )
+                  CALL AB_DCOPY( KI, WORK( 1+(IV-1)*N ), 1, VR(1,IS-1), 
+     $1 )
+                  CALL AB_DCOPY( KI, WORK( 1+(IV  )*N ), 1, VR(1,IS  ), 
+     $1 )
 *
                   EMAX = ZERO
                   DO 100 K = 1, KI
@@ -734,8 +746,8 @@
      $                                 ABS( VR( K, IS   ) ) )
   100             CONTINUE
                   REMAX = ONE / EMAX
-                  CALL DSCAL( KI, REMAX, VR( 1, IS-1 ), 1 )
-                  CALL DSCAL( KI, REMAX, VR( 1, IS   ), 1 )
+                  CALL AB_DSCAL( KI, REMAX, VR( 1, IS-1 ), 1 )
+                  CALL AB_DSCAL( KI, REMAX, VR( 1, IS   ), 1 )
 *
                   DO 110 K = KI + 1, N
                      VR( K, IS-1 ) = ZERO
@@ -746,15 +758,17 @@
 *                 ------------------------------
 *                 version 1: back-transform each vector with GEMV, Q*x.
                   IF( KI.GT.2 ) THEN
-                     CALL DGEMV( 'N', N, KI-2, ONE, VR, LDVR,
+                     CALL AB_DGEMV( 'N', N, KI-2, ONE, VR, LDVR,
      $                           WORK( 1    + (IV-1)*N ), 1,
      $                           WORK( KI-1 + (IV-1)*N ), VR(1,KI-1), 1)
-                     CALL DGEMV( 'N', N, KI-2, ONE, VR, LDVR,
+                     CALL AB_DGEMV( 'N', N, KI-2, ONE, VR, LDVR,
      $                           WORK( 1  + (IV)*N ), 1,
      $                           WORK( KI + (IV)*N ), VR( 1, KI ), 1 )
                   ELSE
-                     CALL DSCAL( N, WORK(KI-1+(IV-1)*N), VR(1,KI-1), 1)
-                     CALL DSCAL( N, WORK(KI  +(IV  )*N), VR(1,KI  ), 1)
+                     CALL AB_DSCAL( N, WORK(KI-1+(IV-1)*N), VR(1,KI-1), 
+     $1)
+                     CALL AB_DSCAL( N, WORK(KI  +(IV  )*N), VR(1,KI  ), 
+     $1)
                   END IF
 *
                   EMAX = ZERO
@@ -763,8 +777,8 @@
      $                                 ABS( VR( K, KI   ) ) )
   120             CONTINUE
                   REMAX = ONE / EMAX
-                  CALL DSCAL( N, REMAX, VR( 1, KI-1 ), 1 )
-                  CALL DSCAL( N, REMAX, VR( 1, KI   ), 1 )
+                  CALL AB_DSCAL( N, REMAX, VR( 1, KI-1 ), 1 )
+                  CALL AB_DSCAL( N, REMAX, VR( 1, KI   ), 1 )
 *
                ELSE
 *                 ------------------------------
@@ -795,7 +809,7 @@
 *              When the number of vectors stored reaches NB-1 or NB,
 *              or if this was last vector, do the GEMM
                IF( (IV.LE.2) .OR. (KI2.EQ.1) ) THEN
-                  CALL DGEMM( 'N', 'N', N, NB-IV+1, KI2+NB-IV, ONE,
+                  CALL AB_DGEMM( 'N', 'N', N, NB-IV+1, KI2+NB-IV, ONE,
      $                        VR, LDVR,
      $                        WORK( 1 + (IV)*N    ), N,
      $                        ZERO,
@@ -804,7 +818,7 @@
                   DO K = IV, NB
                      IF( ISCOMPLEX(K).EQ.0 ) THEN
 *                       real eigenvector
-                        II = IDAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
+                        II = AB_IDAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
                         REMAX = ONE / ABS( WORK( II + (NB+K)*N ) )
                      ELSE IF( ISCOMPLEX(K).EQ.1 ) THEN
 *                       first eigenvector of conjugate pair
@@ -815,13 +829,13 @@
      $                                 ABS( WORK( II + (NB+K+1)*N ) ) )
                         END DO
                         REMAX = ONE / EMAX
-*                    else if ISCOMPLEX(K).EQ.-1
-*                       second eigenvector of conjugate pair
+*                    ELSE if ISCOMPLEX(K).EQ.-1
+*                       AB_SECOND eigenvector of conjugate pair
 *                       reuse same REMAX as previous K
                      END IF
-                     CALL DSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
+                     CALL AB_DSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
                   END DO
-                  CALL DLACPY( 'F', N, NB-IV+1,
+                  CALL AB_DLACPY( 'F', N, NB-IV+1,
      $                         WORK( 1 + (NB+IV)*N ), N,
      $                         VR( 1, KI2 ), LDVR )
                   IV = NB
@@ -852,7 +866,7 @@
          DO 260 KI = 1, N
             IF( IP.EQ.1 ) THEN
 *              previous iteration (ki-1) was first of conjugate pair,
-*              so this ki is second of conjugate pair; skip to end of loop
+*              so this ki is AB_SECOND of conjugate pair; skip to end of loop
                IP = -1
                GO TO 260
             ELSE IF( KI.EQ.N ) THEN
@@ -922,25 +936,27 @@
 *
                      IF( WORK( J ).GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL DSCAL( N-KI+1, REC, WORK( KI+IV*N ), 1 )
+                        CALL AB_DSCAL( N-KI+1, REC, WORK( KI+IV*N ), 1 )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J+IV*N ) = WORK( J+IV*N ) -
-     $                                DDOT( J-KI-1, T( KI+1, J ), 1,
+     $                                AB_DDOT( J-KI-1, T( KI+1, J ), 1,
      $                                      WORK( KI+1+IV*N ), 1 )
 *
 *                    Solve [ T(J,J) - WR ]**T * X = WORK
 *
-                     CALL DLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
+                     CALL AB_DLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, 
+     $J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL DSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1 )
+     $                  CALL AB_DSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1
+     $ )
                      WORK( J+IV*N ) = X( 1, 1 )
                      VMAX = MAX( ABS( WORK( J+IV*N ) ), VMAX )
                      VCRIT = BIGNUM / VMAX
@@ -955,31 +971,33 @@
                      BETA = MAX( WORK( J ), WORK( J+1 ) )
                      IF( BETA.GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL DSCAL( N-KI+1, REC, WORK( KI+IV*N ), 1 )
+                        CALL AB_DSCAL( N-KI+1, REC, WORK( KI+IV*N ), 1 )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J+IV*N ) = WORK( J+IV*N ) -
-     $                                DDOT( J-KI-1, T( KI+1, J ), 1,
+     $                                AB_DDOT( J-KI-1, T( KI+1, J ), 1,
      $                                      WORK( KI+1+IV*N ), 1 )
 *
                      WORK( J+1+IV*N ) = WORK( J+1+IV*N ) -
-     $                                  DDOT( J-KI-1, T( KI+1, J+1 ), 1,
+     $                                  AB_DDOT( J-KI-1, T( KI+1, J+1 ),
+     $ 1,
      $                                        WORK( KI+1+IV*N ), 1 )
 *
 *                    Solve
 *                    [ T(J,J)-WR   T(J,J+1)      ]**T * X = SCALE*( WORK1 )
 *                    [ T(J+1,J)    T(J+1,J+1)-WR ]                ( WORK2 )
 *
-                     CALL DLALN2( .TRUE., 2, 1, SMIN, ONE, T( J, J ),
+                     CALL AB_DLALN2( .TRUE., 2, 1, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL DSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1 )
+     $                  CALL AB_DSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1
+     $ )
                      WORK( J  +IV*N ) = X( 1, 1 )
                      WORK( J+1+IV*N ) = X( 2, 1 )
 *
@@ -995,12 +1013,12 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VL and normalize.
-                  CALL DCOPY( N-KI+1, WORK( KI + IV*N ), 1,
+                  CALL AB_DCOPY( N-KI+1, WORK( KI + IV*N ), 1,
      $                                VL( KI, IS ), 1 )
 *
-                  II = IDAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
+                  II = AB_IDAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
                   REMAX = ONE / ABS( VL( II, IS ) )
-                  CALL DSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
+                  CALL AB_DSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
 *
                   DO 180 K = 1, KI - 1
                      VL( K, IS ) = ZERO
@@ -1010,14 +1028,14 @@
 *                 ------------------------------
 *                 version 1: back-transform each vector with GEMV, Q*x.
                   IF( KI.LT.N )
-     $               CALL DGEMV( 'N', N, N-KI, ONE,
+     $               CALL AB_DGEMV( 'N', N, N-KI, ONE,
      $                           VL( 1, KI+1 ), LDVL,
      $                           WORK( KI+1 + IV*N ), 1,
      $                           WORK( KI   + IV*N ), VL( 1, KI ), 1 )
 *
-                  II = IDAMAX( N, VL( 1, KI ), 1 )
+                  II = AB_IDAMAX( N, VL( 1, KI ), 1 )
                   REMAX = ONE / ABS( VL( II, KI ) )
-                  CALL DSCAL( N, REMAX, VL( 1, KI ), 1 )
+                  CALL AB_DSCAL( N, REMAX, VL( 1, KI ), 1 )
 *
                ELSE
 *                 ------------------------------
@@ -1085,30 +1103,37 @@
 *
                      IF( WORK( J ).GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL DSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1 )
-                        CALL DSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1 )
+                        CALL AB_DSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1
+     $ )
+                        CALL AB_DSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1
+     $ )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J+(IV  )*N ) = WORK( J+(IV)*N ) -
-     $                                  DDOT( J-KI-2, T( KI+2, J ), 1,
+     $                                  AB_DDOT( J-KI-2, T( KI+2, J ), 1
+     $,
      $                                        WORK( KI+2+(IV)*N ), 1 )
                      WORK( J+(IV+1)*N ) = WORK( J+(IV+1)*N ) -
-     $                                  DDOT( J-KI-2, T( KI+2, J ), 1,
+     $                                  AB_DDOT( J-KI-2, T( KI+2, J ), 1
+     $,
      $                                        WORK( KI+2+(IV+1)*N ), 1 )
 *
 *                    Solve [ T(J,J)-(WR-i*WI) ]*(X11+i*X12)= WK+I*WK2
 *
-                     CALL DLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J ),
+                     CALL AB_DLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, 
+     $J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            -WI, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL DSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N), 1)
-                        CALL DSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N), 1)
+                        CALL AB_DSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N),
+     $ 1)
+                        CALL AB_DSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N),
+     $ 1)
                      END IF
                      WORK( J+(IV  )*N ) = X( 1, 1 )
                      WORK( J+(IV+1)*N ) = X( 1, 2 )
@@ -1126,41 +1151,47 @@
                      BETA = MAX( WORK( J ), WORK( J+1 ) )
                      IF( BETA.GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL DSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1 )
-                        CALL DSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1 )
+                        CALL AB_DSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1
+     $ )
+                        CALL AB_DSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1
+     $ )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J  +(IV  )*N ) = WORK( J+(IV)*N ) -
-     $                                DDOT( J-KI-2, T( KI+2, J ), 1,
+     $                                AB_DDOT( J-KI-2, T( KI+2, J ), 1,
      $                                      WORK( KI+2+(IV)*N ), 1 )
 *
                      WORK( J  +(IV+1)*N ) = WORK( J+(IV+1)*N ) -
-     $                                DDOT( J-KI-2, T( KI+2, J ), 1,
+     $                                AB_DDOT( J-KI-2, T( KI+2, J ), 1,
      $                                      WORK( KI+2+(IV+1)*N ), 1 )
 *
                      WORK( J+1+(IV  )*N ) = WORK( J+1+(IV)*N ) -
-     $                                DDOT( J-KI-2, T( KI+2, J+1 ), 1,
+     $                                AB_DDOT( J-KI-2, T( KI+2, J+1 ), 1
+     $,
      $                                      WORK( KI+2+(IV)*N ), 1 )
 *
                      WORK( J+1+(IV+1)*N ) = WORK( J+1+(IV+1)*N ) -
-     $                                DDOT( J-KI-2, T( KI+2, J+1 ), 1,
+     $                                AB_DDOT( J-KI-2, T( KI+2, J+1 ), 1
+     $,
      $                                      WORK( KI+2+(IV+1)*N ), 1 )
 *
 *                    Solve 2-by-2 complex linear equation
 *                    [ (T(j,j)   T(j,j+1)  )**T - (wr-i*wi)*I ]*X = SCALE*B
 *                    [ (T(j+1,j) T(j+1,j+1))                  ]
 *
-                     CALL DLALN2( .TRUE., 2, 2, SMIN, ONE, T( J, J ),
+                     CALL AB_DLALN2( .TRUE., 2, 2, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            -WI, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL DSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N), 1)
-                        CALL DSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N), 1)
+                        CALL AB_DSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N),
+     $ 1)
+                        CALL AB_DSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N),
+     $ 1)
                      END IF
                      WORK( J  +(IV  )*N ) = X( 1, 1 )
                      WORK( J  +(IV+1)*N ) = X( 1, 2 )
@@ -1179,9 +1210,9 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VL and normalize.
-                  CALL DCOPY( N-KI+1, WORK( KI + (IV  )*N ), 1,
+                  CALL AB_DCOPY( N-KI+1, WORK( KI + (IV  )*N ), 1,
      $                        VL( KI, IS   ), 1 )
-                  CALL DCOPY( N-KI+1, WORK( KI + (IV+1)*N ), 1,
+                  CALL AB_DCOPY( N-KI+1, WORK( KI + (IV+1)*N ), 1,
      $                        VL( KI, IS+1 ), 1 )
 *
                   EMAX = ZERO
@@ -1190,8 +1221,8 @@
      $                                 ABS( VL( K, IS+1 ) ) )
   220             CONTINUE
                   REMAX = ONE / EMAX
-                  CALL DSCAL( N-KI+1, REMAX, VL( KI, IS   ), 1 )
-                  CALL DSCAL( N-KI+1, REMAX, VL( KI, IS+1 ), 1 )
+                  CALL AB_DSCAL( N-KI+1, REMAX, VL( KI, IS   ), 1 )
+                  CALL AB_DSCAL( N-KI+1, REMAX, VL( KI, IS+1 ), 1 )
 *
                   DO 230 K = 1, KI - 1
                      VL( K, IS   ) = ZERO
@@ -1202,19 +1233,21 @@
 *                 ------------------------------
 *                 version 1: back-transform each vector with GEMV, Q*x.
                   IF( KI.LT.N-1 ) THEN
-                     CALL DGEMV( 'N', N, N-KI-1, ONE,
+                     CALL AB_DGEMV( 'N', N, N-KI-1, ONE,
      $                           VL( 1, KI+2 ), LDVL,
      $                           WORK( KI+2 + (IV)*N ), 1,
      $                           WORK( KI   + (IV)*N ),
      $                           VL( 1, KI ), 1 )
-                     CALL DGEMV( 'N', N, N-KI-1, ONE,
+                     CALL AB_DGEMV( 'N', N, N-KI-1, ONE,
      $                           VL( 1, KI+2 ), LDVL,
      $                           WORK( KI+2 + (IV+1)*N ), 1,
      $                           WORK( KI+1 + (IV+1)*N ),
      $                           VL( 1, KI+1 ), 1 )
                   ELSE
-                     CALL DSCAL( N, WORK(KI+  (IV  )*N), VL(1, KI  ), 1)
-                     CALL DSCAL( N, WORK(KI+1+(IV+1)*N), VL(1, KI+1), 1)
+                     CALL AB_DSCAL( N, WORK(KI+  (IV  )*N), VL(1, KI  ),
+     $ 1)
+                     CALL AB_DSCAL( N, WORK(KI+1+(IV+1)*N), VL(1, KI+1),
+     $ 1)
                   END IF
 *
                   EMAX = ZERO
@@ -1223,8 +1256,8 @@
      $                                 ABS( VL( K, KI+1 ) ) )
   240             CONTINUE
                   REMAX = ONE / EMAX
-                  CALL DSCAL( N, REMAX, VL( 1, KI   ), 1 )
-                  CALL DSCAL( N, REMAX, VL( 1, KI+1 ), 1 )
+                  CALL AB_DSCAL( N, REMAX, VL( 1, KI   ), 1 )
+                  CALL AB_DSCAL( N, REMAX, VL( 1, KI+1 ), 1 )
 *
                ELSE
 *                 ------------------------------
@@ -1256,7 +1289,7 @@
 *              When the number of vectors stored reaches NB-1 or NB,
 *              or if this was last vector, do the GEMM
                IF( (IV.GE.NB-1) .OR. (KI2.EQ.N) ) THEN
-                  CALL DGEMM( 'N', 'N', N, IV, N-KI2+IV, ONE,
+                  CALL AB_DGEMM( 'N', 'N', N, IV, N-KI2+IV, ONE,
      $                        VL( 1, KI2-IV+1 ), LDVL,
      $                        WORK( KI2-IV+1 + (1)*N ), N,
      $                        ZERO,
@@ -1265,7 +1298,7 @@
                   DO K = 1, IV
                      IF( ISCOMPLEX(K).EQ.0) THEN
 *                       real eigenvector
-                        II = IDAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
+                        II = AB_IDAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
                         REMAX = ONE / ABS( WORK( II + (NB+K)*N ) )
                      ELSE IF( ISCOMPLEX(K).EQ.1) THEN
 *                       first eigenvector of conjugate pair
@@ -1276,13 +1309,13 @@
      $                                 ABS( WORK( II + (NB+K+1)*N ) ) )
                         END DO
                         REMAX = ONE / EMAX
-*                    else if ISCOMPLEX(K).EQ.-1
-*                       second eigenvector of conjugate pair
+*                    ELSE if ISCOMPLEX(K).EQ.-1
+*                       AB_SECOND eigenvector of conjugate pair
 *                       reuse same REMAX as previous K
                      END IF
-                     CALL DSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
+                     CALL AB_DSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
                   END DO
-                  CALL DLACPY( 'F', N, IV,
+                  CALL AB_DLACPY( 'F', N, IV,
      $                         WORK( 1 + (NB+1)*N ), N,
      $                         VL( 1, KI2-IV+1 ), LDVL )
                   IV = 1
@@ -1299,6 +1332,6 @@
 *
       RETURN
 *
-*     End of DTREVC3
+*     End of AB_AB_DTREVC3
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SDRVPP
+*> \brief \b AB_SDRVPP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE AB_SDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
 *                          RWORK, IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> SDRVPP tests the driver routines SPPSV and -SVX.
+*> AB_SDRVPP tests the driver routines AB_SPPSV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -163,7 +163,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+      SUBROUTINE AB_SDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX
+     $,
      $                   A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
@@ -211,15 +212,18 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SGET06, SLANSP
-      EXTERNAL           LSAME, SGET06, SLANSP
+      LOGICAL            AB_LSAME
+      REAL               AB_SGET06, AB_SLANSP
+      EXTERNAL           AB_LSAME, AB_SGET06, AB_SLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, SCOPY, SERRVX, SGET04,
-     $                   SLACPY, SLAQSP, SLARHS, SLASET, SLATB4, SLATMS,
-     $                   SPPEQU, SPPSV, SPPSVX, SPPT01, SPPT02, SPPT05,
-     $                   SPPTRF, SPPTRI
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_SCOPY, AB_S
+     $ERRVX, AB_SGET04,
+     $                   AB_SLACPY, AB_SLAQSP, AB_SLARHS, AB_SLASET, AB_
+     $SLATB4, AB_SLATMS,
+     $                   AB_SPPEQU, AB_SPPSV, AB_AB_SPPSVX, AB_SPPT01, A
+     $B_SPPT02, AB_SPPT05,
+     $                   AB_SPPTRF, AB_SPPTRI
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -254,7 +258,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL SERRVX( PATH, NOUT )
+     $   CALL AB_SERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of N in NVAL
@@ -287,22 +291,24 @@
                UPLO = UPLOS( IUPLO )
                PACKIT = PACKS( IUPLO )
 *
-*              Set up parameters with SLATB4 and generate a test matrix
-*              with SLATMS.
+*              Set up parameters with AB_SLATB4 and generate a test matrix
+*              with AB_SLATMS.
 *
-               CALL SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+               CALL AB_SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
+     $DE,
      $                      CNDNUM, DIST )
                RCONDC = ONE / CNDNUM
 *
-               SRNAMT = 'SLATMS'
-               CALL SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_SLATMS'
+               CALL AB_SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, PACKIT, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from SLATMS.
+*              Check error code from AB_SLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'SLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_SLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 120
                END IF
@@ -348,7 +354,7 @@
 *
 *              Save a copy of the matrix A in ASAV.
 *
-               CALL SCOPY( NPP, A, 1, ASAV, 1 )
+               CALL AB_SCOPY( NPP, A, 1, ASAV, 1 )
 *
                DO 110 IEQUED = 1, 2
                   EQUED = EQUEDS( IEQUED )
@@ -360,29 +366,30 @@
 *
                   DO 100 IFACT = 1, NFACT
                      FACT = FACTS( IFACT )
-                     PREFAC = LSAME( FACT, 'F' )
-                     NOFACT = LSAME( FACT, 'N' )
-                     EQUIL = LSAME( FACT, 'E' )
+                     PREFAC = AB_LSAME( FACT, 'F' )
+                     NOFACT = AB_LSAME( FACT, 'N' )
+                     EQUIL = AB_LSAME( FACT, 'E' )
 *
                      IF( ZEROT ) THEN
                         IF( PREFAC )
      $                     GO TO 100
                         RCONDC = ZERO
 *
-                     ELSE IF( .NOT.LSAME( FACT, 'N' ) ) THEN
+                     ELSE IF( .NOT.AB_LSAME( FACT, 'N' ) ) THEN
 *
 *                       Compute the condition number for comparison with
-*                       the value returned by SPPSVX (FACT = 'N' reuses
+*                       the value returned by AB_AB_SPPSVX (FACT = 'N' reuses
 *                       the condition number from the previous iteration
 *                       with FACT = 'F').
 *
-                        CALL SCOPY( NPP, ASAV, 1, AFAC, 1 )
+                        CALL AB_SCOPY( NPP, ASAV, 1, AFAC, 1 )
                         IF( EQUIL .OR. IEQUED.GT.1 ) THEN
 *
 *                          Compute row and column scale factors to
 *                          equilibrate the matrix A.
 *
-                           CALL SPPEQU( UPLO, N, AFAC, S, SCOND, AMAX,
+                           CALL AB_SPPEQU( UPLO, N, AFAC, S, SCOND, AMAX
+     $,
      $                                  INFO )
                            IF( INFO.EQ.0 .AND. N.GT.0 ) THEN
                               IF( IEQUED.GT.1 )
@@ -390,33 +397,33 @@
 *
 *                             Equilibrate the matrix.
 *
-                              CALL SLAQSP( UPLO, N, AFAC, S, SCOND,
+                              CALL AB_SLAQSP( UPLO, N, AFAC, S, SCOND,
      $                                     AMAX, EQUED )
                            END IF
                         END IF
 *
 *                       Save the condition number of the
-*                       non-equilibrated system for use in SGET04.
+*                       non-equilibrated system for use in AB_SGET04.
 *
                         IF( EQUIL )
      $                     ROLDC = RCONDC
 *
 *                       Compute the 1-norm of A.
 *
-                        ANORM = SLANSP( '1', UPLO, N, AFAC, RWORK )
+                        ANORM = AB_SLANSP( '1', UPLO, N, AFAC, RWORK )
 *
 *                       Factor the matrix A.
 *
-                        CALL SPPTRF( UPLO, N, AFAC, INFO )
+                        CALL AB_SPPTRF( UPLO, N, AFAC, INFO )
 *
 *                       Form the inverse of A.
 *
-                        CALL SCOPY( NPP, AFAC, 1, A, 1 )
-                        CALL SPPTRI( UPLO, N, A, INFO )
+                        CALL AB_SCOPY( NPP, AFAC, 1, A, 1 )
+                        CALL AB_SPPTRI( UPLO, N, A, INFO )
 *
 *                       Compute the 1-norm condition number of A.
 *
-                        AINVNM = SLANSP( '1', UPLO, N, A, RWORK )
+                        AINVNM = AB_SLANSP( '1', UPLO, N, A, RWORK )
                         IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                            RCONDC = ONE
                         ELSE
@@ -426,34 +433,39 @@
 *
 *                    Restore the matrix A.
 *
-                     CALL SCOPY( NPP, ASAV, 1, A, 1 )
+                     CALL AB_SCOPY( NPP, ASAV, 1, A, 1 )
 *
 *                    Form an exact solution and set the right hand side.
 *
-                     SRNAMT = 'SLARHS'
-                     CALL SLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                     SRNAMT = 'AB_SLARHS'
+                     CALL AB_SLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, K
+     $U,
      $                            NRHS, A, LDA, XACT, LDA, B, LDA,
      $                            ISEED, INFO )
                      XTYPE = 'C'
-                     CALL SLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA )
+                     CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA 
+     $)
 *
                      IF( NOFACT ) THEN
 *
-*                       --- Test SPPSV  ---
+*                       --- Test AB_SPPSV  ---
 *
 *                       Compute the L*L' or U'*U factorization of the
 *                       matrix and solve the system.
 *
-                        CALL SCOPY( NPP, A, 1, AFAC, 1 )
-                        CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                        CALL AB_SCOPY( NPP, A, 1, AFAC, 1 )
+                        CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, X, LDA 
+     $)
 *
-                        SRNAMT = 'SPPSV '
-                        CALL SPPSV( UPLO, N, NRHS, AFAC, X, LDA, INFO )
+                        SRNAMT = 'AB_SPPSV '
+                        CALL AB_SPPSV( UPLO, N, NRHS, AFAC, X, LDA, INFO
+     $ )
 *
-*                       Check error code from SPPSV .
+*                       Check error code from AB_SPPSV .
 *
                         IF( INFO.NE.IZERO ) THEN
-                           CALL ALAERH( PATH, 'SPPSV ', INFO, IZERO,
+                           CALL AB_ALAERH( PATH, 'AB_SPPSV ', INFO, IZER
+     $O,
      $                                  UPLO, N, N, -1, -1, NRHS, IMAT,
      $                                  NFAIL, NERRS, NOUT )
                            GO TO 70
@@ -464,19 +476,20 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL SPPT01( UPLO, N, A, AFAC, RWORK,
+                        CALL AB_SPPT01( UPLO, N, A, AFAC, RWORK,
      $                               RESULT( 1 ) )
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK,
+                        CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, WORK,
      $                               LDA )
-                        CALL SPPT02( UPLO, N, NRHS, A, X, LDA, WORK,
+                        CALL AB_SPPT02( UPLO, N, NRHS, A, X, LDA, WORK,
      $                               LDA, RWORK, RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                        CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCON
+     $DC,
      $                               RESULT( 3 ) )
                         NT = 3
 *
@@ -486,8 +499,9 @@
                         DO 60 K = 1, NT
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL ALADHD( NOUT, PATH )
-                              WRITE( NOUT, FMT = 9999 )'SPPSV ', UPLO,
+     $                           CALL AB_ALADHD( NOUT, PATH )
+                              WRITE( NOUT, FMT = 9999 )'AB_SPPSV ', UPLO
+     $,
      $                           N, IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
                            END IF
@@ -496,32 +510,37 @@
    70                   CONTINUE
                      END IF
 *
-*                    --- Test SPPSVX ---
+*                    --- Test AB_AB_SPPSVX ---
 *
                      IF( .NOT.PREFAC .AND. NPP.GT.0 )
-     $                  CALL SLASET( 'Full', NPP, 1, ZERO, ZERO, AFAC,
+     $                  CALL AB_SLASET( 'Full', NPP, 1, ZERO, ZERO, AFAC
+     $,
      $                               NPP )
-                     CALL SLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
+                     CALL AB_SLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA
+     $ )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT='F' and
 *                       EQUED='Y'.
 *
-                        CALL SLAQSP( UPLO, N, A, S, SCOND, AMAX, EQUED )
+                        CALL AB_SLAQSP( UPLO, N, A, S, SCOND, AMAX, EQUE
+     $D )
                      END IF
 *
 *                    Solve the system and compute the condition number
-*                    and error bounds using SPPSVX.
+*                    and error bounds using AB_AB_SPPSVX.
 *
-                     SRNAMT = 'SPPSVX'
-                     CALL SPPSVX( FACT, UPLO, N, NRHS, A, AFAC, EQUED,
+                     SRNAMT = 'AB_AB_SPPSVX'
+                     CALL AB_AB_SPPSVX( FACT, UPLO, N, NRHS, A, AFAC, EQ
+     $UED,
      $                            S, B, LDA, X, LDA, RCOND, RWORK,
      $                            RWORK( NRHS+1 ), WORK, IWORK, INFO )
 *
-*                    Check the error code from SPPSVX.
+*                    Check the error code from AB_AB_SPPSVX.
 *
                      IF( INFO.NE.IZERO ) THEN
-                        CALL ALAERH( PATH, 'SPPSVX', INFO, IZERO,
+                        CALL AB_ALAERH( PATH, 'AB_AB_SPPSVX', INFO, IZER
+     $O,
      $                               FACT // UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 90
@@ -533,7 +552,7 @@
 *                          Reconstruct matrix from factors and compute
 *                          residual.
 *
-                           CALL SPPT01( UPLO, N, A, AFAC,
+                           CALL AB_SPPT01( UPLO, N, A, AFAC,
      $                                  RWORK( 2*NRHS+1 ), RESULT( 1 ) )
                            K1 = 1
                         ELSE
@@ -542,37 +561,39 @@
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL SLACPY( 'Full', N, NRHS, BSAV, LDA, WORK,
+                        CALL AB_SLACPY( 'Full', N, NRHS, BSAV, LDA, WORK
+     $,
      $                               LDA )
-                        CALL SPPT02( UPLO, N, NRHS, ASAV, X, LDA, WORK,
+                        CALL AB_SPPT02( UPLO, N, NRHS, ASAV, X, LDA, WOR
+     $K,
      $                               LDA, RWORK( 2*NRHS+1 ),
      $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        IF( NOFACT .OR. ( PREFAC .AND. LSAME( EQUED,
+                        IF( NOFACT .OR. ( PREFAC .AND. AB_LSAME( EQUED,
      $                      'N' ) ) ) THEN
-                           CALL SGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  RCONDC, RESULT( 3 ) )
                         ELSE
-                           CALL SGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  ROLDC, RESULT( 3 ) )
                         END IF
 *
 *                       Check the error bounds from iterative
 *                       refinement.
 *
-                        CALL SPPT05( UPLO, N, NRHS, ASAV, B, LDA, X,
+                        CALL AB_SPPT05( UPLO, N, NRHS, ASAV, B, LDA, X,
      $                               LDA, XACT, LDA, RWORK,
      $                               RWORK( NRHS+1 ), RESULT( 4 ) )
                      ELSE
                         K1 = 6
                      END IF
 *
-*                    Compare RCOND from SPPSVX with the computed value
+*                    Compare RCOND from AB_AB_SPPSVX with the computed value
 *                    in RCONDC.
 *
-                     RESULT( 6 ) = SGET06( RCOND, RCONDC )
+                     RESULT( 6 ) = AB_SGET06( RCOND, RCONDC )
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -580,12 +601,14 @@
                      DO 80 K = K1, 6
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALADHD( NOUT, PATH )
+     $                        CALL AB_ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'SPPSVX', FACT,
+                              WRITE( NOUT, FMT = 9997 )'AB_AB_SPPSVX', F
+     $ACT,
      $                           UPLO, N, EQUED, IMAT, K, RESULT( K )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'SPPSVX', FACT,
+                              WRITE( NOUT, FMT = 9998 )'AB_AB_SPPSVX', F
+     $ACT,
      $                           UPLO, N, IMAT, K, RESULT( K )
                            END IF
                            NFAIL = NFAIL + 1
@@ -601,7 +624,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I1,
      $      ', test(', I1, ')=', G12.5 )
@@ -612,6 +635,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of SDRVPP
+*     End of AB_SDRVPP
 *
       END

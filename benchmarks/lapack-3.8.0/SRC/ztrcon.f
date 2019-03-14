@@ -1,4 +1,4 @@
-*> \brief \b ZTRCON
+*> \brief \b AB_ZTRCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTRCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrcon.f">
+*> Download AB_ZTRCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTRCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTRCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTRCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTRCON( NORM, UPLO, DIAG, N, A, LDA, RCOND, WORK,
+*       SUBROUTINE AB_ZTRCON( NORM, UPLO, DIAG, N, A, LDA, RCOND, WORK,
 *                          RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> ZTRCON estimates the reciprocal of the condition number of a
+*> AB_ZTRCON estimates the reciprocal of the condition number of a
 *> triangular matrix A, in either the 1-norm or the infinity-norm.
 *>
 *> The norm of A is computed and an estimate is obtained for
@@ -134,7 +134,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZTRCON( NORM, UPLO, DIAG, N, A, LDA, RCOND, WORK,
+      SUBROUTINE AB_ZTRCON( NORM, UPLO, DIAG, N, A, LDA, RCOND, WORK,
      $                   RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -169,13 +169,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH, ZLANTR
-      EXTERNAL           LSAME, IZAMAX, DLAMCH, ZLANTR
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IZAMAX
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANTR
+      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH, AB_ZLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLATRS
+      EXTERNAL           AB_XERBLA, ZAB_DRSCL, AB_ZLACN2, AB_ZLATRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -191,15 +191,15 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
-      NOUNIT = LSAME( DIAG, 'N' )
+      UPPER = AB_LSAME( UPLO, 'U' )
+      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
+      NOUNIT = AB_LSAME( DIAG, 'N' )
 *
-      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
+      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -207,7 +207,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTRCON', -INFO )
+         CALL AB_XERBLA( 'AB_ZTRCON', -INFO )
          RETURN
       END IF
 *
@@ -219,11 +219,11 @@
       END IF
 *
       RCOND = ZERO
-      SMLNUM = DLAMCH( 'Safe minimum' )*DBLE( MAX( 1, N ) )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )*DBLE( MAX( 1, N ) )
 *
 *     Compute the norm of the triangular matrix A.
 *
-      ANORM = ZLANTR( NORM, UPLO, DIAG, N, N, A, LDA, RWORK )
+      ANORM = AB_ZLANTR( NORM, UPLO, DIAG, N, N, A, LDA, RWORK )
 *
 *     Continue only if ANORM > 0.
 *
@@ -240,19 +240,20 @@
          END IF
          KASE = 0
    10    CONTINUE
-         CALL ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+         CALL AB_ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.KASE1 ) THEN
 *
 *              Multiply by inv(A).
 *
-               CALL ZLATRS( UPLO, 'No transpose', DIAG, NORMIN, N, A,
+               CALL AB_ZLATRS( UPLO, 'No transpose', DIAG, NORMIN, N, A,
      $                      LDA, WORK, SCALE, RWORK, INFO )
             ELSE
 *
 *              Multiply by inv(A**H).
 *
-               CALL ZLATRS( UPLO, 'Conjugate transpose', DIAG, NORMIN,
+               CALL AB_ZLATRS( UPLO, 'Conjugate transpose', DIAG, NORMIN
+     $,
      $                      N, A, LDA, WORK, SCALE, RWORK, INFO )
             END IF
             NORMIN = 'Y'
@@ -260,11 +261,11 @@
 *           Multiply by 1/SCALE if doing so will not cause overflow.
 *
             IF( SCALE.NE.ONE ) THEN
-               IX = IZAMAX( N, WORK, 1 )
+               IX = AB_IZAMAX( N, WORK, 1 )
                XNORM = CABS1( WORK( IX ) )
                IF( SCALE.LT.XNORM*SMLNUM .OR. SCALE.EQ.ZERO )
      $            GO TO 20
-               CALL ZDRSCL( N, SCALE, WORK, 1 )
+               CALL ZAB_DRSCL( N, SCALE, WORK, 1 )
             END IF
             GO TO 10
          END IF
@@ -278,6 +279,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of ZTRCON
+*     End of AB_ZTRCON
 *
       END

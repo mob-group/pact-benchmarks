@@ -1,4 +1,4 @@
-*> \brief \b CERRLQT
+*> \brief \b AB_AB_CERRLQT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CERRLQT( PATH, NUNIT )
+*       SUBROUTINE AB_AB_CERRLQT( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CERRLQT tests the error exits for the COMPLEX routines
+*> AB_AB_CERRLQT tests the error exits for the COMPLEX routines
 *> that use the LQT decomposition of a general matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE CERRLQT( PATH, NUNIT )
+      SUBROUTINE AB_AB_CERRLQT( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,9 @@
      $                   C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, CGELQT3, CGELQT,
-     $                   CGEMLQT
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_CGELQT3, AB_AB_CGEL
+     $QT,
+     $                   AB_AB_CGEMLQT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,84 +115,95 @@
 *
 *     Error exits for LQT factorization
 *
-*     CGELQT
+*     AB_AB_CGELQT
 *
-      SRNAMT = 'CGELQT'
+      SRNAMT = 'AB_AB_CGELQT'
       INFOT = 1
-      CALL CGELQT( -1, 0, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'CGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT( -1, 0, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CGELQT( 0, -1, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'CGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT( 0, -1, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CGELQT( 0, 0, 0, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'CGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT( 0, 0, 0, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CGELQT( 2, 1, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'CGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT( 2, 1, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL CGELQT( 2, 2, 2, A, 2, T, 1, W, INFO )
-      CALL CHKXER( 'CGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT( 2, 2, 2, A, 2, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT', INFOT, NOUT, LERR, OK )
 *
-*     CGELQT3
+*     AB_AB_CGELQT3
 *
-      SRNAMT = 'CGELQT3'
+      SRNAMT = 'AB_AB_CGELQT3'
       INFOT = 1
-      CALL CGELQT3( -1, 0, A, 1, T, 1, INFO )
-      CALL CHKXER( 'CGELQT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT3( -1, 0, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT3', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CGELQT3( 0, -1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'CGELQT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT3( 0, -1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT3', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CGELQT3( 2, 2, A, 1, T, 1, INFO )
-      CALL CHKXER( 'CGELQT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT3( 2, 2, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT3', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL CGELQT3( 2, 2, A, 2, T, 1, INFO )
-      CALL CHKXER( 'CGELQT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGELQT3( 2, 2, A, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_CGELQT3', INFOT, NOUT, LERR, OK )
 *
-*     CGEMLQT
+*     AB_AB_CGEMLQT
 *
-      SRNAMT = 'CGEMLQT'
+      SRNAMT = 'AB_AB_CGEMLQT'
       INFOT = 1
-      CALL CGEMLQT( '/', 'N', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( '/', 'N', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CGEMLQT( 'L', '/', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'L', '/', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CGEMLQT( 'L', 'N', -1, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'L', 'N', -1, 0, 0, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CGEMLQT( 'L', 'N', 0, -1, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'L', 'N', 0, -1, 0, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CGEMLQT( 'L', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'L', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CGEMLQT( 'R', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'R', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL CGEMLQT( 'L', 'N', 0, 0, 0, 0, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'L', 'N', 0, 0, 0, 0, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL CGEMLQT( 'R', 'N', 2, 2, 2, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'R', 'N', 2, 2, 2, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL CGEMLQT( 'L', 'N', 2, 2, 2, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'L', 'N', 2, 2, 2, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL CGEMLQT( 'R', 'N', 1, 1, 1, 1, A, 1, T, 0, C, 1, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'R', 'N', 1, 1, 1, 1, A, 1, T, 0, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL CGEMLQT( 'L', 'N', 1, 1, 1, 1, A, 1, T, 1, C, 0, W, INFO )
-      CALL CHKXER( 'CGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_CGEMLQT( 'L', 'N', 1, 1, 1, 1, A, 1, T, 1, C, 0, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_CGEMLQT', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of CERRLQT
+*     End of AB_AB_CERRLQT
 *
       END

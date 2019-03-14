@@ -1,4 +1,4 @@
-*> \brief \b DQRT04
+*> \brief \b AB_DQRT04
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DQRT04(M,N,NB,RESULT)
+*       SUBROUTINE AB_DQRT04(M,N,NB,RESULT)
 *
 *       .. Scalar Arguments ..
 *       INTEGER M, N, NB, LDT
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DQRT04 tests DGEQRT and DGEMQRT.
+*> AB_DQRT04 tests AB_AB_DGEQRT and AB_AB_DGEMQRT.
 *> \endverbatim
 *
 *  Arguments:
@@ -71,7 +71,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DQRT04(M,N,NB,RESULT)
+      SUBROUTINE AB_DQRT04(M,N,NB,RESULT)
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -104,9 +104,9 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION DLAMCH, DLANGE, DLANSY
-      LOGICAL  LSAME
-      EXTERNAL DLAMCH, DLANGE, DLANSY, LSAME
+      DOUBLE PRECISION AB_DLAMCH, AB_DLANGE, AB_DLANSY
+      LOGICAL  AB_LSAME
+      EXTERNAL AB_DLAMCH, AB_DLANGE, AB_DLANSY, AB_LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
@@ -114,7 +114,7 @@
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       K = MIN(M,N)
       L = MAX(M,N)
       LWORK = MAX(2,L)*MAX(2,L)*NB
@@ -129,30 +129,30 @@
 *
       LDT=NB
       DO J=1,N
-         CALL DLARNV( 2, ISEED, M, A( 1, J ) )
+         CALL AB_DLARNV( 2, ISEED, M, A( 1, J ) )
       END DO
-      CALL DLACPY( 'Full', M, N, A, M, AF, M )
+      CALL AB_DLACPY( 'Full', M, N, A, M, AF, M )
 *
 *     Factor the matrix A in the array AF.
 *
-      CALL DGEQRT( M, N, NB, AF, M, T, LDT, WORK, INFO )
+      CALL AB_AB_DGEQRT( M, N, NB, AF, M, T, LDT, WORK, INFO )
 *
 *     Generate the m-by-m matrix Q
 *
-      CALL DLASET( 'Full', M, M, ZERO, ONE, Q, M )
-      CALL DGEMQRT( 'R', 'N', M, M, K, NB, AF, M, T, LDT, Q, M,
+      CALL AB_DLASET( 'Full', M, M, ZERO, ONE, Q, M )
+      CALL AB_AB_DGEMQRT( 'R', 'N', M, M, K, NB, AF, M, T, LDT, Q, M,
      $              WORK, INFO )
 *
 *     Copy R
 *
-      CALL DLASET( 'Full', M, N, ZERO, ZERO, R, M )
-      CALL DLACPY( 'Upper', M, N, AF, M, R, M )
+      CALL AB_DLASET( 'Full', M, N, ZERO, ZERO, R, M )
+      CALL AB_DLACPY( 'Upper', M, N, AF, M, R, M )
 *
 *     Compute |R - Q'*A| / |A| and store in RESULT(1)
 *
-      CALL DGEMM( 'T', 'N', M, N, M, -ONE, Q, M, A, M, ONE, R, M )
-      ANORM = DLANGE( '1', M, N, A, M, RWORK )
-      RESID = DLANGE( '1', M, N, R, M, RWORK )
+      CALL AB_DGEMM( 'T', 'N', M, N, M, -ONE, Q, M, A, M, ONE, R, M )
+      ANORM = AB_DLANGE( '1', M, N, A, M, RWORK )
+      RESID = AB_DLANGE( '1', M, N, R, M, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = RESID / (EPS*MAX(1,M)*ANORM)
       ELSE
@@ -161,28 +161,28 @@
 *
 *     Compute |I - Q'*Q| and store in RESULT(2)
 *
-      CALL DLASET( 'Full', M, M, ZERO, ONE, R, M )
-      CALL DSYRK( 'U', 'C', M, M, -ONE, Q, M, ONE, R, M )
-      RESID = DLANSY( '1', 'Upper', M, R, M, RWORK )
+      CALL AB_DLASET( 'Full', M, M, ZERO, ONE, R, M )
+      CALL AB_AB_DSYRK( 'U', 'C', M, M, -ONE, Q, M, ONE, R, M )
+      RESID = AB_DLANSY( '1', 'Upper', M, R, M, RWORK )
       RESULT( 2 ) = RESID / (EPS*MAX(1,M))
 *
 *     Generate random m-by-n matrix C and a copy CF
 *
       DO J=1,N
-         CALL DLARNV( 2, ISEED, M, C( 1, J ) )
+         CALL AB_DLARNV( 2, ISEED, M, C( 1, J ) )
       END DO
-      CNORM = DLANGE( '1', M, N, C, M, RWORK)
-      CALL DLACPY( 'Full', M, N, C, M, CF, M )
+      CNORM = AB_DLANGE( '1', M, N, C, M, RWORK)
+      CALL AB_DLACPY( 'Full', M, N, C, M, CF, M )
 *
 *     Apply Q to C as Q*C
 *
-      CALL DGEMQRT( 'L', 'N', M, N, K, NB, AF, M, T, NB, CF, M,
+      CALL AB_AB_DGEMQRT( 'L', 'N', M, N, K, NB, AF, M, T, NB, CF, M,
      $             WORK, INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
 *
-      CALL DGEMM( 'N', 'N', M, N, M, -ONE, Q, M, C, M, ONE, CF, M )
-      RESID = DLANGE( '1', M, N, CF, M, RWORK )
+      CALL AB_DGEMM( 'N', 'N', M, N, M, -ONE, Q, M, C, M, ONE, CF, M )
+      RESID = AB_DLANGE( '1', M, N, CF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 3 ) = RESID / (EPS*MAX(1,M)*CNORM)
       ELSE
@@ -191,17 +191,17 @@
 *
 *     Copy C into CF again
 *
-      CALL DLACPY( 'Full', M, N, C, M, CF, M )
+      CALL AB_DLACPY( 'Full', M, N, C, M, CF, M )
 *
 *     Apply Q to C as QT*C
 *
-      CALL DGEMQRT( 'L', 'T', M, N, K, NB, AF, M, T, NB, CF, M,
+      CALL AB_AB_DGEMQRT( 'L', 'T', M, N, K, NB, AF, M, T, NB, CF, M,
      $             WORK, INFO)
 *
 *     Compute |QT*C - QT*C| / |C|
 *
-      CALL DGEMM( 'T', 'N', M, N, M, -ONE, Q, M, C, M, ONE, CF, M )
-      RESID = DLANGE( '1', M, N, CF, M, RWORK )
+      CALL AB_DGEMM( 'T', 'N', M, N, M, -ONE, Q, M, C, M, ONE, CF, M )
+      RESID = AB_DLANGE( '1', M, N, CF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 4 ) = RESID / (EPS*MAX(1,M)*CNORM)
       ELSE
@@ -211,20 +211,20 @@
 *     Generate random n-by-m matrix D and a copy DF
 *
       DO J=1,M
-         CALL DLARNV( 2, ISEED, N, D( 1, J ) )
+         CALL AB_DLARNV( 2, ISEED, N, D( 1, J ) )
       END DO
-      DNORM = DLANGE( '1', N, M, D, N, RWORK)
-      CALL DLACPY( 'Full', N, M, D, N, DF, N )
+      DNORM = AB_DLANGE( '1', N, M, D, N, RWORK)
+      CALL AB_DLACPY( 'Full', N, M, D, N, DF, N )
 *
 *     Apply Q to D as D*Q
 *
-      CALL DGEMQRT( 'R', 'N', N, M, K, NB, AF, M, T, NB, DF, N,
+      CALL AB_AB_DGEMQRT( 'R', 'N', N, M, K, NB, AF, M, T, NB, DF, N,
      $             WORK, INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
 *
-      CALL DGEMM( 'N', 'N', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
-      RESID = DLANGE( '1', N, M, DF, N, RWORK )
+      CALL AB_DGEMM( 'N', 'N', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
+      RESID = AB_DLANGE( '1', N, M, DF, N, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 5 ) = RESID / (EPS*MAX(1,M)*DNORM)
       ELSE
@@ -233,17 +233,17 @@
 *
 *     Copy D into DF again
 *
-      CALL DLACPY( 'Full', N, M, D, N, DF, N )
+      CALL AB_DLACPY( 'Full', N, M, D, N, DF, N )
 *
 *     Apply Q to D as D*QT
 *
-      CALL DGEMQRT( 'R', 'T', N, M, K, NB, AF, M, T, NB, DF, N,
+      CALL AB_AB_DGEMQRT( 'R', 'T', N, M, K, NB, AF, M, T, NB, DF, N,
      $             WORK, INFO)
 *
 *     Compute |D*QT - D*QT| / |D|
 *
-      CALL DGEMM( 'N', 'T', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
-      RESID = DLANGE( '1', N, M, DF, N, RWORK )
+      CALL AB_DGEMM( 'N', 'T', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
+      RESID = AB_DLANGE( '1', N, M, DF, N, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 6 ) = RESID / (EPS*MAX(1,M)*DNORM)
       ELSE

@@ -1,4 +1,4 @@
-*> \brief <b> SSTEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> AB_AB_SSTEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSTEVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstevd.f">
+*> Download AB_AB_SSTEVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SSTEVD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sstevd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SSTEVD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstevd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SSTEVD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSTEVD( JOBZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
+*       SUBROUTINE AB_AB_SSTEVD( JOBZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
 *                          LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SSTEVD computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_AB_SSTEVD computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric tridiagonal matrix. If eigenvectors are desired, it
 *> uses a divide and conquer algorithm.
 *>
@@ -115,7 +115,7 @@
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by XERBLA.
+*>          LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -135,7 +135,7 @@
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by XERBLA.
+*>          LWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -160,7 +160,8 @@
 *> \ingroup realOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE SSTEVD( JOBZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
+      SUBROUTINE AB_AB_SSTEVD( JOBZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK
+     $,
      $                   LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -190,12 +191,12 @@
      $                   TNRM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANST
-      EXTERNAL           LSAME, SLAMCH, SLANST
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANST
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSTEDC, SSTERF, XERBLA
+      EXTERNAL           AB_SSCAL, AB_SSTEDC, AB_SSTERF, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -204,7 +205,7 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
@@ -215,7 +216,7 @@
          LIWMIN = 3 + 5*N
       END IF
 *
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -235,7 +236,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSTEVD', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SSTEVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -254,8 +255,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )
@@ -264,7 +265,7 @@
 *     Scale matrix to allowable range, if necessary.
 *
       ISCALE = 0
-      TNRM = SLANST( 'M', N, D, E )
+      TNRM = AB_SLANST( 'M', N, D, E )
       IF( TNRM.GT.ZERO .AND. TNRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / TNRM
@@ -273,30 +274,31 @@
          SIGMA = RMAX / TNRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL SSCAL( N, SIGMA, D, 1 )
-         CALL SSCAL( N-1, SIGMA, E( 1 ), 1 )
+         CALL AB_SSCAL( N, SIGMA, D, 1 )
+         CALL AB_SSCAL( N-1, SIGMA, E( 1 ), 1 )
       END IF
 *
-*     For eigenvalues only, call SSTERF.  For eigenvalues and
-*     eigenvectors, call SSTEDC.
+*     For eigenvalues only, call AB_SSTERF.  For eigenvalues and
+*     eigenvectors, call AB_SSTEDC.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL SSTERF( N, D, E, INFO )
+         CALL AB_SSTERF( N, D, E, INFO )
       ELSE
-         CALL SSTEDC( 'I', N, D, E, Z, LDZ, WORK, LWORK, IWORK, LIWORK,
+         CALL AB_SSTEDC( 'I', N, D, E, Z, LDZ, WORK, LWORK, IWORK, LIWOR
+     $K,
      $                INFO )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
 *
       IF( ISCALE.EQ.1 )
-     $   CALL SSCAL( N, ONE / SIGMA, D, 1 )
+     $   CALL AB_SSCAL( N, ONE / SIGMA, D, 1 )
 *
       WORK( 1 ) = LWMIN
       IWORK( 1 ) = LIWMIN
 *
       RETURN
 *
-*     End of SSTEVD
+*     End of AB_AB_SSTEVD
 *
       END

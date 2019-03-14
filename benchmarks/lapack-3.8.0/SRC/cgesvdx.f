@@ -1,4 +1,4 @@
-*> \brief <b> CGESVDX computes the singular value decomposition (SVD) for GE matrices</b>
+*> \brief <b> AB_AB_AB_CGESVDX computes the singular value decomposition (SVD) for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGESVDX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgesvdx.f">
+*> Download AB_AB_AB_CGESVDX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_CGESVDX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgesvdx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_CGESVDX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgesvdx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_CGESVDX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE CGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
+*     SUBROUTINE AB_AB_AB_CGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
 *    $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
 *    $                    LWORK, RWORK, IWORK, INFO )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*>  CGESVDX computes the singular value decomposition (SVD) of a complex
+*>  AB_AB_AB_CGESVDX computes the singular value decomposition (SVD) of a complex
 *>  M-by-N matrix A, optionally computing the left and/or right singular
 *>  vectors. The SVD is written
 *>
@@ -54,9 +54,9 @@
 *>  are returned in descending order.  The first min(m,n) columns of
 *>  U and V are the left and right singular vectors of A.
 *>
-*>  CGESVDX uses an eigenvalue problem for obtaining the SVD, which
+*>  AB_AB_AB_CGESVDX uses an eigenvalue problem for obtaining the SVD, which
 *>  allows for the computation of a subset of singular values and
-*>  vectors. See SBDSVDX for details.
+*>  vectors. See AB_SBDSVDX for details.
 *>
 *>  Note that the routine returns V**T, not V.
 *> \endverbatim
@@ -225,7 +225,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -239,7 +239,7 @@
 *>          IWORK is INTEGER array, dimension (12*MIN(M,N))
 *>          If INFO = 0, the first NS elements of IWORK are zero. If INFO > 0,
 *>          then IWORK contains the indices of the eigenvectors that failed
-*>          to converge in SBDSVDX/SSTEVX.
+*>          to converge in AB_SBDSVDX/AB_AB_SSTEVX.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -248,9 +248,9 @@
 *>           = 0:  successful exit
 *>           < 0:  if INFO = -i, the i-th argument had an illegal value
 *>           > 0:  if INFO = i, then i eigenvectors failed to converge
-*>                 in SBDSVDX/SSTEVX.
+*>                 in AB_SBDSVDX/AB_AB_SSTEVX.
 *>                 if INFO = N*2 + 1, an internal error occurred in
-*>                 SBDSVDX
+*>                 AB_SBDSVDX
 *> \endverbatim
 *
 *  Authors:
@@ -266,7 +266,8 @@
 *> \ingroup complexGEsing
 *
 *  =====================================================================
-      SUBROUTINE CGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
+      SUBROUTINE AB_AB_AB_CGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL,
+     $ VU,
      $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
      $                    LWORK, RWORK, IWORK, INFO )
 *
@@ -308,15 +309,16 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEBRD, CGELQF, CGEQRF, CLASCL, CLASET,
-     $                   CUNMBR, CUNMQR, CUNMLQ, CLACPY, 
-     $                   SBDSVDX, SLASCL, XERBLA
+      EXTERNAL           AB_CGEBRD, AB_AB_CGELQF, AB_AB_CGEQRF, AB_CLASC
+     $L, AB_CLASET,
+     $                   AB_CUNMBR, AB_CUNMQR, AB_CUNMLQ, AB_CLACPY, 
+     $                   AB_SBDSVDX, AB_SLASCL, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      REAL               SLAMCH, CLANGE
-      EXTERNAL           LSAME, ILAENV, SLAMCH, CLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      REAL               AB_SLAMCH, AB_CLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLAMCH, AB_CLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -327,27 +329,27 @@
 *
       NS = 0
       INFO = 0
-      ABSTOL = 2*SLAMCH('S')
+      ABSTOL = 2*AB_SLAMCH('S')
       LQUERY = ( LWORK.EQ.-1 )
       MINMN = MIN( M, N )
 
-      WANTU = LSAME( JOBU, 'V' )
-      WANTVT = LSAME( JOBVT, 'V' )
+      WANTU = AB_LSAME( JOBU, 'V' )
+      WANTVT = AB_LSAME( JOBVT, 'V' )
       IF( WANTU .OR. WANTVT ) THEN
          JOBZ = 'V'
       ELSE
          JOBZ = 'N'
       END IF
-      ALLS = LSAME( RANGE, 'A' )
-      VALS = LSAME( RANGE, 'V' )
-      INDS = LSAME( RANGE, 'I' )
+      ALLS = AB_LSAME( RANGE, 'A' )
+      VALS = AB_LSAME( RANGE, 'V' )
+      INDS = AB_LSAME( RANGE, 'I' )
 *
       INFO = 0
-      IF( .NOT.LSAME( JOBU, 'V' ) .AND.
-     $    .NOT.LSAME( JOBU, 'N' ) ) THEN
+      IF( .NOT.AB_LSAME( JOBU, 'V' ) .AND.
+     $    .NOT.AB_LSAME( JOBU, 'N' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( JOBVT, 'V' ) .AND.
-     $         .NOT.LSAME( JOBVT, 'N' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( JOBVT, 'V' ) .AND.
+     $         .NOT.AB_LSAME( JOBVT, 'N' ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLS .OR. VALS .OR. INDS ) ) THEN
          INFO = -3
@@ -391,50 +393,60 @@
 *     minimal amount of workspace needed at that point in the code,
 *     as well as the preferred amount for good performance.
 *     NB refers to the optimal block size for the immediately
-*     following subroutine, as returned by ILAENV.)
+*     following subroutine, as returned by AB_ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             IF( M.GE.N ) THEN
-               MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = AB_ILAENV( 6, 'AB_AB_CGESVD', JOBU // JOBVT, M, N
+     $, 0, 0 )
                IF( M.GE.MNTHR ) THEN
 *
 *                 Path 1 (M much larger than N)
 *
                   MINWRK = N*(N+5)
-                  MAXWRK = N + N*ILAENV(1,'CGEQRF',' ',M,N,-1,-1)
+                  MAXWRK = N + N*AB_ILAENV(1,'AB_AB_CGEQRF',' ',M,N,-1,-
+     $1)
                   MAXWRK = MAX(MAXWRK,
-     $                     N*N+2*N+2*N*ILAENV(1,'CGEBRD',' ',N,N,-1,-1))
+     $                     N*N+2*N+2*N*AB_ILAENV(1,'AB_CGEBRD',' ',N,N,-
+     $1,-1))
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                       N*N+2*N+N*ILAENV(1,'CUNMQR','LN',N,N,N,-1))
+     $                       N*N+2*N+N*AB_ILAENV(1,'AB_CUNMQR','LN',N,N,
+     $N,-1))
                   END IF
                ELSE
 *
 *                 Path 2 (M at least N, but not much larger)
 *
                   MINWRK = 3*N + M
-                  MAXWRK = 2*N + (M+N)*ILAENV(1,'CGEBRD',' ',M,N,-1,-1)
+                  MAXWRK = 2*N + (M+N)*AB_ILAENV(1,'AB_CGEBRD',' ',M,N,-
+     $1,-1)
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                        2*N+N*ILAENV(1,'CUNMQR','LN',N,N,N,-1))
+     $                        2*N+N*AB_ILAENV(1,'AB_CUNMQR','LN',N,N,N,-
+     $1))
                   END IF
                END IF
             ELSE
-               MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = AB_ILAENV( 6, 'AB_AB_CGESVD', JOBU // JOBVT, M, N
+     $, 0, 0 )
                IF( N.GE.MNTHR ) THEN
 *
 *                 Path 1t (N much larger than M)
 *
                   MINWRK = M*(M+5)
-                  MAXWRK = M + M*ILAENV(1,'CGELQF',' ',M,N,-1,-1)
+                  MAXWRK = M + M*AB_ILAENV(1,'AB_AB_CGELQF',' ',M,N,-1,-
+     $1)
                   MAXWRK = MAX(MAXWRK,
-     $                     M*M+2*M+2*M*ILAENV(1,'CGEBRD',' ',M,M,-1,-1))
+     $                     M*M+2*M+2*M*AB_ILAENV(1,'AB_CGEBRD',' ',M,M,-
+     $1,-1))
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                       M*M+2*M+M*ILAENV(1,'CUNMQR','LN',M,M,M,-1))
+     $                       M*M+2*M+M*AB_ILAENV(1,'AB_CUNMQR','LN',M,M,
+     $M,-1))
                   END IF
                ELSE
 *
@@ -442,10 +454,12 @@
 *
 *
                   MINWRK = 3*M + N
-                  MAXWRK = 2*M + (M+N)*ILAENV(1,'CGEBRD',' ',M,N,-1,-1)
+                  MAXWRK = 2*M + (M+N)*AB_ILAENV(1,'AB_CGEBRD',' ',M,N,-
+     $1,-1)
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                        2*M+M*ILAENV(1,'CUNMQR','LN',M,M,M,-1))
+     $                        2*M+M*AB_ILAENV(1,'AB_CUNMQR','LN',M,M,M,-
+     $1))
                   END IF
                END IF
             END IF
@@ -459,7 +473,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGESVDX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_AB_CGESVDX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -489,20 +503,20 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SQRT( SLAMCH( 'S' ) ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = SQRT( AB_SLAMCH( 'S' ) ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = CLANGE( 'M', M, N, A, LDA, DUM )
+      ANRM = AB_CLANGE( 'M', M, N, A, LDA, DUM )
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1
-         CALL CLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          ISCL = 1
-         CALL CLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
       END IF
 *
       IF( M.GE.N ) THEN
@@ -523,7 +537,8 @@
 *
             ITAU = 1
             ITEMP = ITAU + N
-            CALL CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP ),
+            CALL AB_AB_CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP )
+     $,
      $                   LWORK-ITEMP+1, INFO )
 *
 *           Copy R into WORK and bidiagonalize it:
@@ -536,10 +551,10 @@
             ID = 1
             IE = ID + N
             ITGKZ = IE + N
-            CALL CLACPY( 'U', N, N, A, LDA, WORK( IQRF ), N )
-            CALL CLASET( 'L', N-1, N-1, CZERO, CZERO,
+            CALL AB_CLACPY( 'U', N, N, A, LDA, WORK( IQRF ), N )
+            CALL AB_CLASET( 'L', N-1, N-1, CZERO, CZERO,
      $                   WORK( IQRF+1 ), N )
-            CALL CGEBRD( N, N, WORK( IQRF ), N, RWORK( ID ),
+            CALL AB_CGEBRD( N, N, WORK( IQRF ), N, RWORK( ID ),
      $                   RWORK( IE ), WORK( ITAUQ ), WORK( ITAUP ),
      $                   WORK( ITEMP ), LWORK-ITEMP+1, INFO )
             ITEMPR = ITGKZ + N*(N*2+1)
@@ -547,7 +562,7 @@
 *           Solve eigenvalue problem TGK*Z=Z*S.
 *           (Workspace: need 2*N*N+14*N)
 *
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, N, RWORK( ID ),
+            CALL AB_SBDSVDX( 'U', JOBZ, RNGTGK, N, RWORK( ID ),
      $                    RWORK( IE ), VL, VU, ILTGK, IUTGK, NS, S,
      $                    RWORK( ITGKZ ), N*2, RWORK( ITEMPR ),
      $                    IWORK, INFO)
@@ -563,19 +578,20 @@
                   END DO
                   K = K + N
                END DO
-               CALL CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU)
+               CALL AB_CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), L
+     $DU)
 *
-*              Call CUNMBR to compute QB*UB.
+*              Call AB_CUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL CUNMBR( 'Q', 'L', 'N', N, NS, N, WORK( IQRF ), N,
+               CALL AB_CUNMBR( 'Q', 'L', 'N', N, NS, N, WORK( IQRF ), N,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
 *
-*              Call CUNMQR to compute Q*(QB*UB).
+*              Call AB_CUNMQR to compute Q*(QB*UB).
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL CUNMQR( 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_CUNMQR( 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAU ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -592,10 +608,10 @@
                   K = K + N
                END DO
 *
-*              Call CUNMBR to compute VB**T * PB**T
+*              Call AB_CUNMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL CUNMBR( 'P', 'R', 'C', NS, N, N, WORK( IQRF ), N,
+               CALL AB_CUNMBR( 'P', 'R', 'C', NS, N, N, WORK( IQRF ), N,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -615,7 +631,7 @@
             ID = 1
             IE = ID + N
             ITGKZ = IE + N
-            CALL CGEBRD( M, N, A, LDA, RWORK( ID ), RWORK( IE ),
+            CALL AB_CGEBRD( M, N, A, LDA, RWORK( ID ), RWORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
             ITEMPR = ITGKZ + N*(N*2+1)
@@ -623,7 +639,7 @@
 *           Solve eigenvalue problem TGK*Z=Z*S.
 *           (Workspace: need 2*N*N+14*N)
 *
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, N, RWORK( ID ),
+            CALL AB_SBDSVDX( 'U', JOBZ, RNGTGK, N, RWORK( ID ),
      $                    RWORK( IE ), VL, VU, ILTGK, IUTGK, NS, S,
      $                    RWORK( ITGKZ ), N*2, RWORK( ITEMPR ),
      $                    IWORK, INFO)
@@ -639,12 +655,13 @@
                   END DO
                   K = K + N
                END DO
-               CALL CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU)
+               CALL AB_CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), L
+     $DU)
 *
-*              Call CUNMBR to compute QB*UB.
+*              Call AB_CUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL CUNMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_CUNMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, IERR )
             END IF
@@ -661,10 +678,10 @@
                   K = K + N
                END DO
 *
-*              Call CUNMBR to compute VB**T * PB**T
+*              Call AB_CUNMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL CUNMBR( 'P', 'R', 'C', NS, N, N, A, LDA,
+               CALL AB_CUNMBR( 'P', 'R', 'C', NS, N, N, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, IERR )
             END IF
@@ -686,7 +703,8 @@
 *
             ITAU = 1
             ITEMP = ITAU + M
-            CALL CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP ),
+            CALL AB_AB_CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP )
+     $,
      $                   LWORK-ITEMP+1, INFO )
 
 *           Copy L into WORK and bidiagonalize it:
@@ -699,10 +717,10 @@
             ID = 1
             IE = ID + M
             ITGKZ = IE + M
-            CALL CLACPY( 'L', M, M, A, LDA, WORK( ILQF ), M )
-            CALL CLASET( 'U', M-1, M-1, CZERO, CZERO,
+            CALL AB_CLACPY( 'L', M, M, A, LDA, WORK( ILQF ), M )
+            CALL AB_CLASET( 'U', M-1, M-1, CZERO, CZERO,
      $                   WORK( ILQF+M ), M )
-            CALL CGEBRD( M, M, WORK( ILQF ), M, RWORK( ID ),
+            CALL AB_CGEBRD( M, M, WORK( ILQF ), M, RWORK( ID ),
      $                   RWORK( IE ), WORK( ITAUQ ), WORK( ITAUP ),
      $                   WORK( ITEMP ), LWORK-ITEMP+1, INFO )
             ITEMPR = ITGKZ + M*(M*2+1)
@@ -710,7 +728,7 @@
 *           Solve eigenvalue problem TGK*Z=Z*S.
 *           (Workspace: need 2*M*M+14*M)
 *
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, M, RWORK( ID ),
+            CALL AB_SBDSVDX( 'U', JOBZ, RNGTGK, M, RWORK( ID ),
      $                    RWORK( IE ), VL, VU, ILTGK, IUTGK, NS, S,
      $                    RWORK( ITGKZ ), M*2, RWORK( ITEMPR ),
      $                    IWORK, INFO)
@@ -727,10 +745,10 @@
                   K = K + M
                END DO
 *
-*              Call CUNMBR to compute QB*UB.
+*              Call AB_CUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL CUNMBR( 'Q', 'L', 'N', M, NS, M, WORK( ILQF ), M,
+               CALL AB_CUNMBR( 'Q', 'L', 'N', M, NS, M, WORK( ILQF ), M,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -746,20 +764,20 @@
                   END DO
                   K = K + M
                END DO
-               CALL CLASET( 'A', NS, N-M, CZERO, CZERO,
+               CALL AB_CLASET( 'A', NS, N-M, CZERO, CZERO,
      $                      VT( 1,M+1 ), LDVT )
 *
-*              Call CUNMBR to compute (VB**T)*(PB**T)
+*              Call AB_CUNMBR to compute (VB**T)*(PB**T)
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL CUNMBR( 'P', 'R', 'C', NS, M, M, WORK( ILQF ), M,
+               CALL AB_CUNMBR( 'P', 'R', 'C', NS, M, M, WORK( ILQF ), M,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
 *
-*              Call CUNMLQ to compute ((VB**T)*(PB**T))*Q.
+*              Call AB_CUNMLQ to compute ((VB**T)*(PB**T))*Q.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL CUNMLQ( 'R', 'N', NS, N, M, A, LDA,
+               CALL AB_CUNMLQ( 'R', 'N', NS, N, M, A, LDA,
      $                      WORK( ITAU ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -779,7 +797,7 @@
             ID = 1
             IE = ID + M
             ITGKZ = IE + M
-            CALL CGEBRD( M, N, A, LDA, RWORK( ID ), RWORK( IE ),
+            CALL AB_CGEBRD( M, N, A, LDA, RWORK( ID ), RWORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
             ITEMPR = ITGKZ + M*(M*2+1)
@@ -787,7 +805,7 @@
 *           Solve eigenvalue problem TGK*Z=Z*S.
 *           (Workspace: need 2*M*M+14*M)
 *
-            CALL SBDSVDX( 'L', JOBZ, RNGTGK, M, RWORK( ID ),
+            CALL AB_SBDSVDX( 'L', JOBZ, RNGTGK, M, RWORK( ID ),
      $                    RWORK( IE ), VL, VU, ILTGK, IUTGK, NS, S,
      $                    RWORK( ITGKZ ), M*2, RWORK( ITEMPR ),
      $                    IWORK, INFO)
@@ -804,10 +822,10 @@
                   K = K + M
                END DO
 *
-*              Call CUNMBR to compute QB*UB.
+*              Call AB_CUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL CUNMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_CUNMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -823,13 +841,13 @@
                   END DO
                   K = K + M
                END DO
-               CALL CLASET( 'A', NS, N-M, CZERO, CZERO,
+               CALL AB_CLASET( 'A', NS, N-M, CZERO, CZERO,
      $                      VT( 1,M+1 ), LDVT )
 *
-*              Call CUNMBR to compute VB**T * PB**T
+*              Call AB_CUNMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL CUNMBR( 'P', 'R', 'C', NS, N, M, A, LDA,
+               CALL AB_CUNMBR( 'P', 'R', 'C', NS, N, M, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -840,10 +858,10 @@
 *
       IF( ISCL.EQ.1 ) THEN
          IF( ANRM.GT.BIGNUM )
-     $      CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1,
+     $      CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1,
      $                   S, MINMN, INFO )
          IF( ANRM.LT.SMLNUM )
-     $      CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1,
+     $      CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1,
      $                   S, MINMN, INFO )
       END IF
 *
@@ -853,6 +871,6 @@
 *
       RETURN
 *
-*     End of CGESVDX
+*     End of AB_AB_AB_CGESVDX
 *
       END

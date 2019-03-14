@@ -1,4 +1,4 @@
-*> \brief \b DSTT22
+*> \brief \b AB_DSTT22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+*       SUBROUTINE AB_DSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
 *                          LDWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DSTT22  checks a set of M eigenvalues and eigenvectors,
+*> AB_DSTT22  checks a set of M eigenvalues and eigenvectors,
 *>
 *>     A U = U S
 *>
@@ -44,14 +44,14 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, DSTT22 does nothing.
+*>          The size of the matrix.  If it is zero, AB_DSTT22 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of eigenpairs to check.  If it is zero, DSTT22
+*>          The number of eigenpairs to check.  If it is zero, AB_DSTT22
 *>          does nothing.  It must be at least zero.
 *> \endverbatim
 *>
@@ -136,7 +136,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+      SUBROUTINE AB_DSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   LDWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -163,11 +163,11 @@
       DOUBLE PRECISION   ANORM, AUKJ, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSY
+      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM
+      EXTERNAL           AB_DGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -179,8 +179,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )
 *
 *     Do Test 1
 *
@@ -221,7 +221,7 @@
          END IF
    40 CONTINUE
 *
-      WNORM = DLANSY( '1', 'L', M, WORK, M, WORK( 1, M+1 ) )
+      WNORM = AB_DLANSY( '1', 'L', M, WORK, M, WORK( 1, M+1 ) )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( M*ULP )
@@ -237,18 +237,19 @@
 *
 *     Compute  U'U - I
 *
-      CALL DGEMM( 'T', 'N', M, M, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+      CALL AB_DGEMM( 'T', 'N', M, M, N, ONE, U, LDU, U, LDU, ZERO, WORK,
      $            M )
 *
       DO 50 J = 1, M
          WORK( J, J ) = WORK( J, J ) - ONE
    50 CONTINUE
 *
-      RESULT( 2 ) = MIN( DBLE( M ), DLANGE( '1', M, M, WORK, M, WORK( 1,
+      RESULT( 2 ) = MIN( DBLE( M ), AB_DLANGE( '1', M, M, WORK, M, WORK(
+     $ 1,
      $              M+1 ) ) ) / ( M*ULP )
 *
       RETURN
 *
-*     End of DSTT22
+*     End of AB_DSTT22
 *
       END

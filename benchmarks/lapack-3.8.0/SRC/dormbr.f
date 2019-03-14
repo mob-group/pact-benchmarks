@@ -1,4 +1,4 @@
-*> \brief \b DORMBR
+*> \brief \b AB_DORMBR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORMBR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormbr.f">
+*> Download AB_DORMBR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORMBR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormbr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORMBR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormbr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORMBR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
+*       SUBROUTINE AB_DORMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
 *                          LDC, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,19 +35,19 @@
 *>
 *> \verbatim
 *>
-*> If VECT = 'Q', DORMBR overwrites the general real M-by-N matrix C
+*> If VECT = 'Q', AB_DORMBR overwrites the general real M-by-N matrix C
 *> with
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
 *> TRANS = 'T':      Q**T * C       C * Q**T
 *>
-*> If VECT = 'P', DORMBR overwrites the general real M-by-N matrix C
+*> If VECT = 'P', AB_DORMBR overwrites the general real M-by-N matrix C
 *> with
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      P * C          C * P
 *> TRANS = 'T':      P**T * C       C * P**T
 *>
-*> Here Q and P**T are the orthogonal matrices determined by DGEBRD when
+*> Here Q and P**T are the orthogonal matrices determined by AB_DGEBRD when
 *> reducing a real matrix A to bidiagonal form: A = Q * B * P**T. Q and
 *> P**T are defined as products of elementary reflectors H(i) and G(i)
 *> respectively.
@@ -104,9 +104,9 @@
 *> \verbatim
 *>          K is INTEGER
 *>          If VECT = 'Q', the number of columns in the original
-*>          matrix reduced by DGEBRD.
+*>          matrix reduced by AB_DGEBRD.
 *>          If VECT = 'P', the number of rows in the original
-*>          matrix reduced by DGEBRD.
+*>          matrix reduced by AB_DGEBRD.
 *>          K >= 0.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *>                                (LDA,nq)        if VECT = 'P'
 *>          The vectors which define the elementary reflectors H(i) and
 *>          G(i), whose products determine the matrices Q and P, as
-*>          returned by DGEBRD.
+*>          returned by AB_DGEBRD.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -133,7 +133,7 @@
 *>          TAU is DOUBLE PRECISION array, dimension (min(nq,K))
 *>          TAU(i) must contain the scalar factor of the elementary
 *>          reflector H(i) or G(i) which determines Q or P, as returned
-*>          by DGEBRD in the array argument TAUQ or TAUP.
+*>          by AB_DGEBRD in the array argument TAUQ or TAUP.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -169,7 +169,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -192,7 +192,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DORMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
+      SUBROUTINE AB_DORMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
      $                   LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -216,12 +216,12 @@
       INTEGER            I1, I2, IINFO, LWKOPT, MI, NB, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DORMLQ, DORMQR, XERBLA
+      EXTERNAL           AB_DORMLQ, AB_DORMQR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -231,9 +231,9 @@
 *     Test the input arguments
 *
       INFO = 0
-      APPLYQ = LSAME( VECT, 'Q' )
-      LEFT = LSAME( SIDE, 'L' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      APPLYQ = AB_LSAME( VECT, 'Q' )
+      LEFT = AB_LSAME( SIDE, 'L' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q or P and NW is the minimum dimension of WORK
@@ -245,11 +245,11 @@
          NQ = N
          NW = M
       END IF
-      IF( .NOT.APPLYQ .AND. .NOT.LSAME( VECT, 'P' ) ) THEN
+      IF( .NOT.APPLYQ .AND. .NOT.AB_LSAME( VECT, 'P' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -270,18 +270,22 @@
       IF( INFO.EQ.0 ) THEN
          IF( APPLYQ ) THEN
             IF( LEFT ) THEN
-               NB = ILAENV( 1, 'DORMQR', SIDE // TRANS, M-1, N, M-1,
+               NB = AB_ILAENV( 1, 'AB_DORMQR', SIDE // TRANS, M-1, N, M-
+     $1,
      $              -1 )
             ELSE
-               NB = ILAENV( 1, 'DORMQR', SIDE // TRANS, M, N-1, N-1,
+               NB = AB_ILAENV( 1, 'AB_DORMQR', SIDE // TRANS, M, N-1, N-
+     $1,
      $              -1 )
             END IF
          ELSE
             IF( LEFT ) THEN
-               NB = ILAENV( 1, 'DORMLQ', SIDE // TRANS, M-1, N, M-1,
+               NB = AB_ILAENV( 1, 'AB_DORMLQ', SIDE // TRANS, M-1, N, M-
+     $1,
      $              -1 )
             ELSE
-               NB = ILAENV( 1, 'DORMLQ', SIDE // TRANS, M, N-1, N-1,
+               NB = AB_ILAENV( 1, 'AB_DORMLQ', SIDE // TRANS, M, N-1, N-
+     $1,
      $              -1 )
             END IF
          END IF
@@ -290,7 +294,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORMBR', -INFO )
+         CALL AB_XERBLA( 'AB_DORMBR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -308,13 +312,13 @@
 *
          IF( NQ.GE.K ) THEN
 *
-*           Q was determined by a call to DGEBRD with nq >= k
+*           Q was determined by a call to AB_DGEBRD with nq >= k
 *
-            CALL DORMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+            CALL AB_DORMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, IINFO )
          ELSE IF( NQ.GT.1 ) THEN
 *
-*           Q was determined by a call to DGEBRD with nq < k
+*           Q was determined by a call to AB_DGEBRD with nq < k
 *
             IF( LEFT ) THEN
                MI = M - 1
@@ -327,7 +331,8 @@
                I1 = 1
                I2 = 2
             END IF
-            CALL DORMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, TAU,
+            CALL AB_DORMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, T
+     $AU,
      $                   C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       ELSE
@@ -341,13 +346,13 @@
          END IF
          IF( NQ.GT.K ) THEN
 *
-*           P was determined by a call to DGEBRD with nq > k
+*           P was determined by a call to AB_DGEBRD with nq > k
 *
-            CALL DORMLQ( SIDE, TRANST, M, N, K, A, LDA, TAU, C, LDC,
+            CALL AB_DORMLQ( SIDE, TRANST, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, IINFO )
          ELSE IF( NQ.GT.1 ) THEN
 *
-*           P was determined by a call to DGEBRD with nq <= k
+*           P was determined by a call to AB_DGEBRD with nq <= k
 *
             IF( LEFT ) THEN
                MI = M - 1
@@ -360,13 +365,13 @@
                I1 = 1
                I2 = 2
             END IF
-            CALL DORMLQ( SIDE, TRANST, MI, NI, NQ-1, A( 1, 2 ), LDA,
+            CALL AB_DORMLQ( SIDE, TRANST, MI, NI, NQ-1, A( 1, 2 ), LDA,
      $                   TAU, C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       END IF
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of DORMBR
+*     End of AB_DORMBR
 *
       END

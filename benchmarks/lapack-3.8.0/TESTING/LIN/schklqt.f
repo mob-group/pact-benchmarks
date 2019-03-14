@@ -1,4 +1,4 @@
-*> \brief \b SCHKLQT
+*> \brief \b AB_AB_SCHKLQT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+*       SUBROUTINE AB_AB_SCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
 *                           NBVAL, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SCHKLQT tests SGELQT and SGEMLQT.
+*> AB_AB_SCHKLQT tests AB_AB_SGELQT and AB_AB_SGEMLQT.
 *> \endverbatim
 *
 *  Arguments:
@@ -99,7 +99,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE SCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+      SUBROUTINE AB_AB_SCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
       IMPLICIT NONE
 *
@@ -132,7 +132,8 @@
       REAL              RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, SERRLQT, SLQT04
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_AB_SERRLQT, 
+     $AB_SLQT04
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -155,7 +156,7 @@
 *
 *     Test the error exits
 *
-      IF( TSTERR ) CALL SERRLQT( PATH, NOUT )
+      IF( TSTERR ) CALL AB_AB_SERRLQT( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of M in MVAL.
@@ -174,10 +175,10 @@
             DO K = 1, NNB
                NB = NBVAL( K )
 *
-*              Test DGELQT and DGEMLQT
+*              Test AB_AB_DGELQT and AB_AB_DGEMLQT
 *
                IF( (NB.LE.MINMN).AND.(NB.GT.0) ) THEN
-                  CALL SLQT04( M, N, NB, RESULT )
+                  CALL AB_SLQT04( M, N, NB, RESULT )
 *
 *                 Print information about the tests that did not
 *                 pass the threshold.
@@ -185,7 +186,7 @@
                   DO T = 1, NTESTS
                      IF( RESULT( T ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                       CALL ALAHD( NOUT, PATH )
+     $                       CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )M, N, NB,
      $                       T, RESULT( T )
                         NFAIL = NFAIL + 1
@@ -199,12 +200,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M=', I5, ', N=', I5, ', NB=', I4,
      $      ' test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of SCHKLQT
+*     End of AB_AB_SCHKLQT
 *
       END

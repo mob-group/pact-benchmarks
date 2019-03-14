@@ -1,4 +1,4 @@
-*> \brief \b CCHKGK
+*> \brief \b AB_CCHKGK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKGK( NIN, NOUT )
+*       SUBROUTINE AB_CCHKGK( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKGK tests CGGBAK, a routine for backward balancing  of
+*> AB_CCHKGK tests AB_CGGBAK, a routine for backward balancing  of
 *> a matrix pair (A, B).
 *> \endverbatim
 *
@@ -52,7 +52,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CCHKGK( NIN, NOUT )
+      SUBROUTINE AB_CCHKGK( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -68,8 +68,8 @@
 *     .. Parameters ..
       INTEGER            LDA, LDB, LDVL, LDVR
       PARAMETER          ( LDA = 50, LDB = 50, LDVL = 50, LDVR = 50 )
-      INTEGER            LDE, LDF, LDWORK, LRWORK
-      PARAMETER          ( LDE = 50, LDF = 50, LDWORK = 50,
+      INTEGER            AB_LDE, LDF, LDWORK, LRWORK
+      PARAMETER          ( AB_LDE = 50, LDF = 50, LDWORK = 50,
      $                   LRWORK = 6*50 )
       REAL               ZERO
       PARAMETER          ( ZERO = 0.0E+0 )
@@ -86,17 +86,18 @@
       INTEGER            LMAX( 4 )
       REAL               LSCALE( LDA ), RSCALE( LDA ), RWORK( LRWORK )
       COMPLEX            A( LDA, LDA ), AF( LDA, LDA ), B( LDB, LDB ),
-     $                   BF( LDB, LDB ), E( LDE, LDE ), F( LDF, LDF ),
+     $                   BF( LDB, LDB ), E( AB_LDE, AB_LDE ), F( LDF, LD
+     $F ),
      $                   VL( LDVL, LDVL ), VLF( LDVL, LDVL ),
      $                   VR( LDVR, LDVR ), VRF( LDVR, LDVR ),
      $                   WORK( LDWORK, LDWORK )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CGGBAK, CGGBAL, CLACPY
+      EXTERNAL           AB_CGEMM, AB_CGGBAK, AB_CGGBAL, AB_CLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -117,7 +118,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
    10 CONTINUE
       READ( NIN, FMT = * )N, M
@@ -142,49 +143,51 @@
 *
       KNT = KNT + 1
 *
-      ANORM = CLANGE( 'M', N, N, A, LDA, RWORK )
-      BNORM = CLANGE( 'M', N, N, B, LDB, RWORK )
+      ANORM = AB_CLANGE( 'M', N, N, A, LDA, RWORK )
+      BNORM = AB_CLANGE( 'M', N, N, B, LDB, RWORK )
 *
-      CALL CLACPY( 'FULL', N, N, A, LDA, AF, LDA )
-      CALL CLACPY( 'FULL', N, N, B, LDB, BF, LDB )
+      CALL AB_CLACPY( 'FULL', N, N, A, LDA, AF, LDA )
+      CALL AB_CLACPY( 'FULL', N, N, B, LDB, BF, LDB )
 *
-      CALL CGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL AB_CGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
      $             RWORK, INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 1 ) = KNT
       END IF
 *
-      CALL CLACPY( 'FULL', N, M, VL, LDVL, VLF, LDVL )
-      CALL CLACPY( 'FULL', N, M, VR, LDVR, VRF, LDVR )
+      CALL AB_CLACPY( 'FULL', N, M, VL, LDVL, VLF, LDVL )
+      CALL AB_CLACPY( 'FULL', N, M, VR, LDVR, VRF, LDVR )
 *
-      CALL CGGBAK( 'B', 'L', N, ILO, IHI, LSCALE, RSCALE, M, VL, LDVL,
+      CALL AB_CGGBAK( 'B', 'L', N, ILO, IHI, LSCALE, RSCALE, M, VL, LDVL
+     $,
      $             INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 2 ) = KNT
       END IF
 *
-      CALL CGGBAK( 'B', 'R', N, ILO, IHI, LSCALE, RSCALE, M, VR, LDVR,
+      CALL AB_CGGBAK( 'B', 'R', N, ILO, IHI, LSCALE, RSCALE, M, VR, LDVR
+     $,
      $             INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 3 ) = KNT
       END IF
 *
-*     Test of CGGBAK
+*     Test of AB_CGGBAK
 *
-*     Check tilde(VL)'*A*tilde(VR) - VL'*tilde(A)*VR
-*     where tilde(A) denotes the transformed matrix.
+*     Check tiAB_LDE(VL)'*A*tiAB_LDE(VR) - VL'*tiAB_LDE(A)*VR
+*     where tiAB_LDE(A) denotes the transformed matrix.
 *
-      CALL CGEMM( 'N', 'N', N, M, N, CONE, AF, LDA, VR, LDVR, CZERO,
+      CALL AB_CGEMM( 'N', 'N', N, M, N, CONE, AF, LDA, VR, LDVR, CZERO,
      $            WORK, LDWORK )
-      CALL CGEMM( 'C', 'N', M, M, N, CONE, VL, LDVL, WORK, LDWORK,
-     $            CZERO, E, LDE )
+      CALL AB_CGEMM( 'C', 'N', M, M, N, CONE, VL, LDVL, WORK, LDWORK,
+     $            CZERO, E, AB_LDE )
 *
-      CALL CGEMM( 'N', 'N', N, M, N, CONE, A, LDA, VRF, LDVR, CZERO,
+      CALL AB_CGEMM( 'N', 'N', N, M, N, CONE, A, LDA, VRF, LDVR, CZERO,
      $            WORK, LDWORK )
-      CALL CGEMM( 'C', 'N', M, M, N, CONE, VLF, LDVL, WORK, LDWORK,
+      CALL AB_CGEMM( 'C', 'N', M, M, N, CONE, VLF, LDVL, WORK, LDWORK,
      $            CZERO, F, LDF )
 *
       VMAX = ZERO
@@ -199,16 +202,16 @@
          RMAX = VMAX
       END IF
 *
-*     Check tilde(VL)'*B*tilde(VR) - VL'*tilde(B)*VR
+*     Check tiAB_LDE(VL)'*B*tiAB_LDE(VR) - VL'*tiAB_LDE(B)*VR
 *
-      CALL CGEMM( 'N', 'N', N, M, N, CONE, BF, LDB, VR, LDVR, CZERO,
+      CALL AB_CGEMM( 'N', 'N', N, M, N, CONE, BF, LDB, VR, LDVR, CZERO,
      $            WORK, LDWORK )
-      CALL CGEMM( 'C', 'N', M, M, N, CONE, VL, LDVL, WORK, LDWORK,
-     $            CZERO, E, LDE )
+      CALL AB_CGEMM( 'C', 'N', M, M, N, CONE, VL, LDVL, WORK, LDWORK,
+     $            CZERO, E, AB_LDE )
 *
-      CALL CGEMM( 'n', 'n', N, M, N, CONE, B, LDB, VRF, LDVR, CZERO,
+      CALL AB_CGEMM( 'n', 'n', N, M, N, CONE, B, LDB, VRF, LDVR, CZERO,
      $            WORK, LDWORK )
-      CALL CGEMM( 'C', 'N', M, M, N, CONE, VLF, LDVL, WORK, LDWORK,
+      CALL AB_CGEMM( 'C', 'N', M, M, N, CONE, VLF, LDVL, WORK, LDWORK,
      $            CZERO, F, LDF )
 *
       VMAX = ZERO
@@ -228,16 +231,16 @@
   100 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of CGGBAK .. ' )
+ 9999 FORMAT( 1X, '.. test output of AB_CGGBAK .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( ' value of largest test error                  =', E12.3 )
       WRITE( NOUT, FMT = 9997 )LMAX( 1 )
- 9997 FORMAT( ' example number where CGGBAL info is not 0    =', I4 )
+ 9997 FORMAT( ' example number where AB_CGGBAL info is not 0    =', I4 )
       WRITE( NOUT, FMT = 9996 )LMAX( 2 )
- 9996 FORMAT( ' example number where CGGBAK(L) info is not 0 =', I4 )
+ 9996 FORMAT( ' example number where AB_CGGBAK(L) info is not 0 =', I4 )
       WRITE( NOUT, FMT = 9995 )LMAX( 3 )
- 9995 FORMAT( ' example number where CGGBAK(R) info is not 0 =', I4 )
+ 9995 FORMAT( ' example number where AB_CGGBAK(R) info is not 0 =', I4 )
       WRITE( NOUT, FMT = 9994 )LMAX( 4 )
  9994 FORMAT( ' example number having largest error          =', I4 )
       WRITE( NOUT, FMT = 9992 )NINFO
@@ -247,6 +250,6 @@
 *
       RETURN
 *
-*     End of CCHKGK
+*     End of AB_CCHKGK
 *
       END

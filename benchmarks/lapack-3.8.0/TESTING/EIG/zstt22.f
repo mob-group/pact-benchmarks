@@ -1,4 +1,4 @@
-*> \brief \b ZSTT22
+*> \brief \b AB_ZSTT22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+*       SUBROUTINE AB_ZSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
 *                          LDWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> ZSTT22  checks a set of M eigenvalues and eigenvectors,
+*> AB_ZSTT22  checks a set of M eigenvalues and eigenvectors,
 *>
 *>     A U = U S
 *>
@@ -45,14 +45,14 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, ZSTT22 does nothing.
+*>          The size of the matrix.  If it is zero, AB_ZSTT22 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of eigenpairs to check.  If it is zero, ZSTT22
+*>          The number of eigenpairs to check.  If it is zero, AB_ZSTT22
 *>          does nothing.  It must be at least zero.
 *> \endverbatim
 *>
@@ -142,7 +142,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+      SUBROUTINE AB_ZSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   LDWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -174,11 +174,11 @@
       COMPLEX*16         AUKJ
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSY
-      EXTERNAL           DLAMCH, ZLANGE, ZLANSY
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANSY
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE, AB_ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM
+      EXTERNAL           AB_ZGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -190,8 +190,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )
 *
 *     Do Test 1
 *
@@ -232,7 +232,7 @@
          END IF
    40 CONTINUE
 *
-      WNORM = ZLANSY( '1', 'L', M, WORK, M, RWORK )
+      WNORM = AB_ZLANSY( '1', 'L', M, WORK, M, RWORK )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( M*ULP )
@@ -248,18 +248,19 @@
 *
 *     Compute  U*U - I
 *
-      CALL ZGEMM( 'T', 'N', M, M, N, CONE, U, LDU, U, LDU, CZERO, WORK,
+      CALL AB_ZGEMM( 'T', 'N', M, M, N, CONE, U, LDU, U, LDU, CZERO, WOR
+     $K,
      $            M )
 *
       DO 50 J = 1, M
          WORK( J, J ) = WORK( J, J ) - ONE
    50 CONTINUE
 *
-      RESULT( 2 ) = MIN( DBLE( M ), ZLANGE( '1', M, M, WORK, M,
+      RESULT( 2 ) = MIN( DBLE( M ), AB_ZLANGE( '1', M, M, WORK, M,
      $              RWORK ) ) / ( M*ULP )
 *
       RETURN
 *
-*     End of ZSTT22
+*     End of AB_ZSTT22
 *
       END

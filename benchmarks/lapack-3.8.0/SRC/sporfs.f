@@ -1,4 +1,4 @@
-*> \brief \b SPORFS
+*> \brief \b AB_SPORFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPORFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sporfs.f">
+*> Download AB_SPORFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPORFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sporfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPORFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sporfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPORFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X,
+*       SUBROUTINE AB_SPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X,
 *                          LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> SPORFS improves the computed solution to a system of linear
+*> AB_SPORFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is symmetric positive definite,
 *> and provides error bounds and backward error estimates for the
 *> solution.
@@ -88,7 +88,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>          The triangular factor U or L from the Cholesky factorization
-*>          A = U**T*U or A = L*L**T, as computed by SPOTRF.
+*>          A = U**T*U or A = L*L**T, as computed by AB_SPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -112,7 +112,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by SPOTRS.
+*>          On entry, the solution matrix X, as computed by AB_SPOTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -180,7 +180,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X,
+      SUBROUTINE AB_SPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X,
      $                   LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -221,23 +221,24 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLACN2, SPOTRS, SSYMV, XERBLA
+      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SLACN2, AB_SPOTRS, AB_SS
+     $YMV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -253,7 +254,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPORFS', -INFO )
+         CALL AB_XERBLA( 'AB_SPORFS', -INFO )
          RETURN
       END IF
 *
@@ -270,8 +271,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = N + 1
-      EPS = SLAMCH( 'Epsilon' )
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -287,8 +288,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL SSYMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE,
+         CALL AB_SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL AB_SSYMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE,
      $               WORK( N+1 ), 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -350,8 +351,8 @@
 *
 *           Update solution and try again.
 *
-            CALL SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INFO )
-            CALL SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
+            CALL AB_SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INFO )
+            CALL AB_SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -375,7 +376,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use SLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_SLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -389,14 +390,16 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL AB_SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
+     $,
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INFO )
+               CALL AB_SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INF
+     $O )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   110          CONTINUE
@@ -407,7 +410,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   120          CONTINUE
-               CALL SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INFO )
+               CALL AB_SPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INF
+     $O )
             END IF
             GO TO 100
          END IF
@@ -425,6 +429,6 @@
 *
       RETURN
 *
-*     End of SPORFS
+*     End of AB_SPORFS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> DPBSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
+*> \brief <b> AB_AB_DPBSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPBSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbsvx.f">
+*> Download AB_AB_DPBSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DPBSVX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DPBSVX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DPBSVX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB,
+*       SUBROUTINE AB_AB_DPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB,
 *                          EQUED, S, B, LDB, X, LDX, RCOND, FERR, BERR,
 *                          WORK, IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> DPBSVX uses the Cholesky factorization A = U**T*U or A = L*L**T to
+*> AB_AB_DPBSVX uses the Cholesky factorization A = U**T*U or A = L*L**T to
 *> compute the solution to a real system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric positive definite band matrix and X
@@ -339,7 +339,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE AB_AB_DPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB, L
+     $DAFB,
      $                   EQUED, S, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
 *
@@ -372,13 +373,14 @@
       DOUBLE PRECISION   AMAX, ANORM, BIGNUM, SCOND, SMAX, SMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANSB
-      EXTERNAL           LSAME, DLAMCH, DLANSB
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSB
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DLAQSB, DPBCON, DPBEQU, DPBRFS,
-     $                   DPBTRF, DPBTRS, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DLAQSB, AB_DPBCON, AB_D
+     $PBEQU, AB_DPBRFS,
+     $                   AB_DPBTRF, AB_DPBTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -386,24 +388,25 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      EQUIL = LSAME( FACT, 'E' )
-      UPPER = LSAME( UPLO, 'U' )
+      NOFACT = AB_LSAME( FACT, 'N' )
+      EQUIL = AB_LSAME( FACT, 'E' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = LSAME( EQUED, 'Y' )
-         SMLNUM = DLAMCH( 'Safe minimum' )
+         RCEQU = AB_LSAME( EQUED, 'Y' )
+         SMLNUM = AB_DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.AB_LSAME( FACT, 'F' ) 
+     $)
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -415,8 +418,8 @@
          INFO = -7
       ELSE IF( LDAFB.LT.KD+1 ) THEN
          INFO = -9
-      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
-     $         ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
+     $         ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -10
       ELSE
          IF( RCEQU ) THEN
@@ -444,7 +447,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPBSVX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DPBSVX', -INFO )
          RETURN
       END IF
 *
@@ -452,13 +455,14 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL DPBEQU( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, INFEQU )
+         CALL AB_DPBEQU( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
 *
-            CALL DLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
-            RCEQU = LSAME( EQUED, 'Y' )
+            CALL AB_DLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED
+     $ )
+            RCEQU = AB_LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
@@ -479,17 +483,17 @@
          IF( UPPER ) THEN
             DO 40 J = 1, N
                J1 = MAX( J-KD, 1 )
-               CALL DCOPY( J-J1+1, AB( KD+1-J+J1, J ), 1,
+               CALL AB_DCOPY( J-J1+1, AB( KD+1-J+J1, J ), 1,
      $                     AFB( KD+1-J+J1, J ), 1 )
    40       CONTINUE
          ELSE
             DO 50 J = 1, N
                J2 = MIN( J+KD, N )
-               CALL DCOPY( J2-J+1, AB( 1, J ), 1, AFB( 1, J ), 1 )
+               CALL AB_DCOPY( J2-J+1, AB( 1, J ), 1, AFB( 1, J ), 1 )
    50       CONTINUE
          END IF
 *
-         CALL DPBTRF( UPLO, N, KD, AFB, LDAFB, INFO )
+         CALL AB_DPBTRF( UPLO, N, KD, AFB, LDAFB, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -501,22 +505,24 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = DLANSB( '1', UPLO, N, KD, AB, LDAB, WORK )
+      ANORM = AB_DLANSB( '1', UPLO, N, KD, AB, LDAB, WORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL DPBCON( UPLO, N, KD, AFB, LDAFB, ANORM, RCOND, WORK, IWORK,
+      CALL AB_DPBCON( UPLO, N, KD, AFB, LDAFB, ANORM, RCOND, WORK, IWORK
+     $,
      $             INFO )
 *
 *     Compute the solution matrix X.
 *
-      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL DPBTRS( UPLO, N, KD, NRHS, AFB, LDAFB, X, LDX, INFO )
+      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_DPBTRS( UPLO, N, KD, NRHS, AFB, LDAFB, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL DPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B, LDB, X,
+      CALL AB_DPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B, LDB, X
+     $,
      $             LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original
@@ -535,11 +541,11 @@
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.DLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_DLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       RETURN
 *
-*     End of DPBSVX
+*     End of AB_AB_DPBSVX
 *
       END

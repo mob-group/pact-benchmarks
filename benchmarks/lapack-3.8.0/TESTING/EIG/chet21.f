@@ -1,4 +1,4 @@
-*> \brief \b CHET21
+*> \brief \b AB_CHET21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
+*       SUBROUTINE AB_CHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
 *                          LDV, TAU, WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CHET21 generally checks a decomposition of the form
+*> AB_CHET21 generally checks a decomposition of the form
 *>
 *>    A = U S UC>
 *> where * means conjugate transpose, A is hermitian, U is unitary, and
@@ -35,9 +35,9 @@
 *> KBAND=1).
 *>
 *> If ITYPE=1, then U is represented as a dense matrix; otherwise U is
-*> expressed as a product of Householder transformations, whose vectors
+*> expressed as a product of HousehoAB_LDEr transformations, whose vectors
 *> are stored in the array "V" and whose scaling constants are in "TAU".
-*> We shall use the letter "V" to refer to the product of Householder
+*> We shall use the letter "V" to refer to the product of HousehoAB_LDEr
 *> transformations (which should be equal to U).
 *>
 *> Specifically, if ITYPE=1, then:
@@ -68,11 +68,11 @@
 *>          1: U expressed as a dense unitary matrix:
 *>             RESULT(1) = | A - U S U* | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU* | / ( n ulp )
 *>
-*>          2: U expressed as a product V of Housholder transformations:
+*>          2: U expressed as a product V of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | A - V S V* | / ( |A| n ulp )
 *>
 *>          3: U expressed both as a dense unitary matrix and
-*>             as a product of Housholder transformations:
+*>             as a product of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | I - UV* | / ( n ulp )
 *> \endverbatim
 *>
@@ -88,7 +88,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, CHET21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_CHET21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -149,7 +149,7 @@
 *> \verbatim
 *>          V is COMPLEX array, dimension (LDV, N)
 *>          If ITYPE=2 or 3, the columns of this array contain the
-*>          Householder vectors used to describe the unitary matrix
+*>          HousehoAB_LDEr vectors used to describe the unitary matrix
 *>          in the decomposition.  If UPLO='L', then the vectors are in
 *>          the lower triangle, if UPLO='U', then in the upper
 *>          triangle.
@@ -171,7 +171,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)* in the Householder transformation H(j) of
+*>          v(j) v(j)* in the HousehoAB_LDEr transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *> \endverbatim
@@ -208,7 +208,8 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
+      SUBROUTINE AB_CHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU,
+     $ V,
      $                   LDV, TAU, WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -243,13 +244,14 @@
       COMPLEX            VSAVE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE, CLANHE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, CLANHE, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE, AB_CLANHE, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHER, CHER2, CLACPY, CLARFY, CLASET,
-     $                   CUNM2L, CUNM2R
+      EXTERNAL           AB_CGEMM, AB_CHER, AB_AB_CHER2, AB_CLACPY, AB_A
+     $B_CLARFY, AB_CLASET,
+     $                   AB_CUNM2L, AB_CUNM2R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -262,7 +264,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -270,8 +272,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -287,7 +289,7 @@
       IF( ITYPE.EQ.3 ) THEN
          ANORM = ONE
       ELSE
-         ANORM = MAX( CLANHE( '1', CUPLO, N, A, LDA, RWORK ), UNFL )
+         ANORM = MAX( AB_CLANHE( '1', CUPLO, N, A, LDA, RWORK ), UNFL )
       END IF
 *
 *     Compute error matrix:
@@ -296,26 +298,27 @@
 *
 *        ITYPE=1: error = A - U S U*
 *
-         CALL CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
-         CALL CLACPY( CUPLO, N, N, A, LDA, WORK, N )
+         CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+         CALL AB_CLACPY( CUPLO, N, N, A, LDA, WORK, N )
 *
          DO 10 J = 1, N
-            CALL CHER( CUPLO, N, -D( J ), U( 1, J ), 1, WORK, N )
+            CALL AB_CHER( CUPLO, N, -D( J ), U( 1, J ), 1, WORK, N )
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
             DO 20 J = 1, N - 1
-               CALL CHER2( CUPLO, N, -CMPLX( E( J ) ), U( 1, J ), 1,
+               CALL AB_AB_CHER2( CUPLO, N, -CMPLX( E( J ) ), U( 1, J ), 
+     $1,
      $                     U( 1, J-1 ), 1, WORK, N )
    20       CONTINUE
          END IF
-         WNORM = CLANHE( '1', CUPLO, N, WORK, N, RWORK )
+         WNORM = AB_CLANHE( '1', CUPLO, N, WORK, N, RWORK )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        ITYPE=2: error = V S V* - A
 *
-         CALL CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+         CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
          IF( LOWER ) THEN
             WORK( N**2 ) = D( N )
@@ -329,7 +332,7 @@
 *
                VSAVE = V( J+1, J )
                V( J+1, J ) = ONE
-               CALL CLARFY( 'L', N-J, V( J+1, J ), 1, TAU( J ),
+               CALL AB_AB_CLARFY( 'L', N-J, V( J+1, J ), 1, TAU( J ),
      $                      WORK( ( N+1 )*J+1 ), N, WORK( N**2+1 ) )
                V( J+1, J ) = VSAVE
                WORK( ( N+1 )*( J-1 )+1 ) = D( J )
@@ -346,7 +349,8 @@
 *
                VSAVE = V( J, J+1 )
                V( J, J+1 ) = ONE
-               CALL CLARFY( 'U', J, V( 1, J+1 ), 1, TAU( J ), WORK, N,
+               CALL AB_AB_CLARFY( 'U', J, V( 1, J+1 ), 1, TAU( J ), WORK
+     $, N,
      $                      WORK( N**2+1 ) )
                V( J, J+1 ) = VSAVE
                WORK( ( N+1 )*J+1 ) = D( J+1 )
@@ -366,7 +370,7 @@
    80          CONTINUE
             END IF
    90    CONTINUE
-         WNORM = CLANHE( '1', CUPLO, N, WORK, N, RWORK )
+         WNORM = AB_CLANHE( '1', CUPLO, N, WORK, N, RWORK )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -374,12 +378,12 @@
 *
          IF( N.LT.2 )
      $      RETURN
-         CALL CLACPY( ' ', N, N, U, LDU, WORK, N )
+         CALL AB_CLACPY( ' ', N, N, U, LDU, WORK, N )
          IF( LOWER ) THEN
-            CALL CUNM2R( 'R', 'C', N, N-1, N-1, V( 2, 1 ), LDV, TAU,
+            CALL AB_CUNM2R( 'R', 'C', N, N-1, N-1, V( 2, 1 ), LDV, TAU,
      $                   WORK( N+1 ), N, WORK( N**2+1 ), IINFO )
          ELSE
-            CALL CUNM2L( 'R', 'C', N, N-1, N-1, V( 1, 2 ), LDV, TAU,
+            CALL AB_CUNM2L( 'R', 'C', N, N-1, N-1, V( 1, 2 ), LDV, TAU,
      $                   WORK, N, WORK( N**2+1 ), IINFO )
          END IF
          IF( IINFO.NE.0 ) THEN
@@ -391,7 +395,7 @@
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
   100    CONTINUE
 *
-         WNORM = CLANGE( '1', N, N, WORK, N, RWORK )
+         WNORM = AB_CLANGE( '1', N, N, WORK, N, RWORK )
       END IF
 *
       IF( ANORM.GT.WNORM ) THEN
@@ -409,19 +413,19 @@
 *     Compute  UU* - I
 *
       IF( ITYPE.EQ.1 ) THEN
-         CALL CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
+         CALL AB_CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
      $               WORK, N )
 *
          DO 110 J = 1, N
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
   110    CONTINUE
 *
-         RESULT( 2 ) = MIN( CLANGE( '1', N, N, WORK, N, RWORK ),
+         RESULT( 2 ) = MIN( AB_CLANGE( '1', N, N, WORK, N, RWORK ),
      $                 REAL( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of CHET21
+*     End of AB_CHET21
 *
       END

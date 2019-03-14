@@ -1,4 +1,4 @@
-*> \brief \b ZDRVAB
+*> \brief \b AB_ZDRVAB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZDRVAB( DOTYPE, NM, MVAL, NNS,
+*       SUBROUTINE AB_ZDRVAB( DOTYPE, NM, MVAL, NNS,
 *                          NSVAL, THRESH, NMAX, A, AFAC, B,
 *                          X, WORK, RWORK, SWORK, IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> ZDRVAB tests ZCGESV
+*> AB_ZDRVAB tests ZAB_CGESV
 *> \endverbatim
 *
 *  Arguments:
@@ -148,7 +148,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZDRVAB( DOTYPE, NM, MVAL, NNS,
+      SUBROUTINE AB_ZDRVAB( DOTYPE, NM, MVAL, NNS,
      $                   NSVAL, THRESH, NMAX, A, AFAC, B,
      $                   X, WORK, RWORK, SWORK, IWORK, NOUT )
 *
@@ -197,8 +197,9 @@
       INTEGER            ITER, KASE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ZGET08, ZLACPY, ZLARHS, ZLASET,
-     $                   ZLATB4, ZLATMS
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ZGET08, AB_ZLACPY, AB_Z
+     $LARHS, AB_ZLASET,
+     $                   AB_ZLATB4, AB_ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, DBLE, MAX, MIN, SQRT
@@ -255,21 +256,22 @@
             IF( ZEROT .AND. N.LT.IMAT-4 )
      $         GO TO 100
 *
-*           Set up parameters with ZLATB4 and generate a test matrix
-*           with ZLATMS.
+*           Set up parameters with AB_ZLATB4 and generate a test matrix
+*           with AB_ZLATMS.
 *
-            CALL ZLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
+            CALL AB_ZLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
      $                   CNDNUM, DIST )
 *
-            SRNAMT = 'ZLATMS'
-            CALL ZLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
+            SRNAMT = 'AB_ZLATMS'
+            CALL AB_ZLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                   CNDNUM, ANORM, KL, KU, 'No packing', A, LDA,
      $                   WORK, INFO )
 *
-*           Check error code from ZLATMS.
+*           Check error code from AB_ZLATMS.
 *
             IF( INFO.NE.0 ) THEN
-               CALL ALAERH( PATH, 'ZLATMS', INFO, 0, ' ', M, N, -1,
+               CALL AB_ALAERH( PATH, 'AB_ZLATMS', INFO, 0, ' ', M, N, -1
+     $,
      $                      -1, -1, IMAT, NFAIL, NERRS, NOUT )
                GO TO 100
             END IF
@@ -291,7 +293,7 @@
                      A( IOFF+I ) = ZERO
    20             CONTINUE
                ELSE
-                  CALL ZLASET( 'Full', M, N-IZERO+1, DCMPLX(ZERO),
+                  CALL AB_ZLASET( 'Full', M, N-IZERO+1, DCMPLX(ZERO),
      $                         DCMPLX(ZERO), A( IOFF+1 ), LDA )
                END IF
             ELSE
@@ -303,38 +305,38 @@
                XTYPE = 'N'
                TRANS = 'N'
 *
-               SRNAMT = 'ZLARHS'
-               CALL ZLARHS( PATH, XTYPE, ' ', TRANS, N, N, KL,
+               SRNAMT = 'AB_ZLARHS'
+               CALL AB_ZLARHS( PATH, XTYPE, ' ', TRANS, N, N, KL,
      $                      KU, NRHS, A, LDA, X, LDA, B,
      $                      LDA, ISEED, INFO )
 *
-               SRNAMT = 'ZCGESV'
+               SRNAMT = 'ZAB_CGESV'
 *
                KASE = KASE + 1
 *
-               CALL ZLACPY( 'Full', M, N, A, LDA, AFAC, LDA )
+               CALL AB_ZLACPY( 'Full', M, N, A, LDA, AFAC, LDA )
 *
-               CALL ZCGESV( N, NRHS, A, LDA, IWORK, B, LDA, X, LDA,
+               CALL ZAB_CGESV( N, NRHS, A, LDA, IWORK, B, LDA, X, LDA,
      $                      WORK, SWORK, RWORK, ITER, INFO)
 *
                IF (ITER.LT.0) THEN
-                   CALL ZLACPY( 'Full', M, N, AFAC, LDA, A, LDA )
+                   CALL AB_ZLACPY( 'Full', M, N, AFAC, LDA, A, LDA )
                ENDIF
 *
-*              Check error code from ZCGESV. This should be the same as
-*              the one of DGETRF.
+*              Check error code from ZAB_CGESV. This should be the same as
+*              the one of AB_DGETRF.
 *
                IF( INFO.NE.IZERO ) THEN
 *
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL ALAHD( NOUT, PATH )
+     $               CALL AB_ALAHD( NOUT, PATH )
                   NERRS = NERRS + 1
 *
                   IF( INFO.NE.IZERO .AND. IZERO.NE.0 ) THEN
-                     WRITE( NOUT, FMT = 9988 )'ZCGESV',INFO,
+                     WRITE( NOUT, FMT = 9988 )'ZAB_CGESV',INFO,
      $                         IZERO,M,IMAT
                   ELSE
-                     WRITE( NOUT, FMT = 9975 )'ZCGESV',INFO,
+                     WRITE( NOUT, FMT = 9975 )'ZAB_CGESV',INFO,
      $                         M, IMAT
                   END IF
                END IF
@@ -346,9 +348,9 @@
 *
 *              Check the quality of the solution
 *
-               CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+               CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
 *
-               CALL ZGET08( TRANS, N, N, NRHS, A, LDA, X, LDA, WORK,
+               CALL AB_ZGET08( TRANS, N, N, NRHS, A, LDA, X, LDA, WORK,
      $                      LDA, RWORK, RESULT( 1 ) )
 *
 *              Check if the test passes the tesing.
@@ -389,9 +391,9 @@
 *     Print a summary of the results.
 *
       IF( NFAIL.GT.0 ) THEN
-         WRITE( NOUT, FMT = 9996 )'ZCGESV', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9996 )'ZAB_CGESV', NFAIL, NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 )'ZCGESV', NRUN
+         WRITE( NOUT, FMT = 9995 )'ZAB_CGESV', NRUN
       END IF
       IF( NERRS.GT.0 ) THEN
          WRITE( NOUT, FMT = 9994 )NERRS
@@ -427,9 +429,9 @@
  8960 FORMAT( 3X, I2, ': norm_1( B - A * X )  / ',
      $      '( norm_1(A) * norm_1(X) * EPS * SQRT(N) ) > 1 if ITERREF',
      $      / 4x, 'or norm_1( B - A * X )  / ',
-     $      '( norm_1(A) * norm_1(X) * EPS ) > THRES if DGETRF' )
+     $      '( norm_1(A) * norm_1(X) * EPS ) > THRES if AB_DGETRF' )
       RETURN
 *
-*     End of ZDRVAB
+*     End of AB_ZDRVAB
 *
       END

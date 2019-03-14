@@ -1,4 +1,4 @@
-*> \brief \b CRQT03
+*> \brief \b AB_CRQT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_CRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> CRQT03 tests CUNMRQ, which computes Q*C, Q'*C, C*Q or C*Q'.
+*> AB_CRQT03 tests AB_CUNMRQ, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
-*> CRQT03 compares the results of a call to CUNMRQ with the results of
-*> forming Q explicitly by a call to CUNGRQ and then performing matrix
-*> multiplication by a call to CGEMM.
+*> AB_CRQT03 compares the results of a call to AB_CUNMRQ with the results of
+*> forming Q explicitly by a call to AB_CUNGRQ and then performing matrix
+*> multiplication by a call to AB_CGEMM.
 *> \endverbatim
 *
 *  Arguments:
@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDA,N)
 *>          Details of the RQ factorization of an m-by-n matrix, as
-*>          returned by CGERQF. See CGERQF for further details.
+*>          returned by AB_CGERQF. See AB_CGERQF for further details.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -133,7 +133,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_CRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK
+     $,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,12 +165,13 @@
       REAL               CNORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLARNV, CLASET, CUNGRQ, CUNMRQ
+      EXTERNAL           AB_CGEMM, AB_CLACPY, AB_CLARNV, AB_CLASET, AB_C
+     $UNGRQ, AB_CUNMRQ
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
@@ -188,7 +190,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       MINMN = MIN( M, N )
 *
 *     Quick return if possible
@@ -203,18 +205,18 @@
 *
 *     Copy the last k rows of the factorization to the array Q
 *
-      CALL CLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
+      CALL AB_CLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
       IF( K.GT.0 .AND. N.GT.K )
-     $   CALL CLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
+     $   CALL AB_CLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
      $                Q( N-K+1, 1 ), LDA )
       IF( K.GT.1 )
-     $   CALL CLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
+     $   CALL AB_CLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
      $                Q( N-K+2, N-K+1 ), LDA )
 *
 *     Generate the n-by-n matrix Q
 *
-      SRNAMT = 'CUNGRQ'
-      CALL CUNGRQ( N, N, K, Q, LDA, TAU( MINMN-K+1 ), WORK, LWORK,
+      SRNAMT = 'AB_CUNGRQ'
+      CALL AB_CUNGRQ( N, N, K, Q, LDA, TAU( MINMN-K+1 ), WORK, LWORK,
      $             INFO )
 *
       DO 30 ISIDE = 1, 2
@@ -231,9 +233,9 @@
 *        Generate MC by NC matrix C
 *
          DO 10 J = 1, NC
-            CALL CLARNV( 2, ISEED, MC, C( 1, J ) )
+            CALL AB_CLARNV( 2, ISEED, MC, C( 1, J ) )
    10    CONTINUE
-         CNORM = CLANGE( '1', MC, NC, C, LDA, RWORK )
+         CNORM = AB_CLANGE( '1', MC, NC, C, LDA, RWORK )
          IF( CNORM.EQ.ZERO )
      $      CNORM = ONE
 *
@@ -246,31 +248,32 @@
 *
 *           Copy C
 *
-            CALL CLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
+            CALL AB_CLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
 *
 *           Apply Q or Q' to C
 *
-            SRNAMT = 'CUNMRQ'
+            SRNAMT = 'AB_CUNMRQ'
             IF( K.GT.0 )
-     $         CALL CUNMRQ( SIDE, TRANS, MC, NC, K, AF( M-K+1, 1 ), LDA,
+     $         CALL AB_CUNMRQ( SIDE, TRANS, MC, NC, K, AF( M-K+1, 1 ), L
+     $DA,
      $                      TAU( MINMN-K+1 ), CC, LDA, WORK, LWORK,
      $                      INFO )
 *
 *           Form explicit product and subtract
 *
-            IF( LSAME( SIDE, 'L' ) ) THEN
-               CALL CGEMM( TRANS, 'No transpose', MC, NC, MC,
+            IF( AB_LSAME( SIDE, 'L' ) ) THEN
+               CALL AB_CGEMM( TRANS, 'No transpose', MC, NC, MC,
      $                     CMPLX( -ONE ), Q, LDA, C, LDA, CMPLX( ONE ),
      $                     CC, LDA )
             ELSE
-               CALL CGEMM( 'No transpose', TRANS, MC, NC, NC,
+               CALL AB_CGEMM( 'No transpose', TRANS, MC, NC, NC,
      $                     CMPLX( -ONE ), C, LDA, Q, LDA, CMPLX( ONE ),
      $                     CC, LDA )
             END IF
 *
 *           Compute error in the difference
 *
-            RESID = CLANGE( '1', MC, NC, CC, LDA, RWORK )
+            RESID = AB_CLANGE( '1', MC, NC, CC, LDA, RWORK )
             RESULT( ( ISIDE-1 )*2+ITRANS ) = RESID /
      $         ( REAL( MAX( 1, N ) )*CNORM*EPS )
 *
@@ -279,6 +282,6 @@
 *
       RETURN
 *
-*     End of CRQT03
+*     End of AB_CRQT03
 *
       END

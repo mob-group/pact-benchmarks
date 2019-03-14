@@ -1,4 +1,4 @@
-*> \brief \b SPPTRI
+*> \brief \b AB_SPPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spptri.f">
+*> Download AB_SPPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPPTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spptri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPPTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spptri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPPTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPPTRI( UPLO, N, AP, INFO )
+*       SUBROUTINE AB_SPPTRI( UPLO, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> SPPTRI computes the inverse of a real symmetric positive definite
+*> AB_SPPTRI computes the inverse of a real symmetric positive definite
 *> matrix A using the Cholesky factorization A = U**T*U or A = L*L**T
-*> computed by SPPTRF.
+*> computed by AB_SPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -91,7 +91,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPPTRI( UPLO, N, AP, INFO )
+      SUBROUTINE AB_SPPTRI( UPLO, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,26 +118,27 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SDOT
-      EXTERNAL           LSAME, SDOT
+      LOGICAL            AB_LSAME
+      REAL               AB_SDOT
+      EXTERNAL           AB_LSAME, AB_SDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSPR, STPMV, STPTRI, XERBLA
+      EXTERNAL           AB_SSCAL, AB_SSPR, AB_STPMV, AB_STPTRI, AB_XERB
+     $LA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPPTRI', -INFO )
+         CALL AB_XERBLA( 'AB_SPPTRI', -INFO )
          RETURN
       END IF
 *
@@ -148,7 +149,7 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL STPTRI( UPLO, 'Non-unit', N, AP, INFO )
+      CALL AB_STPTRI( UPLO, 'Non-unit', N, AP, INFO )
       IF( INFO.GT.0 )
      $   RETURN
 *
@@ -161,9 +162,9 @@
             JC = JJ + 1
             JJ = JJ + J
             IF( J.GT.1 )
-     $         CALL SSPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
+     $         CALL AB_SSPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
             AJJ = AP( JJ )
-            CALL SSCAL( J, AJJ, AP( JC ), 1 )
+            CALL AB_SSCAL( J, AJJ, AP( JC ), 1 )
    10    CONTINUE
 *
       ELSE
@@ -173,9 +174,9 @@
          JJ = 1
          DO 20 J = 1, N
             JJN = JJ + N - J + 1
-            AP( JJ ) = SDOT( N-J+1, AP( JJ ), 1, AP( JJ ), 1 )
+            AP( JJ ) = AB_SDOT( N-J+1, AP( JJ ), 1, AP( JJ ), 1 )
             IF( J.LT.N )
-     $         CALL STPMV( 'Lower', 'Transpose', 'Non-unit', N-J,
+     $         CALL AB_STPMV( 'Lower', 'Transpose', 'Non-unit', N-J,
      $                     AP( JJN ), AP( JJ+1 ), 1 )
             JJ = JJN
    20    CONTINUE
@@ -183,6 +184,6 @@
 *
       RETURN
 *
-*     End of SPPTRI
+*     End of AB_SPPTRI
 *
       END

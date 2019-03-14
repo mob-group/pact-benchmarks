@@ -1,4 +1,4 @@
-*> \brief \b SDRVST
+*> \brief \b AB_SDRVST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_SDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, D1, D2, D3, D4, EVEIGS, WA1,
 *                          WA2, WA3, U, LDU, V, TAU, Z, WORK, LWORK,
 *                          IWORK, LIWORK, RESULT, INFO )
@@ -33,55 +33,55 @@
 *>
 *> \verbatim
 *>
-*>      SDRVST  checks the symmetric eigenvalue problem drivers.
+*>      AB_SDRVST  checks the symmetric eigenvalue problem drivers.
 *>
-*>              SSTEV computes all eigenvalues and, optionally,
+*>              AB_SSTEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric tridiagonal matrix.
 *>
-*>              SSTEVX computes selected eigenvalues and, optionally,
+*>              AB_AB_SSTEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric tridiagonal matrix.
 *>
-*>              SSTEVR computes selected eigenvalues and, optionally,
+*>              AB_AB_SSTEVR computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric tridiagonal matrix
 *>              using the Relatively Robust Representation where it can.
 *>
-*>              SSYEV computes all eigenvalues and, optionally,
+*>              AB_SSYEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric matrix.
 *>
-*>              SSYEVX computes selected eigenvalues and, optionally,
+*>              AB_AB_SSYEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric matrix.
 *>
-*>              SSYEVR computes selected eigenvalues and, optionally,
+*>              AB_AB_SSYEVR computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric matrix
 *>              using the Relatively Robust Representation where it can.
 *>
-*>              SSPEV computes all eigenvalues and, optionally,
+*>              AB_SSPEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric matrix in packed
 *>              storage.
 *>
-*>              SSPEVX computes selected eigenvalues and, optionally,
+*>              AB_AB_SSPEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric matrix in packed
 *>              storage.
 *>
-*>              SSBEV computes all eigenvalues and, optionally,
+*>              AB_SSBEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric band matrix.
 *>
-*>              SSBEVX computes selected eigenvalues and, optionally,
+*>              AB_AB_SSBEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric band matrix.
 *>
-*>              SSYEVD computes all eigenvalues and, optionally,
+*>              AB_AB_SSYEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric matrix using
 *>              a divide and conquer algorithm.
 *>
-*>              SSPEVD computes all eigenvalues and, optionally,
+*>              AB_AB_SSPEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric matrix in packed
 *>              storage, using a divide and conquer algorithm.
 *>
-*>              SSBEVD computes all eigenvalues and, optionally,
+*>              AB_AB_SSBEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric band matrix,
 *>              using a divide and conquer algorithm.
 *>
-*>      When SDRVST is called, a number of matrix "sizes" ("n's") and a
+*>      When AB_SDRVST is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix will be generated and used
 *>      to test the appropriate drivers.  For each matrix and each
@@ -148,7 +148,7 @@
 *> \verbatim
 *>  NSIZES  INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          SDRVST does nothing.  It must be at least zero.
+*>          AB_SDRVST does nothing.  It must be at least zero.
 *>          Not modified.
 *>
 *>  NN      INTEGER array, dimension (NSIZES)
@@ -158,7 +158,7 @@
 *>          Not modified.
 *>
 *>  NTYPES  INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, SDRVST
+*>          The number of elements in DOTYPE.   If it is zero, AB_SDRVST
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -184,7 +184,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to SDRVST to continue the same random number
+*>          next call to AB_SDRVST to continue the same random number
 *>          sequence.
 *>          Modified.
 *>
@@ -214,26 +214,26 @@
 *>          Not modified.
 *>
 *>  D1      REAL array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by SSTEQR simlutaneously
+*>          The eigenvalues of A, as computed by AB_SSTEQR simlutaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *>          Modified.
 *>
 *>  D2      REAL array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by SSTEQR if Z is not
+*>          The eigenvalues of A, as computed by AB_SSTEQR if Z is not
 *>          computed.  On exit, the eigenvalues in D2 correspond with
 *>          the matrix in A.
 *>          Modified.
 *>
 *>  D3      REAL array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by SSTERF.  On exit, the
+*>          The eigenvalues of A, as computed by AB_SSTERF.  On exit, the
 *>          eigenvalues in D3 correspond with the matrix in A.
 *>          Modified.
 *>
 *>  D4      REAL array, dimension
 *>
 *>  EVEIGS  REAL array, dimension (max(NN))
-*>          The eigenvalues as computed by SSTEV('N', ... )
+*>          The eigenvalues as computed by AB_SSTEV('N', ... )
 *>          (I reserve the right to change this to the output of
 *>          whichever algorithm computes the most accurate eigenvalues).
 *>
@@ -244,7 +244,7 @@
 *>  WA3     REAL array, dimension
 *>
 *>  U       REAL array, dimension (LDU, max(NN))
-*>          The orthogonal matrix computed by SSYTRD + SORGTR.
+*>          The orthogonal matrix computed by AB_SSYTRD + AB_SORGTR.
 *>          Modified.
 *>
 *>  LDU     INTEGER
@@ -253,18 +253,18 @@
 *>          Not modified.
 *>
 *>  V       REAL array, dimension (LDU, max(NN))
-*>          The Housholder vectors computed by SSYTRD in reducing A to
+*>          The HoushoAB_LDEr vectors computed by AB_SSYTRD in reducing A to
 *>          tridiagonal form.
 *>          Modified.
 *>
 *>  TAU     REAL array, dimension (max(NN))
-*>          The Householder factors computed by SSYTRD in reducing A
+*>          The HousehoAB_LDEr factors computed by AB_SSYTRD in reducing A
 *>          to tridiagonal form.
 *>          Modified.
 *>
 *>  Z       REAL array, dimension (LDU, max(NN))
-*>          The orthogonal matrix of eigenvectors computed by SSTEQR,
-*>          SPTEQR, and SSTEIN.
+*>          The orthogonal matrix of eigenvectors computed by AB_SSTEQR,
+*>          AB_SPTEQR, and AB_SSTEIN.
 *>          Modified.
 *>
 *>  WORK    REAL array, dimension (LWORK)
@@ -298,8 +298,8 @@
 *>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
 *>          -16: LDU < 1 or LDU < NMAX.
 *>          -21: LWORK too small.
-*>          If  SLATMR, SLATMS, SSYTRD, SORGTR, SSTEQR, SSTERF,
-*>              or SORMTR returns an error code, the
+*>          If  AB_SLATMR, AB_SLATMS, AB_SSYTRD, AB_SORGTR, AB_SSTEQR, AB_SSTERF,
+*>              or AB_SORMTR returns an error code, the
 *>              absolute value of it is returned.
 *>          Modified.
 *>
@@ -315,7 +315,7 @@
 *>       NMAX            Largest value in NN.
 *>       NMATS           The number of matrices generated so far.
 *>       NERRS           The number of tests which have exceeded THRESH
-*>                       so far (computed by SLAFTS).
+*>                       so far (computed by AB_SLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
 *>
@@ -330,109 +330,109 @@
 *>                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *>
 *>     The tests performed are:                 Routine tested
-*>    1= | A - U S U' | / ( |A| n ulp )         SSTEV('V', ... )
-*>    2= | I - U U' | / ( n ulp )               SSTEV('V', ... )
-*>    3= |D(with Z) - D(w/o Z)| / (|D| ulp)     SSTEV('N', ... )
-*>    4= | A - U S U' | / ( |A| n ulp )         SSTEVX('V','A', ... )
-*>    5= | I - U U' | / ( n ulp )               SSTEVX('V','A', ... )
-*>    6= |D(with Z) - EVEIGS| / (|D| ulp)       SSTEVX('N','A', ... )
-*>    7= | A - U S U' | / ( |A| n ulp )         SSTEVR('V','A', ... )
-*>    8= | I - U U' | / ( n ulp )               SSTEVR('V','A', ... )
-*>    9= |D(with Z) - EVEIGS| / (|D| ulp)       SSTEVR('N','A', ... )
-*>    10= | A - U S U' | / ( |A| n ulp )        SSTEVX('V','I', ... )
-*>    11= | I - U U' | / ( n ulp )              SSTEVX('V','I', ... )
-*>    12= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSTEVX('N','I', ... )
-*>    13= | A - U S U' | / ( |A| n ulp )        SSTEVX('V','V', ... )
-*>    14= | I - U U' | / ( n ulp )              SSTEVX('V','V', ... )
-*>    15= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSTEVX('N','V', ... )
-*>    16= | A - U S U' | / ( |A| n ulp )        SSTEVD('V', ... )
-*>    17= | I - U U' | / ( n ulp )              SSTEVD('V', ... )
-*>    18= |D(with Z) - EVEIGS| / (|D| ulp)      SSTEVD('N', ... )
-*>    19= | A - U S U' | / ( |A| n ulp )        SSTEVR('V','I', ... )
-*>    20= | I - U U' | / ( n ulp )              SSTEVR('V','I', ... )
-*>    21= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSTEVR('N','I', ... )
-*>    22= | A - U S U' | / ( |A| n ulp )        SSTEVR('V','V', ... )
-*>    23= | I - U U' | / ( n ulp )              SSTEVR('V','V', ... )
-*>    24= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSTEVR('N','V', ... )
+*>    1= | A - U S U' | / ( |A| n ulp )         AB_SSTEV('V', ... )
+*>    2= | I - U U' | / ( n ulp )               AB_SSTEV('V', ... )
+*>    3= |D(with Z) - D(w/o Z)| / (|D| ulp)     AB_SSTEV('N', ... )
+*>    4= | A - U S U' | / ( |A| n ulp )         AB_AB_SSTEVX('V','A', ... )
+*>    5= | I - U U' | / ( n ulp )               AB_AB_SSTEVX('V','A', ... )
+*>    6= |D(with Z) - EVEIGS| / (|D| ulp)       AB_AB_SSTEVX('N','A', ... )
+*>    7= | A - U S U' | / ( |A| n ulp )         AB_AB_SSTEVR('V','A', ... )
+*>    8= | I - U U' | / ( n ulp )               AB_AB_SSTEVR('V','A', ... )
+*>    9= |D(with Z) - EVEIGS| / (|D| ulp)       AB_AB_SSTEVR('N','A', ... )
+*>    10= | A - U S U' | / ( |A| n ulp )        AB_AB_SSTEVX('V','I', ... )
+*>    11= | I - U U' | / ( n ulp )              AB_AB_SSTEVX('V','I', ... )
+*>    12= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSTEVX('N','I', ... )
+*>    13= | A - U S U' | / ( |A| n ulp )        AB_AB_SSTEVX('V','V', ... )
+*>    14= | I - U U' | / ( n ulp )              AB_AB_SSTEVX('V','V', ... )
+*>    15= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSTEVX('N','V', ... )
+*>    16= | A - U S U' | / ( |A| n ulp )        AB_AB_SSTEVD('V', ... )
+*>    17= | I - U U' | / ( n ulp )              AB_AB_SSTEVD('V', ... )
+*>    18= |D(with Z) - EVEIGS| / (|D| ulp)      AB_AB_SSTEVD('N', ... )
+*>    19= | A - U S U' | / ( |A| n ulp )        AB_AB_SSTEVR('V','I', ... )
+*>    20= | I - U U' | / ( n ulp )              AB_AB_SSTEVR('V','I', ... )
+*>    21= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSTEVR('N','I', ... )
+*>    22= | A - U S U' | / ( |A| n ulp )        AB_AB_SSTEVR('V','V', ... )
+*>    23= | I - U U' | / ( n ulp )              AB_AB_SSTEVR('V','V', ... )
+*>    24= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSTEVR('N','V', ... )
 *>
-*>    25= | A - U S U' | / ( |A| n ulp )        SSYEV('L','V', ... )
-*>    26= | I - U U' | / ( n ulp )              SSYEV('L','V', ... )
-*>    27= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEV('L','N', ... )
-*>    28= | A - U S U' | / ( |A| n ulp )        SSYEVX('L','V','A', ... )
-*>    29= | I - U U' | / ( n ulp )              SSYEVX('L','V','A', ... )
-*>    30= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVX('L','N','A', ... )
-*>    31= | A - U S U' | / ( |A| n ulp )        SSYEVX('L','V','I', ... )
-*>    32= | I - U U' | / ( n ulp )              SSYEVX('L','V','I', ... )
-*>    33= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVX('L','N','I', ... )
-*>    34= | A - U S U' | / ( |A| n ulp )        SSYEVX('L','V','V', ... )
-*>    35= | I - U U' | / ( n ulp )              SSYEVX('L','V','V', ... )
-*>    36= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVX('L','N','V', ... )
-*>    37= | A - U S U' | / ( |A| n ulp )        SSPEV('L','V', ... )
-*>    38= | I - U U' | / ( n ulp )              SSPEV('L','V', ... )
-*>    39= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEV('L','N', ... )
-*>    40= | A - U S U' | / ( |A| n ulp )        SSPEVX('L','V','A', ... )
-*>    41= | I - U U' | / ( n ulp )              SSPEVX('L','V','A', ... )
-*>    42= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVX('L','N','A', ... )
-*>    43= | A - U S U' | / ( |A| n ulp )        SSPEVX('L','V','I', ... )
-*>    44= | I - U U' | / ( n ulp )              SSPEVX('L','V','I', ... )
-*>    45= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVX('L','N','I', ... )
-*>    46= | A - U S U' | / ( |A| n ulp )        SSPEVX('L','V','V', ... )
-*>    47= | I - U U' | / ( n ulp )              SSPEVX('L','V','V', ... )
-*>    48= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVX('L','N','V', ... )
-*>    49= | A - U S U' | / ( |A| n ulp )        SSBEV('L','V', ... )
-*>    50= | I - U U' | / ( n ulp )              SSBEV('L','V', ... )
-*>    51= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEV('L','N', ... )
-*>    52= | A - U S U' | / ( |A| n ulp )        SSBEVX('L','V','A', ... )
-*>    53= | I - U U' | / ( n ulp )              SSBEVX('L','V','A', ... )
-*>    54= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEVX('L','N','A', ... )
-*>    55= | A - U S U' | / ( |A| n ulp )        SSBEVX('L','V','I', ... )
-*>    56= | I - U U' | / ( n ulp )              SSBEVX('L','V','I', ... )
-*>    57= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEVX('L','N','I', ... )
-*>    58= | A - U S U' | / ( |A| n ulp )        SSBEVX('L','V','V', ... )
-*>    59= | I - U U' | / ( n ulp )              SSBEVX('L','V','V', ... )
-*>    60= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEVX('L','N','V', ... )
-*>    61= | A - U S U' | / ( |A| n ulp )        SSYEVD('L','V', ... )
-*>    62= | I - U U' | / ( n ulp )              SSYEVD('L','V', ... )
-*>    63= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVD('L','N', ... )
-*>    64= | A - U S U' | / ( |A| n ulp )        SSPEVD('L','V', ... )
-*>    65= | I - U U' | / ( n ulp )              SSPEVD('L','V', ... )
-*>    66= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVD('L','N', ... )
-*>    67= | A - U S U' | / ( |A| n ulp )        SSBEVD('L','V', ... )
-*>    68= | I - U U' | / ( n ulp )              SSBEVD('L','V', ... )
-*>    69= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEVD('L','N', ... )
-*>    70= | A - U S U' | / ( |A| n ulp )        SSYEVR('L','V','A', ... )
-*>    71= | I - U U' | / ( n ulp )              SSYEVR('L','V','A', ... )
-*>    72= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVR('L','N','A', ... )
-*>    73= | A - U S U' | / ( |A| n ulp )        SSYEVR('L','V','I', ... )
-*>    74= | I - U U' | / ( n ulp )              SSYEVR('L','V','I', ... )
-*>    75= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVR('L','N','I', ... )
-*>    76= | A - U S U' | / ( |A| n ulp )        SSYEVR('L','V','V', ... )
-*>    77= | I - U U' | / ( n ulp )              SSYEVR('L','V','V', ... )
-*>    78= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVR('L','N','V', ... )
+*>    25= | A - U S U' | / ( |A| n ulp )        AB_SSYEV('L','V', ... )
+*>    26= | I - U U' | / ( n ulp )              AB_SSYEV('L','V', ... )
+*>    27= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSYEV('L','N', ... )
+*>    28= | A - U S U' | / ( |A| n ulp )        AB_AB_SSYEVX('L','V','A', ... )
+*>    29= | I - U U' | / ( n ulp )              AB_AB_SSYEVX('L','V','A', ... )
+*>    30= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSYEVX('L','N','A', ... )
+*>    31= | A - U S U' | / ( |A| n ulp )        AB_AB_SSYEVX('L','V','I', ... )
+*>    32= | I - U U' | / ( n ulp )              AB_AB_SSYEVX('L','V','I', ... )
+*>    33= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSYEVX('L','N','I', ... )
+*>    34= | A - U S U' | / ( |A| n ulp )        AB_AB_SSYEVX('L','V','V', ... )
+*>    35= | I - U U' | / ( n ulp )              AB_AB_SSYEVX('L','V','V', ... )
+*>    36= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSYEVX('L','N','V', ... )
+*>    37= | A - U S U' | / ( |A| n ulp )        AB_SSPEV('L','V', ... )
+*>    38= | I - U U' | / ( n ulp )              AB_SSPEV('L','V', ... )
+*>    39= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSPEV('L','N', ... )
+*>    40= | A - U S U' | / ( |A| n ulp )        AB_AB_SSPEVX('L','V','A', ... )
+*>    41= | I - U U' | / ( n ulp )              AB_AB_SSPEVX('L','V','A', ... )
+*>    42= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSPEVX('L','N','A', ... )
+*>    43= | A - U S U' | / ( |A| n ulp )        AB_AB_SSPEVX('L','V','I', ... )
+*>    44= | I - U U' | / ( n ulp )              AB_AB_SSPEVX('L','V','I', ... )
+*>    45= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSPEVX('L','N','I', ... )
+*>    46= | A - U S U' | / ( |A| n ulp )        AB_AB_SSPEVX('L','V','V', ... )
+*>    47= | I - U U' | / ( n ulp )              AB_AB_SSPEVX('L','V','V', ... )
+*>    48= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSPEVX('L','N','V', ... )
+*>    49= | A - U S U' | / ( |A| n ulp )        AB_SSBEV('L','V', ... )
+*>    50= | I - U U' | / ( n ulp )              AB_SSBEV('L','V', ... )
+*>    51= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSBEV('L','N', ... )
+*>    52= | A - U S U' | / ( |A| n ulp )        AB_AB_SSBEVX('L','V','A', ... )
+*>    53= | I - U U' | / ( n ulp )              AB_AB_SSBEVX('L','V','A', ... )
+*>    54= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSBEVX('L','N','A', ... )
+*>    55= | A - U S U' | / ( |A| n ulp )        AB_AB_SSBEVX('L','V','I', ... )
+*>    56= | I - U U' | / ( n ulp )              AB_AB_SSBEVX('L','V','I', ... )
+*>    57= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSBEVX('L','N','I', ... )
+*>    58= | A - U S U' | / ( |A| n ulp )        AB_AB_SSBEVX('L','V','V', ... )
+*>    59= | I - U U' | / ( n ulp )              AB_AB_SSBEVX('L','V','V', ... )
+*>    60= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSBEVX('L','N','V', ... )
+*>    61= | A - U S U' | / ( |A| n ulp )        AB_AB_SSYEVD('L','V', ... )
+*>    62= | I - U U' | / ( n ulp )              AB_AB_SSYEVD('L','V', ... )
+*>    63= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSYEVD('L','N', ... )
+*>    64= | A - U S U' | / ( |A| n ulp )        AB_AB_SSPEVD('L','V', ... )
+*>    65= | I - U U' | / ( n ulp )              AB_AB_SSPEVD('L','V', ... )
+*>    66= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSPEVD('L','N', ... )
+*>    67= | A - U S U' | / ( |A| n ulp )        AB_AB_SSBEVD('L','V', ... )
+*>    68= | I - U U' | / ( n ulp )              AB_AB_SSBEVD('L','V', ... )
+*>    69= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSBEVD('L','N', ... )
+*>    70= | A - U S U' | / ( |A| n ulp )        AB_AB_SSYEVR('L','V','A', ... )
+*>    71= | I - U U' | / ( n ulp )              AB_AB_SSYEVR('L','V','A', ... )
+*>    72= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSYEVR('L','N','A', ... )
+*>    73= | A - U S U' | / ( |A| n ulp )        AB_AB_SSYEVR('L','V','I', ... )
+*>    74= | I - U U' | / ( n ulp )              AB_AB_SSYEVR('L','V','I', ... )
+*>    75= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSYEVR('L','N','I', ... )
+*>    76= | A - U S U' | / ( |A| n ulp )        AB_AB_SSYEVR('L','V','V', ... )
+*>    77= | I - U U' | / ( n ulp )              AB_AB_SSYEVR('L','V','V', ... )
+*>    78= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_AB_SSYEVR('L','N','V', ... )
 *>
 *>    Tests 25 through 78 are repeated (as tests 79 through 132)
 *>    with UPLO='U'
 *>
 *>    To be added in 1999
 *>
-*>    79= | A - U S U' | / ( |A| n ulp )        SSPEVR('L','V','A', ... )
-*>    80= | I - U U' | / ( n ulp )              SSPEVR('L','V','A', ... )
-*>    81= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVR('L','N','A', ... )
-*>    82= | A - U S U' | / ( |A| n ulp )        SSPEVR('L','V','I', ... )
-*>    83= | I - U U' | / ( n ulp )              SSPEVR('L','V','I', ... )
-*>    84= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVR('L','N','I', ... )
-*>    85= | A - U S U' | / ( |A| n ulp )        SSPEVR('L','V','V', ... )
-*>    86= | I - U U' | / ( n ulp )              SSPEVR('L','V','V', ... )
-*>    87= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVR('L','N','V', ... )
-*>    88= | A - U S U' | / ( |A| n ulp )        SSBEVR('L','V','A', ... )
-*>    89= | I - U U' | / ( n ulp )              SSBEVR('L','V','A', ... )
-*>    90= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEVR('L','N','A', ... )
-*>    91= | A - U S U' | / ( |A| n ulp )        SSBEVR('L','V','I', ... )
-*>    92= | I - U U' | / ( n ulp )              SSBEVR('L','V','I', ... )
-*>    93= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEVR('L','N','I', ... )
-*>    94= | A - U S U' | / ( |A| n ulp )        SSBEVR('L','V','V', ... )
-*>    95= | I - U U' | / ( n ulp )              SSBEVR('L','V','V', ... )
-*>    96= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSBEVR('L','N','V', ... )
+*>    79= | A - U S U' | / ( |A| n ulp )        AB_SSPEVR('L','V','A', ... )
+*>    80= | I - U U' | / ( n ulp )              AB_SSPEVR('L','V','A', ... )
+*>    81= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSPEVR('L','N','A', ... )
+*>    82= | A - U S U' | / ( |A| n ulp )        AB_SSPEVR('L','V','I', ... )
+*>    83= | I - U U' | / ( n ulp )              AB_SSPEVR('L','V','I', ... )
+*>    84= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSPEVR('L','N','I', ... )
+*>    85= | A - U S U' | / ( |A| n ulp )        AB_SSPEVR('L','V','V', ... )
+*>    86= | I - U U' | / ( n ulp )              AB_SSPEVR('L','V','V', ... )
+*>    87= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSPEVR('L','N','V', ... )
+*>    88= | A - U S U' | / ( |A| n ulp )        AB_SSBEVR('L','V','A', ... )
+*>    89= | I - U U' | / ( n ulp )              AB_SSBEVR('L','V','A', ... )
+*>    90= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSBEVR('L','N','A', ... )
+*>    91= | A - U S U' | / ( |A| n ulp )        AB_SSBEVR('L','V','I', ... )
+*>    92= | I - U U' | / ( n ulp )              AB_SSBEVR('L','V','I', ... )
+*>    93= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSBEVR('L','N','I', ... )
+*>    94= | A - U S U' | / ( |A| n ulp )        AB_SSBEVR('L','V','V', ... )
+*>    95= | I - U U' | / ( n ulp )              AB_SSBEVR('L','V','V', ... )
+*>    96= |D(with Z) - D(w/o Z)| / (|D| ulp)    AB_SSBEVR('L','N','V', ... )
 *> \endverbatim
 *
 *  Authors:
@@ -448,7 +448,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_SDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, D1, D2, D3, D4, EVEIGS, WA1,
      $                   WA2, WA3, U, LDU, V, TAU, Z, WORK, LWORK,
      $                   IWORK, LIWORK, RESULT, INFO )
@@ -501,15 +501,19 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND, SSXT1
-      EXTERNAL           SLAMCH, SLARND, SSXT1
+      REAL               AB_SLAMCH, AB_SLARND, AB_SSXT1
+      EXTERNAL           AB_SLAMCH, AB_SLARND, AB_SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, SLABAD, SLACPY, SLAFTS, SLASET, SLATMR,
-     $                   SLATMS, SSBEV, SSBEVD, SSBEVX, SSPEV, SSPEVD,
-     $                   SSPEVX, SSTEV, SSTEVD, SSTEVR, SSTEVX, SSTT21,
-     $                   SSTT22, SSYEV, SSYEVD, SSYEVR, SSYEVX, SSYT21,
-     $                   SSYT22, XERBLA
+      EXTERNAL           AB_ALASVM, AB_SLABAD, AB_SLACPY, AB_SLAFTS, AB_
+     $SLASET, AB_SLATMR,
+     $                   AB_SLATMS, AB_SSBEV, AB_AB_SSBEVD, AB_AB_SSBEVX
+     $, AB_SSPEV, AB_AB_SSPEVD,
+     $                   AB_AB_SSPEVX, AB_SSTEV, AB_AB_SSTEVD, AB_AB_SST
+     $EVR, AB_AB_SSTEVX, AB_SSTT21,
+     $                   AB_SSTT22, AB_SSYEV, AB_AB_SSYEVD, AB_AB_SSYEVR
+     $, AB_AB_SSYEVX, AB_SSYT21,
+     $                   AB_SSYT22, AB_XERBLA
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -564,7 +568,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVST', -INFO )
+         CALL AB_XERBLA( 'AB_SDRVST', -INFO )
          RETURN
       END IF
 *
@@ -575,10 +579,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
+      CALL AB_SLABAD( UNFL, OVFL )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -668,7 +672,7 @@ c           LIWEDC = 12
 *
    70       CONTINUE
 *
-            CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+            CALL AB_SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -691,7 +695,7 @@ c           LIWEDC = 12
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL AB_SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -699,7 +703,7 @@ c           LIWEDC = 12
 *
 *              Symmetric, eigenvalues specified
 *
-               CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL AB_SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -708,7 +712,7 @@ c           LIWEDC = 12
 *              Diagonal, random eigenvalues
 *
                IDUMMA( 1 ) = 1
-               CALL SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+               CALL AB_SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -718,7 +722,7 @@ c           LIWEDC = 12
 *              Symmetric, random eigenvalues
 *
                IDUMMA( 1 ) = 1
-               CALL SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+               CALL AB_SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -727,14 +731,14 @@ c           LIWEDC = 12
 *
 *              Symmetric banded, eigenvalues specified
 *
-               IHBW = INT( ( N-1 )*SLARND( 1, ISEED3 ) )
-               CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               IHBW = INT( ( N-1 )*AB_SLARND( 1, ISEED3 ) )
+               CALL AB_SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, IHBW, IHBW, 'Z', U, LDU, WORK( N+1 ),
      $                      IINFO )
 *
 *              Store as dense matrix for most routines.
 *
-               CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+               CALL AB_SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
                DO 100 IDIAG = -IHBW, IHBW
                   IROW = IHBW - IDIAG + 1
                   J1 = MAX( 1, IDIAG+1 )
@@ -762,8 +766,8 @@ c           LIWEDC = 12
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( N-1 )*AB_SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( N-1 )*AB_SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -771,7 +775,7 @@ c           LIWEDC = 12
                END IF
             END IF
 *
-*           3)      If matrix is tridiagonal, call SSTEV and SSTEVX.
+*           3)      If matrix is tridiagonal, call AB_SSTEV and AB_AB_SSTEVX.
 *
             IF( JTYPE.LE.7 ) THEN
                NTEST = 1
@@ -781,10 +785,10 @@ c           LIWEDC = 12
                DO 130 I = 1, N - 1
                   D2( I ) = REAL( A( I+1, I ) )
   130          CONTINUE
-               SRNAMT = 'SSTEV'
-               CALL SSTEV( 'V', N, D1, D2, Z, LDU, WORK, IINFO )
+               SRNAMT = 'AB_SSTEV'
+               CALL AB_SSTEV( 'V', N, D1, D2, Z, LDU, WORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEV(V)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSTEV(V)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -805,17 +809,17 @@ c           LIWEDC = 12
                DO 150 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   150          CONTINUE
-               CALL SSTT21( N, 0, D3, D4, D1, D2, Z, LDU, WORK,
+               CALL AB_SSTT21( N, 0, D3, D4, D1, D2, Z, LDU, WORK,
      $                      RESULT( 1 ) )
 *
                NTEST = 3
                DO 160 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   160          CONTINUE
-               SRNAMT = 'SSTEV'
-               CALL SSTEV( 'N', N, D3, D4, Z, LDU, WORK, IINFO )
+               SRNAMT = 'AB_SSTEV'
+               CALL AB_SSTEV( 'N', N, D3, D4, Z, LDU, WORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEV(N)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSTEV(N)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -847,12 +851,14 @@ c           LIWEDC = 12
                DO 200 I = 1, N - 1
                   D2( I ) = REAL( A( I+1, I ) )
   200          CONTINUE
-               SRNAMT = 'SSTEVX'
-               CALL SSTEVX( 'V', 'A', N, D1, D2, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVX'
+               CALL AB_AB_SSTEVX( 'V', 'A', N, D1, D2, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M, WA1, Z, LDU, WORK, IWORK, IWORK( 5*N+1 ),
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVX(V,A)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVX(V,A)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -878,19 +884,21 @@ c           LIWEDC = 12
                DO 220 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   220          CONTINUE
-               CALL SSTT21( N, 0, D3, D4, WA1, D2, Z, LDU, WORK,
+               CALL AB_SSTT21( N, 0, D3, D4, WA1, D2, Z, LDU, WORK,
      $                      RESULT( 4 ) )
 *
                NTEST = 6
                DO 230 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   230          CONTINUE
-               SRNAMT = 'SSTEVX'
-               CALL SSTEVX( 'N', 'A', N, D3, D4, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVX'
+               CALL AB_AB_SSTEVX( 'N', 'A', N, D3, D4, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M2, WA2, Z, LDU, WORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVX(N,A)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVX(N,A)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -922,12 +930,14 @@ c           LIWEDC = 12
                DO 270 I = 1, N - 1
                   D2( I ) = REAL( A( I+1, I ) )
   270          CONTINUE
-               SRNAMT = 'SSTEVR'
-               CALL SSTEVR( 'V', 'A', N, D1, D2, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVR'
+               CALL AB_AB_SSTEVR( 'V', 'A', N, D1, D2, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M, WA1, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVR(V,A)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVR(V,A)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -952,19 +962,21 @@ c           LIWEDC = 12
                DO 290 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   290          CONTINUE
-               CALL SSTT21( N, 0, D3, D4, WA1, D2, Z, LDU, WORK,
+               CALL AB_SSTT21( N, 0, D3, D4, WA1, D2, Z, LDU, WORK,
      $                      RESULT( 7 ) )
 *
                NTEST = 9
                DO 300 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   300          CONTINUE
-               SRNAMT = 'SSTEVR'
-               CALL SSTEVR( 'N', 'A', N, D3, D4, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVR'
+               CALL AB_AB_SSTEVR( 'N', 'A', N, D3, D4, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVR(N,A)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVR(N,A)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -997,12 +1009,14 @@ c           LIWEDC = 12
                DO 340 I = 1, N - 1
                   D2( I ) = REAL( A( I+1, I ) )
   340          CONTINUE
-               SRNAMT = 'SSTEVX'
-               CALL SSTEVX( 'V', 'I', N, D1, D2, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVX'
+               CALL AB_AB_SSTEVX( 'V', 'I', N, D1, D2, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M2, WA2, Z, LDU, WORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVX(V,I)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVX(V,I)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1023,7 +1037,7 @@ c           LIWEDC = 12
                DO 360 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   360          CONTINUE
-               CALL SSTT22( N, M2, 0, D3, D4, WA2, D2, Z, LDU, WORK,
+               CALL AB_SSTT22( N, M2, 0, D3, D4, WA2, D2, Z, LDU, WORK,
      $                      MAX( 1, M2 ), RESULT( 10 ) )
 *
 *
@@ -1031,12 +1045,14 @@ c           LIWEDC = 12
                DO 370 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   370          CONTINUE
-               SRNAMT = 'SSTEVX'
-               CALL SSTEVX( 'N', 'I', N, D3, D4, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVX'
+               CALL AB_AB_SSTEVX( 'N', 'I', N, D3, D4, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M3, WA3, Z, LDU, WORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVX(N,I)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVX(N,I)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1049,8 +1065,10 @@ c           LIWEDC = 12
 *
 *              Do test 12.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                RESULT( 12 ) = ( TEMP1+TEMP2 ) / MAX( UNFL, ULP*TEMP3 )
 *
   380          CONTINUE
@@ -1084,12 +1102,14 @@ c           LIWEDC = 12
                DO 400 I = 1, N - 1
                   D2( I ) = REAL( A( I+1, I ) )
   400          CONTINUE
-               SRNAMT = 'SSTEVX'
-               CALL SSTEVX( 'V', 'V', N, D1, D2, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVX'
+               CALL AB_AB_SSTEVX( 'V', 'V', N, D1, D2, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M2, WA2, Z, LDU, WORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVX(V,V)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVX(V,V)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1117,19 +1137,21 @@ c           LIWEDC = 12
                DO 420 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   420          CONTINUE
-               CALL SSTT22( N, M2, 0, D3, D4, WA2, D2, Z, LDU, WORK,
+               CALL AB_SSTT22( N, M2, 0, D3, D4, WA2, D2, Z, LDU, WORK,
      $                      MAX( 1, M2 ), RESULT( 13 ) )
 *
                NTEST = 15
                DO 430 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   430          CONTINUE
-               SRNAMT = 'SSTEVX'
-               CALL SSTEVX( 'N', 'V', N, D3, D4, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVX'
+               CALL AB_AB_SSTEVX( 'N', 'V', N, D3, D4, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M3, WA3, Z, LDU, WORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVX(N,V)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVX(N,V)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1142,8 +1164,10 @@ c           LIWEDC = 12
 *
 *              Do test 15.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                RESULT( 15 ) = ( TEMP1+TEMP2 ) / MAX( UNFL, TEMP3*ULP )
 *
   440          CONTINUE
@@ -1155,11 +1179,13 @@ c           LIWEDC = 12
                DO 460 I = 1, N - 1
                   D2( I ) = REAL( A( I+1, I ) )
   460          CONTINUE
-               SRNAMT = 'SSTEVD'
-               CALL SSTEVD( 'V', N, D1, D2, Z, LDU, WORK, LWEDC, IWORK,
+               SRNAMT = 'AB_AB_SSTEVD'
+               CALL AB_AB_SSTEVD( 'V', N, D1, D2, Z, LDU, WORK, LWEDC, I
+     $WORK,
      $                      LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVD(V)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVD(V)', IINFO, N
+     $,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1180,18 +1206,20 @@ c           LIWEDC = 12
                DO 480 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   480          CONTINUE
-               CALL SSTT21( N, 0, D3, D4, D1, D2, Z, LDU, WORK,
+               CALL AB_SSTT21( N, 0, D3, D4, D1, D2, Z, LDU, WORK,
      $                      RESULT( 16 ) )
 *
                NTEST = 18
                DO 490 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   490          CONTINUE
-               SRNAMT = 'SSTEVD'
-               CALL SSTEVD( 'N', N, D3, D4, Z, LDU, WORK, LWEDC, IWORK,
+               SRNAMT = 'AB_AB_SSTEVD'
+               CALL AB_AB_SSTEVD( 'N', N, D3, D4, Z, LDU, WORK, LWEDC, I
+     $WORK,
      $                      LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVD(N)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVD(N)', IINFO, N
+     $,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1223,12 +1251,14 @@ c           LIWEDC = 12
                DO 530 I = 1, N - 1
                   D2( I ) = REAL( A( I+1, I ) )
   530          CONTINUE
-               SRNAMT = 'SSTEVR'
-               CALL SSTEVR( 'V', 'I', N, D1, D2, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVR'
+               CALL AB_AB_SSTEVR( 'V', 'I', N, D1, D2, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVR(V,I)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVR(V,I)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1249,7 +1279,7 @@ c           LIWEDC = 12
                DO 550 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   550          CONTINUE
-               CALL SSTT22( N, M2, 0, D3, D4, WA2, D2, Z, LDU, WORK,
+               CALL AB_SSTT22( N, M2, 0, D3, D4, WA2, D2, Z, LDU, WORK,
      $                      MAX( 1, M2 ), RESULT( 19 ) )
 *
 *
@@ -1257,12 +1287,14 @@ c           LIWEDC = 12
                DO 560 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   560          CONTINUE
-               SRNAMT = 'SSTEVR'
-               CALL SSTEVR( 'N', 'I', N, D3, D4, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVR'
+               CALL AB_AB_SSTEVR( 'N', 'I', N, D3, D4, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M3, WA3, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVR(N,I)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVR(N,I)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1275,8 +1307,10 @@ c           LIWEDC = 12
 *
 *              Do test 21.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                RESULT( 21 ) = ( TEMP1+TEMP2 ) / MAX( UNFL, ULP*TEMP3 )
 *
   570          CONTINUE
@@ -1310,12 +1344,14 @@ c           LIWEDC = 12
                DO 590 I = 1, N - 1
                   D2( I ) = REAL( A( I+1, I ) )
   590          CONTINUE
-               SRNAMT = 'SSTEVR'
-               CALL SSTEVR( 'V', 'V', N, D1, D2, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVR'
+               CALL AB_AB_SSTEVR( 'V', 'V', N, D1, D2, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVR(V,V)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVR(V,V)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1343,19 +1379,21 @@ c           LIWEDC = 12
                DO 610 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   610          CONTINUE
-               CALL SSTT22( N, M2, 0, D3, D4, WA2, D2, Z, LDU, WORK,
+               CALL AB_SSTT22( N, M2, 0, D3, D4, WA2, D2, Z, LDU, WORK,
      $                      MAX( 1, M2 ), RESULT( 22 ) )
 *
                NTEST = 24
                DO 620 I = 1, N - 1
                   D4( I ) = REAL( A( I+1, I ) )
   620          CONTINUE
-               SRNAMT = 'SSTEVR'
-               CALL SSTEVR( 'N', 'V', N, D3, D4, VL, VU, IL, IU, ABSTOL,
+               SRNAMT = 'AB_AB_SSTEVR'
+               CALL AB_AB_SSTEVR( 'N', 'V', N, D3, D4, VL, VU, IL, IU, A
+     $BSTOL,
      $                      M3, WA3, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEVR(N,V)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSTEVR(N,V)', IINFO,
+     $ N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1368,8 +1406,10 @@ c           LIWEDC = 12
 *
 *              Do test 24.
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                RESULT( 24 ) = ( TEMP1+TEMP2 ) / MAX( UNFL, TEMP3*ULP )
 *
   630          CONTINUE
@@ -1394,16 +1434,17 @@ c           LIWEDC = 12
                   UPLO = 'U'
                END IF
 *
-*              4)      Call SSYEV and SSYEVX.
+*              4)      Call AB_SSYEV and AB_AB_SSYEVX.
 *
-               CALL SLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL AB_SLACPY( ' ', N, N, A, LDA, V, LDU )
 *
                NTEST = NTEST + 1
-               SRNAMT = 'SSYEV'
-               CALL SSYEV( 'V', UPLO, N, A, LDU, D1, WORK, LWORK,
+               SRNAMT = 'AB_SSYEV'
+               CALL AB_SSYEV( 'V', UPLO, N, A, LDU, D1, WORK, LWORK,
      $                     IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEV(V,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSYEV(V,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1418,17 +1459,18 @@ c           LIWEDC = 12
 *
 *              Do tests 25 and 26 (or +54)
 *
-               CALL SSYT21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
+               CALL AB_SSYT21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 2
-               SRNAMT = 'SSYEV'
-               CALL SSYEV( 'N', UPLO, N, A, LDU, D3, WORK, LWORK,
+               SRNAMT = 'AB_SSYEV'
+               CALL AB_SSYEV( 'N', UPLO, N, A, LDU, D3, WORK, LWORK,
      $                     IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEV(N,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSYEV(N,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1451,7 +1493,7 @@ c           LIWEDC = 12
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
   660          CONTINUE
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 1
 *
@@ -1477,12 +1519,14 @@ c           LIWEDC = 12
                   VU = ONE
                END IF
 *
-               SRNAMT = 'SSYEVX'
-               CALL SSYEVX( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSYEVX'
+               CALL AB_AB_SSYEVX( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M, WA1, Z, LDU, WORK, LWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVX(V,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVX(V,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1497,18 +1541,20 @@ c           LIWEDC = 12
 *
 *              Do tests 28 and 29 (or +54)
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL SSYT21( 1, UPLO, N, 0, A, LDU, D1, D2, Z, LDU, V,
+               CALL AB_SSYT21( 1, UPLO, N, 0, A, LDU, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               SRNAMT = 'SSYEVX'
-               CALL SSYEVX( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSYEVX'
+               CALL AB_AB_SSYEVX( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVX(N,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVX(N,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1533,13 +1579,15 @@ c           LIWEDC = 12
   680          CONTINUE
 *
                NTEST = NTEST + 1
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
-               SRNAMT = 'SSYEVX'
-               CALL SSYEVX( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'AB_AB_SSYEVX'
+               CALL AB_AB_SSYEVX( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVX(V,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVX(V,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1554,19 +1602,22 @@ c           LIWEDC = 12
 *
 *              Do tests 31 and 32 (or +54)
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
-               SRNAMT = 'SSYEVX'
-               CALL SSYEVX( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'AB_AB_SSYEVX'
+               CALL AB_AB_SSYEVX( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M3, WA3, Z, LDU, WORK, LWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVX(N,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVX(N,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1579,20 +1630,24 @@ c           LIWEDC = 12
 *
 *              Do test 33 (or +54)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
      $                           MAX( UNFL, ULP*TEMP3 )
   690          CONTINUE
 *
                NTEST = NTEST + 1
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
-               SRNAMT = 'SSYEVX'
-               CALL SSYEVX( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'AB_AB_SSYEVX'
+               CALL AB_AB_SSYEVX( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVX(V,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVX(V,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1607,19 +1662,22 @@ c           LIWEDC = 12
 *
 *              Do tests 34 and 35 (or +54)
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
-               SRNAMT = 'SSYEVX'
-               CALL SSYEVX( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'AB_AB_SSYEVX'
+               CALL AB_AB_SSYEVX( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M3, WA3, Z, LDU, WORK, LWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVX(N,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVX(N,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1637,8 +1695,10 @@ c           LIWEDC = 12
 *
 *              Do test 36 (or +54)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1649,9 +1709,9 @@ c           LIWEDC = 12
 *
   700          CONTINUE
 *
-*              5)      Call SSPEV and SSPEVX.
+*              5)      Call AB_SSPEV and AB_AB_SSPEVX.
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
 *              Load array WORK with the upper or lower triangular
 *              part of the matrix in packed form.
@@ -1675,10 +1735,11 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 1
-               SRNAMT = 'SSPEV'
-               CALL SSPEV( 'V', UPLO, N, WORK, D1, Z, LDU, V, IINFO )
+               SRNAMT = 'AB_SSPEV'
+               CALL AB_SSPEV( 'V', UPLO, N, WORK, D1, Z, LDU, V, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEV(V,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSPEV(V,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1693,7 +1754,7 @@ c           LIWEDC = 12
 *
 *              Do tests 37 and 38 (or +54)
 *
-               CALL SSYT21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL AB_SSYT21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -1715,10 +1776,11 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 2
-               SRNAMT = 'SSPEV'
-               CALL SSPEV( 'N', UPLO, N, WORK, D3, Z, LDU, V, IINFO )
+               SRNAMT = 'AB_SSPEV'
+               CALL AB_SSPEV( 'N', UPLO, N, WORK, D3, Z, LDU, V, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEV(N,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSPEV(N,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1786,12 +1848,14 @@ c           LIWEDC = 12
                   VU = ONE
                END IF
 *
-               SRNAMT = 'SSPEVX'
-               CALL SSPEVX( 'V', 'A', UPLO, N, WORK, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSPEVX'
+               CALL AB_AB_SSPEVX( 'V', 'A', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M, WA1, Z, LDU, V, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEVX(V,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPEVX(V,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1806,7 +1870,8 @@ c           LIWEDC = 12
 *
 *              Do tests 40 and 41 (or +54)
 *
-               CALL SSYT21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
+               CALL AB_SSYT21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
+     $,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1829,12 +1894,14 @@ c           LIWEDC = 12
   880             CONTINUE
                END IF
 *
-               SRNAMT = 'SSPEVX'
-               CALL SSPEVX( 'N', 'A', UPLO, N, WORK, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSPEVX'
+               CALL AB_AB_SSPEVX( 'N', 'A', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M2, WA2, Z, LDU, V, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEVX(N,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPEVX(N,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1877,12 +1944,14 @@ c           LIWEDC = 12
 *
                NTEST = NTEST + 1
 *
-               SRNAMT = 'SSPEVX'
-               CALL SSPEVX( 'V', 'I', UPLO, N, WORK, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSPEVX'
+               CALL AB_AB_SSPEVX( 'V', 'I', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M2, WA2, Z, LDU, V, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEVX(V,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPEVX(V,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1897,7 +1966,8 @@ c           LIWEDC = 12
 *
 *              Do tests 43 and 44 (or +54)
 *
-               CALL SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1920,12 +1990,14 @@ c           LIWEDC = 12
   980             CONTINUE
                END IF
 *
-               SRNAMT = 'SSPEVX'
-               CALL SSPEVX( 'N', 'I', UPLO, N, WORK, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSPEVX'
+               CALL AB_AB_SSPEVX( 'N', 'I', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M3, WA3, Z, LDU, V, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEVX(N,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPEVX(N,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1943,8 +2015,10 @@ c           LIWEDC = 12
 *
 *              Do test 45 (or +54)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1974,12 +2048,14 @@ c           LIWEDC = 12
 *
                NTEST = NTEST + 1
 *
-               SRNAMT = 'SSPEVX'
-               CALL SSPEVX( 'V', 'V', UPLO, N, WORK, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSPEVX'
+               CALL AB_AB_SSPEVX( 'V', 'V', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M2, WA2, Z, LDU, V, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEVX(V,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPEVX(V,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1994,7 +2070,8 @@ c           LIWEDC = 12
 *
 *              Do tests 46 and 47 (or +54)
 *
-               CALL SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -2017,12 +2094,14 @@ c           LIWEDC = 12
  1070             CONTINUE
                END IF
 *
-               SRNAMT = 'SSPEVX'
-               CALL SSPEVX( 'N', 'V', UPLO, N, WORK, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSPEVX'
+               CALL AB_AB_SSPEVX( 'N', 'V', UPLO, N, WORK, VL, VU, IL, I
+     $U,
      $                      ABSTOL, M3, WA3, Z, LDU, V, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEVX(N,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPEVX(N,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2040,8 +2119,10 @@ c           LIWEDC = 12
 *
 *              Do test 48 (or +54)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -2052,7 +2133,7 @@ c           LIWEDC = 12
 *
  1080          CONTINUE
 *
-*              6)      Call SSBEV and SSBEVX.
+*              6)      Call AB_SSBEV and AB_AB_SSBEVX.
 *
                IF( JTYPE.LE.7 ) THEN
                   KD = 1
@@ -2080,11 +2161,13 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 1
-               SRNAMT = 'SSBEV'
-               CALL SSBEV( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK,
+               SRNAMT = 'AB_SSBEV'
+               CALL AB_SSBEV( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK
+     $,
      $                     IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEV(V,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSBEV(V,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2099,7 +2182,7 @@ c           LIWEDC = 12
 *
 *              Do tests 49 and 50 (or ... )
 *
-               CALL SSYT21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL AB_SSYT21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -2117,11 +2200,13 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 2
-               SRNAMT = 'SSBEV'
-               CALL SSBEV( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK,
+               SRNAMT = 'AB_SSBEV'
+               CALL AB_SSBEV( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK
+     $,
      $                     IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEV(N,' // UPLO // ')',
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSBEV(N,' // UPLO // ')
+     $',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2162,12 +2247,14 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 1
-               SRNAMT = 'SSBEVX'
-               CALL SSBEVX( 'V', 'A', UPLO, N, KD, V, LDU, U, LDU, VL,
+               SRNAMT = 'AB_AB_SSBEVX'
+               CALL AB_AB_SSBEVX( 'V', 'A', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M, WA2, Z, LDU, WORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEVX(V,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBEVX(V,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2182,7 +2269,8 @@ c           LIWEDC = 12
 *
 *              Do tests 52 and 53 (or +54)
 *
-               CALL SSYT21( 1, UPLO, N, 0, A, LDU, WA2, D2, Z, LDU, V,
+               CALL AB_SSYT21( 1, UPLO, N, 0, A, LDU, WA2, D2, Z, LDU, V
+     $,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -2201,12 +2289,14 @@ c           LIWEDC = 12
  1260             CONTINUE
                END IF
 *
-               SRNAMT = 'SSBEVX'
-               CALL SSBEVX( 'N', 'A', UPLO, N, KD, V, LDU, U, LDU, VL,
+               SRNAMT = 'AB_AB_SSBEVX'
+               CALL AB_AB_SSBEVX( 'N', 'A', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M3, WA3, Z, LDU, WORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEVX(N,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBEVX(N,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2244,12 +2334,14 @@ c           LIWEDC = 12
  1320             CONTINUE
                END IF
 *
-               SRNAMT = 'SSBEVX'
-               CALL SSBEVX( 'V', 'I', UPLO, N, KD, V, LDU, U, LDU, VL,
+               SRNAMT = 'AB_AB_SSBEVX'
+               CALL AB_AB_SSBEVX( 'V', 'I', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M2, WA2, Z, LDU, WORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEVX(V,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBEVX(V,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2264,7 +2356,8 @@ c           LIWEDC = 12
 *
 *              Do tests 55 and 56 (or +54)
 *
-               CALL SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -2283,12 +2376,14 @@ c           LIWEDC = 12
  1360             CONTINUE
                END IF
 *
-               SRNAMT = 'SSBEVX'
-               CALL SSBEVX( 'N', 'I', UPLO, N, KD, V, LDU, U, LDU, VL,
+               SRNAMT = 'AB_AB_SSBEVX'
+               CALL AB_AB_SSBEVX( 'N', 'I', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M3, WA3, Z, LDU, WORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEVX(N,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBEVX(N,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2301,8 +2396,10 @@ c           LIWEDC = 12
 *
 *              Do test 57 (or +54)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -2327,12 +2424,14 @@ c           LIWEDC = 12
  1410             CONTINUE
                END IF
 *
-               SRNAMT = 'SSBEVX'
-               CALL SSBEVX( 'V', 'V', UPLO, N, KD, V, LDU, U, LDU, VL,
+               SRNAMT = 'AB_AB_SSBEVX'
+               CALL AB_AB_SSBEVX( 'V', 'V', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M2, WA2, Z, LDU, WORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEVX(V,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBEVX(V,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2347,7 +2446,8 @@ c           LIWEDC = 12
 *
 *              Do tests 58 and 59 (or +54)
 *
-               CALL SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -2366,12 +2466,14 @@ c           LIWEDC = 12
  1450             CONTINUE
                END IF
 *
-               SRNAMT = 'SSBEVX'
-               CALL SSBEVX( 'N', 'V', UPLO, N, KD, V, LDU, U, LDU, VL,
+               SRNAMT = 'AB_AB_SSBEVX'
+               CALL AB_AB_SSBEVX( 'N', 'V', UPLO, N, KD, V, LDU, U, LDU,
+     $ VL,
      $                      VU, IL, IU, ABSTOL, M3, WA3, Z, LDU, WORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEVX(N,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBEVX(N,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2389,8 +2491,10 @@ c           LIWEDC = 12
 *
 *              Do test 60 (or +54)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -2401,16 +2505,17 @@ c           LIWEDC = 12
 *
  1460          CONTINUE
 *
-*              7)      Call SSYEVD
+*              7)      Call AB_AB_SSYEVD
 *
-               CALL SLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL AB_SLACPY( ' ', N, N, A, LDA, V, LDU )
 *
                NTEST = NTEST + 1
-               SRNAMT = 'SSYEVD'
-               CALL SSYEVD( 'V', UPLO, N, A, LDU, D1, WORK, LWEDC,
+               SRNAMT = 'AB_AB_SSYEVD'
+               CALL AB_AB_SSYEVD( 'V', UPLO, N, A, LDU, D1, WORK, LWEDC,
      $                      IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVD(V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVD(V,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2425,17 +2530,18 @@ c           LIWEDC = 12
 *
 *              Do tests 61 and 62 (or +54)
 *
-               CALL SSYT21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
+               CALL AB_SSYT21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 2
-               SRNAMT = 'SSYEVD'
-               CALL SSYEVD( 'N', UPLO, N, A, LDU, D3, WORK, LWEDC,
+               SRNAMT = 'AB_AB_SSYEVD'
+               CALL AB_AB_SSYEVD( 'N', UPLO, N, A, LDU, D3, WORK, LWEDC,
      $                      IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVD(N,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVD(N,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2459,9 +2565,9 @@ c           LIWEDC = 12
 *
  1480          CONTINUE
 *
-*              8)      Call SSPEVD.
+*              8)      Call AB_AB_SSPEVD.
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
 *              Load array WORK with the upper or lower triangular
 *              part of the matrix in packed form.
@@ -2485,12 +2591,13 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 1
-               SRNAMT = 'SSPEVD'
-               CALL SSPEVD( 'V', UPLO, N, WORK, D1, Z, LDU,
+               SRNAMT = 'AB_AB_SSPEVD'
+               CALL AB_AB_SSPEVD( 'V', UPLO, N, WORK, D1, Z, LDU,
      $                      WORK( INDX ), LWEDC-INDX+1, IWORK, LIWEDC,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEVD(V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPEVD(V,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2505,7 +2612,7 @@ c           LIWEDC = 12
 *
 *              Do tests 64 and 65 (or +54)
 *
-               CALL SSYT21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL AB_SSYT21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -2528,12 +2635,13 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 2
-               SRNAMT = 'SSPEVD'
-               CALL SSPEVD( 'N', UPLO, N, WORK, D3, Z, LDU,
+               SRNAMT = 'AB_AB_SSPEVD'
+               CALL AB_AB_SSPEVD( 'N', UPLO, N, WORK, D3, Z, LDU,
      $                      WORK( INDX ), LWEDC-INDX+1, IWORK, LIWEDC,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSPEVD(N,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPEVD(N,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2556,7 +2664,7 @@ c           LIWEDC = 12
      $                           ULP*MAX( TEMP1, TEMP2 ) )
  1580          CONTINUE
 *
-*              9)      Call SSBEVD.
+*              9)      Call AB_AB_SSBEVD.
 *
                IF( JTYPE.LE.7 ) THEN
                   KD = 1
@@ -2584,11 +2692,13 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 1
-               SRNAMT = 'SSBEVD'
-               CALL SSBEVD( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK,
+               SRNAMT = 'AB_AB_SSBEVD'
+               CALL AB_AB_SSBEVD( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, 
+     $WORK,
      $                      LWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEVD(V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBEVD(V,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2603,7 +2713,7 @@ c           LIWEDC = 12
 *
 *              Do tests 67 and 68 (or +54)
 *
-               CALL SSYT21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL AB_SSYT21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -2621,11 +2731,13 @@ c           LIWEDC = 12
                END IF
 *
                NTEST = NTEST + 2
-               SRNAMT = 'SSBEVD'
-               CALL SSBEVD( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK,
+               SRNAMT = 'AB_AB_SSBEVD'
+               CALL AB_AB_SSBEVD( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, 
+     $WORK,
      $                      LWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBEVD(N,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBEVD(N,' // UPLO /
+     $/
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2650,14 +2762,16 @@ c           LIWEDC = 12
  1680          CONTINUE
 *
 *
-               CALL SLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL AB_SLACPY( ' ', N, N, A, LDA, V, LDU )
                NTEST = NTEST + 1
-               SRNAMT = 'SSYEVR'
-               CALL SSYEVR( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSYEVR'
+               CALL AB_AB_SSYEVR( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M, WA1, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVR(V,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVR(V,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2672,18 +2786,21 @@ c           LIWEDC = 12
 *
 *              Do tests 70 and 71 (or ... )
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL SSYT21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
+               CALL AB_SSYT21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
+     $,
      $                      LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               SRNAMT = 'SSYEVR'
-               CALL SSYEVR( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
+               SRNAMT = 'AB_AB_SSYEVR'
+               CALL AB_AB_SSYEVR( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVR(N,A,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVR(N,A,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2708,13 +2825,15 @@ c           LIWEDC = 12
  1700          CONTINUE
 *
                NTEST = NTEST + 1
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
-               SRNAMT = 'SSYEVR'
-               CALL SSYEVR( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'AB_AB_SSYEVR'
+               CALL AB_AB_SSYEVR( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVR(V,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVR(V,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2729,19 +2848,22 @@ c           LIWEDC = 12
 *
 *              Do tests 73 and 74 (or +54)
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
-               SRNAMT = 'SSYEVR'
-               CALL SSYEVR( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'AB_AB_SSYEVR'
+               CALL AB_AB_SSYEVR( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M3, WA3, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVR(N,I,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVR(N,I,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2754,20 +2876,24 @@ c           LIWEDC = 12
 *
 *              Do test 75 (or +54)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
      $                           MAX( UNFL, ULP*TEMP3 )
  1710          CONTINUE
 *
                NTEST = NTEST + 1
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
-               SRNAMT = 'SSYEVR'
-               CALL SSYEVR( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'AB_AB_SSYEVR'
+               CALL AB_AB_SSYEVR( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVR(V,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVR(V,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2782,19 +2908,22 @@ c           LIWEDC = 12
 *
 *              Do tests 76 and 77 (or +54)
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
+               CALL AB_SSYT22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
+     $U,
      $                      V, LDU, TAU, WORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
-               SRNAMT = 'SSYEVR'
-               CALL SSYEVR( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
+               SRNAMT = 'AB_AB_SSYEVR'
+               CALL AB_AB_SSYEVR( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL,
+     $ IU,
      $                      ABSTOL, M3, WA3, Z, LDU, IWORK, WORK, LWORK,
      $                      IWORK(2*N+1), LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSYEVR(N,V,' // UPLO //
+                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYEVR(N,V,' // UPLO
+     $ //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2812,8 +2941,10 @@ c           LIWEDC = 12
 *
 *              Do test 78 (or +54)
 *
-               TEMP1 = SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-               TEMP2 = SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+               TEMP1 = AB_SSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
+     $)
+               TEMP2 = AB_SSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
+     $)
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -2822,7 +2953,7 @@ c           LIWEDC = 12
                RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
      $                           MAX( UNFL, TEMP3*ULP )
 *
-               CALL SLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL AB_SLACPY( ' ', N, N, V, LDU, A, LDA )
 *
  1720       CONTINUE
 *
@@ -2830,7 +2961,7 @@ c           LIWEDC = 12
 *
             NTESTT = NTESTT + NTEST
 *
-            CALL SLAFTS( 'SST', N, N, JTYPE, NTEST, RESULT, IOLDSD,
+            CALL AB_SLAFTS( 'SST', N, N, JTYPE, NTEST, RESULT, IOLDSD,
      $                   THRESH, NOUNIT, NERRS )
 *
  1730    CONTINUE
@@ -2838,13 +2969,13 @@ c           LIWEDC = 12
 *
 *     Summary
 *
-      CALL ALASVM( 'SST', NOUNIT, NERRS, NTESTT, 0 )
+      CALL AB_ALASVM( 'SST', NOUNIT, NERRS, NTESTT, 0 )
 *
- 9999 FORMAT( ' SDRVST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_SDRVST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of SDRVST
+*     End of AB_SDRVST
 *
       END

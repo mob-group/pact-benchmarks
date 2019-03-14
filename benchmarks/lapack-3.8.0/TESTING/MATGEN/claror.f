@@ -1,4 +1,4 @@
-*> \brief \b CLAROR
+*> \brief \b AB_CLAROR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
+*       SUBROUTINE AB_CLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          INIT, SIDE
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*>    CLAROR pre- or post-multiplies an M by N matrix A by a random
+*>    AB_CLAROR pre- or post-multiplies an M by N matrix A by a random
 *>    unitary matrix U, overwriting A. A may optionally be
 *>    initialized to the identity matrix before multiplying by U.
 *>    U is generated using the method of G.W. Stewart
@@ -58,7 +58,7 @@
 *>
 *>           INIT = 'I' may be used to generate square (i.e., unitary)
 *>           or rectangular orthogonal matrices (orthogonality being
-*>           in the sense of CDOTC):
+*>           in the sense of AB_CDOTC):
 *>
 *>           For square matrices, M=N, and SIDE many be either 'L' or
 *>           'R'; the rows will be orthogonal to each other, as will the
@@ -114,7 +114,7 @@
 *>           congruential sequence limited to small integers, and so
 *>           should produce machine independent random numbers. The
 *>           values of ISEED are changed on exit, and can be used in the
-*>           next call to CLAROR to continue the same random number
+*>           next call to AB_CLAROR to continue the same random number
 *>           sequence.
 *>           Modified.
 *> \endverbatim
@@ -134,7 +134,7 @@
 *>          INFO is INTEGER
 *>           An error flag.  It is set to:
 *>            0  if no error.
-*>            1  if CLARND returned a bad random number (installation
+*>            1  if AB_CLARND returned a bad random number (installation
 *>               problem)
 *>           -1  if SIDE is not L, R, C, or T.
 *>           -3  if M is negative.
@@ -156,7 +156,7 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE CLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
+      SUBROUTINE AB_CLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,13 +188,14 @@
       COMPLEX            CSIGN, XNORMS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SCNRM2
-      COMPLEX            CLARND
-      EXTERNAL           LSAME, SCNRM2, CLARND
+      LOGICAL            AB_LSAME
+      REAL               AB_SCNRM2
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_LSAME, AB_SCNRM2, AB_CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGERC, CLACGV, CLASET, CSCAL, XERBLA
+      EXTERNAL           AB_CGEMV, AB_CGERC, AB_CLACGV, AB_CLASET, AB_CS
+     $CAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, CONJG
@@ -206,13 +207,13 @@
      $   RETURN
 *
       ITYPE = 0
-      IF( LSAME( SIDE, 'L' ) ) THEN
+      IF( AB_LSAME( SIDE, 'L' ) ) THEN
          ITYPE = 1
-      ELSE IF( LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'R' ) ) THEN
          ITYPE = 2
-      ELSE IF( LSAME( SIDE, 'C' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'C' ) ) THEN
          ITYPE = 3
-      ELSE IF( LSAME( SIDE, 'T' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'T' ) ) THEN
          ITYPE = 4
       END IF
 *
@@ -228,7 +229,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAROR', -INFO )
+         CALL AB_XERBLA( 'AB_CLAROR', -INFO )
          RETURN
       END IF
 *
@@ -240,13 +241,13 @@
 *
 *     Initialize A to the identity matrix if desired
 *
-      IF( LSAME( INIT, 'I' ) )
-     $   CALL CLASET( 'Full', M, N, CZERO, CONE, A, LDA )
+      IF( AB_LSAME( INIT, 'I' ) )
+     $   CALL AB_CLASET( 'Full', M, N, CZERO, CONE, A, LDA )
 *
 *     If no rotation possible, still multiply by
 *     a random complex number from the circle |x| = 1
 *
-*      2)      Compute Rotation by computing Householder
+*      2)      Compute Rotation by computing HousehoAB_LDEr
 *              Transformations H(2), H(3), ..., H(n).  Note that the
 *              order in which they are computed is irrelevant.
 *
@@ -260,12 +261,12 @@
 *        Generate independent normal( 0, 1 ) random numbers
 *
          DO 50 J = KBEG, NXFRM
-            X( J ) = CLARND( 3, ISEED )
+            X( J ) = AB_CLARND( 3, ISEED )
    50    CONTINUE
 *
-*        Generate a Householder transformation from the random vector X
+*        Generate a HousehoAB_LDEr transformation from the random vector X
 *
-         XNORM = SCNRM2( IXFRM, X( KBEG ), 1 )
+         XNORM = AB_SCNRM2( IXFRM, X( KBEG ), 1 )
          XABS = ABS( X( KBEG ) )
          IF( XABS.NE.CZERO ) THEN
             CSIGN = X( KBEG ) / XABS
@@ -277,22 +278,22 @@
          FACTOR = XNORM*( XNORM+XABS )
          IF( ABS( FACTOR ).LT.TOOSML ) THEN
             INFO = 1
-            CALL XERBLA( 'CLAROR', -INFO )
+            CALL AB_XERBLA( 'AB_CLAROR', -INFO )
             RETURN
          ELSE
             FACTOR = ONE / FACTOR
          END IF
          X( KBEG ) = X( KBEG ) + XNORMS
 *
-*        Apply Householder transformation to A
+*        Apply HousehoAB_LDEr transformation to A
 *
          IF( ITYPE.EQ.1 .OR. ITYPE.EQ.3 .OR. ITYPE.EQ.4 ) THEN
 *
 *           Apply H(k) on the left of A
 *
-            CALL CGEMV( 'C', IXFRM, N, CONE, A( KBEG, 1 ), LDA,
+            CALL AB_CGEMV( 'C', IXFRM, N, CONE, A( KBEG, 1 ), LDA,
      $                  X( KBEG ), 1, CZERO, X( 2*NXFRM+1 ), 1 )
-            CALL CGERC( IXFRM, N, -CMPLX( FACTOR ), X( KBEG ), 1,
+            CALL AB_CGERC( IXFRM, N, -CMPLX( FACTOR ), X( KBEG ), 1,
      $                  X( 2*NXFRM+1 ), 1, A( KBEG, 1 ), LDA )
 *
          END IF
@@ -302,18 +303,19 @@
 *           Apply H(k)* (or H(k)') on the right of A
 *
             IF( ITYPE.EQ.4 ) THEN
-               CALL CLACGV( IXFRM, X( KBEG ), 1 )
+               CALL AB_CLACGV( IXFRM, X( KBEG ), 1 )
             END IF
 *
-            CALL CGEMV( 'N', M, IXFRM, CONE, A( 1, KBEG ), LDA,
+            CALL AB_CGEMV( 'N', M, IXFRM, CONE, A( 1, KBEG ), LDA,
      $                  X( KBEG ), 1, CZERO, X( 2*NXFRM+1 ), 1 )
-            CALL CGERC( M, IXFRM, -CMPLX( FACTOR ), X( 2*NXFRM+1 ), 1,
+            CALL AB_CGERC( M, IXFRM, -CMPLX( FACTOR ), X( 2*NXFRM+1 ), 1
+     $,
      $                  X( KBEG ), 1, A( 1, KBEG ), LDA )
 *
          END IF
    60 CONTINUE
 *
-      X( 1 ) = CLARND( 3, ISEED )
+      X( 1 ) = AB_CLARND( 3, ISEED )
       XABS = ABS( X( 1 ) )
       IF( XABS.NE.ZERO ) THEN
          CSIGN = X( 1 ) / XABS
@@ -326,23 +328,25 @@
 *
       IF( ITYPE.EQ.1 .OR. ITYPE.EQ.3 .OR. ITYPE.EQ.4 ) THEN
          DO 70 IROW = 1, M
-            CALL CSCAL( N, CONJG( X( NXFRM+IROW ) ), A( IROW, 1 ), LDA )
+            CALL AB_CSCAL( N, CONJG( X( NXFRM+IROW ) ), A( IROW, 1 ), LD
+     $A )
    70    CONTINUE
       END IF
 *
       IF( ITYPE.EQ.2 .OR. ITYPE.EQ.3 ) THEN
          DO 80 JCOL = 1, N
-            CALL CSCAL( M, X( NXFRM+JCOL ), A( 1, JCOL ), 1 )
+            CALL AB_CSCAL( M, X( NXFRM+JCOL ), A( 1, JCOL ), 1 )
    80    CONTINUE
       END IF
 *
       IF( ITYPE.EQ.4 ) THEN
          DO 90 JCOL = 1, N
-            CALL CSCAL( M, CONJG( X( NXFRM+JCOL ) ), A( 1, JCOL ), 1 )
+            CALL AB_CSCAL( M, CONJG( X( NXFRM+JCOL ) ), A( 1, JCOL ), 1 
+     $)
    90    CONTINUE
       END IF
       RETURN
 *
-*     End of CLAROR
+*     End of AB_CLAROR
 *
       END

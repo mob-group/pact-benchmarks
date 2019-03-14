@@ -1,4 +1,4 @@
-*> \brief \b CERRHEX
+*> \brief \b AB_CERRHEX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CERRHE( PATH, NUNIT )
+*       SUBROUTINE AB_CERRHE( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,11 +21,11 @@
 *>
 *> \verbatim
 *>
-*> CERRHE tests the error exits for the COMPLEX routines
+*> AB_CERRHE tests the error exits for the COMPLEX routines
 *> for Hermitian indefinite matrices.
 *>
 *> Note that this file is used only when the XBLAS are available,
-*> otherwise cerrhe.f defines this subroutine.
+*> otherwise AB_CERRHE.f defines this subroutine.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CERRHE( PATH, NUNIT )
+      SUBROUTINE AB_CERRHE( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -90,16 +90,22 @@
      $                   E( NMAX ), W( 2*NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHECON, CHECON_3, CHECON_ROOK, CHERFS,
-     $                   CHETF2, CHETF2_RK, CHETF2_ROOK, CHETRF,
-     $                   CHETRF_RK, CHETRF_ROOK, CHETRI, CHETRI_3,
-     $                   CHETRI_3X, CHETRI_ROOK, CHETRI2, CHETRI2X,
-     $                   CHETRS, CHETRS_3, CHETRS_ROOK, CHKXER, CHPCON,
-     $                   CHPRFS, CHPTRF, CHPTRI, CHPTRS, CHERFSX
+      EXTERNAL           AB_ALAESM, AB_CHECON, AB_AB_CHECON_3, AB_AB_CHE
+     $CON_ROOK, AB_AB_CHERFS,
+     $                   AB_CHETF2, AB_AB_CHETF2_RK, AB_AB_CHETF2_ROOK, 
+     $AB_CHETRF,
+     $                   AB_AB_CHETRF_RK, AB_AB_CHETRF_ROOK, AB_CHETRI, 
+     $AB_AB_CHETRI_3,
+     $                   AB_AB_AB_CHETRI_3X, AB_AB_CHETRI_ROOK, AB_AB_CH
+     $ETRI2, AB_AB_AB_CHETRI2X,
+     $                   AB_CHETRS, AB_AB_CHETRS_3, AB_AB_CHETRS_ROOK, A
+     $B_CHKXER, AB_CHPCON,
+     $                   AB_AB_CHPRFS, AB_CHPTRF, AB_CHPTRI, AB_CHPTRS, 
+     $AB_AB_AB_CHERFSX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -137,284 +143,303 @@
       ANRM = 1.0
       OK = .TRUE.
 *
-      IF( LSAMEN( 2, C2, 'HE' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'HE' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a Hermitian indefinite matrix with patrial
 *        (Bunch-Kaufman) diagonal pivoting method.
 *
-*        CHETRF
+*        AB_CHETRF
 *
-         SRNAMT = 'CHETRF'
+         SRNAMT = 'AB_CHETRF'
          INFOT = 1
-         CALL CHETRF( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRF( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHETRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRF( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRF( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHETRF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRF( 'U', 2, A, 1, IP, W, 4, INFO )
-         CALL CHKXER( 'CHETRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRF( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL AB_CHKXER( 'AB_CHETRF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHETRF( 'U', 0, A, 1, IP, W, 0, INFO )
-         CALL CHKXER( 'CHETRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRF( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_CHETRF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHETRF( 'U', 0, A, 1, IP, W, -2, INFO )
-         CALL CHKXER( 'CHETRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRF( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL AB_CHKXER( 'AB_CHETRF', INFOT, NOUT, LERR, OK )
 *
-*        CHETF2
+*        AB_CHETF2
 *
-         SRNAMT = 'CHETF2'
+         SRNAMT = 'AB_CHETF2'
          INFOT = 1
-         CALL CHETF2( '/', 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CHETF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETF2( '/', 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CHETF2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETF2( 'U', -1, A, 1, IP, INFO )
-         CALL CHKXER( 'CHETF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETF2( 'U', -1, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CHETF2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETF2( 'U', 2, A, 1, IP, INFO )
-         CALL CHKXER( 'CHETF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETF2( 'U', 2, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CHETF2', INFOT, NOUT, LERR, OK )
 *
-*        CHETRI
+*        AB_CHETRI
 *
-         SRNAMT = 'CHETRI'
+         SRNAMT = 'AB_CHETRI'
          INFOT = 1
-         CALL CHETRI( '/', 0, A, 1, IP, W, INFO )
-         CALL CHKXER( 'CHETRI', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRI( '/', 0, A, 1, IP, W, INFO )
+         CALL AB_CHKXER( 'AB_CHETRI', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRI( 'U', -1, A, 1, IP, W, INFO )
-         CALL CHKXER( 'CHETRI', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRI( 'U', -1, A, 1, IP, W, INFO )
+         CALL AB_CHKXER( 'AB_CHETRI', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRI( 'U', 2, A, 1, IP, W, INFO )
-         CALL CHKXER( 'CHETRI', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRI( 'U', 2, A, 1, IP, W, INFO )
+         CALL AB_CHKXER( 'AB_CHETRI', INFOT, NOUT, LERR, OK )
 *
-*        CHETRI2
+*        AB_AB_CHETRI2
 *
-         SRNAMT = 'CHETRI2'
+         SRNAMT = 'AB_AB_CHETRI2'
          INFOT = 1
-         CALL CHETRI2( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI2', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI2( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRI2( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI2', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI2( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRI2( 'U', 2, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI2', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI2( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI2', INFOT, NOUT, LERR, OK )
 *
-*        CHETRI2X
+*        AB_AB_AB_CHETRI2X
 *
-         SRNAMT = 'CHETRI2X'
+         SRNAMT = 'AB_AB_AB_CHETRI2X'
          INFOT = 1
-         CALL CHETRI2X( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI2X', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_AB_CHETRI2X( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_AB_CHETRI2X', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRI2X( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI2X', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_AB_CHETRI2X( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_AB_CHETRI2X', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRI2X( 'U', 2, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI2X', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_AB_CHETRI2X( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_AB_CHETRI2X', INFOT, NOUT, LERR, OK )
 *
-*        CHETRS
+*        AB_CHETRS
 *
-         SRNAMT = 'CHETRS'
+         SRNAMT = 'AB_CHETRS'
          INFOT = 1
-         CALL CHETRS( '/', 0, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRS( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHETRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRS( 'U', -1, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRS( 'U', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHETRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHETRS( 'U', 0, -1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRS( 'U', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHETRS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHETRS( 'U', 2, 1, A, 1, IP, B, 2, INFO )
-         CALL CHKXER( 'CHETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRS( 'U', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL AB_CHKXER( 'AB_CHETRS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHETRS( 'U', 2, 1, A, 2, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHETRS( 'U', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHETRS', INFOT, NOUT, LERR, OK )
 *
-*        CHERFS
+*        AB_AB_CHERFS
 *
-         SRNAMT = 'CHERFS'
+         SRNAMT = 'AB_AB_CHERFS'
          INFOT = 1
-         CALL CHERFS( '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2, W,
+         CALL AB_AB_CHERFS( '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, 
+     $R2, W,
      $                R, INFO )
-         CALL CHKXER( 'CHERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHERFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHERFS( 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
+         CALL AB_AB_CHERFS( 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1,
+     $ R2,
      $                W, R, INFO )
-         CALL CHKXER( 'CHERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHERFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHERFS( 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
+         CALL AB_AB_CHERFS( 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1,
+     $ R2,
      $                W, R, INFO )
-         CALL CHKXER( 'CHERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHERFS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHERFS( 'U', 2, 1, A, 1, AF, 2, IP, B, 2, X, 2, R1, R2, W,
+         CALL AB_AB_CHERFS( 'U', 2, 1, A, 1, AF, 2, IP, B, 2, X, 2, R1, 
+     $R2, W,
      $                R, INFO )
-         CALL CHKXER( 'CHERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHERFS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHERFS( 'U', 2, 1, A, 2, AF, 1, IP, B, 2, X, 2, R1, R2, W,
+         CALL AB_AB_CHERFS( 'U', 2, 1, A, 2, AF, 1, IP, B, 2, X, 2, R1, 
+     $R2, W,
      $                R, INFO )
-         CALL CHKXER( 'CHERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHERFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CHERFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 1, X, 2, R1, R2, W,
+         CALL AB_AB_CHERFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 1, X, 2, R1, 
+     $R2, W,
      $                R, INFO )
-         CALL CHKXER( 'CHERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHERFS', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL CHERFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 2, X, 1, R1, R2, W,
+         CALL AB_AB_CHERFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 2, X, 1, R1, 
+     $R2, W,
      $                R, INFO )
-         CALL CHKXER( 'CHERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHERFS', INFOT, NOUT, LERR, OK )
 *
-*        CHECON
+*        AB_CHECON
 *
-         SRNAMT = 'CHECON'
+         SRNAMT = 'AB_CHECON'
          INFOT = 1
-         CALL CHECON( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHECON( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL AB_CHKXER( 'AB_CHECON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHECON( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHECON( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL AB_CHKXER( 'AB_CHECON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHECON( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHECON( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL AB_CHKXER( 'AB_CHECON', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CHECON( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHECON( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
+         CALL AB_CHKXER( 'AB_CHECON', INFOT, NOUT, LERR, OK )
 *
-*        CHERFSX
+*        AB_AB_AB_CHERFSX
 *
          N_ERR_BNDS = 3
          NPARAMS = 0
-         SRNAMT = 'CHERFSX'
+         SRNAMT = 'AB_AB_AB_CHERFSX'
          INFOT = 1
-         CALL CHERFSX( '/', EQ, 0, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
+         CALL AB_AB_AB_CHERFSX( '/', EQ, 0, 0, A, 1, AF, 1, IP, S, B, 1,
+     $ X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHERFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
+         CALL AB_AB_AB_CHERFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1
+     $, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHERFSX', INFOT, NOUT, LERR, OK )
          EQ = 'N'
          INFOT = 3
-         CALL CHERFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
+         CALL AB_AB_AB_CHERFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1
+     $, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHERFSX( 'U', EQ, 0, -1, A, 1, AF, 1, IP, S, B, 1, X, 1,
+         CALL AB_AB_AB_CHERFSX( 'U', EQ, 0, -1, A, 1, AF, 1, IP, S, B, 1
+     $, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CHERFSX( 'U', EQ, 2, 1, A, 1, AF, 2, IP, S, B, 2, X, 2,
+         CALL AB_AB_AB_CHERFSX( 'U', EQ, 2, 1, A, 1, AF, 2, IP, S, B, 2,
+     $ X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 1, IP, S, B, 2, X, 2,
+         CALL AB_AB_AB_CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 1, IP, S, B, 2,
+     $ X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 1, X, 2,
+         CALL AB_AB_AB_CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 1,
+     $ X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 2, X, 1,
+         CALL AB_AB_AB_CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 2,
+     $ X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_AB_CHERFSX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HR' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a Hermitian indefinite matrix with rook
 *        (bounded Bunch-Kaufman) diagonal pivoting method.
 *
-*        CHETRF_ROOK
+*        AB_AB_CHETRF_ROOK
 *
-         SRNAMT = 'CHETRF_ROOK'
+         SRNAMT = 'AB_AB_CHETRF_ROOK'
          INFOT = 1
-         CALL CHETRF_ROOK( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_ROOK( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRF_ROOK( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_ROOK( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRF_ROOK( 'U', 2, A, 1, IP, W, 4, INFO )
-         CALL CHKXER( 'CHETRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_ROOK( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHETRF_ROOK( 'U', 0, A, 1, IP, W, 0, INFO )
-         CALL CHKXER( 'CHETRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_ROOK( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHETRF_ROOK( 'U', 0, A, 1, IP, W, -2, INFO )
-         CALL CHKXER( 'CHETRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_ROOK( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        CHETF2_ROOK
+*        AB_AB_CHETF2_ROOK
 *
-         SRNAMT = 'CHETF2_ROOK'
+         SRNAMT = 'AB_AB_CHETF2_ROOK'
          INFOT = 1
-         CALL CHETF2_ROOK( '/', 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CHETF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETF2_ROOK( '/', 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETF2_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETF2_ROOK( 'U', -1, A, 1, IP, INFO )
-         CALL CHKXER( 'CHETF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETF2_ROOK( 'U', -1, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETF2_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETF2_ROOK( 'U', 2, A, 1, IP, INFO )
-         CALL CHKXER( 'CHETF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETF2_ROOK( 'U', 2, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETF2_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        CHETRI_ROOK
+*        AB_AB_CHETRI_ROOK
 *
-         SRNAMT = 'CHETRI_ROOK'
+         SRNAMT = 'AB_AB_CHETRI_ROOK'
          INFOT = 1
-         CALL CHETRI_ROOK( '/', 0, A, 1, IP, W, INFO )
-         CALL CHKXER( 'CHETRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI_ROOK( '/', 0, A, 1, IP, W, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRI_ROOK( 'U', -1, A, 1, IP, W, INFO )
-         CALL CHKXER( 'CHETRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI_ROOK( 'U', -1, A, 1, IP, W, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
-         CALL CHKXER( 'CHETRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        CHETRS_ROOK
+*        AB_AB_CHETRS_ROOK
 *
-         SRNAMT = 'CHETRS_ROOK'
+         SRNAMT = 'AB_AB_CHETRS_ROOK'
          INFOT = 1
-         CALL CHETRS_ROOK( '/', 0, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_ROOK( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRS_ROOK( 'U', -1, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_ROOK( 'U', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHETRS_ROOK( 'U', 0, -1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_ROOK( 'U', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHETRS_ROOK( 'U', 2, 1, A, 1, IP, B, 2, INFO )
-         CALL CHKXER( 'CHETRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_ROOK( 'U', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHETRS_ROOK( 'U', 2, 1, A, 2, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_ROOK( 'U', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        CHECON_ROOK
+*        AB_AB_CHECON_ROOK
 *
-         SRNAMT = 'CHECON_ROOK'
+         SRNAMT = 'AB_AB_CHECON_ROOK'
          INFOT = 1
-         CALL CHECON_ROOK( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHECON_ROOK( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CHECON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHECON_ROOK( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHECON_ROOK( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO
+     $ )
+         CALL AB_CHKXER( 'AB_AB_CHECON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHECON_ROOK( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHECON_ROOK( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CHECON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CHECON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHECON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO
+     $ )
+         CALL AB_CHKXER( 'AB_AB_CHECON_ROOK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'HK' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HK' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a Hermitian indefinite matrix with rook
@@ -424,191 +449,200 @@
 *        L (or U) is stored in A, diagonal of D is stored on the
 *        diagonal of A, subdiagonal of D is stored in a separate array E.
 *
-*        CHETRF_RK
+*        AB_AB_CHETRF_RK
 *
-         SRNAMT = 'CHETRF_RK'
+         SRNAMT = 'AB_AB_CHETRF_RK'
          INFOT = 1
-         CALL CHETRF_RK( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRF_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_RK( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRF_RK( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRF_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_RK( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRF_RK( 'U', 2, A, 1, E, IP, W, 4, INFO )
-         CALL CHKXER( 'CHETRF_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_RK( 'U', 2, A, 1, E, IP, W, 4, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHETRF_RK( 'U', 0, A, 1, E, IP, W, 0, INFO )
-         CALL CHKXER( 'CHETRF_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_RK( 'U', 0, A, 1, E, IP, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHETRF_RK( 'U', 0, A, 1, E, IP, W, -2, INFO )
-         CALL CHKXER( 'CHETRF_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRF_RK( 'U', 0, A, 1, E, IP, W, -2, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRF_RK', INFOT, NOUT, LERR, OK )
 *
-*        CHETF2_RK
+*        AB_AB_CHETF2_RK
 *
-         SRNAMT = 'CHETF2_RK'
+         SRNAMT = 'AB_AB_CHETF2_RK'
          INFOT = 1
-         CALL CHETF2_RK( '/', 0, A, 1, E, IP, INFO )
-         CALL CHKXER( 'CHETF2_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETF2_RK( '/', 0, A, 1, E, IP, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETF2_RK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETF2_RK( 'U', -1, A, 1, E, IP, INFO )
-         CALL CHKXER( 'CHETF2_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETF2_RK( 'U', -1, A, 1, E, IP, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETF2_RK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETF2_RK( 'U', 2, A, 1, E, IP, INFO )
-         CALL CHKXER( 'CHETF2_RK', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETF2_RK( 'U', 2, A, 1, E, IP, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETF2_RK', INFOT, NOUT, LERR, OK )
 *
-*        CHETRI_3
+*        AB_AB_CHETRI_3
 *
-         SRNAMT = 'CHETRI_3'
+         SRNAMT = 'AB_AB_CHETRI_3'
          INFOT = 1
-         CALL CHETRI_3( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI_3( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRI_3( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI_3( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRI_3( 'U', 2, A, 1, E, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI_3( 'U', 2, A, 1, E, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHETRI_3( 'U', 0, A, 1, E, IP, W, 0, INFO )
-         CALL CHKXER( 'CHETRI_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI_3( 'U', 0, A, 1, E, IP, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHETRI_3( 'U', 0, A, 1, E, IP, W, -2, INFO )
-         CALL CHKXER( 'CHETRI_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRI_3( 'U', 0, A, 1, E, IP, W, -2, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRI_3', INFOT, NOUT, LERR, OK )
 *
-*        CHETRI_3X
+*        AB_AB_AB_CHETRI_3X
 *
-         SRNAMT = 'CHETRI_3X'
+         SRNAMT = 'AB_AB_AB_CHETRI_3X'
          INFOT = 1
-         CALL CHETRI_3X( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI_3X', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_AB_CHETRI_3X( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_AB_CHETRI_3X', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRI_3X( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI_3X', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_AB_CHETRI_3X( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_AB_CHETRI_3X', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRI_3X( 'U', 2, A, 1, E, IP, W, 1, INFO )
-         CALL CHKXER( 'CHETRI_3X', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_AB_CHETRI_3X( 'U', 2, A, 1, E, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_AB_CHETRI_3X', INFOT, NOUT, LERR, OK )
 *
-*        CHETRS_3
+*        AB_AB_CHETRS_3
 *
-         SRNAMT = 'CHETRS_3'
+         SRNAMT = 'AB_AB_CHETRS_3'
          INFOT = 1
-         CALL CHETRS_3( '/', 0, 0, A, 1, E, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_3( '/', 0, 0, A, 1, E, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRS_3( 'U', -1, 0, A, 1, E, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_3( 'U', -1, 0, A, 1, E, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHETRS_3( 'U', 0, -1, A, 1, E, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_3( 'U', 0, -1, A, 1, E, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHETRS_3( 'U', 2, 1, A, 1, E, IP, B, 2, INFO )
-         CALL CHKXER( 'CHETRS_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_3( 'U', 2, 1, A, 1, E, IP, B, 2, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CHETRS_3( 'U', 2, 1, A, 2, E, IP, B, 1, INFO )
-         CALL CHKXER( 'CHETRS_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHETRS_3( 'U', 2, 1, A, 2, E, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_AB_CHETRS_3', INFOT, NOUT, LERR, OK )
 *
-*        CHECON_3
+*        AB_AB_CHECON_3
 *
-         SRNAMT = 'CHECON_3'
+         SRNAMT = 'AB_AB_CHECON_3'
          INFOT = 1
-         CALL CHECON_3( '/', 0, A, 1,  E, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHECON_3( '/', 0, A, 1,  E, IP, ANRM, RCOND, W, INFO
+     $ )
+         CALL AB_CHKXER( 'AB_AB_CHECON_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHECON_3( 'U', -1, A, 1, E, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHECON_3( 'U', -1, A, 1, E, IP, ANRM, RCOND, W, INFO
+     $ )
+         CALL AB_CHKXER( 'AB_AB_CHECON_3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHECON_3( 'U', 2, A, 1, E, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHECON_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHECON_3( 'U', 2, A, 1, E, IP, ANRM, RCOND, W, INFO 
+     $)
+         CALL AB_CHKXER( 'AB_AB_CHECON_3', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHECON_3( 'U', 1, A, 1, E, IP, -1.0E0, RCOND, W, INFO)
-         CALL CHKXER( 'CHECON_3', INFOT, NOUT, LERR, OK )
+         CALL AB_AB_CHECON_3( 'U', 1, A, 1, E, IP, -1.0E0, RCOND, W, INF
+     $O)
+         CALL AB_CHKXER( 'AB_AB_CHECON_3', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HP' ) ) THEN
 *
 *     Test error exits of the routines that use factorization
 *     of a Hermitian indefinite packed matrix with patrial
 *     (Bunch-Kaufman) diagonal pivoting method.
 *
-*        CHPTRF
+*        AB_CHPTRF
 *
-         SRNAMT = 'CHPTRF'
+         SRNAMT = 'AB_CHPTRF'
          INFOT = 1
-         CALL CHPTRF( '/', 0, A, IP, INFO )
-         CALL CHKXER( 'CHPTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPTRF( '/', 0, A, IP, INFO )
+         CALL AB_CHKXER( 'AB_CHPTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHPTRF( 'U', -1, A, IP, INFO )
-         CALL CHKXER( 'CHPTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPTRF( 'U', -1, A, IP, INFO )
+         CALL AB_CHKXER( 'AB_CHPTRF', INFOT, NOUT, LERR, OK )
 *
-*        CHPTRI
+*        AB_CHPTRI
 *
-         SRNAMT = 'CHPTRI'
+         SRNAMT = 'AB_CHPTRI'
          INFOT = 1
-         CALL CHPTRI( '/', 0, A, IP, W, INFO )
-         CALL CHKXER( 'CHPTRI', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPTRI( '/', 0, A, IP, W, INFO )
+         CALL AB_CHKXER( 'AB_CHPTRI', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHPTRI( 'U', -1, A, IP, W, INFO )
-         CALL CHKXER( 'CHPTRI', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPTRI( 'U', -1, A, IP, W, INFO )
+         CALL AB_CHKXER( 'AB_CHPTRI', INFOT, NOUT, LERR, OK )
 *
-*        CHPTRS
+*        AB_CHPTRS
 *
-         SRNAMT = 'CHPTRS'
+         SRNAMT = 'AB_CHPTRS'
          INFOT = 1
-         CALL CHPTRS( '/', 0, 0, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CHPTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPTRS( '/', 0, 0, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHPTRS( 'U', -1, 0, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CHPTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPTRS( 'U', -1, 0, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHPTRS( 'U', 0, -1, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CHPTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPTRS( 'U', 0, -1, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHPTRS( 'U', 2, 1, A, IP, B, 1, INFO )
-         CALL CHKXER( 'CHPTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPTRS( 'U', 2, 1, A, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CHPTRS', INFOT, NOUT, LERR, OK )
 *
-*        CHPRFS
+*        AB_AB_CHPRFS
 *
-         SRNAMT = 'CHPRFS'
+         SRNAMT = 'AB_AB_CHPRFS'
          INFOT = 1
-         CALL CHPRFS( '/', 0, 0, A, AF, IP, B, 1, X, 1, R1, R2, W, R,
+         CALL AB_AB_CHPRFS( '/', 0, 0, A, AF, IP, B, 1, X, 1, R1, R2, W,
+     $ R,
      $                INFO )
-         CALL CHKXER( 'CHPRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHPRFS( 'U', -1, 0, A, AF, IP, B, 1, X, 1, R1, R2, W, R,
+         CALL AB_AB_CHPRFS( 'U', -1, 0, A, AF, IP, B, 1, X, 1, R1, R2, W
+     $, R,
      $                INFO )
-         CALL CHKXER( 'CHPRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHPRFS( 'U', 0, -1, A, AF, IP, B, 1, X, 1, R1, R2, W, R,
+         CALL AB_AB_CHPRFS( 'U', 0, -1, A, AF, IP, B, 1, X, 1, R1, R2, W
+     $, R,
      $                INFO )
-         CALL CHKXER( 'CHPRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CHPRFS( 'U', 2, 1, A, AF, IP, B, 1, X, 2, R1, R2, W, R,
+         CALL AB_AB_CHPRFS( 'U', 2, 1, A, AF, IP, B, 1, X, 2, R1, R2, W,
+     $ R,
      $                INFO )
-         CALL CHKXER( 'CHPRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CHPRFS( 'U', 2, 1, A, AF, IP, B, 2, X, 1, R1, R2, W, R,
+         CALL AB_AB_CHPRFS( 'U', 2, 1, A, AF, IP, B, 2, X, 1, R1, R2, W,
+     $ R,
      $                INFO )
-         CALL CHKXER( 'CHPRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_AB_CHPRFS', INFOT, NOUT, LERR, OK )
 *
-*        CHPCON
+*        AB_CHPCON
 *
-         SRNAMT = 'CHPCON'
+         SRNAMT = 'AB_CHPCON'
          INFOT = 1
-         CALL CHPCON( '/', 0, A, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHPCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPCON( '/', 0, A, IP, ANRM, RCOND, W, INFO )
+         CALL AB_CHKXER( 'AB_CHPCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHPCON( 'U', -1, A, IP, ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHPCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPCON( 'U', -1, A, IP, ANRM, RCOND, W, INFO )
+         CALL AB_CHKXER( 'AB_CHPCON', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHPCON( 'U', 1, A, IP, -ANRM, RCOND, W, INFO )
-         CALL CHKXER( 'CHPCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHPCON( 'U', 1, A, IP, -ANRM, RCOND, W, INFO )
+         CALL AB_CHKXER( 'AB_CHPCON', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of CERRHE
+*     End of AB_CERRHE
 *
       END

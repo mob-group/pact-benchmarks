@@ -1,4 +1,4 @@
-*> \brief \b CDRVSX
+*> \brief \b AB_CDRVSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVSX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_CDRVSX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NIUNIT, NOUNIT, A, LDA, H, HT, W, WT, WTMP, VS,
 *                          LDVS, VS1, RESULT, WORK, LWORK, RWORK, BWORK,
 *                          INFO )
@@ -33,15 +33,15 @@
 *>
 *> \verbatim
 *>
-*>    CDRVSX checks the nonsymmetric eigenvalue (Schur form) problem
-*>    expert driver CGEESX.
+*>    AB_CDRVSX checks the nonsymmetric eigenvalue (Schur form) problem
+*>    expert driver AB_AB_CGEESX.
 *>
-*>    CDRVSX uses both test matrices generated randomly depending on
+*>    AB_CDRVSX uses both test matrices generated randomly depending on
 *>    data supplied in the calling sequence, as well as on data
 *>    read from an input file and including precomputed condition
 *>    numbers to which it compares the ones it computes.
 *>
-*>    When CDRVSX is called, a number of matrix "sizes" ("n's") and a
+*>    When AB_CDRVSX is called, a number of matrix "sizes" ("n's") and a
 *>    number of matrix "types" are specified.  For each size ("n")
 *>    and each type of matrix, one matrix will be generated and used
 *>    to test the nonsymmetric eigenroutines.  For each matrix, 15
@@ -192,7 +192,7 @@
 *>   (16)  |RCONDE - RCDEIN| / cond(RCONDE)
 *>
 *>      RCONDE is the reciprocal average eigenvalue condition number
-*>      computed by CGEESX and RCDEIN (the precomputed true value)
+*>      computed by AB_AB_CGEESX and RCDEIN (the precomputed true value)
 *>      is supplied as input.  cond(RCONDE) is the condition number
 *>      of RCONDE, and takes errors in computing RCONDE into account,
 *>      so that the resulting quantity should be O(ULP). cond(RCONDE)
@@ -201,7 +201,7 @@
 *>   (17)  |RCONDV - RCDVIN| / cond(RCONDV)
 *>
 *>      RCONDV is the reciprocal right invariant subspace condition
-*>      number computed by CGEESX and RCDVIN (the precomputed true
+*>      number computed by AB_AB_CGEESX and RCDVIN (the precomputed true
 *>      value) is supplied as input. cond(RCONDV) is the condition
 *>      number of RCONDV, and takes errors in computing RCONDV into
 *>      account, so that the resulting quantity should be O(ULP).
@@ -262,7 +262,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to CDRVSX to continue the same random number
+*>          next call to AB_CDRVSX to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -308,13 +308,13 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX array, dimension (LDA, max(NN))
-*>          Another copy of the test matrix A, modified by CGEESX.
+*>          Another copy of the test matrix A, modified by AB_AB_CGEESX.
 *> \endverbatim
 *>
 *> \param[out] HT
 *> \verbatim
 *>          HT is COMPLEX array, dimension (LDA, max(NN))
-*>          Yet another copy of the test matrix A, modified by CGEESX.
+*>          Yet another copy of the test matrix A, modified by AB_AB_CGEESX.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -327,7 +327,7 @@
 *> \verbatim
 *>          WT is COMPLEX array, dimension (max(NN))
 *>          Like W, this array contains the eigenvalues of A,
-*>          but those computed when CGEESX only computes a partial
+*>          but those computed when AB_AB_CGEESX only computes a partial
 *>          eigendecomposition, i.e. not Schur vectors
 *> \endverbatim
 *>
@@ -389,7 +389,7 @@
 *>          INFO is INTEGER
 *>          If 0,  successful exit.
 *>            <0,  input parameter -INFO is incorrect
-*>            >0,  CLATMR, CLATMS, CLATME or CGET24 returned an error
+*>            >0,  AB_CLATMR, AB_CLATMS, AB_CLATME or AB_CGET24 returned an error
 *>                 code and INFO is its absolute value
 *>
 *>-----------------------------------------------------------------------
@@ -430,7 +430,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CDRVSX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_CDRVSX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NIUNIT, NOUNIT, A, LDA, H, HT, W, WT, WTMP, VS,
      $                   LDVS, VS1, RESULT, WORK, LWORK, RWORK, BWORK,
      $                   INFO )
@@ -491,12 +491,13 @@
       COMMON             / SSLCT / SELOPT, SELDIM, SELVAL, SELWR, SELWI
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGET24, CLATME, CLATMR, CLATMS, CLASET, SLABAD,
-     $                   SLASUM, XERBLA
+      EXTERNAL           AB_CGET24, AB_CLATME, AB_CLATMR, AB_CLATMS, AB_
+     $CLASET, AB_SLABAD,
+     $                   AB_SLASUM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -557,7 +558,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CDRVSX', -INFO )
+         CALL AB_XERBLA( 'AB_CDRVSX', -INFO )
          RETURN
       END IF
 *
@@ -568,10 +569,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      CALL AB_SLABAD( UNFL, OVFL )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP
@@ -638,7 +639,7 @@
 *
    60       CONTINUE
 *
-            CALL CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL AB_CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -672,7 +673,8 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -680,7 +682,8 @@
 *
 *              Symmetric, eigenvalues specified
 *
-               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, N, N, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -696,7 +699,7 @@
                   CONDS = ZERO
                END IF
 *
-               CALL CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
+               CALL AB_CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
      $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N, ANORM,
      $                      A, LDA, WORK( 2*N+1 ), IINFO )
 *
@@ -704,7 +707,8 @@
 *
 *              Diagonal, random eigenvalues
 *
-               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IDUMMA, IINFO )
@@ -713,7 +717,8 @@
 *
 *              Symmetric, random eigenvalues
 *
-               CALL CLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IDUMMA, IINFO )
@@ -722,17 +727,19 @@
 *
 *              General, random eigenvalues
 *
-               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IDUMMA, IINFO )
                IF( N.GE.4 ) THEN
-                  CALL CLASET( 'Full', 2, N, CZERO, CZERO, A, LDA )
-                  CALL CLASET( 'Full', N-3, 1, CZERO, CZERO, A( 3, 1 ),
+                  CALL AB_CLASET( 'Full', 2, N, CZERO, CZERO, A, LDA )
+                  CALL AB_CLASET( 'Full', N-3, 1, CZERO, CZERO, A( 3, 1 
+     $),
      $                         LDA )
-                  CALL CLASET( 'Full', N-3, 2, CZERO, CZERO,
+                  CALL AB_CLASET( 'Full', N-3, 2, CZERO, CZERO,
      $                         A( 3, N-1 ), LDA )
-                  CALL CLASET( 'Full', 1, N, CZERO, CZERO, A( N, 1 ),
+                  CALL AB_CLASET( 'Full', 1, N, CZERO, CZERO, A( N, 1 ),
      $                         LDA )
                END IF
 *
@@ -740,7 +747,8 @@
 *
 *              Triangular, random eigenvalues
 *
-               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
+               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IDUMMA, IINFO )
@@ -769,7 +777,8 @@
                END IF
                NNWORK = MAX( NNWORK, 1 )
 *
-               CALL CGET24( .FALSE., JTYPE, THRESH, IOLDSD, NOUNIT, N,
+               CALL AB_CGET24( .FALSE., JTYPE, THRESH, IOLDSD, NOUNIT
+     $, N,
      $                      A, LDA, H, HT, W, WT, WTMP, VS, LDVS, VS1,
      $                      RCDEIN, RCDVIN, NSLCT, ISLCT, 0, RESULT,
      $                      WORK, NNWORK, RWORK, BWORK, INFO )
@@ -829,7 +838,8 @@
   170 CONTINUE
       READ( NIUNIT, FMT = * )RCDEIN, RCDVIN
 *
-      CALL CGET24( .TRUE., 22, THRESH, ISEED, NOUNIT, N, A, LDA, H, HT,
+      CALL AB_CGET24( .TRUE., 22, THRESH, ISEED, NOUNIT, N, A, LDA, H, H
+     $T,
      $             W, WT, WTMP, VS, LDVS, VS1, RCDEIN, RCDVIN, NSLCT,
      $             ISLCT, ISRT, RESULT, WORK, LWORK, RWORK, BWORK,
      $             INFO )
@@ -869,10 +879,10 @@
 *
 *     Summary
 *
-      CALL SLASUM( PATH, NOUNIT, NERRS, NTESTT )
+      CALL AB_SLASUM( PATH, NOUNIT, NERRS, NTESTT )
 *
  9999 FORMAT( / 1X, A3, ' -- Complex Schur Form Decomposition Expert ',
-     $      'Driver', / ' Matrix types (see CDRVSX for details): ' )
+     $      'Driver', / ' Matrix types (see AB_CDRVSX for details): ' )
 *
  9998 FORMAT( / ' Special Matrices:', / '  1=Zero matrix.             ',
      $      '           ', '  5=Diagonal: geometr. spaced entries.',
@@ -910,14 +920,14 @@
      $      / ' 9 = | I - VS transpose(VS) | / ( n ulp ) (sort) ',
      $      / ' 10 = 0 if W are eigenvalues of T (sort),',
      $      '  1/ulp otherwise', /
-     $      ' 11 = 0 if T same no matter what else computed (sort),',
+     $      ' 11 = 0 if T same no matter what ELSE computed (sort),',
      $      '  1/ulp otherwise', /
-     $      ' 12 = 0 if W same no matter what else computed ',
+     $      ' 12 = 0 if W same no matter what ELSE computed ',
      $      '(sort), 1/ulp otherwise', /
      $      ' 13 = 0 if sorting successful, 1/ulp otherwise',
-     $      / ' 14 = 0 if RCONDE same no matter what else computed,',
+     $      / ' 14 = 0 if RCONDE same no matter what ELSE computed,',
      $      ' 1/ulp otherwise', /
-     $      ' 15 = 0 if RCONDv same no matter what else computed,',
+     $      ' 15 = 0 if RCONDv same no matter what ELSE computed,',
      $      ' 1/ulp otherwise', /
      $      ' 16 = | RCONDE - RCONDE(precomputed) | / cond(RCONDE),',
      $      / ' 17 = | RCONDV - RCONDV(precomputed) | / cond(RCONDV),' )
@@ -925,11 +935,11 @@
      $      ' type ', I2, ', test(', I2, ')=', G10.3 )
  9992 FORMAT( ' N=', I5, ', input example =', I3, ',  test(', I2, ')=',
      $      G10.3 )
- 9991 FORMAT( ' CDRVSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9991 FORMAT( ' AB_CDRVSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of CDRVSX
+*     End of AB_CDRVSX
 *
       END

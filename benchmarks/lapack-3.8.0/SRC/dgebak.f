@@ -1,4 +1,4 @@
-*> \brief \b DGEBAK
+*> \brief \b AB_DGEBAK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEBAK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgebak.f">
+*> Download AB_DGEBAK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEBAK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgebak.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEBAK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgebak.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEBAK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
+*       SUBROUTINE AB_DGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> DGEBAK forms the right or left eigenvectors of a real general matrix
+*> AB_DGEBAK forms the right or left eigenvectors of a real general matrix
 *> by backward transformation on the computed eigenvectors of the
-*> balanced matrix output by DGEBAL.
+*> balanced matrix output by AB_DGEBAL.
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *>          = 'S', do backward transformation for scaling only;
 *>          = 'B', do backward transformations for both permutation and
 *>                 scaling.
-*>          JOB must be the same as the argument JOB supplied to DGEBAL.
+*>          JOB must be the same as the argument JOB supplied to AB_DGEBAL.
 *> \endverbatim
 *>
 *> \param[in] SIDE
@@ -76,7 +76,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*>          The integers ILO and IHI determined by DGEBAL.
+*>          The integers ILO and IHI determined by AB_DGEBAL.
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
 *> \endverbatim
 *>
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          SCALE is DOUBLE PRECISION array, dimension (N)
 *>          Details of the permutation and scaling factors, as returned
-*>          by DGEBAL.
+*>          by AB_DGEBAL.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -97,7 +97,7 @@
 *> \verbatim
 *>          V is DOUBLE PRECISION array, dimension (LDV,M)
 *>          On entry, the matrix of right or left eigenvectors to be
-*>          transformed, as returned by DHSEIN or DTREVC.
+*>          transformed, as returned by AB_DHSEIN or AB_DTREVC.
 *>          On exit, V is overwritten by the transformed eigenvectors.
 *> \endverbatim
 *>
@@ -127,7 +127,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
+      SUBROUTINE AB_DGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -155,11 +155,11 @@
       DOUBLE PRECISION   S
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSWAP, XERBLA
+      EXTERNAL           AB_DSCAL, AB_DSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -168,12 +168,14 @@
 *
 *     Decode and Test the input parameters
 *
-      RIGHTV = LSAME( SIDE, 'R' )
-      LEFTV = LSAME( SIDE, 'L' )
+      RIGHTV = AB_LSAME( SIDE, 'R' )
+      LEFTV = AB_LSAME( SIDE, 'L' )
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.AB_LSAME( JOB, 'P' ) .AND
+     $.
+     $    .NOT.AB_LSAME( JOB, 'S' ) .AND. .NOT.AB_LSAME( JOB, 'B' ) ) TH
+     $EN
          INFO = -1
       ELSE IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -2
@@ -189,7 +191,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEBAK', -INFO )
+         CALL AB_XERBLA( 'AB_DGEBAK', -INFO )
          RETURN
       END IF
 *
@@ -199,7 +201,7 @@
      $   RETURN
       IF( M.EQ.0 )
      $   RETURN
-      IF( LSAME( JOB, 'N' ) )
+      IF( AB_LSAME( JOB, 'N' ) )
      $   RETURN
 *
       IF( ILO.EQ.IHI )
@@ -207,19 +209,19 @@
 *
 *     Backward balance
 *
-      IF( LSAME( JOB, 'S' ) .OR. LSAME( JOB, 'B' ) ) THEN
+      IF( AB_LSAME( JOB, 'S' ) .OR. AB_LSAME( JOB, 'B' ) ) THEN
 *
          IF( RIGHTV ) THEN
             DO 10 I = ILO, IHI
                S = SCALE( I )
-               CALL DSCAL( M, S, V( I, 1 ), LDV )
+               CALL AB_DSCAL( M, S, V( I, 1 ), LDV )
    10       CONTINUE
          END IF
 *
          IF( LEFTV ) THEN
             DO 20 I = ILO, IHI
                S = ONE / SCALE( I )
-               CALL DSCAL( M, S, V( I, 1 ), LDV )
+               CALL AB_DSCAL( M, S, V( I, 1 ), LDV )
    20       CONTINUE
          END IF
 *
@@ -231,7 +233,7 @@
 *              IHI+1 step 1 until N do --
 *
    30 CONTINUE
-      IF( LSAME( JOB, 'P' ) .OR. LSAME( JOB, 'B' ) ) THEN
+      IF( AB_LSAME( JOB, 'P' ) .OR. AB_LSAME( JOB, 'B' ) ) THEN
          IF( RIGHTV ) THEN
             DO 40 II = 1, N
                I = II
@@ -242,7 +244,7 @@
                K = SCALE( I )
                IF( K.EQ.I )
      $            GO TO 40
-               CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
+               CALL AB_DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
    40       CONTINUE
          END IF
 *
@@ -256,13 +258,13 @@
                K = SCALE( I )
                IF( K.EQ.I )
      $            GO TO 50
-               CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
+               CALL AB_DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
    50       CONTINUE
          END IF
       END IF
 *
       RETURN
 *
-*     End of DGEBAK
+*     End of AB_DGEBAK
 *
       END

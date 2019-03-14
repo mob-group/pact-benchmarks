@@ -1,4 +1,4 @@
-*> \brief \b SGTT01
+*> \brief \b AB_SGTT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+*       SUBROUTINE AB_SGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
 *                          LDWORK, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> SGTT01 reconstructs a tridiagonal matrix A from its LU factorization
+*> AB_SGTT01 reconstructs a tridiagonal matrix A from its LU factorization
 *> and computes the residual
 *>    norm(L*U - A) / ( norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -84,7 +84,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is REAL array, dimension (N-2)
-*>          The (n-2) elements of the second super-diagonal of U.
+*>          The (n-2) elements of the AB_SECOND super-diagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -131,7 +131,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+      SUBROUTINE AB_SGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
      $                   LDWORK, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -161,14 +161,14 @@
       REAL               ANORM, EPS, LI
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGT, SLANHS
-      EXTERNAL           SLAMCH, SLANGT, SLANHS
+      REAL               AB_SLAMCH, AB_SLANGT, AB_SLANHS
+      EXTERNAL           AB_SLAMCH, AB_SLANGT, AB_SLANHS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SSWAP
+      EXTERNAL           AB_SAXPY, AB_SSWAP
 *     ..
 *     .. Executable Statements ..
 *
@@ -179,7 +179,7 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the matrix U to WORK.
 *
@@ -210,13 +210,14 @@
       LASTJ = N
       DO 40 I = N - 1, 1, -1
          LI = DLF( I )
-         CALL SAXPY( LASTJ-I+1, LI, WORK( I, I ), LDWORK,
+         CALL AB_SAXPY( LASTJ-I+1, LI, WORK( I, I ), LDWORK,
      $               WORK( I+1, I ), LDWORK )
          IP = IPIV( I )
          IF( IP.EQ.I ) THEN
             LASTJ = MIN( I+2, N )
          ELSE
-            CALL SSWAP( LASTJ-I+1, WORK( I, I ), LDWORK, WORK( I+1, I ),
+            CALL AB_SSWAP( LASTJ-I+1, WORK( I, I ), LDWORK, WORK( I+1, I
+     $ ),
      $                  LDWORK )
          END IF
    40 CONTINUE
@@ -237,12 +238,12 @@
 *
 *     Compute the 1-norm of the tridiagonal matrix A.
 *
-      ANORM = SLANGT( '1', N, DL, D, DU )
+      ANORM = AB_SLANGT( '1', N, DL, D, DU )
 *
 *     Compute the 1-norm of WORK, which is only guaranteed to be
 *     upper Hessenberg.
 *
-      RESID = SLANHS( '1', N, WORK, LDWORK, RWORK )
+      RESID = AB_SLANHS( '1', N, WORK, LDWORK, RWORK )
 *
 *     Compute norm(L*U - A) / (norm(A) * EPS)
 *
@@ -255,6 +256,6 @@
 *
       RETURN
 *
-*     End of SGTT01
+*     End of AB_SGTT01
 *
       END

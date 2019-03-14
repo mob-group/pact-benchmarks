@@ -1,4 +1,4 @@
-*> \brief \b CHPGVD
+*> \brief \b AB_AB_CHPGVD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHPGVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpgvd.f">
+*> Download AB_AB_CHPGVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CHPGVD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpgvd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CHPGVD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgvd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CHPGVD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+*       SUBROUTINE AB_AB_CHPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
 *                          LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> CHPGVD computes all the eigenvalues and, optionally, the eigenvectors
+*> AB_AB_CHPGVD computes all the eigenvalues and, optionally, the eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.  Here A and
 *> B are assumed to be Hermitian, stored in packed format, and B is also
@@ -151,7 +151,7 @@
 *>          only calculates the required sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -172,7 +172,7 @@
 *>          routine only calculates the required sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -192,7 +192,7 @@
 *>          routine only calculates the required sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -200,8 +200,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  CPPTRF or CHPEVD returned an error code:
-*>             <= N:  if INFO = i, CHPEVD failed to converge;
+*>          > 0:  AB_CPPTRF or AB_AB_CHPEVD returned an error code:
+*>             <= N:  if INFO = i, AB_AB_CHPEVD failed to converge;
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not convergeto zero;
 *>             > N:   if INFO = N + i, for 1 <= i <= n, then the leading
@@ -228,7 +228,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE CHPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+      SUBROUTINE AB_AB_CHPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, 
+     $WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -254,11 +255,12 @@
       INTEGER            J, LIWMIN, LRWMIN, LWMIN, NEIG
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPEVD, CHPGST, CPPTRF, CTPMV, CTPSV, XERBLA
+      EXTERNAL           AB_AB_CHPEVD, AB_CHPGST, AB_CPPTRF, AB_CTPMV, A
+     $B_CTPSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -267,16 +269,16 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 .OR. LRWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -314,7 +316,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHPGVD', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CHPGVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -327,7 +329,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL CPPTRF( UPLO, N, BP, INFO )
+      CALL AB_CPPTRF( UPLO, N, BP, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -335,8 +337,9 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL CHPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK, RWORK,
+      CALL AB_CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      CALL AB_AB_CHPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK, RWOR
+     $K,
      $             LRWORK, IWORK, LIWORK, INFO )
       LWMIN = MAX( REAL( LWMIN ), REAL( WORK( 1 ) ) )
       LRWMIN = MAX( REAL( LRWMIN ), REAL( RWORK( 1 ) ) )
@@ -361,7 +364,7 @@
             END IF
 *
             DO 10 J = 1, NEIG
-               CALL CTPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL AB_CTPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    10       CONTINUE
 *
@@ -377,7 +380,7 @@
             END IF
 *
             DO 20 J = 1, NEIG
-               CALL CTPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL AB_CTPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    20       CONTINUE
          END IF
@@ -388,6 +391,6 @@
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of CHPGVD
+*     End of AB_AB_CHPGVD
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CLAIPD
+*> \brief \b AB_CLAIPD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAIPD( N, A, INDA, VINDA )
+*       SUBROUTINE AB_CLAIPD( N, A, INDA, VINDA )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INDA, N, VINDA
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> CLAIPD sets the imaginary part of the diagonal elements of a complex
+*> AB_CLAIPD sets the imaginary part of the diagonal elements of a complex
 *> matrix A to a large value.  This is used to test LAPACK routines for
 *> complex Hermitian matrices, which are not supposed to access or use
 *> the imaginary parts of the diagonals.
@@ -81,7 +81,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CLAIPD( N, A, INDA, VINDA )
+      SUBROUTINE AB_CLAIPD( N, A, INDA, VINDA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -102,15 +102,15 @@
       REAL               BIGNUM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      BIGNUM = SLAMCH( 'Epsilon' ) / SLAMCH( 'Safe minimum' )
+      BIGNUM = AB_SLAMCH( 'Epsilon' ) / AB_SLAMCH( 'Safe minimum' )
       IA = 1
       IXA = INDA
       DO 10 I = 1, N

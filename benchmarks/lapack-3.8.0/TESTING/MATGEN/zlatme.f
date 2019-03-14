@@ -1,4 +1,4 @@
-*> \brief \b ZLATME
+*> \brief \b AB_ZLATME
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
+*       SUBROUTINE AB_ZLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
 *         RSIGN,
 *                          UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM,
 *         A,
@@ -32,10 +32,10 @@
 *>
 *> \verbatim
 *>
-*>    ZLATME generates random non-symmetric square matrices with
+*>    AB_ZLATME generates random non-symmetric square matrices with
 *>    specified eigenvalues for testing LAPACK programs.
 *>
-*>    ZLATME operates by applying the following sequence of
+*>    AB_ZLATME operates by applying the following sequence of
 *>    operations:
 *>
 *>    1. Set the diagonal to D, where D may be input or
@@ -50,7 +50,7 @@
 *>         CONDS, and on the right by X inverse.
 *>
 *>    4. If KL < N-1, the lower bandwidth is reduced to KL using
-*>         Householder transformations.  If KU < N-1, the upper
+*>         HousehoAB_LDEr transformations.  If KU < N-1, the upper
 *>         bandwidth is reduced to KU.
 *>
 *>    5. If ANORM is not negative, the matrix is scaled to have
@@ -91,7 +91,7 @@
 *>           uses a linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to ZLATME
+*>           exit, and can be used in the next call to AB_ZLATME
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -275,11 +275,11 @@
 *>           -16 => KU is less than 1, or KL and KU are both less than
 *>                  N-1.
 *>           -19 => LDA is less than M.
-*>            1  => Error return from ZLATM1 (computing D)
+*>            1  => Error return from AB_ZLATM1 (computing D)
 *>            2  => Cannot scale to DMAX (max. eigenvalue is 0)
-*>            3  => Error return from DLATM1 (computing DS)
-*>            4  => Error return from ZLARGE
-*>            5  => Zero singular value from DLATM1.
+*>            3  => Error return from AB_DLATM1 (computing DS)
+*>            4  => Error return from AB_ZLARGE
+*>            5  => Zero singular value from AB_DLATM1.
 *> \endverbatim
 *
 *  Authors:
@@ -295,7 +295,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE ZLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
+      SUBROUTINE AB_ZLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
      $  RSIGN,
      $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM,
      $  A,
@@ -341,15 +341,17 @@
       DOUBLE PRECISION   TEMPA( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   ZLANGE
-      COMPLEX*16         ZLARND
-      EXTERNAL           LSAME, ZLANGE, ZLARND
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_ZLANGE
+      COMPLEX*16         AB_ZLARND
+      EXTERNAL           AB_LSAME, AB_ZLANGE, AB_ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLATM1, XERBLA, ZCOPY, ZDSCAL, ZGEMV, ZGERC,
-     $                   ZLACGV, ZLARFG, ZLARGE, ZLARNV, ZLASET, ZLATM1,
-     $                   ZSCAL
+      EXTERNAL           AB_DLATM1, AB_XERBLA, AB_ZCOPY, ZAB_DSCAL, AB_Z
+     $GEMV, AB_ZGERC,
+     $                   AB_ZLACGV, AB_AB_ZLARFG, AB_ZLARGE, AB_ZLARNV, 
+     $AB_ZLASET, AB_ZLATM1,
+     $                   AB_ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, MAX, MOD
@@ -368,13 +370,13 @@
 *
 *     Decode DIST
 *
-      IF( LSAME( DIST, 'U' ) ) THEN
+      IF( AB_LSAME( DIST, 'U' ) ) THEN
          IDIST = 1
-      ELSE IF( LSAME( DIST, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'S' ) ) THEN
          IDIST = 2
-      ELSE IF( LSAME( DIST, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'N' ) ) THEN
          IDIST = 3
-      ELSE IF( LSAME( DIST, 'D' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'D' ) ) THEN
          IDIST = 4
       ELSE
          IDIST = -1
@@ -382,9 +384,9 @@
 *
 *     Decode RSIGN
 *
-      IF( LSAME( RSIGN, 'T' ) ) THEN
+      IF( AB_LSAME( RSIGN, 'T' ) ) THEN
          IRSIGN = 1
-      ELSE IF( LSAME( RSIGN, 'F' ) ) THEN
+      ELSE IF( AB_LSAME( RSIGN, 'F' ) ) THEN
          IRSIGN = 0
       ELSE
          IRSIGN = -1
@@ -392,9 +394,9 @@
 *
 *     Decode UPPER
 *
-      IF( LSAME( UPPER, 'T' ) ) THEN
+      IF( AB_LSAME( UPPER, 'T' ) ) THEN
          IUPPER = 1
-      ELSE IF( LSAME( UPPER, 'F' ) ) THEN
+      ELSE IF( AB_LSAME( UPPER, 'F' ) ) THEN
          IUPPER = 0
       ELSE
          IUPPER = -1
@@ -402,9 +404,9 @@
 *
 *     Decode SIM
 *
-      IF( LSAME( SIM, 'T' ) ) THEN
+      IF( AB_LSAME( SIM, 'T' ) ) THEN
          ISIM = 1
-      ELSE IF( LSAME( SIM, 'F' ) ) THEN
+      ELSE IF( AB_LSAME( SIM, 'F' ) ) THEN
          ISIM = 0
       ELSE
          ISIM = -1
@@ -428,7 +430,8 @@
          INFO = -2
       ELSE IF( ABS( MODE ).GT.6 ) THEN
          INFO = -5
-      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE )
+      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE
+     $ )
      $          THEN
          INFO = -6
       ELSE IF( IRSIGN.EQ.-1 ) THEN
@@ -452,7 +455,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLATME', -INFO )
+         CALL AB_XERBLA( 'AB_ZLATME', -INFO )
          RETURN
       END IF
 *
@@ -469,7 +472,7 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, IINFO )
+      CALL AB_ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, IINFO )
       IF( IINFO.NE.0 ) THEN
          INFO = 1
          RETURN
@@ -490,18 +493,18 @@
             RETURN
          END IF
 *
-         CALL ZSCAL( N, ALPHA, D, 1 )
+         CALL AB_ZSCAL( N, ALPHA, D, 1 )
 *
       END IF
 *
-      CALL ZLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
-      CALL ZCOPY( N, D, 1, A, LDA+1 )
+      CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
+      CALL AB_ZCOPY( N, D, 1, A, LDA+1 )
 *
 *     3)      If UPPER='T', set upper triangle of A to random numbers.
 *
       IF( IUPPER.NE.0 ) THEN
          DO 40 JC = 2, N
-            CALL ZLARNV( IDIST, ISEED, JC-1, A( 1, JC ) )
+            CALL AB_ZLARNV( IDIST, ISEED, JC-1, A( 1, JC ) )
    40    CONTINUE
       END IF
 *
@@ -517,7 +520,7 @@
 *        Compute S (singular values of the eigenvector matrix)
 *        according to CONDS and MODES
 *
-         CALL DLATM1( MODES, CONDS, 0, 0, ISEED, DS, N, IINFO )
+         CALL AB_DLATM1( MODES, CONDS, 0, 0, ISEED, DS, N, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 3
             RETURN
@@ -525,7 +528,7 @@
 *
 *        Multiply by V and V'
 *
-         CALL ZLARGE( N, A, LDA, ISEED, WORK, IINFO )
+         CALL AB_ZLARGE( N, A, LDA, ISEED, WORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 4
             RETURN
@@ -534,9 +537,9 @@
 *        Multiply by S and (1/S)
 *
          DO 50 J = 1, N
-            CALL ZDSCAL( N, DS( J ), A( J, 1 ), LDA )
+            CALL ZAB_DSCAL( N, DS( J ), A( J, 1 ), LDA )
             IF( DS( J ).NE.ZERO ) THEN
-               CALL ZDSCAL( N, ONE / DS( J ), A( 1, J ), 1 )
+               CALL ZAB_DSCAL( N, ONE / DS( J ), A( 1, J ), 1 )
             ELSE
                INFO = 5
                RETURN
@@ -545,7 +548,7 @@
 *
 *        Multiply by U and U'
 *
-         CALL ZLARGE( N, A, LDA, ISEED, WORK, IINFO )
+         CALL AB_ZLARGE( N, A, LDA, ISEED, WORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 4
             RETURN
@@ -563,29 +566,31 @@
             IROWS = N + 1 - JCR
             ICOLS = N + KL - JCR
 *
-            CALL ZCOPY( IROWS, A( JCR, IC ), 1, WORK, 1 )
+            CALL AB_ZCOPY( IROWS, A( JCR, IC ), 1, WORK, 1 )
             XNORMS = WORK( 1 )
-            CALL ZLARFG( IROWS, XNORMS, WORK( 2 ), 1, TAU )
+            CALL AB_AB_ZLARFG( IROWS, XNORMS, WORK( 2 ), 1, TAU )
             TAU = DCONJG( TAU )
             WORK( 1 ) = CONE
-            ALPHA = ZLARND( 5, ISEED )
+            ALPHA = AB_ZLARND( 5, ISEED )
 *
-            CALL ZGEMV( 'C', IROWS, ICOLS, CONE, A( JCR, IC+1 ), LDA,
+            CALL AB_ZGEMV( 'C', IROWS, ICOLS, CONE, A( JCR, IC+1 ), LDA,
      $                  WORK, 1, CZERO, WORK( IROWS+1 ), 1 )
-            CALL ZGERC( IROWS, ICOLS, -TAU, WORK, 1, WORK( IROWS+1 ), 1,
+            CALL AB_ZGERC( IROWS, ICOLS, -TAU, WORK, 1, WORK( IROWS+1 ),
+     $ 1,
      $                  A( JCR, IC+1 ), LDA )
 *
-            CALL ZGEMV( 'N', N, IROWS, CONE, A( 1, JCR ), LDA, WORK, 1,
+            CALL AB_ZGEMV( 'N', N, IROWS, CONE, A( 1, JCR ), LDA, WORK, 
+     $1,
      $                  CZERO, WORK( IROWS+1 ), 1 )
-            CALL ZGERC( N, IROWS, -DCONJG( TAU ), WORK( IROWS+1 ), 1,
+            CALL AB_ZGERC( N, IROWS, -DCONJG( TAU ), WORK( IROWS+1 ), 1,
      $                  WORK, 1, A( 1, JCR ), LDA )
 *
             A( JCR, IC ) = XNORMS
-            CALL ZLASET( 'Full', IROWS-1, 1, CZERO, CZERO,
+            CALL AB_ZLASET( 'Full', IROWS-1, 1, CZERO, CZERO,
      $                   A( JCR+1, IC ), LDA )
 *
-            CALL ZSCAL( ICOLS+1, ALPHA, A( JCR, IC ), LDA )
-            CALL ZSCAL( N, DCONJG( ALPHA ), A( 1, JCR ), 1 )
+            CALL AB_ZSCAL( ICOLS+1, ALPHA, A( JCR, IC ), LDA )
+            CALL AB_ZSCAL( N, DCONJG( ALPHA ), A( 1, JCR ), 1 )
    60    CONTINUE
       ELSE IF( KU.LT.N-1 ) THEN
 *
@@ -596,47 +601,49 @@
             IROWS = N + KU - JCR
             ICOLS = N + 1 - JCR
 *
-            CALL ZCOPY( ICOLS, A( IR, JCR ), LDA, WORK, 1 )
+            CALL AB_ZCOPY( ICOLS, A( IR, JCR ), LDA, WORK, 1 )
             XNORMS = WORK( 1 )
-            CALL ZLARFG( ICOLS, XNORMS, WORK( 2 ), 1, TAU )
+            CALL AB_AB_ZLARFG( ICOLS, XNORMS, WORK( 2 ), 1, TAU )
             TAU = DCONJG( TAU )
             WORK( 1 ) = CONE
-            CALL ZLACGV( ICOLS-1, WORK( 2 ), 1 )
-            ALPHA = ZLARND( 5, ISEED )
+            CALL AB_ZLACGV( ICOLS-1, WORK( 2 ), 1 )
+            ALPHA = AB_ZLARND( 5, ISEED )
 *
-            CALL ZGEMV( 'N', IROWS, ICOLS, CONE, A( IR+1, JCR ), LDA,
+            CALL AB_ZGEMV( 'N', IROWS, ICOLS, CONE, A( IR+1, JCR ), LDA,
      $                  WORK, 1, CZERO, WORK( ICOLS+1 ), 1 )
-            CALL ZGERC( IROWS, ICOLS, -TAU, WORK( ICOLS+1 ), 1, WORK, 1,
+            CALL AB_ZGERC( IROWS, ICOLS, -TAU, WORK( ICOLS+1 ), 1, WORK,
+     $ 1,
      $                  A( IR+1, JCR ), LDA )
 *
-            CALL ZGEMV( 'C', ICOLS, N, CONE, A( JCR, 1 ), LDA, WORK, 1,
+            CALL AB_ZGEMV( 'C', ICOLS, N, CONE, A( JCR, 1 ), LDA, WORK, 
+     $1,
      $                  CZERO, WORK( ICOLS+1 ), 1 )
-            CALL ZGERC( ICOLS, N, -DCONJG( TAU ), WORK, 1,
+            CALL AB_ZGERC( ICOLS, N, -DCONJG( TAU ), WORK, 1,
      $                  WORK( ICOLS+1 ), 1, A( JCR, 1 ), LDA )
 *
             A( IR, JCR ) = XNORMS
-            CALL ZLASET( 'Full', 1, ICOLS-1, CZERO, CZERO,
+            CALL AB_ZLASET( 'Full', 1, ICOLS-1, CZERO, CZERO,
      $                   A( IR, JCR+1 ), LDA )
 *
-            CALL ZSCAL( IROWS+1, ALPHA, A( IR, JCR ), 1 )
-            CALL ZSCAL( N, DCONJG( ALPHA ), A( JCR, 1 ), LDA )
+            CALL AB_ZSCAL( IROWS+1, ALPHA, A( IR, JCR ), 1 )
+            CALL AB_ZSCAL( N, DCONJG( ALPHA ), A( JCR, 1 ), LDA )
    70    CONTINUE
       END IF
 *
 *     Scale the matrix to have norm ANORM
 *
       IF( ANORM.GE.ZERO ) THEN
-         TEMP = ZLANGE( 'M', N, N, A, LDA, TEMPA )
+         TEMP = AB_ZLANGE( 'M', N, N, A, LDA, TEMPA )
          IF( TEMP.GT.ZERO ) THEN
             RALPHA = ANORM / TEMP
             DO 80 J = 1, N
-               CALL ZDSCAL( N, RALPHA, A( 1, J ), 1 )
+               CALL ZAB_DSCAL( N, RALPHA, A( 1, J ), 1 )
    80       CONTINUE
          END IF
       END IF
 *
       RETURN
 *
-*     End of ZLATME
+*     End of AB_ZLATME
 *
       END

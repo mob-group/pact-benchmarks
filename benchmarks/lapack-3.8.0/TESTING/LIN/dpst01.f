@@ -1,4 +1,4 @@
-*> \brief \b DPST01
+*> \brief \b AB_DPST01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
+*       SUBROUTINE AB_DPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
 *                          PIV, RWORK, RESID, RANK )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> DPST01 reconstructs a symmetric positive semidefinite matrix A
+*> AB_DPST01 reconstructs a symmetric positive semidefinite matrix A
 *> from its L or U factors and the permutation matrix P and computes
 *> the residual
 *>    norm( P*L*L'*P' - A ) / ( N * norm(A) * EPS ) or
@@ -131,7 +131,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
+      SUBROUTINE AB_DPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
      $                   PIV, RWORK, RESID, RANK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -161,12 +161,12 @@
       INTEGER            I, J, K
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DDOT, DLAMCH, DLANSY
-      LOGICAL            LSAME
-      EXTERNAL           DDOT, DLAMCH, DLANSY, LSAME
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DLANSY
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_DDOT, AB_DLAMCH, AB_DLANSY, AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSYR, DTRMV
+      EXTERNAL           AB_DSCAL, AB_DSYR, AB_DTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -182,8 +182,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_DLANSY( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -191,7 +191,7 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
          IF( RANK.LT.N ) THEN
             DO 110 J = RANK + 1, N
@@ -205,12 +205,12 @@
 *
 *           Compute the (K,K) element of the result.
 *
-            T = DDOT( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
+            T = AB_DDOT( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
             AFAC( K, K ) = T
 *
 *           Compute the rest of column K.
 *
-            CALL DTRMV( 'Upper', 'Transpose', 'Non-unit', K-1, AFAC,
+            CALL AB_DTRMV( 'Upper', 'Transpose', 'Non-unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
 *
   120    CONTINUE
@@ -232,20 +232,20 @@
 *           columns K+1 through N.
 *
             IF( K+1.LE.N )
-     $         CALL DSYR( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
+     $         CALL AB_DSYR( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
      $                    AFAC( K+1, K+1 ), LDAFAC )
 *
 *           Scale column K by the diagonal element.
 *
             T = AFAC( K, K )
-            CALL DSCAL( N-K+1, T, AFAC( K, K ), 1 )
+            CALL AB_DSCAL( N-K+1, T, AFAC( K, K ), 1 )
   150    CONTINUE
 *
       END IF
 *
 *        Form P*L*L'*P' or P*U'*U*P'
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
          DO 170 J = 1, N
             DO 160 I = 1, N
@@ -278,7 +278,7 @@
 *
 *     Compute the difference  P*L*L'*P' - A (or P*U'*U*P' - A).
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 210 J = 1, N
             DO 200 I = 1, J
                PERM( I, J ) = PERM( I, J ) - A( I, J )
@@ -295,12 +295,12 @@
 *     Compute norm( P*L*L'P - A ) / ( N * norm(A) * EPS ), or
 *     ( P*U'*U*P' - A )/ ( N * norm(A) * EPS ).
 *
-      RESID = DLANSY( '1', UPLO, N, PERM, LDAFAC, RWORK )
+      RESID = AB_DLANSY( '1', UPLO, N, PERM, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of DPST01
+*     End of AB_DPST01
 *
       END

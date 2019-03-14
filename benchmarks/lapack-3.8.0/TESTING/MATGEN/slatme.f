@@ -1,4 +1,4 @@
-*> \brief \b SLATME
+*> \brief \b AB_SLATME
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI,
+*       SUBROUTINE AB_SLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI,
 *         RSIGN,
 *                          UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM,
 *         A,
@@ -31,10 +31,10 @@
 *>
 *> \verbatim
 *>
-*>    SLATME generates random non-symmetric square matrices with
+*>    AB_SLATME generates random non-symmetric square matrices with
 *>    specified eigenvalues for testing LAPACK programs.
 *>
-*>    SLATME operates by applying the following sequence of
+*>    AB_SLATME operates by applying the following sequence of
 *>    operations:
 *>
 *>    1. Set the diagonal to D, where D may be input or
@@ -55,7 +55,7 @@
 *>         CONDS, and on the right by X inverse.
 *>
 *>    5. If KL < N-1, the lower bandwidth is reduced to KL using
-*>         Householder transformations.  If KU < N-1, the upper
+*>         HousehoAB_LDEr transformations.  If KU < N-1, the upper
 *>         bandwidth is reduced to KU.
 *>
 *>    6. If ANORM is not negative, the matrix is scaled to have
@@ -95,7 +95,7 @@
 *>           uses a linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to SLATME
+*>           exit, and can be used in the next call to AB_SLATME
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -306,11 +306,11 @@
 *>           -16 => KU is less than 1, or KL and KU are both less than
 *>                  N-1.
 *>           -19 => LDA is less than N.
-*>            1  => Error return from SLATM1 (computing D)
+*>            1  => Error return from AB_SLATM1 (computing D)
 *>            2  => Cannot scale to DMAX (max. eigenvalue is 0)
-*>            3  => Error return from SLATM1 (computing DS)
-*>            4  => Error return from SLARGE
-*>            5  => Zero singular value from SLATM1.
+*>            3  => Error return from AB_SLATM1 (computing DS)
+*>            4  => Error return from AB_SLARGE
+*>            5  => Zero singular value from AB_SLATM1.
 *> \endverbatim
 *
 *  Authors:
@@ -326,7 +326,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI,
+      SUBROUTINE AB_SLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI,
      $  RSIGN,
      $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM,
      $  A,
@@ -368,13 +368,14 @@
       REAL               TEMPA( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLANGE, SLARAN
-      EXTERNAL           LSAME, SLANGE, SLARAN
+      LOGICAL            AB_LSAME
+      REAL               AB_SLANGE, AB_SLARAN
+      EXTERNAL           AB_LSAME, AB_SLANGE, AB_SLARAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SGER, SLARFG, SLARGE, SLARNV,
-     $                   SLATM1, SLASET, SSCAL, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SGEMV, AB_SGER, AB_AB_SLARFG, AB_S
+     $LARGE, AB_SLARNV,
+     $                   AB_SLATM1, AB_SLASET, AB_SSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MOD
@@ -393,11 +394,11 @@
 *
 *     Decode DIST
 *
-      IF( LSAME( DIST, 'U' ) ) THEN
+      IF( AB_LSAME( DIST, 'U' ) ) THEN
          IDIST = 1
-      ELSE IF( LSAME( DIST, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'S' ) ) THEN
          IDIST = 2
-      ELSE IF( LSAME( DIST, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'N' ) ) THEN
          IDIST = 3
       ELSE
          IDIST = -1
@@ -407,16 +408,16 @@
 *
       USEEI = .TRUE.
       BADEI = .FALSE.
-      IF( LSAME( EI( 1 ), ' ' ) .OR. MODE.NE.0 ) THEN
+      IF( AB_LSAME( EI( 1 ), ' ' ) .OR. MODE.NE.0 ) THEN
          USEEI = .FALSE.
       ELSE
-         IF( LSAME( EI( 1 ), 'R' ) ) THEN
+         IF( AB_LSAME( EI( 1 ), 'R' ) ) THEN
             DO 10 J = 2, N
-               IF( LSAME( EI( J ), 'I' ) ) THEN
-                  IF( LSAME( EI( J-1 ), 'I' ) )
+               IF( AB_LSAME( EI( J ), 'I' ) ) THEN
+                  IF( AB_LSAME( EI( J-1 ), 'I' ) )
      $               BADEI = .TRUE.
                ELSE
-                  IF( .NOT.LSAME( EI( J ), 'R' ) )
+                  IF( .NOT.AB_LSAME( EI( J ), 'R' ) )
      $               BADEI = .TRUE.
                END IF
    10       CONTINUE
@@ -427,9 +428,9 @@
 *
 *     Decode RSIGN
 *
-      IF( LSAME( RSIGN, 'T' ) ) THEN
+      IF( AB_LSAME( RSIGN, 'T' ) ) THEN
          IRSIGN = 1
-      ELSE IF( LSAME( RSIGN, 'F' ) ) THEN
+      ELSE IF( AB_LSAME( RSIGN, 'F' ) ) THEN
          IRSIGN = 0
       ELSE
          IRSIGN = -1
@@ -437,9 +438,9 @@
 *
 *     Decode UPPER
 *
-      IF( LSAME( UPPER, 'T' ) ) THEN
+      IF( AB_LSAME( UPPER, 'T' ) ) THEN
          IUPPER = 1
-      ELSE IF( LSAME( UPPER, 'F' ) ) THEN
+      ELSE IF( AB_LSAME( UPPER, 'F' ) ) THEN
          IUPPER = 0
       ELSE
          IUPPER = -1
@@ -447,9 +448,9 @@
 *
 *     Decode SIM
 *
-      IF( LSAME( SIM, 'T' ) ) THEN
+      IF( AB_LSAME( SIM, 'T' ) ) THEN
          ISIM = 1
-      ELSE IF( LSAME( SIM, 'F' ) ) THEN
+      ELSE IF( AB_LSAME( SIM, 'F' ) ) THEN
          ISIM = 0
       ELSE
          ISIM = -1
@@ -473,7 +474,8 @@
          INFO = -2
       ELSE IF( ABS( MODE ).GT.6 ) THEN
          INFO = -5
-      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE )
+      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE
+     $ )
      $          THEN
          INFO = -6
       ELSE IF( BADEI ) THEN
@@ -499,7 +501,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLATME', -INFO )
+         CALL AB_XERBLA( 'AB_SLATME', -INFO )
          RETURN
       END IF
 *
@@ -516,7 +518,7 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, IINFO )
+      CALL AB_SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, IINFO )
       IF( IINFO.NE.0 ) THEN
          INFO = 1
          RETURN
@@ -539,19 +541,19 @@
             ALPHA = ZERO
          END IF
 *
-         CALL SSCAL( N, ALPHA, D, 1 )
+         CALL AB_SSCAL( N, ALPHA, D, 1 )
 *
       END IF
 *
-      CALL SLASET( 'Full', N, N, ZERO, ZERO, A, LDA )
-      CALL SCOPY( N, D, 1, A, LDA+1 )
+      CALL AB_SLASET( 'Full', N, N, ZERO, ZERO, A, LDA )
+      CALL AB_SCOPY( N, D, 1, A, LDA+1 )
 *
 *     Set up complex conjugate pairs
 *
       IF( MODE.EQ.0 ) THEN
          IF( USEEI ) THEN
             DO 50 J = 2, N
-               IF( LSAME( EI( J ), 'I' ) ) THEN
+               IF( AB_LSAME( EI( J ), 'I' ) ) THEN
                   A( J-1, J ) = A( J, J )
                   A( J, J-1 ) = -A( J, J )
                   A( J, J ) = A( J-1, J-1 )
@@ -562,7 +564,7 @@
       ELSE IF( ABS( MODE ).EQ.5 ) THEN
 *
          DO 60 J = 2, N, 2
-            IF( SLARAN( ISEED ).GT.HALF ) THEN
+            IF( AB_SLARAN( ISEED ).GT.HALF ) THEN
                A( J-1, J ) = A( J, J )
                A( J, J-1 ) = -A( J, J )
                A( J, J ) = A( J-1, J-1 )
@@ -580,7 +582,7 @@
             ELSE
                JR = JC - 1
             END IF
-            CALL SLARNV( IDIST, ISEED, JR, A( 1, JC ) )
+            CALL AB_SLARNV( IDIST, ISEED, JR, A( 1, JC ) )
    70    CONTINUE
       END IF
 *
@@ -596,7 +598,7 @@
 *        Compute S (singular values of the eigenvector matrix)
 *        according to CONDS and MODES
 *
-         CALL SLATM1( MODES, CONDS, 0, 0, ISEED, DS, N, IINFO )
+         CALL AB_SLATM1( MODES, CONDS, 0, 0, ISEED, DS, N, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 3
             RETURN
@@ -604,7 +606,7 @@
 *
 *        Multiply by V and V'
 *
-         CALL SLARGE( N, A, LDA, ISEED, WORK, IINFO )
+         CALL AB_SLARGE( N, A, LDA, ISEED, WORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 4
             RETURN
@@ -613,9 +615,9 @@
 *        Multiply by S and (1/S)
 *
          DO 80 J = 1, N
-            CALL SSCAL( N, DS( J ), A( J, 1 ), LDA )
+            CALL AB_SSCAL( N, DS( J ), A( J, 1 ), LDA )
             IF( DS( J ).NE.ZERO ) THEN
-               CALL SSCAL( N, ONE / DS( J ), A( 1, J ), 1 )
+               CALL AB_SSCAL( N, ONE / DS( J ), A( 1, J ), 1 )
             ELSE
                INFO = 5
                RETURN
@@ -624,7 +626,7 @@
 *
 *        Multiply by U and U'
 *
-         CALL SLARGE( N, A, LDA, ISEED, WORK, IINFO )
+         CALL AB_SLARGE( N, A, LDA, ISEED, WORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 4
             RETURN
@@ -642,23 +644,26 @@
             IROWS = N + 1 - JCR
             ICOLS = N + KL - JCR
 *
-            CALL SCOPY( IROWS, A( JCR, IC ), 1, WORK, 1 )
+            CALL AB_SCOPY( IROWS, A( JCR, IC ), 1, WORK, 1 )
             XNORMS = WORK( 1 )
-            CALL SLARFG( IROWS, XNORMS, WORK( 2 ), 1, TAU )
+            CALL AB_AB_SLARFG( IROWS, XNORMS, WORK( 2 ), 1, TAU )
             WORK( 1 ) = ONE
 *
-            CALL SGEMV( 'T', IROWS, ICOLS, ONE, A( JCR, IC+1 ), LDA,
+            CALL AB_SGEMV( 'T', IROWS, ICOLS, ONE, A( JCR, IC+1 ), LDA,
      $                  WORK, 1, ZERO, WORK( IROWS+1 ), 1 )
-            CALL SGER( IROWS, ICOLS, -TAU, WORK, 1, WORK( IROWS+1 ), 1,
+            CALL AB_SGER( IROWS, ICOLS, -TAU, WORK, 1, WORK( IROWS+1 ), 
+     $1,
      $                 A( JCR, IC+1 ), LDA )
 *
-            CALL SGEMV( 'N', N, IROWS, ONE, A( 1, JCR ), LDA, WORK, 1,
+            CALL AB_SGEMV( 'N', N, IROWS, ONE, A( 1, JCR ), LDA, WORK, 1
+     $,
      $                  ZERO, WORK( IROWS+1 ), 1 )
-            CALL SGER( N, IROWS, -TAU, WORK( IROWS+1 ), 1, WORK, 1,
+            CALL AB_SGER( N, IROWS, -TAU, WORK( IROWS+1 ), 1, WORK, 1,
      $                 A( 1, JCR ), LDA )
 *
             A( JCR, IC ) = XNORMS
-            CALL SLASET( 'Full', IROWS-1, 1, ZERO, ZERO, A( JCR+1, IC ),
+            CALL AB_SLASET( 'Full', IROWS-1, 1, ZERO, ZERO, A( JCR+1, IC
+     $ ),
      $                   LDA )
    90    CONTINUE
       ELSE IF( KU.LT.N-1 ) THEN
@@ -670,23 +675,26 @@
             IROWS = N + KU - JCR
             ICOLS = N + 1 - JCR
 *
-            CALL SCOPY( ICOLS, A( IR, JCR ), LDA, WORK, 1 )
+            CALL AB_SCOPY( ICOLS, A( IR, JCR ), LDA, WORK, 1 )
             XNORMS = WORK( 1 )
-            CALL SLARFG( ICOLS, XNORMS, WORK( 2 ), 1, TAU )
+            CALL AB_AB_SLARFG( ICOLS, XNORMS, WORK( 2 ), 1, TAU )
             WORK( 1 ) = ONE
 *
-            CALL SGEMV( 'N', IROWS, ICOLS, ONE, A( IR+1, JCR ), LDA,
+            CALL AB_SGEMV( 'N', IROWS, ICOLS, ONE, A( IR+1, JCR ), LDA,
      $                  WORK, 1, ZERO, WORK( ICOLS+1 ), 1 )
-            CALL SGER( IROWS, ICOLS, -TAU, WORK( ICOLS+1 ), 1, WORK, 1,
+            CALL AB_SGER( IROWS, ICOLS, -TAU, WORK( ICOLS+1 ), 1, WORK, 
+     $1,
      $                 A( IR+1, JCR ), LDA )
 *
-            CALL SGEMV( 'C', ICOLS, N, ONE, A( JCR, 1 ), LDA, WORK, 1,
+            CALL AB_SGEMV( 'C', ICOLS, N, ONE, A( JCR, 1 ), LDA, WORK, 1
+     $,
      $                  ZERO, WORK( ICOLS+1 ), 1 )
-            CALL SGER( ICOLS, N, -TAU, WORK, 1, WORK( ICOLS+1 ), 1,
+            CALL AB_SGER( ICOLS, N, -TAU, WORK, 1, WORK( ICOLS+1 ), 1,
      $                 A( JCR, 1 ), LDA )
 *
             A( IR, JCR ) = XNORMS
-            CALL SLASET( 'Full', 1, ICOLS-1, ZERO, ZERO, A( IR, JCR+1 ),
+            CALL AB_SLASET( 'Full', 1, ICOLS-1, ZERO, ZERO, A( IR, JCR+1
+     $ ),
      $                   LDA )
   100    CONTINUE
       END IF
@@ -694,17 +702,17 @@
 *     Scale the matrix to have norm ANORM
 *
       IF( ANORM.GE.ZERO ) THEN
-         TEMP = SLANGE( 'M', N, N, A, LDA, TEMPA )
+         TEMP = AB_SLANGE( 'M', N, N, A, LDA, TEMPA )
          IF( TEMP.GT.ZERO ) THEN
             ALPHA = ANORM / TEMP
             DO 110 J = 1, N
-               CALL SSCAL( N, ALPHA, A( 1, J ), 1 )
+               CALL AB_SSCAL( N, ALPHA, A( 1, J ), 1 )
   110       CONTINUE
          END IF
       END IF
 *
       RETURN
 *
-*     End of SLATME
+*     End of AB_SLATME
 *
       END

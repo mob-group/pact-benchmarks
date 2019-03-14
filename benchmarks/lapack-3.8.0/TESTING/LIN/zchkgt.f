@@ -1,4 +1,4 @@
-*> \brief \b ZCHKGT
+*> \brief \b AB_ZCHKGT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE AB_ZCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          A, AF, B, X, XACT, WORK, RWORK, IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKGT tests ZGTTRF, -TRS, -RFS, and -CON
+*> AB_ZCHKGT tests AB_ZGTTRF, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -144,7 +144,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+      SUBROUTINE AB_ZCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
+     $,
      $                   A, AF, B, X, XACT, WORK, RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -192,14 +193,17 @@
       COMPLEX*16         Z( 3 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, DZASUM, ZLANGT
-      EXTERNAL           DGET06, DZASUM, ZLANGT
+      DOUBLE PRECISION   AB_DGET06, AB_DZASUM, AB_ZLANGT
+      EXTERNAL           AB_DGET06, AB_DZASUM, AB_ZLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, ZCOPY, ZDSCAL, ZERRGE,
-     $                   ZGET04, ZGTCON, ZGTRFS, ZGTT01, ZGTT02, ZGTT05,
-     $                   ZGTTRF, ZGTTRS, ZLACPY, ZLAGTM, ZLARNV, ZLATB4,
-     $                   ZLATMS
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_ZCOPY, ZAB_D
+     $SCAL, AB_ZERRGE,
+     $                   AB_ZGET04, AB_ZGTCON, AB_ZGTRFS, AB_ZGTT01, AB_
+     $ZGTT02, AB_ZGTT05,
+     $                   AB_ZGTTRF, AB_ZGTTRS, AB_ZLACPY, AB_ZLAGTM, AB_
+     $ZLARNV, AB_ZLATB4,
+     $                   AB_ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -231,7 +235,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL ZERRGE( PATH, NOUT )
+     $   CALL AB_ZERRGE( PATH, NOUT )
       INFOT = 0
 *
       DO 110 IN = 1, NN
@@ -252,9 +256,9 @@
             IF( .NOT.DOTYPE( IMAT ) )
      $         GO TO 100
 *
-*           Set up parameters with ZLATB4.
+*           Set up parameters with AB_ZLATB4.
 *
-            CALL ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+            CALL AB_ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                   COND, DIST )
 *
             ZEROT = IMAT.GE.8 .AND. IMAT.LE.10
@@ -263,25 +267,27 @@
 *              Types 1-6:  generate matrices of known condition number.
 *
                KOFF = MAX( 2-KU, 3-MAX( 1, N ) )
-               SRNAMT = 'ZLATMS'
-               CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, COND,
+               SRNAMT = 'AB_ZLATMS'
+               CALL AB_ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CON
+     $D,
      $                      ANORM, KL, KU, 'Z', AF( KOFF ), 3, WORK,
      $                      INFO )
 *
-*              Check the error code from ZLATMS.
+*              Check the error code from AB_ZLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'ZLATMS', INFO, 0, ' ', N, N, KL,
+                  CALL AB_ALAERH( PATH, 'AB_ZLATMS', INFO, 0, ' ', N, N,
+     $ KL,
      $                         KU, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 100
                END IF
                IZERO = 0
 *
                IF( N.GT.1 ) THEN
-                  CALL ZCOPY( N-1, AF( 4 ), 3, A, 1 )
-                  CALL ZCOPY( N-1, AF( 3 ), 3, A( N+M+1 ), 1 )
+                  CALL AB_ZCOPY( N-1, AF( 4 ), 3, A, 1 )
+                  CALL AB_ZCOPY( N-1, AF( 3 ), 3, A( N+M+1 ), 1 )
                END IF
-               CALL ZCOPY( N, AF( 2 ), 3, A( M+1 ), 1 )
+               CALL AB_ZCOPY( N, AF( 2 ), 3, A( M+1 ), 1 )
             ELSE
 *
 *              Types 7-12:  generate tridiagonal matrices with
@@ -292,9 +298,9 @@
 *                 Generate a matrix with elements whose real and
 *                 imaginary parts are from [-1,1].
 *
-                  CALL ZLARNV( 2, ISEED, N+2*M, A )
+                  CALL AB_ZLARNV( 2, ISEED, N+2*M, A )
                   IF( ANORM.NE.ONE )
-     $               CALL ZDSCAL( N+2*M, ANORM, A, 1 )
+     $               CALL ZAB_DSCAL( N+2*M, ANORM, A, 1 )
                ELSE IF( IZERO.GT.0 ) THEN
 *
 *                 Reuse the last matrix by copying back the zeroed out
@@ -348,19 +354,21 @@
 *           Factor A as L*U and compute the ratio
 *              norm(L*U - A) / (n * norm(A) * EPS )
 *
-            CALL ZCOPY( N+2*M, A, 1, AF, 1 )
-            SRNAMT = 'ZGTTRF'
-            CALL ZGTTRF( N, AF, AF( M+1 ), AF( N+M+1 ), AF( N+2*M+1 ),
+            CALL AB_ZCOPY( N+2*M, A, 1, AF, 1 )
+            SRNAMT = 'AB_ZGTTRF'
+            CALL AB_ZGTTRF( N, AF, AF( M+1 ), AF( N+M+1 ), AF( N+2*M+1 )
+     $,
      $                   IWORK, INFO )
 *
-*           Check error code from ZGTTRF.
+*           Check error code from AB_ZGTTRF.
 *
             IF( INFO.NE.IZERO )
-     $         CALL ALAERH( PATH, 'ZGTTRF', INFO, IZERO, ' ', N, N, 1,
+     $         CALL AB_ALAERH( PATH, 'AB_ZGTTRF', INFO, IZERO, ' ', N, N
+     $, 1,
      $                      1, -1, IMAT, NFAIL, NERRS, NOUT )
             TRFCON = INFO.NE.0
 *
-            CALL ZGTT01( N, A, A( M+1 ), A( N+M+1 ), AF, AF( M+1 ),
+            CALL AB_ZGTT01( N, A, A( M+1 ), A( N+M+1 ), AF, AF( M+1 ),
      $                   AF( N+M+1 ), AF( N+2*M+1 ), IWORK, WORK, LDA,
      $                   RWORK, RESULT( 1 ) )
 *
@@ -368,7 +376,7 @@
 *
             IF( RESULT( 1 ).GE.THRESH ) THEN
                IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $            CALL ALAHD( NOUT, PATH )
+     $            CALL AB_ALAHD( NOUT, PATH )
                WRITE( NOUT, FMT = 9999 )N, IMAT, 1, RESULT( 1 )
                NFAIL = NFAIL + 1
             END IF
@@ -381,11 +389,11 @@
                ELSE
                   NORM = 'I'
                END IF
-               ANORM = ZLANGT( NORM, N, A, A( M+1 ), A( N+M+1 ) )
+               ANORM = AB_ZLANGT( NORM, N, A, A( M+1 ), A( N+M+1 ) )
 *
                IF( .NOT.TRFCON ) THEN
 *
-*                 Use ZGTTRS to solve for one column at a time of
+*                 Use AB_ZGTTRS to solve for one column at a time of
 *                 inv(A), computing the maximum column sum as we go.
 *
                   AINVNM = ZERO
@@ -394,10 +402,10 @@
                         X( J ) = ZERO
    30                CONTINUE
                      X( I ) = ONE
-                     CALL ZGTTRS( TRANS, N, 1, AF, AF( M+1 ),
+                     CALL AB_ZGTTRS( TRANS, N, 1, AF, AF( M+1 ),
      $                            AF( N+M+1 ), AF( N+2*M+1 ), IWORK, X,
      $                            LDA, INFO )
-                     AINVNM = MAX( AINVNM, DZASUM( N, X, 1 ) )
+                     AINVNM = MAX( AINVNM, AB_DZASUM( N, X, 1 ) )
    40             CONTINUE
 *
 *                 Compute RCONDC = 1 / (norm(A) * norm(inv(A))
@@ -420,24 +428,25 @@
 *              Estimate the reciprocal of the condition number of the
 *              matrix.
 *
-               SRNAMT = 'ZGTCON'
-               CALL ZGTCON( NORM, N, AF, AF( M+1 ), AF( N+M+1 ),
+               SRNAMT = 'AB_ZGTCON'
+               CALL AB_ZGTCON( NORM, N, AF, AF( M+1 ), AF( N+M+1 ),
      $                      AF( N+2*M+1 ), IWORK, ANORM, RCOND, WORK,
      $                      INFO )
 *
-*              Check error code from ZGTCON.
+*              Check error code from AB_ZGTCON.
 *
                IF( INFO.NE.0 )
-     $            CALL ALAERH( PATH, 'ZGTCON', INFO, 0, NORM, N, N, -1,
+     $            CALL AB_ALAERH( PATH, 'AB_ZGTCON', INFO, 0, NORM, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-               RESULT( 7 ) = DGET06( RCOND, RCONDC )
+               RESULT( 7 ) = AB_DGET06( RCOND, RCONDC )
 *
 *              Print the test ratio if it is .GE. THRESH.
 *
                IF( RESULT( 7 ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL ALAHD( NOUT, PATH )
+     $               CALL AB_ALAHD( NOUT, PATH )
                   WRITE( NOUT, FMT = 9997 )NORM, N, IMAT, 7,
      $               RESULT( 7 )
                   NFAIL = NFAIL + 1
@@ -457,7 +466,7 @@
 *
                IX = 1
                DO 60 J = 1, NRHS
-                  CALL ZLARNV( 2, ISEED, N, XACT( IX ) )
+                  CALL AB_ZLARNV( 2, ISEED, N, XACT( IX ) )
                   IX = IX + LDA
    60          CONTINUE
 *
@@ -471,55 +480,60 @@
 *
 *                 Set the right hand side.
 *
-                  CALL ZLAGTM( TRANS, N, NRHS, ONE, A, A( M+1 ),
+                  CALL AB_ZLAGTM( TRANS, N, NRHS, ONE, A, A( M+1 ),
      $                         A( N+M+1 ), XACT, LDA, ZERO, B, LDA )
 *
 *+    TEST 2
 *              Solve op(A) * X = B and compute the residual.
 *
-                  CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
-                  SRNAMT = 'ZGTTRS'
-                  CALL ZGTTRS( TRANS, N, NRHS, AF, AF( M+1 ),
+                  CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                  SRNAMT = 'AB_ZGTTRS'
+                  CALL AB_ZGTTRS( TRANS, N, NRHS, AF, AF( M+1 ),
      $                         AF( N+M+1 ), AF( N+2*M+1 ), IWORK, X,
      $                         LDA, INFO )
 *
-*              Check error code from ZGTTRS.
+*              Check error code from AB_ZGTTRS.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'ZGTTRS', INFO, 0, TRANS, N, N,
+     $               CALL AB_ALAERH( PATH, 'AB_ZGTTRS', INFO, 0, TRANS, 
+     $N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                  CALL ZGTT02( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 ),
+                  CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                  CALL AB_ZGTT02( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 
+     $),
      $                         X, LDA, WORK, LDA, RESULT( 2 ) )
 *
 *+    TEST 3
 *              Check solution from generated exact solution.
 *
-                  CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 3 ) )
 *
 *+    TESTS 4, 5, and 6
 *              Use iterative refinement to improve the solution.
 *
-                  SRNAMT = 'ZGTRFS'
-                  CALL ZGTRFS( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 ),
+                  SRNAMT = 'AB_ZGTRFS'
+                  CALL AB_ZGTRFS( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 
+     $),
      $                         AF, AF( M+1 ), AF( N+M+1 ),
      $                         AF( N+2*M+1 ), IWORK, B, LDA, X, LDA,
      $                         RWORK, RWORK( NRHS+1 ), WORK,
      $                         RWORK( 2*NRHS+1 ), INFO )
 *
-*              Check error code from ZGTRFS.
+*              Check error code from AB_ZGTRFS.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'ZGTRFS', INFO, 0, TRANS, N, N,
+     $               CALL AB_ALAERH( PATH, 'AB_ZGTRFS', INFO, 0, TRANS, 
+     $N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 4 ) )
-                  CALL ZGTT05( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 ),
+                  CALL AB_ZGTT05( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 
+     $),
      $                         B, LDA, X, LDA, XACT, LDA, RWORK,
      $                         RWORK( NRHS+1 ), RESULT( 5 ) )
 *
@@ -529,7 +543,7 @@
                   DO 70 K = 2, 6
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9998 )TRANS, N, NRHS, IMAT,
      $                     K, RESULT( K )
                         NFAIL = NFAIL + 1
@@ -543,7 +557,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 12X, 'N =', I5, ',', 10X, ' type ', I2, ', test(', I2,
      $      ') = ', G12.5 )
@@ -553,6 +567,6 @@
      $      ', test(', I2, ') = ', G12.5 )
       RETURN
 *
-*     End of ZCHKGT
+*     End of AB_ZCHKGT
 *
       END

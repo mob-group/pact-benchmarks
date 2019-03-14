@@ -1,4 +1,4 @@
-*> \brief <b> SGESVD computes the singular value decomposition (SVD) for GE matrices</b>
+*> \brief <b> AB_AB_SGESVD computes the singular value decomposition (SVD) for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGESVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvd.f">
+*> Download AB_AB_SGESVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SGESVD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesvd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SGESVD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SGESVD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,
+*       SUBROUTINE AB_AB_SGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SGESVD computes the singular value decomposition (SVD) of a real
+*> AB_AB_SGESVD computes the singular value decomposition (SVD) of a real
 *> M-by-N matrix A, optionally computing the left and/or right singular
 *> vectors. The SVD is written
 *>
@@ -181,7 +181,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -189,7 +189,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  if SBDSQR did not converge, INFO specifies how many
+*>          > 0:  if AB_SBDSQR did not converge, INFO specifies how many
 *>                superdiagonals of an intermediate bidiagonal form B
 *>                did not converge to zero. See the description of WORK
 *>                above for details.
@@ -208,7 +208,8 @@
 *> \ingroup realGEsing
 *
 *  =====================================================================
-      SUBROUTINE SGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,
+      SUBROUTINE AB_AB_SGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT,
+     $ LDVT,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -238,24 +239,29 @@
      $                   ITAU, ITAUP, ITAUQ, IU, IWORK, LDWRKR, LDWRKU,
      $                   MAXWRK, MINMN, MINWRK, MNTHR, NCU, NCVT, NRU,
      $                   NRVT, WRKBL
-      INTEGER            LWORK_SGEQRF, LWORK_SORGQR_N, LWORK_SORGQR_M,
-     $                   LWORK_SGEBRD, LWORK_SORGBR_P, LWORK_SORGBR_Q,
-     $                   LWORK_SGELQF, LWORK_SORGLQ_N, LWORK_SORGLQ_M
+      INTEGER            LWORK_AB_AB_SGEQRF, LWORK_AB_SORGQR_N, LWORK_AB
+     $_SORGQR_M,
+     $                   LWORK_AB_SGEBRD, LWORK_AB_SORGBR_P, LWORK_AB_SO
+     $RGBR_Q,
+     $                   LWORK_AB_AB_SGELQF, LWORK_AB_SORGLQ_N, LWORK_AB
+     $_SORGLQ_M
       REAL               ANRM, BIGNUM, EPS, SMLNUM
 *     ..
 *     .. Local Arrays ..
       REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SBDSQR, SGEBRD, SGELQF, SGEMM, SGEQRF, SLACPY,
-     $                   SLASCL, SLASET, SORGBR, SORGLQ, SORGQR, SORMBR,
-     $                   XERBLA
+      EXTERNAL           AB_SBDSQR, AB_SGEBRD, AB_AB_SGELQF, AB_SGEMM, A
+     $B_AB_SGEQRF, AB_SLACPY,
+     $                   AB_SLASCL, AB_SLASET, AB_SORGBR, AB_SORGLQ, AB_
+     $SORGQR, AB_SORMBR,
+     $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -266,16 +272,16 @@
 *
       INFO = 0
       MINMN = MIN( M, N )
-      WNTUA = LSAME( JOBU, 'A' )
-      WNTUS = LSAME( JOBU, 'S' )
+      WNTUA = AB_LSAME( JOBU, 'A' )
+      WNTUS = AB_LSAME( JOBU, 'S' )
       WNTUAS = WNTUA .OR. WNTUS
-      WNTUO = LSAME( JOBU, 'O' )
-      WNTUN = LSAME( JOBU, 'N' )
-      WNTVA = LSAME( JOBVT, 'A' )
-      WNTVS = LSAME( JOBVT, 'S' )
+      WNTUO = AB_LSAME( JOBU, 'O' )
+      WNTUN = AB_LSAME( JOBU, 'N' )
+      WNTVA = AB_LSAME( JOBVT, 'A' )
+      WNTVS = AB_LSAME( JOBVT, 'S' )
       WNTVAS = WNTVA .OR. WNTVS
-      WNTVO = LSAME( JOBVT, 'O' )
-      WNTVN = LSAME( JOBVT, 'N' )
+      WNTVO = AB_LSAME( JOBVT, 'O' )
+      WNTVN = AB_LSAME( JOBVT, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       IF( .NOT.( WNTUA .OR. WNTUS .OR. WNTUO .OR. WNTUN ) ) THEN
@@ -301,57 +307,58 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by ILAENV.)
+*       following subroutine, as returned by AB_ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
          MAXWRK = 1
          IF( M.GE.N .AND. MINMN.GT.0 ) THEN
 *
-*           Compute space needed for SBDSQR
+*           Compute space needed for AB_SBDSQR
 *
-            MNTHR = ILAENV( 6, 'SGESVD', JOBU // JOBVT, M, N, 0, 0 )
+            MNTHR = AB_ILAENV( 6, 'AB_AB_SGESVD', JOBU // JOBVT, M, N, 0
+     $, 0 )
             BDSPAC = 5*N
-*           Compute space needed for SGEQRF
-            CALL SGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
-            LWORK_SGEQRF = INT( DUM(1) )
-*           Compute space needed for SORGQR
-            CALL SORGQR( M, N, N, A, LDA, DUM(1), DUM(1), -1, IERR )
-            LWORK_SORGQR_N = INT( DUM(1) )
-            CALL SORGQR( M, M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
-            LWORK_SORGQR_M = INT( DUM(1) )
-*           Compute space needed for SGEBRD
-            CALL SGEBRD( N, N, A, LDA, S, DUM(1), DUM(1),
+*           Compute space needed for AB_AB_SGEQRF
+            CALL AB_AB_SGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_AB_AB_SGEQRF = INT( DUM(1) )
+*           Compute space needed for AB_SORGQR
+            CALL AB_SORGQR( M, N, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_AB_SORGQR_N = INT( DUM(1) )
+            CALL AB_SORGQR( M, M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_AB_SORGQR_M = INT( DUM(1) )
+*           Compute space needed for AB_SGEBRD
+            CALL AB_SGEBRD( N, N, A, LDA, S, DUM(1), DUM(1),
      $                   DUM(1), DUM(1), -1, IERR )
-            LWORK_SGEBRD = INT( DUM(1) )
-*           Compute space needed for SORGBR P
-            CALL SORGBR( 'P', N, N, N, A, LDA, DUM(1),
+            LWORK_AB_SGEBRD = INT( DUM(1) )
+*           Compute space needed for AB_SORGBR P
+            CALL AB_SORGBR( 'P', N, N, N, A, LDA, DUM(1),
      $                   DUM(1), -1, IERR )
-            LWORK_SORGBR_P = INT( DUM(1) )
-*           Compute space needed for SORGBR Q
-            CALL SORGBR( 'Q', N, N, N, A, LDA, DUM(1),
+            LWORK_AB_SORGBR_P = INT( DUM(1) )
+*           Compute space needed for AB_SORGBR Q
+            CALL AB_SORGBR( 'Q', N, N, N, A, LDA, DUM(1),
      $                   DUM(1), -1, IERR )
-            LWORK_SORGBR_Q = INT( DUM(1) )
+            LWORK_AB_SORGBR_Q = INT( DUM(1) )
 *
             IF( M.GE.MNTHR ) THEN
                IF( WNTUN ) THEN
 *
 *                 Path 1 (M much larger than N, JOBU='N')
 *
-                  MAXWRK = N + LWORK_SGEQRF
-                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_SGEBRD )
+                  MAXWRK = N + LWORK_AB_AB_SGEQRF
+                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_AB_SGEBRD )
                   IF( WNTVO .OR. WNTVAS )
-     $               MAXWRK = MAX( MAXWRK, 3*N+LWORK_SORGBR_P )
+     $               MAXWRK = MAX( MAXWRK, 3*N+LWORK_AB_SORGBR_P )
                   MAXWRK = MAX( MAXWRK, BDSPAC )
                   MINWRK = MAX( 4*N, BDSPAC )
                ELSE IF( WNTUO .AND. WNTVN ) THEN
 *
 *                 Path 2 (M much larger than N, JOBU='O', JOBVT='N')
 *
-                  WRKBL = N + LWORK_SGEQRF
-                  WRKBL = MAX( WRKBL, N+LWORK_SORGQR_N )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_Q )
+                  WRKBL = N + LWORK_AB_AB_SGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_AB_SORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = MAX( N*N+WRKBL, N*N+M*N+N )
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -360,11 +367,11 @@
 *                 Path 3 (M much larger than N, JOBU='O', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + LWORK_SGEQRF
-                  WRKBL = MAX( WRKBL, N+LWORK_SORGQR_N )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_Q )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_P )
+                  WRKBL = N + LWORK_AB_AB_SGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_AB_SORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = MAX( N*N+WRKBL, N*N+M*N+N )
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -372,10 +379,10 @@
 *
 *                 Path 4 (M much larger than N, JOBU='S', JOBVT='N')
 *
-                  WRKBL = N + LWORK_SGEQRF
-                  WRKBL = MAX( WRKBL, N+LWORK_SORGQR_N )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_Q )
+                  WRKBL = N + LWORK_AB_AB_SGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_AB_SORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -383,11 +390,11 @@
 *
 *                 Path 5 (M much larger than N, JOBU='S', JOBVT='O')
 *
-                  WRKBL = N + LWORK_SGEQRF
-                  WRKBL = MAX( WRKBL, N+LWORK_SORGQR_N )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_Q )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_P )
+                  WRKBL = N + LWORK_AB_AB_SGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_AB_SORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = 2*N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -396,11 +403,11 @@
 *                 Path 6 (M much larger than N, JOBU='S', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + LWORK_SGEQRF
-                  WRKBL = MAX( WRKBL, N+LWORK_SORGQR_N )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_Q )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_P )
+                  WRKBL = N + LWORK_AB_AB_SGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_AB_SORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -408,10 +415,10 @@
 *
 *                 Path 7 (M much larger than N, JOBU='A', JOBVT='N')
 *
-                  WRKBL = N + LWORK_SGEQRF
-                  WRKBL = MAX( WRKBL, N+LWORK_SORGQR_M )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_Q )
+                  WRKBL = N + LWORK_AB_AB_SGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_AB_SORGQR_M )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -419,11 +426,11 @@
 *
 *                 Path 8 (M much larger than N, JOBU='A', JOBVT='O')
 *
-                  WRKBL = N + LWORK_SGEQRF
-                  WRKBL = MAX( WRKBL, N+LWORK_SORGQR_M )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_Q )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_P )
+                  WRKBL = N + LWORK_AB_AB_SGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_AB_SORGQR_M )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = 2*N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -432,11 +439,11 @@
 *                 Path 9 (M much larger than N, JOBU='A', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + LWORK_SGEQRF
-                  WRKBL = MAX( WRKBL, N+LWORK_SORGQR_M )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_Q )
-                  WRKBL = MAX( WRKBL, 3*N+LWORK_SORGBR_P )
+                  WRKBL = N + LWORK_AB_AB_SGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_AB_SORGQR_M )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_AB_SORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -445,73 +452,75 @@
 *
 *              Path 10 (M at least N, but not much larger)
 *
-               CALL SGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+               CALL AB_SGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
      $                   DUM(1), DUM(1), -1, IERR )
-               LWORK_SGEBRD = INT( DUM(1) )
-               MAXWRK = 3*N + LWORK_SGEBRD
+               LWORK_AB_SGEBRD = INT( DUM(1) )
+               MAXWRK = 3*N + LWORK_AB_SGEBRD
                IF( WNTUS .OR. WNTUO ) THEN
-                  CALL SORGBR( 'Q', M, N, N, A, LDA, DUM(1),
+                  CALL AB_SORGBR( 'Q', M, N, N, A, LDA, DUM(1),
      $                   DUM(1), -1, IERR )
-                  LWORK_SORGBR_Q = INT( DUM(1) )
-                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_SORGBR_Q )
+                  LWORK_AB_SORGBR_Q = INT( DUM(1) )
+                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_AB_SORGBR_Q )
                END IF
                IF( WNTUA ) THEN
-                  CALL SORGBR( 'Q', M, M, N, A, LDA, DUM(1),
+                  CALL AB_SORGBR( 'Q', M, M, N, A, LDA, DUM(1),
      $                   DUM(1), -1, IERR )
-                  LWORK_SORGBR_Q = INT( DUM(1) )
-                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_SORGBR_Q )
+                  LWORK_AB_SORGBR_Q = INT( DUM(1) )
+                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_AB_SORGBR_Q )
                END IF
                IF( .NOT.WNTVN ) THEN
-                 MAXWRK = MAX( MAXWRK, 3*N+LWORK_SORGBR_P )
+                 MAXWRK = MAX( MAXWRK, 3*N+LWORK_AB_SORGBR_P )
                END IF
                MAXWRK = MAX( MAXWRK, BDSPAC )
                MINWRK = MAX( 3*N+M, BDSPAC )
             END IF
          ELSE IF( MINMN.GT.0 ) THEN
 *
-*           Compute space needed for SBDSQR
+*           Compute space needed for AB_SBDSQR
 *
-            MNTHR = ILAENV( 6, 'SGESVD', JOBU // JOBVT, M, N, 0, 0 )
+            MNTHR = AB_ILAENV( 6, 'AB_AB_SGESVD', JOBU // JOBVT, M, N, 0
+     $, 0 )
             BDSPAC = 5*M
-*           Compute space needed for SGELQF
-            CALL SGELQF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
-            LWORK_SGELQF = INT( DUM(1) )
-*           Compute space needed for SORGLQ
-            CALL SORGLQ( N, N, M, DUM(1), N, DUM(1), DUM(1), -1, IERR )
-            LWORK_SORGLQ_N = INT( DUM(1) )
-            CALL SORGLQ( M, N, M, A, LDA, DUM(1), DUM(1), -1, IERR )
-            LWORK_SORGLQ_M = INT( DUM(1) )
-*           Compute space needed for SGEBRD
-            CALL SGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
+*           Compute space needed for AB_AB_SGELQF
+            CALL AB_AB_SGELQF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_AB_AB_SGELQF = INT( DUM(1) )
+*           Compute space needed for AB_SORGLQ
+            CALL AB_SORGLQ( N, N, M, DUM(1), N, DUM(1), DUM(1), -1, IERR
+     $ )
+            LWORK_AB_SORGLQ_N = INT( DUM(1) )
+            CALL AB_SORGLQ( M, N, M, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_AB_SORGLQ_M = INT( DUM(1) )
+*           Compute space needed for AB_SGEBRD
+            CALL AB_SGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
      $                   DUM(1), DUM(1), -1, IERR )
-            LWORK_SGEBRD = INT( DUM(1) )
-*            Compute space needed for SORGBR P
-            CALL SORGBR( 'P', M, M, M, A, N, DUM(1),
+            LWORK_AB_SGEBRD = INT( DUM(1) )
+*            Compute space needed for AB_SORGBR P
+            CALL AB_SORGBR( 'P', M, M, M, A, N, DUM(1),
      $                   DUM(1), -1, IERR )
-            LWORK_SORGBR_P = INT( DUM(1) )
-*           Compute space needed for SORGBR Q
-            CALL SORGBR( 'Q', M, M, M, A, N, DUM(1),
+            LWORK_AB_SORGBR_P = INT( DUM(1) )
+*           Compute space needed for AB_SORGBR Q
+            CALL AB_SORGBR( 'Q', M, M, M, A, N, DUM(1),
      $                   DUM(1), -1, IERR )
-            LWORK_SORGBR_Q = INT( DUM(1) )
+            LWORK_AB_SORGBR_Q = INT( DUM(1) )
             IF( N.GE.MNTHR ) THEN
                IF( WNTVN ) THEN
 *
 *                 Path 1t(N much larger than M, JOBVT='N')
 *
-                  MAXWRK = M + LWORK_SGELQF
-                  MAXWRK = MAX( MAXWRK, 3*M+LWORK_SGEBRD )
+                  MAXWRK = M + LWORK_AB_AB_SGELQF
+                  MAXWRK = MAX( MAXWRK, 3*M+LWORK_AB_SGEBRD )
                   IF( WNTUO .OR. WNTUAS )
-     $               MAXWRK = MAX( MAXWRK, 3*M+LWORK_SORGBR_Q )
+     $               MAXWRK = MAX( MAXWRK, 3*M+LWORK_AB_SORGBR_Q )
                   MAXWRK = MAX( MAXWRK, BDSPAC )
                   MINWRK = MAX( 4*M, BDSPAC )
                ELSE IF( WNTVO .AND. WNTUN ) THEN
 *
 *                 Path 2t(N much larger than M, JOBU='N', JOBVT='O')
 *
-                  WRKBL = M + LWORK_SGELQF
-                  WRKBL = MAX( WRKBL, M+LWORK_SORGLQ_M )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_P )
+                  WRKBL = M + LWORK_AB_AB_SGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_AB_SORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = MAX( M*M+WRKBL, M*M+M*N+M )
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -520,11 +529,11 @@
 *                 Path 3t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='O')
 *
-                  WRKBL = M + LWORK_SGELQF
-                  WRKBL = MAX( WRKBL, M+LWORK_SORGLQ_M )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_P )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_Q )
+                  WRKBL = M + LWORK_AB_AB_SGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_AB_SORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = MAX( M*M+WRKBL, M*M+M*N+M )
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -532,10 +541,10 @@
 *
 *                 Path 4t(N much larger than M, JOBU='N', JOBVT='S')
 *
-                  WRKBL = M + LWORK_SGELQF
-                  WRKBL = MAX( WRKBL, M+LWORK_SORGLQ_M )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_P )
+                  WRKBL = M + LWORK_AB_AB_SGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_AB_SORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -543,11 +552,11 @@
 *
 *                 Path 5t(N much larger than M, JOBU='O', JOBVT='S')
 *
-                  WRKBL = M + LWORK_SGELQF
-                  WRKBL = MAX( WRKBL, M+LWORK_SORGLQ_M )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_P )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_Q )
+                  WRKBL = M + LWORK_AB_AB_SGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_AB_SORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = 2*M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -557,11 +566,11 @@
 *                 Path 6t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='S')
 *
-                  WRKBL = M + LWORK_SGELQF
-                  WRKBL = MAX( WRKBL, M+LWORK_SORGLQ_M )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_P )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_Q )
+                  WRKBL = M + LWORK_AB_AB_SGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_AB_SORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -569,10 +578,10 @@
 *
 *                 Path 7t(N much larger than M, JOBU='N', JOBVT='A')
 *
-                  WRKBL = M + LWORK_SGELQF
-                  WRKBL = MAX( WRKBL, M+LWORK_SORGLQ_N )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_P )
+                  WRKBL = M + LWORK_AB_AB_SGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_AB_SORGLQ_N )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -580,11 +589,11 @@
 *
 *                 Path 8t(N much larger than M, JOBU='O', JOBVT='A')
 *
-                  WRKBL = M + LWORK_SGELQF
-                  WRKBL = MAX( WRKBL, M+LWORK_SORGLQ_N )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_P )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_Q )
+                  WRKBL = M + LWORK_AB_AB_SGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_AB_SORGLQ_N )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = 2*M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -593,11 +602,11 @@
 *                 Path 9t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='A')
 *
-                  WRKBL = M + LWORK_SGELQF
-                  WRKBL = MAX( WRKBL, M+LWORK_SORGLQ_N )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SGEBRD )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_P )
-                  WRKBL = MAX( WRKBL, 3*M+LWORK_SORGBR_Q )
+                  WRKBL = M + LWORK_AB_AB_SGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_AB_SORGLQ_N )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_AB_SORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -606,25 +615,25 @@
 *
 *              Path 10t(N greater than M, but not much larger)
 *
-               CALL SGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+               CALL AB_SGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
      $                   DUM(1), DUM(1), -1, IERR )
-               LWORK_SGEBRD = INT( DUM(1) )
-               MAXWRK = 3*M + LWORK_SGEBRD
+               LWORK_AB_SGEBRD = INT( DUM(1) )
+               MAXWRK = 3*M + LWORK_AB_SGEBRD
                IF( WNTVS .OR. WNTVO ) THEN
-*                Compute space needed for SORGBR P
-                 CALL SORGBR( 'P', M, N, M, A, N, DUM(1),
+*                Compute space needed for AB_SORGBR P
+                 CALL AB_SORGBR( 'P', M, N, M, A, N, DUM(1),
      $                   DUM(1), -1, IERR )
-                 LWORK_SORGBR_P = INT( DUM(1) )
-                 MAXWRK = MAX( MAXWRK, 3*M+LWORK_SORGBR_P )
+                 LWORK_AB_SORGBR_P = INT( DUM(1) )
+                 MAXWRK = MAX( MAXWRK, 3*M+LWORK_AB_SORGBR_P )
                END IF
                IF( WNTVA ) THEN
-                 CALL SORGBR( 'P', N, N, M, A, N, DUM(1),
+                 CALL AB_SORGBR( 'P', N, N, M, A, N, DUM(1),
      $                   DUM(1), -1, IERR )
-                 LWORK_SORGBR_P = INT( DUM(1) )
-                 MAXWRK = MAX( MAXWRK, 3*M+LWORK_SORGBR_P )
+                 LWORK_AB_SORGBR_P = INT( DUM(1) )
+                 MAXWRK = MAX( MAXWRK, 3*M+LWORK_AB_SORGBR_P )
                END IF
                IF( .NOT.WNTUN ) THEN
-                  MAXWRK = MAX( MAXWRK, 3*M+LWORK_SORGBR_Q )
+                  MAXWRK = MAX( MAXWRK, 3*M+LWORK_AB_SORGBR_Q )
                END IF
                MAXWRK = MAX( MAXWRK, BDSPAC )
                MINWRK = MAX( 3*M+N, BDSPAC )
@@ -639,7 +648,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGESVD', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SGESVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -653,20 +662,20 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SQRT( SLAMCH( 'S' ) ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = SQRT( AB_SLAMCH( 'S' ) ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = SLANGE( 'M', M, N, A, LDA, DUM )
+      ANRM = AB_SLANGE( 'M', M, N, A, LDA, DUM )
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1
-         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, IERR )
+         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, IERR )
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          ISCL = 1
-         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, IERR )
+         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, IERR )
       END IF
 *
       IF( M.GE.N ) THEN
@@ -688,13 +697,14 @@
 *              Compute A=Q*R
 *              (Workspace: need 2*N, prefer N+N*NB)
 *
-               CALL SGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+               CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWOR
+     $K ),
      $                      LWORK-IWORK+1, IERR )
 *
 *              Zero out below R
 *
                IF( N .GT. 1 ) THEN
-                  CALL SLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
+                  CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
      $                         LDA )
                END IF
                IE = 1
@@ -705,7 +715,8 @@
 *              Bidiagonalize R in A
 *              (Workspace: need 4*N, prefer 3*N+2*N*NB)
 *
-               CALL SGEBRD( N, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+               CALL AB_SGEBRD( N, N, A, LDA, S, WORK( IE ), WORK( ITAUQ 
+     $),
      $                      WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                      IERR )
                NCVT = 0
@@ -714,7 +725,7 @@
 *                 If right singular vectors desired, generate P'.
 *                 (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-                  CALL SORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+                  CALL AB_SORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   NCVT = N
                END IF
@@ -724,13 +735,14 @@
 *              singular vectors of A in A if desired
 *              (Workspace: need BDSPAC)
 *
-               CALL SBDSQR( 'U', N, NCVT, 0, 0, S, WORK( IE ), A, LDA,
+               CALL AB_SBDSQR( 'U', N, NCVT, 0, 0, S, WORK( IE ), A, LDA
+     $,
      $                      DUM, 1, DUM, 1, WORK( IWORK ), INFO )
 *
 *              If right singular vectors desired in VT, copy them there
 *
                IF( WNTVAS )
-     $            CALL SLACPY( 'F', N, N, A, LDA, VT, LDVT )
+     $            CALL AB_SLACPY( 'F', N, N, A, LDA, VT, LDVT )
 *
             ELSE IF( WNTUO .AND. WNTVN ) THEN
 *
@@ -768,19 +780,21 @@
 *                 Compute A=Q*R
 *                 (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                  CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                  CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Copy R to WORK(IR) and zero out below it
 *
-                  CALL SLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
-                  CALL SLASET( 'L', N-1, N-1, ZERO, ZERO, WORK( IR+1 ),
+                  CALL AB_SLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR 
+     $)
+                  CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO, WORK( IR+1 
+     $),
      $                         LDWRKR )
 *
 *                 Generate Q in A
 *                 (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                  CALL SORGQR( M, N, N, A, LDA, WORK( ITAU ),
+                  CALL AB_SORGQR( M, N, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IE = ITAU
                   ITAUQ = IE + N
@@ -790,14 +804,15 @@
 *                 Bidiagonalize R in WORK(IR)
 *                 (Workspace: need N*N+4*N, prefer N*N+3*N+2*N*NB)
 *
-                  CALL SGEBRD( N, N, WORK( IR ), LDWRKR, S, WORK( IE ),
+                  CALL AB_SGEBRD( N, N, WORK( IR ), LDWRKR, S, WORK( IE 
+     $),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Generate left vectors bidiagonalizing R
 *                 (Workspace: need N*N+4*N, prefer N*N+3*N+N*NB)
 *
-                  CALL SORGBR( 'Q', N, N, N, WORK( IR ), LDWRKR,
+                  CALL AB_SORGBR( 'Q', N, N, N, WORK( IR ), LDWRKR,
      $                         WORK( ITAUQ ), WORK( IWORK ),
      $                         LWORK-IWORK+1, IERR )
                   IWORK = IE + N
@@ -806,7 +821,8 @@
 *                 singular vectors of R in WORK(IR)
 *                 (Workspace: need N*N+BDSPAC)
 *
-                  CALL SBDSQR( 'U', N, 0, N, 0, S, WORK( IE ), DUM, 1,
+                  CALL AB_SBDSQR( 'U', N, 0, N, 0, S, WORK( IE ), DUM, 1
+     $,
      $                         WORK( IR ), LDWRKR, DUM, 1,
      $                         WORK( IWORK ), INFO )
                   IU = IE + N
@@ -817,10 +833,11 @@
 *
                   DO 10 I = 1, M, LDWRKU
                      CHUNK = MIN( M-I+1, LDWRKU )
-                     CALL SGEMM( 'N', 'N', CHUNK, N, N, ONE, A( I, 1 ),
+                     CALL AB_SGEMM( 'N', 'N', CHUNK, N, N, ONE, A( I, 1 
+     $),
      $                           LDA, WORK( IR ), LDWRKR, ZERO,
      $                           WORK( IU ), LDWRKU )
-                     CALL SLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
+                     CALL AB_SLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
      $                            A( I, 1 ), LDA )
    10             CONTINUE
 *
@@ -836,14 +853,14 @@
 *                 Bidiagonalize A
 *                 (Workspace: need 3*N+M, prefer 3*N+(M+N)*NB)
 *
-                  CALL SGEBRD( M, N, A, LDA, S, WORK( IE ),
+                  CALL AB_SGEBRD( M, N, A, LDA, S, WORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Generate left vectors bidiagonalizing A
 *                 (Workspace: need 4*N, prefer 3*N+N*NB)
 *
-                  CALL SORGBR( 'Q', M, N, N, A, LDA, WORK( ITAUQ ),
+                  CALL AB_SORGBR( 'Q', M, N, N, A, LDA, WORK( ITAUQ ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IWORK = IE + N
 *
@@ -851,7 +868,8 @@
 *                 singular vectors of A in A
 *                 (Workspace: need BDSPAC)
 *
-                  CALL SBDSQR( 'U', N, 0, M, 0, S, WORK( IE ), DUM, 1,
+                  CALL AB_SBDSQR( 'U', N, 0, M, 0, S, WORK( IE ), DUM, 1
+     $,
      $                         A, LDA, DUM, 1, WORK( IWORK ), INFO )
 *
                END IF
@@ -892,20 +910,20 @@
 *                 Compute A=Q*R
 *                 (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                  CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                  CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Copy R to VT, zeroing out below it
 *
-                  CALL SLACPY( 'U', N, N, A, LDA, VT, LDVT )
+                  CALL AB_SLACPY( 'U', N, N, A, LDA, VT, LDVT )
                   IF( N.GT.1 )
-     $               CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+     $               CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                            VT( 2, 1 ), LDVT )
 *
 *                 Generate Q in A
 *                 (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                  CALL SORGQR( M, N, N, A, LDA, WORK( ITAU ),
+                  CALL AB_SORGQR( M, N, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IE = ITAU
                   ITAUQ = IE + N
@@ -915,22 +933,23 @@
 *                 Bidiagonalize R in VT, copying result to WORK(IR)
 *                 (Workspace: need N*N+4*N, prefer N*N+3*N+2*N*NB)
 *
-                  CALL SGEBRD( N, N, VT, LDVT, S, WORK( IE ),
+                  CALL AB_SGEBRD( N, N, VT, LDVT, S, WORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
-                  CALL SLACPY( 'L', N, N, VT, LDVT, WORK( IR ), LDWRKR )
+                  CALL AB_SLACPY( 'L', N, N, VT, LDVT, WORK( IR ), LDWRK
+     $R )
 *
 *                 Generate left vectors bidiagonalizing R in WORK(IR)
 *                 (Workspace: need N*N+4*N, prefer N*N+3*N+N*NB)
 *
-                  CALL SORGBR( 'Q', N, N, N, WORK( IR ), LDWRKR,
+                  CALL AB_SORGBR( 'Q', N, N, N, WORK( IR ), LDWRKR,
      $                         WORK( ITAUQ ), WORK( IWORK ),
      $                         LWORK-IWORK+1, IERR )
 *
 *                 Generate right vectors bidiagonalizing R in VT
 *                 (Workspace: need N*N+4*N-1, prefer N*N+3*N+(N-1)*NB)
 *
-                  CALL SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                  CALL AB_SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IWORK = IE + N
 *
@@ -939,7 +958,8 @@
 *                 singular vectors of R in VT
 *                 (Workspace: need N*N+BDSPAC)
 *
-                  CALL SBDSQR( 'U', N, N, N, 0, S, WORK( IE ), VT, LDVT,
+                  CALL AB_SBDSQR( 'U', N, N, N, 0, S, WORK( IE ), VT, LD
+     $VT,
      $                         WORK( IR ), LDWRKR, DUM, 1,
      $                         WORK( IWORK ), INFO )
                   IU = IE + N
@@ -950,10 +970,11 @@
 *
                   DO 20 I = 1, M, LDWRKU
                      CHUNK = MIN( M-I+1, LDWRKU )
-                     CALL SGEMM( 'N', 'N', CHUNK, N, N, ONE, A( I, 1 ),
+                     CALL AB_SGEMM( 'N', 'N', CHUNK, N, N, ONE, A( I, 1 
+     $),
      $                           LDA, WORK( IR ), LDWRKR, ZERO,
      $                           WORK( IU ), LDWRKU )
-                     CALL SLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
+                     CALL AB_SLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
      $                            A( I, 1 ), LDA )
    20             CONTINUE
 *
@@ -967,20 +988,20 @@
 *                 Compute A=Q*R
 *                 (Workspace: need 2*N, prefer N+N*NB)
 *
-                  CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                  CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Copy R to VT, zeroing out below it
 *
-                  CALL SLACPY( 'U', N, N, A, LDA, VT, LDVT )
+                  CALL AB_SLACPY( 'U', N, N, A, LDA, VT, LDVT )
                   IF( N.GT.1 )
-     $               CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+     $               CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                            VT( 2, 1 ), LDVT )
 *
 *                 Generate Q in A
 *                 (Workspace: need 2*N, prefer N+N*NB)
 *
-                  CALL SORGQR( M, N, N, A, LDA, WORK( ITAU ),
+                  CALL AB_SORGQR( M, N, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IE = ITAU
                   ITAUQ = IE + N
@@ -990,21 +1011,21 @@
 *                 Bidiagonalize R in VT
 *                 (Workspace: need 4*N, prefer 3*N+2*N*NB)
 *
-                  CALL SGEBRD( N, N, VT, LDVT, S, WORK( IE ),
+                  CALL AB_SGEBRD( N, N, VT, LDVT, S, WORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Multiply Q in A by left vectors bidiagonalizing R
 *                 (Workspace: need 3*N+M, prefer 3*N+M*NB)
 *
-                  CALL SORMBR( 'Q', 'R', 'N', M, N, N, VT, LDVT,
+                  CALL AB_SORMBR( 'Q', 'R', 'N', M, N, N, VT, LDVT,
      $                         WORK( ITAUQ ), A, LDA, WORK( IWORK ),
      $                         LWORK-IWORK+1, IERR )
 *
 *                 Generate right vectors bidiagonalizing R in VT
 *                 (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-                  CALL SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                  CALL AB_SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IWORK = IE + N
 *
@@ -1013,7 +1034,8 @@
 *                 singular vectors of A in VT
 *                 (Workspace: need BDSPAC)
 *
-                  CALL SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), VT, LDVT,
+                  CALL AB_SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), VT, LD
+     $VT,
      $                         A, LDA, DUM, 1, WORK( IWORK ), INFO )
 *
                END IF
@@ -1048,20 +1070,20 @@
 *                    Compute A=Q*R
 *                    (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy R to WORK(IR), zeroing out below it
 *
-                     CALL SLACPY( 'U', N, N, A, LDA, WORK( IR ),
+                     CALL AB_SLACPY( 'U', N, N, A, LDA, WORK( IR ),
      $                            LDWRKR )
-                     CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                            WORK( IR+1 ), LDWRKR )
 *
 *                    Generate Q in A
 *                    (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                     CALL SORGQR( M, N, N, A, LDA, WORK( ITAU ),
+                     CALL AB_SORGQR( M, N, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1071,7 +1093,7 @@
 *                    Bidiagonalize R in WORK(IR)
 *                    (Workspace: need N*N+4*N, prefer N*N+3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, WORK( IR ), LDWRKR, S,
+                     CALL AB_SGEBRD( N, N, WORK( IR ), LDWRKR, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
@@ -1079,7 +1101,7 @@
 *                    Generate left vectors bidiagonalizing R in WORK(IR)
 *                    (Workspace: need N*N+4*N, prefer N*N+3*N+N*NB)
 *
-                     CALL SORGBR( 'Q', N, N, N, WORK( IR ), LDWRKR,
+                     CALL AB_SORGBR( 'Q', N, N, N, WORK( IR ), LDWRKR,
      $                            WORK( ITAUQ ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + N
@@ -1088,7 +1110,8 @@
 *                    singular vectors of R in WORK(IR)
 *                    (Workspace: need N*N+BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, 0, N, 0, S, WORK( IE ), DUM,
+                     CALL AB_SBDSQR( 'U', N, 0, N, 0, S, WORK( IE ), DUM
+     $,
      $                            1, WORK( IR ), LDWRKR, DUM, 1,
      $                            WORK( IWORK ), INFO )
 *
@@ -1096,7 +1119,7 @@
 *                    WORK(IR), storing result in U
 *                    (Workspace: need N*N)
 *
-                     CALL SGEMM( 'N', 'N', M, N, N, ONE, A, LDA,
+                     CALL AB_SGEMM( 'N', 'N', M, N, N, ONE, A, LDA,
      $                           WORK( IR ), LDWRKR, ZERO, U, LDU )
 *
                   ELSE
@@ -1109,14 +1132,14 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Generate Q in U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SORGQR( M, N, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, N, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1126,21 +1149,21 @@
 *                    Zero out below R in A
 *
                      IF( N .GT. 1 ) THEN
-                        CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                        CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                               A( 2, 1 ), LDA )
                      END IF
 *
 *                    Bidiagonalize R in A
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, A, LDA, S, WORK( IE ),
+                     CALL AB_SGEBRD( N, N, A, LDA, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Multiply Q in U by left vectors bidiagonalizing R
 *                    (Workspace: need 3*N+M, prefer 3*N+M*NB)
 *
-                     CALL SORMBR( 'Q', 'R', 'N', M, N, N, A, LDA,
+                     CALL AB_SORMBR( 'Q', 'R', 'N', M, N, N, A, LDA,
      $                            WORK( ITAUQ ), U, LDU, WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + N
@@ -1149,7 +1172,8 @@
 *                    singular vectors of A in U
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, 0, M, 0, S, WORK( IE ), DUM,
+                     CALL AB_SBDSQR( 'U', N, 0, M, 0, S, WORK( IE ), DUM
+     $,
      $                            1, U, LDU, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -1194,20 +1218,20 @@
 *                    Compute A=Q*R
 *                    (Workspace: need 2*N*N+2*N, prefer 2*N*N+N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy R to WORK(IU), zeroing out below it
 *
-                     CALL SLACPY( 'U', N, N, A, LDA, WORK( IU ),
+                     CALL AB_SLACPY( 'U', N, N, A, LDA, WORK( IU ),
      $                            LDWRKU )
-                     CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                            WORK( IU+1 ), LDWRKU )
 *
 *                    Generate Q in A
 *                    (Workspace: need 2*N*N+2*N, prefer 2*N*N+N+N*NB)
 *
-                     CALL SORGQR( M, N, N, A, LDA, WORK( ITAU ),
+                     CALL AB_SORGQR( M, N, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1219,17 +1243,17 @@
 *                    (Workspace: need 2*N*N+4*N,
 *                                prefer 2*N*N+3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, WORK( IU ), LDWRKU, S,
+                     CALL AB_SGEBRD( N, N, WORK( IU ), LDWRKU, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', N, N, WORK( IU ), LDWRKU,
+                     CALL AB_SLACPY( 'U', N, N, WORK( IU ), LDWRKU,
      $                            WORK( IR ), LDWRKR )
 *
 *                    Generate left bidiagonalizing vectors in WORK(IU)
 *                    (Workspace: need 2*N*N+4*N, prefer 2*N*N+3*N+N*NB)
 *
-                     CALL SORGBR( 'Q', N, N, N, WORK( IU ), LDWRKU,
+                     CALL AB_SORGBR( 'Q', N, N, N, WORK( IU ), LDWRKU,
      $                            WORK( ITAUQ ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
@@ -1237,7 +1261,7 @@
 *                    (Workspace: need 2*N*N+4*N-1,
 *                                prefer 2*N*N+3*N+(N-1)*NB)
 *
-                     CALL SORGBR( 'P', N, N, N, WORK( IR ), LDWRKR,
+                     CALL AB_SORGBR( 'P', N, N, N, WORK( IR ), LDWRKR,
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + N
@@ -1247,7 +1271,7 @@
 *                    right singular vectors of R in WORK(IR)
 *                    (Workspace: need 2*N*N+BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, N, N, 0, S, WORK( IE ),
+                     CALL AB_SBDSQR( 'U', N, N, N, 0, S, WORK( IE ),
      $                            WORK( IR ), LDWRKR, WORK( IU ),
      $                            LDWRKU, DUM, 1, WORK( IWORK ), INFO )
 *
@@ -1255,13 +1279,13 @@
 *                    WORK(IU), storing result in U
 *                    (Workspace: need N*N)
 *
-                     CALL SGEMM( 'N', 'N', M, N, N, ONE, A, LDA,
+                     CALL AB_SGEMM( 'N', 'N', M, N, N, ONE, A, LDA,
      $                           WORK( IU ), LDWRKU, ZERO, U, LDU )
 *
 *                    Copy right singular vectors of R to A
 *                    (Workspace: need N*N)
 *
-                     CALL SLACPY( 'F', N, N, WORK( IR ), LDWRKR, A,
+                     CALL AB_SLACPY( 'F', N, N, WORK( IR ), LDWRKR, A,
      $                            LDA )
 *
                   ELSE
@@ -1274,14 +1298,14 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Generate Q in U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SORGQR( M, N, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, N, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1291,28 +1315,29 @@
 *                    Zero out below R in A
 *
                      IF( N .GT. 1 ) THEN
-                        CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                        CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                               A( 2, 1 ), LDA )
                      END IF
 *
 *                    Bidiagonalize R in A
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, A, LDA, S, WORK( IE ),
+                     CALL AB_SGEBRD( N, N, A, LDA, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Multiply Q in U by left vectors bidiagonalizing R
 *                    (Workspace: need 3*N+M, prefer 3*N+M*NB)
 *
-                     CALL SORMBR( 'Q', 'R', 'N', M, N, N, A, LDA,
+                     CALL AB_SORMBR( 'Q', 'R', 'N', M, N, N, A, LDA,
      $                            WORK( ITAUQ ), U, LDU, WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
 *                    Generate right vectors bidiagonalizing R in A
 *                    (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-                     CALL SORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+                     CALL AB_SORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP )
+     $,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + N
 *
@@ -1321,7 +1346,7 @@
 *                    singular vectors of A in A
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), A,
+                     CALL AB_SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), A,
      $                            LDA, U, LDU, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -1356,20 +1381,20 @@
 *                    Compute A=Q*R
 *                    (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy R to WORK(IU), zeroing out below it
 *
-                     CALL SLACPY( 'U', N, N, A, LDA, WORK( IU ),
+                     CALL AB_SLACPY( 'U', N, N, A, LDA, WORK( IU ),
      $                            LDWRKU )
-                     CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                            WORK( IU+1 ), LDWRKU )
 *
 *                    Generate Q in A
 *                    (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                     CALL SORGQR( M, N, N, A, LDA, WORK( ITAU ),
+                     CALL AB_SORGQR( M, N, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1379,17 +1404,17 @@
 *                    Bidiagonalize R in WORK(IU), copying result to VT
 *                    (Workspace: need N*N+4*N, prefer N*N+3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, WORK( IU ), LDWRKU, S,
+                     CALL AB_SGEBRD( N, N, WORK( IU ), LDWRKU, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', N, N, WORK( IU ), LDWRKU, VT,
+                     CALL AB_SLACPY( 'U', N, N, WORK( IU ), LDWRKU, VT,
      $                            LDVT )
 *
 *                    Generate left bidiagonalizing vectors in WORK(IU)
 *                    (Workspace: need N*N+4*N, prefer N*N+3*N+N*NB)
 *
-                     CALL SORGBR( 'Q', N, N, N, WORK( IU ), LDWRKU,
+                     CALL AB_SORGBR( 'Q', N, N, N, WORK( IU ), LDWRKU,
      $                            WORK( ITAUQ ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
@@ -1397,7 +1422,8 @@
 *                    (Workspace: need N*N+4*N-1,
 *                                prefer N*N+3*N+(N-1)*NB)
 *
-                     CALL SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                     CALL AB_SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP
+     $ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + N
 *
@@ -1406,7 +1432,7 @@
 *                    right singular vectors of R in VT
 *                    (Workspace: need N*N+BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, N, N, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', N, N, N, 0, S, WORK( IE ), VT,
      $                            LDVT, WORK( IU ), LDWRKU, DUM, 1,
      $                            WORK( IWORK ), INFO )
 *
@@ -1414,7 +1440,7 @@
 *                    WORK(IU), storing result in U
 *                    (Workspace: need N*N)
 *
-                     CALL SGEMM( 'N', 'N', M, N, N, ONE, A, LDA,
+                     CALL AB_SGEMM( 'N', 'N', M, N, N, ONE, A, LDA,
      $                           WORK( IU ), LDWRKU, ZERO, U, LDU )
 *
                   ELSE
@@ -1427,21 +1453,21 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Generate Q in U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SORGQR( M, N, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, N, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy R to VT, zeroing out below it
 *
-                     CALL SLACPY( 'U', N, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', N, N, A, LDA, VT, LDVT )
                      IF( N.GT.1 )
-     $                  CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+     $                  CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                               VT( 2, 1 ), LDVT )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1451,7 +1477,7 @@
 *                    Bidiagonalize R in VT
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, VT, LDVT, S, WORK( IE ),
+                     CALL AB_SGEBRD( N, N, VT, LDVT, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -1459,14 +1485,15 @@
 *                    in VT
 *                    (Workspace: need 3*N+M, prefer 3*N+M*NB)
 *
-                     CALL SORMBR( 'Q', 'R', 'N', M, N, N, VT, LDVT,
+                     CALL AB_SORMBR( 'Q', 'R', 'N', M, N, N, VT, LDVT,
      $                            WORK( ITAUQ ), U, LDU, WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
 *                    Generate right bidiagonalizing vectors in VT
 *                    (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-                     CALL SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                     CALL AB_SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP
+     $ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + N
 *
@@ -1475,7 +1502,7 @@
 *                    singular vectors of A in VT
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), VT,
      $                            LDVT, U, LDU, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -1513,21 +1540,21 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Copy R to WORK(IR), zeroing out below it
 *
-                     CALL SLACPY( 'U', N, N, A, LDA, WORK( IR ),
+                     CALL AB_SLACPY( 'U', N, N, A, LDA, WORK( IR ),
      $                            LDWRKR )
-                     CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                            WORK( IR+1 ), LDWRKR )
 *
 *                    Generate Q in U
 *                    (Workspace: need N*N+N+M, prefer N*N+N+M*NB)
 *
-                     CALL SORGQR( M, M, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, M, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1537,7 +1564,7 @@
 *                    Bidiagonalize R in WORK(IR)
 *                    (Workspace: need N*N+4*N, prefer N*N+3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, WORK( IR ), LDWRKR, S,
+                     CALL AB_SGEBRD( N, N, WORK( IR ), LDWRKR, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
@@ -1545,7 +1572,7 @@
 *                    Generate left bidiagonalizing vectors in WORK(IR)
 *                    (Workspace: need N*N+4*N, prefer N*N+3*N+N*NB)
 *
-                     CALL SORGBR( 'Q', N, N, N, WORK( IR ), LDWRKR,
+                     CALL AB_SORGBR( 'Q', N, N, N, WORK( IR ), LDWRKR,
      $                            WORK( ITAUQ ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + N
@@ -1554,7 +1581,8 @@
 *                    singular vectors of R in WORK(IR)
 *                    (Workspace: need N*N+BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, 0, N, 0, S, WORK( IE ), DUM,
+                     CALL AB_SBDSQR( 'U', N, 0, N, 0, S, WORK( IE ), DUM
+     $,
      $                            1, WORK( IR ), LDWRKR, DUM, 1,
      $                            WORK( IWORK ), INFO )
 *
@@ -1562,12 +1590,12 @@
 *                    WORK(IR), storing result in A
 *                    (Workspace: need N*N)
 *
-                     CALL SGEMM( 'N', 'N', M, N, N, ONE, U, LDU,
+                     CALL AB_SGEMM( 'N', 'N', M, N, N, ONE, U, LDU,
      $                           WORK( IR ), LDWRKR, ZERO, A, LDA )
 *
 *                    Copy left singular vectors of A from A to U
 *
-                     CALL SLACPY( 'F', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'F', M, N, A, LDA, U, LDU )
 *
                   ELSE
 *
@@ -1579,14 +1607,14 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Generate Q in U
 *                    (Workspace: need N+M, prefer N+M*NB)
 *
-                     CALL SORGQR( M, M, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, M, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1596,14 +1624,14 @@
 *                    Zero out below R in A
 *
                      IF( N .GT. 1 ) THEN
-                        CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                        CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                               A( 2, 1 ), LDA )
                      END IF
 *
 *                    Bidiagonalize R in A
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, A, LDA, S, WORK( IE ),
+                     CALL AB_SGEBRD( N, N, A, LDA, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -1611,7 +1639,7 @@
 *                    in A
 *                    (Workspace: need 3*N+M, prefer 3*N+M*NB)
 *
-                     CALL SORMBR( 'Q', 'R', 'N', M, N, N, A, LDA,
+                     CALL AB_SORMBR( 'Q', 'R', 'N', M, N, N, A, LDA,
      $                            WORK( ITAUQ ), U, LDU, WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + N
@@ -1620,7 +1648,8 @@
 *                    singular vectors of A in U
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, 0, M, 0, S, WORK( IE ), DUM,
+                     CALL AB_SBDSQR( 'U', N, 0, M, 0, S, WORK( IE ), DUM
+     $,
      $                            1, U, LDU, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -1665,21 +1694,21 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need 2*N*N+2*N, prefer 2*N*N+N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Generate Q in U
 *                    (Workspace: need 2*N*N+N+M, prefer 2*N*N+N+M*NB)
 *
-                     CALL SORGQR( M, M, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, M, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy R to WORK(IU), zeroing out below it
 *
-                     CALL SLACPY( 'U', N, N, A, LDA, WORK( IU ),
+                     CALL AB_SLACPY( 'U', N, N, A, LDA, WORK( IU ),
      $                            LDWRKU )
-                     CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                            WORK( IU+1 ), LDWRKU )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1691,17 +1720,17 @@
 *                    (Workspace: need 2*N*N+4*N,
 *                                prefer 2*N*N+3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, WORK( IU ), LDWRKU, S,
+                     CALL AB_SGEBRD( N, N, WORK( IU ), LDWRKU, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', N, N, WORK( IU ), LDWRKU,
+                     CALL AB_SLACPY( 'U', N, N, WORK( IU ), LDWRKU,
      $                            WORK( IR ), LDWRKR )
 *
 *                    Generate left bidiagonalizing vectors in WORK(IU)
 *                    (Workspace: need 2*N*N+4*N, prefer 2*N*N+3*N+N*NB)
 *
-                     CALL SORGBR( 'Q', N, N, N, WORK( IU ), LDWRKU,
+                     CALL AB_SORGBR( 'Q', N, N, N, WORK( IU ), LDWRKU,
      $                            WORK( ITAUQ ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
@@ -1709,7 +1738,7 @@
 *                    (Workspace: need 2*N*N+4*N-1,
 *                                prefer 2*N*N+3*N+(N-1)*NB)
 *
-                     CALL SORGBR( 'P', N, N, N, WORK( IR ), LDWRKR,
+                     CALL AB_SORGBR( 'P', N, N, N, WORK( IR ), LDWRKR,
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + N
@@ -1719,7 +1748,7 @@
 *                    right singular vectors of R in WORK(IR)
 *                    (Workspace: need 2*N*N+BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, N, N, 0, S, WORK( IE ),
+                     CALL AB_SBDSQR( 'U', N, N, N, 0, S, WORK( IE ),
      $                            WORK( IR ), LDWRKR, WORK( IU ),
      $                            LDWRKU, DUM, 1, WORK( IWORK ), INFO )
 *
@@ -1727,16 +1756,16 @@
 *                    WORK(IU), storing result in A
 *                    (Workspace: need N*N)
 *
-                     CALL SGEMM( 'N', 'N', M, N, N, ONE, U, LDU,
+                     CALL AB_SGEMM( 'N', 'N', M, N, N, ONE, U, LDU,
      $                           WORK( IU ), LDWRKU, ZERO, A, LDA )
 *
 *                    Copy left singular vectors of A from A to U
 *
-                     CALL SLACPY( 'F', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'F', M, N, A, LDA, U, LDU )
 *
 *                    Copy right singular vectors of R from WORK(IR) to A
 *
-                     CALL SLACPY( 'F', N, N, WORK( IR ), LDWRKR, A,
+                     CALL AB_SLACPY( 'F', N, N, WORK( IR ), LDWRKR, A,
      $                            LDA )
 *
                   ELSE
@@ -1749,14 +1778,14 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Generate Q in U
 *                    (Workspace: need N+M, prefer N+M*NB)
 *
-                     CALL SORGQR( M, M, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, M, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1766,14 +1795,14 @@
 *                    Zero out below R in A
 *
                      IF( N .GT. 1 ) THEN
-                        CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                        CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                               A( 2, 1 ), LDA )
                      END IF
 *
 *                    Bidiagonalize R in A
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, A, LDA, S, WORK( IE ),
+                     CALL AB_SGEBRD( N, N, A, LDA, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -1781,14 +1810,15 @@
 *                    in A
 *                    (Workspace: need 3*N+M, prefer 3*N+M*NB)
 *
-                     CALL SORMBR( 'Q', 'R', 'N', M, N, N, A, LDA,
+                     CALL AB_SORMBR( 'Q', 'R', 'N', M, N, N, A, LDA,
      $                            WORK( ITAUQ ), U, LDU, WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
 *                    Generate right bidiagonalizing vectors in A
 *                    (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-                     CALL SORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+                     CALL AB_SORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP )
+     $,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + N
 *
@@ -1797,7 +1827,7 @@
 *                    singular vectors of A in A
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), A,
+                     CALL AB_SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), A,
      $                            LDA, U, LDU, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -1832,21 +1862,21 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need N*N+2*N, prefer N*N+N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Generate Q in U
 *                    (Workspace: need N*N+N+M, prefer N*N+N+M*NB)
 *
-                     CALL SORGQR( M, M, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, M, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy R to WORK(IU), zeroing out below it
 *
-                     CALL SLACPY( 'U', N, N, A, LDA, WORK( IU ),
+                     CALL AB_SLACPY( 'U', N, N, A, LDA, WORK( IU ),
      $                            LDWRKU )
-                     CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                            WORK( IU+1 ), LDWRKU )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1856,17 +1886,17 @@
 *                    Bidiagonalize R in WORK(IU), copying result to VT
 *                    (Workspace: need N*N+4*N, prefer N*N+3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, WORK( IU ), LDWRKU, S,
+                     CALL AB_SGEBRD( N, N, WORK( IU ), LDWRKU, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', N, N, WORK( IU ), LDWRKU, VT,
+                     CALL AB_SLACPY( 'U', N, N, WORK( IU ), LDWRKU, VT,
      $                            LDVT )
 *
 *                    Generate left bidiagonalizing vectors in WORK(IU)
 *                    (Workspace: need N*N+4*N, prefer N*N+3*N+N*NB)
 *
-                     CALL SORGBR( 'Q', N, N, N, WORK( IU ), LDWRKU,
+                     CALL AB_SORGBR( 'Q', N, N, N, WORK( IU ), LDWRKU,
      $                            WORK( ITAUQ ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
@@ -1874,7 +1904,8 @@
 *                    (Workspace: need N*N+4*N-1,
 *                                prefer N*N+3*N+(N-1)*NB)
 *
-                     CALL SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                     CALL AB_SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP
+     $ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + N
 *
@@ -1883,7 +1914,7 @@
 *                    right singular vectors of R in VT
 *                    (Workspace: need N*N+BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, N, N, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', N, N, N, 0, S, WORK( IE ), VT,
      $                            LDVT, WORK( IU ), LDWRKU, DUM, 1,
      $                            WORK( IWORK ), INFO )
 *
@@ -1891,12 +1922,12 @@
 *                    WORK(IU), storing result in A
 *                    (Workspace: need N*N)
 *
-                     CALL SGEMM( 'N', 'N', M, N, N, ONE, U, LDU,
+                     CALL AB_SGEMM( 'N', 'N', M, N, N, ONE, U, LDU,
      $                           WORK( IU ), LDWRKU, ZERO, A, LDA )
 *
 *                    Copy left singular vectors of A from A to U
 *
-                     CALL SLACPY( 'F', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'F', M, N, A, LDA, U, LDU )
 *
                   ELSE
 *
@@ -1908,21 +1939,21 @@
 *                    Compute A=Q*R, copying result to U
 *                    (Workspace: need 2*N, prefer N+N*NB)
 *
-                     CALL SGEQRF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+                     CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *                    Generate Q in U
 *                    (Workspace: need N+M, prefer N+M*NB)
 *
-                     CALL SORGQR( M, M, N, U, LDU, WORK( ITAU ),
+                     CALL AB_SORGQR( M, M, N, U, LDU, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy R from A to VT, zeroing out below it
 *
-                     CALL SLACPY( 'U', N, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', N, N, A, LDA, VT, LDVT )
                      IF( N.GT.1 )
-     $                  CALL SLASET( 'L', N-1, N-1, ZERO, ZERO,
+     $                  CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO,
      $                               VT( 2, 1 ), LDVT )
                      IE = ITAU
                      ITAUQ = IE + N
@@ -1932,7 +1963,7 @@
 *                    Bidiagonalize R in VT
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
 *
-                     CALL SGEBRD( N, N, VT, LDVT, S, WORK( IE ),
+                     CALL AB_SGEBRD( N, N, VT, LDVT, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -1940,14 +1971,15 @@
 *                    in VT
 *                    (Workspace: need 3*N+M, prefer 3*N+M*NB)
 *
-                     CALL SORMBR( 'Q', 'R', 'N', M, N, N, VT, LDVT,
+                     CALL AB_SORMBR( 'Q', 'R', 'N', M, N, N, VT, LDVT,
      $                            WORK( ITAUQ ), U, LDU, WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
 *                    Generate right bidiagonalizing vectors in VT
 *                    (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-                     CALL SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+                     CALL AB_SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP
+     $ ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + N
 *
@@ -1956,7 +1988,7 @@
 *                    singular vectors of A in VT
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', N, N, M, 0, S, WORK( IE ), VT,
      $                            LDVT, U, LDU, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -1981,7 +2013,7 @@
 *           Bidiagonalize A
 *           (Workspace: need 3*N+M, prefer 3*N+(M+N)*NB)
 *
-            CALL SGEBRD( M, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+            CALL AB_SGEBRD( M, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
      $                   WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                   IERR )
             IF( WNTUAS ) THEN
@@ -1990,12 +2022,12 @@
 *              and generate left bidiagonalizing vectors in U
 *              (Workspace: need 3*N+NCU, prefer 3*N+NCU*NB)
 *
-               CALL SLACPY( 'L', M, N, A, LDA, U, LDU )
+               CALL AB_SLACPY( 'L', M, N, A, LDA, U, LDU )
                IF( WNTUS )
      $            NCU = N
                IF( WNTUA )
      $            NCU = M
-               CALL SORGBR( 'Q', M, NCU, N, U, LDU, WORK( ITAUQ ),
+               CALL AB_SORGBR( 'Q', M, NCU, N, U, LDU, WORK( ITAUQ ),
      $                      WORK( IWORK ), LWORK-IWORK+1, IERR )
             END IF
             IF( WNTVAS ) THEN
@@ -2004,8 +2036,8 @@
 *              VT and generate right bidiagonalizing vectors in VT
 *              (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-               CALL SLACPY( 'U', N, N, A, LDA, VT, LDVT )
-               CALL SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+               CALL AB_SLACPY( 'U', N, N, A, LDA, VT, LDVT )
+               CALL AB_SORGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
      $                      WORK( IWORK ), LWORK-IWORK+1, IERR )
             END IF
             IF( WNTUO ) THEN
@@ -2014,7 +2046,7 @@
 *              bidiagonalizing vectors in A
 *              (Workspace: need 4*N, prefer 3*N+N*NB)
 *
-               CALL SORGBR( 'Q', M, N, N, A, LDA, WORK( ITAUQ ),
+               CALL AB_SORGBR( 'Q', M, N, N, A, LDA, WORK( ITAUQ ),
      $                      WORK( IWORK ), LWORK-IWORK+1, IERR )
             END IF
             IF( WNTVO ) THEN
@@ -2023,7 +2055,7 @@
 *              bidiagonalizing vectors in A
 *              (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-               CALL SORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+               CALL AB_SORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
      $                      WORK( IWORK ), LWORK-IWORK+1, IERR )
             END IF
             IWORK = IE + N
@@ -2042,7 +2074,7 @@
 *              vectors in VT
 *              (Workspace: need BDSPAC)
 *
-               CALL SBDSQR( 'U', N, NCVT, NRU, 0, S, WORK( IE ), VT,
+               CALL AB_SBDSQR( 'U', N, NCVT, NRU, 0, S, WORK( IE ), VT,
      $                      LDVT, U, LDU, DUM, 1, WORK( IWORK ), INFO )
             ELSE IF( ( .NOT.WNTUO ) .AND. WNTVO ) THEN
 *
@@ -2051,7 +2083,8 @@
 *              vectors in A
 *              (Workspace: need BDSPAC)
 *
-               CALL SBDSQR( 'U', N, NCVT, NRU, 0, S, WORK( IE ), A, LDA,
+               CALL AB_SBDSQR( 'U', N, NCVT, NRU, 0, S, WORK( IE ), A, L
+     $DA,
      $                      U, LDU, DUM, 1, WORK( IWORK ), INFO )
             ELSE
 *
@@ -2060,7 +2093,7 @@
 *              vectors in VT
 *              (Workspace: need BDSPAC)
 *
-               CALL SBDSQR( 'U', N, NCVT, NRU, 0, S, WORK( IE ), VT,
+               CALL AB_SBDSQR( 'U', N, NCVT, NRU, 0, S, WORK( IE ), VT,
      $                      LDVT, A, LDA, DUM, 1, WORK( IWORK ), INFO )
             END IF
 *
@@ -2085,12 +2118,14 @@
 *              Compute A=L*Q
 *              (Workspace: need 2*M, prefer M+M*NB)
 *
-               CALL SGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+               CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWOR
+     $K ),
      $                      LWORK-IWORK+1, IERR )
 *
 *              Zero out above L
 *
-               CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ), LDA )
+               CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ), LDA
+     $ )
                IE = 1
                ITAUQ = IE + M
                ITAUP = ITAUQ + M
@@ -2099,7 +2134,8 @@
 *              Bidiagonalize L in A
 *              (Workspace: need 4*M, prefer 3*M+2*M*NB)
 *
-               CALL SGEBRD( M, M, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+               CALL AB_SGEBRD( M, M, A, LDA, S, WORK( IE ), WORK( ITAUQ 
+     $),
      $                      WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                      IERR )
                IF( WNTUO .OR. WNTUAS ) THEN
@@ -2107,7 +2143,7 @@
 *                 If left singular vectors desired, generate Q
 *                 (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-                  CALL SORGBR( 'Q', M, M, M, A, LDA, WORK( ITAUQ ),
+                  CALL AB_SORGBR( 'Q', M, M, M, A, LDA, WORK( ITAUQ ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                END IF
                IWORK = IE + M
@@ -2119,13 +2155,14 @@
 *              vectors of A in A if desired
 *              (Workspace: need BDSPAC)
 *
-               CALL SBDSQR( 'U', M, 0, NRU, 0, S, WORK( IE ), DUM, 1, A,
+               CALL AB_SBDSQR( 'U', M, 0, NRU, 0, S, WORK( IE ), DUM, 1,
+     $ A,
      $                      LDA, DUM, 1, WORK( IWORK ), INFO )
 *
 *              If left singular vectors desired in U, copy them there
 *
                IF( WNTUAS )
-     $            CALL SLACPY( 'F', M, M, A, LDA, U, LDU )
+     $            CALL AB_SLACPY( 'F', M, M, A, LDA, U, LDU )
 *
             ELSE IF( WNTVO .AND. WNTUN ) THEN
 *
@@ -2166,19 +2203,20 @@
 *                 Compute A=L*Q
 *                 (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                  CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                  CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Copy L to WORK(IR) and zero out above it
 *
-                  CALL SLACPY( 'L', M, M, A, LDA, WORK( IR ), LDWRKR )
-                  CALL SLASET( 'U', M-1, M-1, ZERO, ZERO,
+                  CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( IR ), LDWRKR 
+     $)
+                  CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO,
      $                         WORK( IR+LDWRKR ), LDWRKR )
 *
 *                 Generate Q in A
 *                 (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                  CALL SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
+                  CALL AB_SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IE = ITAU
                   ITAUQ = IE + M
@@ -2188,14 +2226,15 @@
 *                 Bidiagonalize L in WORK(IR)
 *                 (Workspace: need M*M+4*M, prefer M*M+3*M+2*M*NB)
 *
-                  CALL SGEBRD( M, M, WORK( IR ), LDWRKR, S, WORK( IE ),
+                  CALL AB_SGEBRD( M, M, WORK( IR ), LDWRKR, S, WORK( IE 
+     $),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Generate right vectors bidiagonalizing L
 *                 (Workspace: need M*M+4*M-1, prefer M*M+3*M+(M-1)*NB)
 *
-                  CALL SORGBR( 'P', M, M, M, WORK( IR ), LDWRKR,
+                  CALL AB_SORGBR( 'P', M, M, M, WORK( IR ), LDWRKR,
      $                         WORK( ITAUP ), WORK( IWORK ),
      $                         LWORK-IWORK+1, IERR )
                   IWORK = IE + M
@@ -2204,7 +2243,7 @@
 *                 singular vectors of L in WORK(IR)
 *                 (Workspace: need M*M+BDSPAC)
 *
-                  CALL SBDSQR( 'U', M, M, 0, 0, S, WORK( IE ),
+                  CALL AB_SBDSQR( 'U', M, M, 0, 0, S, WORK( IE ),
      $                         WORK( IR ), LDWRKR, DUM, 1, DUM, 1,
      $                         WORK( IWORK ), INFO )
                   IU = IE + M
@@ -2215,10 +2254,11 @@
 *
                   DO 30 I = 1, N, CHUNK
                      BLK = MIN( N-I+1, CHUNK )
-                     CALL SGEMM( 'N', 'N', M, BLK, M, ONE, WORK( IR ),
+                     CALL AB_SGEMM( 'N', 'N', M, BLK, M, ONE, WORK( IR )
+     $,
      $                           LDWRKR, A( 1, I ), LDA, ZERO,
      $                           WORK( IU ), LDWRKU )
-                     CALL SLACPY( 'F', M, BLK, WORK( IU ), LDWRKU,
+                     CALL AB_SLACPY( 'F', M, BLK, WORK( IU ), LDWRKU,
      $                            A( 1, I ), LDA )
    30             CONTINUE
 *
@@ -2234,14 +2274,14 @@
 *                 Bidiagonalize A
 *                 (Workspace: need 3*M+N, prefer 3*M+(M+N)*NB)
 *
-                  CALL SGEBRD( M, N, A, LDA, S, WORK( IE ),
+                  CALL AB_SGEBRD( M, N, A, LDA, S, WORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Generate right vectors bidiagonalizing A
 *                 (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-                  CALL SORGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
+                  CALL AB_SORGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IWORK = IE + M
 *
@@ -2249,7 +2289,8 @@
 *                 singular vectors of A in A
 *                 (Workspace: need BDSPAC)
 *
-                  CALL SBDSQR( 'L', M, N, 0, 0, S, WORK( IE ), A, LDA,
+                  CALL AB_SBDSQR( 'L', M, N, 0, 0, S, WORK( IE ), A, LDA
+     $,
      $                         DUM, 1, DUM, 1, WORK( IWORK ), INFO )
 *
                END IF
@@ -2293,19 +2334,19 @@
 *                 Compute A=L*Q
 *                 (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                  CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                  CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Copy L to U, zeroing about above it
 *
-                  CALL SLACPY( 'L', M, M, A, LDA, U, LDU )
-                  CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, U( 1, 2 ),
+                  CALL AB_SLACPY( 'L', M, M, A, LDA, U, LDU )
+                  CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, U( 1, 2 ),
      $                         LDU )
 *
 *                 Generate Q in A
 *                 (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                  CALL SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
+                  CALL AB_SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IE = ITAU
                   ITAUQ = IE + M
@@ -2315,22 +2356,23 @@
 *                 Bidiagonalize L in U, copying result to WORK(IR)
 *                 (Workspace: need M*M+4*M, prefer M*M+3*M+2*M*NB)
 *
-                  CALL SGEBRD( M, M, U, LDU, S, WORK( IE ),
+                  CALL AB_SGEBRD( M, M, U, LDU, S, WORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
-                  CALL SLACPY( 'U', M, M, U, LDU, WORK( IR ), LDWRKR )
+                  CALL AB_SLACPY( 'U', M, M, U, LDU, WORK( IR ), LDWRKR 
+     $)
 *
 *                 Generate right vectors bidiagonalizing L in WORK(IR)
 *                 (Workspace: need M*M+4*M-1, prefer M*M+3*M+(M-1)*NB)
 *
-                  CALL SORGBR( 'P', M, M, M, WORK( IR ), LDWRKR,
+                  CALL AB_SORGBR( 'P', M, M, M, WORK( IR ), LDWRKR,
      $                         WORK( ITAUP ), WORK( IWORK ),
      $                         LWORK-IWORK+1, IERR )
 *
 *                 Generate left vectors bidiagonalizing L in U
 *                 (Workspace: need M*M+4*M, prefer M*M+3*M+M*NB)
 *
-                  CALL SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                  CALL AB_SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IWORK = IE + M
 *
@@ -2339,7 +2381,7 @@
 *                 singular vectors of L in WORK(IR)
 *                 (Workspace: need M*M+BDSPAC)
 *
-                  CALL SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
+                  CALL AB_SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
      $                         WORK( IR ), LDWRKR, U, LDU, DUM, 1,
      $                         WORK( IWORK ), INFO )
                   IU = IE + M
@@ -2350,10 +2392,11 @@
 *
                   DO 40 I = 1, N, CHUNK
                      BLK = MIN( N-I+1, CHUNK )
-                     CALL SGEMM( 'N', 'N', M, BLK, M, ONE, WORK( IR ),
+                     CALL AB_SGEMM( 'N', 'N', M, BLK, M, ONE, WORK( IR )
+     $,
      $                           LDWRKR, A( 1, I ), LDA, ZERO,
      $                           WORK( IU ), LDWRKU )
-                     CALL SLACPY( 'F', M, BLK, WORK( IU ), LDWRKU,
+                     CALL AB_SLACPY( 'F', M, BLK, WORK( IU ), LDWRKU,
      $                            A( 1, I ), LDA )
    40             CONTINUE
 *
@@ -2367,19 +2410,19 @@
 *                 Compute A=L*Q
 *                 (Workspace: need 2*M, prefer M+M*NB)
 *
-                  CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                  CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Copy L to U, zeroing out above it
 *
-                  CALL SLACPY( 'L', M, M, A, LDA, U, LDU )
-                  CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, U( 1, 2 ),
+                  CALL AB_SLACPY( 'L', M, M, A, LDA, U, LDU )
+                  CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, U( 1, 2 ),
      $                         LDU )
 *
 *                 Generate Q in A
 *                 (Workspace: need 2*M, prefer M+M*NB)
 *
-                  CALL SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
+                  CALL AB_SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IE = ITAU
                   ITAUQ = IE + M
@@ -2389,21 +2432,21 @@
 *                 Bidiagonalize L in U
 *                 (Workspace: need 4*M, prefer 3*M+2*M*NB)
 *
-                  CALL SGEBRD( M, M, U, LDU, S, WORK( IE ),
+                  CALL AB_SGEBRD( M, M, U, LDU, S, WORK( IE ),
      $                         WORK( ITAUQ ), WORK( ITAUP ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                 Multiply right vectors bidiagonalizing L by Q in A
 *                 (Workspace: need 3*M+N, prefer 3*M+N*NB)
 *
-                  CALL SORMBR( 'P', 'L', 'T', M, N, M, U, LDU,
+                  CALL AB_SORMBR( 'P', 'L', 'T', M, N, M, U, LDU,
      $                         WORK( ITAUP ), A, LDA, WORK( IWORK ),
      $                         LWORK-IWORK+1, IERR )
 *
 *                 Generate left vectors bidiagonalizing L in U
 *                 (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-                  CALL SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                  CALL AB_SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
      $                         WORK( IWORK ), LWORK-IWORK+1, IERR )
                   IWORK = IE + M
 *
@@ -2412,7 +2455,8 @@
 *                 singular vectors of A in A
 *                 (Workspace: need BDSPAC)
 *
-                  CALL SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), A, LDA,
+                  CALL AB_SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), A, LDA
+     $,
      $                         U, LDU, DUM, 1, WORK( IWORK ), INFO )
 *
                END IF
@@ -2447,20 +2491,20 @@
 *                    Compute A=L*Q
 *                    (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy L to WORK(IR), zeroing out above it
 *
-                     CALL SLACPY( 'L', M, M, A, LDA, WORK( IR ),
+                     CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( IR ),
      $                            LDWRKR )
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO,
      $                            WORK( IR+LDWRKR ), LDWRKR )
 *
 *                    Generate Q in A
 *                    (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                     CALL SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
+                     CALL AB_SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -2470,7 +2514,7 @@
 *                    Bidiagonalize L in WORK(IR)
 *                    (Workspace: need M*M+4*M, prefer M*M+3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, WORK( IR ), LDWRKR, S,
+                     CALL AB_SGEBRD( M, M, WORK( IR ), LDWRKR, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
@@ -2479,7 +2523,7 @@
 *                    WORK(IR)
 *                    (Workspace: need M*M+4*M, prefer M*M+3*M+(M-1)*NB)
 *
-                     CALL SORGBR( 'P', M, M, M, WORK( IR ), LDWRKR,
+                     CALL AB_SORGBR( 'P', M, M, M, WORK( IR ), LDWRKR,
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + M
@@ -2488,7 +2532,7 @@
 *                    singular vectors of L in WORK(IR)
 *                    (Workspace: need M*M+BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, M, 0, 0, S, WORK( IE ),
+                     CALL AB_SBDSQR( 'U', M, M, 0, 0, S, WORK( IE ),
      $                            WORK( IR ), LDWRKR, DUM, 1, DUM, 1,
      $                            WORK( IWORK ), INFO )
 *
@@ -2496,7 +2540,7 @@
 *                    Q in A, storing result in VT
 *                    (Workspace: need M*M)
 *
-                     CALL SGEMM( 'N', 'N', M, N, M, ONE, WORK( IR ),
+                     CALL AB_SGEMM( 'N', 'N', M, N, M, ONE, WORK( IR ),
      $                           LDWRKR, A, LDA, ZERO, VT, LDVT )
 *
                   ELSE
@@ -2509,17 +2553,17 @@
 *                    Compute A=L*Q
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy result to VT
 *
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Generate Q in VT
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SORGLQ( M, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( M, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -2528,20 +2572,21 @@
 *
 *                    Zero out above L in A
 *
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ),
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 
+     $),
      $                            LDA )
 *
 *                    Bidiagonalize L in A
 *                    (Workspace: need 4*M, prefer 3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, A, LDA, S, WORK( IE ),
+                     CALL AB_SGEBRD( M, M, A, LDA, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Multiply right vectors bidiagonalizing L by Q in VT
 *                    (Workspace: need 3*M+N, prefer 3*M+N*NB)
 *
-                     CALL SORMBR( 'P', 'L', 'T', M, N, M, A, LDA,
+                     CALL AB_SORMBR( 'P', 'L', 'T', M, N, M, A, LDA,
      $                            WORK( ITAUP ), VT, LDVT,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + M
@@ -2550,7 +2595,7 @@
 *                    singular vectors of A in VT
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, N, 0, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', M, N, 0, 0, S, WORK( IE ), VT,
      $                            LDVT, DUM, 1, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -2595,20 +2640,20 @@
 *                    Compute A=L*Q
 *                    (Workspace: need 2*M*M+2*M, prefer 2*M*M+M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy L to WORK(IU), zeroing out below it
 *
-                     CALL SLACPY( 'L', M, M, A, LDA, WORK( IU ),
+                     CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( IU ),
      $                            LDWRKU )
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO,
      $                            WORK( IU+LDWRKU ), LDWRKU )
 *
 *                    Generate Q in A
 *                    (Workspace: need 2*M*M+2*M, prefer 2*M*M+M+M*NB)
 *
-                     CALL SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
+                     CALL AB_SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -2620,25 +2665,25 @@
 *                    (Workspace: need 2*M*M+4*M,
 *                                prefer 2*M*M+3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, WORK( IU ), LDWRKU, S,
+                     CALL AB_SGEBRD( M, M, WORK( IU ), LDWRKU, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, M, WORK( IU ), LDWRKU,
+                     CALL AB_SLACPY( 'L', M, M, WORK( IU ), LDWRKU,
      $                            WORK( IR ), LDWRKR )
 *
 *                    Generate right bidiagonalizing vectors in WORK(IU)
 *                    (Workspace: need 2*M*M+4*M-1,
 *                                prefer 2*M*M+3*M+(M-1)*NB)
 *
-                     CALL SORGBR( 'P', M, M, M, WORK( IU ), LDWRKU,
+                     CALL AB_SORGBR( 'P', M, M, M, WORK( IU ), LDWRKU,
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
 *                    Generate left bidiagonalizing vectors in WORK(IR)
 *                    (Workspace: need 2*M*M+4*M, prefer 2*M*M+3*M+M*NB)
 *
-                     CALL SORGBR( 'Q', M, M, M, WORK( IR ), LDWRKR,
+                     CALL AB_SORGBR( 'Q', M, M, M, WORK( IR ), LDWRKR,
      $                            WORK( ITAUQ ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + M
@@ -2648,7 +2693,7 @@
 *                    right singular vectors of L in WORK(IU)
 *                    (Workspace: need 2*M*M+BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
+                     CALL AB_SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
      $                            WORK( IU ), LDWRKU, WORK( IR ),
      $                            LDWRKR, DUM, 1, WORK( IWORK ), INFO )
 *
@@ -2656,13 +2701,13 @@
 *                    Q in A, storing result in VT
 *                    (Workspace: need M*M)
 *
-                     CALL SGEMM( 'N', 'N', M, N, M, ONE, WORK( IU ),
+                     CALL AB_SGEMM( 'N', 'N', M, N, M, ONE, WORK( IU ),
      $                           LDWRKU, A, LDA, ZERO, VT, LDVT )
 *
 *                    Copy left singular vectors of L to A
 *                    (Workspace: need M*M)
 *
-                     CALL SLACPY( 'F', M, M, WORK( IR ), LDWRKR, A,
+                     CALL AB_SLACPY( 'F', M, M, WORK( IR ), LDWRKR, A,
      $                            LDA )
 *
                   ELSE
@@ -2675,14 +2720,14 @@
 *                    Compute A=L*Q, copying result to VT
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Generate Q in VT
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SORGLQ( M, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( M, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -2691,27 +2736,29 @@
 *
 *                    Zero out above L in A
 *
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ),
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 
+     $),
      $                            LDA )
 *
 *                    Bidiagonalize L in A
 *                    (Workspace: need 4*M, prefer 3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, A, LDA, S, WORK( IE ),
+                     CALL AB_SGEBRD( M, M, A, LDA, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Multiply right vectors bidiagonalizing L by Q in VT
 *                    (Workspace: need 3*M+N, prefer 3*M+N*NB)
 *
-                     CALL SORMBR( 'P', 'L', 'T', M, N, M, A, LDA,
+                     CALL AB_SORMBR( 'P', 'L', 'T', M, N, M, A, LDA,
      $                            WORK( ITAUP ), VT, LDVT,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Generate left bidiagonalizing vectors of L in A
 *                    (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-                     CALL SORGBR( 'Q', M, M, M, A, LDA, WORK( ITAUQ ),
+                     CALL AB_SORGBR( 'Q', M, M, M, A, LDA, WORK( ITAUQ )
+     $,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + M
 *
@@ -2720,7 +2767,7 @@
 *                    singular vectors of A in VT
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), VT,
      $                            LDVT, A, LDA, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -2755,20 +2802,20 @@
 *                    Compute A=L*Q
 *                    (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy L to WORK(IU), zeroing out above it
 *
-                     CALL SLACPY( 'L', M, M, A, LDA, WORK( IU ),
+                     CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( IU ),
      $                            LDWRKU )
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO,
      $                            WORK( IU+LDWRKU ), LDWRKU )
 *
 *                    Generate Q in A
 *                    (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                     CALL SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
+                     CALL AB_SORGLQ( M, N, M, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -2778,25 +2825,26 @@
 *                    Bidiagonalize L in WORK(IU), copying result to U
 *                    (Workspace: need M*M+4*M, prefer M*M+3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, WORK( IU ), LDWRKU, S,
+                     CALL AB_SGEBRD( M, M, WORK( IU ), LDWRKU, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, M, WORK( IU ), LDWRKU, U,
+                     CALL AB_SLACPY( 'L', M, M, WORK( IU ), LDWRKU, U,
      $                            LDU )
 *
 *                    Generate right bidiagonalizing vectors in WORK(IU)
 *                    (Workspace: need M*M+4*M-1,
 *                                prefer M*M+3*M+(M-1)*NB)
 *
-                     CALL SORGBR( 'P', M, M, M, WORK( IU ), LDWRKU,
+                     CALL AB_SORGBR( 'P', M, M, M, WORK( IU ), LDWRKU,
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
 *                    Generate left bidiagonalizing vectors in U
 *                    (Workspace: need M*M+4*M, prefer M*M+3*M+M*NB)
 *
-                     CALL SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                     CALL AB_SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ )
+     $,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + M
 *
@@ -2805,7 +2853,7 @@
 *                    singular vectors of L in WORK(IU)
 *                    (Workspace: need M*M+BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
+                     CALL AB_SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
      $                            WORK( IU ), LDWRKU, U, LDU, DUM, 1,
      $                            WORK( IWORK ), INFO )
 *
@@ -2813,7 +2861,7 @@
 *                    Q in A, storing result in VT
 *                    (Workspace: need M*M)
 *
-                     CALL SGEMM( 'N', 'N', M, N, M, ONE, WORK( IU ),
+                     CALL AB_SGEMM( 'N', 'N', M, N, M, ONE, WORK( IU ),
      $                           LDWRKU, A, LDA, ZERO, VT, LDVT )
 *
                   ELSE
@@ -2826,20 +2874,21 @@
 *                    Compute A=L*Q, copying result to VT
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Generate Q in VT
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SORGLQ( M, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( M, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy L to U, zeroing out above it
 *
-                     CALL SLACPY( 'L', M, M, A, LDA, U, LDU )
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, U( 1, 2 ),
+                     CALL AB_SLACPY( 'L', M, M, A, LDA, U, LDU )
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, U( 1, 2 
+     $),
      $                            LDU )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -2849,7 +2898,7 @@
 *                    Bidiagonalize L in U
 *                    (Workspace: need 4*M, prefer 3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, U, LDU, S, WORK( IE ),
+                     CALL AB_SGEBRD( M, M, U, LDU, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -2857,14 +2906,15 @@
 *                    in VT
 *                    (Workspace: need 3*M+N, prefer 3*M+N*NB)
 *
-                     CALL SORMBR( 'P', 'L', 'T', M, N, M, U, LDU,
+                     CALL AB_SORMBR( 'P', 'L', 'T', M, N, M, U, LDU,
      $                            WORK( ITAUP ), VT, LDVT,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Generate left bidiagonalizing vectors in U
 *                    (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-                     CALL SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                     CALL AB_SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ )
+     $,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + M
 *
@@ -2873,7 +2923,7 @@
 *                    singular vectors of A in VT
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), VT,
      $                            LDVT, U, LDU, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -2911,21 +2961,21 @@
 *                    Compute A=L*Q, copying result to VT
 *                    (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Copy L to WORK(IR), zeroing out above it
 *
-                     CALL SLACPY( 'L', M, M, A, LDA, WORK( IR ),
+                     CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( IR ),
      $                            LDWRKR )
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO,
      $                            WORK( IR+LDWRKR ), LDWRKR )
 *
 *                    Generate Q in VT
 *                    (Workspace: need M*M+M+N, prefer M*M+M+N*NB)
 *
-                     CALL SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -2935,7 +2985,7 @@
 *                    Bidiagonalize L in WORK(IR)
 *                    (Workspace: need M*M+4*M, prefer M*M+3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, WORK( IR ), LDWRKR, S,
+                     CALL AB_SGEBRD( M, M, WORK( IR ), LDWRKR, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
@@ -2944,7 +2994,7 @@
 *                    (Workspace: need M*M+4*M-1,
 *                                prefer M*M+3*M+(M-1)*NB)
 *
-                     CALL SORGBR( 'P', M, M, M, WORK( IR ), LDWRKR,
+                     CALL AB_SORGBR( 'P', M, M, M, WORK( IR ), LDWRKR,
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + M
@@ -2953,7 +3003,7 @@
 *                    singular vectors of L in WORK(IR)
 *                    (Workspace: need M*M+BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, M, 0, 0, S, WORK( IE ),
+                     CALL AB_SBDSQR( 'U', M, M, 0, 0, S, WORK( IE ),
      $                            WORK( IR ), LDWRKR, DUM, 1, DUM, 1,
      $                            WORK( IWORK ), INFO )
 *
@@ -2961,12 +3011,12 @@
 *                    Q in VT, storing result in A
 *                    (Workspace: need M*M)
 *
-                     CALL SGEMM( 'N', 'N', M, N, M, ONE, WORK( IR ),
+                     CALL AB_SGEMM( 'N', 'N', M, N, M, ONE, WORK( IR ),
      $                           LDWRKR, VT, LDVT, ZERO, A, LDA )
 *
 *                    Copy right singular vectors of A from A to VT
 *
-                     CALL SLACPY( 'F', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'F', M, N, A, LDA, VT, LDVT )
 *
                   ELSE
 *
@@ -2978,14 +3028,14 @@
 *                    Compute A=L*Q, copying result to VT
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Generate Q in VT
 *                    (Workspace: need M+N, prefer M+N*NB)
 *
-                     CALL SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -2994,13 +3044,14 @@
 *
 *                    Zero out above L in A
 *
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ),
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 
+     $),
      $                            LDA )
 *
 *                    Bidiagonalize L in A
 *                    (Workspace: need 4*M, prefer 3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, A, LDA, S, WORK( IE ),
+                     CALL AB_SGEBRD( M, M, A, LDA, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -3008,7 +3059,7 @@
 *                    in VT
 *                    (Workspace: need 3*M+N, prefer 3*M+N*NB)
 *
-                     CALL SORMBR( 'P', 'L', 'T', M, N, M, A, LDA,
+                     CALL AB_SORMBR( 'P', 'L', 'T', M, N, M, A, LDA,
      $                            WORK( ITAUP ), VT, LDVT,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + M
@@ -3017,7 +3068,7 @@
 *                    singular vectors of A in VT
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, N, 0, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', M, N, 0, 0, S, WORK( IE ), VT,
      $                            LDVT, DUM, 1, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -3062,21 +3113,21 @@
 *                    Compute A=L*Q, copying result to VT
 *                    (Workspace: need 2*M*M+2*M, prefer 2*M*M+M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Generate Q in VT
 *                    (Workspace: need 2*M*M+M+N, prefer 2*M*M+M+N*NB)
 *
-                     CALL SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy L to WORK(IU), zeroing out above it
 *
-                     CALL SLACPY( 'L', M, M, A, LDA, WORK( IU ),
+                     CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( IU ),
      $                            LDWRKU )
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO,
      $                            WORK( IU+LDWRKU ), LDWRKU )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -3088,25 +3139,25 @@
 *                    (Workspace: need 2*M*M+4*M,
 *                                prefer 2*M*M+3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, WORK( IU ), LDWRKU, S,
+                     CALL AB_SGEBRD( M, M, WORK( IU ), LDWRKU, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, M, WORK( IU ), LDWRKU,
+                     CALL AB_SLACPY( 'L', M, M, WORK( IU ), LDWRKU,
      $                            WORK( IR ), LDWRKR )
 *
 *                    Generate right bidiagonalizing vectors in WORK(IU)
 *                    (Workspace: need 2*M*M+4*M-1,
 *                                prefer 2*M*M+3*M+(M-1)*NB)
 *
-                     CALL SORGBR( 'P', M, M, M, WORK( IU ), LDWRKU,
+                     CALL AB_SORGBR( 'P', M, M, M, WORK( IU ), LDWRKU,
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
 *                    Generate left bidiagonalizing vectors in WORK(IR)
 *                    (Workspace: need 2*M*M+4*M, prefer 2*M*M+3*M+M*NB)
 *
-                     CALL SORGBR( 'Q', M, M, M, WORK( IR ), LDWRKR,
+                     CALL AB_SORGBR( 'Q', M, M, M, WORK( IR ), LDWRKR,
      $                            WORK( ITAUQ ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
                      IWORK = IE + M
@@ -3116,7 +3167,7 @@
 *                    right singular vectors of L in WORK(IU)
 *                    (Workspace: need 2*M*M+BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
+                     CALL AB_SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
      $                            WORK( IU ), LDWRKU, WORK( IR ),
      $                            LDWRKR, DUM, 1, WORK( IWORK ), INFO )
 *
@@ -3124,16 +3175,16 @@
 *                    Q in VT, storing result in A
 *                    (Workspace: need M*M)
 *
-                     CALL SGEMM( 'N', 'N', M, N, M, ONE, WORK( IU ),
+                     CALL AB_SGEMM( 'N', 'N', M, N, M, ONE, WORK( IU ),
      $                           LDWRKU, VT, LDVT, ZERO, A, LDA )
 *
 *                    Copy right singular vectors of A from A to VT
 *
-                     CALL SLACPY( 'F', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'F', M, N, A, LDA, VT, LDVT )
 *
 *                    Copy left singular vectors of A from WORK(IR) to A
 *
-                     CALL SLACPY( 'F', M, M, WORK( IR ), LDWRKR, A,
+                     CALL AB_SLACPY( 'F', M, M, WORK( IR ), LDWRKR, A,
      $                            LDA )
 *
                   ELSE
@@ -3146,14 +3197,14 @@
 *                    Compute A=L*Q, copying result to VT
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Generate Q in VT
 *                    (Workspace: need M+N, prefer M+N*NB)
 *
-                     CALL SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -3162,13 +3213,14 @@
 *
 *                    Zero out above L in A
 *
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 ),
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, A( 1, 2 
+     $),
      $                            LDA )
 *
 *                    Bidiagonalize L in A
 *                    (Workspace: need 4*M, prefer 3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, A, LDA, S, WORK( IE ),
+                     CALL AB_SGEBRD( M, M, A, LDA, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -3176,14 +3228,15 @@
 *                    in VT
 *                    (Workspace: need 3*M+N, prefer 3*M+N*NB)
 *
-                     CALL SORMBR( 'P', 'L', 'T', M, N, M, A, LDA,
+                     CALL AB_SORMBR( 'P', 'L', 'T', M, N, M, A, LDA,
      $                            WORK( ITAUP ), VT, LDVT,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Generate left bidiagonalizing vectors in A
 *                    (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-                     CALL SORGBR( 'Q', M, M, M, A, LDA, WORK( ITAUQ ),
+                     CALL AB_SORGBR( 'Q', M, M, M, A, LDA, WORK( ITAUQ )
+     $,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + M
 *
@@ -3192,7 +3245,7 @@
 *                    singular vectors of A in VT
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), VT,
      $                            LDVT, A, LDA, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -3227,21 +3280,21 @@
 *                    Compute A=L*Q, copying result to VT
 *                    (Workspace: need M*M+2*M, prefer M*M+M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Generate Q in VT
 *                    (Workspace: need M*M+M+N, prefer M*M+M+N*NB)
 *
-                     CALL SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy L to WORK(IU), zeroing out above it
 *
-                     CALL SLACPY( 'L', M, M, A, LDA, WORK( IU ),
+                     CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( IU ),
      $                            LDWRKU )
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO,
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO,
      $                            WORK( IU+LDWRKU ), LDWRKU )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -3251,24 +3304,25 @@
 *                    Bidiagonalize L in WORK(IU), copying result to U
 *                    (Workspace: need M*M+4*M, prefer M*M+3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, WORK( IU ), LDWRKU, S,
+                     CALL AB_SGEBRD( M, M, WORK( IU ), LDWRKU, S,
      $                            WORK( IE ), WORK( ITAUQ ),
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'L', M, M, WORK( IU ), LDWRKU, U,
+                     CALL AB_SLACPY( 'L', M, M, WORK( IU ), LDWRKU, U,
      $                            LDU )
 *
 *                    Generate right bidiagonalizing vectors in WORK(IU)
 *                    (Workspace: need M*M+4*M, prefer M*M+3*M+(M-1)*NB)
 *
-                     CALL SORGBR( 'P', M, M, M, WORK( IU ), LDWRKU,
+                     CALL AB_SORGBR( 'P', M, M, M, WORK( IU ), LDWRKU,
      $                            WORK( ITAUP ), WORK( IWORK ),
      $                            LWORK-IWORK+1, IERR )
 *
 *                    Generate left bidiagonalizing vectors in U
 *                    (Workspace: need M*M+4*M, prefer M*M+3*M+M*NB)
 *
-                     CALL SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                     CALL AB_SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ )
+     $,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + M
 *
@@ -3277,7 +3331,7 @@
 *                    singular vectors of L in WORK(IU)
 *                    (Workspace: need M*M+BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
+                     CALL AB_SBDSQR( 'U', M, M, M, 0, S, WORK( IE ),
      $                            WORK( IU ), LDWRKU, U, LDU, DUM, 1,
      $                            WORK( IWORK ), INFO )
 *
@@ -3285,12 +3339,12 @@
 *                    Q in VT, storing result in A
 *                    (Workspace: need M*M)
 *
-                     CALL SGEMM( 'N', 'N', M, N, M, ONE, WORK( IU ),
+                     CALL AB_SGEMM( 'N', 'N', M, N, M, ONE, WORK( IU ),
      $                           LDWRKU, VT, LDVT, ZERO, A, LDA )
 *
 *                    Copy right singular vectors of A from A to VT
 *
-                     CALL SLACPY( 'F', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'F', M, N, A, LDA, VT, LDVT )
 *
                   ELSE
 *
@@ -3302,20 +3356,21 @@
 *                    Compute A=L*Q, copying result to VT
 *                    (Workspace: need 2*M, prefer M+M*NB)
 *
-                     CALL SGELQF( M, N, A, LDA, WORK( ITAU ),
+                     CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
-                     CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+                     CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *                    Generate Q in VT
 *                    (Workspace: need M+N, prefer M+N*NB)
 *
-                     CALL SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
+                     CALL AB_SORGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Copy L to U, zeroing out above it
 *
-                     CALL SLACPY( 'L', M, M, A, LDA, U, LDU )
-                     CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, U( 1, 2 ),
+                     CALL AB_SLACPY( 'L', M, M, A, LDA, U, LDU )
+                     CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, U( 1, 2 
+     $),
      $                            LDU )
                      IE = ITAU
                      ITAUQ = IE + M
@@ -3325,7 +3380,7 @@
 *                    Bidiagonalize L in U
 *                    (Workspace: need 4*M, prefer 3*M+2*M*NB)
 *
-                     CALL SGEBRD( M, M, U, LDU, S, WORK( IE ),
+                     CALL AB_SGEBRD( M, M, U, LDU, S, WORK( IE ),
      $                            WORK( ITAUQ ), WORK( ITAUP ),
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
@@ -3333,14 +3388,15 @@
 *                    in VT
 *                    (Workspace: need 3*M+N, prefer 3*M+N*NB)
 *
-                     CALL SORMBR( 'P', 'L', 'T', M, N, M, U, LDU,
+                     CALL AB_SORMBR( 'P', 'L', 'T', M, N, M, U, LDU,
      $                            WORK( ITAUP ), VT, LDVT,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
 *
 *                    Generate left bidiagonalizing vectors in U
 *                    (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-                     CALL SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ ),
+                     CALL AB_SORGBR( 'Q', M, M, M, U, LDU, WORK( ITAUQ )
+     $,
      $                            WORK( IWORK ), LWORK-IWORK+1, IERR )
                      IWORK = IE + M
 *
@@ -3349,7 +3405,7 @@
 *                    singular vectors of A in VT
 *                    (Workspace: need BDSPAC)
 *
-                     CALL SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), VT,
+                     CALL AB_SBDSQR( 'U', M, N, M, 0, S, WORK( IE ), VT,
      $                            LDVT, U, LDU, DUM, 1, WORK( IWORK ),
      $                            INFO )
 *
@@ -3374,7 +3430,7 @@
 *           Bidiagonalize A
 *           (Workspace: need 3*M+N, prefer 3*M+(M+N)*NB)
 *
-            CALL SGEBRD( M, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+            CALL AB_SGEBRD( M, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
      $                   WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                   IERR )
             IF( WNTUAS ) THEN
@@ -3383,8 +3439,8 @@
 *              and generate left bidiagonalizing vectors in U
 *              (Workspace: need 4*M-1, prefer 3*M+(M-1)*NB)
 *
-               CALL SLACPY( 'L', M, M, A, LDA, U, LDU )
-               CALL SORGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
+               CALL AB_SLACPY( 'L', M, M, A, LDA, U, LDU )
+               CALL AB_SORGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
      $                      WORK( IWORK ), LWORK-IWORK+1, IERR )
             END IF
             IF( WNTVAS ) THEN
@@ -3393,12 +3449,12 @@
 *              VT and generate right bidiagonalizing vectors in VT
 *              (Workspace: need 3*M+NRVT, prefer 3*M+NRVT*NB)
 *
-               CALL SLACPY( 'U', M, N, A, LDA, VT, LDVT )
+               CALL AB_SLACPY( 'U', M, N, A, LDA, VT, LDVT )
                IF( WNTVA )
      $            NRVT = N
                IF( WNTVS )
      $            NRVT = M
-               CALL SORGBR( 'P', NRVT, N, M, VT, LDVT, WORK( ITAUP ),
+               CALL AB_SORGBR( 'P', NRVT, N, M, VT, LDVT, WORK( ITAUP ),
      $                      WORK( IWORK ), LWORK-IWORK+1, IERR )
             END IF
             IF( WNTUO ) THEN
@@ -3407,7 +3463,7 @@
 *              bidiagonalizing vectors in A
 *              (Workspace: need 4*M-1, prefer 3*M+(M-1)*NB)
 *
-               CALL SORGBR( 'Q', M, M, N, A, LDA, WORK( ITAUQ ),
+               CALL AB_SORGBR( 'Q', M, M, N, A, LDA, WORK( ITAUQ ),
      $                      WORK( IWORK ), LWORK-IWORK+1, IERR )
             END IF
             IF( WNTVO ) THEN
@@ -3416,7 +3472,7 @@
 *              bidiagonalizing vectors in A
 *              (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-               CALL SORGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
+               CALL AB_SORGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
      $                      WORK( IWORK ), LWORK-IWORK+1, IERR )
             END IF
             IWORK = IE + M
@@ -3435,7 +3491,7 @@
 *              vectors in VT
 *              (Workspace: need BDSPAC)
 *
-               CALL SBDSQR( 'L', M, NCVT, NRU, 0, S, WORK( IE ), VT,
+               CALL AB_SBDSQR( 'L', M, NCVT, NRU, 0, S, WORK( IE ), VT,
      $                      LDVT, U, LDU, DUM, 1, WORK( IWORK ), INFO )
             ELSE IF( ( .NOT.WNTUO ) .AND. WNTVO ) THEN
 *
@@ -3444,7 +3500,8 @@
 *              vectors in A
 *              (Workspace: need BDSPAC)
 *
-               CALL SBDSQR( 'L', M, NCVT, NRU, 0, S, WORK( IE ), A, LDA,
+               CALL AB_SBDSQR( 'L', M, NCVT, NRU, 0, S, WORK( IE ), A, L
+     $DA,
      $                      U, LDU, DUM, 1, WORK( IWORK ), INFO )
             ELSE
 *
@@ -3453,7 +3510,7 @@
 *              vectors in VT
 *              (Workspace: need BDSPAC)
 *
-               CALL SBDSQR( 'L', M, NCVT, NRU, 0, S, WORK( IE ), VT,
+               CALL AB_SBDSQR( 'L', M, NCVT, NRU, 0, S, WORK( IE ), VT,
      $                      LDVT, A, LDA, DUM, 1, WORK( IWORK ), INFO )
             END IF
 *
@@ -3461,7 +3518,7 @@
 *
       END IF
 *
-*     If SBDSQR failed to converge, copy unconverged superdiagonals
+*     If AB_SBDSQR failed to converge, copy unconverged superdiagonals
 *     to WORK( 2:MINMN )
 *
       IF( INFO.NE.0 ) THEN
@@ -3481,16 +3538,18 @@
 *
       IF( ISCL.EQ.1 ) THEN
          IF( ANRM.GT.BIGNUM )
-     $      CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
+     $      CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
      $                   IERR )
          IF( INFO.NE.0 .AND. ANRM.GT.BIGNUM )
-     $      CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN-1, 1, WORK( 2 ),
+     $      CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN-1, 1, WORK( 2
+     $ ),
      $                   MINMN, IERR )
          IF( ANRM.LT.SMLNUM )
-     $      CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
+     $      CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
      $                   IERR )
          IF( INFO.NE.0 .AND. ANRM.LT.SMLNUM )
-     $      CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN-1, 1, WORK( 2 ),
+     $      CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN-1, 1, WORK( 2
+     $ ),
      $                   MINMN, IERR )
       END IF
 *
@@ -3500,6 +3559,6 @@
 *
       RETURN
 *
-*     End of SGESVD
+*     End of AB_AB_SGESVD
 *
       END

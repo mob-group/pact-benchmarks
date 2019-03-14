@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
+*       SUBROUTINE AB_AB_CGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER INFO, LDA, LDT, M, N, MB
@@ -17,7 +17,7 @@
 *>
 *> \verbatim
 *>
-*> CGELQT computes a blocked LQ factorization of a complex M-by-N matrix A
+*> AB_AB_CGELQT computes a blocked LQ factorization of a complex M-by-N matrix A
 *> using the compact WY representation of Q.
 *> \endverbatim
 *
@@ -121,7 +121,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
+      SUBROUTINE AB_AB_CGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,7 +142,7 @@
       INTEGER    I, IB, IINFO, K
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   CGELQT3, CLARFB, XERBLA
+      EXTERNAL   AB_AB_CGELQT3, AB_AB_CLARFB, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -153,7 +153,8 @@
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
-      ELSE IF( MB.LT.1 .OR. (MB.GT.MIN(M,N) .AND. MIN(M,N).GT.0 ))THEN
+      ELSE IF( MB.LT.1 .OR. (MB.GT.MIN(M,N) .AND. MIN(M,N).GT.0 ))THE
+     $N
          INFO = -3
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -5
@@ -161,7 +162,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGELQT', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CGELQT', -INFO )
          RETURN
       END IF
 *
@@ -177,18 +178,19 @@
 *
 *     Compute the LQ factorization of the current block A(I:M,I:I+IB-1)
 *
-         CALL CGELQT3( IB, N-I+1, A(I,I), LDA, T(1,I), LDT, IINFO )
+         CALL AB_AB_CGELQT3( IB, N-I+1, A(I,I), LDA, T(1,I), LDT, IINFO 
+     $)
          IF( I+IB.LE.M ) THEN
 *
 *     Update by applying H**T to A(I:M,I+IB:N) from the right
 *
-         CALL CLARFB( 'R', 'N', 'F', 'R', M-I-IB+1, N-I+1, IB,
+         CALL AB_AB_CLARFB( 'R', 'N', 'F', 'R', M-I-IB+1, N-I+1, IB,
      $                   A( I, I ), LDA, T( 1, I ), LDT,
      $                   A( I+IB, I ), LDA, WORK , M-I-IB+1 )
          END IF
       END DO
       RETURN
 *
-*     End of CGELQT
+*     End of AB_AB_CGELQT
 *
       END

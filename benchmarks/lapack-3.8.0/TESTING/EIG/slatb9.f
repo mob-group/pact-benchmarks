@@ -1,4 +1,4 @@
-*> \brief \b SLATB9
+*> \brief \b AB_SLATB9
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA,
+*       SUBROUTINE AB_SLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA,
 *                          KLB, KUB, ANORM, BNORM, MODEA, MODEB,
 *                          CNDNMA, CNDNMB, DISTA, DISTB )
 *
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> SLATB9 sets parameters for the matrix generator based on the type of
+*> AB_SLATB9 sets parameters for the matrix generator based on the type of
 *> matrix to be generated.
 *> \endverbatim
 *
@@ -46,7 +46,7 @@
 *>          = 1:   A: diagonal, B: upper triangular
 *>          = 2:   A: upper triangular, B: upper triangular
 *>          = 3:   A: lower triangular, B: upper triangular
-*>          Else:  A: general dense, B: general dense
+*>          ELSE:  A: general dense, B: general dense
 *> \endverbatim
 *>
 *> \param[in] M
@@ -166,7 +166,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA,
+      SUBROUTINE AB_SLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA,
      $                   KLB, KUB, ANORM, BNORM, MODEA, MODEB,
      $                   CNDNMA, CNDNMB, DISTA, DISTB )
 *
@@ -195,15 +195,15 @@
       REAL               BADC1, BADC2, EPS, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      REAL               SLAMCH
-      EXTERNAL           LSAMEN, SLAMCH
+      LOGICAL            AB_AB_LSAMEN
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_AB_LSAMEN, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD
+      EXTERNAL           AB_SLABAD
 *     ..
 *     .. Save statement ..
       SAVE               EPS, SMALL, LARGE, BADC1, BADC2, FIRST
@@ -217,16 +217,16 @@
 *
       IF( FIRST ) THEN
          FIRST = .FALSE.
-         EPS = SLAMCH( 'Precision' )
+         EPS = AB_SLAMCH( 'Precision' )
          BADC2 = TENTH / EPS
          BADC1 = SQRT( BADC2 )
-         SMALL = SLAMCH( 'Safe minimum' )
+         SMALL = AB_SLAMCH( 'Safe minimum' )
          LARGE = ONE / SMALL
 *
 *        If it looks like we're on a Cray, take the square root of
 *        SMALL and LARGE to avoid overflow and underflow problems.
 *
-         CALL SLABAD( SMALL, LARGE )
+         CALL AB_SLABAD( SMALL, LARGE )
          SMALL = SHRINK*( SMALL / EPS )
          LARGE = ONE / SMALL
       END IF
@@ -241,8 +241,9 @@
 *
 *     Set the lower and upper bandwidths.
 *
-      IF( LSAMEN( 3, PATH, 'GRQ') .OR. LSAMEN( 3, PATH, 'LSE') .OR.
-     $    LSAMEN( 3, PATH, 'GSV') )THEN
+      IF( AB_AB_LSAMEN( 3, PATH, 'GRQ') .OR. AB_AB_LSAMEN( 3, PATH, 'AB_
+     $LSE') .OR.
+     $    AB_AB_LSAMEN( 3, PATH, 'GSV') )THEN
 *
 *        A: M by N, B: P by N
 *
@@ -284,8 +285,8 @@
 *
          END IF
 *
-      ELSE IF( LSAMEN( 3, PATH, 'GQR' ) .OR.
-     $         LSAMEN( 3, PATH, 'GLM') )THEN
+      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'GQR' ) .OR.
+     $         AB_AB_LSAMEN( 3, PATH, 'GLM') )THEN
 *
 *        A: N by M, B: N by P
 *
@@ -331,8 +332,9 @@
 *
       CNDNMA = TEN*TEN
       CNDNMB = TEN
-      IF( LSAMEN( 3, PATH, 'GQR') .OR. LSAMEN( 3, PATH, 'GRQ') .OR.
-     $    LSAMEN( 3, PATH, 'GSV') )THEN
+      IF( AB_AB_LSAMEN( 3, PATH, 'GQR') .OR. AB_AB_LSAMEN( 3, PATH, 'GRQ
+     $') .OR.
+     $    AB_AB_LSAMEN( 3, PATH, 'GSV') )THEN
          IF( IMAT.EQ.5 ) THEN
             CNDNMA = BADC1
             CNDNMB = BADC1
@@ -350,7 +352,8 @@
 *
       ANORM = TEN
       BNORM = TEN*TEN*TEN
-      IF( LSAMEN( 3, PATH, 'GQR') .OR. LSAMEN( 3, PATH, 'GRQ') )THEN
+      IF( AB_AB_LSAMEN( 3, PATH, 'GQR') .OR. AB_AB_LSAMEN( 3, PATH, 'GRQ
+     $') )THEN
          IF( IMAT.EQ.7 ) THEN
             ANORM = SMALL
             BNORM = LARGE
@@ -367,6 +370,6 @@
 *
       RETURN
 *
-*     End of SLATB9
+*     End of AB_SLATB9
 *
       END

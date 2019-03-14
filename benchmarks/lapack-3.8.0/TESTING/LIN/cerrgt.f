@@ -1,4 +1,4 @@
-*> \brief \b CERRGT
+*> \brief \b AB_CERRGT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CERRGT( PATH, NUNIT )
+*       SUBROUTINE AB_CERRGT( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CERRGT tests the error exits for the COMPLEX tridiagonal
+*> AB_CERRGT tests the error exits for the COMPLEX tridiagonal
 *> routines.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CERRGT( PATH, NUNIT )
+      SUBROUTINE AB_CERRGT( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,12 +85,13 @@
      $                   EF( NMAX ), W( NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CGTCON, CGTRFS, CGTTRF, CGTTRS, CHKXER,
-     $                   CPTCON, CPTRFS, CPTTRF, CPTTRS
+      EXTERNAL           AB_ALAESM, AB_CGTCON, AB_CGTRFS, AB_CGTTRF, AB_
+     $CGTTRS, AB_CHKXER,
+     $                   AB_CPTCON, AB_CPTRFS, AB_CPTTRF, AB_CPTTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -115,142 +116,149 @@
       ANORM = 1.0
       OK = .TRUE.
 *
-      IF( LSAMEN( 2, C2, 'GT' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'GT' ) ) THEN
 *
 *        Test error exits for the general tridiagonal routines.
 *
-*        CGTTRF
+*        AB_CGTTRF
 *
-         SRNAMT = 'CGTTRF'
+         SRNAMT = 'AB_CGTTRF'
          INFOT = 1
-         CALL CGTTRF( -1, DL, E, DU, DU2, IP, INFO )
-         CALL CHKXER( 'CGTTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGTTRF( -1, DL, E, DU, DU2, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGTTRF', INFOT, NOUT, LERR, OK )
 *
-*        CGTTRS
+*        AB_CGTTRS
 *
-         SRNAMT = 'CGTTRS'
+         SRNAMT = 'AB_CGTTRS'
          INFOT = 1
-         CALL CGTTRS( '/', 0, 0, DL, E, DU, DU2, IP, X, 1, INFO )
-         CALL CHKXER( 'CGTTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGTTRS( '/', 0, 0, DL, E, DU, DU2, IP, X, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGTTRS( 'N', -1, 0, DL, E, DU, DU2, IP, X, 1, INFO )
-         CALL CHKXER( 'CGTTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGTTRS( 'N', -1, 0, DL, E, DU, DU2, IP, X, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGTTRS( 'N', 0, -1, DL, E, DU, DU2, IP, X, 1, INFO )
-         CALL CHKXER( 'CGTTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGTTRS( 'N', 0, -1, DL, E, DU, DU2, IP, X, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CGTTRS( 'N', 2, 1, DL, E, DU, DU2, IP, X, 1, INFO )
-         CALL CHKXER( 'CGTTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGTTRS( 'N', 2, 1, DL, E, DU, DU2, IP, X, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGTTRS', INFOT, NOUT, LERR, OK )
 *
-*        CGTRFS
+*        AB_CGTRFS
 *
-         SRNAMT = 'CGTRFS'
+         SRNAMT = 'AB_CGTRFS'
          INFOT = 1
-         CALL CGTRFS( '/', 0, 0, DL, E, DU, DLF, EF, DUF, DU2, IP, B, 1,
+         CALL AB_CGTRFS( '/', 0, 0, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
+     $ 1,
      $                X, 1, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGTRFS( 'N', -1, 0, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
+         CALL AB_CGTRFS( 'N', -1, 0, DL, E, DU, DLF, EF, DUF, DU2, IP, B
+     $,
      $                1, X, 1, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGTRFS( 'N', 0, -1, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
+         CALL AB_CGTRFS( 'N', 0, -1, DL, E, DU, DLF, EF, DUF, DU2, IP, B
+     $,
      $                1, X, 1, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL CGTRFS( 'N', 2, 1, DL, E, DU, DLF, EF, DUF, DU2, IP, B, 1,
+         CALL AB_CGTRFS( 'N', 2, 1, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
+     $ 1,
      $                X, 2, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL CGTRFS( 'N', 2, 1, DL, E, DU, DLF, EF, DUF, DU2, IP, B, 2,
+         CALL AB_CGTRFS( 'N', 2, 1, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
+     $ 2,
      $                X, 1, R1, R2, W, RW, INFO )
-         CALL CHKXER( 'CGTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTRFS', INFOT, NOUT, LERR, OK )
 *
-*        CGTCON
+*        AB_CGTCON
 *
-         SRNAMT = 'CGTCON'
+         SRNAMT = 'AB_CGTCON'
          INFOT = 1
-         CALL CGTCON( '/', 0, DL, E, DU, DU2, IP, ANORM, RCOND, W,
+         CALL AB_CGTCON( '/', 0, DL, E, DU, DU2, IP, ANORM, RCOND, W,
      $                INFO )
-         CALL CHKXER( 'CGTCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGTCON( 'I', -1, DL, E, DU, DU2, IP, ANORM, RCOND, W,
+         CALL AB_CGTCON( 'I', -1, DL, E, DU, DU2, IP, ANORM, RCOND, W,
      $                INFO )
-         CALL CHKXER( 'CGTCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTCON', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CGTCON( 'I', 0, DL, E, DU, DU2, IP, -ANORM, RCOND, W,
+         CALL AB_CGTCON( 'I', 0, DL, E, DU, DU2, IP, -ANORM, RCOND, W,
      $                INFO )
-         CALL CHKXER( 'CGTCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGTCON', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'PT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PT' ) ) THEN
 *
 *        Test error exits for the positive definite tridiagonal
 *        routines.
 *
-*        CPTTRF
+*        AB_CPTTRF
 *
-         SRNAMT = 'CPTTRF'
+         SRNAMT = 'AB_CPTTRF'
          INFOT = 1
-         CALL CPTTRF( -1, D, E, INFO )
-         CALL CHKXER( 'CPTTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTTRF( -1, D, E, INFO )
+         CALL AB_CHKXER( 'AB_CPTTRF', INFOT, NOUT, LERR, OK )
 *
-*        CPTTRS
+*        AB_CPTTRS
 *
-         SRNAMT = 'CPTTRS'
+         SRNAMT = 'AB_CPTTRS'
          INFOT = 1
-         CALL CPTTRS( '/', 1, 0, D, E, X, 1, INFO )
-         CALL CHKXER( 'CPTTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTTRS( '/', 1, 0, D, E, X, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPTTRS( 'U', -1, 0, D, E, X, 1, INFO )
-         CALL CHKXER( 'CPTTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTTRS( 'U', -1, 0, D, E, X, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPTTRS( 'U', 0, -1, D, E, X, 1, INFO )
-         CALL CHKXER( 'CPTTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTTRS( 'U', 0, -1, D, E, X, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CPTTRS( 'U', 2, 1, D, E, X, 1, INFO )
-         CALL CHKXER( 'CPTTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTTRS( 'U', 2, 1, D, E, X, 1, INFO )
+         CALL AB_CHKXER( 'AB_CPTTRS', INFOT, NOUT, LERR, OK )
 *
-*        CPTRFS
+*        AB_CPTRFS
 *
-         SRNAMT = 'CPTRFS'
+         SRNAMT = 'AB_CPTRFS'
          INFOT = 1
-         CALL CPTRFS( '/', 1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W,
+         CALL AB_CPTRFS( '/', 1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W,
      $                RW, INFO )
-         CALL CHKXER( 'CPTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPTRFS( 'U', -1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W,
+         CALL AB_CPTRFS( 'U', -1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W
+     $,
      $                RW, INFO )
-         CALL CHKXER( 'CPTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CPTRFS( 'U', 0, -1, D, E, DF, EF, B, 1, X, 1, R1, R2, W,
+         CALL AB_CPTRFS( 'U', 0, -1, D, E, DF, EF, B, 1, X, 1, R1, R2, W
+     $,
      $                RW, INFO )
-         CALL CHKXER( 'CPTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CPTRFS( 'U', 2, 1, D, E, DF, EF, B, 1, X, 2, R1, R2, W,
+         CALL AB_CPTRFS( 'U', 2, 1, D, E, DF, EF, B, 1, X, 2, R1, R2, W,
      $                RW, INFO )
-         CALL CHKXER( 'CPTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CPTRFS( 'U', 2, 1, D, E, DF, EF, B, 2, X, 1, R1, R2, W,
+         CALL AB_CPTRFS( 'U', 2, 1, D, E, DF, EF, B, 2, X, 1, R1, R2, W,
      $                RW, INFO )
-         CALL CHKXER( 'CPTRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CPTRFS', INFOT, NOUT, LERR, OK )
 *
-*        CPTCON
+*        AB_CPTCON
 *
-         SRNAMT = 'CPTCON'
+         SRNAMT = 'AB_CPTCON'
          INFOT = 1
-         CALL CPTCON( -1, D, E, ANORM, RCOND, RW, INFO )
-         CALL CHKXER( 'CPTCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTCON( -1, D, E, ANORM, RCOND, RW, INFO )
+         CALL AB_CHKXER( 'AB_CPTCON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CPTCON( 0, D, E, -ANORM, RCOND, RW, INFO )
-         CALL CHKXER( 'CPTCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CPTCON( 0, D, E, -ANORM, RCOND, RW, INFO )
+         CALL AB_CHKXER( 'AB_CPTCON', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of CERRGT
+*     End of AB_CERRGT
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SGET34
+*> \brief \b AB_SGET34
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGET34( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE AB_SGET34( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX
@@ -24,9 +24,9 @@
 *>
 *> \verbatim
 *>
-*> SGET34 tests SLAEXC, a routine for swapping adjacent blocks (either
+*> AB_SGET34 tests AB_SLAEXC, a routine for swapping adjacent blocks (either
 *> 1 by 1 or 2 by 2) on the diagonal of a matrix in real Schur form.
-*> Thus, SLAEXC computes an orthogonal matrix Q such that
+*> Thus, AB_SLAEXC computes an orthogonal matrix Q such that
 *>
 *>     Q' * [ A B ] * Q  = [ C1 B1 ]
 *>          [ 0 C ]        [ 0  A1 ]
@@ -80,7 +80,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SGET34( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE AB_SGET34( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,11 +115,11 @@
      $                   VAL( 9 ), VM( 2 ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAEXC
+      EXTERNAL           AB_SCOPY, AB_SLAEXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL, SIGN, SQRT
@@ -128,10 +128,10 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -146,7 +146,7 @@
       VAL( 9 ) = -SQRT( BIGNUM )
       VM( 1 ) = ONE
       VM( 2 ) = ONE + TWO*EPS
-      CALL SCOPY( 16, VAL( 4 ), 0, T( 1, 1 ), 1 )
+      CALL AB_SCOPY( 16, VAL( 4 ), 0, T( 1, 1 ), 1 )
 *
       NINFO( 1 ) = 0
       NINFO( 2 ) = 0
@@ -166,14 +166,15 @@
                   T( 2, 1 ) = ZERO
                   TNRM = MAX( ABS( T( 1, 1 ) ), ABS( T( 2, 2 ) ),
      $                   ABS( T( 1, 2 ) ) )
-                  CALL SCOPY( 16, T, 1, T1, 1 )
-                  CALL SCOPY( 16, VAL( 1 ), 0, Q, 1 )
-                  CALL SCOPY( 4, VAL( 3 ), 0, Q, 5 )
-                  CALL SLAEXC( .TRUE., 2, T, 4, Q, 4, 1, 1, 1, WORK,
+                  CALL AB_SCOPY( 16, T, 1, T1, 1 )
+                  CALL AB_SCOPY( 16, VAL( 1 ), 0, Q, 1 )
+                  CALL AB_SCOPY( 4, VAL( 3 ), 0, Q, 5 )
+                  CALL AB_SLAEXC( .TRUE., 2, T, 4, Q, 4, 1, 1, 1, WORK,
      $                         INFO )
                   IF( INFO.NE.0 )
      $               NINFO( INFO ) = NINFO( INFO ) + 1
-                  CALL SHST01( 2, 1, 2, T1, 4, T, 4, Q, 4, WORK, LWORK,
+                  CALL AB_SHST01( 2, 1, 2, T1, 4, T, 4, Q, 4, WORK, LWOR
+     $K,
      $                         RESULT )
                   RES = RESULT( 1 ) + RESULT( 2 )
                   IF( INFO.NE.0 )
@@ -214,14 +215,15 @@
      $                            ABS( T( 1, 2 ) ), ABS( T( 1, 3 ) ),
      $                            ABS( T( 2, 2 ) ), ABS( T( 2, 3 ) ),
      $                            ABS( T( 3, 2 ) ), ABS( T( 3, 3 ) ) )
-                           CALL SCOPY( 16, T, 1, T1, 1 )
-                           CALL SCOPY( 16, VAL( 1 ), 0, Q, 1 )
-                           CALL SCOPY( 4, VAL( 3 ), 0, Q, 5 )
-                           CALL SLAEXC( .TRUE., 3, T, 4, Q, 4, 1, 1, 2,
+                           CALL AB_SCOPY( 16, T, 1, T1, 1 )
+                           CALL AB_SCOPY( 16, VAL( 1 ), 0, Q, 1 )
+                           CALL AB_SCOPY( 4, VAL( 3 ), 0, Q, 5 )
+                           CALL AB_SLAEXC( .TRUE., 3, T, 4, Q, 4, 1, 1, 
+     $2,
      $                                  WORK, INFO )
                            IF( INFO.NE.0 )
      $                        NINFO( INFO ) = NINFO( INFO ) + 1
-                           CALL SHST01( 3, 1, 3, T1, 4, T, 4, Q, 4,
+                           CALL AB_SHST01( 3, 1, 3, T1, 4, T, 4, Q, 4,
      $                                  WORK, LWORK, RESULT )
                            RES = RESULT( 1 ) + RESULT( 2 )
                            IF( INFO.EQ.0 ) THEN
@@ -270,14 +272,15 @@
      $                            ABS( T( 1, 2 ) ), ABS( T( 1, 3 ) ),
      $                            ABS( T( 2, 2 ) ), ABS( T( 2, 3 ) ),
      $                            ABS( T( 3, 2 ) ), ABS( T( 3, 3 ) ) )
-                           CALL SCOPY( 16, T, 1, T1, 1 )
-                           CALL SCOPY( 16, VAL( 1 ), 0, Q, 1 )
-                           CALL SCOPY( 4, VAL( 3 ), 0, Q, 5 )
-                           CALL SLAEXC( .TRUE., 3, T, 4, Q, 4, 1, 2, 1,
+                           CALL AB_SCOPY( 16, T, 1, T1, 1 )
+                           CALL AB_SCOPY( 16, VAL( 1 ), 0, Q, 1 )
+                           CALL AB_SCOPY( 4, VAL( 3 ), 0, Q, 5 )
+                           CALL AB_SLAEXC( .TRUE., 3, T, 4, Q, 4, 1, 2, 
+     $1,
      $                                  WORK, INFO )
                            IF( INFO.NE.0 )
      $                        NINFO( INFO ) = NINFO( INFO ) + 1
-                           CALL SHST01( 3, 1, 3, T1, 4, T, 4, Q, 4,
+                           CALL AB_SHST01( 3, 1, 3, T1, 4, T, 4, Q, 4,
      $                                  WORK, LWORK, RESULT )
                            RES = RESULT( 1 ) + RESULT( 2 )
                            IF( INFO.EQ.0 ) THEN
@@ -346,14 +349,18 @@
      $                                           ABS( T( I, J ) ) )
   190                                  CONTINUE
   200                               CONTINUE
-                                    CALL SCOPY( 16, T, 1, T1, 1 )
-                                    CALL SCOPY( 16, VAL( 1 ), 0, Q, 1 )
-                                    CALL SCOPY( 4, VAL( 3 ), 0, Q, 5 )
-                                    CALL SLAEXC( .TRUE., 4, T, 4, Q, 4,
+                                    CALL AB_SCOPY( 16, T, 1, T1, 1 )
+                                    CALL AB_SCOPY( 16, VAL( 1 ), 0, Q, 1
+     $ )
+                                    CALL AB_SCOPY( 4, VAL( 3 ), 0, Q, 5 
+     $)
+                                    CALL AB_SLAEXC( .TRUE., 4, T, 4, Q, 
+     $4,
      $                                           1, 2, 2, WORK, INFO )
                                     IF( INFO.NE.0 )
      $                                 NINFO( INFO ) = NINFO( INFO ) + 1
-                                    CALL SHST01( 4, 1, 4, T1, 4, T, 4,
+                                    CALL AB_SHST01( 4, 1, 4, T1, 4, T, 4
+     $,
      $                                           Q, 4, WORK, LWORK,
      $                                           RESULT )
                                     RES = RESULT( 1 ) + RESULT( 2 )
@@ -397,6 +404,6 @@
 *
       RETURN
 *
-*     End of SGET34
+*     End of AB_SGET34
 *
       END

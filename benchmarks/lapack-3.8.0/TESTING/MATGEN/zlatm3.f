@@ -1,4 +1,4 @@
-*> \brief \b ZLATM3
+*> \brief \b AB_ZLATM3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       COMPLEX*16   FUNCTION ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+*       COMPLEX*16   FUNCTION AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
 *                        IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
 *                        SPARSE )
 *
@@ -31,21 +31,21 @@
 *>
 *> \verbatim
 *>
-*>    ZLATM3 returns the (ISUB,JSUB) entry of a random matrix of
+*>    AB_ZLATM3 returns the (ISUB,JSUB) entry of a random matrix of
 *>    dimension (M, N) described by the other parameters. (ISUB,JSUB)
 *>    is the final position of the (I,J) entry after pivoting
-*>    according to IPVTNG and IWORK. ZLATM3 is called by the
-*>    ZLATMR routine in order to build random test matrices. No error
+*>    according to IPVTNG and IWORK. AB_ZLATM3 is called by the
+*>    AB_ZLATMR routine in order to build random test matrices. No error
 *>    checking on parameters is done, because this routine is called in
-*>    a tight loop by ZLATMR which has already checked the parameters.
+*>    a tight loop by AB_ZLATMR which has already checked the parameters.
 *>
-*>    Use of ZLATM3 differs from CLATM2 in the order in which the random
+*>    Use of AB_ZLATM3 differs from AB_CLATM2 in the order in which the random
 *>    number generator is called to fill in random matrix entries.
-*>    With ZLATM2, the generator is called to fill in the pivoted matrix
-*>    columnwise. With ZLATM3, the generator is called to fill in the
-*>    matrix columnwise, after which it is pivoted. Thus, ZLATM3 can
+*>    With AB_ZLATM2, the generator is called to fill in the pivoted matrix
+*>    columnwise. With AB_ZLATM3, the generator is called to fill in the
+*>    matrix columnwise, after which it is pivoted. Thus, AB_ZLATM3 can
 *>    be used to construct random matrices which differ only in their
-*>    order of rows and/or columns. ZLATM2 is used to construct band
+*>    order of rows and/or columns. AB_ZLATM2 is used to construct band
 *>    matrices while avoiding calling the random number generator for
 *>    entries outside the band (and therefore generating random numbers
 *>    in different orders for different pivot orders).
@@ -195,7 +195,7 @@
 *>           This array specifies the permutation used. The
 *>           row (or column) originally in position K is in
 *>           position IWORK( K ) after pivoting.
-*>           This differs from IWORK for ZLATM2. Not modified.
+*>           This differs from IWORK for AB_ZLATM2. Not modified.
 *> \endverbatim
 *>
 *> \param[in] SPARSE
@@ -225,7 +225,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      COMPLEX*16   FUNCTION ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+      COMPLEX*16   FUNCTION AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                 IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                 SPARSE )
 *
@@ -264,9 +264,9 @@
 *
 *     .. External Functions ..
 *
-      DOUBLE PRECISION   DLARAN
-      COMPLEX*16         ZLARND
-      EXTERNAL           DLARAN, ZLARND
+      DOUBLE PRECISION   AB_DLARAN
+      COMPLEX*16         AB_ZLARND
+      EXTERNAL           AB_DLARAN, AB_ZLARND
 *     ..
 *
 *     .. Intrinsic Functions ..
@@ -284,7 +284,7 @@
       IF( I.LT.1 .OR. I.GT.M .OR. J.LT.1 .OR. J.GT.N ) THEN
          ISUB = I
          JSUB = J
-         ZLATM3 = CZERO
+         AB_ZLATM3 = CZERO
          RETURN
       END IF
 *
@@ -307,15 +307,15 @@
 *     Check for banding
 *
       IF( JSUB.GT.ISUB+KU .OR. JSUB.LT.ISUB-KL ) THEN
-         ZLATM3 = CZERO
+         AB_ZLATM3 = CZERO
          RETURN
       END IF
 *
 *     Check for sparsity
 *
       IF( SPARSE.GT.ZERO ) THEN
-         IF( DLARAN( ISEED ).LT.SPARSE ) THEN
-            ZLATM3 = CZERO
+         IF( AB_DLARAN( ISEED ).LT.SPARSE ) THEN
+            AB_ZLATM3 = CZERO
             RETURN
          END IF
       END IF
@@ -325,7 +325,7 @@
       IF( I.EQ.J ) THEN
          CTEMP = D( I )
       ELSE
-         CTEMP = ZLARND( IDIST, ISEED )
+         CTEMP = AB_ZLARND( IDIST, ISEED )
       END IF
       IF( IGRADE.EQ.1 ) THEN
          CTEMP = CTEMP*DL( I )
@@ -340,9 +340,9 @@
       ELSE IF( IGRADE.EQ.6 ) THEN
          CTEMP = CTEMP*DL( I )*DL( J )
       END IF
-      ZLATM3 = CTEMP
+      AB_ZLATM3 = CTEMP
       RETURN
 *
-*     End of ZLATM3
+*     End of AB_ZLATM3
 *
       END

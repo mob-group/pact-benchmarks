@@ -1,4 +1,4 @@
-*> \brief \b SLATM1
+*> \brief \b AB_SLATM1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
+*       SUBROUTINE AB_SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST, INFO, IRSIGN, MODE, N
@@ -25,9 +25,9 @@
 *>
 *> \verbatim
 *>
-*>    SLATM1 computes the entries of D(1..N) as specified by
+*>    AB_SLATM1 computes the entries of D(1..N) as specified by
 *>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
-*>    of random numbers. SLATM1 is called by SLATMR to generate
+*>    of random numbers. AB_SLATM1 is called by AB_SLATMR to generate
 *>    random test matrices for LAPACK programs.
 *> \endverbatim
 *
@@ -90,7 +90,7 @@
 *>           linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to SLATM1
+*>           exit, and can be used in the next call to AB_SLATM1
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -133,7 +133,8 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
+      SUBROUTINE AB_SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO
+     $ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,11 +163,11 @@
       REAL               ALPHA, TEMP
 *     ..
 *     .. External Functions ..
-      REAL               SLARAN
-      EXTERNAL           SLARAN
+      REAL               AB_SLARAN
+      EXTERNAL           AB_SLARAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARNV, XERBLA
+      EXTERNAL           AB_SLARNV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, LOG, REAL
@@ -200,7 +201,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLATM1', -INFO )
+         CALL AB_XERBLA( 'AB_SLATM1', -INFO )
          RETURN
       END IF
 *
@@ -257,14 +258,14 @@
    90    CONTINUE
          ALPHA = LOG( ONE / COND )
          DO 100 I = 1, N
-            D( I ) = EXP( ALPHA*SLARAN( ISEED ) )
+            D( I ) = EXP( ALPHA*AB_SLARAN( ISEED ) )
   100    CONTINUE
          GO TO 120
 *
 *        Randomly distributed D values from IDIST
 *
   110    CONTINUE
-         CALL SLARNV( IDIST, ISEED, N, D )
+         CALL AB_SLARNV( IDIST, ISEED, N, D )
 *
   120    CONTINUE
 *
@@ -274,7 +275,7 @@
          IF( ( MODE.NE.-6 .AND. MODE.NE.0 .AND. MODE.NE.6 ) .AND.
      $       IRSIGN.EQ.1 ) THEN
             DO 130 I = 1, N
-               TEMP = SLARAN( ISEED )
+               TEMP = AB_SLARAN( ISEED )
                IF( TEMP.GT.HALF )
      $            D( I ) = -D( I )
   130       CONTINUE
@@ -294,6 +295,6 @@
 *
       RETURN
 *
-*     End of SLATM1
+*     End of AB_SLATM1
 *
       END

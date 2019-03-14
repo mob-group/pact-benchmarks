@@ -1,4 +1,4 @@
-*> \brief \b SORBDB1
+*> \brief \b AB_AB_SORBDB1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SORBDB1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorbdb1.f">
+*> Download AB_AB_SORBDB1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SORBDB1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorbdb1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SORBDB1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorbdb1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SORBDB1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+*       SUBROUTINE AB_AB_SORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
 *                           TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *>\verbatim
 *>
-*> SORBDB1 simultaneously bidiagonalizes the blocks of a tall and skinny
+*> AB_AB_SORBDB1 simultaneously bidiagonalizes the blocks of a tall and skinny
 *> matrix X with orthonomal columns:
 *>
 *>                            [ B11 ]
@@ -46,12 +46,12 @@
 *>                            [  0  ]
 *>
 *> X11 is P-by-Q, and X21 is (M-P)-by-Q. Q must be no larger than P,
-*> M-P, or M-Q. Routines SORBDB2, SORBDB3, and SORBDB4 handle cases in
+*> M-P, or M-Q. Routines AB_AB_SORBDB2, AB_AB_SORBDB3, and AB_AB_SORBDB4 handle cases in
 *> which Q is not the minimum dimension.
 *>
 *> The orthogonal matrices P1, P2, and Q1 are P-by-P, (M-P)-by-(M-P),
 *> and (M-Q)-by-(M-Q), respectively. They are represented implicitly by
-*> Householder vectors.
+*> HousehoAB_LDEr vectors.
 *>
 *> B11 and B12 are Q-by-Q bidiagonal matrices represented implicitly by
 *> angles THETA, PHI.
@@ -155,7 +155,7 @@
 *>           If LWORK = -1, then a workspace query is assumed; the routine
 *>           only calculates the optimal size of the WORK array, returns
 *>           this value as the first entry of the WORK array, and no error
-*>           message related to LWORK is issued by XERBLA.
+*>           message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -189,8 +189,8 @@
 *>  with a sine or cosine of a PHI. See [1] or SORCSD for details.
 *>
 *>  P1, P2, and Q1 are represented as products of elementary reflectors.
-*>  See SORCSD2BY1 for details on generating P1, P2, and Q1 using SORGQR
-*>  and SORGLQ.
+*>  See AB_SORCSD2BY1 for details on generating P1, P2, and Q1 using AB_SORGQR
+*>  and AB_SORGLQ.
 *> \endverbatim
 *
 *> \par References:
@@ -200,7 +200,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE SORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE AB_AB_SORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, 
+     $PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -230,11 +231,12 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFGP, SORBDB5, SROT, XERBLA
+      EXTERNAL           AB_SLARF, AB_AB_AB_SLARFGP, AB_AB_SORBDB5, AB_S
+     $ROT, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SNRM2
-      EXTERNAL           SNRM2
+      REAL               AB_SNRM2
+      EXTERNAL           AB_SNRM2
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          ATAN2, COS, MAX, SIN, SQRT
@@ -273,7 +275,7 @@
          END IF
       END IF
       IF( INFO .NE. 0 ) THEN
-         CALL XERBLA( 'SORBDB1', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SORBDB1', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -283,31 +285,36 @@
 *
       DO I = 1, Q
 *
-         CALL SLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
-         CALL SLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
+         CALL AB_AB_AB_SLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I)
+     $ )
+         CALL AB_AB_AB_SLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(
+     $I) )
          THETA(I) = ATAN2( X21(I,I), X11(I,I) )
          C = COS( THETA(I) )
          S = SIN( THETA(I) )
          X11(I,I) = ONE
          X21(I,I) = ONE
-         CALL SLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+1),
+         CALL AB_SLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+
+     $1),
      $               LDX11, WORK(ILARF) )
-         CALL SLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
+         CALL AB_SLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, TAUP2(I),
      $               X21(I,I+1), LDX21, WORK(ILARF) )
 *
          IF( I .LT. Q ) THEN
-            CALL SROT( Q-I, X11(I,I+1), LDX11, X21(I,I+1), LDX21, C, S )
-            CALL SLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21, TAUQ1(I) )
+            CALL AB_SROT( Q-I, X11(I,I+1), LDX11, X21(I,I+1), LDX21, C, 
+     $S )
+            CALL AB_AB_AB_SLARFGP( Q-I, X21(I,I+1), X21(I,I+2), LDX21, T
+     $AUQ1(I) )
             S = X21(I,I+1)
             X21(I,I+1) = ONE
-            CALL SLARF( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
+            CALL AB_SLARF( 'R', P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
      $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
-            CALL SLARF( 'R', M-P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
+            CALL AB_SLARF( 'R', M-P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
      $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
-            C = SQRT( SNRM2( P-I, X11(I+1,I+1), 1 )**2
-     $              + SNRM2( M-P-I, X21(I+1,I+1), 1 )**2 )
+            C = SQRT( AB_SNRM2( P-I, X11(I+1,I+1), 1 )**2
+     $              + AB_SNRM2( M-P-I, X21(I+1,I+1), 1 )**2 )
             PHI(I) = ATAN2( S, C )
-            CALL SORBDB5( P-I, M-P-I, Q-I-1, X11(I+1,I+1), 1,
+            CALL AB_AB_SORBDB5( P-I, M-P-I, Q-I-1, X11(I+1,I+1), 1,
      $                    X21(I+1,I+1), 1, X11(I+1,I+2), LDX11,
      $                    X21(I+1,I+2), LDX21, WORK(IORBDB5), LORBDB5,
      $                    CHILDINFO )
@@ -317,7 +324,7 @@
 *
       RETURN
 *
-*     End of SORBDB1
+*     End of AB_AB_SORBDB1
 *
       END
 

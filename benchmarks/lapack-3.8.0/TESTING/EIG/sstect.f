@@ -1,4 +1,4 @@
-*> \brief \b SSTECT
+*> \brief \b AB_SSTECT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSTECT( N, A, B, SHIFT, NUM )
+*       SUBROUTINE AB_SSTECT( N, A, B, SHIFT, NUM )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NUM
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    SSTECT counts the number NUM of eigenvalues of a tridiagonal
+*>    AB_SSTECT counts the number NUM of eigenvalues of a tridiagonal
 *>    matrix T which are less than or equal to SHIFT. T has
 *>    diagonal entries A(1), ... , A(N), and offdiagonal entries
 *>    B(1), ..., B(N-1).
@@ -80,7 +80,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SSTECT( N, A, B, SHIFT, NUM )
+      SUBROUTINE AB_SSTECT( N, A, B, SHIFT, NUM )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -107,8 +107,8 @@
      $                   TOM, U, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -117,8 +117,8 @@
 *
 *     Get machine constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
 *
 *     Find largest entry
 *
@@ -182,6 +182,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of SSTECT
+*     End of AB_SSTECT
 *
       END

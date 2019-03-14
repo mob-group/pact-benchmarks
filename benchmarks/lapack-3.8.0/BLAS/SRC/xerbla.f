@@ -1,4 +1,4 @@
-*> \brief \b XERBLA
+*> \brief \b AB_XERBLA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE XERBLA( SRNAME, INFO )
+*       SUBROUTINE AB_XERBLA( SRNAME, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*(*)      SRNAME
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> XERBLA  is an error handler for the LAPACK routines.
+*> AB_XERBLA  is an error handler for the LAPACK routines.
 *> It is called by an LAPACK routine if an input parameter has an
 *> invalid value.  A message is printed and execution stops.
 *>
@@ -35,7 +35,7 @@
 *> \param[in] SRNAME
 *> \verbatim
 *>          SRNAME is CHARACTER*(*)
-*>          The name of the routine which called XERBLA.
+*>          The name of the routine which called AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[in] INFO
@@ -58,7 +58,7 @@
 *> \ingroup aux_blas
 *
 *  =====================================================================
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE AB_XERBLA( SRNAME, INFO )
 *
 *  -- Reference BLAS level1 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -84,6 +84,6 @@
  9999 FORMAT( ' ** On entry to ', A, ' parameter number ', I2, ' had ',
      $      'an illegal value' )
 *
-*     End of XERBLA
+*     End of AB_XERBLA
 *
       END

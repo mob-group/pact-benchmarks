@@ -1,4 +1,4 @@
-*> \brief \b SLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
+*> \brief \b AB_SLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLADIV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sladiv.f">
+*> Download AB_SLADIV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLADIV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sladiv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLADIV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sladiv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLADIV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLADIV( A, B, C, D, P, Q )
+*       SUBROUTINE AB_SLADIV( A, B, C, D, P, Q )
 *
 *       .. Scalar Arguments ..
 *       REAL               A, B, C, D, P, Q
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SLADIV performs complex division in  real arithmetic
+*> AB_SLADIV performs complex division in  real arithmetic
 *>
 *>                       a + i*b
 *>            p + i*q = ---------
@@ -89,7 +89,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLADIV( A, B, C, D, P, Q )
+      SUBROUTINE AB_SLADIV( A, B, C, D, P, Q )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -114,11 +114,11 @@
       REAL               AA, BB, CC, DD, AB, CD, S, OV, UN, BE, EPS
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLADIV1
+      EXTERNAL           AB_AB_SLADIV1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -133,9 +133,9 @@
       CD = MAX( ABS(C), ABS(D) )
       S = 1.0E0
 
-      OV = SLAMCH( 'Overflow threshold' )
-      UN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Epsilon' )
+      OV = AB_SLAMCH( 'Overflow threshold' )
+      UN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       BE = BS / (EPS*EPS)
 
       IF( AB >= HALF*OV ) THEN
@@ -159,9 +159,9 @@
          S  = S * BE
       END IF
       IF( ABS( D ).LE.ABS( C ) ) THEN
-         CALL SLADIV1(AA, BB, CC, DD, P, Q)
+         CALL AB_AB_SLADIV1(AA, BB, CC, DD, P, Q)
       ELSE
-         CALL SLADIV1(BB, AA, DD, CC, P, Q)
+         CALL AB_AB_SLADIV1(BB, AA, DD, CC, P, Q)
          Q = -Q
       END IF
       P = P * S
@@ -169,14 +169,14 @@
 *
       RETURN
 *
-*     End of SLADIV
+*     End of AB_SLADIV
 *
       END
 
 *> \ingroup realOTHERauxiliary
 
 
-      SUBROUTINE SLADIV1( A, B, C, D, P, Q )
+      SUBROUTINE AB_AB_SLADIV1( A, B, C, D, P, Q )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -197,26 +197,26 @@
       REAL               R, T
 *     ..
 *     .. External Functions ..
-      REAL               SLADIV2
-      EXTERNAL           SLADIV2
+      REAL               AB_AB_SLADIV2
+      EXTERNAL           AB_AB_SLADIV2
 *     ..
 *     .. Executable Statements ..
 *
       R = D / C
       T = ONE / (C + D * R)
-      P = SLADIV2(A, B, C, D, R, T)
+      P = AB_AB_SLADIV2(A, B, C, D, R, T)
       A = -A
-      Q = SLADIV2(B, A, C, D, R, T)
+      Q = AB_AB_SLADIV2(B, A, C, D, R, T)
 *
       RETURN
 *
-*     End of SLADIV1
+*     End of AB_AB_SLADIV1
 *
       END
 
 *> \ingroup realOTHERauxiliary
 
-      REAL FUNCTION SLADIV2( A, B, C, D, R, T )
+      REAL FUNCTION AB_AB_SLADIV2( A, B, C, D, R, T )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -241,16 +241,16 @@
       IF( R.NE.ZERO ) THEN
          BR = B * R
          if( BR.NE.ZERO ) THEN
-            SLADIV2 = (A + BR) * T
+            AB_AB_SLADIV2 = (A + BR) * T
          ELSE
-            SLADIV2 = A * T + (B * T) * R
+            AB_AB_SLADIV2 = A * T + (B * T) * R
          END IF
       ELSE
-         SLADIV2 = (A + D * (B / C)) * T
+         AB_AB_SLADIV2 = (A + D * (B / C)) * T
       END IF
 *
       RETURN
 *
-*     End of SLADIV
+*     End of AB_SLADIV
 *
       END

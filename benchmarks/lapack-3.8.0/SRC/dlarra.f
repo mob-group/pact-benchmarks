@@ -1,4 +1,4 @@
-*> \brief \b DLARRA computes the splitting points with the specified threshold.
+*> \brief \b AB_DLARRA computes the splitting points with the specified threshold.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARRA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarra.f">
+*> Download AB_DLARRA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARRA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarra.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARRA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarra.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARRA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARRA( N, D, E, E2, SPLTOL, TNRM,
+*       SUBROUTINE AB_DLARRA( N, D, E, E2, SPLTOL, TNRM,
 *                           NSPLIT, ISPLIT, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *> \verbatim
 *>
 *> Compute the splitting points with threshold SPLTOL.
-*> DLARRA sets any "small" off-diagonal elements to zero.
+*> AB_DLARRA sets any "small" off-diagonal elements to zero.
 *> \endverbatim
 *
 *  Arguments:
@@ -100,7 +100,7 @@
 *>          ISPLIT is INTEGER array, dimension (N)
 *>          The splitting points, at which T breaks up into blocks.
 *>          The first block consists of rows/columns 1 to ISPLIT(1),
-*>          the second of rows/columns ISPLIT(1)+1 through ISPLIT(2),
+*>          the AB_SECOND of rows/columns ISPLIT(1)+1 through ISPLIT(2),
 *>          etc., and the NSPLIT-th consists of rows/columns
 *>          ISPLIT(NSPLIT-1)+1 through ISPLIT(NSPLIT)=N.
 *> \endverbatim
@@ -133,7 +133,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLARRA( N, D, E, E2, SPLTOL, TNRM,
+      SUBROUTINE AB_DLARRA( N, D, E, E2, SPLTOL, TNRM,
      $                    NSPLIT, ISPLIT, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -205,6 +205,6 @@
 
       RETURN
 *
-*     End of DLARRA
+*     End of AB_DLARRA
 *
       END

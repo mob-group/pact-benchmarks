@@ -1,4 +1,4 @@
-*> \brief \b DGET06
+*> \brief \b AB_DGET06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DGET06( RCOND, RCONDC )
+*       DOUBLE PRECISION FUNCTION AB_DGET06( RCOND, RCONDC )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   RCOND, RCONDC
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> DGET06 computes a test ratio to compare two values for RCOND.
+*> AB_DGET06 computes a test ratio to compare two values for RCOND.
 *> \endverbatim
 *
 *  Arguments:
@@ -30,7 +30,7 @@
 *> \verbatim
 *>          RCOND is DOUBLE PRECISION
 *>          The estimate of the reciprocal of the condition number of A,
-*>          as computed by DGECON.
+*>          as computed by AB_DGECON.
 *> \endverbatim
 *>
 *> \param[in] RCONDC
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DGET06( RCOND, RCONDC )
+      DOUBLE PRECISION FUNCTION AB_DGET06( RCOND, RCONDC )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -74,15 +74,15 @@
       DOUBLE PRECISION   EPS, RAT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       IF( RCOND.GT.ZERO ) THEN
          IF( RCONDC.GT.ZERO ) THEN
             RAT = MAX( RCOND, RCONDC ) / MIN( RCOND, RCONDC ) -
@@ -97,9 +97,9 @@
             RAT = ZERO
          END IF
       END IF
-      DGET06 = RAT
+      AB_DGET06 = RAT
       RETURN
 *
-*     End of DGET06
+*     End of AB_DGET06
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DDRVRFP
+*> \brief \b AB_DDRVRFP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,12 +8,12 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+*       SUBROUTINE AB_DDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
 *      +              THRESH, A, ASAV, AFAC, AINV, B,
 *      +              BSAV, XACT, X, ARF, ARFINV,
-*      +              D_WORK_DLATMS, D_WORK_DPOT01, D_TEMP_DPOT02,
-*      +              D_TEMP_DPOT03, D_WORK_DLANSY,
-*      +              D_WORK_DPOT02, D_WORK_DPOT03 )
+*      +              D_WORK_AB_DLATMS, D_WORK_AB_DPOT01, D_TEMP_AB_DPOT02,
+*      +              D_TEMP_AB_DPOT03, D_WORK_AB_DLANSY,
+*      +              D_WORK_AB_DPOT02, D_WORK_AB_DPOT03 )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NN, NNS, NNT, NOUT
@@ -31,13 +31,13 @@
 *       DOUBLE PRECISION   ARFINV( * )
 *       DOUBLE PRECISION   XACT( * )
 *       DOUBLE PRECISION   X( * )
-*       DOUBLE PRECISION   D_WORK_DLATMS( * )
-*       DOUBLE PRECISION   D_WORK_DPOT01( * )
-*       DOUBLE PRECISION   D_TEMP_DPOT02( * )
-*       DOUBLE PRECISION   D_TEMP_DPOT03( * )
-*       DOUBLE PRECISION   D_WORK_DLANSY( * )
-*       DOUBLE PRECISION   D_WORK_DPOT02( * )
-*       DOUBLE PRECISION   D_WORK_DPOT03( * )
+*       DOUBLE PRECISION   D_WORK_AB_DLATMS( * )
+*       DOUBLE PRECISION   D_WORK_AB_DPOT01( * )
+*       DOUBLE PRECISION   D_TEMP_AB_DPOT02( * )
+*       DOUBLE PRECISION   D_TEMP_AB_DPOT03( * )
+*       DOUBLE PRECISION   D_WORK_AB_DLANSY( * )
+*       DOUBLE PRECISION   D_WORK_AB_DPOT02( * )
+*       DOUBLE PRECISION   D_WORK_AB_DPOT03( * )
 *       ..
 *
 *
@@ -46,15 +46,15 @@
 *>
 *> \verbatim
 *>
-*> DDRVRFP tests the LAPACK RFP routines:
-*>     DPFTRF, DPFTRS, and DPFTRI.
+*> AB_DDRVRFP tests the LAPACK RFP routines:
+*>     AB_DPFTRF, AB_DPFTRS, and AB_DPFTRI.
 *>
-*> This testing routine follow the same tests as DDRVPO (test for the full
+*> This testing routine follow the same tests as AB_DDRVPO (test for the full
 *> format Symmetric Positive Definite solver).
 *>
 *> The tests are performed in Full Format, conversion back and forth from
-*> full format to RFP format are performed using the routines DTRTTF and
-*> DTFTTR.
+*> full format to RFP format are performed using the routines AB_DTRTTF and
+*> AB_DTFTTR.
 *>
 *> First, a specific matrix A of size N is created. There is nine types of
 *> different matrixes possible.
@@ -63,9 +63,9 @@
 *> *3. First row and column zero       8. Scaled near underflow
 *> *4. Last row and column zero        9. Scaled near overflow
 *> *5. Middle row and column zero
-*> (* - tests error exits from DPFTRF, no test ratios are computed)
+*> (* - tests error exits from AB_DPFTRF, no test ratios are computed)
 *> A solution XACT of size N-by-NRHS is created and the associated right
-*> hand side B as well. Then DPFTRF is called to compute L (or U), the
+*> hand side B as well. Then AB_DPFTRF is called to compute L (or U), the
 *> Cholesky factor of A. Then L (or U) is used to solve the linear system
 *> of equations AX = B. This gives X. Then L (or U) is used to compute the
 *> inverse of A, AINV. The following four tests are then performed:
@@ -183,44 +183,44 @@
 *>          ARFINV is DOUBLE PRECISION array, dimension ((NMAX*(NMAX+1))/2)
 *> \endverbatim
 *>
-*> \param[out] D_WORK_DLATMS
+*> \param[out] D_WORK_AB_DLATMS
 *> \verbatim
-*>          D_WORK_DLATMS is DOUBLE PRECISION array, dimension ( 3*NMAX )
+*>          D_WORK_AB_DLATMS is DOUBLE PRECISION array, dimension ( 3*NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_DPOT01
+*> \param[out] D_WORK_AB_DPOT01
 *> \verbatim
-*>          D_WORK_DPOT01 is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_AB_DPOT01 is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_TEMP_DPOT02
+*> \param[out] D_TEMP_AB_DPOT02
 *> \verbatim
-*>          D_TEMP_DPOT02 is DOUBLE PRECISION array, dimension ( NMAX*MAXRHS )
+*>          D_TEMP_AB_DPOT02 is DOUBLE PRECISION array, dimension ( NMAX*MAXRHS )
 *> \endverbatim
 *>
-*> \param[out] D_TEMP_DPOT03
+*> \param[out] D_TEMP_AB_DPOT03
 *> \verbatim
-*>          D_TEMP_DPOT03 is DOUBLE PRECISION array, dimension ( NMAX*NMAX )
+*>          D_TEMP_AB_DPOT03 is DOUBLE PRECISION array, dimension ( NMAX*NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_DLATMS
+*> \param[out] D_WORK_AB_DLATMS
 *> \verbatim
-*>          D_WORK_DLATMS is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_AB_DLATMS is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_DLANSY
+*> \param[out] D_WORK_AB_DLANSY
 *> \verbatim
-*>          D_WORK_DLANSY is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_AB_DLANSY is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_DPOT02
+*> \param[out] D_WORK_AB_DPOT02
 *> \verbatim
-*>          D_WORK_DPOT02 is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_AB_DPOT02 is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_DPOT03
+*> \param[out] D_WORK_AB_DPOT03
 *> \verbatim
-*>          D_WORK_DPOT03 is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_AB_DPOT03 is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *
 *  Authors:
@@ -236,12 +236,13 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+      SUBROUTINE AB_DDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
-     +              D_WORK_DLATMS, D_WORK_DPOT01, D_TEMP_DPOT02,
-     +              D_TEMP_DPOT03, D_WORK_DLANSY,
-     +              D_WORK_DPOT02, D_WORK_DPOT03 )
+     +              D_WORK_AB_DLATMS, D_WORK_AB_DPOT01, D_TEMP_AB_DPOT02
+     $,
+     +              D_TEMP_AB_DPOT03, D_WORK_AB_DLANSY,
+     +              D_WORK_AB_DPOT02, D_WORK_AB_DPOT03 )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -264,13 +265,13 @@
       DOUBLE PRECISION   ARFINV( * )
       DOUBLE PRECISION   XACT( * )
       DOUBLE PRECISION   X( * )
-      DOUBLE PRECISION   D_WORK_DLATMS( * )
-      DOUBLE PRECISION   D_WORK_DPOT01( * )
-      DOUBLE PRECISION   D_TEMP_DPOT02( * )
-      DOUBLE PRECISION   D_TEMP_DPOT03( * )
-      DOUBLE PRECISION   D_WORK_DLANSY( * )
-      DOUBLE PRECISION   D_WORK_DPOT02( * )
-      DOUBLE PRECISION   D_WORK_DPOT03( * )
+      DOUBLE PRECISION   D_WORK_AB_DLATMS( * )
+      DOUBLE PRECISION   D_WORK_AB_DPOT01( * )
+      DOUBLE PRECISION   D_TEMP_AB_DPOT02( * )
+      DOUBLE PRECISION   D_TEMP_AB_DPOT03( * )
+      DOUBLE PRECISION   D_WORK_AB_DLANSY( * )
+      DOUBLE PRECISION   D_WORK_AB_DPOT02( * )
+      DOUBLE PRECISION   D_WORK_AB_DPOT03( * )
 *     ..
 *
 *  =====================================================================
@@ -296,13 +297,16 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLANSY
-      EXTERNAL           DLANSY
+      DOUBLE PRECISION   AB_DLANSY
+      EXTERNAL           AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, DGET04, DTFTTR, DLACPY,
-     +                   DLARHS, DLATB4, DLATMS, DPFTRI, DPFTRF, DPFTRS,
-     +                   DPOT01, DPOT02, DPOT03, DPOTRI, DPOTRF, DTRTTF
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_DGET04, AB_
+     $DTFTTR, AB_DLACPY,
+     +                   AB_DLARHS, AB_DLATB4, AB_DLATMS, AB_DPFTRI, AB_
+     $DPFTRF, AB_DPFTRS,
+     +                   AB_DPOT01, AB_DPOT02, AB_DPOT03, AB_DPOTRI, AB_
+     $DPOTRF, AB_DTRTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -359,22 +363,23 @@
                   DO 100 IFORM = 1, 2
                      CFORM = FORMS( IFORM )
 *
-*                    Set up parameters with DLATB4 and generate a test
-*                    matrix with DLATMS.
+*                    Set up parameters with AB_DLATB4 and generate a test
+*                    matrix with AB_DLATMS.
 *
-                     CALL DLATB4( 'DPO', IMAT, N, N, CTYPE, KL, KU,
+                     CALL AB_DLATB4( 'DPO', IMAT, N, N, CTYPE, KL, KU,
      +                            ANORM, MODE, CNDNUM, DIST )
 *
-                     SRNAMT = 'DLATMS'
-                     CALL DLATMS( N, N, DIST, ISEED, CTYPE,
-     +                            D_WORK_DLATMS,
+                     SRNAMT = 'AB_DLATMS'
+                     CALL AB_DLATMS( N, N, DIST, ISEED, CTYPE,
+     +                            D_WORK_AB_DLATMS,
      +                            MODE, CNDNUM, ANORM, KL, KU, UPLO, A,
-     +                            LDA, D_WORK_DLATMS, INFO )
+     +                            LDA, D_WORK_AB_DLATMS, INFO )
 *
-*                    Check error code from DLATMS.
+*                    Check error code from AB_DLATMS.
 *
                      IF( INFO.NE.0 ) THEN
-                        CALL ALAERH( 'DPF', 'DLATMS', INFO, 0, UPLO, N,
+                        CALL AB_ALAERH( 'DPF', 'AB_DLATMS', INFO, 0, UPL
+     $O, N,
      +                               N, -1, -1, -1, IIT, NFAIL, NERRS,
      +                               NOUT )
                         GO TO 100
@@ -422,7 +427,7 @@
 *
 *                    Save a copy of the matrix A in ASAV.
 *
-                     CALL DLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
+                     CALL AB_DLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
 *
 *                    Compute the condition number of A (RCONDC).
 *
@@ -432,61 +437,65 @@
 *
 *                       Compute the 1-norm of A.
 *
-                        ANORM = DLANSY( '1', UPLO, N, A, LDA,
-     +                         D_WORK_DLANSY )
+                        ANORM = AB_DLANSY( '1', UPLO, N, A, LDA,
+     +                         D_WORK_AB_DLANSY )
 *
 *                       Factor the matrix A.
 *
-                        CALL DPOTRF( UPLO, N, A, LDA, INFO )
+                        CALL AB_DPOTRF( UPLO, N, A, LDA, INFO )
 *
 *                       Form the inverse of A.
 *
-                        CALL DPOTRI( UPLO, N, A, LDA, INFO )
+                        CALL AB_DPOTRI( UPLO, N, A, LDA, INFO )
 
       					IF ( N .NE. 0 ) THEN
 
 *
 *                          Compute the 1-norm condition number of A.
 *
-                           AINVNM = DLANSY( '1', UPLO, N, A, LDA,
-     +                           D_WORK_DLANSY )
+                           AINVNM = AB_DLANSY( '1', UPLO, N, A, LDA,
+     +                           D_WORK_AB_DLANSY )
                            RCONDC = ( ONE / ANORM ) / AINVNM
 *
 *                          Restore the matrix A.
 *
-                           CALL DLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
+                           CALL AB_DLACPY( UPLO, N, N, ASAV, LDA, A, LDA
+     $ )
                         END IF
 *
                      END IF
 *
 *                    Form an exact solution and set the right hand side.
 *
-                     SRNAMT = 'DLARHS'
-                     CALL DLARHS( 'DPO', 'N', UPLO, ' ', N, N, KL, KU,
+                     SRNAMT = 'AB_DLARHS'
+                     CALL AB_DLARHS( 'DPO', 'N', UPLO, ' ', N, N, KL, KU
+     $,
      +                            NRHS, A, LDA, XACT, LDA, B, LDA,
      +                            ISEED, INFO )
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA )
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA 
+     $)
 *
 *                    Compute the L*L' or U'*U factorization of the
 *                    matrix and solve the system.
 *
-                     CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDB )
+                     CALL AB_DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDB )
 *
-                     SRNAMT = 'DTRTTF'
-                     CALL DTRTTF( CFORM, UPLO, N, AFAC, LDA, ARF, INFO )
-                     SRNAMT = 'DPFTRF'
-                     CALL DPFTRF( CFORM, UPLO, N, ARF, INFO )
+                     SRNAMT = 'AB_DTRTTF'
+                     CALL AB_DTRTTF( CFORM, UPLO, N, AFAC, LDA, ARF, INF
+     $O )
+                     SRNAMT = 'AB_DPFTRF'
+                     CALL AB_DPFTRF( CFORM, UPLO, N, ARF, INFO )
 *
-*                    Check error code from DPFTRF.
+*                    Check error code from AB_DPFTRF.
 *
                      IF( INFO.NE.IZERO ) THEN
 *
 *                       LANGOU: there is a small hick here: IZERO should
-*                       always be INFO however if INFO is ZERO, ALAERH does not
+*                       always be INFO however if INFO is ZERO, AB_ALAERH does not
 *                       complain.
 *
-                         CALL ALAERH( 'DPF', 'DPFSV ', INFO, IZERO,
+                         CALL AB_ALAERH( 'DPF', 'DPFSV ', INFO, IZERO,
      +                                UPLO, N, N, -1, -1, NRHS, IIT,
      +                                NFAIL, NERRS, NOUT )
                          GO TO 100
@@ -498,60 +507,64 @@
                         GO TO 100
                      END IF
 *
-                     SRNAMT = 'DPFTRS'
-                     CALL DPFTRS( CFORM, UPLO, N, NRHS, ARF, X, LDB,
+                     SRNAMT = 'AB_DPFTRS'
+                     CALL AB_DPFTRS( CFORM, UPLO, N, NRHS, ARF, X, LDB,
      +                            INFO )
 *
-                     SRNAMT = 'DTFTTR'
-                     CALL DTFTTR( CFORM, UPLO, N, ARF, AFAC, LDA, INFO )
+                     SRNAMT = 'AB_DTFTTR'
+                     CALL AB_DTFTTR( CFORM, UPLO, N, ARF, AFAC, LDA, INF
+     $O )
 *
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL DLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
-                     CALL DPOT01( UPLO, N, A, LDA, AFAC, LDA,
-     +                             D_WORK_DPOT01, RESULT( 1 ) )
-                     CALL DLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
+                     CALL AB_DLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
+                     CALL AB_DPOT01( UPLO, N, A, LDA, AFAC, LDA,
+     +                             D_WORK_AB_DPOT01, RESULT( 1 ) )
+                     CALL AB_DLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
 *
 *                    Form the inverse and compute the residual.
 *
                      IF(MOD(N,2).EQ.0)THEN
-                        CALL DLACPY( 'A', N+1, N/2, ARF, N+1, ARFINV,
+                        CALL AB_DLACPY( 'A', N+1, N/2, ARF, N+1, ARFINV,
      +                               N+1 )
                      ELSE
-                        CALL DLACPY( 'A', N, (N+1)/2, ARF, N, ARFINV,
+                        CALL AB_DLACPY( 'A', N, (N+1)/2, ARF, N, ARFINV,
      +                               N )
                      END IF
 *
-                     SRNAMT = 'DPFTRI'
-                     CALL DPFTRI( CFORM, UPLO, N, ARFINV , INFO )
+                     SRNAMT = 'AB_DPFTRI'
+                     CALL AB_DPFTRI( CFORM, UPLO, N, ARFINV , INFO )
 *
-                     SRNAMT = 'DTFTTR'
-                     CALL DTFTTR( CFORM, UPLO, N, ARFINV, AINV, LDA,
+                     SRNAMT = 'AB_DTFTTR'
+                     CALL AB_DTFTTR( CFORM, UPLO, N, ARFINV, AINV, LDA,
      +                            INFO )
 *
-*                    Check error code from DPFTRI.
+*                    Check error code from AB_DPFTRI.
 *
                      IF( INFO.NE.0 )
-     +                  CALL ALAERH( 'DPO', 'DPFTRI', INFO, 0, UPLO, N,
+     +                  CALL AB_ALAERH( 'DPO', 'AB_DPFTRI', INFO, 0, UPL
+     $O, N,
      +                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      +                               NOUT )
 *
-                     CALL DPOT03( UPLO, N, A, LDA, AINV, LDA,
-     +                            D_TEMP_DPOT03, LDA, D_WORK_DPOT03,
+                     CALL AB_DPOT03( UPLO, N, A, LDA, AINV, LDA,
+     +                            D_TEMP_AB_DPOT03, LDA, D_WORK_AB_DPOT0
+     $3,
      +                            RCONDC, RESULT( 2 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA,
-     +                            D_TEMP_DPOT02, LDA )
-                     CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
-     +                            D_TEMP_DPOT02, LDA, D_WORK_DPOT02,
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA,
+     +                            D_TEMP_AB_DPOT02, LDA )
+                     CALL AB_DPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
+     +                            D_TEMP_AB_DPOT02, LDA, D_WORK_AB_DPOT0
+     $2,
      +                            RESULT( 3 ) )
 *
 *                    Check solution from generated exact solution.
 
-                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      +                         RESULT( 4 ) )
                      NT = 4
 *
@@ -561,7 +574,7 @@
                      DO 60 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     +                        CALL ALADHD( NOUT, 'DPF' )
+     +                        CALL AB_ALADHD( NOUT, 'DPF' )
                            WRITE( NOUT, FMT = 9999 )'DPFSV ', UPLO,
      +                            N, IIT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -576,13 +589,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( 'DPF', NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( 'DPF', NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A6, ', UPLO=''', A1, ''', N =', I5, ', type ', I1,
      +      ', test(', I1, ')=', G12.5 )
 *
       RETURN
 *
-*     End of DDRVRFP
+*     End of AB_DDRVRFP
 *
       END

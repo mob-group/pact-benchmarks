@@ -1,4 +1,4 @@
-*> \brief \b ZCHKEC
+*> \brief \b AB_AB_ZCHKEC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKEC( THRESH, TSTERR, NIN, NOUT )
+*       SUBROUTINE AB_AB_ZCHKEC( THRESH, TSTERR, NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -22,12 +22,12 @@
 *>
 *> \verbatim
 *>
-*> ZCHKEC tests eigen- condition estimation routines
-*>        ZTRSYL, CTREXC, CTRSNA, CTRSEN
+*> AB_AB_ZCHKEC tests eigen- condition estimation routines
+*>        AB_ZTRSYL, AB_CTREXC, AB_CTRSNA, AB_CTRSEN
 *>
 *> In all cases, the routine runs through a fixed set of numerical
 *> examples, subjects them to various tests, and compares the test
-*> results to a threshold THRESH. In addition, ZTRSNA and CTRSEN are
+*> results to a threshold THRESH. In addition, AB_ZTRSNA and AB_CTRSEN are
 *> tested by reading in precomputed examples from a file (on input unit
 *> NIN).  Output is written to output unit NOUT.
 *> \endverbatim
@@ -73,7 +73,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZCHKEC( THRESH, TSTERR, NIN, NOUT )
+      SUBROUTINE AB_AB_ZCHKEC( THRESH, TSTERR, NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -101,18 +101,19 @@
       DOUBLE PRECISION   RTRSEN( 3 ), RTRSNA( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZERREC, ZGET35, ZGET36, ZGET37, ZGET38
+      EXTERNAL           AB_ZERREC, AB_ZGET35, AB_ZGET36, AB_ZGET37, AB_
+     $ZGET38
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
       PATH( 1: 1 ) = 'Zomplex precision'
       PATH( 2: 3 ) = 'EC'
-      EPS = DLAMCH( 'P' )
-      SFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SFMIN = AB_DLAMCH( 'S' )
       WRITE( NOUT, FMT = 9994 )
       WRITE( NOUT, FMT = 9993 )EPS, SFMIN
       WRITE( NOUT, FMT = 9992 )THRESH
@@ -120,22 +121,22 @@
 *     Test error exits if TSTERR is .TRUE.
 *
       IF( TSTERR )
-     $   CALL ZERREC( PATH, NOUT )
+     $   CALL AB_ZERREC( PATH, NOUT )
 *
       OK = .TRUE.
-      CALL ZGET35( RTRSYL, LTRSYL, NTRSYL, KTRSYL, NIN )
+      CALL AB_ZGET35( RTRSYL, LTRSYL, NTRSYL, KTRSYL, NIN )
       IF( RTRSYL.GT.THRESH ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9999 )RTRSYL, LTRSYL, NTRSYL, KTRSYL
       END IF
 *
-      CALL ZGET36( RTREXC, LTREXC, NTREXC, KTREXC, NIN )
+      CALL AB_ZGET36( RTREXC, LTREXC, NTREXC, KTREXC, NIN )
       IF( RTREXC.GT.THRESH .OR. NTREXC.GT.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9998 )RTREXC, LTREXC, NTREXC, KTREXC
       END IF
 *
-      CALL ZGET37( RTRSNA, LTRSNA, NTRSNA, KTRSNA, NIN )
+      CALL AB_ZGET37( RTRSNA, LTRSNA, NTRSNA, KTRSNA, NIN )
       IF( RTRSNA( 1 ).GT.THRESH .OR. RTRSNA( 2 ).GT.THRESH .OR.
      $    NTRSNA( 1 ).NE.0 .OR. NTRSNA( 2 ).NE.0 .OR. NTRSNA( 3 ).NE.0 )
      $     THEN
@@ -143,7 +144,7 @@
          WRITE( NOUT, FMT = 9997 )RTRSNA, LTRSNA, NTRSNA, KTRSNA
       END IF
 *
-      CALL ZGET38( RTRSEN, LTRSEN, NTRSEN, KTRSEN, NIN )
+      CALL AB_ZGET38( RTRSEN, LTRSEN, NTRSEN, KTRSEN, NIN )
       IF( RTRSEN( 1 ).GT.THRESH .OR. RTRSEN( 2 ).GT.THRESH .OR.
      $    NTRSEN( 1 ).NE.0 .OR. NTRSEN( 2 ).NE.0 .OR. NTRSEN( 3 ).NE.0 )
      $     THEN
@@ -155,18 +156,19 @@
       IF( OK )
      $   WRITE( NOUT, FMT = 9995 )PATH, NTESTS
 *
- 9999 FORMAT( ' Error in ZTRSYL: RMAX =', D12.3, / ' LMAX = ', I8,
+ 9999 FORMAT( ' Error in AB_ZTRSYL: RMAX =', D12.3, / ' LMAX = ', I8,
      $      ' NINFO=', I8, ' KNT=', I8 )
- 9998 FORMAT( ' Error in ZTREXC: RMAX =', D12.3, / ' LMAX = ', I8,
+ 9998 FORMAT( ' Error in AB_ZTREXC: RMAX =', D12.3, / ' LMAX = ', I8,
      $      ' NINFO=', I8, ' KNT=', I8 )
- 9997 FORMAT( ' Error in ZTRSNA: RMAX =', 3D12.3, / ' LMAX = ', 3I8,
+ 9997 FORMAT( ' Error in AB_ZTRSNA: RMAX =', 3D12.3, / ' LMAX = ', 3I8,
      $      ' NINFO=', 3I8, ' KNT=', I8 )
- 9996 FORMAT( ' Error in ZTRSEN: RMAX =', 3D12.3, / ' LMAX = ', 3I8,
+ 9996 FORMAT( ' Error in AB_ZTRSEN: RMAX =', 3D12.3, / ' LMAX = ', 3I8,
      $      ' NINFO=', 3I8, ' KNT=', I8 )
  9995 FORMAT( / 1X, 'All tests for ', A3,
      $      ' routines passed the threshold ( ', I6, ' tests run)' )
  9994 FORMAT( ' Tests of the Nonsymmetric eigenproblem condition',
-     $      ' estimation routines', / ' ZTRSYL, ZTREXC, ZTRSNA, ZTRSEN',
+     $      ' estimation routines', / ' AB_ZTRSYL, AB_ZTREXC, AB_ZTRSNA,
+     $ AB_ZTRSEN',
      $      / )
  9993 FORMAT( ' Relative machine precision (EPS) = ', D16.6,
      $      / ' Safe minimum (SFMIN)             = ', D16.6, / )
@@ -174,6 +176,6 @@
      $      'less than', F8.2, / / )
       RETURN
 *
-*     End of ZCHKEC
+*     End of AB_AB_ZCHKEC
 *
       END

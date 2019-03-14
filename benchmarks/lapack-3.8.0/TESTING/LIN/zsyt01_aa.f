@@ -1,4 +1,4 @@
-*> \brief \b ZSYT01
+*> \brief \b AB_ZSYT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*       SUBROUTINE AB_AB_ZSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                             RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> ZSYT01 reconstructs a hermitian indefinite matrix A from its
+*> AB_ZSYT01 reconstructs a hermitian indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -70,7 +70,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by ZSYTRF.
+*>          as computed by AB_ZSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from ZSYTRF.
+*>          The pivot indices from AB_ZSYTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -118,12 +118,13 @@
 *
 *> \date December 2016
 *
-*  @generated from LIN/dsyt01_aa.f, fortran d -> z, Thu Nov 17 13:01:50 2016
+*  @generated from LIN/AB_AB_DSYT01_AA.f, fortran d -> z, Thu Nov 17 13:01:50 2016
 *
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE AB_AB_ZSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C
+     $,
      $                      LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -155,12 +156,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANSY
-      EXTERNAL           LSAME, DLAMCH, ZLANSY
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANSY
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASET, ZLAVSY
+      EXTERNAL           AB_ZLASET, AB_ZLAVSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -176,43 +177,49 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.
 *
-      CALL ZLASET( 'Full', N, N, CZERO, CZERO, C, LDC )
-      CALL ZLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+1 )
+      CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, C, LDC )
+      CALL AB_ZLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+
+     $1 )
       IF( N.GT.1 ) THEN
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL ZLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2 ),
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_ZLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2
+     $ ),
      $                   LDC+1 )
-            CALL ZLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1 ),
+            CALL AB_ZLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1
+     $ ),
      $                   LDC+1 )
          ELSE
-            CALL ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2 ),
+            CALL AB_ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2
+     $ ),
      $                   LDC+1 )
-            CALL ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
+            CALL AB_ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1
+     $ ),
      $                   LDC+1 )
          ENDIF
 *
-*        Call ZTRMM to form the product U' * D (or L * D ).
+*        Call AB_ZTRMM to form the product U' * D (or L * D ).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL ZTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_ZTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
      $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
          ELSE
-            CALL ZTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+            CALL AB_ZTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
      $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
          END IF
 *
-*        Call ZTRMM again to multiply by U (or L ).
+*        Call AB_ZTRMM again to multiply by U (or L ).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL ZTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            CALL AB_ZTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1
+     $,
      $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
          ELSE
-            CALL ZTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
+            CALL AB_ZTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
      $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
          END IF
       ENDIF
@@ -222,18 +229,18 @@
       DO J = N, 1, -1
          I = IPIV( J )
          IF( I.NE.J )
-     $      CALL ZSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
+     $      CALL AB_ZSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
       END DO
       DO J = N, 1, -1
          I = IPIV( J )
          IF( I.NE.J )
-     $      CALL ZSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
+     $      CALL AB_ZSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
       END DO
 *
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO J = 1, N
             DO I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -249,7 +256,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = ZLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_ZLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -260,6 +267,6 @@
 *
       RETURN
 *
-*     End of ZSYT01
+*     End of AB_ZSYT01
 *
       END

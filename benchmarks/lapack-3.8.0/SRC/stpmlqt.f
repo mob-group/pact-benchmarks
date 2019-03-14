@@ -1,4 +1,4 @@
-*> \brief \b DTPMLQT
+*> \brief \b AB_DTPMLQT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTPMQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpmlqt.f">
+*> Download AB_DTPMQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STPMLQT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpmlqt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STPMLQT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpmlqt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STPMLQT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
+*       SUBROUTINE AB_STPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
 *                           A, LDA, B, LDB, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DTPMQRT applies a real orthogonal matrix Q obtained from a
+*> AB_DTPMQRT applies a real orthogonal matrix Q obtained from a
 *> "triangular-pentagonal" real block reflector H to a general
 *> real matrix C, which consists of two blocks A and B.
 *> \endverbatim
@@ -89,7 +89,7 @@
 *>          MB is INTEGER
 *>          The block size used for the storage of T.  K >= MB >= 1.
 *>          This must be the same value of MB used to generate T
-*>          in DTPLQT.
+*>          in AB_DTPLQT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -97,7 +97,7 @@
 *>          V is REAL array, dimension (LDA,K)
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DTPLQT in B.  See Further Details.
+*>          AB_DTPLQT in B.  See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -112,7 +112,7 @@
 *> \verbatim
 *>          T is REAL array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DTPLQT, stored as a MB-by-K matrix.
+*>          as returned by AB_DTPLQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -213,7 +213,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
+      SUBROUTINE AB_STPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT
+     $,
      $                    A, LDA, B, LDB, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -238,11 +239,11 @@
       INTEGER            I, IB, NB, LB, KF, LDAQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARFB, STPRFB, XERBLA
+      EXTERNAL           AB_AB_SLARFB, AB_STPRFB, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -252,10 +253,10 @@
 *     .. Test the input arguments ..
 *
       INFO   = 0
-      LEFT   = LSAME( SIDE,  'L' )
-      RIGHT  = LSAME( SIDE,  'R' )
-      TRAN   = LSAME( TRANS, 'T' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT   = AB_LSAME( SIDE,  'L' )
+      RIGHT  = AB_LSAME( SIDE,  'R' )
+      TRAN   = AB_LSAME( TRANS, 'T' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
 *
       IF ( LEFT ) THEN
          LDAQ = MAX( 1, K )
@@ -287,7 +288,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STPMLQT', -INFO )
+         CALL AB_XERBLA( 'AB_STPMLQT', -INFO )
          RETURN
       END IF
 *
@@ -305,7 +306,7 @@
             ELSE
                LB = 0
             END IF
-            CALL STPRFB( 'L', 'T', 'F', 'R', NB, N, IB, LB,
+            CALL AB_STPRFB( 'L', 'T', 'F', 'R', NB, N, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( I, 1 ), LDA, B, LDB, WORK, IB )
          END DO
@@ -320,7 +321,7 @@
             ELSE
                LB = NB-N+L-I+1
             END IF
-            CALL STPRFB( 'R', 'N', 'F', 'R', M, NB, IB, LB,
+            CALL AB_STPRFB( 'R', 'N', 'F', 'R', M, NB, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( 1, I ), LDA, B, LDB, WORK, M )
          END DO
@@ -336,7 +337,7 @@
             ELSE
                LB = 0
             END IF
-            CALL STPRFB( 'L', 'N', 'F', 'R', NB, N, IB, LB,
+            CALL AB_STPRFB( 'L', 'N', 'F', 'R', NB, N, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( I, 1 ), LDA, B, LDB, WORK, IB )
          END DO
@@ -352,7 +353,7 @@
             ELSE
                LB = NB-N+L-I+1
             END IF
-            CALL STPRFB( 'R', 'T', 'F', 'R', M, NB, IB, LB,
+            CALL AB_STPRFB( 'R', 'T', 'F', 'R', M, NB, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( 1, I ), LDA, B, LDB, WORK, M )
          END DO
@@ -361,6 +362,6 @@
 *
       RETURN
 *
-*     End of STPMLQT
+*     End of AB_STPMLQT
 *
       END

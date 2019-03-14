@@ -1,4 +1,4 @@
-*> \brief \b ZGTT02
+*> \brief \b AB_ZGTT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
+*       SUBROUTINE AB_ZGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZGTT02 computes the residual for the solution to a tridiagonal
+*> AB_ZGTT02 computes the residual for the solution to a tridiagonal
 *> system of equations:
 *>    RESID = norm(B - op(A)*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
@@ -121,7 +121,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
+      SUBROUTINE AB_ZGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -150,12 +150,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGT
-      EXTERNAL           LSAME, DLAMCH, DZASUM, ZLANGT
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANGT
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DZASUM, AB_ZLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLAGTM
+      EXTERNAL           AB_ZLAGTM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -171,15 +171,15 @@
 *     Compute the maximum over the number of right hand sides of
 *        norm(B - op(A)*X) / ( norm(A) * norm(X) * EPS ).
 *
-      IF( LSAME( TRANS, 'N' ) ) THEN
-         ANORM = ZLANGT( '1', N, DL, D, DU )
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+         ANORM = AB_ZLANGT( '1', N, DL, D, DU )
       ELSE
-         ANORM = ZLANGT( 'I', N, DL, D, DU )
+         ANORM = AB_ZLANGT( 'I', N, DL, D, DU )
       END IF
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -187,12 +187,12 @@
 *
 *     Compute B - op(A)*X.
 *
-      CALL ZLAGTM( TRANS, N, NRHS, -ONE, DL, D, DU, X, LDX, ONE, B,
+      CALL AB_ZLAGTM( TRANS, N, NRHS, -ONE, DL, D, DU, X, LDX, ONE, B,
      $             LDB )
 *
       DO 10 J = 1, NRHS
-         BNORM = DZASUM( N, B( 1, J ), 1 )
-         XNORM = DZASUM( N, X( 1, J ), 1 )
+         BNORM = AB_DZASUM( N, B( 1, J ), 1 )
+         XNORM = AB_DZASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -202,6 +202,6 @@
 *
       RETURN
 *
-*     End of ZGTT02
+*     End of AB_ZGTT02
 *
       END

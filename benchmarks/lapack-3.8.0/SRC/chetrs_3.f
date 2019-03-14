@@ -1,4 +1,4 @@
-*> \brief \b CHETRS_3
+*> \brief \b AB_AB_CHETRS_3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETRS_3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_3.f">
+*> Download AB_AB_CHETRS_3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CHETRS_3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrs_3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CHETRS_3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CHETRS_3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
+*       SUBROUTINE AB_AB_CHETRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
 *                            INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,9 +35,9 @@
 *  =============
 *>
 *> \verbatim
-*> CHETRS_3 solves a system of linear equations A * X = B with a complex
+*> AB_AB_CHETRS_3 solves a system of linear equations A * X = B with a complex
 *> Hermitian matrix A using the factorization computed
-*> by CHETRF_RK or CHETRF_BK:
+*> by AB_AB_CHETRF_RK or AB_CHETRF_BK:
 *>
 *>    A = P*U*D*(U**H)*(P**T) or A = P*L*D*(L**H)*(P**T),
 *>
@@ -78,7 +78,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          Diagonal of the block diagonal matrix D and factors U or L
-*>          as computed by CHETRF_RK and CHETRF_BK:
+*>          as computed by AB_AB_CHETRF_RK and AB_CHETRF_BK:
 *>            a) ONLY diagonal elements of the Hermitian block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -111,7 +111,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by CHETRF_RK or CHETRF_BK.
+*>          as determined by AB_AB_CHETRF_RK or AB_CHETRF_BK.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -162,7 +162,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHETRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
+      SUBROUTINE AB_AB_CHETRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
      $                     INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -192,11 +192,11 @@
       COMPLEX            AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSSCAL, CSWAP, CTRSM, XERBLA
+      EXTERNAL           AB_CAB_SSCAL, AB_CSWAP, AB_CTRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, REAL
@@ -204,8 +204,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -217,7 +217,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETRS_3', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CHETRS_3', -INFO )
          RETURN
       END IF
 *
@@ -244,13 +244,14 @@
          DO K = N, 1, -1
             KP = ABS( IPIV( K ) )
             IF( KP.NE.K ) THEN
-               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             END IF
          END DO
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL CTRSM( 'L', 'U', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL AB_CTRSM( 'L', 'U', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB
+     $ )
 *
 *        Compute D \ B -> B   [ D \ (U \P**T * B) ]
 *
@@ -258,7 +259,7 @@
          DO WHILE ( I.GE.1 )
             IF( IPIV( I ).GT.0 ) THEN
                S = REAL( ONE ) / REAL( A( I, I ) )
-               CALL CSSCAL( NRHS, S, B( I, 1 ), LDB )
+               CALL AB_CAB_SSCAL( NRHS, S, B( I, 1 ), LDB )
             ELSE IF ( I.GT.1 ) THEN
                AKM1K = E( I )
                AKM1 = A( I-1, I-1 ) / AKM1K
@@ -277,7 +278,8 @@
 *
 *        Compute (U**H \ B) -> B   [ U**H \ (D \ (U \P**T * B) ) ]
 *
-         CALL CTRSM( 'L', 'U', 'C', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL AB_CTRSM( 'L', 'U', 'C', 'U', N, NRHS, ONE, A, LDA, B, LDB
+     $ )
 *
 *        P * B  [ P * (U**H \ (D \ (U \P**T * B) )) ]
 *
@@ -291,7 +293,7 @@
          DO K = 1, N, 1
             KP = ABS( IPIV( K ) )
             IF( KP.NE.K ) THEN
-               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             END IF
          END DO
 *
@@ -312,13 +314,14 @@
          DO K = 1, N, 1
             KP = ABS( IPIV( K ) )
             IF( KP.NE.K ) THEN
-               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             END IF
          END DO
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL CTRSM( 'L', 'L', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL AB_CTRSM( 'L', 'L', 'N', 'U', N, NRHS, ONE, A, LDA, B, LDB
+     $ )
 *
 *        Compute D \ B -> B   [ D \ (L \P**T * B) ]
 *
@@ -326,7 +329,7 @@
          DO WHILE ( I.LE.N )
             IF( IPIV( I ).GT.0 ) THEN
                S = REAL( ONE ) / REAL( A( I, I ) )
-               CALL CSSCAL( NRHS, S, B( I, 1 ), LDB )
+               CALL AB_CAB_SSCAL( NRHS, S, B( I, 1 ), LDB )
             ELSE IF( I.LT.N ) THEN
                AKM1K = E( I )
                AKM1 = A( I, I ) / CONJG( AKM1K )
@@ -345,7 +348,8 @@
 *
 *        Compute (L**H \ B) -> B   [ L**H \ (D \ (L \P**T * B) ) ]
 *
-         CALL CTRSM('L', 'L', 'C', 'U', N, NRHS, ONE, A, LDA, B, LDB )
+         CALL AB_CTRSM('L', 'L', 'C', 'U', N, NRHS, ONE, A, LDA, B, LDB 
+     $)
 *
 *        P * B  [ P * (L**H \ (D \ (L \P**T * B) )) ]
 *
@@ -359,7 +363,7 @@
          DO K = N, 1, -1
             KP = ABS( IPIV( K ) )
             IF( KP.NE.K ) THEN
-               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             END IF
          END DO
 *
@@ -369,6 +373,6 @@
 *
       RETURN
 *
-*     End of CHETRS_3
+*     End of AB_AB_CHETRS_3
 *
       END

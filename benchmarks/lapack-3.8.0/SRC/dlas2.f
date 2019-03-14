@@ -1,4 +1,4 @@
-*> \brief \b DLAS2 computes singular values of a 2-by-2 triangular matrix.
+*> \brief \b AB_DLAS2 computes singular values of a 2-by-2 triangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlas2.f">
+*> Download AB_DLAS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAS2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlas2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAS2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlas2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAS2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAS2( F, G, H, SSMIN, SSMAX )
+*       SUBROUTINE AB_DLAS2( F, G, H, SSMIN, SSMAX )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   F, G, H, SSMAX, SSMIN
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DLAS2  computes the singular values of the 2-by-2 matrix
+*> AB_DLAS2  computes the singular values of the 2-by-2 matrix
 *>    [  F   G  ]
 *>    [  0   H  ].
 *> On return, SSMIN is the smaller singular value and SSMAX is the
@@ -105,7 +105,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLAS2( F, G, H, SSMIN, SSMAX )
+      SUBROUTINE AB_DLAS2( F, G, H, SSMIN, SSMAX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -178,6 +178,6 @@
       END IF
       RETURN
 *
-*     End of DLAS2
+*     End of AB_DLAS2
 *
       END

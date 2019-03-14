@@ -1,4 +1,4 @@
-*> \brief \b SLSETS
+*> \brief \b AB_SAB_LSETS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF,
+*       SUBROUTINE AB_SAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF,
 *                          D, DF, X, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,8 +26,8 @@
 *>
 *> \verbatim
 *>
-*> SLSETS tests SGGLSE - a subroutine for solving linear equality
-*> constrained least square problem (LSE).
+*> AB_SAB_LSETS tests AB_SGGAB_LSE - a subroutine for solving linear equality
+*> constrained least square problem (AB_LSE).
 *> \endverbatim
 *
 *  Arguments:
@@ -90,7 +90,7 @@
 *> \param[in] C
 *> \verbatim
 *>          C is REAL array, dimension( M )
-*>          the vector C in the LSE problem.
+*>          the vector C in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] CF
@@ -101,7 +101,7 @@
 *> \param[in] D
 *> \verbatim
 *>          D is REAL array, dimension( P )
-*>          the vector D in the LSE problem.
+*>          the vector D in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] DF
@@ -112,7 +112,7 @@
 *> \param[out] X
 *> \verbatim
 *>          X is REAL array, dimension( N )
-*>          solution vector X in the LSE problem.
+*>          solution vector X in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -152,7 +152,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF,
+      SUBROUTINE AB_SAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF,
      $                   D, DF, X, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -176,39 +176,39 @@
       INTEGER            INFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGGLSE, SLACPY, SGET02
+      EXTERNAL           AB_SGGAB_LSE, AB_SLACPY, AB_SGET02
 *     ..
 *     .. Executable Statements ..
 *
 *     Copy the matrices A and B to the arrays AF and BF,
 *     and the vectors C and D to the arrays CF and DF,
 *
-      CALL SLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL SLACPY( 'Full', P, N, B, LDB, BF, LDB )
-      CALL SCOPY( M, C, 1, CF, 1 )
-      CALL SCOPY( P, D, 1, DF, 1 )
+      CALL AB_SLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL AB_SLACPY( 'Full', P, N, B, LDB, BF, LDB )
+      CALL AB_SCOPY( M, C, 1, CF, 1 )
+      CALL AB_SCOPY( P, D, 1, DF, 1 )
 *
-*     Solve LSE problem
+*     Solve AB_LSE problem
 *
-      CALL SGGLSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X,
+      CALL AB_SGGAB_LSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X,
      $             WORK, LWORK, INFO )
 *
-*     Test the residual for the solution of LSE
+*     Test the residual for the solution of AB_LSE
 *
 *     Compute RESULT(1) = norm( A*x - c ) / norm(A)*norm(X)*EPS
 *
-      CALL SCOPY( M, C, 1, CF, 1 )
-      CALL SCOPY( P, D, 1, DF, 1 )
-      CALL SGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M,
+      CALL AB_SCOPY( M, C, 1, CF, 1 )
+      CALL AB_SCOPY( P, D, 1, DF, 1 )
+      CALL AB_SGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M,
      $             RWORK, RESULT( 1 ) )
 *
 *     Compute result(2) = norm( B*x - d ) / norm(B)*norm(X)*EPS
 *
-      CALL SGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P,
+      CALL AB_SGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P,
      $             RWORK, RESULT( 2 ) )
 *
       RETURN
 *
-*     End of SLSETS
+*     End of AB_SAB_LSETS
 *
       END

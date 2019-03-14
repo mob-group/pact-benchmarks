@@ -1,4 +1,4 @@
-*> \brief \b SGET06
+*> \brief \b AB_SGET06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION SGET06( RCOND, RCONDC )
+*       REAL             FUNCTION AB_SGET06( RCOND, RCONDC )
 *
 *       .. Scalar Arguments ..
 *       REAL               RCOND, RCONDC
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> SGET06 computes a test ratio to compare two values for RCOND.
+*> AB_SGET06 computes a test ratio to compare two values for RCOND.
 *> \endverbatim
 *
 *  Arguments:
@@ -30,7 +30,7 @@
 *> \verbatim
 *>          RCOND is REAL
 *>          The estimate of the reciprocal of the condition number of A,
-*>          as computed by SGECON.
+*>          as computed by AB_SGECON.
 *> \endverbatim
 *>
 *> \param[in] RCONDC
@@ -53,7 +53,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      REAL             FUNCTION SGET06( RCOND, RCONDC )
+      REAL             FUNCTION AB_SGET06( RCOND, RCONDC )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -74,15 +74,15 @@
       REAL               EPS, RAT
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( RCOND.GT.ZERO ) THEN
          IF( RCONDC.GT.ZERO ) THEN
             RAT = MAX( RCOND, RCONDC ) / MIN( RCOND, RCONDC ) -
@@ -97,9 +97,9 @@
             RAT = ZERO
          END IF
       END IF
-      SGET06 = RAT
+      AB_SGET06 = RAT
       RETURN
 *
-*     End of SGET06
+*     End of AB_SGET06
 *
       END

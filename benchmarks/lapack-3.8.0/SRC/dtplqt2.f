@@ -1,4 +1,4 @@
-*> \brief \b DTPLQT2 computes a LQ factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q.
+*> \brief \b AB_AB_DTPLQT2 computes a LQ factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTPLQT2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtplqt2.f">
+*> Download AB_AB_DTPLQT2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DTPLQT2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtplqt2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DTPLQT2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtplqt2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DTPLQT2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
+*       SUBROUTINE AB_AB_DTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER   INFO, LDA, LDB, LDT, N, M, L
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DTPLQT2 computes a LQ a factorization of a real "triangular-pentagonal"
+*> AB_AB_DTPLQT2 computes a LQ a factorization of a real "triangular-pentagonal"
 *> matrix C, which is composed of a triangular block A and pentagonal block B,
 *> using the compact WY representation for Q.
 *> \endverbatim
@@ -175,7 +175,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
+      SUBROUTINE AB_AB_DTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -200,7 +200,7 @@
       DOUBLE PRECISION   ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  DLARFG, DGEMV, DGER, DTRMV, XERBLA
+      EXTERNAL  AB_AB_DLARFG, AB_DGEMV, AB_DGER, AB_DTRMV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX, MIN
@@ -224,7 +224,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DTPLQT2', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DTPLQT2', -INFO )
          RETURN
       END IF
 *
@@ -237,7 +237,7 @@
 *        Generate elementary reflector H(I) to annihilate B(I,:)
 *
          P = N-L+MIN( L, I )
-         CALL DLARFG( P+1, A( I, I ), B( I, 1 ), LDB, T( 1, I ) )
+         CALL AB_AB_DLARFG( P+1, A( I, I ), B( I, 1 ), LDB, T( 1, I ) )
          IF( I.LT.M ) THEN
 *
 *           W(M-I:1) := C(I+1:M,I:N) * C(I,I:N) [use W = T(M,:)]
@@ -245,7 +245,7 @@
             DO J = 1, M-I
                T( M, J ) = (A( I+J, I ))
             END DO
-            CALL DGEMV( 'N', M-I, P, ONE, B( I+1, 1 ), LDB,
+            CALL AB_DGEMV( 'N', M-I, P, ONE, B( I+1, 1 ), LDB,
      $                  B( I, 1 ), LDB, ONE, T( M, 1 ), LDT )
 *
 *           C(I+1:M,I:N) = C(I+1:M,I:N) + alpha * C(I,I:N)*W(M-1:1)^H
@@ -254,7 +254,7 @@
             DO J = 1, M-I
                A( I+J, I ) = A( I+J, I ) + ALPHA*(T( M, J ))
             END DO
-            CALL DGER( M-I, P, ALPHA,  T( M, 1 ), LDT,
+            CALL AB_DGER( M-I, P, ALPHA,  T( M, 1 ), LDT,
      $          B( I, 1 ), LDB, B( I+1, 1 ), LDB )
          END IF
       END DO
@@ -277,22 +277,22 @@
          DO J = 1, P
             T( I, J ) = ALPHA*B( I, N-L+J )
          END DO
-         CALL DTRMV( 'L', 'N', 'N', P, B( 1, NP ), LDB,
+         CALL AB_DTRMV( 'L', 'N', 'N', P, B( 1, NP ), LDB,
      $               T( I, 1 ), LDT )
 *
 *        Rectangular part of B2
 *
-         CALL DGEMV( 'N', I-1-P, L,  ALPHA, B( MP, NP ), LDB,
+         CALL AB_DGEMV( 'N', I-1-P, L,  ALPHA, B( MP, NP ), LDB,
      $               B( I, NP ), LDB, ZERO, T( I,MP ), LDT )
 *
 *        B1
 *
-         CALL DGEMV( 'N', I-1, N-L, ALPHA, B, LDB, B( I, 1 ), LDB,
+         CALL AB_DGEMV( 'N', I-1, N-L, ALPHA, B, LDB, B( I, 1 ), LDB,
      $               ONE, T( I, 1 ), LDT )
 *
 *        T(1:I-1,I) := T(1:I-1,1:I-1) * T(I,1:I-1)
 *
-        CALL DTRMV( 'L', 'T', 'N', I-1, T, LDT, T( I, 1 ), LDT )
+        CALL AB_DTRMV( 'L', 'T', 'N', I-1, T, LDT, T( I, 1 ), LDT )
 *
 *        T(I,I) = tau(I)
 *
@@ -307,6 +307,6 @@
       END DO
 
 *
-*     End of DTPLQT2
+*     End of AB_AB_DTPLQT2
 *
       END

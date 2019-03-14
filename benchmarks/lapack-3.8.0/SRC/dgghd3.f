@@ -1,4 +1,4 @@
-*> \brief \b DGGHD3
+*> \brief \b AB_DGGHD3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGGHD3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgghd3.f">
+*> Download AB_DGGHD3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGGHD3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgghd3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGGHD3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghd3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGGHD3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+*       SUBROUTINE AB_DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
 *                          LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DGGHD3 reduces a pair of real matrices (A,B) to generalized upper
+*> AB_DGGHD3 reduces a pair of real matrices (A,B) to generalized upper
 *> Hessenberg form using orthogonal transformations, where A is a
 *> general matrix and B is upper triangular.  The form of the
 *> generalized eigenvalue problem is
@@ -62,10 +62,10 @@
 *>      Q1 * B * Z1**T = (Q1*Q) * T * (Z1*Z)**T
 *>
 *> If Q1 is the orthogonal matrix from the QR factorization of B in the
-*> original equation A*x = lambda*B*x, then DGGHD3 reduces the original
+*> original equation A*x = lambda*B*x, then AB_DGGHD3 reduces the original
 *> problem to generalized Hessenberg form.
 *>
-*> This is a blocked variant of DGGHRD, using matrix-matrix
+*> This is a blocked variant of AB_DGGHRD, using matrix-matrix
 *> multiplications for parts of the computation to enhance performance.
 *> \endverbatim
 *
@@ -110,7 +110,7 @@
 *>          ILO and IHI mark the rows and columns of A which are to be
 *>          reduced.  It is assumed that A is already upper triangular
 *>          in rows and columns 1:ILO-1 and IHI+1:N.  ILO and IHI are
-*>          normally set by a previous call to DGGBAL; otherwise they
+*>          normally set by a previous call to AB_DGGBAL; otherwise they
 *>          should be set to 1 and N respectively.
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
 *> \endverbatim
@@ -193,7 +193,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -227,7 +227,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE AB_DGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q
+     $,
      $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -261,13 +262,14 @@
       DOUBLE PRECISION   C, C1, C2, S, S1, S2, TEMP, TEMP1, TEMP2, TEMP3
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV, LSAME
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV, AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGGHRD, DLARTG, DLASET, DORM22, DROT, DGEMM,
-     $                   DGEMV, DTRMV, DLACPY, XERBLA
+      EXTERNAL           AB_DGGHRD, AB_DLARTG, AB_DLASET, AB_DORM22, AB_
+     $DROT, AB_DGEMM,
+     $                   AB_DGEMV, AB_DTRMV, AB_DLACPY, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX
@@ -277,18 +279,18 @@
 *     Decode and test the input parameters.
 *
       INFO = 0
-      NB = ILAENV( 1, 'DGGHD3', ' ', N, ILO, IHI, -1 )
+      NB = AB_ILAENV( 1, 'AB_DGGHD3', ' ', N, ILO, IHI, -1 )
       LWKOPT = MAX( 6*N*NB, 1 )
       WORK( 1 ) = DBLE( LWKOPT )
-      INITQ = LSAME( COMPQ, 'I' )
-      WANTQ = INITQ .OR. LSAME( COMPQ, 'V' )
-      INITZ = LSAME( COMPZ, 'I' )
-      WANTZ = INITZ .OR. LSAME( COMPZ, 'V' )
+      INITQ = AB_LSAME( COMPQ, 'I' )
+      WANTQ = INITQ .OR. AB_LSAME( COMPQ, 'V' )
+      INITZ = AB_LSAME( COMPZ, 'I' )
+      WANTZ = INITZ .OR. AB_LSAME( COMPZ, 'V' )
       LQUERY = ( LWORK.EQ.-1 )
 *
-      IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
+      IF( .NOT.AB_LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( COMPZ, 'N' ) .AND. .NOT.WANTZ ) THEN
+      ELSE IF( .NOT.AB_LSAME( COMPZ, 'N' ) .AND. .NOT.WANTZ ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -308,7 +310,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGGHD3', -INFO )
+         CALL AB_XERBLA( 'AB_DGGHD3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -317,14 +319,14 @@
 *     Initialize Q and Z if desired.
 *
       IF( INITQ )
-     $   CALL DLASET( 'All', N, N, ZERO, ONE, Q, LDQ )
+     $   CALL AB_DLASET( 'All', N, N, ZERO, ONE, Q, LDQ )
       IF( INITZ )
-     $   CALL DLASET( 'All', N, N, ZERO, ONE, Z, LDZ )
+     $   CALL AB_DLASET( 'All', N, N, ZERO, ONE, Z, LDZ )
 *
 *     Zero out lower triangle of B.
 *
       IF( N.GT.1 )
-     $   CALL DLASET( 'Lower', N-1, N-1, ZERO, ZERO, B(2, 1), LDB )
+     $   CALL AB_DLASET( 'Lower', N-1, N-1, ZERO, ZERO, B(2, 1), LDB )
 *
 *     Quick return if possible
 *
@@ -336,12 +338,13 @@
 *
 *     Determine the blocksize.
 *
-      NBMIN = ILAENV( 2, 'DGGHD3', ' ', N, ILO, IHI, -1 )
+      NBMIN = AB_ILAENV( 2, 'AB_DGGHD3', ' ', N, ILO, IHI, -1 )
       IF( NB.GT.1 .AND. NB.LT.NH ) THEN
 *
 *        Determine when to use unblocked instead of blocked code.
 *
-         NX = MAX( NB, ILAENV( 3, 'DGGHD3', ' ', N, ILO, IHI, -1 ) )
+         NX = MAX( NB, AB_ILAENV( 3, 'AB_DGGHD3', ' ', N, ILO, IHI, -1 )
+     $ )
          IF( NX.LT.NH ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -352,7 +355,8 @@
 *              minimum value of NB, and reduce NB or force use of
 *              unblocked code.
 *
-               NBMIN = MAX( 2, ILAENV( 2, 'DGGHD3', ' ', N, ILO, IHI,
+               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_DGGHD3', ' ', N, ILO, I
+     $HI,
      $                 -1 ) )
                IF( LWORK.GE.6*N*NBMIN ) THEN
                   NB = LWORK / ( 6*N )
@@ -373,7 +377,7 @@
 *
 *        Use blocked code
 *
-         KACC22 = ILAENV( 16, 'DGGHD3', ' ', N, ILO, IHI, -1 )
+         KACC22 = AB_ILAENV( 16, 'AB_DGGHD3', ' ', N, ILO, IHI, -1 )
          BLK22 = KACC22.EQ.2
          DO JCOL = ILO, IHI-2, NB
             NNB = MIN( NB, IHI-JCOL-1 )
@@ -386,10 +390,11 @@
 *
             N2NB = ( IHI-JCOL-1 ) / NNB - 1
             NBLST = IHI - JCOL - N2NB*NNB
-            CALL DLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK, NBLST )
+            CALL AB_DLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK, NBLST 
+     $)
             PW = NBLST * NBLST + 1
             DO I = 1, N2NB
-               CALL DLASET( 'All', 2*NNB, 2*NNB, ZERO, ONE,
+               CALL AB_DLASET( 'All', 2*NNB, 2*NNB, ZERO, ONE,
      $                      WORK( PW ), 2*NNB )
                PW = PW + 4*NNB*NNB
             END DO
@@ -403,7 +408,7 @@
 *
                DO I = IHI, J+2, -1
                   TEMP = A( I-1, J )
-                  CALL DLARTG( TEMP, A( I, J ), C, S, A( I-1, J ) )
+                  CALL AB_DLARTG( TEMP, A( I, J ), C, S, A( I-1, J ) )
                   A( I, J ) = C
                   B( I, J ) = S
                END DO
@@ -472,10 +477,10 @@
 *
                   IF( JJ.LT.IHI ) THEN
                      TEMP = B( JJ+1, JJ+1 )
-                     CALL DLARTG( TEMP, B( JJ+1, JJ ), C, S,
+                     CALL AB_DLARTG( TEMP, B( JJ+1, JJ ), C, S,
      $                            B( JJ+1, JJ+1 ) )
                      B( JJ+1, JJ ) = ZERO
-                     CALL DROT( JJ-TOP, B( TOP+1, JJ+1 ), 1,
+                     CALL AB_DROT( JJ-TOP, B( TOP+1, JJ+1 ), 1,
      $                          B( TOP+1, JJ ), 1, C, S )
                      A( JJ+1, J ) = C
                      B( JJ+1, J ) = -S
@@ -484,8 +489,8 @@
 *
 *              Update A by transformations from right.
 *              Explicit loop unrolling provides better performance
-*              compared to DLASR.
-*               CALL DLASR( 'Right', 'Variable', 'Backward', IHI-TOP,
+*              compared to AB_DLASR.
+*               CALL AB_DLASR( 'Right', 'Variable', 'Backward', IHI-TOP,
 *     $                     IHI-J, A( J+2, J ), B( J+2, J ),
 *     $                     A( TOP+1, J+1 ), LDA )
 *
@@ -514,7 +519,7 @@
 *
                IF( JJ.GT.0 ) THEN
                   DO I = JJ, 1, -1
-                     CALL DROT( IHI-TOP, A( TOP+1, J+I+1 ), 1,
+                     CALL AB_DROT( IHI-TOP, A( TOP+1, J+I+1 ), 1,
      $                          A( TOP+1, J+I ), 1, A( J+1+I, J ),
      $                          -B( J+1+I, J ) )
                   END DO
@@ -536,7 +541,7 @@
 *                 triangular.
 *
                   JROW = IHI - NBLST + 1
-                  CALL DGEMV( 'Transpose', NBLST, LEN, ONE, WORK,
+                  CALL AB_DGEMV( 'Transpose', NBLST, LEN, ONE, WORK,
      $                        NBLST, A( JROW, J+1 ), 1, ZERO,
      $                        WORK( PW ), 1 )
                   PPW = PW + LEN
@@ -544,10 +549,10 @@
                      WORK( PPW ) = A( I, J+1 )
                      PPW = PPW + 1
                   END DO
-                  CALL DTRMV( 'Lower', 'Transpose', 'Non-unit',
+                  CALL AB_DTRMV( 'Lower', 'Transpose', 'Non-unit',
      $                        NBLST-LEN, WORK( LEN*NBLST + 1 ), NBLST,
      $                        WORK( PW+LEN ), 1 )
-                  CALL DGEMV( 'Transpose', LEN, NBLST-LEN, ONE,
+                  CALL AB_DGEMV( 'Transpose', LEN, NBLST-LEN, ONE,
      $                        WORK( (LEN+1)*NBLST - LEN + 1 ), NBLST,
      $                        A( JROW+NBLST-LEN, J+1 ), 1, ONE,
      $                        WORK( PW+LEN ), 1 )
@@ -583,16 +588,18 @@
                         WORK( PPW ) = A( I, J+1 )
                         PPW = PPW + 1
                      END DO
-                     CALL DTRMV( 'Upper', 'Transpose', 'Non-unit', LEN,
+                     CALL AB_DTRMV( 'Upper', 'Transpose', 'Non-unit', LE
+     $N,
      $                           WORK( PPWO + NNB ), 2*NNB, WORK( PW ),
      $                           1 )
-                     CALL DTRMV( 'Lower', 'Transpose', 'Non-unit', NNB,
+                     CALL AB_DTRMV( 'Lower', 'Transpose', 'Non-unit', NN
+     $B,
      $                           WORK( PPWO + 2*LEN*NNB ),
      $                           2*NNB, WORK( PW + LEN ), 1 )
-                     CALL DGEMV( 'Transpose', NNB, LEN, ONE,
+                     CALL AB_DGEMV( 'Transpose', NNB, LEN, ONE,
      $                           WORK( PPWO ), 2*NNB, A( JROW, J+1 ), 1,
      $                           ONE, WORK( PW ), 1 )
-                     CALL DGEMV( 'Transpose', LEN, NNB, ONE,
+                     CALL AB_DGEMV( 'Transpose', LEN, NNB, ONE,
      $                           WORK( PPWO + 2*LEN*NNB + NNB ), 2*NNB,
      $                           A( JROW+NNB, J+1 ), 1, ONE,
      $                           WORK( PW+LEN ), 1 )
@@ -610,11 +617,11 @@
 *
             COLA = N - JCOL - NNB + 1
             J = IHI - NBLST + 1
-            CALL DGEMM( 'Transpose', 'No Transpose', NBLST,
+            CALL AB_DGEMM( 'Transpose', 'No Transpose', NBLST,
      $                  COLA, NBLST, ONE, WORK, NBLST,
      $                  A( J, JCOL+NNB ), LDA, ZERO, WORK( PW ),
      $                  NBLST )
-            CALL DLACPY( 'All', NBLST, COLA, WORK( PW ), NBLST,
+            CALL AB_DLACPY( 'All', NBLST, COLA, WORK( PW ), NBLST,
      $                   A( J, JCOL+NNB ), LDA )
             PPWO = NBLST*NBLST + 1
             J0 = J - NNB
@@ -630,7 +637,7 @@
 *                 where all blocks are NNB-by-NNB, U21 is upper
 *                 triangular and U12 is lower triangular.
 *
-                  CALL DORM22( 'Left', 'Transpose', 2*NNB, COLA, NNB,
+                  CALL AB_DORM22( 'Left', 'Transpose', 2*NNB, COLA, NNB,
      $                         NNB, WORK( PPWO ), 2*NNB,
      $                         A( J, JCOL+NNB ), LDA, WORK( PW ),
      $                         LWORK-PW+1, IERR )
@@ -638,11 +645,11 @@
 *
 *                 Ignore the structure of U.
 *
-                  CALL DGEMM( 'Transpose', 'No Transpose', 2*NNB,
+                  CALL AB_DGEMM( 'Transpose', 'No Transpose', 2*NNB,
      $                        COLA, 2*NNB, ONE, WORK( PPWO ), 2*NNB,
      $                        A( J, JCOL+NNB ), LDA, ZERO, WORK( PW ),
      $                        2*NNB )
-                  CALL DLACPY( 'All', 2*NNB, COLA, WORK( PW ), 2*NNB,
+                  CALL AB_DLACPY( 'All', 2*NNB, COLA, WORK( PW ), 2*NNB,
      $                         A( J, JCOL+NNB ), LDA )
                END IF
                PPWO = PPWO + 4*NNB*NNB
@@ -659,10 +666,10 @@
                   TOPQ = 1
                   NH = N
                END IF
-               CALL DGEMM( 'No Transpose', 'No Transpose', NH,
+               CALL AB_DGEMM( 'No Transpose', 'No Transpose', NH,
      $                     NBLST, NBLST, ONE, Q( TOPQ, J ), LDQ,
      $                     WORK, NBLST, ZERO, WORK( PW ), NH )
-               CALL DLACPY( 'All', NH, NBLST, WORK( PW ), NH,
+               CALL AB_DLACPY( 'All', NH, NBLST, WORK( PW ), NH,
      $                      Q( TOPQ, J ), LDQ )
                PPWO = NBLST*NBLST + 1
                J0 = J - NNB
@@ -675,7 +682,7 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL DORM22( 'Right', 'No Transpose', NH, 2*NNB,
+                     CALL AB_DORM22( 'Right', 'No Transpose', NH, 2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            Q( TOPQ, J ), LDQ, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -683,11 +690,11 @@
 *
 *                    Ignore the structure of U.
 *
-                     CALL DGEMM( 'No Transpose', 'No Transpose', NH,
+                     CALL AB_DGEMM( 'No Transpose', 'No Transpose', NH,
      $                           2*NNB, 2*NNB, ONE, Q( TOPQ, J ), LDQ,
      $                           WORK( PPWO ), 2*NNB, ZERO, WORK( PW ),
      $                           NH )
-                     CALL DLACPY( 'All', NH, 2*NNB, WORK( PW ), NH,
+                     CALL AB_DLACPY( 'All', NH, 2*NNB, WORK( PW ), NH,
      $                            Q( TOPQ, J ), LDQ )
                   END IF
                   PPWO = PPWO + 4*NNB*NNB
@@ -701,11 +708,11 @@
 *              Initialize small orthogonal factors that will hold the
 *              accumulated Givens rotations in workspace.
 *
-               CALL DLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK,
+               CALL AB_DLASET( 'All', NBLST, NBLST, ZERO, ONE, WORK,
      $                      NBLST )
                PW = NBLST * NBLST + 1
                DO I = 1, N2NB
-                  CALL DLASET( 'All', 2*NNB, 2*NNB, ZERO, ONE,
+                  CALL AB_DLASET( 'All', 2*NNB, 2*NNB, ZERO, ONE,
      $                         WORK( PW ), 2*NNB )
                   PW = PW + 4*NNB*NNB
                END DO
@@ -753,9 +760,9 @@
                END DO
             ELSE
 *
-               CALL DLASET( 'Lower', IHI - JCOL - 1, NNB, ZERO, ZERO,
+               CALL AB_DLASET( 'Lower', IHI - JCOL - 1, NNB, ZERO, ZERO,
      $                      A( JCOL + 2, JCOL ), LDA )
-               CALL DLASET( 'Lower', IHI - JCOL - 1, NNB, ZERO, ZERO,
+               CALL AB_DLASET( 'Lower', IHI - JCOL - 1, NNB, ZERO, ZERO,
      $                      B( JCOL + 2, JCOL ), LDB )
             END IF
 *
@@ -763,10 +770,10 @@
 *
             IF ( TOP.GT.0 ) THEN
                J = IHI - NBLST + 1
-               CALL DGEMM( 'No Transpose', 'No Transpose', TOP,
+               CALL AB_DGEMM( 'No Transpose', 'No Transpose', TOP,
      $                     NBLST, NBLST, ONE, A( 1, J ), LDA,
      $                     WORK, NBLST, ZERO, WORK( PW ), TOP )
-               CALL DLACPY( 'All', TOP, NBLST, WORK( PW ), TOP,
+               CALL AB_DLACPY( 'All', TOP, NBLST, WORK( PW ), TOP,
      $                      A( 1, J ), LDA )
                PPWO = NBLST*NBLST + 1
                J0 = J - NNB
@@ -775,7 +782,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL DORM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL AB_DORM22( 'Right', 'No Transpose', TOP, 2*NNB
+     $,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            A( 1, J ), LDA, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -783,21 +791,21 @@
 *
 *                    Ignore the structure of U.
 *
-                     CALL DGEMM( 'No Transpose', 'No Transpose', TOP,
+                     CALL AB_DGEMM( 'No Transpose', 'No Transpose', TOP,
      $                           2*NNB, 2*NNB, ONE, A( 1, J ), LDA,
      $                           WORK( PPWO ), 2*NNB, ZERO,
      $                           WORK( PW ), TOP )
-                     CALL DLACPY( 'All', TOP, 2*NNB, WORK( PW ), TOP,
+                     CALL AB_DLACPY( 'All', TOP, 2*NNB, WORK( PW ), TOP,
      $                            A( 1, J ), LDA )
                   END IF
                   PPWO = PPWO + 4*NNB*NNB
                END DO
 *
                J = IHI - NBLST + 1
-               CALL DGEMM( 'No Transpose', 'No Transpose', TOP,
+               CALL AB_DGEMM( 'No Transpose', 'No Transpose', TOP,
      $                     NBLST, NBLST, ONE, B( 1, J ), LDB,
      $                     WORK, NBLST, ZERO, WORK( PW ), TOP )
-               CALL DLACPY( 'All', TOP, NBLST, WORK( PW ), TOP,
+               CALL AB_DLACPY( 'All', TOP, NBLST, WORK( PW ), TOP,
      $                      B( 1, J ), LDB )
                PPWO = NBLST*NBLST + 1
                J0 = J - NNB
@@ -806,7 +814,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL DORM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL AB_DORM22( 'Right', 'No Transpose', TOP, 2*NNB
+     $,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            B( 1, J ), LDB, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -814,11 +823,11 @@
 *
 *                    Ignore the structure of U.
 *
-                     CALL DGEMM( 'No Transpose', 'No Transpose', TOP,
+                     CALL AB_DGEMM( 'No Transpose', 'No Transpose', TOP,
      $                           2*NNB, 2*NNB, ONE, B( 1, J ), LDB,
      $                           WORK( PPWO ), 2*NNB, ZERO,
      $                           WORK( PW ), TOP )
-                     CALL DLACPY( 'All', TOP, 2*NNB, WORK( PW ), TOP,
+                     CALL AB_DLACPY( 'All', TOP, 2*NNB, WORK( PW ), TOP,
      $                            B( 1, J ), LDB )
                   END IF
                   PPWO = PPWO + 4*NNB*NNB
@@ -836,10 +845,10 @@
                   TOPQ = 1
                   NH = N
                END IF
-               CALL DGEMM( 'No Transpose', 'No Transpose', NH,
+               CALL AB_DGEMM( 'No Transpose', 'No Transpose', NH,
      $                     NBLST, NBLST, ONE, Z( TOPQ, J ), LDZ,
      $                     WORK, NBLST, ZERO, WORK( PW ), NH )
-               CALL DLACPY( 'All', NH, NBLST, WORK( PW ), NH,
+               CALL AB_DLACPY( 'All', NH, NBLST, WORK( PW ), NH,
      $                      Z( TOPQ, J ), LDZ )
                PPWO = NBLST*NBLST + 1
                J0 = J - NNB
@@ -852,7 +861,7 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL DORM22( 'Right', 'No Transpose', NH, 2*NNB,
+                     CALL AB_DORM22( 'Right', 'No Transpose', NH, 2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            Z( TOPQ, J ), LDZ, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -860,11 +869,11 @@
 *
 *                    Ignore the structure of U.
 *
-                     CALL DGEMM( 'No Transpose', 'No Transpose', NH,
+                     CALL AB_DGEMM( 'No Transpose', 'No Transpose', NH,
      $                           2*NNB, 2*NNB, ONE, Z( TOPQ, J ), LDZ,
      $                           WORK( PPWO ), 2*NNB, ZERO, WORK( PW ),
      $                           NH )
-                     CALL DLACPY( 'All', NH, 2*NNB, WORK( PW ), NH,
+                     CALL AB_DLACPY( 'All', NH, 2*NNB, WORK( PW ), NH,
      $                            Z( TOPQ, J ), LDZ )
                   END IF
                   PPWO = PPWO + 4*NNB*NNB
@@ -886,12 +895,13 @@
       END IF
 *
       IF ( JCOL.LT.IHI )
-     $   CALL DGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
+     $   CALL AB_DGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q
+     $,
      $                LDQ, Z, LDZ, IERR )
       WORK( 1 ) = DBLE( LWKOPT )
 *
       RETURN
 *
-*     End of DGGHD3
+*     End of AB_DGGHD3
 *
       END

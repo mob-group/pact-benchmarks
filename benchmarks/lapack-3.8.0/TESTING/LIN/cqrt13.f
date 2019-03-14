@@ -1,4 +1,4 @@
-*> \brief \b CQRT13
+*> \brief \b AB_CQRT13
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
+*       SUBROUTINE AB_CQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, M, N, SCALE
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> CQRT13 generates a full-rank matrix that may be scaled to have large
+*> AB_CQRT13 generates a full-rank matrix that may be scaled to have large
 *> or small norm.
 *> \endverbatim
 *
@@ -89,7 +89,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
+      SUBROUTINE AB_CQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -116,11 +116,11 @@
       REAL               BIGNUM, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SCASUM, SLAMCH
-      EXTERNAL           CLANGE, SCASUM, SLAMCH
+      REAL               AB_CLANGE, AB_SCASUM, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARNV, CLASCL, SLABAD
+      EXTERNAL           AB_CLARNV, AB_CLASCL, AB_SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, REAL, SIGN
@@ -136,9 +136,10 @@
 *     benign matrix
 *
       DO 10 J = 1, N
-         CALL CLARNV( 2, ISEED, M, A( 1, J ) )
+         CALL AB_CLARNV( 2, ISEED, M, A( 1, J ) )
          IF( J.LE.M ) THEN
-            A( J, J ) = A( J, J ) + CMPLX( SIGN( SCASUM( M, A( 1, J ),
+            A( J, J ) = A( J, J ) + CMPLX( SIGN( AB_SCASUM( M, A( 1, J )
+     $,
      $                  1 ), REAL( A( J, J ) ) ) )
          END IF
    10 CONTINUE
@@ -146,31 +147,33 @@
 *     scaled versions
 *
       IF( SCALE.NE.1 ) THEN
-         NORMA = CLANGE( 'Max', M, N, A, LDA, DUMMY )
-         SMLNUM = SLAMCH( 'Safe minimum' )
+         NORMA = AB_CLANGE( 'Max', M, N, A, LDA, DUMMY )
+         SMLNUM = AB_SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
-         CALL SLABAD( SMLNUM, BIGNUM )
-         SMLNUM = SMLNUM / SLAMCH( 'Epsilon' )
+         CALL AB_SLABAD( SMLNUM, BIGNUM )
+         SMLNUM = SMLNUM / AB_SLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *
          IF( SCALE.EQ.2 ) THEN
 *
 *           matrix scaled up
 *
-            CALL CLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA,
+            CALL AB_CLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA
+     $,
      $                   INFO )
          ELSE IF( SCALE.EQ.3 ) THEN
 *
 *           matrix scaled down
 *
-            CALL CLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A, LDA,
+            CALL AB_CLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A, LDA
+     $,
      $                   INFO )
          END IF
       END IF
 *
-      NORMA = CLANGE( 'One-norm', M, N, A, LDA, DUMMY )
+      NORMA = AB_CLANGE( 'One-norm', M, N, A, LDA, DUMMY )
       RETURN
 *
-*     End of CQRT13
+*     End of AB_CQRT13
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DLASD7 merges the two sets of singular values together into a single sorted set. Then it tries to deflate the size of the problem. Used by sbdsdc.
+*> \brief \b AB_DLASD7 merges the two sets of singular values together into a single sorted set. Then it tries to deflate the size of the problem. Used by AB_SBDSDC.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLASD7 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd7.f">
+*> Download AB_DLASD7 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASD7.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd7.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASD7.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd7.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASD7.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, ZW, VF, VFW, VL,
+*       SUBROUTINE AB_DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, ZW, VF, VFW, VL,
 *                          VLW, ALPHA, BETA, DSIGMA, IDX, IDXP, IDXQ,
 *                          PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
 *                          C, S, INFO )
@@ -42,14 +42,14 @@
 *>
 *> \verbatim
 *>
-*> DLASD7 merges the two sets of singular values together into a single
+*> AB_DLASD7 merges the two sets of singular values together into a single
 *> sorted set. Then it tries to deflate the size of the problem. There
 *> are two ways in which deflation can occur:  when two or more singular
 *> values are close together or if there is a tiny entry in the Z
 *> vector. For each such occurrence the order of the related
 *> secular equation problem is reduced by one.
 *>
-*> DLASD7 is called from DLASD6.
+*> AB_DLASD7 is called from AB_DLASD6.
 *> \endverbatim
 *
 *  Arguments:
@@ -191,7 +191,7 @@
 *>         This contains the permutation which separately sorts the two
 *>         sub-problems in D into ascending order.  Note that entries in
 *>         the first half of this permutation must first be moved one
-*>         position backward; and entries in the second half
+*>         position backward; and entries in the AB_SECOND half
 *>         must first have NL+1 added to their values.
 *> \endverbatim
 *>
@@ -275,7 +275,8 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, ZW, VF, VFW, VL,
+      SUBROUTINE AB_DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, ZW, VF, VFW, 
+     $VL,
      $                   VLW, ALPHA, BETA, DSIGMA, IDX, IDXP, IDXQ,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   C, S, INFO )
@@ -312,11 +313,11 @@
       DOUBLE PRECISION   EPS, HLFTOL, TAU, TOL, Z1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAMRG, DROT, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DLAMRG, AB_DROT, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLAPY2
-      EXTERNAL           DLAMCH, DLAPY2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -343,7 +344,7 @@
          INFO = -24
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLASD7', -INFO )
+         CALL AB_XERBLA( 'AB_DLASD7', -INFO )
          RETURN
       END IF
 *
@@ -368,7 +369,7 @@
    10 CONTINUE
       VF( 1 ) = TAU
 *
-*     Generate the second part of the vector Z.
+*     Generate the AB_SECOND part of the vector Z.
 *
       DO 20 I = NLP2, M
          Z( I ) = BETA*VF( I )
@@ -390,7 +391,7 @@
          VLW( I ) = VL( IDXQ( I ) )
    40 CONTINUE
 *
-      CALL DLAMRG( NL, NR, DSIGMA( 2 ), 1, 1, IDX( 2 ) )
+      CALL AB_DLAMRG( NL, NR, DSIGMA( 2 ), 1, 1, IDX( 2 ) )
 *
       DO 50 I = 2, N
          IDXI = 1 + IDX( I )
@@ -402,12 +403,12 @@
 *
 *     Calculate the allowable deflation tolerence
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       TOL = MAX( ABS( ALPHA ), ABS( BETA ) )
       TOL = EIGHT*EIGHT*EPS*MAX( ABS( D( N ) ), TOL )
 *
 *     There are 2 kinds of deflation -- first a value in the z-vector
-*     is small, second two (or more) singular values are very close
+*     is small, AB_SECOND two (or more) singular values are very close
 *     together (their difference is small).
 *
 *     If the value in the z-vector is small, we simply permute the
@@ -467,7 +468,7 @@
 *           Find sqrt(a**2+b**2) without overflow or
 *           destructive underflow.
 *
-            TAU = DLAPY2( C, S )
+            TAU = AB_DLAPY2( C, S )
             Z( J ) = TAU
             Z( JPREV ) = ZERO
             C = C / TAU
@@ -490,8 +491,8 @@
                GIVNUM( GIVPTR, 2 ) = C
                GIVNUM( GIVPTR, 1 ) = S
             END IF
-            CALL DROT( 1, VF( JPREV ), 1, VF( J ), 1, C, S )
-            CALL DROT( 1, VL( JPREV ), 1, VL( J ), 1, C, S )
+            CALL AB_DROT( 1, VF( JPREV ), 1, VF( J ), 1, C, S )
+            CALL AB_DROT( 1, VL( JPREV ), 1, VL( J ), 1, C, S )
             K2 = K2 - 1
             IDXP( K2 ) = JPREV
             JPREV = J
@@ -538,7 +539,7 @@
 *     The deflated singular values go back into the last N - K slots of
 *     D.
 *
-      CALL DCOPY( N-K, DSIGMA( K+1 ), 1, D( K+1 ), 1 )
+      CALL AB_DCOPY( N-K, DSIGMA( K+1 ), 1, D( K+1 ), 1 )
 *
 *     Determine DSIGMA(1), DSIGMA(2), Z(1), VF(1), VL(1), VF(M), and
 *     VL(M).
@@ -548,7 +549,7 @@
       IF( ABS( DSIGMA( 2 ) ).LE.HLFTOL )
      $   DSIGMA( 2 ) = HLFTOL
       IF( M.GT.N ) THEN
-         Z( 1 ) = DLAPY2( Z1, Z( M ) )
+         Z( 1 ) = AB_DLAPY2( Z1, Z( M ) )
          IF( Z( 1 ).LE.TOL ) THEN
             C = ONE
             S = ZERO
@@ -557,8 +558,8 @@
             C = Z1 / Z( 1 )
             S = -Z( M ) / Z( 1 )
          END IF
-         CALL DROT( 1, VF( M ), 1, VF( 1 ), 1, C, S )
-         CALL DROT( 1, VL( M ), 1, VL( 1 ), 1, C, S )
+         CALL AB_DROT( 1, VF( M ), 1, VF( 1 ), 1, C, S )
+         CALL AB_DROT( 1, VL( M ), 1, VL( 1 ), 1, C, S )
       ELSE
          IF( ABS( Z1 ).LE.TOL ) THEN
             Z( 1 ) = TOL
@@ -569,12 +570,12 @@
 *
 *     Restore Z, VF, and VL.
 *
-      CALL DCOPY( K-1, ZW( 2 ), 1, Z( 2 ), 1 )
-      CALL DCOPY( N-1, VFW( 2 ), 1, VF( 2 ), 1 )
-      CALL DCOPY( N-1, VLW( 2 ), 1, VL( 2 ), 1 )
+      CALL AB_DCOPY( K-1, ZW( 2 ), 1, Z( 2 ), 1 )
+      CALL AB_DCOPY( N-1, VFW( 2 ), 1, VF( 2 ), 1 )
+      CALL AB_DCOPY( N-1, VLW( 2 ), 1, VL( 2 ), 1 )
 *
       RETURN
 *
-*     End of DLASD7
+*     End of AB_DLASD7
 *
       END

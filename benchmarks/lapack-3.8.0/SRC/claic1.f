@@ -1,4 +1,4 @@
-*> \brief \b CLAIC1 applies one step of incremental condition estimation.
+*> \brief \b AB_CLAIC1 applies one step of incremental condition estimation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAIC1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claic1.f">
+*> Download AB_CLAIC1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAIC1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claic1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAIC1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claic1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAIC1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+*       SUBROUTINE AB_CLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            J, JOB
@@ -35,13 +35,13 @@
 *>
 *> \verbatim
 *>
-*> CLAIC1 applies one step of incremental condition estimation in
+*> AB_CLAIC1 applies one step of incremental condition estimation in
 *> its simplest version:
 *>
 *> Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j
 *> lower triangular matrix L, such that
 *>          twonorm(L*x) = sest
-*> Then CLAIC1 computes sestpr, s, c such that
+*> Then AB_CLAIC1 computes sestpr, s, c such that
 *> the vector
 *>                 [ s*x ]
 *>          xhat = [  c  ]
@@ -133,7 +133,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+      SUBROUTINE AB_CLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -166,14 +166,14 @@
       INTRINSIC          ABS, CONJG, MAX, SQRT
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      COMPLEX            CDOTC
-      EXTERNAL           SLAMCH, CDOTC
+      REAL               AB_SLAMCH
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_SLAMCH, AB_CDOTC
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ALPHA = CDOTC( J, X, 1, W, 1 )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ALPHA = AB_CDOTC( J, X, 1, W, 1 )
 *
       ABSALP = ABS( ALPHA )
       ABSGAM = ABS( GAMMA )
@@ -221,7 +221,8 @@
                SESTPR = S1
             END IF
             RETURN
-         ELSE IF( ABSEST.LE.EPS*ABSALP .OR. ABSEST.LE.EPS*ABSGAM ) THEN
+         ELSE IF( ABSEST.LE.EPS*ABSALP .OR. ABSEST.LE.EPS*ABSGAM ) TH
+     $EN
             S1 = ABSGAM
             S2 = ABSALP
             IF( S1.LE.S2 ) THEN
@@ -302,7 +303,8 @@
                SESTPR = S2
             END IF
             RETURN
-         ELSE IF( ABSEST.LE.EPS*ABSALP .OR. ABSEST.LE.EPS*ABSGAM ) THEN
+         ELSE IF( ABSEST.LE.EPS*ABSALP .OR. ABSEST.LE.EPS*ABSGAM ) TH
+     $EN
             S1 = ABSGAM
             S2 = ABSALP
             IF( S1.LE.S2 ) THEN
@@ -366,6 +368,6 @@
       END IF
       RETURN
 *
-*     End of CLAIC1
+*     End of AB_CLAIC1
 *
       END

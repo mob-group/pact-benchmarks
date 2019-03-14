@@ -1,4 +1,4 @@
-*> \brief \b CCHKBL
+*> \brief \b AB_CCHKBL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKBL( NIN, NOUT )
+*       SUBROUTINE AB_CCHKBL( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKBL tests CGEBAL, a routine for balancing a general complex
+*> AB_CCHKBL tests AB_CGEBAL, a routine for balancing a general complex
 *> matrix and isolating some of its eigenvalues.
 *> \endverbatim
 *
@@ -52,7 +52,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CCHKBL( NIN, NOUT )
+      SUBROUTINE AB_CCHKBL( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,11 +83,11 @@
       COMPLEX            A( LDA, LDA ), AIN( LDA, LDA )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEBAL
+      EXTERNAL           AB_CGEBAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -107,8 +107,8 @@
       KNT = 0
       RMAX = ZERO
       VMAX = ZERO
-      SFMIN = SLAMCH( 'S' )
-      MEPS = SLAMCH( 'E' )
+      SFMIN = AB_SLAMCH( 'S' )
+      MEPS = AB_SLAMCH( 'E' )
 *
    10 CONTINUE
 *
@@ -125,9 +125,9 @@
    30 CONTINUE
       READ( NIN, FMT = * )( SCALIN( I ), I = 1, N )
 *
-      ANORM = CLANGE( 'M', N, N, A, LDA, DUMMY )
+      ANORM = AB_CLANGE( 'M', N, N, A, LDA, DUMMY )
       KNT = KNT + 1
-      CALL CGEBAL( 'B', N, A, LDA, ILO, IHI, SCALE, INFO )
+      CALL AB_CGEBAL( 'B', N, A, LDA, ILO, IHI, SCALE, INFO )
 *
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
@@ -163,7 +163,7 @@
    70 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of CGEBAL .. ' )
+ 9999 FORMAT( 1X, '.. test output of AB_CGEBAL .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error            = ', E12.3 )
@@ -180,6 +180,6 @@
 *
       RETURN
 *
-*     End of CCHKBL
+*     End of AB_CCHKBL
 *
       END

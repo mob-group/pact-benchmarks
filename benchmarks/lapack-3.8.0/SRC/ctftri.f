@@ -1,4 +1,4 @@
-*> \brief \b CTFTRI
+*> \brief \b AB_CTFTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTFTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctftri.f">
+*> Download AB_CTFTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTFTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctftri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTFTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctftri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTFTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTFTRI( TRANSR, UPLO, DIAG, N, A, INFO )
+*       SUBROUTINE AB_CTFTRI( TRANSR, UPLO, DIAG, N, A, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO, DIAG
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CTFTRI computes the inverse of a triangular matrix A stored in RFP
+*> AB_CTFTRI computes the inverse of a triangular matrix A stored in RFP
 *> format.
 *>
 *> This is a Level 3 BLAS version of the algorithm.
@@ -219,7 +219,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTFTRI( TRANSR, UPLO, DIAG, N, A, INFO )
+      SUBROUTINE AB_CTFTRI( TRANSR, UPLO, DIAG, N, A, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -245,11 +245,11 @@
       INTEGER            N1, N2, K
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CTRMM, CTRTRI
+      EXTERNAL           AB_XERBLA, AB_CTRMM, AB_CTRTRI
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -259,20 +259,21 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = LSAME( TRANSR, 'N' )
-      LOWER = LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'C' ) ) THEN
+      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
+      LOWER = AB_LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
+      ELSE IF( .NOT.AB_LSAME( DIAG, 'N' ) .AND. .NOT.AB_LSAME( DIAG, 
+     $'U' ) )
      $         THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTFTRI', -INFO )
+         CALL AB_XERBLA( 'AB_CTFTRI', -INFO )
          RETURN
       END IF
 *
@@ -318,17 +319,19 @@
 *             T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0)
 *             T1 -> a(0), T2 -> a(n), S -> a(n1)
 *
-               CALL CTRTRI( 'L', DIAG, N1, A( 0 ), N, INFO )
+               CALL AB_CTRTRI( 'L', DIAG, N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'L', 'N', DIAG, N2, N1, -CONE, A( 0 ),
+               CALL AB_CTRMM( 'R', 'L', 'N', DIAG, N2, N1, -CONE, A( 0 )
+     $,
      $                     N, A( N1 ), N )
-               CALL CTRTRI( 'U', DIAG, N2, A( N ), N, INFO )
+               CALL AB_CTRTRI( 'U', DIAG, N2, A( N ), N, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'U', 'C', DIAG, N2, N1, CONE, A( N ), N,
+               CALL AB_CTRMM( 'L', 'U', 'C', DIAG, N2, N1, CONE, A( N ),
+     $ N,
      $                     A( N1 ), N )
 *
             ELSE
@@ -337,17 +340,19 @@
 *             T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0)
 *             T1 -> a(n2), T2 -> a(n1), S -> a(0)
 *
-               CALL CTRTRI( 'L', DIAG, N1, A( N2 ), N, INFO )
+               CALL AB_CTRTRI( 'L', DIAG, N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'L', 'C', DIAG, N1, N2, -CONE, A( N2 ),
+               CALL AB_CTRMM( 'L', 'L', 'C', DIAG, N1, N2, -CONE, A( N2 
+     $),
      $                     N, A( 0 ), N )
-               CALL CTRTRI( 'U', DIAG, N2, A( N1 ), N, INFO )
+               CALL AB_CTRTRI( 'U', DIAG, N2, A( N1 ), N, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'U', 'N', DIAG, N1, N2, CONE, A( N1 ),
+               CALL AB_CTRMM( 'R', 'U', 'N', DIAG, N1, N2, CONE, A( N1 )
+     $,
      $                     N, A( 0 ), N )
 *
             END IF
@@ -361,17 +366,18 @@
 *              SRPA for LOWER, TRANSPOSE and N is odd
 *              T1 -> a(0), T2 -> a(1), S -> a(0+n1*n1)
 *
-               CALL CTRTRI( 'U', DIAG, N1, A( 0 ), N1, INFO )
+               CALL AB_CTRTRI( 'U', DIAG, N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'U', 'N', DIAG, N1, N2, -CONE, A( 0 ),
+               CALL AB_CTRMM( 'L', 'U', 'N', DIAG, N1, N2, -CONE, A( 0 )
+     $,
      $                     N1, A( N1*N1 ), N1 )
-               CALL CTRTRI( 'L', DIAG, N2, A( 1 ), N1, INFO )
+               CALL AB_CTRTRI( 'L', DIAG, N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'L', 'C', DIAG, N1, N2, CONE, A( 1 ),
+               CALL AB_CTRMM( 'R', 'L', 'C', DIAG, N1, N2, CONE, A( 1 ),
      $                     N1, A( N1*N1 ), N1 )
 *
             ELSE
@@ -379,17 +385,17 @@
 *              SRPA for UPPER, TRANSPOSE and N is odd
 *              T1 -> a(0+n2*n2), T2 -> a(0+n1*n2), S -> a(0)
 *
-               CALL CTRTRI( 'U', DIAG, N1, A( N2*N2 ), N2, INFO )
+               CALL AB_CTRTRI( 'U', DIAG, N1, A( N2*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'U', 'C', DIAG, N2, N1, -CONE,
+               CALL AB_CTRMM( 'R', 'U', 'C', DIAG, N2, N1, -CONE,
      $                     A( N2*N2 ), N2, A( 0 ), N2 )
-               CALL CTRTRI( 'L', DIAG, N2, A( N1*N2 ), N2, INFO )
+               CALL AB_CTRTRI( 'L', DIAG, N2, A( N1*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'L', 'N', DIAG, N2, N1, CONE,
+               CALL AB_CTRMM( 'L', 'L', 'N', DIAG, N2, N1, CONE,
      $                     A( N1*N2 ), N2, A( 0 ), N2 )
             END IF
 *
@@ -409,17 +415,18 @@
 *              T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0)
 *              T1 -> a(1), T2 -> a(0), S -> a(k+1)
 *
-               CALL CTRTRI( 'L', DIAG, K, A( 1 ), N+1, INFO )
+               CALL AB_CTRTRI( 'L', DIAG, K, A( 1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'L', 'N', DIAG, K, K, -CONE, A( 1 ),
+               CALL AB_CTRMM( 'R', 'L', 'N', DIAG, K, K, -CONE, A( 1 ),
      $                     N+1, A( K+1 ), N+1 )
-               CALL CTRTRI( 'U', DIAG, K, A( 0 ), N+1, INFO )
+               CALL AB_CTRTRI( 'U', DIAG, K, A( 0 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'U', 'C', DIAG, K, K, CONE, A( 0 ), N+1,
+               CALL AB_CTRMM( 'L', 'U', 'C', DIAG, K, K, CONE, A( 0 ), N
+     $+1,
      $                     A( K+1 ), N+1 )
 *
             ELSE
@@ -428,17 +435,19 @@
 *              T1 -> a(k+1,0) ,  T2 -> a(k,0),   S -> a(0,0)
 *              T1 -> a(k+1), T2 -> a(k), S -> a(0)
 *
-               CALL CTRTRI( 'L', DIAG, K, A( K+1 ), N+1, INFO )
+               CALL AB_CTRTRI( 'L', DIAG, K, A( K+1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'L', 'C', DIAG, K, K, -CONE, A( K+1 ),
+               CALL AB_CTRMM( 'L', 'L', 'C', DIAG, K, K, -CONE, A( K+1 )
+     $,
      $                     N+1, A( 0 ), N+1 )
-               CALL CTRTRI( 'U', DIAG, K, A( K ), N+1, INFO )
+               CALL AB_CTRTRI( 'U', DIAG, K, A( K ), N+1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'U', 'N', DIAG, K, K, CONE, A( K ), N+1,
+               CALL AB_CTRMM( 'R', 'U', 'N', DIAG, K, K, CONE, A( K ), N
+     $+1,
      $                     A( 0 ), N+1 )
             END IF
          ELSE
@@ -451,17 +460,19 @@
 *              T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1)
 *              T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1)); lda=k
 *
-               CALL CTRTRI( 'U', DIAG, K, A( K ), K, INFO )
+               CALL AB_CTRTRI( 'U', DIAG, K, A( K ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'U', 'N', DIAG, K, K, -CONE, A( K ), K,
+               CALL AB_CTRMM( 'L', 'U', 'N', DIAG, K, K, -CONE, A( K ), 
+     $K,
      $                     A( K*( K+1 ) ), K )
-               CALL CTRTRI( 'L', DIAG, K, A( 0 ), K, INFO )
+               CALL AB_CTRTRI( 'L', DIAG, K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'L', 'C', DIAG, K, K, CONE, A( 0 ), K,
+               CALL AB_CTRMM( 'R', 'L', 'C', DIAG, K, K, CONE, A( 0 ), K
+     $,
      $                     A( K*( K+1 ) ), K )
             ELSE
 *
@@ -469,17 +480,18 @@
 *              T1 -> B(0,k+1),     T2 -> B(0,k),   S -> B(0,0)
 *              T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0)); lda=k
 *
-               CALL CTRTRI( 'U', DIAG, K, A( K*( K+1 ) ), K, INFO )
+               CALL AB_CTRTRI( 'U', DIAG, K, A( K*( K+1 ) ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'R', 'U', 'C', DIAG, K, K, -CONE,
+               CALL AB_CTRMM( 'R', 'U', 'C', DIAG, K, K, -CONE,
      $                     A( K*( K+1 ) ), K, A( 0 ), K )
-               CALL CTRTRI( 'L', DIAG, K, A( K*K ), K, INFO )
+               CALL AB_CTRTRI( 'L', DIAG, K, A( K*K ), K, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
                IF( INFO.GT.0 )
      $            RETURN
-               CALL CTRMM( 'L', 'L', 'N', DIAG, K, K, CONE, A( K*K ), K,
+               CALL AB_CTRMM( 'L', 'L', 'N', DIAG, K, K, CONE, A( K*K ),
+     $ K,
      $                     A( 0 ), K )
             END IF
          END IF
@@ -487,6 +499,6 @@
 *
       RETURN
 *
-*     End of CTFTRI
+*     End of AB_CTFTRI
 *
       END

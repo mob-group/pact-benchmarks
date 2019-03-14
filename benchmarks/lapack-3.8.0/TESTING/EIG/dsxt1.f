@@ -1,4 +1,4 @@
-*> \brief \b DSXT1
+*> \brief \b AB_DSXT1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DSXT1( IJOB, D1, N1, D2, N2, ABSTOL,
+*       DOUBLE PRECISION FUNCTION AB_DSXT1( IJOB, D1, N1, D2, N2, ABSTOL,
 *                        ULP, UNFL )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DSXT1  computes the difference between a set of eigenvalues.
+*> AB_DSXT1  computes the difference between a set of eigenvalues.
 *> The result is returned as the function value.
 *>
 *> IJOB = 1:   Computes   max { min | D1(i)-D2(j) | }
@@ -61,7 +61,7 @@
 *> \param[in] D2
 *> \verbatim
 *>          D2 is DOUBLE PRECISION array, dimension (N2)
-*>          The second array.  D2 should be in increasing order, i.e.,
+*>          The AB_SECOND array.  D2 should be in increasing order, i.e.,
 *>          D2(j) <= D2(j+1).
 *> \endverbatim
 *>
@@ -103,7 +103,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DSXT1( IJOB, D1, N1, D2, N2, ABSTOL,
+      DOUBLE PRECISION FUNCTION AB_DSXT1( IJOB, D1, N1, D2, N2, ABSTOL,
      $                 ULP, UNFL )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -156,9 +156,9 @@
          TEMP1 = MAX( TEMP1, TEMP2 )
    20 CONTINUE
 *
-      DSXT1 = TEMP1
+      AB_DSXT1 = TEMP1
       RETURN
 *
-*     End of DSXT1
+*     End of AB_DSXT1
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CPOT03
+*> \brief \b AB_CPOT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+*       SUBROUTINE AB_CPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
 *                          RWORK, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> CPOT03 computes the residual for a Hermitian matrix times its
+*> AB_CPOT03 computes the residual for a Hermitian matrix times its
 *> inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -123,7 +123,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+      SUBROUTINE AB_CPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
      $                   RWORK, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -156,12 +156,12 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE, CLANHE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, CLANHE, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE, AB_CLANHE, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHEMM
+      EXTERNAL           AB_CHEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, REAL
@@ -178,9 +178,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
-      AINVNM = CLANHE( '1', UPLO, N, AINV, LDAINV, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      AINVNM = AB_CLANHE( '1', UPLO, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -188,10 +188,10 @@
       END IF
       RCOND = ( ONE/ANORM ) / AINVNM
 *
-*     Expand AINV into a full matrix and call CHEMM to multiply
+*     Expand AINV into a full matrix and call AB_CHEMM to multiply
 *     AINV on the left by A.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J - 1
                AINV( J, I ) = CONJG( AINV( I, J ) )
@@ -204,7 +204,7 @@
    30       CONTINUE
    40    CONTINUE
       END IF
-      CALL CHEMM( 'Left', UPLO, N, N, -CONE, A, LDA, AINV, LDAINV,
+      CALL AB_CHEMM( 'Left', UPLO, N, N, -CONE, A, LDA, AINV, LDAINV,
      $            CZERO, WORK, LDWORK )
 *
 *     Add the identity matrix to WORK .
@@ -215,12 +215,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = CLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = AB_CLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND )/EPS ) / REAL( N )
 *
       RETURN
 *
-*     End of CPOT03
+*     End of AB_CPOT03
 *
       END

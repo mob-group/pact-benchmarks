@@ -1,4 +1,4 @@
-*> \brief \b STBT05
+*> \brief \b AB_STBT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+*       SUBROUTINE AB_STBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
 *                          LDB, X, LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> STBT05 tests the error bounds from iterative refinement for the
+*> AB_STBT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> triangular band matrix.
 *>
@@ -186,7 +186,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE STBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+      SUBROUTINE AB_STBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
      $                   LDB, X, LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -216,10 +216,10 @@
       REAL               AXBI, DIFF, EPS, ERRBND, OVFL, TMP, UNFL, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -234,12 +234,12 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      UPPER = LSAME( UPLO, 'U' )
-      NOTRAN = LSAME( TRANS, 'N' )
-      UNIT = LSAME( DIAG, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      UNIT = AB_LSAME( DIAG, 'U' )
       NZ = MIN( KD, N-1 ) + 1
 *
 *     Test 1:  Compute the maximum of
@@ -248,7 +248,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = ISAMAX( N, X( 1, J ), 1 )
+         IMAX = AB_ISAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( ABS( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -329,6 +329,6 @@
 *
       RETURN
 *
-*     End of STBT05
+*     End of AB_STBT05
 *
       END

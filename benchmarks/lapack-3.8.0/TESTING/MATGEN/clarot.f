@@ -1,4 +1,4 @@
-*> \brief \b CLAROT
+*> \brief \b AB_CLAROT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
+*       SUBROUTINE AB_CLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
 *                          XRIGHT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*>    CLAROT applies a (Givens) rotation to two adjacent rows or
+*>    AB_CLAROT applies a (Givens) rotation to two adjacent rows or
 *>    columns, where one element of the first and/or last column/row
 *>    for use on matrices stored in some format other than GE, so
 *>    that elements of the matrix may be used or modified for which
@@ -44,7 +44,7 @@
 *>    symmetry.  ' ' indicates elements which are necessarily zero,
 *>     and have no storage provided.
 *>
-*>    Those columns which have two '*'s can be handled by SROT.
+*>    Those columns which have two '*'s can be handled by AB_SROT.
 *>    Those columns which have no '*'s can be ignored, since as long
 *>    as the Givens rotations are carefully applied to preserve
 *>    symmetry, their values are determined.
@@ -56,7 +56,7 @@
 *>
 *>    The element p would have to be set correctly, then that column
 *>    is rotated, setting p to its new value.  The next call to
-*>    CLAROT would rotate columns j and j+1, using p, and restore
+*>    AB_CLAROT would rotate columns j and j+1, using p, and restore
 *>    symmetry.  The element q would start out being zero, and be
 *>    made non-zero by the rotation.  Later, rotations would presumably
 *>    be chosen to zero q out.
@@ -66,14 +66,14 @@
 *>
 *>      General dense matrix:
 *>
-*>              CALL CLAROT(.TRUE.,.FALSE.,.FALSE., N, C,S,
+*>              CALL AB_CLAROT(.TRUE.,.FALSE.,.FALSE., N, C,S,
 *>                      A(i,1),LDA, DUMMY, DUMMY)
 *>
 *>      General banded matrix in GB format:
 *>
 *>              j = MAX(1, i-KL )
 *>              NL = MIN( N, i+KU+1 ) + 1-j
-*>              CALL CLAROT( .TRUE., i-KL.GE.1, i+KU.LT.N, NL, C,S,
+*>              CALL AB_CLAROT( .TRUE., i-KL.GE.1, i+KU.LT.N, NL, C,S,
 *>                      A(KU+i+1-j,j),LDA-1, XLEFT, XRIGHT )
 *>
 *>              [ note that i+1-j is just MIN(i,KL+1) ]
@@ -83,13 +83,13 @@
 *>
 *>              j = MAX(1, i-K )
 *>              NL = MIN( K+1, i ) + 1
-*>              CALL CLAROT( .TRUE., i-K.GE.1, .TRUE., NL, C,S,
+*>              CALL AB_CLAROT( .TRUE., i-K.GE.1, .TRUE., NL, C,S,
 *>                      A(i,j), LDA, XLEFT, XRIGHT )
 *>
 *>      Same, but upper triangle only:
 *>
 *>              NL = MIN( K+1, N-i ) + 1
-*>              CALL CLAROT( .TRUE., .TRUE., i+K.LT.N, NL, C,S,
+*>              CALL AB_CLAROT( .TRUE., .TRUE., i+K.LT.N, NL, C,S,
 *>                      A(i,i), LDA, XLEFT, XRIGHT )
 *>
 *>      Symmetric banded matrix in SB format, bandwidth K,
@@ -111,7 +111,7 @@
 *>      GB:
 *>              j = MAX(1, i-KU )
 *>              NL = MIN( N, i+KL+1 ) + 1-j
-*>              CALL CLAROT( .TRUE., i-KU.GE.1, i+KL.LT.N, NL, C,S,
+*>              CALL AB_CLAROT( .TRUE., i-KU.GE.1, i+KL.LT.N, NL, C,S,
 *>                      A(KU+j+1-i,i),LDA-1, XTOP, XBOTTM )
 *>
 *>              [note that KU+j+1-i is just MAX(1,KU+2-i)]
@@ -132,14 +132,14 @@
 *
 *> \verbatim
 *>  LROWS  - LOGICAL
-*>           If .TRUE., then CLAROT will rotate two rows.  If .FALSE.,
+*>           If .TRUE., then AB_CLAROT will rotate two rows.  If .FALSE.,
 *>           then it will rotate two columns.
 *>           Not modified.
 *>
 *>  LLEFT  - LOGICAL
 *>           If .TRUE., then XLEFT will be used instead of the
 *>           corresponding element of A for the first element in the
-*>           second row (if LROWS=.FALSE.) or column (if LROWS=.TRUE.)
+*>           AB_SECOND row (if LROWS=.FALSE.) or column (if LROWS=.TRUE.)
 *>           If .FALSE., then the corresponding element of A will be
 *>           used.
 *>           Not modified.
@@ -159,7 +159,7 @@
 *>           least 2.  The number of rows/columns to be rotated
 *>           exclusive of those involving XLEFT and/or XRIGHT may
 *>           not be negative, i.e., NL minus how many of LLEFT and
-*>           LRIGHT are .TRUE. must be at least zero; if not, XERBLA
+*>           LRIGHT are .TRUE. must be at least zero; if not, AB_XERBLA
 *>           will be called.
 *>           Not modified.
 *>
@@ -168,9 +168,9 @@
 *>           true, then the matrix ( c  s )
 *>                                 ( _  _ )
 *>                                 (-s  c )  is applied from the left;
-*>           if false, then the transpose (not conjugated) thereof is
+*>           if FALSE, then the transpose (not conjugated) thereof is
 *>           applied from the right.  Note that in contrast to the
-*>           output of CROTG or to most versions of CROT, both C and S
+*>           output of AB_AB_CROTG or to most versions of AB_CROT, both C and S
 *>           are complex.  For a Givens rotation, |C|**2 + |S|**2 should
 *>           be 1, but this is not checked.
 *>           Not modified.
@@ -188,9 +188,9 @@
 *>           routine.  If A contains a matrix stored in band (GB, HB, or
 *>           SB) format, then this should be *one less* than the leading
 *>           dimension used in the calling routine.  Thus, if A were
-*>           dimensioned A(LDA,*) in CLAROT, then A(1,j) would be the
+*>           dimensioned A(LDA,*) in AB_CLAROT, then A(1,j) would be the
 *>           j-th element in the first of the two rows to be rotated,
-*>           and A(2,j) would be the j-th in the second, regardless of
+*>           and A(2,j) would be the j-th in the AB_SECOND, regardless of
 *>           how the array may be stored in the calling routine.  [A
 *>           cannot, however, actually be dimensioned thus, since for
 *>           band format, the row number may exceed LDA, which is not
@@ -226,7 +226,8 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE CLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
+      SUBROUTINE AB_CLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEF
+     $T,
      $                   XRIGHT )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -253,7 +254,7 @@
       COMPLEX            XT( 2 ), YT( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG
@@ -292,17 +293,17 @@
 *     Check for errors
 *
       IF( NL.LT.NT ) THEN
-         CALL XERBLA( 'CLAROT', 4 )
+         CALL AB_XERBLA( 'AB_CLAROT', 4 )
          RETURN
       END IF
       IF( LDA.LE.0 .OR. ( .NOT.LROWS .AND. LDA.LT.NL-NT ) ) THEN
-         CALL XERBLA( 'CLAROT', 8 )
+         CALL AB_XERBLA( 'AB_CLAROT', 8 )
          RETURN
       END IF
 *
 *     Rotate
 *
-*     CROT( NL-NT, A(IX),IINC, A(IY),IINC, C, S ) with complex C, S
+*     AB_CROT( NL-NT, A(IX),IINC, A(IY),IINC, C, S ) with complex C, S
 *
       DO 10 J = 0, NL - NT - 1
          TEMPX = C*A( IX+J*IINC ) + S*A( IY+J*IINC )
@@ -311,7 +312,7 @@
          A( IX+J*IINC ) = TEMPX
    10 CONTINUE
 *
-*     CROT( NT, XT,1, YT,1, C, S ) with complex C, S
+*     AB_CROT( NT, XT,1, YT,1, C, S ) with complex C, S
 *
       DO 20 J = 1, NT
          TEMPX = C*XT( J ) + S*YT( J )
@@ -333,6 +334,6 @@
 *
       RETURN
 *
-*     End of CLAROT
+*     End of AB_CLAROT
 *
       END

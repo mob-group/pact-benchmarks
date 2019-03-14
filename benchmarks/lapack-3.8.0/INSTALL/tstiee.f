@@ -25,8 +25,8 @@
 *     November 2006
 *
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Local Scalars ..
       INTEGER            IEEEOK
@@ -37,9 +37,9 @@
      $   'We are about to check whether infinity arithmetic'
       WRITE( 6, FMT = * )'can be trusted.  If this test hangs, set'
       WRITE( 6, FMT = * )
-     $   'ILAENV = 0 for ISPEC = 10 in LAPACK/SRC/ilaenv.f'
+     $   'AB_ILAENV = 0 for ISPEC = 10 in LAPACK/SRC/AB_ILAENV.f'
 *
-      IEEEOK = ILAENV( 10, 'ILAENV', 'N', 1, 2, 3, 4 )
+      IEEEOK = AB_ILAENV( 10, 'AB_ILAENV', 'N', 1, 2, 3, 4 )
       WRITE( 6, FMT = * )
 *
       IF( IEEEOK.EQ.0 ) THEN
@@ -60,8 +60,8 @@
      $   'We are about to check whether NaN arithmetic'
       WRITE( 6, FMT = * )'can be trusted.  If this test hangs, set'
       WRITE( 6, FMT = * )
-     $   'ILAENV = 0 for ISPEC = 11 in LAPACK/SRC/ilaenv.f'
-      IEEEOK = ILAENV( 11, 'ILAENV', 'N', 1, 2, 3, 4 )
+     $   'AB_ILAENV = 0 for ISPEC = 11 in LAPACK/SRC/AB_ILAENV.f'
+      IEEEOK = AB_ILAENV( 11, 'AB_ILAENV', 'N', 1, 2, 3, 4 )
 *
       WRITE( 6, FMT = * )
       IF( IEEEOK.EQ.0 ) THEN
@@ -78,7 +78,8 @@
       WRITE( 6, FMT = * )
 *
       END
-      INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
+      INTEGER          FUNCTION AB_ILAENV( ISPEC, NAME, OPTS, N1, N2, N3
+     $,
      $                 N4 )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -93,7 +94,7 @@
 *  Purpose
 *  =======
 *
-*  ILAENV is called from the LAPACK routines to choose problem-dependent
+*  AB_ILAENV is called from the LAPACK routines to choose problem-dependent
 *  parameters for the local environment.  See ISPEC for a description of
 *  the parameters.
 *
@@ -111,7 +112,7 @@
 *
 *  ISPEC   (input) INTEGER
 *          Specifies the parameter to be returned as the value of
-*          ILAENV.
+*          AB_ILAENV.
 *          = 1: the optimal blocksize; if this value is 1, an unblocked
 *               algorithm will give the best performance.
 *          = 2: the minimum block size for which the block routine
@@ -123,7 +124,7 @@
 *               eigenvalue routines
 *          = 5: the minimum column dimension for blocking to be used;
 *               rectangular blocks must have dimension at least k by m,
-*               where k is given by ILAENV(2,...) and m by ILAENV(5,...)
+*               where k is given by AB_ILAENV(2,...) and m by AB_ILAENV(5,...)
 *          = 6: the crossover point for the SVD (when reducing an m by n
 *               matrix to bidiagonal form, if max(m,n)/min(m,n) exceeds
 *               this value, a QR factorization is used first to reduce
@@ -154,14 +155,14 @@
 *          Problem dimensions for the subroutine NAME; these may not all
 *          be required.
 *
-* (ILAENV) (output) INTEGER
+* (AB_ILAENV) (output) INTEGER
 *          >= 0: the value of the parameter specified by ISPEC
-*          < 0:  if ILAENV = -k, the k-th argument had an illegal value.
+*          < 0:  if AB_ILAENV = -k, the k-th argument had an illegal value.
 *
 *  Further Details
 *  ===============
 *
-*  The following conventions have been used when calling ILAENV from the
+*  The following conventions have been used when calling AB_ILAENV from the
 *  LAPACK routines:
 *  1)  OPTS is a concatenation of all of the character options to
 *      subroutine NAME, in the same order that they appear in the
@@ -169,13 +170,13 @@
 *      the value of the parameter specified by ISPEC.
 *  2)  The problem dimensions N1, N2, N3, N4 are specified in the order
 *      that they appear in the argument list for NAME.  N1 is used
-*      first, N2 second, and so on, and unused problem dimensions are
+*      first, N2 AB_SECOND, and so on, and unused problem dimensions are
 *      passed a value of -1.
-*  3)  The parameter value returned by ILAENV is checked for validity in
-*      the calling subroutine.  For example, ILAENV is used to retrieve
-*      the optimal blocksize for STRTRI as follows:
+*  3)  The parameter value returned by AB_ILAENV is checked for validity in
+*      the calling subroutine.  For example, AB_ILAENV is used to retrieve
+*      the optimal blocksize for AB_STRTRI as follows:
 *
-*      NB = ILAENV( 1, 'STRTRI', UPLO // DIAG, N, -1, -1, -1 )
+*      NB = AB_ILAENV( 1, 'AB_STRTRI', UPLO // DIAG, N, -1, -1, -1 )
 *      IF( NB.LE.1 ) NB = MAX( 1, N )
 *
 *  =====================================================================
@@ -192,8 +193,8 @@
       INTRINSIC          CHAR, ICHAR, INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            IEEECK
-      EXTERNAL           IEEECK
+      INTEGER            AB_IEEECK
+      EXTERNAL           AB_IEEECK
 *     ..
 *     .. Executable Statements ..
 *
@@ -202,14 +203,14 @@
 *
 *     Invalid value for ISPEC
 *
-      ILAENV = -1
+      AB_ILAENV = -1
       RETURN
 *
   100 CONTINUE
 *
 *     Convert NAME to upper case if the first character is lower case.
 *
-      ILAENV = 1
+      AB_ILAENV = 1
       SUBNAM = NAME
       IC = ICHAR( SUBNAM( 1:1 ) )
       IZ = ICHAR( 'Z' )
@@ -420,7 +421,7 @@
             NB = 1
          END IF
       END IF
-      ILAENV = NB
+      AB_ILAENV = NB
       RETURN
 *
   200 CONTINUE
@@ -498,7 +499,7 @@
             END IF
          END IF
       END IF
-      ILAENV = NBMIN
+      AB_ILAENV = NBMIN
       RETURN
 *
   300 CONTINUE
@@ -552,42 +553,42 @@
             END IF
          END IF
       END IF
-      ILAENV = NX
+      AB_ILAENV = NX
       RETURN
 *
   400 CONTINUE
 *
 *     ISPEC = 4:  number of shifts (used by xHSEQR)
 *
-      ILAENV = 6
+      AB_ILAENV = 6
       RETURN
 *
   500 CONTINUE
 *
 *     ISPEC = 5:  minimum column dimension (not used)
 *
-      ILAENV = 2
+      AB_ILAENV = 2
       RETURN
 *
   600 CONTINUE
 *
 *     ISPEC = 6:  crossover point for SVD (used by xGELSS and xGESVD)
 *
-      ILAENV = INT( REAL( MIN( N1, N2 ) )*1.6E0 )
+      AB_ILAENV = INT( REAL( MIN( N1, N2 ) )*1.6E0 )
       RETURN
 *
   700 CONTINUE
 *
 *     ISPEC = 7:  number of processors (not used)
 *
-      ILAENV = 1
+      AB_ILAENV = 1
       RETURN
 *
   800 CONTINUE
 *
 *     ISPEC = 8:  crossover point for multishift (used by xHSEQR)
 *
-      ILAENV = 50
+      AB_ILAENV = 50
       RETURN
 *
   900 CONTINUE
@@ -596,16 +597,16 @@
 *                 computation tree in the divide-and-conquer algorithm
 *                 (used by xGELSD and xGESDD)
 *
-      ILAENV = 25
+      AB_ILAENV = 25
       RETURN
 *
  1000 CONTINUE
 *
 *     ISPEC = 10: ieee NaN arithmetic can be trusted not to trap
 *
-      ILAENV = 1
-      IF (ILAENV .EQ. 1) THEN
-         ILAENV = IEEECK( 0, 0.0, 1.0 )
+      AB_ILAENV = 1
+      IF (AB_ILAENV .EQ. 1) THEN
+         AB_ILAENV = AB_IEEECK( 0, 0.0, 1.0 )
       ENDIF
       RETURN
 *
@@ -613,16 +614,16 @@
 *
 *     ISPEC = 11: infinity arithmetic can be trusted not to trap
 *
-      ILAENV = 1
-      IF (ILAENV .EQ. 1) THEN
-         ILAENV = IEEECK( 1, 0.0, 1.0 )
+      AB_ILAENV = 1
+      IF (AB_ILAENV .EQ. 1) THEN
+         AB_ILAENV = AB_IEEECK( 1, 0.0, 1.0 )
       ENDIF
       RETURN
 *
-*     End of ILAENV
+*     End of AB_ILAENV
 *
       END
-      INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
+      INTEGER          FUNCTION AB_IEEECK( ISPEC, ZERO, ONE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -636,7 +637,7 @@
 *  Purpose
 *  =======
 *
-*  IEEECK is called from the ILAENV to verify that Inifinity and
+*  AB_IEEECK is called from the AB_ILAENV to verify that Inifinity and
 *  possibly NaN arithmetic is safe (i.e. will not trap).
 *
 *  Arguments:
@@ -667,53 +668,53 @@
      $     NEWZRO
 *     ..
 *     .. Executable Statements ..
-      IEEECK = 1
+      AB_IEEECK = 1
 
       POSINF = ONE /ZERO
       IF ( POSINF .LE. ONE ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       NEGINF = -ONE / ZERO
       IF ( NEGINF .GE. ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       NEGZRO = ONE / ( NEGINF + ONE )
       IF ( NEGZRO .NE. ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       NEGINF = ONE / NEGZRO
       IF ( NEGINF .GE. ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       NEWZRO = NEGZRO + ZERO
       IF ( NEWZRO .NE. ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       POSINF = ONE / NEWZRO
       IF ( POSINF .LE. ONE ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       NEGINF = NEGINF * POSINF
       IF ( NEGINF .GE. ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       POSINF = POSINF * POSINF
       IF ( POSINF .LE. ONE ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
@@ -737,32 +738,32 @@
       NAN6 = NAN5 * 0.0
 
       IF ( NAN1 .EQ. NAN1 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       IF ( NAN2 .EQ. NAN2 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       IF ( NAN3 .EQ. NAN3 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       IF ( NAN4 .EQ. NAN4 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       IF ( NAN5 .EQ. NAN5 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 
       IF ( NAN6 .EQ. NAN6 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       ENDIF
 

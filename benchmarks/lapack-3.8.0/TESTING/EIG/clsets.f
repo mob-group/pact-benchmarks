@@ -1,4 +1,4 @@
-*> \brief \b CLSETS
+*> \brief \b AB_CAB_LSETS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF,
+*       SUBROUTINE AB_CAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF,
 *                          D, DF, X, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,8 +26,8 @@
 *>
 *> \verbatim
 *>
-*> CLSETS tests CGGLSE - a subroutine for solving linear equality
-*> constrained least square problem (LSE).
+*> AB_CAB_LSETS tests AB_CGGAB_LSE - a subroutine for solving linear equality
+*> constrained least square problem (AB_LSE).
 *> \endverbatim
 *
 *  Arguments:
@@ -90,7 +90,7 @@
 *> \param[in] C
 *> \verbatim
 *>          C is COMPLEX array, dimension( M )
-*>          the vector C in the LSE problem.
+*>          the vector C in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] CF
@@ -101,7 +101,7 @@
 *> \param[in] D
 *> \verbatim
 *>          D is COMPLEX array, dimension( P )
-*>          the vector D in the LSE problem.
+*>          the vector D in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] DF
@@ -112,7 +112,7 @@
 *> \param[out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension( N )
-*>          solution vector X in the LSE problem.
+*>          solution vector X in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -152,7 +152,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF,
+      SUBROUTINE AB_CAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF,
      $                   D, DF, X, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -176,39 +176,39 @@
       INTEGER            INFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGGLSE, CLACPY, CGET02
+      EXTERNAL           AB_CGGAB_LSE, AB_CLACPY, AB_CGET02
 *     ..
 *     .. Executable Statements ..
 *
 *     Copy the matrices A and B to the arrays AF and BF,
 *     and the vectors C and D to the arrays CF and DF,
 *
-      CALL CLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL CLACPY( 'Full', P, N, B, LDB, BF, LDB )
-      CALL CCOPY( M, C, 1, CF, 1 )
-      CALL CCOPY( P, D, 1, DF, 1 )
+      CALL AB_CLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL AB_CLACPY( 'Full', P, N, B, LDB, BF, LDB )
+      CALL AB_CCOPY( M, C, 1, CF, 1 )
+      CALL AB_CCOPY( P, D, 1, DF, 1 )
 *
-*     Solve LSE problem
+*     Solve AB_LSE problem
 *
-      CALL CGGLSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X,
+      CALL AB_CGGAB_LSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X,
      $             WORK, LWORK, INFO )
 *
-*     Test the residual for the solution of LSE
+*     Test the residual for the solution of AB_LSE
 *
 *     Compute RESULT(1) = norm( A*x - c ) / norm(A)*norm(X)*EPS
 *
-      CALL CCOPY( M, C, 1, CF, 1 )
-      CALL CCOPY( P, D, 1, DF, 1 )
-      CALL CGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M,
+      CALL AB_CCOPY( M, C, 1, CF, 1 )
+      CALL AB_CCOPY( P, D, 1, DF, 1 )
+      CALL AB_CGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M,
      $             RWORK, RESULT( 1 ) )
 *
 *     Compute result(2) = norm( B*x - d ) / norm(B)*norm(X)*EPS
 *
-      CALL CGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P,
+      CALL AB_CGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P,
      $             RWORK, RESULT( 2 ) )
 *
       RETURN
 *
-*     End of CLSETS
+*     End of AB_CAB_LSETS
 *
       END

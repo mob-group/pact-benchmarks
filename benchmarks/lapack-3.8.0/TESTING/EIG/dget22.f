@@ -1,4 +1,4 @@
-*> \brief \b DGET22
+*> \brief \b AB_DGET22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,15 +8,15 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, WR,
+*       SUBROUTINE AB_DGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, AB_LDE, WR,
 *                          WI, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSA, TRANSE, TRANSW
-*       INTEGER            LDA, LDE, N
+*       INTEGER            LDA, AB_LDE, N
 *       ..
 *       .. Array Arguments ..
-*       DOUBLE PRECISION   A( LDA, * ), E( LDE, * ), RESULT( 2 ), WI( * ),
+*       DOUBLE PRECISION   A( LDA, * ), E( AB_LDE, * ), RESULT( 2 ), WI( * ),
 *      $                   WORK( * ), WR( * )
 *       ..
 *
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DGET22 does an eigenvector check.
+*> AB_DGET22 does an eigenvector check.
 *>
 *> The basic test is:
 *>
@@ -110,16 +110,16 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is DOUBLE PRECISION array, dimension (LDE,N)
+*>          E is DOUBLE PRECISION array, dimension (AB_LDE,N)
 *>          The matrix of eigenvectors. If TRANSE = 'N', the eigenvectors
 *>          are stored in the columns of E, if TRANSE = 'T' or 'C', the
 *>          eigenvectors are stored in the rows of E.
 *> \endverbatim
 *>
-*> \param[in] LDE
+*> \param[in] AB_LDE
 *> \verbatim
-*>          LDE is INTEGER
-*>          The leading dimension of the array E.  LDE >= max(1,N).
+*>          AB_LDE is INTEGER
+*>          The leading dimension of the array E.  AB_LDE >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in] WR
@@ -164,7 +164,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, WR,
+      SUBROUTINE AB_DGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, AB_LDE
+     $, WR,
      $                   WI, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -174,10 +175,11 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANSA, TRANSE, TRANSW
-      INTEGER            LDA, LDE, N
+      INTEGER            LDA, AB_LDE, N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION   A( LDA, * ), E( LDE, * ), RESULT( 2 ), WI( * ),
+      DOUBLE PRECISION   A( LDA, * ), E( AB_LDE, * ), RESULT( 2 ), WI( *
+     $ ),
      $                   WORK( * ), WR( * )
 *     ..
 *
@@ -198,12 +200,12 @@
       DOUBLE PRECISION   WMAT( 2, 2 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, DLAMCH, DLANGE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DGEMM, DLASET
+      EXTERNAL           AB_DAXPY, AB_DGEMM, AB_DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -217,21 +219,21 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
 *
       ITRNSE = 0
       INCE = 1
       NORMA = 'O'
       NORME = 'O'
 *
-      IF( LSAME( TRANSA, 'T' ) .OR. LSAME( TRANSA, 'C' ) ) THEN
+      IF( AB_LSAME( TRANSA, 'T' ) .OR. AB_LSAME( TRANSA, 'C' ) ) THEN
          NORMA = 'I'
       END IF
-      IF( LSAME( TRANSE, 'T' ) .OR. LSAME( TRANSE, 'C' ) ) THEN
+      IF( AB_LSAME( TRANSE, 'T' ) .OR. AB_LSAME( TRANSE, 'C' ) ) THEN
          NORME = 'I'
          ITRNSE = 1
-         INCE = LDE
+         INCE = AB_LDE
       END IF
 *
 *     Check normalization of E
@@ -309,17 +311,17 @@
 *
 *     Norm of A:
 *
-      ANORM = MAX( DLANGE( NORMA, N, N, A, LDA, WORK ), UNFL )
+      ANORM = MAX( AB_DLANGE( NORMA, N, N, A, LDA, WORK ), UNFL )
 *
 *     Norm of E:
 *
-      ENORM = MAX( DLANGE( NORME, N, N, E, LDE, WORK ), ULP )
+      ENORM = MAX( AB_DLANGE( NORME, N, N, E, AB_LDE, WORK ), ULP )
 *
 *     Norm of error:
 *
 *     Error =  AE - EW
 *
-      CALL DLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+      CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
 *
       IPAIR = 0
       IEROW = 1
@@ -340,25 +342,28 @@
             WMAT( 2, 1 ) = -WI( JCOL )
             WMAT( 1, 2 ) = WI( JCOL )
             WMAT( 2, 2 ) = WR( JCOL )
-            CALL DGEMM( TRANSE, TRANSW, N, 2, 2, ONE, E( IEROW, IECOL ),
-     $                  LDE, WMAT, 2, ZERO, WORK( N*( JCOL-1 )+1 ), N )
+            CALL AB_DGEMM( TRANSE, TRANSW, N, 2, 2, ONE, E( IEROW, IECOL
+     $ ),
+     $                  AB_LDE, WMAT, 2, ZERO, WORK( N*( JCOL-1 )+1 ), N
+     $ )
             IPAIR = 2
          ELSE IF( IPAIR.EQ.2 ) THEN
             IPAIR = 0
 *
          ELSE
 *
-            CALL DAXPY( N, WR( JCOL ), E( IEROW, IECOL ), INCE,
+            CALL AB_DAXPY( N, WR( JCOL ), E( IEROW, IECOL ), INCE,
      $                  WORK( N*( JCOL-1 )+1 ), 1 )
             IPAIR = 0
          END IF
 *
    80 CONTINUE
 *
-      CALL DGEMM( TRANSA, TRANSE, N, N, N, ONE, A, LDA, E, LDE, -ONE,
+      CALL AB_DGEMM( TRANSA, TRANSE, N, N, N, ONE, A, LDA, E, AB_LDE, -O
+     $NE,
      $            WORK, N )
 *
-      ERRNRM = DLANGE( 'One', N, N, WORK, N, WORK( N*N+1 ) ) / ENORM
+      ERRNRM = AB_DLANGE( 'One', N, N, WORK, N, WORK( N*N+1 ) ) / ENORM
 *
 *     Compute RESULT(1) (avoiding under/overflow)
 *
@@ -379,6 +384,6 @@
 *
       RETURN
 *
-*     End of DGET22
+*     End of AB_DGET22
 *
       END

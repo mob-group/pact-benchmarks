@@ -1,4 +1,4 @@
-*> \brief \b DSYR2K
+*> \brief \b AB_AB_AB_DSYR2K
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+*       SUBROUTINE AB_AB_AB_DSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DSYR2K  performs one of the symmetric rank 2k operations
+*> AB_AB_AB_DSYR2K  performs one of the symmetric rank 2k operations
 *>
 *>    C := alpha*A*B**T + alpha*B*A**T + beta*C,
 *>
@@ -35,7 +35,7 @@
 *>
 *> where  alpha and beta  are scalars, C is an  n by n  symmetric matrix
 *> and  A and B  are  n by k  matrices  in the  first  case  and  k by n
-*> matrices in the second case.
+*> matrices in the AB_SECOND case.
 *> \endverbatim
 *
 *  Arguments:
@@ -190,7 +190,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+      SUBROUTINE AB_AB_AB_DSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C
+     $,LDC)
 *
 *  -- Reference BLAS level3 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -209,11 +210,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -230,19 +231,19 @@
 *
 *     Test the input parameters.
 *
-      IF (LSAME(TRANS,'N')) THEN
+      IF (AB_LSAME(TRANS,'N')) THEN
           NROWA = N
       ELSE
           NROWA = K
       END IF
-      UPPER = LSAME(UPLO,'U')
+      UPPER = AB_LSAME(UPLO,'U')
 *
       INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
+      IF ((.NOT.UPPER) .AND. (.NOT.AB_LSAME(UPLO,'L'))) THEN
           INFO = 1
-      ELSE IF ((.NOT.LSAME(TRANS,'N')) .AND.
-     +         (.NOT.LSAME(TRANS,'T')) .AND.
-     +         (.NOT.LSAME(TRANS,'C'))) THEN
+      ELSE IF ((.NOT.AB_LSAME(TRANS,'N')) .AND.
+     +         (.NOT.AB_LSAME(TRANS,'T')) .AND.
+     +         (.NOT.AB_LSAME(TRANS,'C'))) THEN
           INFO = 2
       ELSE IF (N.LT.0) THEN
           INFO = 3
@@ -256,7 +257,7 @@
           INFO = 12
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('DSYR2K',INFO)
+          CALL AB_XERBLA('AB_AB_AB_DSYR2K',INFO)
           RETURN
       END IF
 *
@@ -302,7 +303,7 @@
 *
 *     Start the operations.
 *
-      IF (LSAME(TRANS,'N')) THEN
+      IF (AB_LSAME(TRANS,'N')) THEN
 *
 *        Form  C := alpha*A*B**T + alpha*B*A**T + C.
 *
@@ -394,6 +395,6 @@
 *
       RETURN
 *
-*     End of DSYR2K.
+*     End of AB_AB_AB_DSYR2K.
 *
       END

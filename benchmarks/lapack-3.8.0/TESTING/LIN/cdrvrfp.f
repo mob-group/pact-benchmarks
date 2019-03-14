@@ -1,4 +1,4 @@
-*> \brief \b CDRVRFP
+*> \brief \b AB_CDRVRFP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,12 +8,12 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+*       SUBROUTINE AB_CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
 *      +              THRESH, A, ASAV, AFAC, AINV, B,
 *      +              BSAV, XACT, X, ARF, ARFINV,
-*      +              C_WORK_CLATMS, C_WORK_CPOT02,
-*      +              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
-*      +              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
+*      +              C_WORK_AB_CLATMS, C_WORK_AB_CPOT02,
+*      +              C_WORK_AB_CPOT03, S_WORK_AB_CLATMS, S_WORK_AB_CLANHE,
+*      +              S_WORK_AB_CPOT01, S_WORK_AB_CPOT02, S_WORK_AB_CPOT03 )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NN, NNS, NNT, NOUT
@@ -31,14 +31,14 @@
 *       COMPLEX            ARFINV( * )
 *       COMPLEX            XACT( * )
 *       COMPLEX            X( * )
-*       COMPLEX            C_WORK_CLATMS( * )
-*       COMPLEX            C_WORK_CPOT02( * )
-*       COMPLEX            C_WORK_CPOT03( * )
-*       REAL               S_WORK_CLATMS( * )
-*       REAL               S_WORK_CLANHE( * )
-*       REAL               S_WORK_CPOT01( * )
-*       REAL               S_WORK_CPOT02( * )
-*       REAL               S_WORK_CPOT03( * )
+*       COMPLEX            C_WORK_AB_CLATMS( * )
+*       COMPLEX            C_WORK_AB_CPOT02( * )
+*       COMPLEX            C_WORK_AB_CPOT03( * )
+*       REAL               S_WORK_AB_CLATMS( * )
+*       REAL               S_WORK_AB_CLANHE( * )
+*       REAL               S_WORK_AB_CPOT01( * )
+*       REAL               S_WORK_AB_CPOT02( * )
+*       REAL               S_WORK_AB_CPOT03( * )
 *       ..
 *
 *
@@ -47,15 +47,15 @@
 *>
 *> \verbatim
 *>
-*> CDRVRFP tests the LAPACK RFP routines:
-*>     CPFTRF, CPFTRS, and CPFTRI.
+*> AB_CDRVRFP tests the LAPACK RFP routines:
+*>     AB_CPFTRF, AB_CPFTRS, and AB_CPFTRI.
 *>
-*> This testing routine follow the same tests as CDRVPO (test for the full
+*> This testing routine follow the same tests as AB_CDRVPO (test for the full
 *> format Symmetric Positive Definite solver).
 *>
 *> The tests are performed in Full Format, conversion back and forth from
-*> full format to RFP format are performed using the routines CTRTTF and
-*> CTFTTR.
+*> full format to RFP format are performed using the routines AB_CTRTTF and
+*> AB_CTFTTR.
 *>
 *> First, a specific matrix A of size N is created. There is nine types of
 *> different matrixes possible.
@@ -64,9 +64,9 @@
 *> *3. First row and column zero       8. Scaled near underflow
 *> *4. Last row and column zero        9. Scaled near overflow
 *> *5. Middle row and column zero
-*> (* - tests error exits from CPFTRF, no test ratios are computed)
+*> (* - tests error exits from AB_CPFTRF, no test ratios are computed)
 *> A solution XACT of size N-by-NRHS is created and the associated right
-*> hand side B as well. Then CPFTRF is called to compute L (or U), the
+*> hand side B as well. Then AB_CPFTRF is called to compute L (or U), the
 *> Cholesky factor of A. Then L (or U) is used to solve the linear system
 *> of equations AX = B. This gives X. Then L (or U) is used to compute the
 *> inverse of A, AINV. The following four tests are then performed:
@@ -184,44 +184,44 @@
 *>          ARFINV is COMPLEX array, dimension ((NMAX*(NMAX+1))/2)
 *> \endverbatim
 *>
-*> \param[out] C_WORK_CLATMS
+*> \param[out] C_WORK_AB_CLATMS
 *> \verbatim
-*>          C_WORK_CLATMS is COMPLEX array, dimension ( 3*NMAX )
+*>          C_WORK_AB_CLATMS is COMPLEX array, dimension ( 3*NMAX )
 *> \endverbatim
 *>
-*> \param[out] C_WORK_CPOT02
+*> \param[out] C_WORK_AB_CPOT02
 *> \verbatim
-*>          C_WORK_CPOT02 is COMPLEX array, dimension ( NMAX*MAXRHS )
+*>          C_WORK_AB_CPOT02 is COMPLEX array, dimension ( NMAX*MAXRHS )
 *> \endverbatim
 *>
-*> \param[out] C_WORK_CPOT03
+*> \param[out] C_WORK_AB_CPOT03
 *> \verbatim
-*>          C_WORK_CPOT03 is COMPLEX array, dimension ( NMAX*NMAX )
+*>          C_WORK_AB_CPOT03 is COMPLEX array, dimension ( NMAX*NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_CLATMS
+*> \param[out] S_WORK_AB_CLATMS
 *> \verbatim
-*>          S_WORK_CLATMS is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_CLATMS is REAL array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_CLANHE
+*> \param[out] S_WORK_AB_CLANHE
 *> \verbatim
-*>          S_WORK_CLANHE is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_CLANHE is REAL array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_CPOT01
+*> \param[out] S_WORK_AB_CPOT01
 *> \verbatim
-*>          S_WORK_CPOT01 is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_CPOT01 is REAL array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_CPOT02
+*> \param[out] S_WORK_AB_CPOT02
 *> \verbatim
-*>          S_WORK_CPOT02 is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_CPOT02 is REAL array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_CPOT03
+*> \param[out] S_WORK_AB_CPOT03
 *> \verbatim
-*>          S_WORK_CPOT03 is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_CPOT03 is REAL array, dimension ( NMAX )
 *> \endverbatim
 *
 *  Authors:
@@ -237,12 +237,14 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+      SUBROUTINE AB_CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
-     +              C_WORK_CLATMS, C_WORK_CPOT02,
-     +              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
-     +              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
+     +              C_WORK_AB_CLATMS, C_WORK_AB_CPOT02,
+     +              C_WORK_AB_CPOT03, S_WORK_AB_CLATMS, S_WORK_AB_CLANHE
+     $,
+     +              S_WORK_AB_CPOT01, S_WORK_AB_CPOT02, S_WORK_AB_CPOT03
+     $ )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -265,14 +267,14 @@
       COMPLEX            ARFINV( * )
       COMPLEX            XACT( * )
       COMPLEX            X( * )
-      COMPLEX            C_WORK_CLATMS( * )
-      COMPLEX            C_WORK_CPOT02( * )
-      COMPLEX            C_WORK_CPOT03( * )
-      REAL               S_WORK_CLATMS( * )
-      REAL               S_WORK_CLANHE( * )
-      REAL               S_WORK_CPOT01( * )
-      REAL               S_WORK_CPOT02( * )
-      REAL               S_WORK_CPOT03( * )
+      COMPLEX            C_WORK_AB_CLATMS( * )
+      COMPLEX            C_WORK_AB_CPOT02( * )
+      COMPLEX            C_WORK_AB_CPOT03( * )
+      REAL               S_WORK_AB_CLATMS( * )
+      REAL               S_WORK_AB_CLANHE( * )
+      REAL               S_WORK_AB_CPOT01( * )
+      REAL               S_WORK_AB_CPOT02( * )
+      REAL               S_WORK_AB_CPOT03( * )
 *     ..
 *
 *  =====================================================================
@@ -298,14 +300,17 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CLANHE
-      EXTERNAL           CLANHE
+      REAL               AB_CLANHE
+      EXTERNAL           AB_CLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, CGET04, CTFTTR, CLACPY,
-     +                   CLAIPD, CLARHS, CLATB4, CLATMS, CPFTRI, CPFTRF,
-     +                   CPFTRS, CPOT01, CPOT02, CPOT03, CPOTRI, CPOTRF,
-     +                   CTRTTF
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_CGET04, AB_
+     $CTFTTR, AB_CLACPY,
+     +                   AB_CLAIPD, AB_CLARHS, AB_CLATB4, AB_CLATMS, AB_
+     $CPFTRI, AB_CPFTRF,
+     +                   AB_CPFTRS, AB_CPOT01, AB_CPOT02, AB_CPOT03, AB_
+     $CPOTRI, AB_CPOTRF,
+     +                   AB_CTRTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -362,22 +367,23 @@
                   DO 100 IFORM = 1, 2
                      CFORM = FORMS( IFORM )
 *
-*                    Set up parameters with CLATB4 and generate a test
-*                    matrix with CLATMS.
+*                    Set up parameters with AB_CLATB4 and generate a test
+*                    matrix with AB_CLATMS.
 *
-                     CALL CLATB4( 'CPO', IMAT, N, N, CTYPE, KL, KU,
+                     CALL AB_CLATB4( 'CPO', IMAT, N, N, CTYPE, KL, KU,
      +                            ANORM, MODE, CNDNUM, DIST )
 *
-                     SRNAMT = 'CLATMS'
-                     CALL CLATMS( N, N, DIST, ISEED, CTYPE,
-     +                            S_WORK_CLATMS,
+                     SRNAMT = 'AB_CLATMS'
+                     CALL AB_CLATMS( N, N, DIST, ISEED, CTYPE,
+     +                            S_WORK_AB_CLATMS,
      +                            MODE, CNDNUM, ANORM, KL, KU, UPLO, A,
-     +                            LDA, C_WORK_CLATMS, INFO )
+     +                            LDA, C_WORK_AB_CLATMS, INFO )
 *
-*                    Check error code from CLATMS.
+*                    Check error code from AB_CLATMS.
 *
                      IF( INFO.NE.0 ) THEN
-                        CALL ALAERH( 'CPF', 'CLATMS', INFO, 0, UPLO, N,
+                        CALL AB_ALAERH( 'CPF', 'AB_CLATMS', INFO, 0, UPL
+     $O, N,
      +                               N, -1, -1, -1, IIT, NFAIL, NERRS,
      +                               NOUT )
                         GO TO 100
@@ -425,11 +431,11 @@
 *
 *                    Set the imaginary part of the diagonals.
 *
-                     CALL CLAIPD( N, A, LDA+1, 0 )
+                     CALL AB_CLAIPD( N, A, LDA+1, 0 )
 *
 *                    Save a copy of the matrix A in ASAV.
 *
-                     CALL CLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
+                     CALL AB_CLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
 *
 *                    Compute the condition number of A (RCONDC).
 *
@@ -439,27 +445,27 @@
 *
 *                       Compute the 1-norm of A.
 *
-                        ANORM = CLANHE( '1', UPLO, N, A, LDA,
-     +                         S_WORK_CLANHE )
+                        ANORM = AB_CLANHE( '1', UPLO, N, A, LDA,
+     +                         S_WORK_AB_CLANHE )
 *
 *                       Factor the matrix A.
 *
-                        CALL CPOTRF( UPLO, N, A, LDA, INFO )
+                        CALL AB_CPOTRF( UPLO, N, A, LDA, INFO )
 *
 *                       Form the inverse of A.
 *
-                        CALL CPOTRI( UPLO, N, A, LDA, INFO )
+                        CALL AB_CPOTRI( UPLO, N, A, LDA, INFO )
 *
 *                       Compute the 1-norm condition number of A.
 *
       					IF ( N .NE. 0 ) THEN
-                           AINVNM = CLANHE( '1', UPLO, N, A, LDA,
-     +                           S_WORK_CLANHE )
+                           AINVNM = AB_CLANHE( '1', UPLO, N, A, LDA,
+     +                           S_WORK_AB_CLANHE )
                            RCONDC = ( ONE / ANORM ) / AINVNM
 *
 *                          Restore the matrix A.
 *
-                        CALL CLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
+                        CALL AB_CLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
                         END IF
 
 *
@@ -467,32 +473,35 @@
 *
 *                    Form an exact solution and set the right hand side.
 *
-                     SRNAMT = 'CLARHS'
-                     CALL CLARHS( 'CPO', 'N', UPLO, ' ', N, N, KL, KU,
+                     SRNAMT = 'AB_CLARHS'
+                     CALL AB_CLARHS( 'CPO', 'N', UPLO, ' ', N, N, KL, KU
+     $,
      +                            NRHS, A, LDA, XACT, LDA, B, LDA,
      +                            ISEED, INFO )
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA )
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA 
+     $)
 *
 *                    Compute the L*L' or U'*U factorization of the
 *                    matrix and solve the system.
 *
-                     CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL CLACPY( 'Full', N, NRHS, B, LDB, X, LDB )
+                     CALL AB_CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDB, X, LDB )
 *
-                     SRNAMT = 'CTRTTF'
-                     CALL CTRTTF( CFORM, UPLO, N, AFAC, LDA, ARF, INFO )
-                     SRNAMT = 'CPFTRF'
-                     CALL CPFTRF( CFORM, UPLO, N, ARF, INFO )
+                     SRNAMT = 'AB_CTRTTF'
+                     CALL AB_CTRTTF( CFORM, UPLO, N, AFAC, LDA, ARF, INF
+     $O )
+                     SRNAMT = 'AB_CPFTRF'
+                     CALL AB_CPFTRF( CFORM, UPLO, N, ARF, INFO )
 *
-*                    Check error code from CPFTRF.
+*                    Check error code from AB_CPFTRF.
 *
                      IF( INFO.NE.IZERO ) THEN
 *
 *                       LANGOU: there is a small hick here: IZERO should
-*                       always be INFO however if INFO is ZERO, ALAERH does not
+*                       always be INFO however if INFO is ZERO, AB_ALAERH does not
 *                       complain.
 *
-                         CALL ALAERH( 'CPF', 'CPFSV ', INFO, IZERO,
+                         CALL AB_ALAERH( 'CPF', 'CPFSV ', INFO, IZERO,
      +                                UPLO, N, N, -1, -1, NRHS, IIT,
      +                                NFAIL, NERRS, NOUT )
                          GO TO 100
@@ -504,60 +513,64 @@
                         GO TO 100
                      END IF
 *
-                     SRNAMT = 'CPFTRS'
-                     CALL CPFTRS( CFORM, UPLO, N, NRHS, ARF, X, LDB,
+                     SRNAMT = 'AB_CPFTRS'
+                     CALL AB_CPFTRS( CFORM, UPLO, N, NRHS, ARF, X, LDB,
      +                            INFO )
 *
-                     SRNAMT = 'CTFTTR'
-                     CALL CTFTTR( CFORM, UPLO, N, ARF, AFAC, LDA, INFO )
+                     SRNAMT = 'AB_CTFTTR'
+                     CALL AB_CTFTTR( CFORM, UPLO, N, ARF, AFAC, LDA, INF
+     $O )
 *
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL CLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
-                     CALL CPOT01( UPLO, N, A, LDA, AFAC, LDA,
-     +                             S_WORK_CPOT01, RESULT( 1 ) )
-                     CALL CLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
+                     CALL AB_CLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
+                     CALL AB_CPOT01( UPLO, N, A, LDA, AFAC, LDA,
+     +                             S_WORK_AB_CPOT01, RESULT( 1 ) )
+                     CALL AB_CLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
 *
 *                    Form the inverse and compute the residual.
 *
                     IF(MOD(N,2).EQ.0)THEN
-                       CALL CLACPY( 'A', N+1, N/2, ARF, N+1, ARFINV,
+                       CALL AB_CLACPY( 'A', N+1, N/2, ARF, N+1, ARFINV,
      +                               N+1 )
                     ELSE
-                       CALL CLACPY( 'A', N, (N+1)/2, ARF, N, ARFINV,
+                       CALL AB_CLACPY( 'A', N, (N+1)/2, ARF, N, ARFINV,
      +                               N )
                     END IF
 *
-                     SRNAMT = 'CPFTRI'
-                     CALL CPFTRI( CFORM, UPLO, N, ARFINV , INFO )
+                     SRNAMT = 'AB_CPFTRI'
+                     CALL AB_CPFTRI( CFORM, UPLO, N, ARFINV , INFO )
 *
-                     SRNAMT = 'CTFTTR'
-                     CALL CTFTTR( CFORM, UPLO, N, ARFINV, AINV, LDA,
+                     SRNAMT = 'AB_CTFTTR'
+                     CALL AB_CTFTTR( CFORM, UPLO, N, ARFINV, AINV, LDA,
      +                            INFO )
 *
-*                    Check error code from CPFTRI.
+*                    Check error code from AB_CPFTRI.
 *
                      IF( INFO.NE.0 )
-     +                  CALL ALAERH( 'CPO', 'CPFTRI', INFO, 0, UPLO, N,
+     +                  CALL AB_ALAERH( 'CPO', 'AB_CPFTRI', INFO, 0, UPL
+     $O, N,
      +                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      +                               NOUT )
 *
-                     CALL CPOT03( UPLO, N, A, LDA, AINV, LDA,
-     +                            C_WORK_CPOT03, LDA, S_WORK_CPOT03,
+                     CALL AB_CPOT03( UPLO, N, A, LDA, AINV, LDA,
+     +                            C_WORK_AB_CPOT03, LDA, S_WORK_AB_CPOT0
+     $3,
      +                            RCONDC, RESULT( 2 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA,
-     +                            C_WORK_CPOT02, LDA )
-                     CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
-     +                            C_WORK_CPOT02, LDA, S_WORK_CPOT02,
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA,
+     +                            C_WORK_AB_CPOT02, LDA )
+                     CALL AB_CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
+     +                            C_WORK_AB_CPOT02, LDA, S_WORK_AB_CPOT0
+     $2,
      +                            RESULT( 3 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      +                         RESULT( 4 ) )
                      NT = 4
 *
@@ -567,7 +580,7 @@
                      DO 60 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     +                        CALL ALADHD( NOUT, 'CPF' )
+     +                        CALL AB_ALADHD( NOUT, 'CPF' )
                            WRITE( NOUT, FMT = 9999 )'CPFSV ', UPLO,
      +                            N, IIT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -582,13 +595,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( 'CPF', NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( 'CPF', NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A6, ', UPLO=''', A1, ''', N =', I5, ', type ', I1,
      +      ', test(', I1, ')=', G12.5 )
 *
       RETURN
 *
-*     End of CDRVRFP
+*     End of AB_CDRVRFP
 *
       END

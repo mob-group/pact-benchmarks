@@ -1,4 +1,4 @@
-*> \brief \b SLAED6 used by sstedc. Computes one Newton step in solution of the secular equation.
+*> \brief \b AB_SLAED6 used by AB_SSTEDC. Computes one Newton step in solution of the secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAED6 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed6.f">
+*> Download AB_SLAED6 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED6.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED6.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED6.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )
+*       SUBROUTINE AB_SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            ORGATI
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SLAED6 computes the positive or negative root (closest to the origin)
+*> AB_SLAED6 computes the positive or negative root (closest to the origin)
 *> of
 *>                  z(1)        z(2)        z(3)
 *> f(x) =   rho + --------- + ---------- + ---------
@@ -46,7 +46,7 @@
 *>       if ORGATI = .true. the root is between d(2) and d(3);
 *>       otherwise it is between d(1) and d(2)
 *>
-*> This routine will be called by SLAED4 when necessary. In most cases,
+*> This routine will be called by AB_SLAED4 when necessary. In most cases,
 *> the root sought is the smallest in magnitude, though it might not be
 *> in some extremely rare situations.
 *> \endverbatim
@@ -57,7 +57,7 @@
 *> \param[in] KNITER
 *> \verbatim
 *>          KNITER is INTEGER
-*>               Refer to SLAED4 for its significance.
+*>               Refer to AB_SLAED4 for its significance.
 *> \endverbatim
 *>
 *> \param[in] ORGATI
@@ -65,7 +65,7 @@
 *>          ORGATI is LOGICAL
 *>               If ORGATI is true, the needed root is between d(2) and
 *>               d(3); otherwise it is between d(1) and d(2).  See
-*>               SLAED4 for further details.
+*>               AB_SLAED4 for further details.
 *> \endverbatim
 *>
 *> \param[in] RHO
@@ -138,7 +138,8 @@
 *>     at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )
+      SUBROUTINE AB_SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO 
+     $)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -164,11 +165,11 @@
      $                   THREE = 3.0E0, FOUR = 4.0E0, EIGHT = 8.0E0 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Local Arrays ..
-      REAL               DSCALE( 3 ), ZSCALE( 3 )
+      REAL               AB_DSCALE( 3 ), AB_ZSCALE( 3 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            SCALE
@@ -247,9 +248,9 @@
 *     SMINV2, EPS are not SAVEd anymore between one call to the
 *     others but recomputed at each call
 *
-      EPS = SLAMCH( 'Epsilon' )
-      BASE = SLAMCH( 'Base' )
-      SMALL1 = BASE**( INT( LOG( SLAMCH( 'SafMin' ) ) / LOG( BASE ) /
+      EPS = AB_SLAMCH( 'Epsilon' )
+      BASE = AB_SLAMCH( 'Base' )
+      SMALL1 = BASE**( INT( LOG( AB_SLAMCH( 'SafMin' ) ) / LOG( BASE ) /
      $         THREE ) )
       SMINV1 = ONE / SMALL1
       SMALL2 = SMALL1*SMALL1
@@ -280,22 +281,22 @@
             SCLINV = SMALL1
          END IF
 *
-*        Scaling up safe because D, Z, TAU scaled elsewhere to be O(1)
+*        Scaling up safe because D, Z, TAU scaled ELSEwhere to be O(1)
 *
          DO 10 I = 1, 3
-            DSCALE( I ) = D( I )*SCLFAC
-            ZSCALE( I ) = Z( I )*SCLFAC
+            AB_DSCALE( I ) = D( I )*SCLFAC
+            AB_ZSCALE( I ) = Z( I )*SCLFAC
    10    CONTINUE
          TAU = TAU*SCLFAC
          LBD = LBD*SCLFAC
          UBD = UBD*SCLFAC
       ELSE
 *
-*        Copy D and Z to DSCALE and ZSCALE
+*        Copy D and Z to AB_DSCALE and AB_ZSCALE
 *
          DO 20 I = 1, 3
-            DSCALE( I ) = D( I )
-            ZSCALE( I ) = Z( I )
+            AB_DSCALE( I ) = D( I )
+            AB_ZSCALE( I ) = Z( I )
    20    CONTINUE
       END IF
 *
@@ -303,11 +304,11 @@
       DF = ZERO
       DDF = ZERO
       DO 30 I = 1, 3
-         TEMP = ONE / ( DSCALE( I )-TAU )
-         TEMP1 = ZSCALE( I )*TEMP
+         TEMP = ONE / ( AB_DSCALE( I )-TAU )
+         TEMP1 = AB_ZSCALE( I )*TEMP
          TEMP2 = TEMP1*TEMP
          TEMP3 = TEMP2*TEMP
-         FC = FC + TEMP1 / DSCALE( I )
+         FC = FC + TEMP1 / AB_DSCALE( I )
          DF = DF + TEMP2
          DDF = DDF + TEMP3
    30 CONTINUE
@@ -337,11 +338,11 @@
       DO 50 NITER = ITER, MAXIT
 *
          IF( ORGATI ) THEN
-            TEMP1 = DSCALE( 2 ) - TAU
-            TEMP2 = DSCALE( 3 ) - TAU
+            TEMP1 = AB_DSCALE( 2 ) - TAU
+            TEMP2 = AB_DSCALE( 3 ) - TAU
          ELSE
-            TEMP1 = DSCALE( 1 ) - TAU
-            TEMP2 = DSCALE( 2 ) - TAU
+            TEMP1 = AB_DSCALE( 1 ) - TAU
+            TEMP2 = AB_DSCALE( 2 ) - TAU
          END IF
          A = ( TEMP1+TEMP2 )*F - TEMP1*TEMP2*DF
          B = TEMP1*TEMP2*F
@@ -370,12 +371,12 @@
          DF = ZERO
          DDF = ZERO
          DO 40 I = 1, 3
-            IF ( ( DSCALE( I )-TAU ).NE.ZERO ) THEN
-               TEMP = ONE / ( DSCALE( I )-TAU )
-               TEMP1 = ZSCALE( I )*TEMP
+            IF ( ( AB_DSCALE( I )-TAU ).NE.ZERO ) THEN
+               TEMP = ONE / ( AB_DSCALE( I )-TAU )
+               TEMP1 = AB_ZSCALE( I )*TEMP
                TEMP2 = TEMP1*TEMP
                TEMP3 = TEMP2*TEMP
-               TEMP4 = TEMP1 / DSCALE( I )
+               TEMP4 = TEMP1 / AB_DSCALE( I )
                FC = FC + TEMP4
                ERRETM = ERRETM + ABS( TEMP4 )
                DF = DF + TEMP2
@@ -405,6 +406,6 @@
      $   TAU = TAU*SCLINV
       RETURN
 *
-*     End of SLAED6
+*     End of AB_SLAED6
 *
       END

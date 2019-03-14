@@ -1,4 +1,4 @@
-*> \brief \b DTRT06
+*> \brief \b AB_DTRT06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, WORK,
+*       SUBROUTINE AB_DTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, WORK,
 *                          RAT )
 *
 *       .. Scalar Arguments ..
@@ -26,9 +26,9 @@
 *>
 *> \verbatim
 *>
-*> DTRT06 computes a test ratio comparing RCOND (the reciprocal
+*> AB_DTRT06 computes a test ratio comparing RCOND (the reciprocal
 *> condition number of a triangular matrix A) and RCONDC, the estimate
-*> computed by DTRCON.  Information about the triangular matrix A is
+*> computed by AB_DTRCON.  Information about the triangular matrix A is
 *> used if one estimate is zero and the other is non-zero to decide if
 *> underflow in the estimate is justified.
 *> \endverbatim
@@ -48,7 +48,7 @@
 *> \verbatim
 *>          RCONDC is DOUBLE PRECISION
 *>          The estimate of the reciprocal condition number computed by
-*>          DTRCON.
+*>          AB_DTRCON.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -118,7 +118,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, WORK,
+      SUBROUTINE AB_DTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, WORK,
      $                   RAT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -145,18 +145,18 @@
       DOUBLE PRECISION   ANORM, BIGNUM, EPS, RMAX, RMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANTR
-      EXTERNAL           DLAMCH, DLANTR
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANTR
+      EXTERNAL           AB_DLAMCH, AB_DLANTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD
+      EXTERNAL           AB_DLABAD
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       RMAX = MAX( RCOND, RCONDC )
       RMIN = MIN( RCOND, RCONDC )
 *
@@ -188,16 +188,16 @@
 *        estimate multiplied by BIGNUM/TMAX, where TMAX is the maximum
 *        element in absolute value in A.
 *
-         SMLNUM = DLAMCH( 'Safe minimum' )
+         SMLNUM = AB_DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
-         CALL DLABAD( SMLNUM, BIGNUM )
-         ANORM = DLANTR( 'M', UPLO, DIAG, N, N, A, LDA, WORK )
+         CALL AB_DLABAD( SMLNUM, BIGNUM )
+         ANORM = AB_DLANTR( 'M', UPLO, DIAG, N, N, A, LDA, WORK )
 *
          RAT = RMAX*( MIN( BIGNUM / MAX( ONE, ANORM ), ONE / EPS ) )
       END IF
 *
       RETURN
 *
-*     End of DTRT06
+*     End of AB_DTRT06
 *
       END

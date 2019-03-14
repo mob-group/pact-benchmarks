@@ -1,4 +1,4 @@
-*> \brief \b DRQT02
+*> \brief \b AB_DRQT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_DRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> DRQT02 tests DORGRQ, which generates an m-by-n matrix Q with
+*> AB_DRQT02 tests AB_DORGRQ, which generates an m-by-n matrix Q with
 *> orthonornmal rows that is defined as the product of k elementary
 *> reflectors.
 *>
-*> Given the RQ factorization of an m-by-n matrix A, DRQT02 generates
+*> Given the RQ factorization of an m-by-n matrix A, AB_DRQT02 generates
 *> the orthogonal matrix Q defined by the factorization of the last k
 *> rows of A; it compares R(m-k+1:m,n-m+1:n) with
 *> A(m-k+1:m,1:n)*Q(n-m+1:n,1:n)', and checks that the rows of Q are
@@ -63,14 +63,14 @@
 *> \param[in] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
-*>          The m-by-n matrix A which was factorized by DRQT01.
+*>          The m-by-n matrix A which was factorized by AB_DRQT01.
 *> \endverbatim
 *>
 *> \param[in] AF
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDA,N)
-*>          Details of the RQ factorization of A, as returned by DGERQF.
-*>          See DGERQF for further details.
+*>          Details of the RQ factorization of A, as returned by AB_AB_DGERQF.
+*>          See AB_AB_DGERQF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -133,7 +133,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_DRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -163,11 +163,12 @@
       DOUBLE PRECISION   ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSY
+      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLASET, DORGRQ, DSYRK
+      EXTERNAL           AB_DGEMM, AB_DLACPY, AB_DLASET, AB_DORGRQ, AB_A
+     $B_DSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX
@@ -188,39 +189,39 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the last k rows of the factorization to the array Q
 *
-      CALL DLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
+      CALL AB_DLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
       IF( K.LT.N )
-     $   CALL DLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
+     $   CALL AB_DLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
      $                Q( M-K+1, 1 ), LDA )
       IF( K.GT.1 )
-     $   CALL DLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
+     $   CALL AB_DLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
      $                Q( M-K+2, N-K+1 ), LDA )
 *
 *     Generate the last n rows of the matrix Q
 *
-      SRNAMT = 'DORGRQ'
-      CALL DORGRQ( M, N, K, Q, LDA, TAU( M-K+1 ), WORK, LWORK, INFO )
+      SRNAMT = 'AB_DORGRQ'
+      CALL AB_DORGRQ( M, N, K, Q, LDA, TAU( M-K+1 ), WORK, LWORK, INFO )
 *
 *     Copy R(m-k+1:m,n-m+1:n)
 *
-      CALL DLASET( 'Full', K, M, ZERO, ZERO, R( M-K+1, N-M+1 ), LDA )
-      CALL DLACPY( 'Upper', K, K, AF( M-K+1, N-K+1 ), LDA,
+      CALL AB_DLASET( 'Full', K, M, ZERO, ZERO, R( M-K+1, N-M+1 ), LDA )
+      CALL AB_DLACPY( 'Upper', K, K, AF( M-K+1, N-K+1 ), LDA,
      $             R( M-K+1, N-K+1 ), LDA )
 *
 *     Compute R(m-k+1:m,n-m+1:n) - A(m-k+1:m,1:n) * Q(n-m+1:n,1:n)'
 *
-      CALL DGEMM( 'No transpose', 'Transpose', K, M, N, -ONE,
+      CALL AB_DGEMM( 'No transpose', 'Transpose', K, M, N, -ONE,
      $            A( M-K+1, 1 ), LDA, Q, LDA, ONE, R( M-K+1, N-M+1 ),
      $            LDA )
 *
 *     Compute norm( R - A*Q' ) / ( N * norm(A) * EPS ) .
 *
-      ANORM = DLANGE( '1', K, N, A( M-K+1, 1 ), LDA, RWORK )
-      RESID = DLANGE( '1', K, M, R( M-K+1, N-M+1 ), LDA, RWORK )
+      ANORM = AB_DLANGE( '1', K, N, A( M-K+1, 1 ), LDA, RWORK )
+      RESID = AB_DLANGE( '1', K, M, R( M-K+1, N-M+1 ), LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / DBLE( MAX( 1, N ) ) ) / ANORM ) / EPS
       ELSE
@@ -229,18 +230,19 @@
 *
 *     Compute I - Q*Q'
 *
-      CALL DLASET( 'Full', M, M, ZERO, ONE, R, LDA )
-      CALL DSYRK( 'Upper', 'No transpose', M, N, -ONE, Q, LDA, ONE, R,
+      CALL AB_DLASET( 'Full', M, M, ZERO, ONE, R, LDA )
+      CALL AB_AB_DSYRK( 'Upper', 'No transpose', M, N, -ONE, Q, LDA, ONE
+     $, R,
      $            LDA )
 *
 *     Compute norm( I - Q*Q' ) / ( N * EPS ) .
 *
-      RESID = DLANSY( '1', 'Upper', M, R, LDA, RWORK )
+      RESID = AB_DLANSY( '1', 'Upper', M, R, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / DBLE( MAX( 1, N ) ) ) / EPS
 *
       RETURN
 *
-*     End of DRQT02
+*     End of AB_DRQT02
 *
       END

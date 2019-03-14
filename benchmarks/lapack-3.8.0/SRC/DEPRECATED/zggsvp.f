@@ -1,4 +1,4 @@
-*> \brief \b ZGGSVP
+*> \brief \b AB_ZGGSVP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGGSVP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggsvp.f">
+*> Download AB_ZGGSVP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGGSVP.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggsvp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGGSVP.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggsvp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGGSVP.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
+*       SUBROUTINE AB_ZGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
 *                          TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
 *                          IWORK, RWORK, TAU, WORK, INFO )
 *
@@ -40,9 +40,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine ZGGSVP3.
+*> This routine is deprecated and has been replaced by routine AB_AB_ZGGSVP3.
 *>
-*> ZGGSVP computes unitary matrices U, V and Q such that
+*> AB_ZGGSVP computes unitary matrices U, V and Q such that
 *>
 *>                    N-K-L  K    L
 *>  U**H*A*Q =     K ( 0    A12  A13 )  if M-K-L >= 0;
@@ -64,7 +64,7 @@
 *>
 *> This decomposition is the preprocessing step for computing the
 *> Generalized Singular Value Decomposition (GSVD), see subroutine
-*> ZGGSVD.
+*> AB_ZGGSVD.
 *> \endverbatim
 *
 *  Arguments:
@@ -255,13 +255,13 @@
 *>
 *> \verbatim
 *>
-*>  The subroutine uses LAPACK subroutine ZGEQPF for the QR factorization
+*>  The subroutine uses LAPACK subroutine AB_ZGEQPF for the QR factorization
 *>  with column pivoting to detect the effective numerical rank of the
 *>  a matrix. It may be replaced by a better rank determination strategy.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
+      SUBROUTINE AB_ZGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
      $                   TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
      $                   IWORK, RWORK, TAU, WORK, INFO )
 *
@@ -295,12 +295,13 @@
       COMPLEX*16         T
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEQPF, ZGEQR2, ZGERQ2, ZLACPY, ZLAPMT,
-     $                   ZLASET, ZUNG2R, ZUNM2R, ZUNMR2
+      EXTERNAL           AB_XERBLA, AB_ZGEQPF, AB_AB_ZGEQR2, AB_ZGERQ2, 
+     $AB_ZLACPY, AB_ZLAPMT,
+     $                   AB_ZLASET, AB_ZUNG2R, AB_ZUNM2R, AB_ZUNMR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -315,17 +316,17 @@
 *
 *     Test the input parameters
 *
-      WANTU = LSAME( JOBU, 'U' )
-      WANTV = LSAME( JOBV, 'V' )
-      WANTQ = LSAME( JOBQ, 'Q' )
+      WANTU = AB_LSAME( JOBU, 'U' )
+      WANTV = AB_LSAME( JOBV, 'V' )
+      WANTQ = AB_LSAME( JOBQ, 'Q' )
       FORWRD = .TRUE.
 *
       INFO = 0
-      IF( .NOT.( WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
+      IF( .NOT.( WANTU .OR. AB_LSAME( JOBU, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTV .OR. LSAME( JOBV, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTV .OR. AB_LSAME( JOBV, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( WANTQ .OR. LSAME( JOBQ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTQ .OR. AB_LSAME( JOBQ, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -345,7 +346,7 @@
          INFO = -20
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGGSVP', -INFO )
+         CALL AB_XERBLA( 'AB_ZGGSVP', -INFO )
          RETURN
       END IF
 *
@@ -355,11 +356,11 @@
       DO 10 I = 1, N
          IWORK( I ) = 0
    10 CONTINUE
-      CALL ZGEQPF( P, N, B, LDB, IWORK, TAU, WORK, RWORK, INFO )
+      CALL AB_ZGEQPF( P, N, B, LDB, IWORK, TAU, WORK, RWORK, INFO )
 *
 *     Update A := A*P
 *
-      CALL ZLAPMT( FORWRD, M, N, A, LDA, IWORK )
+      CALL AB_ZLAPMT( FORWRD, M, N, A, LDA, IWORK )
 *
 *     Determine the effective rank of matrix B.
 *
@@ -373,11 +374,11 @@
 *
 *        Copy the details of V, and form V.
 *
-         CALL ZLASET( 'Full', P, P, CZERO, CZERO, V, LDV )
+         CALL AB_ZLASET( 'Full', P, P, CZERO, CZERO, V, LDV )
          IF( P.GT.1 )
-     $      CALL ZLACPY( 'Lower', P-1, N, B( 2, 1 ), LDB, V( 2, 1 ),
+     $      CALL AB_ZLACPY( 'Lower', P-1, N, B( 2, 1 ), LDB, V( 2, 1 ),
      $                   LDV )
-         CALL ZUNG2R( P, P, MIN( P, N ), V, LDV, TAU, WORK, INFO )
+         CALL AB_ZUNG2R( P, P, MIN( P, N ), V, LDV, TAU, WORK, INFO )
       END IF
 *
 *     Clean up B
@@ -388,37 +389,39 @@
    30    CONTINUE
    40 CONTINUE
       IF( P.GT.L )
-     $   CALL ZLASET( 'Full', P-L, N, CZERO, CZERO, B( L+1, 1 ), LDB )
+     $   CALL AB_ZLASET( 'Full', P-L, N, CZERO, CZERO, B( L+1, 1 ), LDB 
+     $)
 *
       IF( WANTQ ) THEN
 *
 *        Set Q = I and Update Q := Q*P
 *
-         CALL ZLASET( 'Full', N, N, CZERO, CONE, Q, LDQ )
-         CALL ZLAPMT( FORWRD, N, N, Q, LDQ, IWORK )
+         CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Q, LDQ )
+         CALL AB_ZLAPMT( FORWRD, N, N, Q, LDQ, IWORK )
       END IF
 *
       IF( P.GE.L .AND. N.NE.L ) THEN
 *
 *        RQ factorization of ( S11 S12 ) = ( 0 S12 )*Z
 *
-         CALL ZGERQ2( L, N, B, LDB, TAU, WORK, INFO )
+         CALL AB_ZGERQ2( L, N, B, LDB, TAU, WORK, INFO )
 *
 *        Update A := A*Z**H
 *
-         CALL ZUNMR2( 'Right', 'Conjugate transpose', M, N, L, B, LDB,
+         CALL AB_ZUNMR2( 'Right', 'Conjugate transpose', M, N, L, B, LDB
+     $,
      $                TAU, A, LDA, WORK, INFO )
          IF( WANTQ ) THEN
 *
 *           Update Q := Q*Z**H
 *
-            CALL ZUNMR2( 'Right', 'Conjugate transpose', N, N, L, B,
+            CALL AB_ZUNMR2( 'Right', 'Conjugate transpose', N, N, L, B,
      $                   LDB, TAU, Q, LDQ, WORK, INFO )
          END IF
 *
 *        Clean up B
 *
-         CALL ZLASET( 'Full', L, N-L, CZERO, CZERO, B, LDB )
+         CALL AB_ZLASET( 'Full', L, N-L, CZERO, CZERO, B, LDB )
          DO 60 J = N - L + 1, N
             DO 50 I = J - N + L + 1, L
                B( I, J ) = CZERO
@@ -438,7 +441,7 @@
       DO 70 I = 1, N - L
          IWORK( I ) = 0
    70 CONTINUE
-      CALL ZGEQPF( M, N-L, A, LDA, IWORK, TAU, WORK, RWORK, INFO )
+      CALL AB_ZGEQPF( M, N-L, A, LDA, IWORK, TAU, WORK, RWORK, INFO )
 *
 *     Determine the effective rank of A11
 *
@@ -450,25 +453,27 @@
 *
 *     Update A12 := U**H*A12, where A12 = A( 1:M, N-L+1:N )
 *
-      CALL ZUNM2R( 'Left', 'Conjugate transpose', M, L, MIN( M, N-L ),
+      CALL AB_ZUNM2R( 'Left', 'Conjugate transpose', M, L, MIN( M, N-L )
+     $,
      $             A, LDA, TAU, A( 1, N-L+1 ), LDA, WORK, INFO )
 *
       IF( WANTU ) THEN
 *
 *        Copy the details of U, and form U
 *
-         CALL ZLASET( 'Full', M, M, CZERO, CZERO, U, LDU )
+         CALL AB_ZLASET( 'Full', M, M, CZERO, CZERO, U, LDU )
          IF( M.GT.1 )
-     $      CALL ZLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2, 1 ),
+     $      CALL AB_ZLACPY( 'Lower', M-1, N-L, A( 2, 1 ), LDA, U( 2, 1 )
+     $,
      $                   LDU )
-         CALL ZUNG2R( M, M, MIN( M, N-L ), U, LDU, TAU, WORK, INFO )
+         CALL AB_ZUNG2R( M, M, MIN( M, N-L ), U, LDU, TAU, WORK, INFO )
       END IF
 *
       IF( WANTQ ) THEN
 *
 *        Update Q( 1:N, 1:N-L )  = Q( 1:N, 1:N-L )*P1
 *
-         CALL ZLAPMT( FORWRD, N, N-L, Q, LDQ, IWORK )
+         CALL AB_ZLAPMT( FORWRD, N, N-L, Q, LDQ, IWORK )
       END IF
 *
 *     Clean up A: set the strictly lower triangular part of
@@ -480,25 +485,27 @@
    90    CONTINUE
   100 CONTINUE
       IF( M.GT.K )
-     $   CALL ZLASET( 'Full', M-K, N-L, CZERO, CZERO, A( K+1, 1 ), LDA )
+     $   CALL AB_ZLASET( 'Full', M-K, N-L, CZERO, CZERO, A( K+1, 1 ), LD
+     $A )
 *
       IF( N-L.GT.K ) THEN
 *
 *        RQ factorization of ( T11 T12 ) = ( 0 T12 )*Z1
 *
-         CALL ZGERQ2( K, N-L, A, LDA, TAU, WORK, INFO )
+         CALL AB_ZGERQ2( K, N-L, A, LDA, TAU, WORK, INFO )
 *
          IF( WANTQ ) THEN
 *
 *           Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**H
 *
-            CALL ZUNMR2( 'Right', 'Conjugate transpose', N, N-L, K, A,
+            CALL AB_ZUNMR2( 'Right', 'Conjugate transpose', N, N-L, K, A
+     $,
      $                   LDA, TAU, Q, LDQ, WORK, INFO )
          END IF
 *
 *        Clean up A
 *
-         CALL ZLASET( 'Full', K, N-L-K, CZERO, CZERO, A, LDA )
+         CALL AB_ZLASET( 'Full', K, N-L-K, CZERO, CZERO, A, LDA )
          DO 120 J = N - L - K + 1, N - L
             DO 110 I = J - N + L + K + 1, K
                A( I, J ) = CZERO
@@ -511,13 +518,15 @@
 *
 *        QR factorization of A( K+1:M,N-L+1:N )
 *
-         CALL ZGEQR2( M-K, L, A( K+1, N-L+1 ), LDA, TAU, WORK, INFO )
+         CALL AB_AB_ZGEQR2( M-K, L, A( K+1, N-L+1 ), LDA, TAU, WORK, INF
+     $O )
 *
          IF( WANTU ) THEN
 *
 *           Update U(:,K+1:M) := U(:,K+1:M)*U1
 *
-            CALL ZUNM2R( 'Right', 'No transpose', M, M-K, MIN( M-K, L ),
+            CALL AB_ZUNM2R( 'Right', 'No transpose', M, M-K, MIN( M-K, L
+     $ ),
      $                   A( K+1, N-L+1 ), LDA, TAU, U( 1, K+1 ), LDU,
      $                   WORK, INFO )
          END IF
@@ -534,6 +543,6 @@
 *
       RETURN
 *
-*     End of ZGGSVP
+*     End of AB_ZGGSVP
 *
       END

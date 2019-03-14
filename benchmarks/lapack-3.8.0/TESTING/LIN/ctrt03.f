@@ -1,4 +1,4 @@
-*> \brief \b CTRT03
+*> \brief \b AB_CTRT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTRT03( UPLO, TRANS, DIAG, N, NRHS, A, LDA, SCALE,
+*       SUBROUTINE AB_CTRT03( UPLO, TRANS, DIAG, N, NRHS, A, LDA, SCALE,
 *                          CNORM, TSCAL, X, LDX, B, LDB, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> CTRT03 computes the residual for the solution to a scaled triangular
+*> AB_CTRT03 computes the residual for the solution to a scaled triangular
 *> system of equations A*x = s*b,  A**T *x = s*b,  or  A**H *x = s*b.
 *> Here A is a triangular matrix, A**T denotes the transpose of A, A**H
 *> denotes the conjugate transpose of A, s is a scalar, and x and b are
@@ -168,7 +168,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CTRT03( UPLO, TRANS, DIAG, N, NRHS, A, LDA, SCALE,
+      SUBROUTINE AB_CTRT03( UPLO, TRANS, DIAG, N, NRHS, A, LDA, SCALE,
      $                   CNORM, TSCAL, X, LDX, B, LDB, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -198,13 +198,13 @@
       REAL               EPS, ERR, SMLNUM, TNORM, XNORM, XSCAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ICAMAX, SLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ICAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CSSCAL, CTRMV
+      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CAB_SSCAL, AB_CTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, REAL
@@ -217,14 +217,14 @@
          RESID = ZERO
          RETURN
       END IF
-      EPS = SLAMCH( 'Epsilon' )
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
 *
 *     Compute the norm of the triangular matrix A using the column
-*     norms already computed by CLATRS.
+*     norms already computed by AB_CLATRS.
 *
       TNORM = ZERO
-      IF( LSAME( DIAG, 'N' ) ) THEN
+      IF( AB_LSAME( DIAG, 'N' ) ) THEN
          DO 10 J = 1, N
             TNORM = MAX( TNORM, TSCAL*ABS( A( J, J ) )+CNORM( J ) )
    10    CONTINUE
@@ -239,16 +239,17 @@
 *
       RESID = ZERO
       DO 30 J = 1, NRHS
-         CALL CCOPY( N, X( 1, J ), 1, WORK, 1 )
-         IX = ICAMAX( N, WORK, 1 )
+         CALL AB_CCOPY( N, X( 1, J ), 1, WORK, 1 )
+         IX = AB_ICAMAX( N, WORK, 1 )
          XNORM = MAX( ONE, ABS( X( IX, J ) ) )
          XSCAL = ( ONE / XNORM ) / REAL( N )
-         CALL CSSCAL( N, XSCAL, WORK, 1 )
-         CALL CTRMV( UPLO, TRANS, DIAG, N, A, LDA, WORK, 1 )
-         CALL CAXPY( N, CMPLX( -SCALE*XSCAL ), B( 1, J ), 1, WORK, 1 )
-         IX = ICAMAX( N, WORK, 1 )
+         CALL AB_CAB_SSCAL( N, XSCAL, WORK, 1 )
+         CALL AB_CTRMV( UPLO, TRANS, DIAG, N, A, LDA, WORK, 1 )
+         CALL AB_CAXPY( N, CMPLX( -SCALE*XSCAL ), B( 1, J ), 1, WORK, 1 
+     $)
+         IX = AB_ICAMAX( N, WORK, 1 )
          ERR = TSCAL*ABS( WORK( IX ) )
-         IX = ICAMAX( N, X( 1, J ), 1 )
+         IX = AB_ICAMAX( N, X( 1, J ), 1 )
          XNORM = ABS( X( IX, J ) )
          IF( ERR*SMLNUM.LE.XNORM ) THEN
             IF( XNORM.GT.ZERO )
@@ -269,6 +270,6 @@
 *
       RETURN
 *
-*     End of CTRT03
+*     End of AB_CTRT03
 *
       END

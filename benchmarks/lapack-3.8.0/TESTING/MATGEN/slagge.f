@@ -1,4 +1,4 @@
-*> \brief \b SLAGGE
+*> \brief \b AB_SLAGGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE AB_SLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, KL, KU, LDA, M, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SLAGGE generates a real general m by n matrix A, by pre- and post-
+*> AB_SLAGGE generates a real general m by n matrix A, by pre- and post-
 *> multiplying a real diagonal matrix D with random orthogonal matrices:
 *> A = U*D*V. The lower and upper bandwidths may then be reduced to
 *> kl and ku by additional orthogonal transformations.
@@ -111,7 +111,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE SLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE AB_SLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,14 +137,15 @@
       REAL               TAU, WA, WB, WN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SGER, SLARNV, SSCAL, XERBLA
+      EXTERNAL           AB_SGEMV, AB_SGER, AB_SLARNV, AB_SSCAL, AB_XERB
+     $LA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SIGN
 *     ..
 *     .. External Functions ..
-      REAL               SNRM2
-      EXTERNAL           SNRM2
+      REAL               AB_SNRM2
+      EXTERNAL           AB_SNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -163,7 +164,7 @@
          INFO = -7
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL XERBLA( 'SLAGGE', -INFO )
+         CALL AB_XERBLA( 'AB_SLAGGE', -INFO )
          RETURN
       END IF
 *
@@ -189,46 +190,47 @@
 *
 *           generate random reflection
 *
-            CALL SLARNV( 3, ISEED, M-I+1, WORK )
-            WN = SNRM2( M-I+1, WORK, 1 )
+            CALL AB_SLARNV( 3, ISEED, M-I+1, WORK )
+            WN = AB_SNRM2( M-I+1, WORK, 1 )
             WA = SIGN( WN, WORK( 1 ) )
             IF( WN.EQ.ZERO ) THEN
                TAU = ZERO
             ELSE
                WB = WORK( 1 ) + WA
-               CALL SSCAL( M-I, ONE / WB, WORK( 2 ), 1 )
+               CALL AB_SSCAL( M-I, ONE / WB, WORK( 2 ), 1 )
                WORK( 1 ) = ONE
                TAU = WB / WA
             END IF
 *
 *           multiply A(i:m,i:n) by random reflection from the left
 *
-            CALL SGEMV( 'Transpose', M-I+1, N-I+1, ONE, A( I, I ), LDA,
+            CALL AB_SGEMV( 'Transpose', M-I+1, N-I+1, ONE, A( I, I ), LD
+     $A,
      $                  WORK, 1, ZERO, WORK( M+1 ), 1 )
-            CALL SGER( M-I+1, N-I+1, -TAU, WORK, 1, WORK( M+1 ), 1,
+            CALL AB_SGER( M-I+1, N-I+1, -TAU, WORK, 1, WORK( M+1 ), 1,
      $                 A( I, I ), LDA )
          END IF
          IF( I.LT.N ) THEN
 *
 *           generate random reflection
 *
-            CALL SLARNV( 3, ISEED, N-I+1, WORK )
-            WN = SNRM2( N-I+1, WORK, 1 )
+            CALL AB_SLARNV( 3, ISEED, N-I+1, WORK )
+            WN = AB_SNRM2( N-I+1, WORK, 1 )
             WA = SIGN( WN, WORK( 1 ) )
             IF( WN.EQ.ZERO ) THEN
                TAU = ZERO
             ELSE
                WB = WORK( 1 ) + WA
-               CALL SSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+               CALL AB_SSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
                WORK( 1 ) = ONE
                TAU = WB / WA
             END IF
 *
 *           multiply A(i:m,i:n) by random reflection from the right
 *
-            CALL SGEMV( 'No transpose', M-I+1, N-I+1, ONE, A( I, I ),
+            CALL AB_SGEMV( 'No transpose', M-I+1, N-I+1, ONE, A( I, I ),
      $                  LDA, WORK, 1, ZERO, WORK( N+1 ), 1 )
-            CALL SGER( M-I+1, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1,
+            CALL AB_SGER( M-I+1, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1,
      $                 A( I, I ), LDA )
          END IF
    40 CONTINUE
@@ -245,23 +247,24 @@
 *
 *              generate reflection to annihilate A(kl+i+1:m,i)
 *
-               WN = SNRM2( M-KL-I+1, A( KL+I, I ), 1 )
+               WN = AB_SNRM2( M-KL-I+1, A( KL+I, I ), 1 )
                WA = SIGN( WN, A( KL+I, I ) )
                IF( WN.EQ.ZERO ) THEN
                   TAU = ZERO
                ELSE
                   WB = A( KL+I, I ) + WA
-                  CALL SSCAL( M-KL-I, ONE / WB, A( KL+I+1, I ), 1 )
+                  CALL AB_SSCAL( M-KL-I, ONE / WB, A( KL+I+1, I ), 1 )
                   A( KL+I, I ) = ONE
                   TAU = WB / WA
                END IF
 *
 *              apply reflection to A(kl+i:m,i+1:n) from the left
 *
-               CALL SGEMV( 'Transpose', M-KL-I+1, N-I, ONE,
+               CALL AB_SGEMV( 'Transpose', M-KL-I+1, N-I, ONE,
      $                     A( KL+I, I+1 ), LDA, A( KL+I, I ), 1, ZERO,
      $                     WORK, 1 )
-               CALL SGER( M-KL-I+1, N-I, -TAU, A( KL+I, I ), 1, WORK, 1,
+               CALL AB_SGER( M-KL-I+1, N-I, -TAU, A( KL+I, I ), 1, WORK,
+     $ 1,
      $                    A( KL+I, I+1 ), LDA )
                A( KL+I, I ) = -WA
             END IF
@@ -270,23 +273,23 @@
 *
 *              generate reflection to annihilate A(i,ku+i+1:n)
 *
-               WN = SNRM2( N-KU-I+1, A( I, KU+I ), LDA )
+               WN = AB_SNRM2( N-KU-I+1, A( I, KU+I ), LDA )
                WA = SIGN( WN, A( I, KU+I ) )
                IF( WN.EQ.ZERO ) THEN
                   TAU = ZERO
                ELSE
                   WB = A( I, KU+I ) + WA
-                  CALL SSCAL( N-KU-I, ONE / WB, A( I, KU+I+1 ), LDA )
+                  CALL AB_SSCAL( N-KU-I, ONE / WB, A( I, KU+I+1 ), LDA )
                   A( I, KU+I ) = ONE
                   TAU = WB / WA
                END IF
 *
 *              apply reflection to A(i+1:m,ku+i:n) from the right
 *
-               CALL SGEMV( 'No transpose', M-I, N-KU-I+1, ONE,
+               CALL AB_SGEMV( 'No transpose', M-I, N-KU-I+1, ONE,
      $                     A( I+1, KU+I ), LDA, A( I, KU+I ), LDA, ZERO,
      $                     WORK, 1 )
-               CALL SGER( M-I, N-KU-I+1, -TAU, WORK, 1, A( I, KU+I ),
+               CALL AB_SGER( M-I, N-KU-I+1, -TAU, WORK, 1, A( I, KU+I ),
      $                    LDA, A( I+1, KU+I ), LDA )
                A( I, KU+I ) = -WA
             END IF
@@ -299,23 +302,23 @@
 *
 *              generate reflection to annihilate A(i,ku+i+1:n)
 *
-               WN = SNRM2( N-KU-I+1, A( I, KU+I ), LDA )
+               WN = AB_SNRM2( N-KU-I+1, A( I, KU+I ), LDA )
                WA = SIGN( WN, A( I, KU+I ) )
                IF( WN.EQ.ZERO ) THEN
                   TAU = ZERO
                ELSE
                   WB = A( I, KU+I ) + WA
-                  CALL SSCAL( N-KU-I, ONE / WB, A( I, KU+I+1 ), LDA )
+                  CALL AB_SSCAL( N-KU-I, ONE / WB, A( I, KU+I+1 ), LDA )
                   A( I, KU+I ) = ONE
                   TAU = WB / WA
                END IF
 *
 *              apply reflection to A(i+1:m,ku+i:n) from the right
 *
-               CALL SGEMV( 'No transpose', M-I, N-KU-I+1, ONE,
+               CALL AB_SGEMV( 'No transpose', M-I, N-KU-I+1, ONE,
      $                     A( I+1, KU+I ), LDA, A( I, KU+I ), LDA, ZERO,
      $                     WORK, 1 )
-               CALL SGER( M-I, N-KU-I+1, -TAU, WORK, 1, A( I, KU+I ),
+               CALL AB_SGER( M-I, N-KU-I+1, -TAU, WORK, 1, A( I, KU+I ),
      $                    LDA, A( I+1, KU+I ), LDA )
                A( I, KU+I ) = -WA
             END IF
@@ -324,23 +327,24 @@
 *
 *              generate reflection to annihilate A(kl+i+1:m,i)
 *
-               WN = SNRM2( M-KL-I+1, A( KL+I, I ), 1 )
+               WN = AB_SNRM2( M-KL-I+1, A( KL+I, I ), 1 )
                WA = SIGN( WN, A( KL+I, I ) )
                IF( WN.EQ.ZERO ) THEN
                   TAU = ZERO
                ELSE
                   WB = A( KL+I, I ) + WA
-                  CALL SSCAL( M-KL-I, ONE / WB, A( KL+I+1, I ), 1 )
+                  CALL AB_SSCAL( M-KL-I, ONE / WB, A( KL+I+1, I ), 1 )
                   A( KL+I, I ) = ONE
                   TAU = WB / WA
                END IF
 *
 *              apply reflection to A(kl+i:m,i+1:n) from the left
 *
-               CALL SGEMV( 'Transpose', M-KL-I+1, N-I, ONE,
+               CALL AB_SGEMV( 'Transpose', M-KL-I+1, N-I, ONE,
      $                     A( KL+I, I+1 ), LDA, A( KL+I, I ), 1, ZERO,
      $                     WORK, 1 )
-               CALL SGER( M-KL-I+1, N-I, -TAU, A( KL+I, I ), 1, WORK, 1,
+               CALL AB_SGER( M-KL-I+1, N-I, -TAU, A( KL+I, I ), 1, WORK,
+     $ 1,
      $                    A( KL+I, I+1 ), LDA )
                A( KL+I, I ) = -WA
             END IF
@@ -360,6 +364,6 @@
    70 CONTINUE
       RETURN
 *
-*     End of SLAGGE
+*     End of AB_SLAGGE
 *
       END

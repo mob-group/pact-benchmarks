@@ -1,4 +1,4 @@
-*> \brief \b ZGBEQU
+*> \brief \b AB_ZGBEQU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGBEQU + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbequ.f">
+*> Download AB_ZGBEQU + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGBEQU.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgbequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGBEQU.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGBEQU.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+*       SUBROUTINE AB_ZGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                          AMAX, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZGBEQU computes row and column scalings intended to equilibrate an
+*> AB_ZGBEQU computes row and column scalings intended to equilibrate an
 *> M-by-N band matrix A and reduce its condition number.  R returns the
 *> row scale factors and C the column scale factors, chosen to try to
 *> make the largest element in each row and column of the matrix B with
@@ -151,7 +151,8 @@
 *> \ingroup complex16GBcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+      SUBROUTINE AB_ZGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND
+     $,
      $                   AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -180,11 +181,11 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -212,7 +213,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGBEQU', -INFO )
+         CALL AB_XERBLA( 'AB_ZGBEQU', -INFO )
          RETURN
       END IF
 *
@@ -227,7 +228,7 @@
 *
 *     Get machine constants.
 *
-      SMLNUM = DLAMCH( 'S' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
 *
 *     Compute row scale factors.
@@ -328,6 +329,6 @@
 *
       RETURN
 *
-*     End of ZGBEQU
+*     End of AB_ZGBEQU
 *
       END

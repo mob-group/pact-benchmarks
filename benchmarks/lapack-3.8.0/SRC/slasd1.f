@@ -1,4 +1,4 @@
-*> \brief \b SLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used by sbdsdc.
+*> \brief \b AB_SLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used by AB_SBDSDC.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASD1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd1.f">
+*> Download AB_SLASD1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASD1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASD1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASD1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
+*       SUBROUTINE AB_SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
 *                          IDXQ, IWORK, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,13 +36,13 @@
 *>
 *> \verbatim
 *>
-*> SLASD1 computes the SVD of an upper bidiagonal N-by-M matrix B,
-*> where N = NL + NR + 1 and M = N + SQRE. SLASD1 is called from SLASD0.
+*> AB_SLASD1 computes the SVD of an upper bidiagonal N-by-M matrix B,
+*> where N = NL + NR + 1 and M = N + SQRE. AB_SLASD1 is called from AB_SLASD0.
 *>
-*> A related subroutine SLASD7 handles the case in which the singular
+*> A related subroutine AB_SLASD7 handles the case in which the singular
 *> values (and the singular vectors in factored form) are desired.
 *>
-*> SLASD1 computes the SVD as follows:
+*> AB_SLASD1 computes the SVD as follows:
 *>
 *>               ( D1(in)    0    0       0 )
 *>   B = U(in) * (   Z1**T   a   Z2**T    b ) * VT(in)
@@ -52,7 +52,7 @@
 *>
 *> where Z**T = (Z1**T a Z2**T b) = u**T VT**T, and u is a vector of dimension M
 *> with ALPHA and BETA in the NL+1 and NL+2 th entries and zeros
-*> elsewhere; and the entry b is empty if SQRE = 0.
+*> ELSEwhere; and the entry b is empty if SQRE = 0.
 *>
 *> The left singular vectors of the original matrix are stored in U, and
 *> the transpose of the right singular vectors are stored in VT, and the
@@ -62,12 +62,12 @@
 *>    when there are multiple singular values or when there are zeros in
 *>    the Z vector.  For each such occurrence the dimension of the
 *>    secular equation problem is reduced by one.  This stage is
-*>    performed by the routine SLASD2.
+*>    performed by the routine AB_SLASD2.
 *>
-*>    The second stage consists of calculating the updated
+*>    The AB_SECOND stage consists of calculating the updated
 *>    singular values. This is done by finding the square roots of the
-*>    roots of the secular equation via the routine SLASD4 (as called
-*>    by SLASD3). This routine also calculates the singular vectors of
+*>    roots of the secular equation via the routine AB_SLASD4 (as called
+*>    by AB_SLASD3). This routine also calculates the singular vectors of
 *>    the current problem.
 *>
 *>    The final stage consists of computing the updated singular vectors
@@ -201,7 +201,8 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
+      SUBROUTINE AB_SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LD
+     $VT,
      $                   IDXQ, IWORK, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -231,7 +232,8 @@
       REAL               ORGNRM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAMRG, SLASCL, SLASD2, SLASD3, XERBLA
+      EXTERNAL           AB_SLAMRG, AB_SLASCL, AB_SLASD2, AB_SLASD3, AB_
+     $XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -250,7 +252,7 @@
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLASD1', -INFO )
+         CALL AB_XERBLA( 'AB_SLASD1', -INFO )
          RETURN
       END IF
 *
@@ -259,7 +261,7 @@
 *
 *     The following values are for bookkeeping purposes only.  They are
 *     integer pointers which indicate the portion of the workspace
-*     used by a particular array in SLASD2 and SLASD3.
+*     used by a particular array in AB_SLASD2 and AB_SLASD3.
 *
       LDU2 = N
       LDVT2 = M
@@ -284,13 +286,14 @@
             ORGNRM = ABS( D( I ) )
          END IF
    10 CONTINUE
-      CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
       ALPHA = ALPHA / ORGNRM
       BETA = BETA / ORGNRM
 *
 *     Deflate singular values.
 *
-      CALL SLASD2( NL, NR, SQRE, K, D, WORK( IZ ), ALPHA, BETA, U, LDU,
+      CALL AB_SLASD2( NL, NR, SQRE, K, D, WORK( IZ ), ALPHA, BETA, U, LD
+     $U,
      $             VT, LDVT, WORK( ISIGMA ), WORK( IU2 ), LDU2,
      $             WORK( IVT2 ), LDVT2, IWORK( IDXP ), IWORK( IDX ),
      $             IWORK( IDXC ), IDXQ, IWORK( COLTYP ), INFO )
@@ -298,7 +301,8 @@
 *     Solve Secular Equation and update singular vectors.
 *
       LDQ = K
-      CALL SLASD3( NL, NR, SQRE, K, D, WORK( IQ ), LDQ, WORK( ISIGMA ),
+      CALL AB_SLASD3( NL, NR, SQRE, K, D, WORK( IQ ), LDQ, WORK( ISIGMA 
+     $),
      $             U, LDU, WORK( IU2 ), LDU2, VT, LDVT, WORK( IVT2 ),
      $             LDVT2, IWORK( IDXC ), IWORK( COLTYP ), WORK( IZ ),
      $             INFO )
@@ -311,16 +315,16 @@
 *
 *     Unscale.
 *
-      CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
 *
 *     Prepare the IDXQ sorting permutation.
 *
       N1 = K
       N2 = N - K
-      CALL SLAMRG( N1, N2, D, 1, -1, IDXQ )
+      CALL AB_SLAMRG( N1, N2, D, 1, -1, IDXQ )
 *
       RETURN
 *
-*     End of SLASD1
+*     End of AB_SLASD1
 *
       END

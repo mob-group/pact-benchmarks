@@ -1,4 +1,4 @@
-*> \brief \b DBDT03
+*> \brief \b AB_DBDT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
+*       SUBROUTINE AB_DBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> DBDT03 reconstructs a bidiagonal matrix B from its SVD:
+*> AB_DBDT03 reconstructs a bidiagonal matrix B from its SVD:
 *>    S = U' * B * V
 *> where U and V are orthogonal matrices and S is diagonal.
 *>
@@ -132,7 +132,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
+      SUBROUTINE AB_DBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK
+     $,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -161,13 +162,13 @@
       DOUBLE PRECISION   BNORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DLAMCH
-      EXTERNAL           LSAME, IDAMAX, DASUM, DLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DASUM, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV
+      EXTERNAL           AB_DGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -187,7 +188,7 @@
 *
 *        B is bidiagonal.
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           B is upper bidiagonal.
 *
@@ -195,7 +196,7 @@
                DO 10 I = 1, N
                   WORK( N+I ) = S( I )*VT( I, J )
    10          CONTINUE
-               CALL DGEMV( 'No transpose', N, N, -ONE, U, LDU,
+               CALL AB_DGEMV( 'No transpose', N, N, -ONE, U, LDU,
      $                     WORK( N+1 ), 1, ZERO, WORK, 1 )
                WORK( J ) = WORK( J ) + D( J )
                IF( J.GT.1 ) THEN
@@ -204,7 +205,7 @@
                ELSE
                   BNORM = MAX( BNORM, ABS( D( J ) ) )
                END IF
-               RESID = MAX( RESID, DASUM( N, WORK, 1 ) )
+               RESID = MAX( RESID, AB_DASUM( N, WORK, 1 ) )
    20       CONTINUE
          ELSE
 *
@@ -214,7 +215,7 @@
                DO 30 I = 1, N
                   WORK( N+I ) = S( I )*VT( I, J )
    30          CONTINUE
-               CALL DGEMV( 'No transpose', N, N, -ONE, U, LDU,
+               CALL AB_DGEMV( 'No transpose', N, N, -ONE, U, LDU,
      $                     WORK( N+1 ), 1, ZERO, WORK, 1 )
                WORK( J ) = WORK( J ) + D( J )
                IF( J.LT.N ) THEN
@@ -223,7 +224,7 @@
                ELSE
                   BNORM = MAX( BNORM, ABS( D( J ) ) )
                END IF
-               RESID = MAX( RESID, DASUM( N, WORK, 1 ) )
+               RESID = MAX( RESID, AB_DASUM( N, WORK, 1 ) )
    40       CONTINUE
          END IF
       ELSE
@@ -234,18 +235,19 @@
             DO 50 I = 1, N
                WORK( N+I ) = S( I )*VT( I, J )
    50       CONTINUE
-            CALL DGEMV( 'No transpose', N, N, -ONE, U, LDU, WORK( N+1 ),
+            CALL AB_DGEMV( 'No transpose', N, N, -ONE, U, LDU, WORK( N+1
+     $ ),
      $                  1, ZERO, WORK, 1 )
             WORK( J ) = WORK( J ) + D( J )
-            RESID = MAX( RESID, DASUM( N, WORK, 1 ) )
+            RESID = MAX( RESID, AB_DASUM( N, WORK, 1 ) )
    60    CONTINUE
-         J = IDAMAX( N, D, 1 )
+         J = AB_IDAMAX( N, D, 1 )
          BNORM = ABS( D( J ) )
       END IF
 *
 *     Compute norm(B - U * S * V') / ( n * norm(B) * EPS )
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
       IF( BNORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -266,6 +268,6 @@
 *
       RETURN
 *
-*     End of DBDT03
+*     End of AB_DBDT03
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZHST01
+*> \brief \b AB_ZHST01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
+*       SUBROUTINE AB_ZHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
 *                          LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,14 +26,14 @@
 *>
 *> \verbatim
 *>
-*> ZHST01 tests the reduction of a general matrix A to upper Hessenberg
+*> AB_ZHST01 tests the reduction of a general matrix A to upper Hessenberg
 *> form:  A = Q*H*Q'.  Two test ratios are computed;
 *>
 *> RESULT(1) = norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )
 *> RESULT(2) = norm( I - Q'*Q ) / ( N * EPS )
 *>
 *> The matrix Q is assumed to be given explicitly as it would be
-*> following ZGEHRD + ZUNGHR.
+*> following AB_ZGEHRD + AB_ZUNGHR.
 *>
 *> In this version, ILO and IHI are not used, but they could be used
 *> to save some work if this is desired.
@@ -78,7 +78,7 @@
 *> \verbatim
 *>          H is COMPLEX*16 array, dimension (LDH,N)
 *>          The upper Hessenberg matrix H from the reduction A = Q*H*Q'
-*>          as computed by ZGEHRD.  H is assumed to be zero below the
+*>          as computed by AB_ZGEHRD.  H is assumed to be zero below the
 *>          first subdiagonal.
 *> \endverbatim
 *>
@@ -92,7 +92,7 @@
 *> \verbatim
 *>          Q is COMPLEX*16 array, dimension (LDQ,N)
 *>          The orthogonal matrix Q from the reduction A = Q*H*Q' as
-*>          computed by ZGEHRD + ZUNGHR.
+*>          computed by AB_ZGEHRD + AB_ZUNGHR.
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -137,7 +137,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
+      SUBROUTINE AB_ZHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
      $                   LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -165,11 +165,11 @@
       DOUBLE PRECISION   ANORM, EPS, OVFL, SMLNUM, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZGEMM, ZLACPY, ZUNT01
+      EXTERNAL           AB_DLABAD, AB_ZGEMM, AB_ZLACPY, AB_ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, MAX, MIN
@@ -184,10 +184,10 @@
          RETURN
       END IF
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      EPS = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
+      CALL AB_DLABAD( UNFL, OVFL )
       SMLNUM = UNFL*N / EPS
 *
 *     Test 1:  Compute norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )
@@ -195,22 +195,22 @@
 *     Copy A to WORK
 *
       LDWORK = MAX( 1, N )
-      CALL ZLACPY( ' ', N, N, A, LDA, WORK, LDWORK )
+      CALL AB_ZLACPY( ' ', N, N, A, LDA, WORK, LDWORK )
 *
 *     Compute Q*H
 *
-      CALL ZGEMM( 'No transpose', 'No transpose', N, N, N,
+      CALL AB_ZGEMM( 'No transpose', 'No transpose', N, N, N,
      $            DCMPLX( ONE ), Q, LDQ, H, LDH, DCMPLX( ZERO ),
      $            WORK( LDWORK*N+1 ), LDWORK )
 *
 *     Compute A - Q*H*Q'
 *
-      CALL ZGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
+      CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
      $            DCMPLX( -ONE ), WORK( LDWORK*N+1 ), LDWORK, Q, LDQ,
      $            DCMPLX( ONE ), WORK, LDWORK )
 *
-      ANORM = MAX( ZLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
-      WNORM = ZLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      ANORM = MAX( AB_ZLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
+      WNORM = AB_ZLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
 *     Note that RESULT(1) cannot overflow and is bounded by 1/(N*EPS)
 *
@@ -218,11 +218,11 @@
 *
 *     Test 2:  Compute norm( I - Q'*Q ) / ( N * EPS )
 *
-      CALL ZUNT01( 'Columns', N, N, Q, LDQ, WORK, LWORK, RWORK,
+      CALL AB_ZUNT01( 'Columns', N, N, Q, LDQ, WORK, LWORK, RWORK,
      $             RESULT( 2 ) )
 *
       RETURN
 *
-*     End of ZHST01
+*     End of AB_ZHST01
 *
       END

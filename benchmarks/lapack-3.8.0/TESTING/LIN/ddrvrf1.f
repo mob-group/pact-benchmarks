@@ -1,4 +1,4 @@
-*> \brief \b DDRVRF1
+*> \brief \b AB_DDRVRF1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
+*       SUBROUTINE AB_DDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -25,8 +25,8 @@
 *>
 *> \verbatim
 *>
-*> DDRVRF1 tests the LAPACK RFP routines:
-*>     DLANSF
+*> AB_DDRVRF1 tests the LAPACK RFP routines:
+*>     AB_DLANSF
 *> \endverbatim
 *
 *  Arguments:
@@ -92,7 +92,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
+      SUBROUTINE AB_DDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,11 +128,11 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANSY, DLANSF, DLARND
-      EXTERNAL           DLAMCH, DLANSY, DLANSF, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSY, AB_DLANSF, AB_DLARND
+      EXTERNAL           AB_DLAMCH, AB_DLANSY, AB_DLANSF, AB_DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DTRTTF
+      EXTERNAL           AB_DTRTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -158,8 +158,8 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
 *
-      EPS = DLAMCH( 'Precision' )
-      SMALL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
+      SMALL = AB_DLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
       SMALL = SMALL * LDA * LDA
       LARGE = LARGE / LDA / LDA
@@ -178,7 +178,7 @@
 *
             DO J = 1, N
                DO I = 1, N
-                  A( I, J) = DLARND( 2, ISEED )
+                  A( I, J) = AB_DLARND( 2, ISEED )
                END DO
             END DO
 *
@@ -210,10 +210,10 @@
 *
                   CFORM = FORMS( IFORM )
 *
-                  SRNAMT = 'DTRTTF'
-                  CALL DTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
+                  SRNAMT = 'AB_DTRTTF'
+                  CALL AB_DTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
 *
-*                 Check error code from DTRTTF
+*                 Check error code from AB_DTRTTF
 *
                   IF( INFO.NE.0 ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 ) THEN
@@ -230,8 +230,9 @@
 *                    Check all four norms: 'M', '1', 'I', 'F'
 *
                      NORM = NORMS( INORM )
-                     NORMARF = DLANSF( NORM, CFORM, UPLO, N, ARF, WORK )
-                     NORMA = DLANSY( NORM, UPLO, N, A, LDA, WORK )
+                     NORMARF = AB_DLANSF( NORM, CFORM, UPLO, N, ARF, WOR
+     $K )
+                     NORMA = AB_DLANSY( NORM, UPLO, N, A, LDA, WORK )
 *
                      RESULT(1) = ( NORMA - NORMARF ) / NORMA / EPS
                      NRUN = NRUN + 1
@@ -241,7 +242,7 @@
                            WRITE( NOUT, * )
                            WRITE( NOUT, FMT = 9999 )
                         END IF
-                        WRITE( NOUT, FMT = 9997 ) 'DLANSF',
+                        WRITE( NOUT, FMT = 9997 ) 'AB_DLANSF',
      +                      N, IIT, UPLO, CFORM, NORM, RESULT(1)
                         NFAIL = NFAIL + 1
                      END IF
@@ -254,15 +255,15 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'DLANSF', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'AB_DLANSF', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'DLANSF', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'AB_DLANSF', NFAIL, NRUN
       END IF
       IF ( NERRS.NE.0 ) THEN
-         WRITE( NOUT, FMT = 9994 ) NERRS, 'DLANSF'
+         WRITE( NOUT, FMT = 9994 ) NERRS, 'AB_DLANSF'
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing DLANSF
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_DLANSF
      +         ***')
  9998 FORMAT( 1X, '     Error in ',A6,' with UPLO=''',A1,''', FORM=''',
      +        A1,''', N=',I5)
@@ -276,6 +277,6 @@
 *
       RETURN
 *
-*     End of DDRVRF1
+*     End of AB_DDRVRF1
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by sgetc2.
+*> \brief \b AB_SGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by AB_SGETC2.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGESC2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesc2.f">
+*> Download AB_SGESC2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGESC2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGESC2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGESC2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+*       SUBROUTINE AB_SGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, N
@@ -35,12 +35,12 @@
 *>
 *> \verbatim
 *>
-*> SGESC2 solves a system of linear equations
+*> AB_SGESC2 solves a system of linear equations
 *>
 *>           A * X = scale* RHS
 *>
 *> with a general N-by-N matrix A using the LU factorization with
-*> complete pivoting computed by SGETC2.
+*> complete pivoting computed by AB_SGETC2.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the  LU part of the factorization of the n-by-n
-*>          matrix A computed by SGETC2:  A = P * L * U * Q
+*>          matrix A computed by AB_SGETC2:  A = P * L * U * Q
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -112,7 +112,7 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE SGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+      SUBROUTINE AB_SGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -139,12 +139,12 @@
       REAL               BIGNUM, EPS, SMLNUM, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLASWP, SSCAL
+      EXTERNAL           AB_SLABAD, AB_SLASWP, AB_SSCAL
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           ISAMAX, SLAMCH
+      INTEGER            AB_ISAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -153,14 +153,14 @@
 *
 *      Set constant to control owerflow
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *
-      CALL SLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
+      CALL AB_SLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
 *
 *     Solve for L part
 *
@@ -176,10 +176,10 @@
 *
 *     Check for scaling
 *
-      I = ISAMAX( N, RHS, 1 )
+      I = AB_ISAMAX( N, RHS, 1 )
       IF( TWO*SMLNUM*ABS( RHS( I ) ).GT.ABS( A( N, N ) ) ) THEN
          TEMP = ( ONE / TWO ) / ABS( RHS( I ) )
-         CALL SSCAL( N, TEMP, RHS( 1 ), 1 )
+         CALL AB_SSCAL( N, TEMP, RHS( 1 ), 1 )
          SCALE = SCALE*TEMP
       END IF
 *
@@ -193,9 +193,9 @@
 *
 *     Apply permutations JPIV to the solution (RHS)
 *
-      CALL SLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
+      CALL AB_SLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
       RETURN
 *
-*     End of SGESC2
+*     End of AB_SGESC2
 *
       END

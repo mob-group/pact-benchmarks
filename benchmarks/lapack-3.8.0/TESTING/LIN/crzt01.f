@@ -1,4 +1,4 @@
-*> \brief \b CRZT01
+*> \brief \b AB_CRZT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION CRZT01( M, N, A, AF, LDA, TAU, WORK,
+*       REAL             FUNCTION AB_CRZT01( M, N, A, AF, LDA, TAU, WORK,
 *                        LWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,9 +25,9 @@
 *>
 *> \verbatim
 *>
-*> CRZT01 returns
+*> AB_CRZT01 returns
 *>      || A - R*Q || / ( M * eps * ||A|| )
-*> for an upper trapezoidal A that was factored with CTZRZF.
+*> for an upper trapezoidal A that was factored with AB_CTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -54,7 +54,7 @@
 *> \param[in] AF
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDA,N)
-*>          The output of CTZRZF for input matrix A.
+*>          The output of AB_CTZRZF for input matrix A.
 *>          The lower triangle is not referenced.
 *> \endverbatim
 *>
@@ -67,8 +67,8 @@
 *> \param[in] TAU
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (M)
-*>          Details of the  Householder transformations as returned by
-*>          CTZRZF.
+*>          Details of the  HousehoAB_LDEr transformations as returned by
+*>          AB_CTZRZF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -95,7 +95,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      REAL             FUNCTION CRZT01( M, N, A, AF, LDA, TAU, WORK,
+      REAL             FUNCTION AB_CRZT01( M, N, A, AF, LDA, TAU, WORK,
      $                 LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -125,21 +125,21 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CLASET, CUNMRZ, XERBLA
+      EXTERNAL           AB_CAXPY, AB_CLASET, AB_CUNMRZ, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      CRZT01 = ZERO
+      AB_CRZT01 = ZERO
 *
       IF( LWORK.LT.M*N+M ) THEN
-         CALL XERBLA( 'CRZT01', 8 )
+         CALL AB_XERBLA( 'AB_CRZT01', 8 )
          RETURN
       END IF
 *
@@ -148,11 +148,12 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      NORMA = CLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      NORMA = AB_CLANGE( 'One-norm', M, N, A, LDA, RWORK )
 *
 *     Copy upper triangle R
 *
-      CALL CLASET( 'Full', M, N, CMPLX( ZERO ), CMPLX( ZERO ), WORK, M )
+      CALL AB_CLASET( 'Full', M, N, CMPLX( ZERO ), CMPLX( ZERO ), WORK, 
+     $M )
       DO 20 J = 1, M
          DO 10 I = 1, J
             WORK( ( J-1 )*M+I ) = AF( I, J )
@@ -161,24 +162,26 @@
 *
 *     R = R * P(1) * ... *P(m)
 *
-      CALL CUNMRZ( 'Right', 'No tranpose', M, N, M, N-M, AF, LDA, TAU,
+      CALL AB_CUNMRZ( 'Right', 'No tranpose', M, N, M, N-M, AF, LDA, TAU
+     $,
      $             WORK, M, WORK( M*N+1 ), LWORK-M*N, INFO )
 *
 *     R = R - A
 *
       DO 30 I = 1, N
-         CALL CAXPY( M, CMPLX( -ONE ), A( 1, I ), 1,
+         CALL AB_CAXPY( M, CMPLX( -ONE ), A( 1, I ), 1,
      $               WORK( ( I-1 )*M+1 ), 1 )
    30 CONTINUE
 *
-      CRZT01 = CLANGE( 'One-norm', M, N, WORK, M, RWORK )
+      AB_CRZT01 = AB_CLANGE( 'One-norm', M, N, WORK, M, RWORK )
 *
-      CRZT01 = CRZT01 / ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
+      AB_CRZT01 = AB_CRZT01 / ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N )
+     $ ) )
       IF( NORMA.NE.ZERO )
-     $   CRZT01 = CRZT01 / NORMA
+     $   AB_CRZT01 = AB_CRZT01 / NORMA
 *
       RETURN
 *
-*     End of CRZT01
+*     End of AB_CRZT01
 *
       END

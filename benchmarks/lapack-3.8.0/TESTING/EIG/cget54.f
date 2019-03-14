@@ -1,4 +1,4 @@
-*> \brief \b CGET54
+*> \brief \b AB_CGET54
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+*       SUBROUTINE AB_CGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
 *                          LDV, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CGET54 checks a generalized decomposition of the form
+*> AB_CGET54 checks a generalized decomposition of the form
 *>
 *>          A = U*S*V'  and B = U*T* V'
 *>
@@ -44,7 +44,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, SGET54 does nothing.
+*>          The size of the matrix.  If it is zero, AB_SGET54 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -153,7 +153,8 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+      SUBROUTINE AB_CGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V
+     $,
      $                   LDV, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -187,11 +188,11 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY
+      EXTERNAL           AB_CGEMM, AB_CLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -204,36 +205,37 @@
 *
 *     Constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     compute the norm of (A,B)
 *
-      CALL CLACPY( 'Full', N, N, A, LDA, WORK, N )
-      CALL CLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
-      ABNORM = MAX( CLANGE( '1', N, 2*N, WORK, N, DUM ), UNFL )
+      CALL AB_CLACPY( 'Full', N, N, A, LDA, WORK, N )
+      CALL AB_CLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
+      ABNORM = MAX( AB_CLANGE( '1', N, 2*N, WORK, N, DUM ), UNFL )
 *
 *     Compute W1 = A - U*S*V', and put in the array WORK(1:N*N)
 *
-      CALL CLACPY( ' ', N, N, A, LDA, WORK, N )
-      CALL CGEMM( 'N', 'N', N, N, N, CONE, U, LDU, S, LDS, CZERO,
+      CALL AB_CLACPY( ' ', N, N, A, LDA, WORK, N )
+      CALL AB_CGEMM( 'N', 'N', N, N, N, CONE, U, LDU, S, LDS, CZERO,
      $            WORK( N*N+1 ), N )
 *
-      CALL CGEMM( 'N', 'C', N, N, N, -CONE, WORK( N*N+1 ), N, V, LDV,
+      CALL AB_CGEMM( 'N', 'C', N, N, N, -CONE, WORK( N*N+1 ), N, V, LDV,
      $            CONE, WORK, N )
 *
 *     Compute W2 = B - U*T*V', and put in the workarray W(N*N+1:2*N*N)
 *
-      CALL CLACPY( ' ', N, N, B, LDB, WORK( N*N+1 ), N )
-      CALL CGEMM( 'N', 'N', N, N, N, CONE, U, LDU, T, LDT, CZERO,
+      CALL AB_CLACPY( ' ', N, N, B, LDB, WORK( N*N+1 ), N )
+      CALL AB_CGEMM( 'N', 'N', N, N, N, CONE, U, LDU, T, LDT, CZERO,
      $            WORK( 2*N*N+1 ), N )
 *
-      CALL CGEMM( 'N', 'C', N, N, N, -CONE, WORK( 2*N*N+1 ), N, V, LDV,
+      CALL AB_CGEMM( 'N', 'C', N, N, N, -CONE, WORK( 2*N*N+1 ), N, V, LD
+     $V,
      $            CONE, WORK( N*N+1 ), N )
 *
 *     Compute norm(W)/ ( ulp*norm((A,B)) )
 *
-      WNORM = CLANGE( '1', N, 2*N, WORK, N, DUM )
+      WNORM = AB_CLANGE( '1', N, 2*N, WORK, N, DUM )
 *
       IF( ABNORM.GT.WNORM ) THEN
          RESULT = ( WNORM / ABNORM ) / ( 2*N*ULP )
@@ -247,6 +249,6 @@
 *
       RETURN
 *
-*     End of CGET54
+*     End of AB_CGET54
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DGET38
+*> \brief \b AB_DGET38
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET38( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_DGET38( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, NIN
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DGET38 tests DTRSEN, a routine for estimating condition numbers of a
+*> AB_DGET38 tests AB_DTRSEN, a routine for estimating condition numbers of a
 *> cluster of eigenvalues and/or its associated right invariant subspace
 *>
 *> The test matrices are read from a file with logical unit number NIN.
@@ -37,8 +37,8 @@
 *> \verbatim
 *>          RMAX is DOUBLE PRECISION array, dimension (3)
 *>          Values of the largest test ratios.
-*>          RMAX(1) = largest residuals from DHST01 or comparing
-*>                    different calls to DTRSEN
+*>          RMAX(1) = largest residuals from AB_DHST01 or comparing
+*>                    different calls to AB_DTRSEN
 *>          RMAX(2) = largest error in reciprocal condition
 *>                    numbers taking their conditioning into account
 *>          RMAX(3) = largest error in reciprocal condition
@@ -51,17 +51,17 @@
 *>          LMAX is INTEGER array, dimension (3)
 *>          LMAX(i) is example number where largest test ratio
 *>          RMAX(i) is achieved. Also:
-*>          If DGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*>          If DHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*>          If DTRSEN returns INFO nonzero on example i, LMAX(3)=i
+*>          If AB_DGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If AB_DHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If AB_DTRSEN returns INFO nonzero on example i, LMAX(3)=i
 *> \endverbatim
 *>
 *> \param[out] NINFO
 *> \verbatim
 *>          NINFO is INTEGER array, dimension (3)
-*>          NINFO(1) = No. of times DGEHRD returned INFO nonzero
-*>          NINFO(2) = No. of times DHSEQR returned INFO nonzero
-*>          NINFO(3) = No. of times DTRSEN returned INFO nonzero
+*>          NINFO(1) = No. of times AB_DGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times AB_DHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times AB_DTRSEN returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -89,7 +89,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET38( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_DGET38( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,22 +133,23 @@
      $                   WR( LDT ), WRTMP( LDT )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEHRD, DHSEQR, DHST01, DLABAD, DLACPY,
-     $                   DORGHR, DSCAL, DTRSEN
+      EXTERNAL           AB_DCOPY, AB_DGEHRD, AB_DHSEQR, AB_DHST01, AB_D
+     $LABAD, AB_DLACPY,
+     $                   AB_DORGHR, AB_DSCAL, AB_DTRSEN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *
@@ -182,24 +183,25 @@
    20 CONTINUE
       READ( NIN, FMT = * )SIN, SEPIN
 *
-      TNRM = DLANGE( 'M', N, N, TMP, LDT, WORK )
+      TNRM = AB_DLANGE( 'M', N, N, TMP, LDT, WORK )
       DO 160 ISCL = 1, 3
 *
 *        Scale input matrix
 *
          KNT = KNT + 1
-         CALL DLACPY( 'F', N, N, TMP, LDT, T, LDT )
+         CALL AB_DLACPY( 'F', N, N, TMP, LDT, T, LDT )
          VMUL = VAL( ISCL )
          DO 30 I = 1, N
-            CALL DSCAL( N, VMUL, T( 1, I ), 1 )
+            CALL AB_DSCAL( N, VMUL, T( 1, I ), 1 )
    30    CONTINUE
          IF( TNRM.EQ.ZERO )
      $      VMUL = ONE
-         CALL DLACPY( 'F', N, N, T, LDT, TSAV, LDT )
+         CALL AB_DLACPY( 'F', N, N, T, LDT, TSAV, LDT )
 *
 *        Compute Schur form
 *
-         CALL DGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
+         CALL AB_DGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
+     $N,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 1 ) = KNT
@@ -209,13 +211,15 @@
 *
 *        Generate orthogonal matrix
 *
-         CALL DLACPY( 'L', N, N, T, LDT, Q, LDT )
-         CALL DORGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
+         CALL AB_DLACPY( 'L', N, N, T, LDT, Q, LDT )
+         CALL AB_DORGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
+     $N,
      $                INFO )
 *
 *        Compute Schur form
 *
-         CALL DHSEQR( 'S', 'V', N, 1, N, T, LDT, WR, WI, Q, LDT, WORK,
+         CALL AB_DHSEQR( 'S', 'V', N, 1, N, T, LDT, WR, WI, Q, LDT, WORK
+     $,
      $                LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 2 ) = KNT
@@ -229,8 +233,8 @@
             IPNT( I ) = I
             SELECT( I ) = .FALSE.
    40    CONTINUE
-         CALL DCOPY( N, WR, 1, WRTMP, 1 )
-         CALL DCOPY( N, WI, 1, WITMP, 1 )
+         CALL AB_DCOPY( N, WR, 1, WRTMP, 1 )
+         CALL AB_DCOPY( N, WI, 1, WITMP, 1 )
          DO 60 I = 1, N - 1
             KMIN = I
             VRMIN = WRTMP( I )
@@ -256,9 +260,10 @@
 *
 *        Compute condition numbers
 *
-         CALL DLACPY( 'F', N, N, Q, LDT, QSAV, LDT )
-         CALL DLACPY( 'F', N, N, T, LDT, TSAV1, LDT )
-         CALL DTRSEN( 'B', 'V', SELECT, N, T, LDT, Q, LDT, WRTMP, WITMP,
+         CALL AB_DLACPY( 'F', N, N, Q, LDT, QSAV, LDT )
+         CALL AB_DLACPY( 'F', N, N, T, LDT, TSAV1, LDT )
+         CALL AB_DTRSEN( 'B', 'V', SELECT, N, T, LDT, Q, LDT, WRTMP, WIT
+     $MP,
      $                M, S, SEP, WORK, LWORK, IWORK, LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -270,7 +275,8 @@
 *
 *        Compute residuals
 *
-         CALL DHST01( N, 1, N, TSAV, LDT, T, LDT, Q, LDT, WORK, LWORK,
+         CALL AB_DHST01( N, 1, N, TSAV, LDT, T, LDT, Q, LDT, WORK, LWORK
+     $,
      $                RESULT )
          VMAX = MAX( RESULT( 1 ), RESULT( 2 ) )
          IF( VMAX.GT.RMAX( 1 ) ) THEN
@@ -394,11 +400,12 @@
 *        Update Q
 *
          VMAX = ZERO
-         CALL DLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL DLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL AB_DLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL AB_DLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL DTRSEN( 'E', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WRTMP,
+         CALL AB_DTRSEN( 'E', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WRTM
+     $P,
      $                WITMP, M, STMP, SEPTMP, WORK, LWORK, IWORK,
      $                LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -422,11 +429,12 @@
 *        Compute invariant subspace condition number only and compare
 *        Update Q
 *
-         CALL DLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL DLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL AB_DLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL AB_DLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL DTRSEN( 'V', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WRTMP,
+         CALL AB_DTRSEN( 'V', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WRTM
+     $P,
      $                WITMP, M, STMP, SEPTMP, WORK, LWORK, IWORK,
      $                LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -450,11 +458,12 @@
 *        Compute eigenvalue condition number only and compare
 *        Do not update Q
 *
-         CALL DLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL DLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL AB_DLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL AB_DLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL DTRSEN( 'E', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WRTMP,
+         CALL AB_DTRSEN( 'E', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WRTM
+     $P,
      $                WITMP, M, STMP, SEPTMP, WORK, LWORK, IWORK,
      $                LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -478,11 +487,12 @@
 *        Compute invariant subspace condition number only and compare
 *        Do not update Q
 *
-         CALL DLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL DLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL AB_DLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL AB_DLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL DTRSEN( 'V', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WRTMP,
+         CALL AB_DTRSEN( 'V', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WRTM
+     $P,
      $                WITMP, M, STMP, SEPTMP, WORK, LWORK, IWORK,
      $                LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -510,6 +520,6 @@
   160 CONTINUE
       GO TO 10
 *
-*     End of DGET38
+*     End of AB_DGET38
 *
       END

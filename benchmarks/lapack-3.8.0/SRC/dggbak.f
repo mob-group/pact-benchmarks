@@ -1,4 +1,4 @@
-*> \brief \b DGGBAK
+*> \brief \b AB_DGGBAK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGGBAK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggbak.f">
+*> Download AB_DGGBAK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGGBAK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggbak.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGGBAK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggbak.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGGBAK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGGBAK( JOB, SIDE, N, ILO, IHI, LSCALE, RSCALE, M, V,
+*       SUBROUTINE AB_DGGBAK( JOB, SIDE, N, ILO, IHI, LSCALE, RSCALE, M, V,
 *                          LDV, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> DGGBAK forms the right or left eigenvectors of a real generalized
+*> AB_DGGBAK forms the right or left eigenvectors of a real generalized
 *> eigenvalue problem A*x = lambda*B*x, by backward transformation on
 *> the computed eigenvectors of the balanced pair of matrices output by
-*> DGGBAL.
+*> AB_DGGBAL.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *>          = 'S':  do backward transformation for scaling only;
 *>          = 'B':  do backward transformations for both permutation and
 *>                  scaling.
-*>          JOB must be the same as the argument JOB supplied to DGGBAL.
+*>          JOB must be the same as the argument JOB supplied to AB_DGGBAL.
 *> \endverbatim
 *>
 *> \param[in] SIDE
@@ -77,7 +77,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*>          The integers ILO and IHI determined by DGGBAL.
+*>          The integers ILO and IHI determined by AB_DGGBAL.
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
 *> \endverbatim
 *>
@@ -85,14 +85,14 @@
 *> \verbatim
 *>          LSCALE is DOUBLE PRECISION array, dimension (N)
 *>          Details of the permutations and/or scaling factors applied
-*>          to the left side of A and B, as returned by DGGBAL.
+*>          to the left side of A and B, as returned by AB_DGGBAL.
 *> \endverbatim
 *>
 *> \param[in] RSCALE
 *> \verbatim
 *>          RSCALE is DOUBLE PRECISION array, dimension (N)
 *>          Details of the permutations and/or scaling factors applied
-*>          to the right side of A and B, as returned by DGGBAL.
+*>          to the right side of A and B, as returned by AB_DGGBAL.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -105,7 +105,7 @@
 *> \verbatim
 *>          V is DOUBLE PRECISION array, dimension (LDV,M)
 *>          On entry, the matrix of right or left eigenvectors to be
-*>          transformed, as returned by DTGEVC.
+*>          transformed, as returned by AB_DTGEVC.
 *>          On exit, V is overwritten by the transformed eigenvectors.
 *> \endverbatim
 *>
@@ -144,7 +144,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGGBAK( JOB, SIDE, N, ILO, IHI, LSCALE, RSCALE, M, V,
+      SUBROUTINE AB_DGGBAK( JOB, SIDE, N, ILO, IHI, LSCALE, RSCALE, M, V
+     $,
      $                   LDV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -167,11 +168,11 @@
       INTEGER            I, K
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSWAP, XERBLA
+      EXTERNAL           AB_DSCAL, AB_DSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, INT
@@ -180,12 +181,14 @@
 *
 *     Test the input parameters
 *
-      RIGHTV = LSAME( SIDE, 'R' )
-      LEFTV = LSAME( SIDE, 'L' )
+      RIGHTV = AB_LSAME( SIDE, 'R' )
+      LEFTV = AB_LSAME( SIDE, 'L' )
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.AB_LSAME( JOB, 'P' ) .AND
+     $.
+     $    .NOT.AB_LSAME( JOB, 'S' ) .AND. .NOT.AB_LSAME( JOB, 'B' ) ) TH
+     $EN
          INFO = -1
       ELSE IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -2
@@ -206,7 +209,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGGBAK', -INFO )
+         CALL AB_XERBLA( 'AB_DGGBAK', -INFO )
          RETURN
       END IF
 *
@@ -216,7 +219,7 @@
      $   RETURN
       IF( M.EQ.0 )
      $   RETURN
-      IF( LSAME( JOB, 'N' ) )
+      IF( AB_LSAME( JOB, 'N' ) )
      $   RETURN
 *
       IF( ILO.EQ.IHI )
@@ -224,13 +227,13 @@
 *
 *     Backward balance
 *
-      IF( LSAME( JOB, 'S' ) .OR. LSAME( JOB, 'B' ) ) THEN
+      IF( AB_LSAME( JOB, 'S' ) .OR. AB_LSAME( JOB, 'B' ) ) THEN
 *
 *        Backward transformation on right eigenvectors
 *
          IF( RIGHTV ) THEN
             DO 10 I = ILO, IHI
-               CALL DSCAL( M, RSCALE( I ), V( I, 1 ), LDV )
+               CALL AB_DSCAL( M, RSCALE( I ), V( I, 1 ), LDV )
    10       CONTINUE
          END IF
 *
@@ -238,7 +241,7 @@
 *
          IF( LEFTV ) THEN
             DO 20 I = ILO, IHI
-               CALL DSCAL( M, LSCALE( I ), V( I, 1 ), LDV )
+               CALL AB_DSCAL( M, LSCALE( I ), V( I, 1 ), LDV )
    20       CONTINUE
          END IF
       END IF
@@ -246,7 +249,7 @@
 *     Backward permutation
 *
    30 CONTINUE
-      IF( LSAME( JOB, 'P' ) .OR. LSAME( JOB, 'B' ) ) THEN
+      IF( AB_LSAME( JOB, 'P' ) .OR. AB_LSAME( JOB, 'B' ) ) THEN
 *
 *        Backward permutation on right eigenvectors
 *
@@ -258,7 +261,7 @@
                K = INT(RSCALE( I ))
                IF( K.EQ.I )
      $            GO TO 40
-               CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
+               CALL AB_DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
    40       CONTINUE
 *
    50       CONTINUE
@@ -268,7 +271,7 @@
                K = INT(RSCALE( I ))
                IF( K.EQ.I )
      $            GO TO 60
-               CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
+               CALL AB_DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
    60       CONTINUE
          END IF
 *
@@ -282,7 +285,7 @@
                K = INT(LSCALE( I ))
                IF( K.EQ.I )
      $            GO TO 80
-               CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
+               CALL AB_DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
    80       CONTINUE
 *
    90       CONTINUE
@@ -292,7 +295,7 @@
                K = INT(LSCALE( I ))
                IF( K.EQ.I )
      $            GO TO 100
-               CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
+               CALL AB_DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
   100       CONTINUE
          END IF
       END IF
@@ -301,6 +304,6 @@
 *
       RETURN
 *
-*     End of DGGBAK
+*     End of AB_DGGBAK
 *
       END

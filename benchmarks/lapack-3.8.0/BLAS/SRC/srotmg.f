@@ -1,4 +1,4 @@
-*> \brief \b SROTMG
+*> \brief \b AB_AB_AB_SROTMG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
+*       SUBROUTINE AB_AB_AB_SROTMG(SD1,SD2,SX1,SY1,SPARAM)
 *
 *       .. Scalar Arguments ..
 *       REAL SD1,SD2,SX1,SY1
@@ -24,7 +24,7 @@
 *> \verbatim
 *>
 *>    CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
-*>    THE SECOND COMPONENT OF THE 2-VECTOR  (SQRT(SD1)*SX1,SQRT(SD2)*>    SY2)**T.
+*>    THE AB_SECOND COMPONENT OF THE 2-VECTOR  (SQRT(SD1)*SX1,SQRT(SD2)*>    SY2)**T.
 *>    WITH SPARAM(1)=SFLAG, H HAS ONE OF THE FOLLOWING FORMS..
 *>
 *>    SFLAG=-1.E0     SFLAG=0.E0        SFLAG=1.E0     SFLAG=-2.E0
@@ -88,7 +88,7 @@
 *> \ingroup single_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
+      SUBROUTINE AB_AB_AB_SROTMG(SD1,SD2,SX1,SY1,SPARAM)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

@@ -1,4 +1,4 @@
-*> \brief \b ZRQT03
+*> \brief \b AB_ZRQT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_ZRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> ZRQT03 tests ZUNMRQ, which computes Q*C, Q'*C, C*Q or C*Q'.
+*> AB_ZRQT03 tests AB_ZUNMRQ, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
-*> ZRQT03 compares the results of a call to ZUNMRQ with the results of
-*> forming Q explicitly by a call to ZUNGRQ and then performing matrix
-*> multiplication by a call to ZGEMM.
+*> AB_ZRQT03 compares the results of a call to AB_ZUNMRQ with the results of
+*> forming Q explicitly by a call to AB_ZUNGRQ and then performing matrix
+*> multiplication by a call to AB_ZGEMM.
 *> \endverbatim
 *
 *  Arguments:
@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDA,N)
 *>          Details of the RQ factorization of an m-by-n matrix, as
-*>          returned by ZGERQF. See CGERQF for further details.
+*>          returned by AB_ZGERQF. See AB_CGERQF for further details.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -133,7 +133,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_ZRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK
+     $,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,12 +165,13 @@
       DOUBLE PRECISION   CNORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, DLAMCH, ZLANGE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZLACPY, ZLARNV, ZLASET, ZUNGRQ, ZUNMRQ
+      EXTERNAL           AB_ZGEMM, AB_ZLACPY, AB_ZLARNV, AB_ZLASET, AB_Z
+     $UNGRQ, AB_ZUNMRQ
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
@@ -188,7 +190,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       MINMN = MIN( M, N )
 *
 *     Quick return if possible
@@ -203,18 +205,18 @@
 *
 *     Copy the last k rows of the factorization to the array Q
 *
-      CALL ZLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
+      CALL AB_ZLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
       IF( K.GT.0 .AND. N.GT.K )
-     $   CALL ZLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
+     $   CALL AB_ZLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
      $                Q( N-K+1, 1 ), LDA )
       IF( K.GT.1 )
-     $   CALL ZLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
+     $   CALL AB_ZLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
      $                Q( N-K+2, N-K+1 ), LDA )
 *
 *     Generate the n-by-n matrix Q
 *
-      SRNAMT = 'ZUNGRQ'
-      CALL ZUNGRQ( N, N, K, Q, LDA, TAU( MINMN-K+1 ), WORK, LWORK,
+      SRNAMT = 'AB_ZUNGRQ'
+      CALL AB_ZUNGRQ( N, N, K, Q, LDA, TAU( MINMN-K+1 ), WORK, LWORK,
      $             INFO )
 *
       DO 30 ISIDE = 1, 2
@@ -231,9 +233,9 @@
 *        Generate MC by NC matrix C
 *
          DO 10 J = 1, NC
-            CALL ZLARNV( 2, ISEED, MC, C( 1, J ) )
+            CALL AB_ZLARNV( 2, ISEED, MC, C( 1, J ) )
    10    CONTINUE
-         CNORM = ZLANGE( '1', MC, NC, C, LDA, RWORK )
+         CNORM = AB_ZLANGE( '1', MC, NC, C, LDA, RWORK )
          IF( CNORM.EQ.ZERO )
      $      CNORM = ONE
 *
@@ -246,31 +248,32 @@
 *
 *           Copy C
 *
-            CALL ZLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
+            CALL AB_ZLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
 *
 *           Apply Q or Q' to C
 *
-            SRNAMT = 'ZUNMRQ'
+            SRNAMT = 'AB_ZUNMRQ'
             IF( K.GT.0 )
-     $         CALL ZUNMRQ( SIDE, TRANS, MC, NC, K, AF( M-K+1, 1 ), LDA,
+     $         CALL AB_ZUNMRQ( SIDE, TRANS, MC, NC, K, AF( M-K+1, 1 ), L
+     $DA,
      $                      TAU( MINMN-K+1 ), CC, LDA, WORK, LWORK,
      $                      INFO )
 *
 *           Form explicit product and subtract
 *
-            IF( LSAME( SIDE, 'L' ) ) THEN
-               CALL ZGEMM( TRANS, 'No transpose', MC, NC, MC,
+            IF( AB_LSAME( SIDE, 'L' ) ) THEN
+               CALL AB_ZGEMM( TRANS, 'No transpose', MC, NC, MC,
      $                     DCMPLX( -ONE ), Q, LDA, C, LDA,
      $                     DCMPLX( ONE ), CC, LDA )
             ELSE
-               CALL ZGEMM( 'No transpose', TRANS, MC, NC, NC,
+               CALL AB_ZGEMM( 'No transpose', TRANS, MC, NC, NC,
      $                     DCMPLX( -ONE ), C, LDA, Q, LDA,
      $                     DCMPLX( ONE ), CC, LDA )
             END IF
 *
 *           Compute error in the difference
 *
-            RESID = ZLANGE( '1', MC, NC, CC, LDA, RWORK )
+            RESID = AB_ZLANGE( '1', MC, NC, CC, LDA, RWORK )
             RESULT( ( ISIDE-1 )*2+ITRANS ) = RESID /
      $         ( DBLE( MAX( 1, N ) )*CNORM*EPS )
 *
@@ -279,6 +282,6 @@
 *
       RETURN
 *
-*     End of ZRQT03
+*     End of AB_ZRQT03
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SERRTZ
+*> \brief \b AB_SERRTZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SERRTZ( PATH, NUNIT )
+*       SUBROUTINE AB_SERRTZ( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> SERRTZ tests the error exits for STZRZF.
+*> AB_SERRTZ tests the error exits for AB_STZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SERRTZ( PATH, NUNIT )
+      SUBROUTINE AB_SERRTZ( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -78,11 +78,11 @@
       REAL               A( NMAX, NMAX ), TAU( NMAX ), W( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, STZRZF
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_STZRZF
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -106,36 +106,36 @@
       W( 2 ) = 0.0E+0
       OK = .TRUE.
 *
-      IF( LSAMEN( 2, C2, 'TZ' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'TZ' ) ) THEN
 *
 *        Test error exits for the trapezoidal routines.
 *
-*        STZRZF
+*        AB_STZRZF
 *
-         SRNAMT = 'STZRZF'
+         SRNAMT = 'AB_STZRZF'
          INFOT = 1
-         CALL STZRZF( -1, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'STZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_STZRZF( -1, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_STZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL STZRZF( 1, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'STZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_STZRZF( 1, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_STZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL STZRZF( 2, 2, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'STZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_STZRZF( 2, 2, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_STZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL STZRZF( 2, 2, A, 2, TAU, W, 0, INFO )
-         CALL CHKXER( 'STZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_STZRZF( 2, 2, A, 2, TAU, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_STZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL STZRZF( 2, 3, A, 2, TAU, W, 1, INFO )
-         CALL CHKXER( 'STZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_STZRZF( 2, 3, A, 2, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_STZRZF', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of SERRTZ
+*     End of AB_SERRTZ
 *
       END

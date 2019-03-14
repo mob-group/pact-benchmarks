@@ -1,4 +1,4 @@
-*> \brief \b SSPT01
+*> \brief \b AB_SSPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+*       SUBROUTINE AB_SSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SSPT01 reconstructs a symmetric indefinite packed matrix A from its
+*> AB_SSPT01 reconstructs a symmetric indefinite packed matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>      norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -63,13 +63,13 @@
 *>          The factored form of the matrix A, stored as a packed
 *>          triangular matrix.  AFAC contains the block diagonal matrix D
 *>          and the multipliers used to obtain the factor L or U from the
-*>          block L*D*L' or U*D*U' factorization as computed by SSPTRF.
+*>          block L*D*L' or U*D*U' factorization as computed by AB_SSPTRF.
 *> \endverbatim
 *>
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from SSPTRF.
+*>          The pivot indices from AB_SSPTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -108,7 +108,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+      SUBROUTINE AB_SSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID
+     $ )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,12 +137,12 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANSP, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSP, SLANSY
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANSP, AB_SLANSY
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANSP, AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAVSP, SLASET
+      EXTERNAL           AB_SLAVSP, AB_SLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -157,26 +158,27 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = SLANSP( '1', UPLO, N, A, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_SLANSP( '1', UPLO, N, A, RWORK )
 *
 *     Initialize C to the identity matrix.
 *
-      CALL SLASET( 'Full', N, N, ZERO, ONE, C, LDC )
+      CALL AB_SLASET( 'Full', N, N, ZERO, ONE, C, LDC )
 *
-*     Call SLAVSP to form the product D * U' (or D * L' ).
+*     Call AB_SLAVSP to form the product D * U' (or D * L' ).
 *
-      CALL SLAVSP( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, IPIV, C,
+      CALL AB_SLAVSP( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, IPIV, C
+     $,
      $             LDC, INFO )
 *
-*     Call SLAVSP again to multiply by U ( or L ).
+*     Call AB_SLAVSP again to multiply by U ( or L ).
 *
-      CALL SLAVSP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
+      CALL AB_SLAVSP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
      $             LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          JC = 0
          DO 20 J = 1, N
             DO 10 I = 1, J
@@ -196,7 +198,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = SLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_SLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -207,6 +209,6 @@
 *
       RETURN
 *
-*     End of SSPT01
+*     End of AB_SSPT01
 *
       END

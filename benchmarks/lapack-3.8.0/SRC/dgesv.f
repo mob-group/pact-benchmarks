@@ -1,4 +1,4 @@
-*> \brief <b> DGESV computes the solution to system of linear equations A * X = B for GE matrices</b>
+*> \brief <b> AB_DGESV computes the solution to system of linear equations A * X = B for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGESV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgesv.f">
+*> Download AB_DGESV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGESV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGESV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGESV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE AB_DGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDB, N, NRHS
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DGESV computes the solution to a real system of linear equations
+*> AB_DGESV computes the solution to a real system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N matrix and X and B are N-by-NRHS matrices.
 *>
@@ -120,7 +120,7 @@
 *> \ingroup doubleGEsolve
 *
 *  =====================================================================
-      SUBROUTINE DGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      SUBROUTINE AB_DGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,7 +138,7 @@
 *  =====================================================================
 *
 *     .. External Subroutines ..
-      EXTERNAL           DGETRF, DGETRS, XERBLA
+      EXTERNAL           AB_DGETRF, AB_DGETRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -158,22 +158,22 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGESV ', -INFO )
+         CALL AB_XERBLA( 'AB_DGESV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the LU factorization of A.
 *
-      CALL DGETRF( N, N, A, LDA, IPIV, INFO )
+      CALL AB_DGETRF( N, N, A, LDA, IPIV, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL DGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, B, LDB,
+         CALL AB_DGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, B, LDB,
      $                INFO )
       END IF
       RETURN
 *
-*     End of DGESV
+*     End of AB_DGESV
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CUNMR2 multiplies a general matrix by the unitary matrix from a RQ factorization determined by cgerqf (unblocked algorithm).
+*> \brief \b AB_CUNMR2 multiplies a general matrix by the unitary matrix from a RQ factorization determined by AB_CGERQF (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CUNMR2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunmr2.f">
+*> Download AB_CUNMR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CUNMR2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cunmr2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CUNMR2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmr2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CUNMR2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CUNMR2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+*       SUBROUTINE AB_CUNMR2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CUNMR2 overwrites the general complex m-by-n matrix C with
+*> AB_CUNMR2 overwrites the general complex m-by-n matrix C with
 *>
 *>       Q * C  if SIDE = 'L' and TRANS = 'N', or
 *>
@@ -50,7 +50,7 @@
 *>
 *>       Q = H(1)**H H(2)**H . . . H(k)**H
 *>
-*> as returned by CGERQF. Q is of order m if SIDE = 'L' and of order n
+*> as returned by AB_CGERQF. Q is of order m if SIDE = 'L' and of order n
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -99,7 +99,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          CGERQF in the last k rows of its array argument A.
+*>          AB_CGERQF in the last k rows of its array argument A.
 *>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
@@ -113,7 +113,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by CGERQF.
+*>          reflector H(i), as returned by AB_CGERQF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -156,7 +156,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CUNMR2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+      SUBROUTINE AB_CUNMR2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -184,11 +184,11 @@
       COMPLEX            AII, TAUI
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARF, XERBLA
+      EXTERNAL           AB_CLACGV, AB_CLARF, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX
@@ -198,8 +198,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = LSAME( SIDE, 'L' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT = AB_LSAME( SIDE, 'L' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
 *
 *     NQ is the order of Q
 *
@@ -208,9 +208,9 @@
       ELSE
          NQ = N
       END IF
-      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -224,7 +224,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CUNMR2', -INFO )
+         CALL AB_XERBLA( 'AB_CUNMR2', -INFO )
          RETURN
       END IF
 *
@@ -269,15 +269,16 @@
          ELSE
             TAUI = TAU( I )
          END IF
-         CALL CLACGV( NQ-K+I-1, A( I, 1 ), LDA )
+         CALL AB_CLACGV( NQ-K+I-1, A( I, 1 ), LDA )
          AII = A( I, NQ-K+I )
          A( I, NQ-K+I ) = ONE
-         CALL CLARF( SIDE, MI, NI, A( I, 1 ), LDA, TAUI, C, LDC, WORK )
+         CALL AB_CLARF( SIDE, MI, NI, A( I, 1 ), LDA, TAUI, C, LDC, WORK
+     $ )
          A( I, NQ-K+I ) = AII
-         CALL CLACGV( NQ-K+I-1, A( I, 1 ), LDA )
+         CALL AB_CLACGV( NQ-K+I-1, A( I, 1 ), LDA )
    10 CONTINUE
       RETURN
 *
-*     End of CUNMR2
+*     End of AB_CUNMR2
 *
       END

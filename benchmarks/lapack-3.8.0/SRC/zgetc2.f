@@ -1,4 +1,4 @@
-*> \brief \b ZGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix.
+*> \brief \b AB_ZGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGETC2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgetc2.f">
+*> Download AB_ZGETC2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGETC2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgetc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGETC2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgetc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGETC2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGETC2( N, A, LDA, IPIV, JPIV, INFO )
+*       SUBROUTINE AB_ZGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZGETC2 computes an LU factorization, using complete pivoting, of the
+*> AB_ZGETC2 computes an LU factorization, using complete pivoting, of the
 *> n-by-n matrix A. The factorization has the form A = P * L * U * Q,
 *> where P and Q are permutation matrices, L is lower triangular with
 *> unit diagonal elements and U is upper triangular.
@@ -109,7 +109,7 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE ZGETC2( N, A, LDA, IPIV, JPIV, INFO )
+      SUBROUTINE AB_ZGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,11 +135,11 @@
       DOUBLE PRECISION   BIGNUM, EPS, SMIN, SMLNUM, XMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGERU, ZSWAP, DLABAD
+      EXTERNAL           AB_ZGERU, AB_ZSWAP, AB_DLABAD
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX
@@ -155,10 +155,10 @@
 *
 *     Set constants to control overflow
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Handle the case N=1 by itself
 *
@@ -195,13 +195,13 @@
 *        Swap rows
 *
          IF( IPV.NE.I )
-     $      CALL ZSWAP( N, A( IPV, 1 ), LDA, A( I, 1 ), LDA )
+     $      CALL AB_ZSWAP( N, A( IPV, 1 ), LDA, A( I, 1 ), LDA )
          IPIV( I ) = IPV
 *
 *        Swap columns
 *
          IF( JPV.NE.I )
-     $      CALL ZSWAP( N, A( 1, JPV ), 1, A( 1, I ), 1 )
+     $      CALL AB_ZSWAP( N, A( 1, JPV ), 1, A( 1, I ), 1 )
          JPIV( I ) = JPV
 *
 *        Check for singularity
@@ -213,7 +213,7 @@
          DO 30 J = I + 1, N
             A( J, I ) = A( J, I ) / A( I, I )
    30    CONTINUE
-         CALL ZGERU( N-I, N-I, -DCMPLX( ONE ), A( I+1, I ), 1,
+         CALL AB_ZGERU( N-I, N-I, -DCMPLX( ONE ), A( I+1, I ), 1,
      $               A( I, I+1 ), LDA, A( I+1, I+1 ), LDA )
    40 CONTINUE
 *
@@ -229,6 +229,6 @@
 *
       RETURN
 *
-*     End of ZGETC2
+*     End of AB_ZGETC2
 *
       END

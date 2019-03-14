@@ -1,4 +1,4 @@
-*> \brief <b> SGTSV computes the solution to system of linear equations A * X = B for GT matrices </b>
+*> \brief <b> AB_SGTSV computes the solution to system of linear equations A * X = B for GT matrices </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGTSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtsv.f">
+*> Download AB_SGTSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGTSV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgtsv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGTSV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtsv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGTSV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
+*       SUBROUTINE AB_SGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDB, N, NRHS
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> SGTSV  solves the equation
+*> AB_SGTSV  solves the equation
 *>
 *>    A*X = B,
 *>
@@ -67,7 +67,7 @@
 *>          A.
 *>
 *>          On exit, DL is overwritten by the (n-2) elements of the
-*>          second super-diagonal of the upper triangular matrix U from
+*>          AB_SECOND super-diagonal of the upper triangular matrix U from
 *>          the LU factorization of A, in DL(1), ..., DL(n-2).
 *> \endverbatim
 *>
@@ -125,7 +125,7 @@
 *> \ingroup realGTsolve
 *
 *  =====================================================================
-      SUBROUTINE SGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
+      SUBROUTINE AB_SGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -153,7 +153,7 @@
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -166,7 +166,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGTSV ', -INFO )
+         CALL AB_XERBLA( 'AB_SGTSV ', -INFO )
          RETURN
       END IF
 *
@@ -328,6 +328,6 @@
 *
       RETURN
 *
-*     End of SGTSV
+*     End of AB_SGTSV
 *
       END

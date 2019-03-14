@@ -1,4 +1,4 @@
-*> \brief \b CGERC
+*> \brief \b AB_CGERC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+*       SUBROUTINE AB_CGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX ALPHA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CGERC  performs the rank 1 operation
+*> AB_CGERC  performs the rank 1 operation
 *>
 *>    A := alpha*x*y**H + A,
 *>
@@ -128,7 +128,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+      SUBROUTINE AB_CGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -154,7 +154,7 @@
       INTEGER I,INFO,IX,J,JY,KX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG,MAX
@@ -175,7 +175,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('CGERC ',INFO)
+          CALL AB_XERBLA('AB_CGERC ',INFO)
           RETURN
       END IF
 *
@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of CGERC .
+*     End of AB_CGERC .
 *
       END

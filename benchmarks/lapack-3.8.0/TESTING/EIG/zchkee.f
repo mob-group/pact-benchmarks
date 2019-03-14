@@ -1,4 +1,4 @@
-*> \brief \b ZCHKEE
+*> \brief \b AB_ZCHKEE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       PROGRAM ZCHKEE
+*       PROGRAM AB_ZCHKEE
 *
 *
 *> \par Purpose:
@@ -16,87 +16,87 @@
 *>
 *> \verbatim
 *>
-*> ZCHKEE tests the COMPLEX*16 LAPACK subroutines for the matrix
+*> AB_ZCHKEE tests the COMPLEX*16 LAPACK subroutines for the matrix
 *> eigenvalue problem.  The test paths in this version are
 *>
 *> NEP (Nonsymmetric Eigenvalue Problem):
-*>     Test ZGEHRD, ZUNGHR, ZHSEQR, ZTREVC, ZHSEIN, and ZUNMHR
+*>     Test AB_ZGEHRD, AB_ZUNGHR, AB_ZHSEQR, AB_ZTREVC, AB_ZHSEIN, and AB_ZUNMHR
 *>
 *> SEP (Hermitian Eigenvalue Problem):
-*>     Test ZHETRD, ZUNGTR, ZSTEQR, ZSTERF, ZSTEIN, ZSTEDC,
-*>     and drivers ZHEEV(X), ZHBEV(X), ZHPEV(X),
-*>                 ZHEEVD,   ZHBEVD,   ZHPEVD
+*>     Test AB_ZHETRD, AB_ZUNGTR, AB_ZSTEQR, ZSTERF, AB_ZSTEIN, AB_ZSTEDC,
+*>     and drivers AB_ZHEEV(X), AB_ZHBEV(X), AB_ZHPEV(X),
+*>                 AB_AB_ZHEEVD,   AB_AB_ZHBEVD,   AB_AB_ZHPEVD
 *>
 *> SVD (Singular Value Decomposition):
-*>     Test ZGEBRD, ZUNGBR, and ZBDSQR
-*>     and the drivers ZGESVD, ZGESDD
+*>     Test AB_ZGEBRD, AB_ZUNGBR, and AB_ZBDSQR
+*>     and the drivers AB_AB_ZGESVD, AB_ZGESDD
 *>
 *> ZEV (Nonsymmetric Eigenvalue/eigenvector Driver):
-*>     Test ZGEEV
+*>     Test AB_ZGEEV
 *>
 *> ZES (Nonsymmetric Schur form Driver):
-*>     Test ZGEES
+*>     Test AB_ZGEES
 *>
 *> ZVX (Nonsymmetric Eigenvalue/eigenvector Expert Driver):
-*>     Test ZGEEVX
+*>     Test AB_AB_ZGEEVX
 *>
 *> ZSX (Nonsymmetric Schur form Expert Driver):
-*>     Test ZGEESX
+*>     Test AB_AB_ZGEESX
 *>
 *> ZGG (Generalized Nonsymmetric Eigenvalue Problem):
-*>     Test ZGGHD3, ZGGBAL, ZGGBAK, ZHGEQZ, and ZTGEVC
+*>     Test AB_ZGGHD3, AB_ZGGBAL, AB_ZGGBAK, AB_ZHGEQZ, and AB_ZTGEVC
 *>
 *> ZGS (Generalized Nonsymmetric Schur form Driver):
-*>     Test ZGGES
+*>     Test AB_ZGGES
 *>
 *> ZGV (Generalized Nonsymmetric Eigenvalue/eigenvector Driver):
-*>     Test ZGGEV
+*>     Test AB_ZGGEV
 *>
 *> ZGX (Generalized Nonsymmetric Schur form Expert Driver):
-*>     Test ZGGESX
+*>     Test AB_AB_ZGGESX
 *>
 *> ZXV (Generalized Nonsymmetric Eigenvalue/eigenvector Expert Driver):
-*>     Test ZGGEVX
+*>     Test AB_AB_ZGGEVX
 *>
 *> ZSG (Hermitian Generalized Eigenvalue Problem):
-*>     Test ZHEGST, ZHEGV, ZHEGVD, ZHEGVX, ZHPGST, ZHPGV, ZHPGVD,
-*>     ZHPGVX, ZHBGST, ZHBGV, ZHBGVD, and ZHBGVX
+*>     Test AB_ZHEGST, AB_ZHEGV, AB_AB_ZHEGVD, AB_AB_ZHEGVX, AB_ZHPGST, AB_ZHPGV, AB_AB_ZHPGVD,
+*>     AB_AB_ZHPGVX, AB_ZHBGST, AB_ZHBGV, AB_AB_ZHBGVD, and AB_AB_ZHBGVX
 *>
 *> ZHB (Hermitian Band Eigenvalue Problem):
-*>     Test ZHBTRD
+*>     Test AB_ZHBTRD
 *>
 *> ZBB (Band Singular Value Decomposition):
-*>     Test ZGBBRD
+*>     Test AB_ZGBBRD
 *>
 *> ZEC (Eigencondition estimation):
-*>     Test ZTRSYL, ZTREXC, ZTRSNA, and ZTRSEN
+*>     Test AB_ZTRSYL, AB_ZTREXC, AB_ZTRSNA, and AB_ZTRSEN
 *>
 *> ZBL (Balancing a general matrix)
-*>     Test ZGEBAL
+*>     Test AB_ZGEBAL
 *>
 *> ZBK (Back transformation on a balanced matrix)
-*>     Test ZGEBAK
+*>     Test AB_ZGEBAK
 *>
 *> ZGL (Balancing a matrix pair)
-*>     Test ZGGBAL
+*>     Test AB_ZGGBAL
 *>
 *> ZGK (Back transformation on a matrix pair)
-*>     Test ZGGBAK
+*>     Test AB_ZGGBAK
 *>
 *> GLM (Generalized Linear Regression Model):
-*>     Tests ZGGGLM
+*>     Tests AB_ZGGGLM
 *>
 *> GQR (Generalized QR and RQ factorizations):
-*>     Tests ZGGQRF and ZGGRQF
+*>     Tests AB_ZGGQRF and AB_ZGGRQF
 *>
 *> GSV (Generalized Singular Value Decomposition):
-*>     Tests ZGGSVD, ZGGSVP, ZTGSJA, ZLAGS2, ZLAPLL, and ZLAPMT
+*>     Tests AB_ZGGSVD, AB_ZGGSVP, AB_ZTGSJA, AB_ZLAGS2, AB_ZLAPLL, and AB_ZLAPMT
 *>
 *> CSD (CS decomposition):
 *>     Tests ZUNCSD
 *>
-*> LSE (Constrained Linear Least Squares):
-*>     Tests ZGGLSE
+*> AB_LSE (Constrained Linear Least Squares):
+*>     Tests AB_ZGGAB_LSE
 *>
 *> Each test path has a different set of inputs, but the data sets for
 *> the driver routines xEV, xES, xVX, and xSX can be concatenated in a
@@ -110,33 +110,33 @@
 *>
 *> Path name(s)  Types    Test routine
 *>
-*> ZHS or NEP      21     ZCHKHS
-*> ZST or SEP      21     ZCHKST (routines)
-*>                 18     ZDRVST (drivers)
-*> ZBD or SVD      16     ZCHKBD (routines)
-*>                  5     ZDRVBD (drivers)
-*> ZEV             21     ZDRVEV
-*> ZES             21     ZDRVES
-*> ZVX             21     ZDRVVX
-*> ZSX             21     ZDRVSX
-*> ZGG             26     ZCHKGG (routines)
-*> ZGS             26     ZDRGES
-*> ZGX              5     ZDRGSX
-*> ZGV             26     ZDRGEV
-*> ZXV              2     ZDRGVX
-*> ZSG             21     ZDRVSG
-*> ZHB             15     ZCHKHB
-*> ZBB             15     ZCHKBB
-*> ZEC              -     ZCHKEC
-*> ZBL              -     ZCHKBL
-*> ZBK              -     ZCHKBK
-*> ZGL              -     ZCHKGL
-*> ZGK              -     ZCHKGK
-*> GLM              8     ZCKGLM
-*> GQR              8     ZCKGQR
-*> GSV              8     ZCKGSV
-*> CSD              3     ZCKCSD
-*> LSE              8     ZCKLSE
+*> ZHS or NEP      21     AB_ZCHKHS
+*> ZST or SEP      21     AB_ZCHKST (routines)
+*>                 18     AB_ZDRVST (drivers)
+*> ZBD or SVD      16     AB_ZCHKBD (routines)
+*>                  5     AB_ZDRVBD (drivers)
+*> ZEV             21     AB_ZDRVEV
+*> ZES             21     AB_ZDRVES
+*> ZVX             21     AB_ZDRVVX
+*> ZSX             21     AB_ZDRVSX
+*> ZGG             26     AB_ZCHKGG (routines)
+*> ZGS             26     AB_ZDRGES
+*> ZGX              5     AB_ZDRGSX
+*> ZGV             26     AB_ZDRGEV
+*> ZXV              2     AB_ZDRGVX
+*> ZSG             21     AB_ZDRVSG
+*> ZHB             15     AB_ZCHKHB
+*> ZBB             15     AB_ZCHKBB
+*> ZEC              -     AB_AB_ZCHKEC
+*> ZBL              -     AB_ZCHKBL
+*> ZBK              -     AB_ZCHKBK
+*> ZGL              -     AB_ZCHKGL
+*> ZGK              -     AB_ZCHKGK
+*> GLM              8     AB_ZCKGLM
+*> GQR              8     AB_ZCKGQR
+*> GSV              8     AB_ZCKGSV
+*> CSD              3     AB_ZCKCSD
+*> AB_LSE              8     AB_ZCKAB_LSE
 *>
 *>-----------------------------------------------------------------------
 *>
@@ -199,7 +199,7 @@
 *>          a 3-character path name in columns 1-3, and the number
 *>          of matrix types must be the first nonblank item in columns
 *>          4-80.  If the number of matrix types is at least 1 but is
-*>          less than the maximum number of possible types, a second
+*>          less than the maximum number of possible types, a AB_SECOND
 *>          line will be read to get the numbers of the matrix types to
 *>          be used.  For example,
 *> NEP 21
@@ -342,7 +342,7 @@
 *>
 *> line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
 *>          These integer parameters determine how blocking is done
-*>          (see ILAENV for details)
+*>          (see AB_ILAENV for details)
 *>          NB     : block size
 *>          NBMIN  : minimum block size
 *>          NX     : minimum dimension for blocking
@@ -367,13 +367,13 @@
 *>          Four integer values for the random number seed.
 *>
 *> lines 8 and following:  Lines specifying matrix types, as for NEP.
-*>          The 3-character path name is 'ZEV' to test CGEEV, or
-*>          'ZES' to test CGEES.
+*>          The 3-character path name is 'ZEV' to test AB_CGEEV, or
+*>          'ZES' to test AB_CGEES.
 *>
 *>-----------------------------------------------------------------------
 *>
 *> The ZVX data has two parts. The first part is identical to ZEV,
-*> and the second part consists of test matrices with precomputed
+*> and the AB_SECOND part consists of test matrices with precomputed
 *> solutions.
 *>
 *> line 1:  'ZVX' in columns 1-3.
@@ -396,7 +396,7 @@
 *>
 *> lines 8 and following: The first line contains 'ZVX' in columns 1-3
 *>          followed by the number of matrix types, possibly with
-*>          a second line to specify certain matrix types.
+*>          a AB_SECOND line to specify certain matrix types.
 *>          If the number of matrix types = 0, no testing of randomly
 *>          generated examples is done, but any precomputed examples
 *>          are tested.
@@ -419,7 +419,7 @@
 *>-----------------------------------------------------------------------
 *>
 *> The ZSX data is like ZVX. The first part is identical to ZEV, and the
-*> second part consists of test matrices with precomputed solutions.
+*> AB_SECOND part consists of test matrices with precomputed solutions.
 *>
 *> line 1:  'ZSX' in columns 1-3.
 *>
@@ -441,14 +441,14 @@
 *>
 *> lines 8 and following: The first line contains 'ZSX' in columns 1-3
 *>          followed by the number of matrix types, possibly with
-*>          a second line to specify certain matrix types.
+*>          a AB_SECOND line to specify certain matrix types.
 *>          If the number of matrix types = 0, no testing of randomly
 *>          generated examples is done, but any precomputed examples
 *>          are tested.
 *>
 *> remaining lines : Each matrix is stored on 3+N**2 lines, where N is
 *>          its dimension. The first line contains the dimension N, the
-*>          dimension M of an invariant subspace, and ISRT. The second
+*>          dimension M of an invariant subspace, and ISRT. The AB_SECOND
 *>          line contains M integers, identifying the eigenvalues in the
 *>          invariant subspace (by their position in a list of
 *>          eigenvalues ordered by increasing real part (if ISRT=0) or
@@ -539,7 +539,7 @@
 *>
 *> line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
 *>          These integer parameters determine how blocking is done
-*>          (see ILAENV for details)
+*>          (see AB_ILAENV for details)
 *>          NB     : block size
 *>          NBMIN  : minimum block size
 *>          NX     : minimum dimension for blocking
@@ -580,7 +580,7 @@
 *>
 *> line 3:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
 *>          These integer parameters determine how blocking is done
-*>          (see ILAENV for details)
+*>          (see AB_ILAENV for details)
 *>          NB     : block size
 *>          NBMIN  : minimum block size
 *>          NX     : minimum dimension for blocking
@@ -636,7 +636,7 @@
 *>
 *> line 3:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
 *>          These integer parameters determine how blocking is done
-*>          (see ILAENV for details)
+*>          (see AB_ILAENV for details)
 *>          NB     : block size
 *>          NBMIN  : minimum block size
 *>          NX     : minimum dimension for blocking
@@ -779,8 +779,8 @@
 *>
 *> ZBL and ZBK input files:
 *>
-*> line 1:  'ZBL' in columns 1-3 to test CGEBAL, or 'ZBK' in
-*>          columns 1-3 to test CGEBAK.
+*> line 1:  'ZBL' in columns 1-3 to test AB_CGEBAL, or 'ZBK' in
+*>          columns 1-3 to test AB_CGEBAK.
 *>
 *> The remaining lines consist of specially constructed test cases.
 *>
@@ -788,8 +788,8 @@
 *>
 *> ZGL and ZGK input files:
 *>
-*> line 1:  'ZGL' in columns 1-3 to test ZGGBAL, or 'ZGK' in
-*>          columns 1-3 to test ZGGBAK.
+*> line 1:  'ZGL' in columns 1-3 to test AB_ZGGBAL, or 'ZGK' in
+*>          columns 1-3 to test AB_ZGGBAK.
 *>
 *> The remaining lines consist of specially constructed test cases.
 *>
@@ -966,9 +966,9 @@
 *>
 *>-----------------------------------------------------------------------
 *>
-*> LSE data file:
+*> AB_LSE data file:
 *>
-*> line 1:  'LSE' in columns 1 to 3.
+*> line 1:  'AB_LSE' in columns 1 to 3.
 *>
 *> line 2:  NN, INTEGER
 *>          Number of values of M, P, and N.
@@ -1032,7 +1032,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      PROGRAM ZCHKEE
+      PROGRAM AB_ZCHKEE
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -1061,7 +1061,8 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            ZBK, ZBL, ZES, ZEV, ZGK, ZGL, ZGS, ZGV, ZGX,
-     $                   ZSX, ZVX, ZXV, CSD, FATAL, GLM, GQR, GSV, LSE,
+     $                   ZSX, ZVX, ZXV, CSD, FATAL, GLM, GQR, GSV, AB_LS
+     $E,
      $                   NEP, SEP, SVD, TSTCHK, TSTDIF, TSTDRV, TSTERR,
      $                   ZBB, ZGG, ZHB
       CHARACTER          C1
@@ -1091,19 +1092,26 @@
      $                   X( 5*NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      DOUBLE PRECISION   DLAMCH, DSECND
-      EXTERNAL           LSAMEN, DLAMCH, DSECND
+      LOGICAL            AB_AB_LSAMEN
+      DOUBLE PRECISION   AB_DLAMCH, AB_DSECND
+      EXTERNAL           AB_AB_LSAMEN, AB_DLAMCH, AB_DSECND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, XLAENV, ZCHKBB, ZCHKBD, ZCHKBK, ZCHKBL,
-     $                   ZCHKEC, ZCHKGG, ZCHKGK, ZCHKGL, ZCHKHB, ZCHKHS,
-     $                   ZCHKST, ZCKCSD, ZCKGLM, ZCKGQR, ZCKGSV, ZCKLSE,
-     $                   ZDRGES, ZDRGEV, ZDRGSX, ZDRGVX, ZDRVBD, ZDRVES,
-     $                   ZDRVEV, ZDRVSG, ZDRVST, ZDRVSX, ZDRVVX,
-     $                   ZERRBD, ZERRED, ZERRGG, ZERRHS, ZERRST, ILAVER,
-     $                   ZDRGES3, ZDRGEV3, 
-     $                   ZCHKST2STG, ZDRVST2STG, ZCHKHB2STG
+      EXTERNAL           AB_ALAREQ, AB_XLAENV, AB_ZCHKBB, AB_ZCHKBD, AB_
+     $ZCHKBK, AB_ZCHKBL,
+     $                   AB_AB_ZCHKEC, AB_ZCHKGG, AB_ZCHKGK, AB_ZCHKGL, 
+     $AB_ZCHKHB, AB_ZCHKHS,
+     $                   AB_ZCHKST, AB_ZCKCSD, AB_ZCKGLM, AB_ZCKGQR, AB_
+     $ZCKGSV, AB_ZCKAB_LSE,
+     $                   AB_ZDRGES, AB_ZDRGEV, AB_ZDRGSX, AB_ZDRGVX, AB_
+     $ZDRVBD, AB_ZDRVES,
+     $                   AB_ZDRVEV, AB_ZDRVSG, AB_ZDRVST, AB_ZDRVSX, AB_
+     $ZDRVVX,
+     $                   AB_ZERRBD, AB_ZERRED, AB_ZERRGG, AB_ZERRHS, AB_
+     $ZERRST, AB_ILAVER,
+     $                   AB_AB_ZDRGES3, AB_AB_ZDRGEV3, 
+     $                   AB_AB_ZCHKST2STG, AB_AB_ZDRVST2STG, AB_AB_ZCHKH
+     $B2STG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN, MIN
@@ -1136,7 +1144,7 @@
       B = 0.0
       C = 0.0
       DC = 0.0
-      S1 = DSECND( )
+      S1 = AB_DSECND( )
       FATAL = .FALSE.
       NUNIT = NOUT
 *
@@ -1148,30 +1156,35 @@
 *
       READ( NIN, FMT = '(A80)', END = 380 )LINE
       PATH = LINE( 1: 3 )
-      NEP = LSAMEN( 3, PATH, 'NEP' ) .OR. LSAMEN( 3, PATH, 'ZHS' )
-      SEP = LSAMEN( 3, PATH, 'SEP' ) .OR. LSAMEN( 3, PATH, 'ZST' ) .OR.
-     $      LSAMEN( 3, PATH, 'ZSG' ) .OR. LSAMEN( 3, PATH, 'SE2' )
-      SVD = LSAMEN( 3, PATH, 'SVD' ) .OR. LSAMEN( 3, PATH, 'ZBD' )
-      ZEV = LSAMEN( 3, PATH, 'ZEV' )
-      ZES = LSAMEN( 3, PATH, 'ZES' )
-      ZVX = LSAMEN( 3, PATH, 'ZVX' )
-      ZSX = LSAMEN( 3, PATH, 'ZSX' )
-      ZGG = LSAMEN( 3, PATH, 'ZGG' )
-      ZGS = LSAMEN( 3, PATH, 'ZGS' )
-      ZGX = LSAMEN( 3, PATH, 'ZGX' )
-      ZGV = LSAMEN( 3, PATH, 'ZGV' )
-      ZXV = LSAMEN( 3, PATH, 'ZXV' )
-      ZHB = LSAMEN( 3, PATH, 'ZHB' )
-      ZBB = LSAMEN( 3, PATH, 'ZBB' )
-      GLM = LSAMEN( 3, PATH, 'GLM' )
-      GQR = LSAMEN( 3, PATH, 'GQR' ) .OR. LSAMEN( 3, PATH, 'GRQ' )
-      GSV = LSAMEN( 3, PATH, 'GSV' )
-      CSD = LSAMEN( 3, PATH, 'CSD' )
-      LSE = LSAMEN( 3, PATH, 'LSE' )
-      ZBL = LSAMEN( 3, PATH, 'ZBL' )
-      ZBK = LSAMEN( 3, PATH, 'ZBK' )
-      ZGL = LSAMEN( 3, PATH, 'ZGL' )
-      ZGK = LSAMEN( 3, PATH, 'ZGK' )
+      NEP = AB_AB_LSAMEN( 3, PATH, 'NEP' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $ZHS' )
+      SEP = AB_AB_LSAMEN( 3, PATH, 'SEP' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $ZST' ) .OR.
+     $      AB_AB_LSAMEN( 3, PATH, 'ZSG' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $SE2' )
+      SVD = AB_AB_LSAMEN( 3, PATH, 'SVD' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $ZBD' )
+      ZEV = AB_AB_LSAMEN( 3, PATH, 'ZEV' )
+      ZES = AB_AB_LSAMEN( 3, PATH, 'ZES' )
+      ZVX = AB_AB_LSAMEN( 3, PATH, 'ZVX' )
+      ZSX = AB_AB_LSAMEN( 3, PATH, 'ZSX' )
+      ZGG = AB_AB_LSAMEN( 3, PATH, 'ZGG' )
+      ZGS = AB_AB_LSAMEN( 3, PATH, 'ZGS' )
+      ZGX = AB_AB_LSAMEN( 3, PATH, 'ZGX' )
+      ZGV = AB_AB_LSAMEN( 3, PATH, 'ZGV' )
+      ZXV = AB_AB_LSAMEN( 3, PATH, 'ZXV' )
+      ZHB = AB_AB_LSAMEN( 3, PATH, 'ZHB' )
+      ZBB = AB_AB_LSAMEN( 3, PATH, 'ZBB' )
+      GLM = AB_AB_LSAMEN( 3, PATH, 'GLM' )
+      GQR = AB_AB_LSAMEN( 3, PATH, 'GQR' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $GRQ' )
+      GSV = AB_AB_LSAMEN( 3, PATH, 'GSV' )
+      CSD = AB_AB_LSAMEN( 3, PATH, 'CSD' )
+      AB_LSE = AB_AB_LSAMEN( 3, PATH, 'AB_LSE' )
+      ZBL = AB_AB_LSAMEN( 3, PATH, 'ZBL' )
+      ZBK = AB_AB_LSAMEN( 3, PATH, 'ZBK' )
+      ZGL = AB_AB_LSAMEN( 3, PATH, 'ZGL' )
+      ZGK = AB_AB_LSAMEN( 3, PATH, 'ZGK' )
 *
 *     Report values of parameters.
 *
@@ -1213,47 +1226,47 @@
          WRITE( NOUT, FMT = 9969 )
       ELSE IF( CSD ) THEN
          WRITE( NOUT, FMT = 9960 )
-      ELSE IF( LSE ) THEN
+      ELSE IF( AB_LSE ) THEN
          WRITE( NOUT, FMT = 9968 )
       ELSE IF( ZBL ) THEN
 *
-*        ZGEBAL:  Balancing
+*        AB_ZGEBAL:  Balancing
 *
-         CALL ZCHKBL( NIN, NOUT )
+         CALL AB_ZCHKBL( NIN, NOUT )
          GO TO 380
       ELSE IF( ZBK ) THEN
 *
-*        ZGEBAK:  Back transformation
+*        AB_ZGEBAK:  Back transformation
 *
-         CALL ZCHKBK( NIN, NOUT )
+         CALL AB_ZCHKBK( NIN, NOUT )
          GO TO 380
       ELSE IF( ZGL ) THEN
 *
-*        ZGGBAL:  Balancing
+*        AB_ZGGBAL:  Balancing
 *
-         CALL ZCHKGL( NIN, NOUT )
+         CALL AB_ZCHKGL( NIN, NOUT )
          GO TO 380
       ELSE IF( ZGK ) THEN
 *
-*        ZGGBAK:  Back transformation
+*        AB_ZGGBAK:  Back transformation
 *
-         CALL ZCHKGK( NIN, NOUT )
+         CALL AB_ZCHKGK( NIN, NOUT )
          GO TO 380
-      ELSE IF( LSAMEN( 3, PATH, 'ZEC' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'ZEC' ) ) THEN
 *
 *        ZEC:  Eigencondition estimation
 *
          READ( NIN, FMT = * )THRESH
-         CALL XLAENV( 1, 1 )
-         CALL XLAENV( 12, 1 )
+         CALL AB_XLAENV( 1, 1 )
+         CALL AB_XLAENV( 12, 1 )
          TSTERR = .TRUE.
-         CALL ZCHKEC( THRESH, TSTERR, NIN, NOUT )
+         CALL AB_AB_ZCHKEC( THRESH, TSTERR, NIN, NOUT )
          GO TO 380
       ELSE
          WRITE( NOUT, FMT = 9992 )PATH
          GO TO 380
       END IF
-      CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      CALL AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
       WRITE( NOUT, FMT = 9972 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
       WRITE( NOUT, FMT = 9984 )
 *
@@ -1293,7 +1306,7 @@
 *
 *     Read the values of P
 *
-      IF( GLM .OR. GQR .OR. GSV .OR. CSD .OR. LSE ) THEN
+      IF( GLM .OR. GQR .OR. GSV .OR. CSD .OR. AB_LSE ) THEN
          READ( NIN, FMT = * )( PVAL( I ), I = 1, NN )
          DO 30 I = 1, NN
             IF( PVAL( I ).LT.0 ) THEN
@@ -1310,7 +1323,7 @@
 *     Read the values of N
 *
       IF( SVD .OR. ZBB .OR. GLM .OR. GQR .OR. GSV .OR. CSD .OR.
-     $    LSE ) THEN
+     $    AB_LSE ) THEN
          READ( NIN, FMT = * )( NVAL( I ), I = 1, NN )
          DO 40 I = 1, NN
             IF( NVAL( I ).LT.0 ) THEN
@@ -1381,14 +1394,14 @@
             WRITE( NOUT, FMT = 9989 )'   IACC22 ', IACC22( 1 ), 0
             FATAL = .TRUE.
          END IF
-         CALL XLAENV( 1, NBVAL( 1 ) )
-         CALL XLAENV( 2, NBMIN( 1 ) )
-         CALL XLAENV( 3, NXVAL( 1 ) )
-         CALL XLAENV(12, MAX( 11, INMIN( 1 ) ) )
-         CALL XLAENV(13, INWIN( 1 ) )
-         CALL XLAENV(14, INIBL( 1 ) )
-         CALL XLAENV(15, ISHFTS( 1 ) )
-         CALL XLAENV(16, IACC22( 1 ) )
+         CALL AB_XLAENV( 1, NBVAL( 1 ) )
+         CALL AB_XLAENV( 2, NBMIN( 1 ) )
+         CALL AB_XLAENV( 3, NXVAL( 1 ) )
+         CALL AB_XLAENV(12, MAX( 11, INMIN( 1 ) ) )
+         CALL AB_XLAENV(13, INWIN( 1 ) )
+         CALL AB_XLAENV(14, INIBL( 1 ) )
+         CALL AB_XLAENV(15, ISHFTS( 1 ) )
+         CALL AB_XLAENV(16, IACC22( 1 ) )
          WRITE( NOUT, FMT = 9983 )'NB:   ', NBVAL( 1 )
          WRITE( NOUT, FMT = 9983 )'NBMIN:', NBMIN( 1 )
          WRITE( NOUT, FMT = 9983 )'NX:   ', NXVAL( 1 )
@@ -1421,18 +1434,18 @@
             WRITE( NOUT, FMT = 9989 )' MAXB ', MXBVAL( 1 ), 1
             FATAL = .TRUE.
          END IF
-         CALL XLAENV( 1, NBVAL( 1 ) )
-         CALL XLAENV( 2, NBMIN( 1 ) )
-         CALL XLAENV( 3, NXVAL( 1 ) )
-         CALL XLAENV( 4, NSVAL( 1 ) )
-         CALL XLAENV( 8, MXBVAL( 1 ) )
+         CALL AB_XLAENV( 1, NBVAL( 1 ) )
+         CALL AB_XLAENV( 2, NBMIN( 1 ) )
+         CALL AB_XLAENV( 3, NXVAL( 1 ) )
+         CALL AB_XLAENV( 4, NSVAL( 1 ) )
+         CALL AB_XLAENV( 8, MXBVAL( 1 ) )
          WRITE( NOUT, FMT = 9983 )'NB:   ', NBVAL( 1 )
          WRITE( NOUT, FMT = 9983 )'NBMIN:', NBMIN( 1 )
          WRITE( NOUT, FMT = 9983 )'NX:   ', NXVAL( 1 )
          WRITE( NOUT, FMT = 9983 )'NS:   ', NSVAL( 1 )
          WRITE( NOUT, FMT = 9983 )'MAXB: ', MXBVAL( 1 )
       ELSE IF( .NOT.ZHB .AND. .NOT.GLM .AND. .NOT.GQR .AND. .NOT.
-     $         GSV .AND. .NOT.CSD .AND. .NOT.LSE ) THEN
+     $         GSV .AND. .NOT.CSD .AND. .NOT.AB_LSE ) THEN
 *
 *        For the other paths, the number of parameters can be varied
 *        from the input file.  Read the number of parameter values.
@@ -1665,11 +1678,11 @@
 *     Calculate and print the machine dependent constants.
 *
       WRITE( NOUT, FMT = * )
-      EPS = DLAMCH( 'Underflow threshold' )
+      EPS = AB_DLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9981 )'underflow', EPS
-      EPS = DLAMCH( 'Overflow threshold' )
+      EPS = AB_DLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9981 )'overflow ', EPS
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9981 )'precision', EPS
 *
 *     Read the threshold value for the test ratios.
@@ -1783,7 +1796,8 @@
   250    CONTINUE
       END IF
 *
-      IF( LSAMEN( 3, C3, 'ZHS' ) .OR. LSAMEN( 3, C3, 'NEP' ) ) THEN
+      IF( AB_AB_LSAMEN( 3, C3, 'ZHS' ) .OR. AB_AB_LSAMEN( 3, C3, 'NEP' )
+     $ ) THEN
 *
 *        -------------------------------------
 *        NEP:  Nonsymmetric Eigenvalue Problem
@@ -1797,19 +1811,19 @@
 *
          MAXTYP = 21
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV( 1, 1 )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR )
-     $      CALL ZERRHS( 'ZHSEQR', NOUT )
+     $      CALL AB_ZERRHS( 'AB_ZHSEQR', NOUT )
          DO 270 I = 1, NPARMS
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 3, NXVAL( I ) )
-            CALL XLAENV(12, MAX( 11, INMIN( I ) ) )
-            CALL XLAENV(13, INWIN( I ) )
-            CALL XLAENV(14, INIBL( I ) )
-            CALL XLAENV(15, ISHFTS( I ) )
-            CALL XLAENV(16, IACC22( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 3, NXVAL( I ) )
+            CALL AB_XLAENV(12, MAX( 11, INMIN( I ) ) )
+            CALL AB_XLAENV(13, INWIN( I ) )
+            CALL AB_XLAENV(14, INIBL( I ) )
+            CALL AB_XLAENV(15, ISHFTS( I ) )
+            CALL AB_XLAENV(16, IACC22( I ) )
 *
             IF( NEWSD.EQ.0 ) THEN
                DO 260 K = 1, 4
@@ -1819,7 +1833,8 @@
             WRITE( NOUT, FMT = 9961 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I ), MAX( 11, INMIN(I)),
      $         INWIN( I ), INIBL( I ), ISHFTS( I ), IACC22( I )
-            CALL ZCHKHS( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+            CALL AB_ZCHKHS( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   A( 1, 4 ), A( 1, 5 ), NMAX, A( 1, 6 ),
      $                   A( 1, 7 ), DC( 1, 1 ), DC( 1, 2 ), A( 1, 8 ),
@@ -1827,11 +1842,13 @@
      $                   DC( 1, 3 ), WORK, LWORK, RWORK, IWORK, LOGWRK,
      $                   RESULT, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZCHKHS', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_ZCHKHS', INFO
   270    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZST' ) .OR. LSAMEN( 3, C3, 'SEP' ) 
-     $                                .OR. LSAMEN( 3, C3, 'SE2' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZST' ) .OR. AB_AB_LSAMEN( 3, C3,
+     $ 'SEP' ) 
+     $                                .OR. AB_AB_LSAMEN( 3, C3, 'SE2' ) 
+     $) THEN
 *
 *        ----------------------------------
 *        SEP:  Symmetric Eigenvalue Problem
@@ -1843,15 +1860,15 @@
 *
          MAXTYP = 21
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV( 1, 1 )
-         CALL XLAENV( 9, 25 )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV( 1, 1 )
+         CALL AB_XLAENV( 9, 25 )
          IF( TSTERR )
-     $      CALL ZERRST( 'ZST', NOUT )
+     $      CALL AB_ZERRST( 'ZST', NOUT )
          DO 290 I = 1, NPARMS
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 3, NXVAL( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 3, NXVAL( I ) )
 *
             IF( NEWSD.EQ.0 ) THEN
                DO 280 K = 1, 4
@@ -1861,8 +1878,9 @@
             WRITE( NOUT, FMT = 9997 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I )
             IF( TSTCHK ) THEN
-               IF( LSAMEN( 3, C3, 'SE2' ) ) THEN
-               CALL ZCHKST2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+               IF( AB_AB_LSAMEN( 3, C3, 'SE2' ) ) THEN
+               CALL AB_AB_ZCHKST2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, T
+     $HRESH,
      $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ),
      $                      DR( 1, 1 ), DR( 1, 2 ), DR( 1, 3 ),
      $                      DR( 1, 4 ), DR( 1, 5 ), DR( 1, 6 ),
@@ -1872,7 +1890,7 @@
      $                      WORK, LWORK, RWORK, LWORK, IWORK, LIWORK,
      $                      RESULT, INFO )
                ELSE
-               CALL ZCHKST( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+               CALL AB_ZCHKST( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
      $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ),
      $                      DR( 1, 1 ), DR( 1, 2 ), DR( 1, 3 ),
      $                      DR( 1, 4 ), DR( 1, 5 ), DR( 1, 6 ),
@@ -1883,18 +1901,20 @@
      $                      RESULT, INFO )
                ENDIF
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'ZCHKST', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_ZCHKST', INFO
             END IF
             IF( TSTDRV ) THEN
-               IF( LSAMEN( 3, C3, 'SE2' ) ) THEN
-               CALL ZDRVST2STG( NN, NVAL, 18, DOTYPE, ISEED, THRESH,
+               IF( AB_AB_LSAMEN( 3, C3, 'SE2' ) ) THEN
+               CALL AB_AB_ZDRVST2STG( NN, NVAL, 18, DOTYPE, ISEED, THRES
+     $H,
      $                    NOUT, A( 1, 1 ), NMAX, DR( 1, 3 ), DR( 1, 4 ),
      $                    DR( 1, 5 ), DR( 1, 8 ), DR( 1, 9 ),
      $                    DR( 1, 10 ), A( 1, 2 ), NMAX, A( 1, 3 ),
      $                    DC( 1, 1 ), A( 1, 4 ), WORK, LWORK, RWORK,
      $                    LWORK, IWORK, LIWORK, RESULT, INFO )
            ELSE
-               CALL ZDRVST( NN, NVAL, 18, DOTYPE, ISEED, THRESH, NOUT,
+               CALL AB_ZDRVST( NN, NVAL, 18, DOTYPE, ISEED, THRESH, NOUT
+     $,
      $                    A( 1, 1 ), NMAX, DR( 1, 3 ), DR( 1, 4 ),
      $                    DR( 1, 5 ), DR( 1, 8 ), DR( 1, 9 ),
      $                    DR( 1, 10 ), A( 1, 2 ), NMAX, A( 1, 3 ),
@@ -1902,11 +1922,11 @@
      $                    LWORK, IWORK, LIWORK, RESULT, INFO )
                ENDIF
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'ZDRVST', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_ZDRVST', INFO
             END IF
   290    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZSG' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZSG' ) ) THEN
 *
 *        ----------------------------------------------
 *        ZSG:  Hermitian Generalized Eigenvalue Problem
@@ -1918,12 +1938,12 @@
 *
          MAXTYP = 21
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV( 9, 25 )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV( 9, 25 )
          DO 310 I = 1, NPARMS
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 3, NXVAL( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 3, NXVAL( I ) )
 *
             IF( NEWSD.EQ.0 ) THEN
                DO 300 K = 1, 4
@@ -1933,24 +1953,26 @@
             WRITE( NOUT, FMT = 9997 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I )
             IF( TSTCHK ) THEN
-*               CALL ZDRVSG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+*               CALL AB_ZDRVSG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
 *     $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
 *     $                      DR( 1, 3 ), A( 1, 3 ), NMAX, A( 1, 4 ),
 *     $                      A( 1, 5 ), A( 1, 6 ), A( 1, 7 ), WORK,
 *     $                      LWORK, RWORK, LWORK, IWORK, LIWORK, RESULT,
 *     $                      INFO )
-               CALL ZDRVSG2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+               CALL AB_AB_ZDRVSG2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, T
+     $HRESH,
      $                          NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
      $                          DR( 1, 3 ), DR( 1, 4 ), A( 1, 3 ), NMAX,
      $                          A( 1, 4 ), A( 1, 5 ), A( 1, 6 ),
      $                          A( 1, 7 ), WORK, LWORK, RWORK, LWORK,
      $                          IWORK, LIWORK, RESULT, INFO )
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'ZDRVSG', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_ZDRVSG', INFO
             END IF
   310    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZBD' ) .OR. LSAMEN( 3, C3, 'SVD' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZBD' ) .OR. AB_AB_LSAMEN( 3, C3,
+     $ 'SVD' ) ) THEN
 *
 *        ----------------------------------
 *        SVD:  Singular Value Decomposition
@@ -1963,22 +1985,22 @@
 *
          MAXTYP = 16
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV( 9, 25 )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV( 9, 25 )
 *
 *        Test the error exits
 *
-         CALL XLAENV( 1, 1 )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR .AND. TSTCHK )
-     $      CALL ZERRBD( 'ZBD', NOUT )
+     $      CALL AB_ZERRBD( 'ZBD', NOUT )
          IF( TSTERR .AND. TSTDRV )
-     $      CALL ZERRED( 'ZBD', NOUT )
+     $      CALL AB_ZERRED( 'ZBD', NOUT )
 *
          DO 330 I = 1, NPARMS
             NRHS = NSVAL( I )
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 3, NXVAL( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 3, NXVAL( I ) )
             IF( NEWSD.EQ.0 ) THEN
                DO 320 K = 1, 4
                   ISEED( K ) = IOLDSD( K )
@@ -1987,17 +2009,18 @@
             WRITE( NOUT, FMT = 9995 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I ), NRHS
             IF( TSTCHK ) THEN
-               CALL ZCHKBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, NRHS, ISEED,
+               CALL AB_ZCHKBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, NRHS, ISE
+     $ED,
      $                      THRESH, A( 1, 1 ), NMAX, DR( 1, 1 ),
      $                      DR( 1, 2 ), DR( 1, 3 ), DR( 1, 4 ),
      $                      A( 1, 2 ), NMAX, A( 1, 3 ), A( 1, 4 ),
      $                      A( 1, 5 ), NMAX, A( 1, 6 ), NMAX, A( 1, 7 ),
      $                      A( 1, 8 ), WORK, LWORK, RWORK, NOUT, INFO )
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'ZCHKBD', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_ZCHKBD', INFO
             END IF
             IF( TSTDRV )
-     $         CALL ZDRVBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, ISEED,
+     $         CALL AB_ZDRVBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, ISEED,
      $                      THRESH, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
      $                      A( 1, 3 ), NMAX, A( 1, 4 ), A( 1, 5 ),
      $                      A( 1, 6 ), DR( 1, 1 ), DR( 1, 2 ),
@@ -2005,11 +2028,11 @@
      $                      INFO )
   330    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZEV' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZEV' ) ) THEN
 *
 *        --------------------------------------------
 *        ZEV:  Nonsymmetric Eigenvalue Problem Driver
-*              ZGEEV (eigenvalues and eigenvectors)
+*              AB_ZGEEV (eigenvalues and eigenvectors)
 *        --------------------------------------------
 *
          MAXTYP = 21
@@ -2018,24 +2041,25 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL ZERRED( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL ZDRVEV( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NOUT,
+     $         CALL AB_ZERRED( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_ZDRVEV( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), DC( 1, 1 ),
      $                   DC( 1, 2 ), A( 1, 3 ), NMAX, A( 1, 4 ), NMAX,
      $                   A( 1, 5 ), NMAX, RESULT, WORK, LWORK, RWORK,
      $                   IWORK, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZGEEV', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_ZGEEV', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZES' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZES' ) ) THEN
 *
 *        --------------------------------------------
 *        ZES:  Nonsymmetric Eigenvalue Problem Driver
-*              ZGEES (Schur form)
+*              AB_ZGEES (Schur form)
 *        --------------------------------------------
 *
          MAXTYP = 21
@@ -2044,24 +2068,25 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL ZERRED( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL ZDRVES( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NOUT,
+     $         CALL AB_ZERRED( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_ZDRVES( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   DC( 1, 1 ), DC( 1, 2 ), A( 1, 4 ), NMAX,
      $                   RESULT, WORK, LWORK, RWORK, IWORK, LOGWRK,
      $                   INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZGEES', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_ZGEES', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZVX' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZVX' ) ) THEN
 *
 *        --------------------------------------------------------------
 *        ZVX:  Nonsymmetric Eigenvalue Problem Expert Driver
-*              ZGEEVX (eigenvalues, eigenvectors and condition numbers)
+*              AB_AB_ZGEEVX (eigenvalues, eigenvectors and condition numbers)
 *        --------------------------------------------------------------
 *
          MAXTYP = 21
@@ -2070,9 +2095,10 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL ZERRED( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL ZDRVVX( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NIN,
+     $         CALL AB_ZERRED( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_ZDRVVX( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NIN
+     $,
      $                   NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), DC( 1, 1 ),
      $                   DC( 1, 2 ), A( 1, 3 ), NMAX, A( 1, 4 ), NMAX,
      $                   A( 1, 5 ), NMAX, DR( 1, 1 ), DR( 1, 2 ),
@@ -2080,16 +2106,16 @@
      $                   DR( 1, 7 ), DR( 1, 8 ), RESULT, WORK, LWORK,
      $                   RWORK, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZGEEVX', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_AB_ZGEEVX', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZSX' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZSX' ) ) THEN
 *
 *        ---------------------------------------------------
 *        ZSX:  Nonsymmetric Eigenvalue Problem Expert Driver
-*              ZGEESX (Schur form and condition numbers)
+*              AB_AB_ZGEESX (Schur form and condition numbers)
 *        ---------------------------------------------------
 *
          MAXTYP = 21
@@ -2098,20 +2124,21 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL ZERRED( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL ZDRVSX( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NIN,
+     $         CALL AB_ZERRED( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_ZDRVSX( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NIN
+     $,
      $                   NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   DC( 1, 1 ), DC( 1, 2 ), DC( 1, 3 ), A( 1, 4 ),
      $                   NMAX, A( 1, 5 ), RESULT, WORK, LWORK, RWORK,
      $                   LOGWRK, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZGEESX', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_AB_ZGEESX', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZGG' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZGG' ) ) THEN
 *
 *        -------------------------------------------------
 *        ZGG:  Generalized Nonsymmetric Eigenvalue Problem
@@ -2126,17 +2153,17 @@
 *
          MAXTYP = 26
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV(1,1)
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV(1,1)
          IF( TSTCHK .AND. TSTERR )
-     $      CALL ZERRGG( C3, NOUT )
+     $      CALL AB_ZERRGG( C3, NOUT )
          DO 350 I = 1, NPARMS
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 4, NSVAL( I ) )
-            CALL XLAENV( 8, MXBVAL( I ) )
-            CALL XLAENV( 16, IACC22( I ) )
-            CALL XLAENV( 5, NBCOL( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 4, NSVAL( I ) )
+            CALL AB_XLAENV( 8, MXBVAL( I ) )
+            CALL AB_XLAENV( 16, IACC22( I ) )
+            CALL AB_XLAENV( 5, NBCOL( I ) )
 *
             IF( NEWSD.EQ.0 ) THEN
                DO 340 K = 1, 4
@@ -2148,7 +2175,7 @@
             TSTDIF = .FALSE.
             THRSHN = 10.D0
             IF( TSTCHK ) THEN
-               CALL ZCHKGG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+               CALL AB_ZCHKGG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
      $                      TSTDIF, THRSHN, NOUT, A( 1, 1 ), NMAX,
      $                      A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                      A( 1, 6 ), A( 1, 7 ), A( 1, 8 ), A( 1, 9 ),
@@ -2157,15 +2184,15 @@
      $                      DC( 1, 4 ), A( 1, 13 ), A( 1, 14 ), WORK,
      $                      LWORK, RWORK, LOGWRK, RESULT, INFO )
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'ZCHKGG', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_ZCHKGG', INFO
             END IF
   350    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZGS' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZGS' ) ) THEN
 *
 *        -------------------------------------------------
 *        ZGS:  Generalized Nonsymmetric Eigenvalue Problem
-*              ZGGES (Schur form)
+*              AB_ZGGES (Schur form)
 *        -------------------------------------------------
 *
          MAXTYP = 26
@@ -2174,27 +2201,29 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL ZERRGG( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL ZDRGES( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+     $         CALL AB_ZERRGG( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_ZDRGES( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
      $                   DC( 1, 1 ), DC( 1, 2 ), WORK, LWORK, RWORK,
      $                   RESULT, LOGWRK, INFO )
 *
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZDRGES', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_ZDRGES', INFO
 *
 * Blocked version
 *
-            CALL ZDRGES3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+            CALL AB_AB_ZDRGES3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $ NOUT,
      $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
      $                    DC( 1, 1 ), DC( 1, 2 ), WORK, LWORK, RWORK,
      $                    RESULT, LOGWRK, INFO )
 *
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZDRGES3', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_AB_ZDRGES3', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
@@ -2203,7 +2232,7 @@
 *
 *        -------------------------------------------------
 *        ZGX  Generalized Nonsymmetric Eigenvalue Problem
-*              ZGGESX (Schur form and condition numbers)
+*              AB_AB_ZGGESX (Schur form and condition numbers)
 *        -------------------------------------------------
 *
          MAXTYP = 5
@@ -2212,25 +2241,26 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL ZERRGG( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL XLAENV( 5, 2 )
-            CALL ZDRGSX( NN, NCMAX, THRESH, NIN, NOUT, A( 1, 1 ), NMAX,
+     $         CALL AB_ZERRGG( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_XLAENV( 5, 2 )
+            CALL AB_ZDRGSX( NN, NCMAX, THRESH, NIN, NOUT, A( 1, 1 ), NMA
+     $X,
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   A( 1, 6 ), DC( 1, 1 ), DC( 1, 2 ), C,
      $                   NCMAX*NCMAX, S, WORK, LWORK, RWORK, IWORK,
      $                   LIWORK, LOGWRK, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZDRGSX', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_ZDRGSX', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZGV' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZGV' ) ) THEN
 *
 *        -------------------------------------------------
 *        ZGV:  Generalized Nonsymmetric Eigenvalue Problem
-*              ZGGEV (Eigenvalue/vector form)
+*              AB_ZGGEV (Eigenvalue/vector form)
 *        -------------------------------------------------
 *
          MAXTYP = 26
@@ -2239,28 +2269,30 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $           CALL ZERRGG( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL ZDRGEV( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+     $           CALL AB_ZERRGG( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_ZDRGEV( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
      $                   A( 1, 9 ), NMAX, DC( 1, 1 ), DC( 1, 2 ),
      $                   DC( 1, 3 ), DC( 1, 4 ), WORK, LWORK, RWORK,
      $                   RESULT, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZDRGEV', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_ZDRGEV', INFO
 *
 * Blocked version
 *
-            CALL XLAENV(16,2)
-            CALL ZDRGEV3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+            CALL AB_XLAENV(16,2)
+            CALL AB_AB_ZDRGEV3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $ NOUT,
      $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
      $                    A( 1, 9 ), NMAX, DC( 1, 1 ), DC( 1, 2 ),
      $                    DC( 1, 3 ), DC( 1, 4 ), WORK, LWORK, RWORK,
      $                    RESULT, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZDRGEV3', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_AB_ZDRGEV3', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
@@ -2269,7 +2301,7 @@
 *
 *        -------------------------------------------------
 *        ZXV:  Generalized Nonsymmetric Eigenvalue Problem
-*              ZGGEVX (eigenvalue/vector with condition numbers)
+*              AB_AB_ZGGEVX (eigenvalue/vector with condition numbers)
 *        -------------------------------------------------
 *
          MAXTYP = 2
@@ -2278,9 +2310,9 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL ZERRGG( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL ZDRGVX( NN, THRESH, NIN, NOUT, A( 1, 1 ), NMAX,
+     $         CALL AB_ZERRGG( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_ZDRGVX( NN, THRESH, NIN, NOUT, A( 1, 1 ), NMAX,
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), DC( 1, 1 ),
      $                   DC( 1, 2 ), A( 1, 5 ), A( 1, 6 ), IWORK( 1 ),
      $                   IWORK( 2 ), DR( 1, 1 ), DR( 1, 2 ), DR( 1, 3 ),
@@ -2289,12 +2321,12 @@
      $                   LOGWRK, INFO )
 *
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZDRGVX', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_ZDRGVX', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZHB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZHB' ) ) THEN
 *
 *        ------------------------------
 *        ZHB:  Hermitian Band Reduction
@@ -2302,22 +2334,23 @@
 *
          MAXTYP = 15
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
          IF( TSTERR )
-     $      CALL ZERRST( 'ZHB', NOUT )
-*         CALL ZCHKHB( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $      CALL AB_ZERRST( 'ZHB', NOUT )
+*         CALL AB_ZCHKHB( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED, THRESH,
 *     $                NOUT, A( 1, 1 ), NMAX, DR( 1, 1 ), DR( 1, 2 ),
 *     $                A( 1, 2 ), NMAX, WORK, LWORK, RWORK, RESULT,
 *     $                INFO )
-         CALL ZCHKHB2STG( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED,
+         CALL AB_AB_ZCHKHB2STG( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEE
+     $D,
      $                 THRESH, NOUT, A( 1, 1 ), NMAX, DR( 1, 1 ), 
      $                 DR( 1, 2 ), DR( 1, 3 ), DR( 1, 4 ), DR( 1, 5 ),
      $                 A( 1, 2 ), NMAX, WORK, LWORK, RWORK, RESULT, 
      $                 INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'ZCHKHB', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_ZCHKHB', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZBB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'ZBB' ) ) THEN
 *
 *        ------------------------------
 *        ZBB:  General Band Reduction
@@ -2325,7 +2358,7 @@
 *
          MAXTYP = 15
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
          DO 370 I = 1, NPARMS
             NRHS = NSVAL( I )
 *
@@ -2335,95 +2368,100 @@
   360          CONTINUE
             END IF
             WRITE( NOUT, FMT = 9966 )C3, NRHS
-            CALL ZCHKBB( NN, MVAL, NVAL, NK, KVAL, MAXTYP, DOTYPE, NRHS,
+            CALL AB_ZCHKBB( NN, MVAL, NVAL, NK, KVAL, MAXTYP, DOTYPE, NR
+     $HS,
      $                   ISEED, THRESH, NOUT, A( 1, 1 ), NMAX,
      $                   A( 1, 2 ), 2*NMAX, DR( 1, 1 ), DR( 1, 2 ),
      $                   A( 1, 4 ), NMAX, A( 1, 5 ), NMAX, A( 1, 6 ),
      $                   NMAX, A( 1, 7 ), WORK, LWORK, RWORK, RESULT,
      $                   INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'ZCHKBB', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_ZCHKBB', INFO
   370    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'GLM' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'GLM' ) ) THEN
 *
 *        -----------------------------------------
 *        GLM:  Generalized Linear Regression Model
 *        -----------------------------------------
 *
-         CALL XLAENV( 1, 1 )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR )
-     $      CALL ZERRGG( 'GLM', NOUT )
-         CALL ZCKGLM( NN, NVAL, MVAL, PVAL, NTYPES, ISEED, THRESH, NMAX,
+     $      CALL AB_ZERRGG( 'GLM', NOUT )
+         CALL AB_ZCKGLM( NN, NVAL, MVAL, PVAL, NTYPES, ISEED, THRESH, NM
+     $AX,
      $                A( 1, 1 ), A( 1, 2 ), B( 1, 1 ), B( 1, 2 ), X,
      $                WORK, DR( 1, 1 ), NIN, NOUT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'ZCKGLM', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_ZCKGLM', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'GQR' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'GQR' ) ) THEN
 *
 *        ------------------------------------------
 *        GQR:  Generalized QR and RQ factorizations
 *        ------------------------------------------
 *
-         CALL XLAENV( 1, 1 )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR )
-     $      CALL ZERRGG( 'GQR', NOUT )
-         CALL ZCKGQR( NN, MVAL, NN, PVAL, NN, NVAL, NTYPES, ISEED,
+     $      CALL AB_ZERRGG( 'GQR', NOUT )
+         CALL AB_ZCKGQR( NN, MVAL, NN, PVAL, NN, NVAL, NTYPES, ISEED,
      $                THRESH, NMAX, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                A( 1, 4 ), TAUA, B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
      $                B( 1, 4 ), B( 1, 5 ), TAUB, WORK, DR( 1, 1 ), NIN,
      $                NOUT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'ZCKGQR', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_ZCKGQR', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'GSV' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'GSV' ) ) THEN
 *
 *        ----------------------------------------------
 *        GSV:  Generalized Singular Value Decomposition
 *        ----------------------------------------------
 *
-         CALL XLAENV(1,1)
+         CALL AB_XLAENV(1,1)
          IF( TSTERR )
-     $      CALL ZERRGG( 'GSV', NOUT )
-         CALL ZCKGSV( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
+     $      CALL AB_ZERRGG( 'GSV', NOUT )
+         CALL AB_ZCKGSV( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NM
+     $AX,
      $                A( 1, 1 ), A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
      $                A( 1, 3 ), B( 1, 3 ), A( 1, 4 ), ALPHA, BETA,
      $                B( 1, 4 ), IWORK, WORK, DR( 1, 1 ), NIN, NOUT,
      $                INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'ZCKGSV', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_ZCKGSV', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'CSD' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'CSD' ) ) THEN
 *
 *        ----------------------------------------------
 *        CSD:  CS Decomposition
 *        ----------------------------------------------
 *
-         CALL XLAENV(1,1)
+         CALL AB_XLAENV(1,1)
          IF( TSTERR )
-     $      CALL ZERRGG( 'CSD', NOUT )
-         CALL ZCKCSD( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
+     $      CALL AB_ZERRGG( 'CSD', NOUT )
+         CALL AB_ZCKCSD( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NM
+     $AX,
      $                A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), A( 1, 4 ),
      $                A( 1, 5 ), A( 1, 6 ), RWORK, IWORK, WORK,
      $                DR( 1, 1 ), NIN, NOUT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'ZCKCSD', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_ZCKCSD', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'LSE' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'AB_LSE' ) ) THEN
 *
 *        --------------------------------------
-*        LSE:  Constrained Linear Least Squares
+*        AB_LSE:  Constrained Linear Least Squares
 *        --------------------------------------
 *
-         CALL XLAENV( 1, 1 )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR )
-     $      CALL ZERRGG( 'LSE', NOUT )
-         CALL ZCKLSE( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
+     $      CALL AB_ZERRGG( 'AB_LSE', NOUT )
+         CALL AB_ZCKAB_LSE( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH,
+     $ NMAX,
      $                A( 1, 1 ), A( 1, 2 ), B( 1, 1 ), B( 1, 2 ), X,
      $                WORK, DR( 1, 1 ), NIN, NOUT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'ZCKLSE', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_ZCKAB_LSE', INFO
       ELSE
          WRITE( NOUT, FMT = * )
          WRITE( NOUT, FMT = * )
@@ -2433,7 +2471,7 @@
      $   GO TO 190
   380 CONTINUE
       WRITE( NOUT, FMT = 9994 )
-      S2 = DSECND( )
+      S2 = AB_DSECND( )
       WRITE( NOUT, FMT = 9993 )S2 - S1
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
@@ -2443,7 +2481,7 @@
  9995 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NX =', I4,
      $      ', NRHS =', I4 )
  9994 FORMAT( / / ' End of tests' )
- 9993 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9993 FORMAT( ' Total time used = ', F12.2, ' AB_SECONDs', / )
  9992 FORMAT( 1X, A3, ':  Unrecognized path name' )
  9991 FORMAT( / / ' *** Invalid integer value in column ', I2,
      $      ' of input', ' line:', / A79 )
@@ -2462,18 +2500,20 @@
  9981 FORMAT( ' Relative machine ', A, ' is taken to be', D16.6 )
  9980 FORMAT( ' *** Error code from ', A, ' = ', I4 )
  9979 FORMAT( / ' Tests of the Nonsymmetric Eigenvalue Problem Driver',
-     $      / '    ZGEEV (eigenvalues and eigevectors)' )
+     $      / '    AB_ZGEEV (eigenvalues and eigevectors)' )
  9978 FORMAT( / ' Tests of the Nonsymmetric Eigenvalue Problem Driver',
-     $      / '    ZGEES (Schur form)' )
+     $      / '    AB_ZGEES (Schur form)' )
  9977 FORMAT( / ' Tests of the Nonsymmetric Eigenvalue Problem Expert',
-     $      ' Driver', / '    ZGEEVX (eigenvalues, eigenvectors and',
+     $      ' Driver', / '    AB_AB_ZGEEVX (eigenvalues, eigenvectors an
+     $d',
      $      ' condition numbers)' )
  9976 FORMAT( / ' Tests of the Nonsymmetric Eigenvalue Problem Expert',
-     $      ' Driver', / '    ZGEESX (Schur form and condition',
+     $      ' Driver', / '    AB_AB_ZGEESX (Schur form and condition',
      $      ' numbers)' )
  9975 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
      $      'Problem routines' )
- 9974 FORMAT( ' Tests of ZHBTRD', / ' (reduction of a Hermitian band ',
+ 9974 FORMAT( ' Tests of AB_ZHBTRD', / ' (reduction of a Hermitian band 
+     $',
      $      'matrix to real tridiagonal form)' )
  9973 FORMAT( / 1X, 71( '-' ) )
  9972 FORMAT( / ' LAPACK VERSION ', I1, '.', I1, '.', I1 )
@@ -2483,23 +2523,23 @@
  9969 FORMAT( / ' Tests of the Generalized Singular Value',
      $      ' Decomposition routines' )
  9968 FORMAT( / ' Tests of the Linear Least Squares routines' )
- 9967 FORMAT( ' Tests of ZGBBRD', / ' (reduction of a general band ',
+ 9967 FORMAT( ' Tests of AB_ZGBBRD', / ' (reduction of a general band ',
      $      'matrix to real bidiagonal form)' )
  9966 FORMAT( / / 1X, A3, ':  NRHS =', I4 )
  9965 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
-     $      'Problem Expert Driver ZGGESX' )
+     $      'Problem Expert Driver AB_AB_ZGGESX' )
  9964 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
-     $      'Problem Driver ZGGES' )
+     $      'Problem Driver AB_ZGGES' )
  9963 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
-     $      'Problem Driver ZGGEV' )
+     $      'Problem Driver AB_ZGGEV' )
  9962 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
-     $      'Problem Expert Driver ZGGEVX' )
+     $      'Problem Expert Driver AB_AB_ZGGEVX' )
  9961 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NX =', I4,
      $      ', INMIN=', I4,
      $      ', INWIN =', I4, ', INIBL =', I4, ', ISHFTS =', I4,
      $      ', IACC22 =', I4)
  9960 FORMAT( / ' Tests of the CS Decomposition routines' )
 *
-*     End of ZCHKEE
+*     End of AB_ZCHKEE
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> SPTSV computes the solution to system of linear equations A * X = B for PT matrices</b>
+*> \brief <b> AB_SPTSV computes the solution to system of linear equations A * X = B for PT matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPTSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sptsv.f">
+*> Download AB_SPTSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPTSV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sptsv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPTSV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sptsv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPTSV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPTSV( N, NRHS, D, E, B, LDB, INFO )
+*       SUBROUTINE AB_SPTSV( N, NRHS, D, E, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDB, N, NRHS
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> SPTSV computes the solution to a real system of linear equations
+*> AB_SPTSV computes the solution to a real system of linear equations
 *> A*X = B, where A is an N-by-N symmetric positive definite tridiagonal
 *> matrix, and X and B are N-by-NRHS matrices.
 *>
@@ -112,7 +112,7 @@
 *> \ingroup realPTsolve
 *
 *  =====================================================================
-      SUBROUTINE SPTSV( N, NRHS, D, E, B, LDB, INFO )
+      SUBROUTINE AB_SPTSV( N, NRHS, D, E, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,7 +129,7 @@
 *  =====================================================================
 *
 *     .. External Subroutines ..
-      EXTERNAL           SPTTRF, SPTTRS, XERBLA
+      EXTERNAL           AB_SPTTRF, AB_SPTTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -147,21 +147,21 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPTSV ', -INFO )
+         CALL AB_XERBLA( 'AB_SPTSV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the L*D*L**T (or U**T*D*U) factorization of A.
 *
-      CALL SPTTRF( N, D, E, INFO )
+      CALL AB_SPTTRF( N, D, E, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL SPTTRS( N, NRHS, D, E, B, LDB, INFO )
+         CALL AB_SPTTRS( N, NRHS, D, E, B, LDB, INFO )
       END IF
       RETURN
 *
-*     End of SPTSV
+*     End of AB_SPTSV
 *
       END

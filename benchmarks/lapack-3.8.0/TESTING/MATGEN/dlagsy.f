@@ -1,4 +1,4 @@
-*> \brief \b DLAGSY
+*> \brief \b AB_DLAGSY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE AB_DLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DLAGSY generates a real symmetric matrix A, by pre- and post-
+*> AB_DLAGSY generates a real symmetric matrix A, by pre- and post-
 *> multiplying a real diagonal matrix D with a random orthogonal matrix:
 *> A = U*D*U'. The semi-bandwidth may then be reduced to k by additional
 *> orthogonal transformations.
@@ -99,7 +99,7 @@
 *> \ingroup double_matgen
 *
 *  =====================================================================
-      SUBROUTINE DLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE AB_DLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -125,12 +125,13 @@
       DOUBLE PRECISION   ALPHA, TAU, WA, WB, WN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DGEMV, DGER, DLARNV, DSCAL, DSYMV,
-     $                   DSYR2, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DGEMV, AB_DGER, AB_DLARNV, AB_DSCA
+     $L, AB_DSYMV,
+     $                   AB_AB_DSYR2, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DDOT, DNRM2
-      EXTERNAL           DDOT, DNRM2
+      DOUBLE PRECISION   AB_DDOT, AB_DNRM2
+      EXTERNAL           AB_DDOT, AB_DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN
@@ -148,7 +149,7 @@
          INFO = -5
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL XERBLA( 'DLAGSY', -INFO )
+         CALL AB_XERBLA( 'AB_DLAGSY', -INFO )
          RETURN
       END IF
 *
@@ -169,14 +170,14 @@
 *
 *        generate random reflection
 *
-         CALL DLARNV( 3, ISEED, N-I+1, WORK )
-         WN = DNRM2( N-I+1, WORK, 1 )
+         CALL AB_DLARNV( 3, ISEED, N-I+1, WORK )
+         WN = AB_DNRM2( N-I+1, WORK, 1 )
          WA = SIGN( WN, WORK( 1 ) )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = WORK( 1 ) + WA
-            CALL DSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+            CALL AB_DSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
             TAU = WB / WA
          END IF
@@ -186,17 +187,19 @@
 *
 *        compute  y := tau * A * u
 *
-         CALL DSYMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZERO,
+         CALL AB_DSYMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZE
+     $RO,
      $               WORK( N+1 ), 1 )
 *
 *        compute  v := y - 1/2 * tau * ( y, u ) * u
 *
-         ALPHA = -HALF*TAU*DDOT( N-I+1, WORK( N+1 ), 1, WORK, 1 )
-         CALL DAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
+         ALPHA = -HALF*TAU*AB_DDOT( N-I+1, WORK( N+1 ), 1, WORK, 1 )
+         CALL AB_DAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
 *
 *        apply the transformation as a rank-2 update to A(i:n,i:n)
 *
-         CALL DSYR2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1,
+         CALL AB_AB_DSYR2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1
+     $,
      $               A( I, I ), LDA )
    40 CONTINUE
 *
@@ -206,39 +209,41 @@
 *
 *        generate reflection to annihilate A(k+i+1:n,i)
 *
-         WN = DNRM2( N-K-I+1, A( K+I, I ), 1 )
+         WN = AB_DNRM2( N-K-I+1, A( K+I, I ), 1 )
          WA = SIGN( WN, A( K+I, I ) )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = A( K+I, I ) + WA
-            CALL DSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
+            CALL AB_DSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
             A( K+I, I ) = ONE
             TAU = WB / WA
          END IF
 *
 *        apply reflection to A(k+i:n,i+1:k+i-1) from the left
 *
-         CALL DGEMV( 'Transpose', N-K-I+1, K-1, ONE, A( K+I, I+1 ), LDA,
+         CALL AB_DGEMV( 'Transpose', N-K-I+1, K-1, ONE, A( K+I, I+1 ), L
+     $DA,
      $               A( K+I, I ), 1, ZERO, WORK, 1 )
-         CALL DGER( N-K-I+1, K-1, -TAU, A( K+I, I ), 1, WORK, 1,
+         CALL AB_DGER( N-K-I+1, K-1, -TAU, A( K+I, I ), 1, WORK, 1,
      $              A( K+I, I+1 ), LDA )
 *
 *        apply reflection to A(k+i:n,k+i:n) from the left and the right
 *
 *        compute  y := tau * A * u
 *
-         CALL DSYMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
+         CALL AB_DSYMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
      $               A( K+I, I ), 1, ZERO, WORK, 1 )
 *
 *        compute  v := y - 1/2 * tau * ( y, u ) * u
 *
-         ALPHA = -HALF*TAU*DDOT( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
-         CALL DAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
+         ALPHA = -HALF*TAU*AB_DDOT( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
+         CALL AB_DAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
 *
 *        apply symmetric rank-2 update to A(k+i:n,k+i:n)
 *
-         CALL DSYR2( 'Lower', N-K-I+1, -ONE, A( K+I, I ), 1, WORK, 1,
+         CALL AB_AB_DSYR2( 'Lower', N-K-I+1, -ONE, A( K+I, I ), 1, WORK,
+     $ 1,
      $               A( K+I, K+I ), LDA )
 *
          A( K+I, I ) = -WA
@@ -256,6 +261,6 @@
    80 CONTINUE
       RETURN
 *
-*     End of DLAGSY
+*     End of AB_DLAGSY
 *
       END

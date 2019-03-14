@@ -1,4 +1,4 @@
-*> \brief \b DGET51
+*> \brief \b AB_DGET51
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
+*       SUBROUTINE AB_DGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
 *                          RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*>      DGET51  generally checks a decomposition of the form
+*>      AB_DGET51  generally checks a decomposition of the form
 *>
 *>              A = U B V'
 *>
@@ -60,7 +60,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, DGET51 does nothing.
+*>          The size of the matrix.  If it is zero, AB_DGET51 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -146,7 +146,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
+      SUBROUTINE AB_DGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WO
+     $RK,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -174,11 +175,11 @@
       DOUBLE PRECISION   ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY
+      EXTERNAL           AB_DGEMM, AB_DLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -191,8 +192,8 @@
 *
 *     Constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -205,24 +206,25 @@
 *
 *        Tests scaled by the norm(A)
 *
-         ANORM = MAX( DLANGE( '1', N, N, A, LDA, WORK ), UNFL )
+         ANORM = MAX( AB_DLANGE( '1', N, N, A, LDA, WORK ), UNFL )
 *
          IF( ITYPE.EQ.1 ) THEN
 *
 *           ITYPE=1: Compute W = A - UBV'
 *
-            CALL DLACPY( ' ', N, N, A, LDA, WORK, N )
-            CALL DGEMM( 'N', 'N', N, N, N, ONE, U, LDU, B, LDB, ZERO,
+            CALL AB_DLACPY( ' ', N, N, A, LDA, WORK, N )
+            CALL AB_DGEMM( 'N', 'N', N, N, N, ONE, U, LDU, B, LDB, ZERO,
      $                  WORK( N**2+1 ), N )
 *
-            CALL DGEMM( 'N', 'C', N, N, N, -ONE, WORK( N**2+1 ), N, V,
+            CALL AB_DGEMM( 'N', 'C', N, N, N, -ONE, WORK( N**2+1 ), N, V
+     $,
      $                  LDV, ONE, WORK, N )
 *
          ELSE
 *
 *           ITYPE=2: Compute W = A - B
 *
-            CALL DLACPY( ' ', N, N, B, LDB, WORK, N )
+            CALL AB_DLACPY( ' ', N, N, B, LDB, WORK, N )
 *
             DO 20 JCOL = 1, N
                DO 10 JROW = 1, N
@@ -234,7 +236,7 @@
 *
 *        Compute norm(W)/ ( ulp*norm(A) )
 *
-         WNORM = DLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
+         WNORM = AB_DLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
 *
          IF( ANORM.GT.WNORM ) THEN
             RESULT = ( WNORM / ANORM ) / ( N*ULP )
@@ -252,7 +254,8 @@
 *
 *        ITYPE=3: Compute  UU' - I
 *
-         CALL DGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+         CALL AB_DGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WO
+     $RK,
      $               N )
 *
          DO 30 JDIAG = 1, N
@@ -260,12 +263,12 @@
      $         1 ) - ONE
    30    CONTINUE
 *
-         RESULT = MIN( DLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) ),
+         RESULT = MIN( AB_DLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) ),
      $            DBLE( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of DGET51
+*     End of AB_DGET51
 *
       END

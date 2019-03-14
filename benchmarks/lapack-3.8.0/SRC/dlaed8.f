@@ -1,4 +1,4 @@
-*> \brief \b DLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
+*> \brief \b AB_DLAED8 used by AB_SSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAED8 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed8.f">
+*> Download AB_DLAED8 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAED8.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed8.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAED8.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed8.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAED8.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
+*       SUBROUTINE AB_DLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
 *                          CUTPNT, Z, DLAMDA, Q2, LDQ2, W, PERM, GIVPTR,
 *                          GIVCOL, GIVNUM, INDXP, INDX, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> DLAED8 merges the two sets of eigenvalues together into a single
+*> AB_DLAED8 merges the two sets of eigenvalues together into a single
 *> sorted set.  Then it tries to deflate the size of the problem.
 *> There are two ways in which deflation can occur:  when two or more
 *> eigenvalues are close together or if there is a tiny element in the
@@ -109,7 +109,7 @@
 *> \verbatim
 *>          INDXQ is INTEGER array, dimension (N)
 *>         The permutation which separately sorts the two sub-problems
-*>         in D into ascending order.  Note that elements in the second
+*>         in D into ascending order.  Note that elements in the AB_SECOND
 *>         half of this permutation must first have CUTPNT added to
 *>         their values in order to be accurate.
 *> \endverbatim
@@ -121,7 +121,7 @@
 *>         cut which originally split the two submatrices which are now
 *>         being recombined.
 *>         On exit, RHO has been modified to the value required by
-*>         DLAED3.
+*>         AB_DLAED3.
 *> \endverbatim
 *>
 *> \param[in] CUTPNT
@@ -136,7 +136,7 @@
 *>          Z is DOUBLE PRECISION array, dimension (N)
 *>         On entry, Z contains the updating vector (the last row of
 *>         the first sub-eigenvector matrix and the first row of the
-*>         second sub-eigenvector matrix).
+*>         AB_SECOND sub-eigenvector matrix).
 *>         On exit, the contents of Z are destroyed by the updating
 *>         process.
 *> \endverbatim
@@ -145,7 +145,7 @@
 *> \verbatim
 *>          DLAMDA is DOUBLE PRECISION array, dimension (N)
 *>         A copy of the first K eigenvalues which will be used by
-*>         DLAED3 to form the secular equation.
+*>         AB_DLAED3 to form the secular equation.
 *> \endverbatim
 *>
 *> \param[out] Q2
@@ -153,7 +153,7 @@
 *>          Q2 is DOUBLE PRECISION array, dimension (LDQ2,N)
 *>         If ICOMPQ = 0, Q2 is not referenced.  Otherwise,
 *>         a copy of the first K eigenvectors which will be used by
-*>         DLAED7 in a matrix multiply (DGEMM) to update the new
+*>         AB_DLAED7 in a matrix multiply (AB_DGEMM) to update the new
 *>         eigenvectors.
 *> \endverbatim
 *>
@@ -167,7 +167,7 @@
 *> \verbatim
 *>          W is DOUBLE PRECISION array, dimension (N)
 *>         The first k values of the final deflation-altered z-vector and
-*>         will be passed to DLAED3.
+*>         will be passed to AB_DLAED3.
 *> \endverbatim
 *>
 *> \param[out] PERM
@@ -239,7 +239,7 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
+      SUBROUTINE AB_DLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
      $                   CUTPNT, Z, DLAMDA, Q2, LDQ2, W, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INDXP, INDX, INFO )
 *
@@ -273,12 +273,13 @@
       DOUBLE PRECISION   C, EPS, S, T, TAU, TOL
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLAPY2
-      EXTERNAL           IDAMAX, DLAMCH, DLAPY2
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DLAMRG, DROT, DSCAL, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DLAMRG, AB_DROT, AB_DSC
+     $AL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -303,7 +304,7 @@
          INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAED8', -INFO )
+         CALL AB_XERBLA( 'AB_DLAED8', -INFO )
          RETURN
       END IF
 *
@@ -324,7 +325,7 @@
       N1P1 = N1 + 1
 *
       IF( RHO.LT.ZERO ) THEN
-         CALL DSCAL( N2, MONE, Z( N1P1 ), 1 )
+         CALL AB_DSCAL( N2, MONE, Z( N1P1 ), 1 )
       END IF
 *
 *     Normalize z so that norm(z) = 1
@@ -333,7 +334,7 @@
       DO 10 J = 1, N
          INDX( J ) = J
    10 CONTINUE
-      CALL DSCAL( N, T, Z, 1 )
+      CALL AB_DSCAL( N, T, Z, 1 )
       RHO = ABS( TWO*RHO )
 *
 *     Sort the eigenvalues into increasing order
@@ -347,7 +348,7 @@
    30 CONTINUE
       I = 1
       J = CUTPNT + 1
-      CALL DLAMRG( N1, N2, DLAMDA, 1, 1, INDX )
+      CALL AB_DLAMRG( N1, N2, DLAMDA, 1, 1, INDX )
       DO 40 I = 1, N
          D( I ) = DLAMDA( INDX( I ) )
          Z( I ) = W( INDX( I ) )
@@ -355,9 +356,9 @@
 *
 *     Calculate the allowable deflation tolerence
 *
-      IMAX = IDAMAX( N, Z, 1 )
-      JMAX = IDAMAX( N, D, 1 )
-      EPS = DLAMCH( 'Epsilon' )
+      IMAX = AB_IDAMAX( N, Z, 1 )
+      JMAX = AB_IDAMAX( N, D, 1 )
+      EPS = AB_DLAMCH( 'Epsilon' )
       TOL = EIGHT*EPS*ABS( D( JMAX ) )
 *
 *     If the rank-1 modifier is small enough, no more needs to be done
@@ -373,9 +374,10 @@
          ELSE
             DO 60 J = 1, N
                PERM( J ) = INDXQ( INDX( J ) )
-               CALL DCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
+               CALL AB_DCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 
+     $)
    60       CONTINUE
-            CALL DLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
+            CALL AB_DLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
      $                   LDQ )
          END IF
          RETURN
@@ -423,7 +425,7 @@
 *        Find sqrt(a**2+b**2) without overflow or
 *        destructive underflow.
 *
-         TAU = DLAPY2( C, S )
+         TAU = AB_DLAPY2( C, S )
          T = D( J ) - D( JLAM )
          C = C / TAU
          S = -S / TAU
@@ -442,7 +444,7 @@
             GIVNUM( 1, GIVPTR ) = C
             GIVNUM( 2, GIVPTR ) = S
             IF( ICOMPQ.EQ.1 ) THEN
-               CALL DROT( QSIZ, Q( 1, INDXQ( INDX( JLAM ) ) ), 1,
+               CALL AB_DROT( QSIZ, Q( 1, INDXQ( INDX( JLAM ) ) ), 1,
      $                    Q( 1, INDXQ( INDX( J ) ) ), 1, C, S )
             END IF
             T = D( JLAM )*C*C + D( J )*S*S
@@ -500,7 +502,7 @@
             JP = INDXP( J )
             DLAMDA( J ) = D( JP )
             PERM( J ) = INDXQ( INDX( JP ) )
-            CALL DCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
+            CALL AB_DCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
   130    CONTINUE
       END IF
 *
@@ -509,16 +511,16 @@
 *
       IF( K.LT.N ) THEN
          IF( ICOMPQ.EQ.0 ) THEN
-            CALL DCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
+            CALL AB_DCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
          ELSE
-            CALL DCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
-            CALL DLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2,
+            CALL AB_DCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
+            CALL AB_DLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2,
      $                   Q( 1, K+1 ), LDQ )
          END IF
       END IF
 *
       RETURN
 *
-*     End of DLAED8
+*     End of AB_DLAED8
 *
       END

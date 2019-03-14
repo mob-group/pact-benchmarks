@@ -1,4 +1,4 @@
-*> \brief \b ZGBT02
+*> \brief \b AB_ZGBT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
+*       SUBROUTINE AB_ZGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
 *                          LDB, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> ZGBT02 computes the residual for a solution of a banded system of
+*> AB_ZGBT02 computes the residual for a solution of a banded system of
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm( B - A*X ) / ( norm(A) * norm(X) * EPS).
 *> where EPS is the machine precision.
@@ -136,7 +136,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
+      SUBROUTINE AB_ZGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B
+     $,
      $                   LDB, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -166,12 +167,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DZASUM
-      EXTERNAL           LSAME, DLAMCH, DZASUM
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DZASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGBMV
+      EXTERNAL           AB_ZGBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -187,20 +188,20 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N
          I1 = MAX( KD+1-J, 1 )
          I2 = MIN( KD+M-J, KL+KD )
-         ANORM = MAX( ANORM, DZASUM( I2-I1+1, A( I1, J ), 1 ) )
+         ANORM = MAX( ANORM, AB_DZASUM( I2-I1+1, A( I1, J ), 1 ) )
    10 CONTINUE
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
       END IF
 *
-      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
+      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
          N1 = N
       ELSE
          N1 = M
@@ -209,7 +210,8 @@
 *     Compute  B - A*X (or  B - A'*X )
 *
       DO 20 J = 1, NRHS
-         CALL ZGBMV( TRANS, M, N, KL, KU, -CONE, A, LDA, X( 1, J ), 1,
+         CALL AB_ZGBMV( TRANS, M, N, KL, KU, -CONE, A, LDA, X( 1, J ), 1
+     $,
      $               CONE, B( 1, J ), 1 )
    20 CONTINUE
 *
@@ -218,8 +220,8 @@
 *
       RESID = ZERO
       DO 30 J = 1, NRHS
-         BNORM = DZASUM( N1, B( 1, J ), 1 )
-         XNORM = DZASUM( N1, X( 1, J ), 1 )
+         BNORM = AB_DZASUM( N1, B( 1, J ), 1 )
+         XNORM = AB_DZASUM( N1, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -229,6 +231,6 @@
 *
       RETURN
 *
-*     End of ZGBT02
+*     End of AB_ZGBT02
 *
       END

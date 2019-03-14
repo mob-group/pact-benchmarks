@@ -1,4 +1,4 @@
-*> \brief \b DLARRV computes the eigenvectors of the tridiagonal matrix T = L D LT given L, D and the eigenvalues of L D LT.
+*> \brief \b AB_DLARRV computes the eigenvectors of the tridiagonal matrix T = L D LT given L, D and the eigenvalues of L D LT.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARRV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrv.f">
+*> Download AB_DLARRV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARRV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARRV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARRV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARRV( N, VL, VU, D, L, PIVMIN,
+*       SUBROUTINE AB_DLARRV( N, VL, VU, D, L, PIVMIN,
 *                          ISPLIT, M, DOL, DOU, MINRGP,
 *                          RTOL1, RTOL2, W, WERR, WGAP,
 *                          IBLOCK, INDEXW, GERS, Z, LDZ, ISUPPZ,
@@ -42,9 +42,9 @@
 *>
 *> \verbatim
 *>
-*> DLARRV computes the eigenvectors of the tridiagonal matrix
+*> AB_DLARRV computes the eigenvectors of the tridiagonal matrix
 *> T = L D L**T given L, D and APPROXIMATIONS to the eigenvalues of L D L**T.
-*> The input eigenvalues should have been computed by DLARRE.
+*> The input eigenvalues should have been computed by AB_DLARRE.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,13 +69,13 @@
 *>          VU is DOUBLE PRECISION
 *>          Upper bound of the interval that contains the desired
 *>          eigenvalues. VL < VU. 
-*>          Note: VU is currently not used by this implementation of DLARRV, VU is
-*>          passed to DLARRV because it could be used compute gaps on the right end
+*>          Note: VU is currently not used by this implementation of AB_DLARRV, VU is
+*>          passed to AB_DLARRV because it could be used compute gaps on the right end
 *>          of the extremal eigenvalues. However, with not much initial accuracy in
 *>          LAMBDA and VU, the formula can lead to an overestimation of the right gap
 *>          and thus to inadequately early RQI 'convergence'. This is currently
 *>          prevented this by forcing a small right gap. And so it turns out that VU
-*>          is currently not used by this implementation of DLARRV.
+*>          is currently not used by this implementation of AB_DLARRV.
 *> \endverbatim
 *>
 *> \param[in,out] D
@@ -91,7 +91,7 @@
 *>          On entry, the (N-1) subdiagonal elements of the unit
 *>          bidiagonal matrix L are in elements 1 to N-1 of L
 *>          (if the matrix is not split.) At the end of each block
-*>          is stored the corresponding shift as given by DLARRE.
+*>          is stored the corresponding shift as given by AB_DLARRE.
 *>          On exit, L is overwritten.
 *> \endverbatim
 *>
@@ -106,7 +106,7 @@
 *>          ISPLIT is INTEGER array, dimension (N)
 *>          The splitting points, at which T breaks up into blocks.
 *>          The first block consists of rows/columns 1 to
-*>          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1
+*>          ISPLIT( 1 ), the AB_SECOND of rows/columns ISPLIT( 1 )+1
 *>          through ISPLIT( 2 ), etc.
 *> \endverbatim
 *>
@@ -126,7 +126,7 @@
 *>          DOU is INTEGER
 *>          If the user wants to compute only selected eigenvectors from all
 *>          the eigenvalues supplied, he can specify an index range DOL:DOU.
-*>          Or else the setting DOL=1, DOU=M should be applied.
+*>          Or ELSE the setting DOL=1, DOU=M should be applied.
 *>          Note that DOL and DOU refer to the order in which the eigenvalues
 *>          are stored in W.
 *>          If the user wants to compute only selected eigenpairs, then
@@ -159,7 +159,7 @@
 *>          which eigenvectors are to be computed.  The eigenvalues
 *>          should be grouped by split-off block and ordered from
 *>          smallest to largest within the block ( The output array
-*>          W from DLARRE is expected here ). Furthermore, they are with
+*>          W from AB_DLARRE is expected here ). Furthermore, they are with
 *>          respect to the shift of the corresponding root representation
 *>          for their block. On exit, W holds the eigenvalues of the
 *>          UNshifted matrix.
@@ -184,7 +184,7 @@
 *>          The indices of the blocks (submatrices) associated with the
 *>          corresponding eigenvalues in W; IBLOCK(i)=1 if eigenvalue
 *>          W(i) belongs to the first block from the top, =2 if W(i)
-*>          belongs to the second block, etc.
+*>          belongs to the AB_SECOND block, etc.
 *> \endverbatim
 *>
 *> \param[in] INDEXW
@@ -192,7 +192,7 @@
 *>          INDEXW is INTEGER array, dimension (N)
 *>          The indices of the eigenvalues within each block (submatrix);
 *>          for example, INDEXW(i)= 10 and IBLOCK(i)=2 imply that the
-*>          i-th eigenvalue W(i) is the 10-th eigenvalue in the second block.
+*>          i-th eigenvalue W(i) is the 10-th eigenvalue in the AB_SECOND block.
 *> \endverbatim
 *>
 *> \param[in] GERS
@@ -245,20 +245,20 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>
-*>          > 0:  A problem occurred in DLARRV.
+*>          > 0:  A problem occurred in AB_DLARRV.
 *>          < 0:  One of the called subroutines signaled an internal problem.
 *>                Needs inspection of the corresponding parameter IINFO
 *>                for further information.
 *>
-*>          =-1:  Problem in DLARRB when refining a child's eigenvalues.
-*>          =-2:  Problem in DLARRF when computing the RRR of a child.
+*>          =-1:  Problem in AB_DLARRB when refining a child's eigenvalues.
+*>          =-2:  Problem in AB_DLARRF when computing the RRR of a child.
 *>                When a child is inside a tight cluster, it can be difficult
 *>                to find an RRR. A partial remedy from the user's point of
 *>                view is to make the parameter MINRGP smaller and recompile.
 *>                However, as the orthogonality of the computed vectors is
 *>                proportional to 1/MINRGP, the user should be aware that
 *>                he might be trading in precision when he decreases MINRGP.
-*>          =-3:  Problem in DLARRB when refining a single eigenvalue
+*>          =-3:  Problem in AB_DLARRB when refining a single eigenvalue
 *>                after the Rayleigh correction was rejected.
 *>          = 5:  The Rayleigh Quotient Iteration failed to converge to
 *>                full accuracy in MAXITR steps.
@@ -286,7 +286,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLARRV( N, VL, VU, D, L, PIVMIN,
+      SUBROUTINE AB_DLARRV( N, VL, VU, D, L, PIVMIN,
      $                   ISPLIT, M, DOL, DOU, MINRGP,
      $                   RTOL1, RTOL2, W, WERR, WGAP,
      $                   IBLOCK, INDEXW, GERS, Z, LDZ, ISUPPZ,
@@ -336,12 +336,13 @@
      $                   SIGMA, SPDIAM, SSIGMA, TAU, TMP, TOL, ZTZ
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAR1V, DLARRB, DLARRF, DLASET,
-     $                   DSCAL
+      EXTERNAL           AB_DCOPY, AB_DLAR1V, AB_DLARRB, AB_DLARRF, AB_D
+     $LASET,
+     $                   AB_DSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC ABS, DBLE, MAX, MIN
@@ -395,10 +396,10 @@
       ZUSEDW = ZUSEDU - ZUSEDL + 1
 
 
-      CALL DLASET( 'Full', N, ZUSEDW, ZERO, ZERO,
+      CALL AB_DLASET( 'Full', N, ZUSEDW, ZERO, ZERO,
      $                    Z(1,ZUSEDL), LDZ )
 
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
       RQTOL = TWO * EPS
 *
 *     Set expert flags for standard code.
@@ -480,7 +481,7 @@
 *        The eigenvalue approximations will be refined when necessary as
 *        high relative accuracy is required for the computation of the
 *        corresponding eigenvectors.
-         CALL DCOPY( IM, W( WBEGIN ), 1,
+         CALL AB_DCOPY( IM, W( WBEGIN ), 1,
      $                   WORK( WBEGIN ), 1 )
 
 *        We store in W the eigenvalue approximations w.r.t. the original
@@ -556,13 +557,13 @@
                         J = WBEGIN + OLDFST - 1
                      ENDIF
                   ENDIF
-                  CALL DCOPY( IN, Z( IBEGIN, J ), 1, D( IBEGIN ), 1 )
-                  CALL DCOPY( IN-1, Z( IBEGIN, J+1 ), 1, L( IBEGIN ),
+                  CALL AB_DCOPY( IN, Z( IBEGIN, J ), 1, D( IBEGIN ), 1 )
+                  CALL AB_DCOPY( IN-1, Z( IBEGIN, J+1 ), 1, L( IBEGIN ),
      $               1 )
                   SIGMA = Z( IEND, J+1 )
 
 *                 Set the corresponding entries in Z to zero
-                  CALL DLASET( 'Full', IN, 2, ZERO, ZERO,
+                  CALL AB_DLASET( 'Full', IN, 2, ZERO, ZERO,
      $                         Z( IBEGIN, J), LDZ )
                END IF
 
@@ -584,7 +585,7 @@
                   OFFSET = INDEXW( WBEGIN ) - 1
 *                 perform limited bisection (if necessary) to get approximate
 *                 eigenvalues to the precision needed.
-                  CALL DLARRB( IN, D( IBEGIN ),
+                  CALL AB_DLARRB( IN, D( IBEGIN ),
      $                         WORK(INDLLD+IBEGIN-1),
      $                         P, Q, RTOL1, RTOL2, OFFSET,
      $                         WORK(WBEGIN),WGAP(WBEGIN),WERR(WBEGIN),
@@ -598,7 +599,7 @@
 *                 of the unshifted matrix and must be used for computation
 *                 of WGAP, the entries of WORK might stem from RRRs with
 *                 different shifts. The gaps from WBEGIN-1+OLDFST to
-*                 WBEGIN-1+OLDLST are correctly computed in DLARRB.
+*                 WBEGIN-1+OLDLST are correctly computed in AB_DLARRB.
 *                 However, we only allow the gaps to become greater since
 *                 this is what should happen when we decrease WERR
                   IF( OLDFST.GT.1) THEN
@@ -694,7 +695,7 @@
                            P = INDEXW( WBEGIN-1+NEWLST )
                         ENDIF
                         OFFSET = INDEXW( WBEGIN ) - 1
-                        CALL DLARRB( IN, D(IBEGIN),
+                        CALL AB_DLARRB( IN, D(IBEGIN),
      $                       WORK( INDLLD+IBEGIN-1 ),P,P,
      $                       RQTOL, RQTOL, OFFSET,
      $                       WORK(WBEGIN),WGAP(WBEGIN),
@@ -719,8 +720,8 @@
 *                    Compute RRR of child cluster.
 *                    Note that the new RRR is stored in Z
 *
-*                    DLARRF needs LWORK = 2*N
-                     CALL DLARRF( IN, D( IBEGIN ), L( IBEGIN ),
+*                    AB_DLARRF needs LWORK = 2*N
+                     CALL AB_DLARRF( IN, D( IBEGIN ), L( IBEGIN ),
      $                         WORK(INDLD+IBEGIN-1),
      $                         NEWFST, NEWLST, WORK(WBEGIN),
      $                         WGAP(WBEGIN), WERR(WBEGIN),
@@ -728,7 +729,7 @@
      $                         Z(IBEGIN, NEWFTT),Z(IBEGIN, NEWFTT+1),
      $                         WORK( INDWRK ), IINFO )
                      IF( IINFO.EQ.0 ) THEN
-*                       a new RRR for the cluster was found by DLARRF
+*                       a new RRR for the cluster was found by AB_DLARRF
 *                       update shift and store it
                         SSIGMA = SIGMA + TAU
                         Z( IEND, NEWFTT+1 ) = SSIGMA
@@ -849,7 +850,7 @@
                         USEDBS = .TRUE.
                         ITMP1 = IWORK( IINDR+WINDEX )
                         OFFSET = INDEXW( WBEGIN ) - 1
-                        CALL DLARRB( IN, D(IBEGIN),
+                        CALL AB_DLARRB( IN, D(IBEGIN),
      $                       WORK(INDLLD+IBEGIN-1),INDEIG,INDEIG,
      $                       ZERO, TWO*EPS, OFFSET,
      $                       WORK(WBEGIN),WGAP(WBEGIN),
@@ -866,7 +867,7 @@
                         IWORK( IINDR+WINDEX ) = 0
                      ENDIF
 *                    Given LAMBDA, compute the eigenvector.
-                     CALL DLAR1V( IN, 1, IN, LAMBDA, D( IBEGIN ),
+                     CALL AB_DLAR1V( IN, 1, IN, LAMBDA, D( IBEGIN ),
      $                    L( IBEGIN ), WORK(INDLD+IBEGIN-1),
      $                    WORK(INDLLD+IBEGIN-1),
      $                    PIVMIN, GAPTOL, Z( IBEGIN, WINDEX ),
@@ -965,8 +966,8 @@
                            STP2II = .TRUE.
                         ENDIF
                         IF (STP2II) THEN
-*                          improve error angle by second step
-                           CALL DLAR1V( IN, 1, IN, LAMBDA,
+*                          improve error angle by AB_SECOND step
+                           CALL AB_DLAR1V( IN, 1, IN, LAMBDA,
      $                          D( IBEGIN ), L( IBEGIN ),
      $                          WORK(INDLD+IBEGIN-1),
      $                          WORK(INDLLD+IBEGIN-1),
@@ -998,7 +999,7 @@
                            Z( II, WINDEX ) = ZERO
  123                    CONTINUE
                      ENDIF
-                     CALL DSCAL( ZTO-ZFROM+1, NRMINV,
+                     CALL AB_DSCAL( ZTO-ZFROM+1, NRMINV,
      $                       Z( ZFROM, WINDEX ), 1 )
  125                 CONTINUE
 *                    Update W
@@ -1040,6 +1041,6 @@
 
       RETURN
 *
-*     End of DLARRV
+*     End of AB_DLARRV
 *
       END

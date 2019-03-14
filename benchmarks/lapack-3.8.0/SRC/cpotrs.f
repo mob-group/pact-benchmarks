@@ -1,4 +1,4 @@
-*> \brief \b CPOTRS
+*> \brief \b AB_CPOTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPOTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotrs.f">
+*> Download AB_CPOTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPOTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpotrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPOTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPOTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+*       SUBROUTINE AB_CPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> CPOTRS solves a system of linear equations A*X = B with a Hermitian
+*> AB_CPOTRS solves a system of linear equations A*X = B with a Hermitian
 *> positive definite matrix A using the Cholesky factorization
-*> A = U**H*U or A = L*L**H computed by CPOTRF.
+*> A = U**H*U or A = L*L**H computed by AB_CPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -66,7 +66,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The triangular factor U or L from the Cholesky factorization
-*>          A = U**H*U or A = L*L**H, as computed by CPOTRF.
+*>          A = U**H*U or A = L*L**H, as computed by AB_CPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -108,7 +108,7 @@
 *> \ingroup complexPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+      SUBROUTINE AB_CPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,11 +133,11 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTRSM, XERBLA
+      EXTERNAL           AB_CTRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -147,8 +147,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -160,7 +160,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPOTRS', -INFO )
+         CALL AB_XERBLA( 'AB_CPOTRS', -INFO )
          RETURN
       END IF
 *
@@ -175,12 +175,13 @@
 *
 *        Solve U**H *X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose', 'Non-unit',
+         CALL AB_CTRSM( 'Left', 'Upper', 'Conjugate transpose', 'Non-uni
+     $t',
      $               N, NRHS, ONE, A, LDA, B, LDB )
 *
 *        Solve U*X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
+         CALL AB_CTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
       ELSE
 *
@@ -188,17 +189,18 @@
 *
 *        Solve L*X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N,
+         CALL AB_CTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
 *
 *        Solve L**H *X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Lower', 'Conjugate transpose', 'Non-unit',
+         CALL AB_CTRSM( 'Left', 'Lower', 'Conjugate transpose', 'Non-uni
+     $t',
      $               N, NRHS, ONE, A, LDA, B, LDB )
       END IF
 *
       RETURN
 *
-*     End of CPOTRS
+*     End of AB_CPOTRS
 *
       END

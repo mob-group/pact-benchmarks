@@ -1,4 +1,4 @@
-*> \brief \b ZLARND
+*> \brief \b AB_ZLARND
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       COMPLEX*16   FUNCTION ZLARND( IDIST, ISEED )
+*       COMPLEX*16   FUNCTION AB_ZLARND( IDIST, ISEED )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> ZLARND returns a random complex number from a uniform or normal
+*> AB_ZLARND returns a random complex number from a uniform or normal
 *> distribution.
 *> \endverbatim
 *
@@ -67,13 +67,13 @@
 *>
 *> \verbatim
 *>
-*>  This routine calls the auxiliary routine DLARAN to generate a random
+*>  This routine calls the auxiliary routine AB_DLARAN to generate a random
 *>  real number from a uniform (0,1) distribution. The Box-Muller method
 *>  is used to transform numbers from a uniform to a normal distribution.
 *> \endverbatim
 *>
 *  =====================================================================
-      COMPLEX*16   FUNCTION ZLARND( IDIST, ISEED )
+      COMPLEX*16   FUNCTION AB_ZLARND( IDIST, ISEED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -99,8 +99,8 @@
       DOUBLE PRECISION   T1, T2
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLARAN
-      EXTERNAL           DLARAN
+      DOUBLE PRECISION   AB_DLARAN
+      EXTERNAL           AB_DLARAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, EXP, LOG, SQRT
@@ -110,37 +110,38 @@
 *     Generate a pair of real random numbers from a uniform (0,1)
 *     distribution
 *
-      T1 = DLARAN( ISEED )
-      T2 = DLARAN( ISEED )
+      T1 = AB_DLARAN( ISEED )
+      T2 = AB_DLARAN( ISEED )
 *
       IF( IDIST.EQ.1 ) THEN
 *
 *        real and imaginary parts each uniform (0,1)
 *
-         ZLARND = DCMPLX( T1, T2 )
+         AB_ZLARND = DCMPLX( T1, T2 )
       ELSE IF( IDIST.EQ.2 ) THEN
 *
 *        real and imaginary parts each uniform (-1,1)
 *
-         ZLARND = DCMPLX( TWO*T1-ONE, TWO*T2-ONE )
+         AB_ZLARND = DCMPLX( TWO*T1-ONE, TWO*T2-ONE )
       ELSE IF( IDIST.EQ.3 ) THEN
 *
 *        real and imaginary parts each normal (0,1)
 *
-         ZLARND = SQRT( -TWO*LOG( T1 ) )*EXP( DCMPLX( ZERO, TWOPI*T2 ) )
+         AB_ZLARND = SQRT( -TWO*LOG( T1 ) )*EXP( DCMPLX( ZERO, TWOPI*T2 
+     $) )
       ELSE IF( IDIST.EQ.4 ) THEN
 *
 *        uniform distribution on the unit disc abs(z) <= 1
 *
-         ZLARND = SQRT( T1 )*EXP( DCMPLX( ZERO, TWOPI*T2 ) )
+         AB_ZLARND = SQRT( T1 )*EXP( DCMPLX( ZERO, TWOPI*T2 ) )
       ELSE IF( IDIST.EQ.5 ) THEN
 *
 *        uniform distribution on the unit circle abs(z) = 1
 *
-         ZLARND = EXP( DCMPLX( ZERO, TWOPI*T2 ) )
+         AB_ZLARND = EXP( DCMPLX( ZERO, TWOPI*T2 ) )
       END IF
       RETURN
 *
-*     End of ZLARND
+*     End of AB_ZLARND
 *
       END

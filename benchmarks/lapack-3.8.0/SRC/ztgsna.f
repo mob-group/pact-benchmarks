@@ -1,4 +1,4 @@
-*> \brief \b ZTGSNA
+*> \brief \b AB_ZTGSNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTGSNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsna.f">
+*> Download AB_ZTGSNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTGSNA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTGSNA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTGSNA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
+*       SUBROUTINE AB_ZTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
 *                          LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
 *                          IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> ZTGSNA estimates reciprocal condition numbers for specified
+*> AB_ZTGSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or eigenvectors of a matrix pair (A, B).
 *>
 *> (A, B) must be in generalized Schur canonical form, that is, A and
@@ -114,7 +114,7 @@
 *>          IF JOB = 'E' or 'B', VL must contain left eigenvectors of
 *>          (A, B), corresponding to the eigenpairs specified by HOWMNY
 *>          and SELECT.  The eigenvectors must be stored in consecutive
-*>          columns of VL, as returned by ZTGEVC.
+*>          columns of VL, as returned by AB_ZTGEVC.
 *>          If JOB = 'V', VL is not referenced.
 *> \endverbatim
 *>
@@ -131,7 +131,7 @@
 *>          IF JOB = 'E' or 'B', VR must contain right eigenvectors of
 *>          (A, B), corresponding to the eigenpairs specified by HOWMNY
 *>          and SELECT.  The eigenvectors must be stored in consecutive
-*>          columns of VR, as returned by ZTGEVC.
+*>          columns of VR, as returned by AB_ZTGEVC.
 *>          If JOB = 'V', VR is not referenced.
 *> \endverbatim
 *>
@@ -264,7 +264,7 @@
 *>  matrices X and Y.
 *>
 *>  We approximate the smallest singular value of Zl with an upper
-*>  bound. This is done by ZLATDF.
+*>  bound. This is done by AB_ZLATDF.
 *>
 *>  An approximate error bound for a computed eigenvector VL(i) or
 *>  VR(i) is given by
@@ -307,7 +307,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
+      SUBROUTINE AB_ZTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
      $                   LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -345,13 +345,15 @@
       COMPLEX*16         DUMMY( 1 ), DUMMY1( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLAPY2, DZNRM2
-      COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, DLAMCH, DLAPY2, DZNRM2, ZDOTC
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2, AB_DZNRM2
+      COMPLEX*16         AB_ZDOTC
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLAPY2, AB_DZNRM2, AB_Z
+     $DOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, XERBLA, ZGEMV, ZLACPY, ZTGEXC, ZTGSYL
+      EXTERNAL           AB_DLABAD, AB_XERBLA, AB_ZGEMV, AB_ZLACPY, AB_Z
+     $TGEXC, AB_ZTGSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX
@@ -360,18 +362,18 @@
 *
 *     Decode and test the input parameters
 *
-      WANTBH = LSAME( JOB, 'B' )
-      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTDF = LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTBH = AB_LSAME( JOB, 'B' )
+      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTDF = AB_LSAME( JOB, 'V' ) .OR. WANTBH
 *
-      SOMCON = LSAME( HOWMNY, 'S' )
+      SOMCON = AB_LSAME( HOWMNY, 'S' )
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
 *
       IF( .NOT.WANTS .AND. .NOT.WANTDF ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
+      ELSE IF( .NOT.AB_LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -400,7 +402,8 @@
 *
          IF( N.EQ.0 ) THEN
             LWMIN = 1
-         ELSE IF( LSAME( JOB, 'V' ) .OR. LSAME( JOB, 'B' ) ) THEN
+         ELSE IF( AB_LSAME( JOB, 'V' ) .OR. AB_LSAME( JOB, 'B' ) ) TH
+     $EN
             LWMIN = 2*N*N
          ELSE
             LWMIN = N
@@ -415,7 +418,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTGSNA', -INFO )
+         CALL AB_XERBLA( 'AB_ZTGSNA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -428,10 +431,10 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
       KS = 0
       DO 20 K = 1, N
 *
@@ -450,15 +453,15 @@
 *           Compute the reciprocal condition number of the k-th
 *           eigenvalue.
 *
-            RNRM = DZNRM2( N, VR( 1, KS ), 1 )
-            LNRM = DZNRM2( N, VL( 1, KS ), 1 )
-            CALL ZGEMV( 'N', N, N, DCMPLX( ONE, ZERO ), A, LDA,
+            RNRM = AB_DZNRM2( N, VR( 1, KS ), 1 )
+            LNRM = AB_DZNRM2( N, VL( 1, KS ), 1 )
+            CALL AB_ZGEMV( 'N', N, N, DCMPLX( ONE, ZERO ), A, LDA,
      $                  VR( 1, KS ), 1, DCMPLX( ZERO, ZERO ), WORK, 1 )
-            YHAX = ZDOTC( N, WORK, 1, VL( 1, KS ), 1 )
-            CALL ZGEMV( 'N', N, N, DCMPLX( ONE, ZERO ), B, LDB,
+            YHAX = AB_ZDOTC( N, WORK, 1, VL( 1, KS ), 1 )
+            CALL AB_ZGEMV( 'N', N, N, DCMPLX( ONE, ZERO ), B, LDB,
      $                  VR( 1, KS ), 1, DCMPLX( ZERO, ZERO ), WORK, 1 )
-            YHBX = ZDOTC( N, WORK, 1, VL( 1, KS ), 1 )
-            COND = DLAPY2( ABS( YHAX ), ABS( YHBX ) )
+            YHBX = AB_ZDOTC( N, WORK, 1, VL( 1, KS ), 1 )
+            COND = AB_DLAPY2( ABS( YHAX ), ABS( YHBX ) )
             IF( COND.EQ.ZERO ) THEN
                S( KS ) = -ONE
             ELSE
@@ -468,7 +471,8 @@
 *
          IF( WANTDF ) THEN
             IF( N.EQ.1 ) THEN
-               DIF( KS ) = DLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1, 1 ) ) )
+               DIF( KS ) = AB_DLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1, 1 ) )
+     $ )
             ELSE
 *
 *              Estimate the reciprocal condition number of the k-th
@@ -477,12 +481,13 @@
 *              Copy the matrix (A, B) to the array WORK and move the
 *              (k,k)th pair to the (1,1) position.
 *
-               CALL ZLACPY( 'Full', N, N, A, LDA, WORK, N )
-               CALL ZLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
+               CALL AB_ZLACPY( 'Full', N, N, A, LDA, WORK, N )
+               CALL AB_ZLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
                IFST = K
                ILST = 1
 *
-               CALL ZTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
+               CALL AB_ZTGEXC( .FALSE., .FALSE., N, WORK, N, WORK(
+     $ N*N+1 ),
      $                      N, DUMMY, 1, DUMMY1, 1, IFST, ILST, IERR )
 *
                IF( IERR.GT.0 ) THEN
@@ -501,7 +506,8 @@
                   N1 = 1
                   N2 = N - N1
                   I = N*N + 1
-                  CALL ZTGSYL( 'N', IDIFJB, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL AB_ZTGSYL( 'N', IDIFJB, N2, N1, WORK( N*N1+N1+1 )
+     $,
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ), DUMMY,
@@ -514,6 +520,6 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of ZTGSNA
+*     End of AB_ZTGSNA
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SSVDCH
+*> \brief \b AB_SSVDCH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSVDCH( N, S, E, SVD, TOL, INFO )
+*       SUBROUTINE AB_SSVDCH( N, S, E, SVD, TOL, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -24,14 +24,14 @@
 *>
 *> \verbatim
 *>
-*> SSVDCH checks to see if SVD(1) ,..., SVD(N) are accurate singular
+*> AB_SSVDCH checks to see if SVD(1) ,..., SVD(N) are accurate singular
 *> values of the bidiagonal matrix B with diagonal entries
 *> S(1) ,..., S(N) and superdiagonal entries E(1) ,..., E(N-1)).
 *> It does this by expanding each SVD(I) into an interval
 *> [SVD(I) * (1-EPS) , SVD(I) * (1+EPS)], merging overlapping intervals
 *> if any, and using Sturm sequences to count and verify whether each
 *> resulting interval has the correct number of singular values (using
-*> SSVDCT). Here EPS=TOL*MAX(N/10,1)*MACHEP, where MACHEP is the
+*> AB_SSVDCT). Here EPS=TOL*MAX(N/10,1)*MACHEP, where MACHEP is the
 *> machine precision. The routine assumes the singular values are sorted
 *> with SVD(1) the largest and SVD(N) smallest.  If each interval
 *> contains the correct number of singular values, INFO = 0 is returned,
@@ -95,7 +95,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SSVDCH( N, S, E, SVD, TOL, INFO )
+      SUBROUTINE AB_SSVDCH( N, S, E, SVD, TOL, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,11 +123,11 @@
       REAL               EPS, LOWER, OVFL, TUPPR, UNFL, UNFLEP, UPPER
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSVDCT
+      EXTERNAL           AB_SSVDCT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -139,13 +139,13 @@
       INFO = 0
       IF( N.LE.0 )
      $   RETURN
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
-      EPS = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
+      EPS = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     UNFLEP is chosen so that when an eigenvalue is multiplied by the
-*     scale factor sqrt(OVFL)*sqrt(sqrt(UNFL))/MX in SSVDCT, it exceeds
-*     sqrt(UNFL), which is the lower limit for SSVDCT.
+*     scale factor sqrt(OVFL)*sqrt(sqrt(UNFL))/MX in AB_SSVDCT, it exceeds
+*     sqrt(UNFL), which is the lower limit for AB_SSVDCT.
 *
       UNFLEP = ( SQRT( SQRT( UNFL ) ) / SQRT( OVFL ) )*SVD( 1 ) +
      $         UNFL / EPS
@@ -188,8 +188,8 @@
 *
 *     Count singular values in interval [ LOWER, UPPER ]
 *
-      CALL SSVDCT( N, S, E, LOWER, NUML )
-      CALL SSVDCT( N, S, E, UPPER, NUMU )
+      CALL AB_SSVDCT( N, S, E, LOWER, NUML )
+      CALL AB_SSVDCT( N, S, E, UPPER, NUMU )
       COUNT = NUMU - NUML
       IF( LOWER.LT.ZERO )
      $   COUNT = COUNT / 2
@@ -207,6 +207,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of SSVDCH
+*     End of AB_SSVDCH
 *
       END

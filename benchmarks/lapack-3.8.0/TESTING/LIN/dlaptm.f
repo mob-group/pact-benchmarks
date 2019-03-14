@@ -1,4 +1,4 @@
-*> \brief \b DLAPTM
+*> \brief \b AB_DLAPTM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
+*       SUBROUTINE AB_DLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDB, LDX, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DLAPTM multiplies an N by NRHS matrix X by a symmetric tridiagonal
+*> AB_DLAPTM multiplies an N by NRHS matrix X by a symmetric tridiagonal
 *> matrix A and stores the result in a matrix B.  The operation has the
 *> form
 *>
@@ -114,7 +114,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
+      SUBROUTINE AB_DLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -198,6 +198,6 @@
       END IF
       RETURN
 *
-*     End of DLAPTM
+*     End of AB_DLAPTM
 *
       END

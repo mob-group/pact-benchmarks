@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE SGEMQR( SIDE, TRANS, M, N, K, A, LDA, T,
+*      SUBROUTINE AB_SGEMQR( SIDE, TRANS, M, N, K, A, LDA, T,
 *     $                   TSIZE, C, LDC, WORK, LWORK, INFO )
 *
 *
@@ -19,7 +19,7 @@
 *>
 *> \verbatim
 *>
-*> SGEMQR overwrites the general real M-by-N matrix C with
+*> AB_SGEMQR overwrites the general real M-by-N matrix C with
 *>
 *>                      SIDE = 'L'     SIDE = 'R'
 *>     TRANS = 'N':      Q * C          C * Q
@@ -27,7 +27,7 @@
 *>
 *> where Q is a real orthogonal matrix defined as the product
 *> of blocked elementary reflectors computed by tall skinny
-*> QR factorization (SGEQR)
+*> QR factorization (AB_SGEQR)
 *>
 *> \endverbatim
 *
@@ -72,7 +72,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is REAL array, dimension (LDA,K)
-*>          Part of the data structure to represent Q as returned by SGEQR.
+*>          Part of the data structure to represent Q as returned by AB_SGEQR.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -86,7 +86,7 @@
 *> \param[in] T
 *> \verbatim
 *>          T is REAL array, dimension (MAX(5,TSIZE)).
-*>          Part of the data structure to represent Q as returned by SGEQR.
+*>          Part of the data structure to represent Q as returned by AB_SGEQR.
 *> \endverbatim
 *>
 *> \param[in] TSIZE
@@ -120,7 +120,7 @@
 *>          If LWORK = -1, then a workspace query is assumed. The routine
 *>          only calculates the size of the WORK array, returns this
 *>          value as WORK(1), and no error message related to WORK 
-*>          is issued by XERBLA.
+*>          is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -153,20 +153,20 @@
 *>          T(2): row block size (MB)
 *>          T(3): column block size (NB)
 *>          T(6:TSIZE): data structure needed for Q, computed by
-*>                           SLATSQR or SGEQRT
+*>                           AB_SLATSQR or AB_AB_SGEQRT
 *>
 *>  Depending on the matrix dimensions M and N, and row and column
-*>  block sizes MB and NB returned by ILAENV, SGEQR will use either
-*>  SLATSQR (if the matrix is tall-and-skinny) or SGEQRT to compute
+*>  block sizes MB and NB returned by AB_ILAENV, AB_SGEQR will use either
+*>  AB_SLATSQR (if the matrix is tall-and-skinny) or AB_AB_SGEQRT to compute
 *>  the QR factorization.
-*>  This version of SGEMQR will use either SLAMTSQR or SGEMQRT to 
+*>  This version of AB_SGEMQR will use either AB_SLAMTSQR or AB_AB_SGEMQRT to 
 *>  multiply matrix Q by another matrix.
-*>  Further Details in SLAMTSQR or SGEMQRT.
+*>  Further Details in AB_SLAMTSQR or AB_AB_SGEMQRT.
 *>
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGEMQR( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,
+      SUBROUTINE AB_SGEMQR( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,
      $                   C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -190,11 +190,11 @@
       INTEGER            MB, NB, LW, NBLCKS, MN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMQRT, SLAMTSQR, XERBLA
+      EXTERNAL           AB_AB_SGEMQRT, AB_SLAMTSQR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, MOD
@@ -204,10 +204,10 @@
 *     Test the input arguments
 *
       LQUERY  = LWORK.EQ.-1
-      NOTRAN  = LSAME( TRANS, 'N' )
-      TRAN    = LSAME( TRANS, 'T' )
-      LEFT    = LSAME( SIDE, 'L' )
-      RIGHT   = LSAME( SIDE, 'R' )
+      NOTRAN  = AB_LSAME( TRANS, 'N' )
+      TRAN    = AB_LSAME( TRANS, 'T' )
+      LEFT    = AB_LSAME( SIDE, 'L' )
+      RIGHT   = AB_LSAME( SIDE, 'R' )
 *
       MB = INT( T( 2 ) )
       NB = INT( T( 3 ) )
@@ -255,7 +255,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'SGEMQR', -INFO )
+        CALL AB_XERBLA( 'AB_SGEMQR', -INFO )
         RETURN
       ELSE IF( LQUERY ) THEN
         RETURN
@@ -269,10 +269,10 @@
 *
       IF( ( LEFT .AND. M.LE.K ) .OR. ( RIGHT .AND. N.LE.K )
      $     .OR. ( MB.LE.K ) .OR. ( MB.GE.MAX( M, N, K ) ) ) THEN
-        CALL SGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA, T( 6 ),
+        CALL AB_AB_SGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA, T( 6 ),
      $                NB, C, LDC, WORK, INFO )
       ELSE
-        CALL SLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T( 6 ),
+        CALL AB_SLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T( 6 ),
      $                 NB, C, LDC, WORK, LWORK, INFO )
       END IF
 *
@@ -280,6 +280,6 @@
 *
       RETURN
 *
-*     End of SGEMQR
+*     End of AB_SGEMQR
 *
       END

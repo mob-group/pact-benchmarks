@@ -1,4 +1,4 @@
-*> \brief \b SGET37
+*> \brief \b AB_SGET37
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGET37( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_SGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, NIN
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SGET37 tests STRSNA, a routine for estimating condition numbers of
+*> AB_SGET37 tests AB_STRSNA, a routine for estimating condition numbers of
 *> eigenvalues and/or right eigenvectors of a matrix.
 *>
 *> The test matrices are read from a file with logical unit number NIN.
@@ -37,7 +37,7 @@
 *> \verbatim
 *>          RMAX is REAL array, dimension (3)
 *>          Value of the largest test ratio.
-*>          RMAX(1) = largest ratio comparing different calls to STRSNA
+*>          RMAX(1) = largest ratio comparing different calls to AB_STRSNA
 *>          RMAX(2) = largest error in reciprocal condition
 *>                    numbers taking their conditioning into account
 *>          RMAX(3) = largest error in reciprocal condition
@@ -50,17 +50,17 @@
 *>          LMAX is INTEGER array, dimension (3)
 *>          LMAX(i) is example number where largest test ratio
 *>          RMAX(i) is achieved. Also:
-*>          If SGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*>          If SHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*>          If STRSNA returns INFO nonzero on example i, LMAX(3)=i
+*>          If AB_SGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If AB_SHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If AB_STRSNA returns INFO nonzero on example i, LMAX(3)=i
 *> \endverbatim
 *>
 *> \param[out] NINFO
 *> \verbatim
 *>          NINFO is INTEGER array, dimension (3)
-*>          NINFO(1) = No. of times SGEHRD returned INFO nonzero
-*>          NINFO(2) = No. of times SHSEQR returned INFO nonzero
-*>          NINFO(3) = No. of times STRSNA returned INFO nonzero
+*>          NINFO(1) = No. of times AB_SGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times AB_SHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times AB_STRSNA returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -88,7 +88,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SGET37( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_SGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,22 +130,23 @@
      $                   WRTMP( LDT )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEHRD, SHSEQR, SLABAD, SLACPY, SSCAL,
-     $                   STREVC, STRSNA
+      EXTERNAL           AB_SCOPY, AB_SGEHRD, AB_SHSEQR, AB_SLABAD, AB_S
+     $LACPY, AB_SSCAL,
+     $                   AB_STREVC, AB_STRSNA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *
@@ -179,7 +180,7 @@
       DO 30 I = 1, N
          READ( NIN, FMT = * )WRIN( I ), WIIN( I ), SIN( I ), SEPIN( I )
    30 CONTINUE
-      TNRM = SLANGE( 'M', N, N, TMP, LDT, WORK )
+      TNRM = AB_SLANGE( 'M', N, N, TMP, LDT, WORK )
 *
 *     Begin test
 *
@@ -188,17 +189,18 @@
 *        Scale input matrix
 *
          KNT = KNT + 1
-         CALL SLACPY( 'F', N, N, TMP, LDT, T, LDT )
+         CALL AB_SLACPY( 'F', N, N, TMP, LDT, T, LDT )
          VMUL = VAL( ISCL )
          DO 40 I = 1, N
-            CALL SSCAL( N, VMUL, T( 1, I ), 1 )
+            CALL AB_SSCAL( N, VMUL, T( 1, I ), 1 )
    40    CONTINUE
          IF( TNRM.EQ.ZERO )
      $      VMUL = ONE
 *
 *        Compute eigenvalues and eigenvectors
 *
-         CALL SGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
+         CALL AB_SGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
+     $N,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 1 ) = KNT
@@ -213,7 +215,8 @@
 *
 *        Compute Schur form
 *
-         CALL SHSEQR( 'S', 'N', N, 1, N, T, LDT, WR, WI, DUM, 1, WORK,
+         CALL AB_SHSEQR( 'S', 'N', N, 1, N, T, LDT, WR, WI, DUM, 1, WORK
+     $,
      $                LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 2 ) = KNT
@@ -223,12 +226,12 @@
 *
 *        Compute eigenvectors
 *
-         CALL STREVC( 'Both', 'All', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL AB_STREVC( 'Both', 'All', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, N, M, WORK, INFO )
 *
 *        Compute condition numbers
 *
-         CALL STRSNA( 'Both', 'All', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL AB_STRSNA( 'Both', 'All', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, S, SEP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -239,11 +242,11 @@
 *        Sort eigenvalues and condition numbers lexicographically
 *        to compare with inputs
 *
-         CALL SCOPY( N, WR, 1, WRTMP, 1 )
-         CALL SCOPY( N, WI, 1, WITMP, 1 )
-         CALL SCOPY( N, S, 1, STMP, 1 )
-         CALL SCOPY( N, SEP, 1, SEPTMP, 1 )
-         CALL SSCAL( N, ONE / VMUL, SEPTMP, 1 )
+         CALL AB_SCOPY( N, WR, 1, WRTMP, 1 )
+         CALL AB_SCOPY( N, WI, 1, WITMP, 1 )
+         CALL AB_SCOPY( N, S, 1, STMP, 1 )
+         CALL AB_SCOPY( N, SEP, 1, SEPTMP, 1 )
+         CALL AB_SSCAL( N, ONE / VMUL, SEPTMP, 1 )
          DO 80 I = 1, N - 1
             KMIN = I
             VRMIN = WRTMP( I )
@@ -324,7 +327,8 @@
                VMAX = ONE / EPS
             ELSE IF( SEPIN( I )-TOLIN.GT.SEPTMP( I )+TOL ) THEN
                VMAX = ( SEPIN( I )-TOLIN ) / ( SEPTMP( I )+TOL )
-            ELSE IF( SEPIN( I )+TOLIN.LT.EPS*( SEPTMP( I )-TOL ) ) THEN
+            ELSE IF( SEPIN( I )+TOLIN.LT.EPS*( SEPTMP( I )-TOL ) ) TH
+     $EN
                VMAX = ONE / EPS
             ELSE IF( SEPIN( I )+TOLIN.LT.SEPTMP( I )-TOL ) THEN
                VMAX = ( SEPTMP( I )-TOL ) / ( SEPIN( I )+TOLIN )
@@ -391,9 +395,10 @@
 *
          VMAX = ZERO
          DUM( 1 ) = -ONE
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL STRSNA( 'Eigcond', 'All', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_STRSNA( 'Eigcond', 'All', SELECT, N, T, LDT, LE, LDT, R
+     $E,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -409,9 +414,10 @@
 *
 *        Compute eigenvector condition numbers only and compare
 *
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL STRSNA( 'Veccond', 'All', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_STRSNA( 'Veccond', 'All', SELECT, N, T, LDT, LE, LDT, R
+     $E,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -430,9 +436,9 @@
          DO 150 I = 1, N
             SELECT( I ) = .TRUE.
   150    CONTINUE
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL STRSNA( 'Bothcond', 'Some', SELECT, N, T, LDT, LE, LDT,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_STRSNA( 'Bothcond', 'Some', SELECT, N, T, LDT, LE, LDT,
      $                RE, LDT, STMP, SEPTMP, N, M, WORK, N, IWORK,
      $                INFO )
          IF( INFO.NE.0 ) THEN
@@ -449,9 +455,10 @@
 *
 *        Compute eigenvalue condition numbers using SELECT and compare
 *
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL STRSNA( 'Eigcond', 'Some', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_STRSNA( 'Eigcond', 'Some', SELECT, N, T, LDT, LE, LDT, 
+     $RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -467,9 +474,10 @@
 *
 *        Compute eigenvector condition numbers using SELECT and compare
 *
-         CALL SCOPY( N, DUM, 0, STMP, 1 )
-         CALL SCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL STRSNA( 'Veccond', 'Some', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL AB_SCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_STRSNA( 'Veccond', 'Some', SELECT, N, T, LDT, LE, LDT, 
+     $RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -500,10 +508,10 @@
                   IFND = 1
                   LCMP( 2 ) = I
                   LCMP( 3 ) = I + 1
-                  CALL SCOPY( N, RE( 1, I ), 1, RE( 1, 2 ), 1 )
-                  CALL SCOPY( N, RE( 1, I+1 ), 1, RE( 1, 3 ), 1 )
-                  CALL SCOPY( N, LE( 1, I ), 1, LE( 1, 2 ), 1 )
-                  CALL SCOPY( N, LE( 1, I+1 ), 1, LE( 1, 3 ), 1 )
+                  CALL AB_SCOPY( N, RE( 1, I ), 1, RE( 1, 2 ), 1 )
+                  CALL AB_SCOPY( N, RE( 1, I+1 ), 1, RE( 1, 3 ), 1 )
+                  CALL AB_SCOPY( N, LE( 1, I ), 1, LE( 1, 2 ), 1 )
+                  CALL AB_SCOPY( N, LE( 1, I+1 ), 1, LE( 1, 3 ), 1 )
                END IF
   190       CONTINUE
             IF( IFND.EQ.0 ) THEN
@@ -521,8 +529,8 @@
                ELSE
                   LCMP( 3 ) = I
                   IFND = 1
-                  CALL SCOPY( N, RE( 1, I ), 1, RE( 1, 3 ), 1 )
-                  CALL SCOPY( N, LE( 1, I ), 1, LE( 1, 3 ), 1 )
+                  CALL AB_SCOPY( N, RE( 1, I ), 1, RE( 1, 3 ), 1 )
+                  CALL AB_SCOPY( N, LE( 1, I ), 1, LE( 1, 3 ), 1 )
                END IF
   200       CONTINUE
             IF( IFND.EQ.0 ) THEN
@@ -534,9 +542,9 @@
 *
 *        Compute all selected condition numbers
 *
-         CALL SCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL STRSNA( 'Bothcond', 'Some', SELECT, N, T, LDT, LE, LDT,
+         CALL AB_SCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_STRSNA( 'Bothcond', 'Some', SELECT, N, T, LDT, LE, LDT,
      $                RE, LDT, STMP, SEPTMP, N, M, WORK, N, IWORK,
      $                INFO )
          IF( INFO.NE.0 ) THEN
@@ -554,9 +562,10 @@
 *
 *        Compute selected eigenvalue condition numbers
 *
-         CALL SCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL STRSNA( 'Eigcond', 'Some', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL AB_SCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_STRSNA( 'Eigcond', 'Some', SELECT, N, T, LDT, LE, LDT, 
+     $RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -573,9 +582,10 @@
 *
 *        Compute selected eigenvector condition numbers
 *
-         CALL SCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL STRSNA( 'Veccond', 'Some', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL AB_SCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_SCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_STRSNA( 'Veccond', 'Some', SELECT, N, T, LDT, LE, LDT, 
+     $RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -597,6 +607,6 @@
   240 CONTINUE
       GO TO 10
 *
-*     End of SGET37
+*     End of AB_SGET37
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SGET52
+*> \brief \b AB_SGET52
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,16 +8,16 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHAR,
+*       SUBROUTINE AB_SGET52( LEFT, N, A, LDA, B, LDB, E, AB_LDE, ALPHAR,
 *                          ALPHAI, BETA, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            LEFT
-*       INTEGER            LDA, LDB, LDE, N
+*       INTEGER            LDA, LDB, AB_LDE, N
 *       ..
 *       .. Array Arguments ..
 *       REAL               A( LDA, * ), ALPHAI( * ), ALPHAR( * ),
-*      $                   B( LDB, * ), BETA( * ), E( LDE, * ),
+*      $                   B( LDB, * ), BETA( * ), E( AB_LDE, * ),
 *      $                   RESULT( 2 ), WORK( * )
 *       ..
 *
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> SGET52  does an eigenvector check for the generalized eigenvalue
+*> AB_SGET52  does an eigenvector check for the generalized eigenvalue
 *> problem.
 *>
 *> The basic test for right eigenvectors is:
@@ -58,7 +58,7 @@
 *>                         T   T  _
 *> For left eigenvectors, A , B , a, and b  are used.
 *>
-*> SGET52 also tests the normalization of E.  Each eigenvector is
+*> AB_SGET52 also tests the normalization of E.  Each eigenvector is
 *> supposed to be normalized so that the maximum "absolute value"
 *> of its elements is 1, where in this case, "absolute value"
 *> of a complex value x is  |Re(x)| + |Im(x)| ; let us call this
@@ -85,7 +85,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrices.  If it is zero, SGET52 does
+*>          The size of the matrices.  If it is zero, AB_SGET52 does
 *>          nothing.  It must be at least zero.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is REAL array, dimension (LDE, N)
+*>          E is REAL array, dimension (AB_LDE, N)
 *>          The matrix of eigenvectors.  It must be O( 1 ).  Complex
 *>          eigenvalues and eigenvectors always come in pairs, the
 *>          eigenvalue and its conjugate being stored in adjacent
@@ -129,9 +129,9 @@
 *>          complex one is specified by whether ALPHAI(j) is zero or not.
 *> \endverbatim
 *>
-*> \param[in] LDE
+*> \param[in] AB_LDE
 *> \verbatim
-*>          LDE is INTEGER
+*>          AB_LDE is INTEGER
 *>          The leading dimension of E.  It must be at least 1 and at
 *>          least N.
 *> \endverbatim
@@ -196,7 +196,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHAR,
+      SUBROUTINE AB_SGET52( LEFT, N, A, LDA, B, LDB, E, AB_LDE, ALPHAR,
      $                   ALPHAI, BETA, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -206,11 +206,11 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            LEFT
-      INTEGER            LDA, LDB, LDE, N
+      INTEGER            LDA, LDB, AB_LDE, N
 *     ..
 *     .. Array Arguments ..
       REAL               A( LDA, * ), ALPHAI( * ), ALPHAR( * ),
-     $                   B( LDB, * ), BETA( * ), E( LDE, * ),
+     $                   B( LDB, * ), BETA( * ), E( AB_LDE, * ),
      $                   RESULT( 2 ), WORK( * )
 *     ..
 *
@@ -229,11 +229,11 @@
      $                   SAFMIN, SALFI, SALFR, SBETA, SCALE, TEMP1, ULP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV
+      EXTERNAL           AB_SGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL
@@ -245,9 +245,9 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SAFMAX = ONE / SAFMIN
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
       IF( LEFT ) THEN
          TRANS = 'T'
@@ -259,9 +259,9 @@
 *
 *     Norm of A, B, and E:
 *
-      ANORM = MAX( SLANGE( NORMAB, N, N, A, LDA, WORK ), SAFMIN )
-      BNORM = MAX( SLANGE( NORMAB, N, N, B, LDB, WORK ), SAFMIN )
-      ENORM = MAX( SLANGE( 'O', N, N, E, LDE, WORK ), ULP )
+      ANORM = MAX( AB_SLANGE( NORMAB, N, N, A, LDA, WORK ), SAFMIN )
+      BNORM = MAX( AB_SLANGE( NORMAB, N, N, B, LDB, WORK ), SAFMIN )
+      ENORM = MAX( AB_SLANGE( 'O', N, N, E, AB_LDE, WORK ), ULP )
       ALFMAX = SAFMAX / MAX( ONE, BNORM )
       BETMAX = SAFMAX / MAX( ONE, ANORM )
 *
@@ -294,9 +294,11 @@
      $                 ABS( SBETA )*ANORM, SAFMIN )
                ACOEF = SCALE*SBETA
                BCOEFR = SCALE*SALFR
-               CALL SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 1,
+               CALL AB_SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 
+     $1,
      $                     ZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC ),
+               CALL AB_SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC )
+     $,
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
             ELSE
 *
@@ -324,24 +326,30 @@
                   BCOEFI = -BCOEFI
                END IF
 *
-               CALL SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 1,
+               CALL AB_SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 
+     $1,
      $                     ZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC ),
+               CALL AB_SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC )
+     $,
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, BCOEFI, B, LDA, E( 1, JVEC+1 ),
+               CALL AB_SGEMV( TRANS, N, N, BCOEFI, B, LDA, E( 1, JVEC+1 
+     $),
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
 *
-               CALL SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC+1 ),
+               CALL AB_SGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC+1 )
+     $,
      $                     1, ZERO, WORK( N*JVEC+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, -BCOEFI, B, LDA, E( 1, JVEC ),
+               CALL AB_SGEMV( TRANS, N, N, -BCOEFI, B, LDA, E( 1, JVEC )
+     $,
      $                     1, ONE, WORK( N*JVEC+1 ), 1 )
-               CALL SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC+1 ),
+               CALL AB_SGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC+1
+     $ ),
      $                     1, ONE, WORK( N*JVEC+1 ), 1 )
             END IF
          END IF
    10 CONTINUE
 *
-      ERRNRM = SLANGE( 'One', N, N, WORK, N, WORK( N**2+1 ) ) / ENORM
+      ERRNRM = AB_SLANGE( 'One', N, N, WORK, N, WORK( N**2+1 ) ) / ENORM
 *
 *     Compute RESULT(1)
 *
@@ -378,6 +386,6 @@
 *
       RETURN
 *
-*     End of SGET52
+*     End of AB_SGET52
 *
       END

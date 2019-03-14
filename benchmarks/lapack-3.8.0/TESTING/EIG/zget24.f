@@ -1,4 +1,4 @@
-*> \brief \b ZGET24
+*> \brief \b AB_ZGET24
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
+*       SUBROUTINE AB_ZGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
 *                          H, HT, W, WT, WTMP, VS, LDVS, VS1, RCDEIN,
 *                          RCDVIN, NSLCT, ISLCT, ISRT, RESULT, WORK,
 *                          LWORK, RWORK, BWORK, INFO )
@@ -34,8 +34,8 @@
 *>
 *> \verbatim
 *>
-*>    ZGET24 checks the nonsymmetric eigenvalue (Schur form) problem
-*>    expert driver ZGEESX.
+*>    AB_ZGET24 checks the nonsymmetric eigenvalue (Schur form) problem
+*>    expert driver AB_AB_ZGEESX.
 *>
 *>    If COMP = .FALSE., the first 13 of the following tests will be
 *>    be performed on the input matrix A, and also tests 14 and 15
@@ -104,7 +104,7 @@
 *>    (16)  |RCONDE - RCDEIN| / cond(RCONDE)
 *>
 *>       RCONDE is the reciprocal average eigenvalue condition number
-*>       computed by ZGEESX and RCDEIN (the precomputed true value)
+*>       computed by AB_AB_ZGEESX and RCDEIN (the precomputed true value)
 *>       is supplied as input.  cond(RCONDE) is the condition number
 *>       of RCONDE, and takes errors in computing RCONDE into account,
 *>       so that the resulting quantity should be O(ULP). cond(RCONDE)
@@ -113,7 +113,7 @@
 *>    (17)  |RCONDV - RCDVIN| / cond(RCONDV)
 *>
 *>       RCONDV is the reciprocal right invariant subspace condition
-*>       number computed by ZGEESX and RCDVIN (the precomputed true
+*>       number computed by AB_AB_ZGEESX and RCDVIN (the precomputed true
 *>       value) is supplied as input. cond(RCONDV) is the condition
 *>       number of RCONDV, and takes errors in computing RCONDV into
 *>       account, so that the resulting quantity should be O(ULP).
@@ -188,13 +188,13 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX*16 array, dimension (LDA, N)
-*>          Another copy of the test matrix A, modified by ZGEESX.
+*>          Another copy of the test matrix A, modified by AB_AB_ZGEESX.
 *> \endverbatim
 *>
 *> \param[out] HT
 *> \verbatim
 *>          HT is COMPLEX*16 array, dimension (LDA, N)
-*>          Yet another copy of the test matrix A, modified by ZGEESX.
+*>          Yet another copy of the test matrix A, modified by AB_AB_ZGEESX.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -207,7 +207,7 @@
 *> \verbatim
 *>          WT is COMPLEX*16 array, dimension (N)
 *>          Like W, this array contains the eigenvalues of A,
-*>          but those computed when ZGEESX only computes a partial
+*>          but those computed when AB_AB_ZGEESX only computes a partial
 *>          eigendecomposition, i.e. not Schur vectors
 *> \endverbatim
 *>
@@ -293,7 +293,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The number of entries in WORK to be passed to ZGEESX. This
+*>          The number of entries in WORK to be passed to AB_AB_ZGEESX. This
 *>          must be at least 2*N, and N*(N+1)/2 if tests 14--16 are to
 *>          be performed.
 *> \endverbatim
@@ -313,7 +313,7 @@
 *>          INFO is INTEGER
 *>          If 0,  successful exit.
 *>          If <0, input parameter -INFO had an incorrect value.
-*>          If >0, ZGEESX returned an error code, the absolute
+*>          If >0, AB_AB_ZGEESX returned an error code, the absolute
 *>                 value of which is returned.
 *> \endverbatim
 *
@@ -330,7 +330,8 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
+      SUBROUTINE AB_ZGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LD
+     $A,
      $                   H, HT, W, WT, WTMP, VS, LDVS, VS1, RCDEIN,
      $                   RCDVIN, NSLCT, ISLCT, ISRT, RESULT, WORK,
      $                   LWORK, RWORK, BWORK, INFO )
@@ -379,12 +380,13 @@
       INTEGER            IPNT( 20 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            ZSLECT
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           ZSLECT, DLAMCH, ZLANGE
+      LOGICAL            AB_ZSLECT
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_ZSLECT, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZGEESX, ZGEMM, ZLACPY, ZUNT01
+      EXTERNAL           AB_XERBLA, AB_ZCOPY, AB_AB_ZGEESX, AB_ZGEMM, AB
+     $_ZLACPY, AB_ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -419,7 +421,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGET24', -INFO )
+         CALL AB_XERBLA( 'AB_ZGET24', -INFO )
          RETURN
       END IF
 *
@@ -434,8 +436,8 @@
 *
 *     Important constants
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
 *
 *     Perform tests (1)-(13)
@@ -452,24 +454,26 @@
 *
 *        Compute Schur form and Schur vectors, and test them
 *
-         CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL ZGEESX( 'V', SORT, ZSLECT, 'N', N, H, LDA, SDIM, W, VS,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL AB_AB_ZGEESX( 'V', SORT, AB_ZSLECT, 'N', N, H, LDA, SDIM, 
+     $W, VS,
      $                LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK, BWORK,
      $                IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1+RSUB ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'ZGEESX1', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEESX1', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'ZGEESX1', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX1', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
             RETURN
          END IF
          IF( ISORT.EQ.0 ) THEN
-            CALL ZCOPY( N, W, 1, WTMP, 1 )
+            CALL AB_ZCOPY( N, W, 1, WTMP, 1 )
          END IF
 *
 *        Do Test (1) or Test (7)
@@ -486,20 +490,21 @@
 *
 *        Copy A to VS1, used as workspace
 *
-         CALL ZLACPY( ' ', N, N, A, LDA, VS1, LDVS )
+         CALL AB_ZLACPY( ' ', N, N, A, LDA, VS1, LDVS )
 *
 *        Compute Q*H and store in HT.
 *
-         CALL ZGEMM( 'No transpose', 'No transpose', N, N, N, CONE, VS,
+         CALL AB_ZGEMM( 'No transpose', 'No transpose', N, N, N, CONE, V
+     $S,
      $               LDVS, H, LDA, CZERO, HT, LDA )
 *
 *        Compute A - Q*H*Q'
 *
-         CALL ZGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
+         CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
      $               -CONE, HT, LDA, VS, LDVS, CONE, VS1, LDVS )
 *
-         ANORM = MAX( ZLANGE( '1', N, N, A, LDA, RWORK ), SMLNUM )
-         WNORM = ZLANGE( '1', N, N, VS1, LDVS, RWORK )
+         ANORM = MAX( AB_ZLANGE( '1', N, N, A, LDA, RWORK ), SMLNUM )
+         WNORM = AB_ZLANGE( '1', N, N, VS1, LDVS, RWORK )
 *
          IF( ANORM.GT.WNORM ) THEN
             RESULT( 2+RSUB ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -515,7 +520,7 @@
 *
 *        Test (3) or (9):  Compute norm( I - Q'*Q ) / ( N * ULP )
 *
-         CALL ZUNT01( 'Columns', N, N, VS, LDVS, WORK, LWORK, RWORK,
+         CALL AB_ZUNT01( 'Columns', N, N, VS, LDVS, WORK, LWORK, RWORK,
      $                RESULT( 3+RSUB ) )
 *
 *        Do Test (4) or Test (10)
@@ -528,17 +533,19 @@
 *
 *        Do Test (5) or Test (11)
 *
-         CALL ZLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL ZGEESX( 'N', SORT, ZSLECT, 'N', N, HT, LDA, SDIM, WT, VS,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_ZGEESX( 'N', SORT, AB_ZSLECT, 'N', N, HT, LDA, SDIM,
+     $ WT, VS,
      $                LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK, BWORK,
      $                IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 5+RSUB ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'ZGEESX2', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEESX2', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'ZGEESX2', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX2', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -567,11 +574,12 @@
             RESULT( 13 ) = ZERO
             KNTEIG = 0
             DO 80 I = 1, N
-               IF( ZSLECT( W( I ) ) )
+               IF( AB_ZSLECT( W( I ) ) )
      $            KNTEIG = KNTEIG + 1
                IF( I.LT.N ) THEN
-                  IF( ZSLECT( W( I+1 ) ) .AND.
-     $                ( .NOT.ZSLECT( W( I ) ) ) )RESULT( 13 ) = ULPINV
+                  IF( AB_ZSLECT( W( I+1 ) ) .AND.
+     $                ( .NOT.AB_ZSLECT( W( I ) ) ) )RESULT( 13 ) = ULPIN
+     $V
                END IF
    80       CONTINUE
             IF( SDIM.NE.KNTEIG )
@@ -590,18 +598,20 @@
          SORT = 'S'
          RESULT( 14 ) = ZERO
          RESULT( 15 ) = ZERO
-         CALL ZLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL ZGEESX( 'V', SORT, ZSLECT, 'B', N, HT, LDA, SDIM1, WT,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_ZGEESX( 'V', SORT, AB_ZSLECT, 'B', N, HT, LDA, SDIM1
+     $, WT,
      $                VS1, LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 14 ) = ULPINV
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'ZGEESX3', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEESX3', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'ZGEESX3', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX3', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -625,18 +635,20 @@
 *
 *        Compute both RCONDE and RCONDV without VS, and compare
 *
-         CALL ZLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL ZGEESX( 'N', SORT, ZSLECT, 'B', N, HT, LDA, SDIM1, WT,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_ZGEESX( 'N', SORT, AB_ZSLECT, 'B', N, HT, LDA, SDIM1
+     $, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 14 ) = ULPINV
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'ZGEESX4', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEESX4', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'ZGEESX4', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX4', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -667,17 +679,19 @@
 *
 *        Compute RCONDE with VS, and compare
 *
-         CALL ZLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL ZGEESX( 'V', SORT, ZSLECT, 'E', N, HT, LDA, SDIM1, WT,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_ZGEESX( 'V', SORT, AB_ZSLECT, 'E', N, HT, LDA, SDIM1
+     $, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 14 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'ZGEESX5', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEESX5', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'ZGEESX5', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX5', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -706,17 +720,19 @@
 *
 *        Compute RCONDE without VS, and compare
 *
-         CALL ZLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL ZGEESX( 'N', SORT, ZSLECT, 'E', N, HT, LDA, SDIM1, WT,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_ZGEESX( 'N', SORT, AB_ZSLECT, 'E', N, HT, LDA, SDIM1
+     $, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 14 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'ZGEESX6', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEESX6', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'ZGEESX6', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX6', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -745,17 +761,19 @@
 *
 *        Compute RCONDV with VS, and compare
 *
-         CALL ZLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL ZGEESX( 'V', SORT, ZSLECT, 'V', N, HT, LDA, SDIM1, WT,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_ZGEESX( 'V', SORT, AB_ZSLECT, 'V', N, HT, LDA, SDIM1
+     $, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'ZGEESX7', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEESX7', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'ZGEESX7', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX7', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -784,17 +802,19 @@
 *
 *        Compute RCONDV without VS, and compare
 *
-         CALL ZLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL ZGEESX( 'N', SORT, ZSLECT, 'V', N, HT, LDA, SDIM1, WT,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_ZGEESX( 'N', SORT, AB_ZSLECT, 'V', N, HT, LDA, SDIM1
+     $, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'ZGEESX8', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEESX8', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'ZGEESX8', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX8', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -831,7 +851,7 @@
       IF( COMP ) THEN
 *
 *        First set up SELOPT, SELDIM, SELVAL, SELWR and SELWI so that
-*        the logical function ZSLECT selects the eigenvalues specified
+*        the logical function AB_ZSLECT selects the eigenvalues specified
 *        by NSLCT, ISLCT and ISRT.
 *
          SELDIM = N
@@ -874,14 +894,16 @@
 *
 *        Compute condition numbers
 *
-         CALL ZLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL ZGEESX( 'N', 'S', ZSLECT, 'B', N, HT, LDA, SDIM1, WT, VS1,
+         CALL AB_ZLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_ZGEESX( 'N', 'S', AB_ZSLECT, 'B', N, HT, LDA, SDIM1,
+     $ WT, VS1,
      $                LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK, BWORK,
      $                IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 16 ) = ULPINV
             RESULT( 17 ) = ULPINV
-            WRITE( NOUNIT, FMT = 9999 )'ZGEESX9', IINFO, N, ISEED( 1 )
+            WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEESX9', IINFO, N, ISEED(
+     $ 1 )
             INFO = ABS( IINFO )
             GO TO 270
          END IF
@@ -889,7 +911,7 @@
 *        Compare condition number for average of selected eigenvalues
 *        taking its condition number into account
 *
-         ANORM = ZLANGE( '1', N, N, A, LDA, RWORK )
+         ANORM = AB_ZLANGE( '1', N, N, A, LDA, RWORK )
          V = MAX( DBLE( N )*EPS*ANORM, SMLNUM )
          IF( ANORM.EQ.ZERO )
      $      V = ONE
@@ -948,13 +970,13 @@
 *
       END IF
 *
- 9999 FORMAT( ' ZGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_ZGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', INPUT EXAMPLE NUMBER = ', I4 )
- 9998 FORMAT( ' ZGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' AB_ZGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of ZGET24
+*     End of AB_ZGET24
 *
       END

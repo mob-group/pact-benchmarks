@@ -1,4 +1,4 @@
-*> \brief \b SRZT01
+*> \brief \b AB_SRZT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION SRZT01( M, N, A, AF, LDA, TAU, WORK,
+*       REAL             FUNCTION AB_SRZT01( M, N, A, AF, LDA, TAU, WORK,
 *                        LWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,9 +25,9 @@
 *>
 *> \verbatim
 *>
-*> SRZT01 returns
+*> AB_SRZT01 returns
 *>      || A - R*Q || / ( M * eps * ||A|| )
-*> for an upper trapezoidal A that was factored with STZRZF.
+*> for an upper trapezoidal A that was factored with AB_STZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -54,7 +54,7 @@
 *> \param[in] AF
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
-*>          The output of STZRZF for input matrix A.
+*>          The output of AB_STZRZF for input matrix A.
 *>          The lower triangle is not referenced.
 *> \endverbatim
 *>
@@ -67,8 +67,8 @@
 *> \param[in] TAU
 *> \verbatim
 *>          TAU is REAL array, dimension (M)
-*>          Details of the Householder transformations as returned by
-*>          STZRZF.
+*>          Details of the HousehoAB_LDEr transformations as returned by
+*>          AB_STZRZF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -95,7 +95,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      REAL             FUNCTION SRZT01( M, N, A, AF, LDA, TAU, WORK,
+      REAL             FUNCTION AB_SRZT01( M, N, A, AF, LDA, TAU, WORK,
      $                 LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -125,21 +125,21 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SLASET, SORMRZ, XERBLA
+      EXTERNAL           AB_SAXPY, AB_SLASET, AB_SORMRZ, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      SRZT01 = ZERO
+      AB_SRZT01 = ZERO
 *
       IF( LWORK.LT.M*N+M ) THEN
-         CALL XERBLA( 'SRZT01', 8 )
+         CALL AB_XERBLA( 'AB_SRZT01', 8 )
          RETURN
       END IF
 *
@@ -148,11 +148,11 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      NORMA = SLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      NORMA = AB_SLANGE( 'One-norm', M, N, A, LDA, RWORK )
 *
 *     Copy upper triangle R
 *
-      CALL SLASET( 'Full', M, N, ZERO, ZERO, WORK, M )
+      CALL AB_SLASET( 'Full', M, N, ZERO, ZERO, WORK, M )
       DO 20 J = 1, M
          DO 10 I = 1, J
             WORK( ( J-1 )*M+I ) = AF( I, J )
@@ -161,23 +161,25 @@
 *
 *     R = R * P(1) * ... *P(m)
 *
-      CALL SORMRZ( 'Right', 'No tranpose', M, N, M, N-M, AF, LDA, TAU,
+      CALL AB_SORMRZ( 'Right', 'No tranpose', M, N, M, N-M, AF, LDA, TAU
+     $,
      $             WORK, M, WORK( M*N+1 ), LWORK-M*N, INFO )
 *
 *     R = R - A
 *
       DO 30 I = 1, N
-         CALL SAXPY( M, -ONE, A( 1, I ), 1, WORK( ( I-1 )*M+1 ), 1 )
+         CALL AB_SAXPY( M, -ONE, A( 1, I ), 1, WORK( ( I-1 )*M+1 ), 1 )
    30 CONTINUE
 *
-      SRZT01 = SLANGE( 'One-norm', M, N, WORK, M, RWORK )
+      AB_SRZT01 = AB_SLANGE( 'One-norm', M, N, WORK, M, RWORK )
 *
-      SRZT01 = SRZT01 / ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
+      AB_SRZT01 = AB_SRZT01 / ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N )
+     $ ) )
       IF( NORMA.NE.ZERO )
-     $   SRZT01 = SRZT01 / NORMA
+     $   AB_SRZT01 = AB_SRZT01 / NORMA
 *
       RETURN
 *
-*     End of SRZT01
+*     End of AB_SRZT01
 *
       END

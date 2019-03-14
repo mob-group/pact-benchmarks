@@ -1,4 +1,4 @@
-*> \brief \b CGET36
+*> \brief \b AB_CGET36
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGET36( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_CGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NIN, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CGET36 tests CTREXC, a routine for reordering diagonal entries of a
+*> AB_CGET36 tests AB_CTREXC, a routine for reordering diagonal entries of a
 *> matrix in complex Schur form. Thus, CLAEXC computes a unitary matrix
 *> Q such that
 *>
@@ -83,7 +83,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGET36( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_CGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -117,15 +117,16 @@
      $                   T2( LDT, LDT ), TMP( LDT, LDT ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CHST01, CLACPY, CLASET, CTREXC
+      EXTERNAL           AB_CCOPY, AB_CHST01, AB_CLACPY, AB_CLASET, AB_C
+     $TREXC
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'P' )
+      EPS = AB_SLAMCH( 'P' )
       RMAX = ZERO
       LMAX = 0
       KNT = 0
@@ -141,14 +142,14 @@
       DO 20 I = 1, N
          READ( NIN, FMT = * )( TMP( I, J ), J = 1, N )
    20 CONTINUE
-      CALL CLACPY( 'F', N, N, TMP, LDT, T1, LDT )
-      CALL CLACPY( 'F', N, N, TMP, LDT, T2, LDT )
+      CALL AB_CLACPY( 'F', N, N, TMP, LDT, T1, LDT )
+      CALL AB_CLACPY( 'F', N, N, TMP, LDT, T2, LDT )
       RES = ZERO
 *
 *     Test without accumulating Q
 *
-      CALL CLASET( 'Full', N, N, CZERO, CONE, Q, LDT )
-      CALL CTREXC( 'N', N, T1, LDT, Q, LDT, IFST, ILST, INFO1 )
+      CALL AB_CLASET( 'Full', N, N, CZERO, CONE, Q, LDT )
+      CALL AB_CTREXC( 'N', N, T1, LDT, Q, LDT, IFST, ILST, INFO1 )
       DO 40 I = 1, N
          DO 30 J = 1, N
             IF( I.EQ.J .AND. Q( I, J ).NE.CONE )
@@ -160,8 +161,8 @@
 *
 *     Test with accumulating Q
 *
-      CALL CLASET( 'Full', N, N, CZERO, CONE, Q, LDT )
-      CALL CTREXC( 'V', N, T2, LDT, Q, LDT, IFST, ILST, INFO2 )
+      CALL AB_CLASET( 'Full', N, N, CZERO, CONE, Q, LDT )
+      CALL AB_CTREXC( 'V', N, T2, LDT, Q, LDT, IFST, ILST, INFO2 )
 *
 *     Compare T1 with T2
 *
@@ -178,7 +179,7 @@
 *
 *     Test for successful reordering of T2
 *
-      CALL CCOPY( N, TMP, LDT+1, DIAG, 1 )
+      CALL AB_CCOPY( N, TMP, LDT+1, DIAG, 1 )
       IF( IFST.LT.ILST ) THEN
          DO 70 I = IFST + 1, ILST
             CTEMP = DIAG( I )
@@ -199,7 +200,7 @@
 *
 *     Test for small residual, and orthogonality of Q
 *
-      CALL CHST01( N, 1, N, TMP, LDT, T2, LDT, Q, LDT, WORK, LWORK,
+      CALL AB_CHST01( N, 1, N, TMP, LDT, T2, LDT, Q, LDT, WORK, LWORK,
      $             RWORK, RESULT )
       RES = RES + RESULT( 1 ) + RESULT( 2 )
 *
@@ -217,6 +218,6 @@
       END IF
       GO TO 10
 *
-*     End of CGET36
+*     End of AB_CGET36
 *
       END

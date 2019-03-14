@@ -1,4 +1,4 @@
-*> \brief \b SSTT21
+*> \brief \b AB_SSTT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+*       SUBROUTINE AB_SSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
 *                          RESULT )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> SSTT21 checks a decomposition of the form
+*> AB_SSTT21 checks a decomposition of the form
 *>
 *>    A = U S U'
 *>
@@ -44,7 +44,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, SSTT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_SSTT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -124,7 +124,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+      SUBROUTINE AB_SSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,11 +151,11 @@
       REAL               ANORM, TEMP1, TEMP2, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLASET, SSYR, SSYR2
+      EXTERNAL           AB_SGEMM, AB_SLASET, AB_SSYR, AB_AB_SSYR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -169,14 +169,14 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
 *
 *     Do Test 1
 *
 *     Copy A & Compute its 1-Norm:
 *
-      CALL SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+      CALL AB_SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
 *
       ANORM = ZERO
       TEMP1 = ZERO
@@ -195,17 +195,18 @@
 *     Norm of A - USU'
 *
       DO 20 J = 1, N
-         CALL SSYR( 'L', N, -SD( J ), U( 1, J ), 1, WORK, N )
+         CALL AB_SSYR( 'L', N, -SD( J ), U( 1, J ), 1, WORK, N )
    20 CONTINUE
 *
       IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
          DO 30 J = 1, N - 1
-            CALL SSYR2( 'L', N, -SE( J ), U( 1, J ), 1, U( 1, J+1 ), 1,
+            CALL AB_AB_SSYR2( 'L', N, -SE( J ), U( 1, J ), 1, U( 1, J+1 
+     $), 1,
      $                  WORK, N )
    30    CONTINUE
       END IF
 *
-      WNORM = SLANSY( '1', 'L', N, WORK, N, WORK( N**2+1 ) )
+      WNORM = AB_SLANSY( '1', 'L', N, WORK, N, WORK( N**2+1 ) )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -221,18 +222,18 @@
 *
 *     Compute  UU' - I
 *
-      CALL SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+      CALL AB_SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
      $            N )
 *
       DO 40 J = 1, N
          WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
    40 CONTINUE
 *
-      RESULT( 2 ) = MIN( REAL( N ), SLANGE( '1', N, N, WORK, N,
+      RESULT( 2 ) = MIN( REAL( N ), AB_SLANGE( '1', N, N, WORK, N,
      $              WORK( N**2+1 ) ) ) / ( N*ULP )
 *
       RETURN
 *
-*     End of SSTT21
+*     End of AB_SSTT21
 *
       END

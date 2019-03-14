@@ -1,4 +1,4 @@
-*> \brief \b DERRAB
+*> \brief \b AB_DERRAB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DERRAB( NUNIT )
+*       SUBROUTINE AB_DERRAB( NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> DERRAB tests the error exits for DSGESV.
+*> AB_DERRAB tests the error exits for AB_DAB_SGESV.
 *> \endverbatim
 *
 *  Arguments:
@@ -45,7 +45,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DERRAB( NUNIT )
+      SUBROUTINE AB_DERRAB( NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -74,7 +74,7 @@
       REAL               SWORK(1)
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, DSGESV
+      EXTERNAL           AB_CHKXER, AB_DAB_SGESV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -111,29 +111,29 @@
    20 CONTINUE
       OK = .TRUE.
 *
-      SRNAMT = 'DSGESV'
+      SRNAMT = 'AB_DAB_SGESV'
       INFOT = 1
-      CALL DSGESV(-1,0,A,1,IP,B,1,X,1,WORK,SWORK,ITER,INFO)
-      CALL CHKXER( 'DSGESV', INFOT, NOUT, LERR, OK )
+      CALL AB_DAB_SGESV(-1,0,A,1,IP,B,1,X,1,WORK,SWORK,ITER,INFO)
+      CALL AB_CHKXER( 'AB_DAB_SGESV', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DSGESV(0,-1,A,1,IP,B,1,X,1,WORK,SWORK,ITER,INFO)
-      CALL CHKXER( 'DSGESV', INFOT, NOUT, LERR, OK )
+      CALL AB_DAB_SGESV(0,-1,A,1,IP,B,1,X,1,WORK,SWORK,ITER,INFO)
+      CALL AB_CHKXER( 'AB_DAB_SGESV', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DSGESV(2,1,A,1,IP,B,2,X,2,WORK,SWORK,ITER,INFO)
-      CALL CHKXER( 'DSGESV', INFOT, NOUT, LERR, OK )
+      CALL AB_DAB_SGESV(2,1,A,1,IP,B,2,X,2,WORK,SWORK,ITER,INFO)
+      CALL AB_CHKXER( 'AB_DAB_SGESV', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL DSGESV(2,1,A,2,IP,B,1,X,2,WORK,SWORK,ITER,INFO)
-      CALL CHKXER( 'DSGESV', INFOT, NOUT, LERR, OK )
+      CALL AB_DAB_SGESV(2,1,A,2,IP,B,1,X,2,WORK,SWORK,ITER,INFO)
+      CALL AB_CHKXER( 'AB_DAB_SGESV', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL DSGESV(2,1,A,2,IP,B,2,X,1,WORK,SWORK,ITER,INFO)
-      CALL CHKXER( 'DSGESV', INFOT, NOUT, LERR, OK )
+      CALL AB_DAB_SGESV(2,1,A,2,IP,B,2,X,1,WORK,SWORK,ITER,INFO)
+      CALL AB_CHKXER( 'AB_DAB_SGESV', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
       IF( OK ) THEN
-         WRITE( NOUT, FMT = 9999 )'DSGESV'
+         WRITE( NOUT, FMT = 9999 )'AB_DAB_SGESV'
       ELSE
-         WRITE( NOUT, FMT = 9998 )'DSGESV'
+         WRITE( NOUT, FMT = 9998 )'AB_DAB_SGESV'
       END IF
 *
  9999 FORMAT( 1X, A6, ' drivers passed the tests of the error exits' )
@@ -142,6 +142,6 @@
 *
       RETURN
 *
-*     End of DERRAB
+*     End of AB_DERRAB
 *
       END

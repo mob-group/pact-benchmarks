@@ -1,4 +1,4 @@
-*> \brief \b STRT02
+*> \brief \b AB_STRT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA, X, LDX, B,
+*       SUBROUTINE AB_STRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA, X, LDX, B,
 *                          LDB, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> STRT02 computes the residual for the computed solution to a
+*> AB_STRT02 computes the residual for the computed solution to a
 *> triangular system of linear equations  A*x = b  or  A'*x = b.
 *> Here A is a triangular matrix, A' is the transpose of A, and x and b
 *> are N by NRHS matrices.  The test ratio is the maximum over the
@@ -147,7 +147,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE STRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA, X, LDX, B,
+      SUBROUTINE AB_STRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA, X, LDX, 
+     $B,
      $                   LDB, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -176,12 +177,12 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SASUM, SLAMCH, SLANTR
-      EXTERNAL           LSAME, SASUM, SLAMCH, SLANTR
+      LOGICAL            AB_LSAME
+      REAL               AB_SASUM, AB_SLAMCH, AB_SLANTR
+      EXTERNAL           AB_LSAME, AB_SASUM, AB_SLAMCH, AB_SLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, STRMV
+      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_STRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -197,15 +198,15 @@
 *
 *     Compute the 1-norm of A or A'.
 *
-      IF( LSAME( TRANS, 'N' ) ) THEN
-         ANORM = SLANTR( '1', UPLO, DIAG, N, N, A, LDA, WORK )
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+         ANORM = AB_SLANTR( '1', UPLO, DIAG, N, N, A, LDA, WORK )
       ELSE
-         ANORM = SLANTR( 'I', UPLO, DIAG, N, N, A, LDA, WORK )
+         ANORM = AB_SLANTR( 'I', UPLO, DIAG, N, N, A, LDA, WORK )
       END IF
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -216,11 +217,11 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         CALL SCOPY( N, X( 1, J ), 1, WORK, 1 )
-         CALL STRMV( UPLO, TRANS, DIAG, N, A, LDA, WORK, 1 )
-         CALL SAXPY( N, -ONE, B( 1, J ), 1, WORK, 1 )
-         BNORM = SASUM( N, WORK, 1 )
-         XNORM = SASUM( N, X( 1, J ), 1 )
+         CALL AB_SCOPY( N, X( 1, J ), 1, WORK, 1 )
+         CALL AB_STRMV( UPLO, TRANS, DIAG, N, A, LDA, WORK, 1 )
+         CALL AB_SAXPY( N, -ONE, B( 1, J ), 1, WORK, 1 )
+         BNORM = AB_SASUM( N, WORK, 1 )
+         XNORM = AB_SASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -230,6 +231,6 @@
 *
       RETURN
 *
-*     End of STRT02
+*     End of AB_STRT02
 *
       END

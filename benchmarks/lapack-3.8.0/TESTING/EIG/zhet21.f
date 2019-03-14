@@ -1,4 +1,4 @@
-*> \brief \b ZHET21
+*> \brief \b AB_ZHET21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
+*       SUBROUTINE AB_ZHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
 *                          LDV, TAU, WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZHET21 generally checks a decomposition of the form
+*> AB_ZHET21 generally checks a decomposition of the form
 *>
 *>    A = U S UC>
 *> where * means conjugate transpose, A is hermitian, U is unitary, and
@@ -35,9 +35,9 @@
 *> KBAND=1).
 *>
 *> If ITYPE=1, then U is represented as a dense matrix; otherwise U is
-*> expressed as a product of Householder transformations, whose vectors
+*> expressed as a product of HousehoAB_LDEr transformations, whose vectors
 *> are stored in the array "V" and whose scaling constants are in "TAU".
-*> We shall use the letter "V" to refer to the product of Householder
+*> We shall use the letter "V" to refer to the product of HousehoAB_LDEr
 *> transformations (which should be equal to U).
 *>
 *> Specifically, if ITYPE=1, then:
@@ -68,11 +68,11 @@
 *>          1: U expressed as a dense unitary matrix:
 *>             RESULT(1) = | A - U S U* | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU* | / ( n ulp )
 *>
-*>          2: U expressed as a product V of Housholder transformations:
+*>          2: U expressed as a product V of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | A - V S V* | / ( |A| n ulp )
 *>
 *>          3: U expressed both as a dense unitary matrix and
-*>             as a product of Housholder transformations:
+*>             as a product of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | I - UV* | / ( n ulp )
 *> \endverbatim
 *>
@@ -88,7 +88,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, ZHET21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_ZHET21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -149,7 +149,7 @@
 *> \verbatim
 *>          V is COMPLEX*16 array, dimension (LDV, N)
 *>          If ITYPE=2 or 3, the columns of this array contain the
-*>          Householder vectors used to describe the unitary matrix
+*>          HousehoAB_LDEr vectors used to describe the unitary matrix
 *>          in the decomposition.  If UPLO='L', then the vectors are in
 *>          the lower triangle, if UPLO='U', then in the upper
 *>          triangle.
@@ -171,7 +171,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)* in the Householder transformation H(j) of
+*>          v(j) v(j)* in the HousehoAB_LDEr transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *> \endverbatim
@@ -208,7 +208,8 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
+      SUBROUTINE AB_ZHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU,
+     $ V,
      $                   LDV, TAU, WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -243,13 +244,14 @@
       COMPLEX*16         VSAVE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHE
-      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANHE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZHER, ZHER2, ZLACPY, ZLARFY, ZLASET,
-     $                   ZUNM2L, ZUNM2R
+      EXTERNAL           AB_ZGEMM, AB_ZHER, AB_AB_ZHER2, AB_ZLACPY, AB_A
+     $B_ZLARFY, AB_ZLASET,
+     $                   AB_ZUNM2L, AB_ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -262,7 +264,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -270,8 +272,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -287,7 +289,7 @@
       IF( ITYPE.EQ.3 ) THEN
          ANORM = ONE
       ELSE
-         ANORM = MAX( ZLANHE( '1', CUPLO, N, A, LDA, RWORK ), UNFL )
+         ANORM = MAX( AB_ZLANHE( '1', CUPLO, N, A, LDA, RWORK ), UNFL )
       END IF
 *
 *     Compute error matrix:
@@ -296,26 +298,27 @@
 *
 *        ITYPE=1: error = A - U S U*
 *
-         CALL ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
-         CALL ZLACPY( CUPLO, N, N, A, LDA, WORK, N )
+         CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+         CALL AB_ZLACPY( CUPLO, N, N, A, LDA, WORK, N )
 *
          DO 10 J = 1, N
-            CALL ZHER( CUPLO, N, -D( J ), U( 1, J ), 1, WORK, N )
+            CALL AB_ZHER( CUPLO, N, -D( J ), U( 1, J ), 1, WORK, N )
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
             DO 20 J = 1, N - 1
-               CALL ZHER2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ), 1,
+               CALL AB_AB_ZHER2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ),
+     $ 1,
      $                     U( 1, J-1 ), 1, WORK, N )
    20       CONTINUE
          END IF
-         WNORM = ZLANHE( '1', CUPLO, N, WORK, N, RWORK )
+         WNORM = AB_ZLANHE( '1', CUPLO, N, WORK, N, RWORK )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        ITYPE=2: error = V S V* - A
 *
-         CALL ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+         CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
          IF( LOWER ) THEN
             WORK( N**2 ) = D( N )
@@ -329,7 +332,7 @@
 *
                VSAVE = V( J+1, J )
                V( J+1, J ) = ONE
-               CALL ZLARFY( 'L', N-J, V( J+1, J ), 1, TAU( J ),
+               CALL AB_AB_ZLARFY( 'L', N-J, V( J+1, J ), 1, TAU( J ),
      $                      WORK( ( N+1 )*J+1 ), N, WORK( N**2+1 ) )
                V( J+1, J ) = VSAVE
                WORK( ( N+1 )*( J-1 )+1 ) = D( J )
@@ -346,7 +349,8 @@
 *
                VSAVE = V( J, J+1 )
                V( J, J+1 ) = ONE
-               CALL ZLARFY( 'U', J, V( 1, J+1 ), 1, TAU( J ), WORK, N,
+               CALL AB_AB_ZLARFY( 'U', J, V( 1, J+1 ), 1, TAU( J ), WORK
+     $, N,
      $                      WORK( N**2+1 ) )
                V( J, J+1 ) = VSAVE
                WORK( ( N+1 )*J+1 ) = D( J+1 )
@@ -366,7 +370,7 @@
    80          CONTINUE
             END IF
    90    CONTINUE
-         WNORM = ZLANHE( '1', CUPLO, N, WORK, N, RWORK )
+         WNORM = AB_ZLANHE( '1', CUPLO, N, WORK, N, RWORK )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -374,12 +378,12 @@
 *
          IF( N.LT.2 )
      $      RETURN
-         CALL ZLACPY( ' ', N, N, U, LDU, WORK, N )
+         CALL AB_ZLACPY( ' ', N, N, U, LDU, WORK, N )
          IF( LOWER ) THEN
-            CALL ZUNM2R( 'R', 'C', N, N-1, N-1, V( 2, 1 ), LDV, TAU,
+            CALL AB_ZUNM2R( 'R', 'C', N, N-1, N-1, V( 2, 1 ), LDV, TAU,
      $                   WORK( N+1 ), N, WORK( N**2+1 ), IINFO )
          ELSE
-            CALL ZUNM2L( 'R', 'C', N, N-1, N-1, V( 1, 2 ), LDV, TAU,
+            CALL AB_ZUNM2L( 'R', 'C', N, N-1, N-1, V( 1, 2 ), LDV, TAU,
      $                   WORK, N, WORK( N**2+1 ), IINFO )
          END IF
          IF( IINFO.NE.0 ) THEN
@@ -391,7 +395,7 @@
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
   100    CONTINUE
 *
-         WNORM = ZLANGE( '1', N, N, WORK, N, RWORK )
+         WNORM = AB_ZLANGE( '1', N, N, WORK, N, RWORK )
       END IF
 *
       IF( ANORM.GT.WNORM ) THEN
@@ -409,19 +413,19 @@
 *     Compute  UU* - I
 *
       IF( ITYPE.EQ.1 ) THEN
-         CALL ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
+         CALL AB_ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
      $               WORK, N )
 *
          DO 110 J = 1, N
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
   110    CONTINUE
 *
-         RESULT( 2 ) = MIN( ZLANGE( '1', N, N, WORK, N, RWORK ),
+         RESULT( 2 ) = MIN( AB_ZLANGE( '1', N, N, WORK, N, RWORK ),
      $                 DBLE( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of ZHET21
+*     End of AB_ZHET21
 *
       END

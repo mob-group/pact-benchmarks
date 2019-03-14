@@ -1,4 +1,4 @@
-*> \brief \b SECOND  Using ETIME_
+*> \brief \b AB_SECOND  Using ETIME_
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      REAL FUNCTION SECOND( )
+*      REAL FUNCTION AB_SECOND( )
 *
 *
 *> \par Purpose:
@@ -16,7 +16,7 @@
 *>
 *> \verbatim
 *>
-*>  SECOND returns the user time for a process in seconds.
+*>  AB_SECOND returns the user time for a process in AB_SECONDs.
 *>  This version gets the time from the system function ETIME_.
 *> \endverbatim
 *
@@ -33,7 +33,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      REAL FUNCTION SECOND( )
+      REAL FUNCTION AB_SECOND( )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -53,10 +53,10 @@
 *     .. Executable Statements ..
 *
       T1 = ETIME_( TARRAY )
-      SECOND = TARRAY( 1 )
+      AB_SECOND = TARRAY( 1 )
       RETURN
 *
-*     End of SECOND
+*     End of AB_SECOND
 *
       END
 

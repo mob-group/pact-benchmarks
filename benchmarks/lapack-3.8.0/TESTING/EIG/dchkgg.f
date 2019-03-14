@@ -1,4 +1,4 @@
-*> \brief \b DCHKGG
+*> \brief \b AB_DCHKGG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_DCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          TSTDIF, THRSHN, NOUNIT, A, LDA, B, H, T, S1,
 *                          S2, P1, P2, U, LDU, V, Q, Z, ALPHR1, ALPHI1,
 *                          BETA1, ALPHR3, ALPHI3, BETA3, EVECTL, EVECTR,
@@ -38,14 +38,14 @@
 *>
 *> \verbatim
 *>
-*> DCHKGG  checks the nonsymmetric generalized eigenvalue problem
+*> AB_DCHKGG  checks the nonsymmetric generalized eigenvalue problem
 *> routines.
 *>                                T          T        T
-*> DGGHRD factors A and B as U H V  and U T V , where   means
+*> AB_DGGHRD factors A and B as U H V  and U T V , where   means
 *> transpose, H is hessenberg, T is triangular and U and V are
 *> orthogonal.
 *>                                 T          T
-*> DHGEQZ factors H and T as  Q S Z  and Q P Z , where P is upper
+*> AB_DHGEQZ factors H and T as  Q S Z  and Q P Z , where P is upper
 *> triangular, S is in generalized Schur form (block upper triangular,
 *> with 1x1 and 2x2 blocks on the diagonal, the 2x2 blocks
 *> corresponding to complex conjugate pairs of generalized
@@ -62,12 +62,12 @@
 *>
 *>     det( m(j) A - B ) = 0
 *>
-*> DTGEVC computes the matrix L of left eigenvectors and the matrix R
+*> AB_DTGEVC computes the matrix L of left eigenvectors and the matrix R
 *> of right eigenvectors for the matrix pair ( S, P ).  In the
 *> description below,  l and r are left and right eigenvectors
 *> corresponding to the generalized eigenvalues (alpha,beta).
 *>
-*> When DCHKGG is called, a number of matrix "sizes" ("n's") and a
+*> When AB_DCHKGG is called, a number of matrix "sizes" ("n's") and a
 *> number of matrix "types" are specified.  For each size ("n")
 *> and each type of matrix, one matrix will be generated and used
 *> to test the nonsymmetric eigenroutines.  For each matrix, 15
@@ -107,7 +107,7 @@
 *>   | l'**H * (beta H - alpha T) | / ( ulp max( |beta H|, |alpha T| ) )
 *>
 *>       where the eigenvectors l' are the result of passing Q to
-*>       DTGEVC and back transforming (HOWMNY='B').
+*>       AB_DTGEVC and back transforming (HOWMNY='B').
 *>
 *> (11)  max over all right eigenvalue/-vector pairs (beta/alpha,r) of
 *>
@@ -118,7 +118,7 @@
 *>       | (beta H - alpha T) r' | / ( ulp max( |beta H|, |alpha T| ) )
 *>
 *>       where the eigenvectors r' are the result of passing Z to
-*>       DTGEVC and back transforming (HOWMNY='B').
+*>       AB_DTGEVC and back transforming (HOWMNY='B').
 *>
 *> The last three test ratios will usually be small, but there is no
 *> mathematical requirement that they be so.  They are therefore
@@ -225,7 +225,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          DCHKGG does nothing.  It must be at least zero.
+*>          AB_DCHKGG does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -239,7 +239,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, DCHKGG
+*>          The number of elements in DOTYPE.   If it is zero, AB_DCHKGG
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -269,7 +269,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to DCHKGG to continue the same random number
+*>          next call to AB_DCHKGG to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -341,47 +341,47 @@
 *> \param[out] H
 *> \verbatim
 *>          H is DOUBLE PRECISION array, dimension (LDA, max(NN))
-*>          The upper Hessenberg matrix computed from A by DGGHRD.
+*>          The upper Hessenberg matrix computed from A by AB_DGGHRD.
 *> \endverbatim
 *>
 *> \param[out] T
 *> \verbatim
 *>          T is DOUBLE PRECISION array, dimension (LDA, max(NN))
-*>          The upper triangular matrix computed from B by DGGHRD.
+*>          The upper triangular matrix computed from B by AB_DGGHRD.
 *> \endverbatim
 *>
 *> \param[out] S1
 *> \verbatim
 *>          S1 is DOUBLE PRECISION array, dimension (LDA, max(NN))
 *>          The Schur (block upper triangular) matrix computed from H by
-*>          DHGEQZ when Q and Z are also computed.
+*>          AB_DHGEQZ when Q and Z are also computed.
 *> \endverbatim
 *>
 *> \param[out] S2
 *> \verbatim
 *>          S2 is DOUBLE PRECISION array, dimension (LDA, max(NN))
 *>          The Schur (block upper triangular) matrix computed from H by
-*>          DHGEQZ when Q and Z are not computed.
+*>          AB_DHGEQZ when Q and Z are not computed.
 *> \endverbatim
 *>
 *> \param[out] P1
 *> \verbatim
 *>          P1 is DOUBLE PRECISION array, dimension (LDA, max(NN))
-*>          The upper triangular matrix computed from T by DHGEQZ
+*>          The upper triangular matrix computed from T by AB_DHGEQZ
 *>          when Q and Z are also computed.
 *> \endverbatim
 *>
 *> \param[out] P2
 *> \verbatim
 *>          P2 is DOUBLE PRECISION array, dimension (LDA, max(NN))
-*>          The upper triangular matrix computed from T by DHGEQZ
+*>          The upper triangular matrix computed from T by AB_DHGEQZ
 *>          when Q and Z are not computed.
 *> \endverbatim
 *>
 *> \param[out] U
 *> \verbatim
 *>          U is DOUBLE PRECISION array, dimension (LDU, max(NN))
-*>          The (left) orthogonal matrix computed by DGGHRD.
+*>          The (left) orthogonal matrix computed by AB_DGGHRD.
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -394,19 +394,19 @@
 *> \param[out] V
 *> \verbatim
 *>          V is DOUBLE PRECISION array, dimension (LDU, max(NN))
-*>          The (right) orthogonal matrix computed by DGGHRD.
+*>          The (right) orthogonal matrix computed by AB_DGGHRD.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is DOUBLE PRECISION array, dimension (LDU, max(NN))
-*>          The (left) orthogonal matrix computed by DHGEQZ.
+*>          The (left) orthogonal matrix computed by AB_DHGEQZ.
 *> \endverbatim
 *>
 *> \param[out] Z
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension (LDU, max(NN))
-*>          The (left) orthogonal matrix computed by DHGEQZ.
+*>          The (left) orthogonal matrix computed by AB_DHGEQZ.
 *> \endverbatim
 *>
 *> \param[out] ALPHR1
@@ -423,7 +423,7 @@
 *> \verbatim
 *>          BETA1 is DOUBLE PRECISION array, dimension (max(NN))
 *>
-*>          The generalized eigenvalues of (A,B) computed by DHGEQZ
+*>          The generalized eigenvalues of (A,B) computed by AB_DHGEQZ
 *>          when Q, Z, and the full Schur matrices are computed.
 *>          On exit, ( ALPHR1(k)+ALPHI1(k)*i ) / BETA1(k) is the k-th
 *>          generalized eigenvalue of the matrices in A and B.
@@ -448,14 +448,14 @@
 *> \verbatim
 *>          EVECTL is DOUBLE PRECISION array, dimension (LDU, max(NN))
 *>          The (block lower triangular) left eigenvector matrix for
-*>          the matrices in S1 and P1.  (See DTGEVC for the format.)
+*>          the matrices in S1 and P1.  (See AB_DTGEVC for the format.)
 *> \endverbatim
 *>
 *> \param[out] EVECTR
 *> \verbatim
 *>          EVECTR is DOUBLE PRECISION array, dimension (LDU, max(NN))
 *>          The (block upper triangular) right eigenvector matrix for
-*>          the matrices in S1 and P1.  (See DTGEVC for the format.)
+*>          the matrices in S1 and P1.  (See AB_DTGEVC for the format.)
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -505,7 +505,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_DCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   TSTDIF, THRSHN, NOUNIT, A, LDA, B, H, T, S1,
      $                   S2, P1, P2, U, LDU, V, Q, Z, ALPHR1, ALPHI1,
      $                   BETA1, ALPHR3, ALPHI3, BETA3, EVECTL, EVECTR,
@@ -560,13 +560,15 @@
       DOUBLE PRECISION   DUMMA( 4 ), RMAGN( 0: 3 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLARND
-      EXTERNAL           DLAMCH, DLANGE, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLARND
+      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQR2, DGET51, DGET52, DGGHRD, DHGEQZ, DLABAD,
-     $                   DLACPY, DLARFG, DLASET, DLASUM, DLATM4, DORM2R,
-     $                   DTGEVC, XERBLA
+      EXTERNAL           AB_AB_DGEQR2, AB_DGET51, AB_DGET52, AB_DGGHRD, 
+     $AB_DHGEQZ, AB_DLABAD,
+     $                   AB_DLACPY, AB_AB_DLARFG, AB_DLASET, AB_DLASUM, 
+     $AB_DLATM4, AB_DORM2R,
+     $                   AB_DTGEVC, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN
@@ -631,7 +633,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DCHKGG', -INFO )
+         CALL AB_XERBLA( 'AB_DCHKGG', -INFO )
          RETURN
       END IF
 *
@@ -640,11 +642,11 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
+      CALL AB_DLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.
@@ -694,7 +696,7 @@
 *
 *           KZLASS: =1 means w/o rotation, =2 means w/ rotation,
 *                   =3 means random.
-*           KATYPE: the "type" to be passed to DLATM4 for computing A.
+*           KATYPE: the "type" to be passed to AB_DLATM4 for computing A.
 *           KAZERO: the pattern of zeros on the diagonal for A:
 *                   =1: ( xxx ), =2: (0, xxx ) =3: ( 0, 0, xxx, 0 ),
 *                   =4: ( 0, xxx, 0, 0 ), =5: ( 0, 0, 1, xxx, 0 ),
@@ -721,11 +723,12 @@
                IF( ABS( KATYPE( JTYPE ) ).EQ.3 ) THEN
                   IN = 2*( ( N-1 ) / 2 ) + 1
                   IF( IN.NE.N )
-     $               CALL DLASET( 'Full', N, N, ZERO, ZERO, A, LDA )
+     $               CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, A, LDA )
                ELSE
                   IN = N
                END IF
-               CALL DLATM4( KATYPE( JTYPE ), IN, KZ1( KAZERO( JTYPE ) ),
+               CALL AB_DLATM4( KATYPE( JTYPE ), IN, KZ1( KAZERO( JTYPE )
+     $ ),
      $                      KZ2( KAZERO( JTYPE ) ), IASIGN( JTYPE ),
      $                      RMAGN( KAMAGN( JTYPE ) ), ULP,
      $                      RMAGN( KTRIAN( JTYPE )*KAMAGN( JTYPE ) ), 2,
@@ -739,11 +742,12 @@
                IF( ABS( KBTYPE( JTYPE ) ).EQ.3 ) THEN
                   IN = 2*( ( N-1 ) / 2 ) + 1
                   IF( IN.NE.N )
-     $               CALL DLASET( 'Full', N, N, ZERO, ZERO, B, LDA )
+     $               CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, B, LDA )
                ELSE
                   IN = N
                END IF
-               CALL DLATM4( KBTYPE( JTYPE ), IN, KZ1( KBZERO( JTYPE ) ),
+               CALL AB_DLATM4( KBTYPE( JTYPE ), IN, KZ1( KBZERO( JTYPE )
+     $ ),
      $                      KZ2( KBZERO( JTYPE ) ), IBSIGN( JTYPE ),
      $                      RMAGN( KBMAGN( JTYPE ) ), ONE,
      $                      RMAGN( KTRIAN( JTYPE )*KBMAGN( JTYPE ) ), 2,
@@ -756,29 +760,31 @@
 *
 *                 Include rotations
 *
-*                 Generate U, V as Householder transformations times
+*                 Generate U, V as HousehoAB_LDEr transformations times
 *                 a diagonal matrix.
 *
                   DO 50 JC = 1, N - 1
                      DO 40 JR = JC, N
-                        U( JR, JC ) = DLARND( 3, ISEED )
-                        V( JR, JC ) = DLARND( 3, ISEED )
+                        U( JR, JC ) = AB_DLARND( 3, ISEED )
+                        V( JR, JC ) = AB_DLARND( 3, ISEED )
    40                CONTINUE
-                     CALL DLARFG( N+1-JC, U( JC, JC ), U( JC+1, JC ), 1,
+                     CALL AB_AB_DLARFG( N+1-JC, U( JC, JC ), U( JC+1, JC
+     $ ), 1,
      $                            WORK( JC ) )
                      WORK( 2*N+JC ) = SIGN( ONE, U( JC, JC ) )
                      U( JC, JC ) = ONE
-                     CALL DLARFG( N+1-JC, V( JC, JC ), V( JC+1, JC ), 1,
+                     CALL AB_AB_DLARFG( N+1-JC, V( JC, JC ), V( JC+1, JC
+     $ ), 1,
      $                            WORK( N+JC ) )
                      WORK( 3*N+JC ) = SIGN( ONE, V( JC, JC ) )
                      V( JC, JC ) = ONE
    50             CONTINUE
                   U( N, N ) = ONE
                   WORK( N ) = ZERO
-                  WORK( 3*N ) = SIGN( ONE, DLARND( 2, ISEED ) )
+                  WORK( 3*N ) = SIGN( ONE, AB_DLARND( 2, ISEED ) )
                   V( N, N ) = ONE
                   WORK( 2*N ) = ZERO
-                  WORK( 4*N ) = SIGN( ONE, DLARND( 2, ISEED ) )
+                  WORK( 4*N ) = SIGN( ONE, AB_DLARND( 2, ISEED ) )
 *
 *                 Apply the diagonal matrices
 *
@@ -790,19 +796,21 @@
      $                                B( JR, JC )
    60                CONTINUE
    70             CONTINUE
-                  CALL DORM2R( 'L', 'N', N, N, N-1, U, LDU, WORK, A,
+                  CALL AB_DORM2R( 'L', 'N', N, N, N-1, U, LDU, WORK, A,
      $                         LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL DORM2R( 'R', 'T', N, N, N-1, V, LDU, WORK( N+1 ),
+                  CALL AB_DORM2R( 'R', 'T', N, N, N-1, V, LDU, WORK( N+1
+     $ ),
      $                         A, LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL DORM2R( 'L', 'N', N, N, N-1, U, LDU, WORK, B,
+                  CALL AB_DORM2R( 'L', 'N', N, N, N-1, U, LDU, WORK, B,
      $                         LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL DORM2R( 'R', 'T', N, N, N-1, V, LDU, WORK( N+1 ),
+                  CALL AB_DORM2R( 'R', 'T', N, N, N-1, V, LDU, WORK( N+1
+     $ ),
      $                         B, LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
@@ -814,15 +822,15 @@
                DO 90 JC = 1, N
                   DO 80 JR = 1, N
                      A( JR, JC ) = RMAGN( KAMAGN( JTYPE ) )*
-     $                             DLARND( 2, ISEED )
+     $                             AB_DLARND( 2, ISEED )
                      B( JR, JC ) = RMAGN( KBMAGN( JTYPE ) )*
-     $                             DLARND( 2, ISEED )
+     $                             AB_DLARND( 2, ISEED )
    80             CONTINUE
    90          CONTINUE
             END IF
 *
-            ANORM = DLANGE( '1', N, N, A, LDA, WORK )
-            BNORM = DLANGE( '1', N, N, B, LDA, WORK )
+            ANORM = AB_DLANGE( '1', N, N, A, LDA, WORK )
+            BNORM = AB_DLANGE( '1', N, N, B, LDA, WORK )
 *
   100       CONTINUE
 *
@@ -835,44 +843,46 @@
 *
   110       CONTINUE
 *
-*           Call DGEQR2, DORM2R, and DGGHRD to compute H, T, U, and V
+*           Call AB_AB_DGEQR2, AB_DORM2R, and AB_DGGHRD to compute H, T, U, and V
 *
-            CALL DLACPY( ' ', N, N, A, LDA, H, LDA )
-            CALL DLACPY( ' ', N, N, B, LDA, T, LDA )
+            CALL AB_DLACPY( ' ', N, N, A, LDA, H, LDA )
+            CALL AB_DLACPY( ' ', N, N, B, LDA, T, LDA )
             NTEST = 1
             RESULT( 1 ) = ULPINV
 *
-            CALL DGEQR2( N, N, T, LDA, WORK, WORK( N+1 ), IINFO )
+            CALL AB_AB_DGEQR2( N, N, T, LDA, WORK, WORK( N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DGEQR2', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEQR2', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL DORM2R( 'L', 'T', N, N, N, T, LDA, WORK, H, LDA,
+            CALL AB_DORM2R( 'L', 'T', N, N, N, T, LDA, WORK, H, LDA,
      $                   WORK( N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DORM2R', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DORM2R', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL DLASET( 'Full', N, N, ZERO, ONE, U, LDU )
-            CALL DORM2R( 'R', 'N', N, N, N, T, LDA, WORK, U, LDU,
+            CALL AB_DLASET( 'Full', N, N, ZERO, ONE, U, LDU )
+            CALL AB_DORM2R( 'R', 'N', N, N, N, T, LDA, WORK, U, LDU,
      $                   WORK( N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DORM2R', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DORM2R', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL DGGHRD( 'V', 'I', N, 1, N, H, LDA, T, LDA, U, LDU, V,
+            CALL AB_DGGHRD( 'V', 'I', N, 1, N, H, LDA, T, LDA, U, LDU, V
+     $,
      $                   LDU, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DGGHRD', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DGGHRD', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -881,31 +891,32 @@
 *
 *           Do tests 1--4
 *
-            CALL DGET51( 1, N, A, LDA, H, LDA, U, LDU, V, LDU, WORK,
+            CALL AB_DGET51( 1, N, A, LDA, H, LDA, U, LDU, V, LDU, WORK,
      $                   RESULT( 1 ) )
-            CALL DGET51( 1, N, B, LDA, T, LDA, U, LDU, V, LDU, WORK,
+            CALL AB_DGET51( 1, N, B, LDA, T, LDA, U, LDU, V, LDU, WORK,
      $                   RESULT( 2 ) )
-            CALL DGET51( 3, N, B, LDA, T, LDA, U, LDU, U, LDU, WORK,
+            CALL AB_DGET51( 3, N, B, LDA, T, LDA, U, LDU, U, LDU, WORK,
      $                   RESULT( 3 ) )
-            CALL DGET51( 3, N, B, LDA, T, LDA, V, LDU, V, LDU, WORK,
+            CALL AB_DGET51( 3, N, B, LDA, T, LDA, V, LDU, V, LDU, WORK,
      $                   RESULT( 4 ) )
 *
-*           Call DHGEQZ to compute S1, P1, S2, P2, Q, and Z, do tests.
+*           Call AB_DHGEQZ to compute S1, P1, S2, P2, Q, and Z, do tests.
 *
 *           Compute T1 and UZ
 *
 *           Eigenvalues only
 *
-            CALL DLACPY( ' ', N, N, H, LDA, S2, LDA )
-            CALL DLACPY( ' ', N, N, T, LDA, P2, LDA )
+            CALL AB_DLACPY( ' ', N, N, H, LDA, S2, LDA )
+            CALL AB_DLACPY( ' ', N, N, T, LDA, P2, LDA )
             NTEST = 5
             RESULT( 5 ) = ULPINV
 *
-            CALL DHGEQZ( 'E', 'N', 'N', N, 1, N, S2, LDA, P2, LDA,
+            CALL AB_DHGEQZ( 'E', 'N', 'N', N, 1, N, S2, LDA, P2, LDA,
      $                   ALPHR3, ALPHI3, BETA3, Q, LDU, Z, LDU, WORK,
      $                   LWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DHGEQZ(E)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DHGEQZ(E)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -913,14 +924,15 @@
 *
 *           Eigenvalues and Full Schur Form
 *
-            CALL DLACPY( ' ', N, N, H, LDA, S2, LDA )
-            CALL DLACPY( ' ', N, N, T, LDA, P2, LDA )
+            CALL AB_DLACPY( ' ', N, N, H, LDA, S2, LDA )
+            CALL AB_DLACPY( ' ', N, N, T, LDA, P2, LDA )
 *
-            CALL DHGEQZ( 'S', 'N', 'N', N, 1, N, S2, LDA, P2, LDA,
+            CALL AB_DHGEQZ( 'S', 'N', 'N', N, 1, N, S2, LDA, P2, LDA,
      $                   ALPHR1, ALPHI1, BETA1, Q, LDU, Z, LDU, WORK,
      $                   LWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DHGEQZ(S)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DHGEQZ(S)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -928,14 +940,15 @@
 *
 *           Eigenvalues, Schur Form, and Schur Vectors
 *
-            CALL DLACPY( ' ', N, N, H, LDA, S1, LDA )
-            CALL DLACPY( ' ', N, N, T, LDA, P1, LDA )
+            CALL AB_DLACPY( ' ', N, N, H, LDA, S1, LDA )
+            CALL AB_DLACPY( ' ', N, N, T, LDA, P1, LDA )
 *
-            CALL DHGEQZ( 'S', 'I', 'I', N, 1, N, S1, LDA, P1, LDA,
+            CALL AB_DHGEQZ( 'S', 'I', 'I', N, 1, N, S1, LDA, P1, LDA,
      $                   ALPHR1, ALPHI1, BETA1, Q, LDU, Z, LDU, WORK,
      $                   LWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DHGEQZ(V)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DHGEQZ(V)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -945,13 +958,13 @@
 *
 *           Do Tests 5--8
 *
-            CALL DGET51( 1, N, H, LDA, S1, LDA, Q, LDU, Z, LDU, WORK,
+            CALL AB_DGET51( 1, N, H, LDA, S1, LDA, Q, LDU, Z, LDU, WORK,
      $                   RESULT( 5 ) )
-            CALL DGET51( 1, N, T, LDA, P1, LDA, Q, LDU, Z, LDU, WORK,
+            CALL AB_DGET51( 1, N, T, LDA, P1, LDA, Q, LDU, Z, LDU, WORK,
      $                   RESULT( 6 ) )
-            CALL DGET51( 3, N, T, LDA, P1, LDA, Q, LDU, Q, LDU, WORK,
+            CALL AB_DGET51( 3, N, T, LDA, P1, LDA, Q, LDU, Q, LDU, WORK,
      $                   RESULT( 7 ) )
-            CALL DGET51( 3, N, T, LDA, P1, LDA, Z, LDU, Z, LDU, WORK,
+            CALL AB_DGET51( 3, N, T, LDA, P1, LDA, Z, LDU, Z, LDU, WORK,
      $                   RESULT( 8 ) )
 *
 *           Compute the Left and Right Eigenvectors of (S1,P1)
@@ -973,10 +986,11 @@
                LLWORK( J ) = .FALSE.
   130       CONTINUE
 *
-            CALL DTGEVC( 'L', 'S', LLWORK, N, S1, LDA, P1, LDA, EVECTL,
+            CALL AB_DTGEVC( 'L', 'S', LLWORK, N, S1, LDA, P1, LDA, EVECT
+     $L,
      $                   LDU, DUMMA, LDU, N, IN, WORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DTGEVC(L,S1)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DTGEVC(L,S1)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -990,21 +1004,21 @@
                LLWORK( J ) = .TRUE.
   150       CONTINUE
 *
-            CALL DTGEVC( 'L', 'S', LLWORK, N, S1, LDA, P1, LDA,
+            CALL AB_DTGEVC( 'L', 'S', LLWORK, N, S1, LDA, P1, LDA,
      $                   EVECTL( 1, I1+1 ), LDU, DUMMA, LDU, N, IN,
      $                   WORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DTGEVC(L,S2)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DTGEVC(L,S2)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL DGET52( .TRUE., N, S1, LDA, P1, LDA, EVECTL, LDU,
+            CALL AB_DGET52( .TRUE., N, S1, LDA, P1, LDA, EVECTL, LDU,
      $                   ALPHR1, ALPHI1, BETA1, WORK, DUMMA( 1 ) )
             RESULT( 9 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRSHN ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Left', 'DTGEVC(HOWMNY=S)',
+               WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_DTGEVC(HOWMNY=S)',
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
@@ -1013,21 +1027,23 @@
 *
             NTEST = 10
             RESULT( 10 ) = ULPINV
-            CALL DLACPY( 'F', N, N, Q, LDU, EVECTL, LDU )
-            CALL DTGEVC( 'L', 'B', LLWORK, N, S1, LDA, P1, LDA, EVECTL,
+            CALL AB_DLACPY( 'F', N, N, Q, LDU, EVECTL, LDU )
+            CALL AB_DTGEVC( 'L', 'B', LLWORK, N, S1, LDA, P1, LDA, EVECT
+     $L,
      $                   LDU, DUMMA, LDU, N, IN, WORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DTGEVC(L,B)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DTGEVC(L,B)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL DGET52( .TRUE., N, H, LDA, T, LDA, EVECTL, LDU, ALPHR1,
+            CALL AB_DGET52( .TRUE., N, H, LDA, T, LDA, EVECTL, LDU, ALPH
+     $R1,
      $                   ALPHI1, BETA1, WORK, DUMMA( 1 ) )
             RESULT( 10 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRSHN ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Left', 'DTGEVC(HOWMNY=B)',
+               WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_DTGEVC(HOWMNY=B)',
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
@@ -1048,10 +1064,11 @@
                LLWORK( J ) = .FALSE.
   170       CONTINUE
 *
-            CALL DTGEVC( 'R', 'S', LLWORK, N, S1, LDA, P1, LDA, DUMMA,
+            CALL AB_DTGEVC( 'R', 'S', LLWORK, N, S1, LDA, P1, LDA, DUMMA
+     $,
      $                   LDU, EVECTR, LDU, N, IN, WORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DTGEVC(R,S1)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DTGEVC(R,S1)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
@@ -1065,21 +1082,24 @@
                LLWORK( J ) = .TRUE.
   190       CONTINUE
 *
-            CALL DTGEVC( 'R', 'S', LLWORK, N, S1, LDA, P1, LDA, DUMMA,
+            CALL AB_DTGEVC( 'R', 'S', LLWORK, N, S1, LDA, P1, LDA, DUMMA
+     $,
      $                   LDU, EVECTR( 1, I1+1 ), LDU, N, IN, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DTGEVC(R,S2)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DTGEVC(R,S2)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL DGET52( .FALSE., N, S1, LDA, P1, LDA, EVECTR, LDU,
+            CALL AB_DGET52( .FALSE., N, S1, LDA, P1, LDA, EVECTR, LDU
+     $,
      $                   ALPHR1, ALPHI1, BETA1, WORK, DUMMA( 1 ) )
             RESULT( 11 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Right', 'DTGEVC(HOWMNY=S)',
+               WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_DTGEVC(HOWMNY=S)'
+     $,
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
@@ -1088,21 +1108,23 @@
 *
             NTEST = 12
             RESULT( 12 ) = ULPINV
-            CALL DLACPY( 'F', N, N, Z, LDU, EVECTR, LDU )
-            CALL DTGEVC( 'R', 'B', LLWORK, N, S1, LDA, P1, LDA, DUMMA,
+            CALL AB_DLACPY( 'F', N, N, Z, LDU, EVECTR, LDU )
+            CALL AB_DTGEVC( 'R', 'B', LLWORK, N, S1, LDA, P1, LDA, DUMMA
+     $,
      $                   LDU, EVECTR, LDU, N, IN, WORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DTGEVC(R,B)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DTGEVC(R,B)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 210
             END IF
 *
-            CALL DGET52( .FALSE., N, H, LDA, T, LDA, EVECTR, LDU,
+            CALL AB_DGET52( .FALSE., N, H, LDA, T, LDA, EVECTR, LDU,
      $                   ALPHR1, ALPHI1, BETA1, WORK, DUMMA( 1 ) )
             RESULT( 12 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Right', 'DTGEVC(HOWMNY=B)',
+               WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_DTGEVC(HOWMNY=B)'
+     $,
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
@@ -1112,9 +1134,9 @@
 *
 *              Do Tests 13--14
 *
-               CALL DGET51( 2, N, S1, LDA, S2, LDA, Q, LDU, Z, LDU,
+               CALL AB_DGET51( 2, N, S1, LDA, S2, LDA, Q, LDU, Z, LDU,
      $                      WORK, RESULT( 13 ) )
-               CALL DGET51( 2, N, P1, LDA, P2, LDA, Q, LDU, Z, LDU,
+               CALL AB_DGET51( 2, N, P1, LDA, P2, LDA, Q, LDU, Z, LDU,
      $                      WORK, RESULT( 14 ) )
 *
 *              Do Test 15
@@ -1150,7 +1172,7 @@
                IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                 If this is the first test to fail,
-*                 print a header to the data file.
+*                 print a AB_HEADER to the data file.
 *
                   IF( NERRS.EQ.0 ) THEN
                      WRITE( NOUNIT, FMT = 9997 )'DGG'
@@ -1183,20 +1205,21 @@
 *
 *     Summary
 *
-      CALL DLASUM( 'DGG', NOUNIT, NERRS, NTESTT )
+      CALL AB_DLASUM( 'DGG', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' DCHKGG: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_DCHKGG: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
- 9998 FORMAT( ' DCHKGG: ', A, ' Eigenvectors from ', A, ' incorrectly ',
+ 9998 FORMAT( ' AB_DCHKGG: ', A, ' Eigenvectors from ', A, ' incorrectly
+     $ ',
      $      'normalized.', / ' Bits of error=', 0P, G10.3, ',', 9X,
      $      'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5,
      $      ')' )
 *
  9997 FORMAT( / 1X, A3, ' -- Real Generalized eigenvalue problem' )
 *
- 9996 FORMAT( ' Matrix types (see DCHKGG for details): ' )
+ 9996 FORMAT( ' Matrix types (see AB_DCHKGG for details): ' )
 *
  9995 FORMAT( ' Special Matrices:', 23X,
      $      '(J''=transposed Jordan block)',
@@ -1239,6 +1262,6 @@
  9991 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I2, ' is', 1P, D10.3 )
 *
-*     End of DCHKGG
+*     End of AB_DCHKGG
 *
       END

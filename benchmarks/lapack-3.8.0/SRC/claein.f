@@ -1,4 +1,4 @@
-*> \brief \b CLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
+*> \brief \b AB_CLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAEIN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claein.f">
+*> Download AB_CLAEIN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAEIN.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAEIN.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAEIN.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
+*       SUBROUTINE AB_CLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
 *                          EPS3, SMLNUM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> CLAEIN uses inverse iteration to find a right or left eigenvector
+*> AB_CLAEIN uses inverse iteration to find a right or left eigenvector
 *> corresponding to the eigenvalue W of a complex upper Hessenberg
 *> matrix H.
 *> \endverbatim
@@ -146,7 +146,8 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
+      SUBROUTINE AB_CLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWO
+     $RK,
      $                   EPS3, SMLNUM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -180,13 +181,13 @@
       COMPLEX            CDUM, EI, EJ, TEMP, X
 *     ..
 *     .. External Functions ..
-      INTEGER            ICAMAX
-      REAL               SCASUM, SCNRM2
-      COMPLEX            CLADIV
-      EXTERNAL           ICAMAX, SCASUM, SCNRM2, CLADIV
+      INTEGER            AB_ICAMAX
+      REAL               AB_SCASUM, AB_SCNRM2
+      COMPLEX            AB_CLADIV
+      EXTERNAL           AB_ICAMAX, AB_SCASUM, AB_SCNRM2, AB_CLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLATRS, CSSCAL
+      EXTERNAL           AB_CLATRS, AB_CAB_SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL, SQRT
@@ -229,8 +230,9 @@
 *
 *        Scale supplied initial vector.
 *
-         VNORM = SCNRM2( N, V, 1 )
-         CALL CSSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), V, 1 )
+         VNORM = AB_SCNRM2( N, V, 1 )
+         CALL AB_CAB_SSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), V,
+     $ 1 )
       END IF
 *
       IF( RIGHTV ) THEN
@@ -244,7 +246,7 @@
 *
 *              Interchange rows and eliminate.
 *
-               X = CLADIV( B( I, I ), EI )
+               X = AB_CLADIV( B( I, I ), EI )
                B( I, I ) = EI
                DO 40 J = I + 1, N
                   TEMP = B( I+1, J )
@@ -257,7 +259,7 @@
 *
                IF( B( I, I ).EQ.ZERO )
      $            B( I, I ) = EPS3
-               X = CLADIV( EI, B( I, I ) )
+               X = AB_CLADIV( EI, B( I, I ) )
                IF( X.NE.ZERO ) THEN
                   DO 50 J = I + 1, N
                      B( I+1, J ) = B( I+1, J ) - X*B( I, J )
@@ -281,7 +283,7 @@
 *
 *              Interchange columns and eliminate.
 *
-               X = CLADIV( B( J, J ), EJ )
+               X = AB_CLADIV( B( J, J ), EJ )
                B( J, J ) = EJ
                DO 70 I = 1, J - 1
                   TEMP = B( I, J-1 )
@@ -294,7 +296,7 @@
 *
                IF( B( J, J ).EQ.ZERO )
      $            B( J, J ) = EPS3
-               X = CLADIV( EJ, B( J, J ) )
+               X = AB_CLADIV( EJ, B( J, J ) )
                IF( X.NE.ZERO ) THEN
                   DO 80 I = 1, J - 1
                      B( I, J-1 ) = B( I, J-1 ) - X*B( I, J )
@@ -316,13 +318,14 @@
 *          or U**H *x = scale*v for a left eigenvector,
 *        overwriting x on v.
 *
-         CALL CLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB, V,
+         CALL AB_CLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB, V
+     $,
      $                SCALE, RWORK, IERR )
          NORMIN = 'Y'
 *
 *        Test for sufficient growth in the norm of v.
 *
-         VNORM = SCASUM( N, V, 1 )
+         VNORM = AB_SCASUM( N, V, 1 )
          IF( VNORM.GE.GROWTO*SCALE )
      $      GO TO 120
 *
@@ -344,11 +347,11 @@
 *
 *     Normalize eigenvector.
 *
-      I = ICAMAX( N, V, 1 )
-      CALL CSSCAL( N, ONE / CABS1( V( I ) ), V, 1 )
+      I = AB_ICAMAX( N, V, 1 )
+      CALL AB_CAB_SSCAL( N, ONE / CABS1( V( I ) ), V, 1 )
 *
       RETURN
 *
-*     End of CLAEIN
+*     End of AB_CLAEIN
 *
       END

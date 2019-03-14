@@ -1,4 +1,4 @@
-*> \brief \b ZHEGST
+*> \brief \b AB_ZHEGST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHEGST + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegst.f">
+*> Download AB_ZHEGST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHEGST.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhegst.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHEGST.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegst.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHEGST.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+*       SUBROUTINE AB_ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZHEGST reduces a complex Hermitian-definite generalized
+*> AB_ZHEGST reduces a complex Hermitian-definite generalized
 *> eigenproblem to standard form.
 *>
 *> If ITYPE = 1, the problem is A*x = lambda*B*x,
@@ -43,7 +43,7 @@
 *> If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H*A*L.
 *>
-*> B must have been previously factorized as U**H*U or L*L**H by ZPOTRF.
+*> B must have been previously factorized as U**H*U or L*L**H by AB_ZPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -96,7 +96,7 @@
 *> \verbatim
 *>          B is COMPLEX*16 array, dimension (LDB,N)
 *>          The triangular factor from the Cholesky factorization of B,
-*>          as returned by ZPOTRF.
+*>          as returned by AB_ZPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -125,7 +125,7 @@
 *> \ingroup complex16HEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      SUBROUTINE AB_ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -154,25 +154,26 @@
       INTEGER            K, KB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHEGS2, ZHEMM, ZHER2K, ZTRMM, ZTRSM
+      EXTERNAL           AB_XERBLA, AB_ZHEGS2, AB_ZHEMM, AB_AB_AB_ZHER2K
+     $, AB_ZTRMM, AB_ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -182,7 +183,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHEGST', -INFO )
+         CALL AB_XERBLA( 'AB_ZHEGST', -INFO )
          RETURN
       END IF
 *
@@ -193,13 +194,13 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = ILAENV( 1, 'ZHEGST', UPLO, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_ZHEGST', UPLO, N, -1, -1, -1 )
 *
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL ZHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+         CALL AB_ZHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
       ELSE
 *
 *        Use blocked code
@@ -214,23 +215,24 @@
 *
 *                 Update the upper triangle of A(k:n,k:n)
 *
-                  CALL ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
+                  CALL AB_ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL ZTRSM( 'Left', UPLO, 'Conjugate transpose',
+                     CALL AB_ZTRSM( 'Left', UPLO, 'Conjugate transpose',
      $                           'Non-unit', KB, N-K-KB+1, CONE,
      $                           B( K, K ), LDB, A( K, K+KB ), LDA )
-                     CALL ZHEMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
+                     CALL AB_ZHEMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
      $                           A( K, K ), LDA, B( K, K+KB ), LDB,
      $                           CONE, A( K, K+KB ), LDA )
-                     CALL ZHER2K( UPLO, 'Conjugate transpose', N-K-KB+1,
+                     CALL AB_AB_AB_ZHER2K( UPLO, 'Conjugate transpose', 
+     $N-K-KB+1,
      $                            KB, -CONE, A( K, K+KB ), LDA,
      $                            B( K, K+KB ), LDB, ONE,
      $                            A( K+KB, K+KB ), LDA )
-                     CALL ZHEMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
+                     CALL AB_ZHEMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
      $                           A( K, K ), LDA, B( K, K+KB ), LDB,
      $                           CONE, A( K, K+KB ), LDA )
-                     CALL ZTRSM( 'Right', UPLO, 'No transpose',
+                     CALL AB_ZTRSM( 'Right', UPLO, 'No transpose',
      $                           'Non-unit', KB, N-K-KB+1, CONE,
      $                           B( K+KB, K+KB ), LDB, A( K, K+KB ),
      $                           LDA )
@@ -245,23 +247,25 @@
 *
 *                 Update the lower triangle of A(k:n,k:n)
 *
-                  CALL ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
+                  CALL AB_ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL ZTRSM( 'Right', UPLO, 'Conjugate transpose',
+                     CALL AB_ZTRSM( 'Right', UPLO, 'Conjugate transpose'
+     $,
      $                           'Non-unit', N-K-KB+1, KB, CONE,
      $                           B( K, K ), LDB, A( K+KB, K ), LDA )
-                     CALL ZHEMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
+                     CALL AB_ZHEMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
      $                           A( K, K ), LDA, B( K+KB, K ), LDB,
      $                           CONE, A( K+KB, K ), LDA )
-                     CALL ZHER2K( UPLO, 'No transpose', N-K-KB+1, KB,
+                     CALL AB_AB_AB_ZHER2K( UPLO, 'No transpose', N-K-KB+
+     $1, KB,
      $                            -CONE, A( K+KB, K ), LDA,
      $                            B( K+KB, K ), LDB, ONE,
      $                            A( K+KB, K+KB ), LDA )
-                     CALL ZHEMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
+                     CALL AB_ZHEMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
      $                           A( K, K ), LDA, B( K+KB, K ), LDB,
      $                           CONE, A( K+KB, K ), LDA )
-                     CALL ZTRSM( 'Left', UPLO, 'No transpose',
+                     CALL AB_ZTRSM( 'Left', UPLO, 'No transpose',
      $                           'Non-unit', N-K-KB+1, KB, CONE,
      $                           B( K+KB, K+KB ), LDB, A( K+KB, K ),
      $                           LDA )
@@ -278,21 +282,25 @@
 *
 *                 Update the upper triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL ZTRMM( 'Left', UPLO, 'No transpose', 'Non-unit',
+                  CALL AB_ZTRMM( 'Left', UPLO, 'No transpose', 'Non-unit
+     $',
      $                        K-1, KB, CONE, B, LDB, A( 1, K ), LDA )
-                  CALL ZHEMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
+                  CALL AB_ZHEMM( 'Right', UPLO, K-1, KB, HALF, A( K, K )
+     $,
      $                        LDA, B( 1, K ), LDB, CONE, A( 1, K ),
      $                        LDA )
-                  CALL ZHER2K( UPLO, 'No transpose', K-1, KB, CONE,
+                  CALL AB_AB_AB_ZHER2K( UPLO, 'No transpose', K-1, KB, C
+     $ONE,
      $                         A( 1, K ), LDA, B( 1, K ), LDB, ONE, A,
      $                         LDA )
-                  CALL ZHEMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
+                  CALL AB_ZHEMM( 'Right', UPLO, K-1, KB, HALF, A( K, K )
+     $,
      $                        LDA, B( 1, K ), LDB, CONE, A( 1, K ),
      $                        LDA )
-                  CALL ZTRMM( 'Right', UPLO, 'Conjugate transpose',
+                  CALL AB_ZTRMM( 'Right', UPLO, 'Conjugate transpose',
      $                        'Non-unit', K-1, KB, CONE, B( K, K ), LDB,
      $                        A( 1, K ), LDA )
-                  CALL ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
+                  CALL AB_ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
    30          CONTINUE
             ELSE
@@ -304,21 +312,23 @@
 *
 *                 Update the lower triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL ZTRMM( 'Right', UPLO, 'No transpose', 'Non-unit',
+                  CALL AB_ZTRMM( 'Right', UPLO, 'No transpose', 'Non-uni
+     $t',
      $                        KB, K-1, CONE, B, LDB, A( K, 1 ), LDA )
-                  CALL ZHEMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
+                  CALL AB_ZHEMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
      $                        LDA, B( K, 1 ), LDB, CONE, A( K, 1 ),
      $                        LDA )
-                  CALL ZHER2K( UPLO, 'Conjugate transpose', K-1, KB,
+                  CALL AB_AB_AB_ZHER2K( UPLO, 'Conjugate transpose', K-1
+     $, KB,
      $                         CONE, A( K, 1 ), LDA, B( K, 1 ), LDB,
      $                         ONE, A, LDA )
-                  CALL ZHEMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
+                  CALL AB_ZHEMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
      $                        LDA, B( K, 1 ), LDB, CONE, A( K, 1 ),
      $                        LDA )
-                  CALL ZTRMM( 'Left', UPLO, 'Conjugate transpose',
+                  CALL AB_ZTRMM( 'Left', UPLO, 'Conjugate transpose',
      $                        'Non-unit', KB, K-1, CONE, B( K, K ), LDB,
      $                        A( K, 1 ), LDA )
-                  CALL ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
+                  CALL AB_ZHEGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
    40          CONTINUE
             END IF
@@ -326,6 +336,6 @@
       END IF
       RETURN
 *
-*     End of ZHEGST
+*     End of AB_ZHEGST
 *
       END

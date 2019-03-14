@@ -1,4 +1,4 @@
-*> \brief \b SCHKPS
+*> \brief \b AB_SCHKPS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
+*       SUBROUTINE AB_SCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
 *                          THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
 *                          RWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SCHKPS tests SPSTRF.
+*> AB_SCHKPS tests AB_SPSTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -150,7 +150,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
+      SUBROUTINE AB_SCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL
+     $,
      $                   THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
      $                   RWORK, NOUT )
 *
@@ -192,8 +193,9 @@
       CHARACTER          UPLOS( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, SERRPS, SLACPY, SLATB5,
-     $                   SLATMT, SPST01, SPSTRF, XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_SERRPS, AB_S
+     $LACPY, AB_SLATB5,
+     $                   AB_SLATMT, AB_SPST01, AB_SPSTRF, AB_XLAENV
 *     ..
 *     .. Scalars in Common ..
       INTEGER            INFOT, NUNIT
@@ -227,9 +229,9 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL SERRPS( PATH, NOUT )
+     $   CALL AB_SERRPS( PATH, NOUT )
       INFOT = 0
-      CALL XLAENV( 2, 2 )
+      CALL AB_XLAENV( 2, 2 )
 *
 *     Do for each value of N in NVAL
 *
@@ -267,21 +269,21 @@
                DO 120 IUPLO = 1, 2
                   UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with SLATB5 and generate a test matrix
-*              with SLATMT.
+*              Set up parameters with AB_SLATB5 and generate a test matrix
+*              with AB_SLATMT.
 *
-                  CALL SLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM,
+                  CALL AB_SLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
-                  SRNAMT = 'SLATMT'
-                  CALL SLATMT( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'AB_SLATMT'
+                  CALL AB_SLATMT( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, RANK, KL, KU, UPLO, A,
      $                         LDA, WORK, INFO )
 *
-*              Check error code from SLATMT.
+*              Check error code from AB_SLATMT.
 *
                   IF( INFO.NE.0 ) THEN
-                    CALL ALAERH( PATH, 'SLATMT', INFO, 0, UPLO, N,
+                    CALL AB_ALAERH( PATH, 'AB_SLATMT', INFO, 0, UPLO, N,
      $                           N, -1, -1, -1, IMAT, NFAIL, NERRS,
      $                           NOUT )
                      GO TO 120
@@ -291,26 +293,26 @@
 *
                   DO 110 INB = 1, NNB
                      NB = NBVAL( INB )
-                     CALL XLAENV( 1, NB )
+                     CALL AB_XLAENV( 1, NB )
 *
 *                 Compute the pivoted L*L' or U'*U factorization
 *                 of the matrix.
 *
-                     CALL SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     SRNAMT = 'SPSTRF'
+                     CALL AB_SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     SRNAMT = 'AB_SPSTRF'
 *
 *                 Use default tolerance
 *
                      TOL = -ONE
-                     CALL SPSTRF( UPLO, N, AFAC, LDA, PIV, COMPRANK,
+                     CALL AB_SPSTRF( UPLO, N, AFAC, LDA, PIV, COMPRANK,
      $                            TOL, WORK, INFO )
 *
-*                 Check error code from SPSTRF.
+*                 Check error code from AB_SPSTRF.
 *
                      IF( (INFO.LT.IZERO)
      $                    .OR.(INFO.NE.IZERO.AND.RANK.EQ.N)
      $                    .OR.(INFO.LE.IZERO.AND.RANK.LT.N) ) THEN
-                        CALL ALAERH( PATH, 'SPSTRF', INFO, IZERO,
+                        CALL AB_ALAERH( PATH, 'AB_SPSTRF', INFO, IZERO,
      $                               UPLO, N, N, -1, -1, NB, IMAT,
      $                               NFAIL, NERRS, NOUT )
                         GO TO 110
@@ -325,7 +327,8 @@
 *
 *                 PERM holds permuted L*L^T or U^T*U
 *
-                     CALL SPST01( UPLO, N, A, LDA, AFAC, LDA, PERM, LDA,
+                     CALL AB_SPST01( UPLO, N, A, LDA, AFAC, LDA, PERM, L
+     $DA,
      $                            PIV, RWORK, RESULT, COMPRANK )
 *
 *                 Print information about the tests that did not pass
@@ -336,7 +339,7 @@
                      RANKDIFF = RANK - COMPRANK
                      IF( RESULT.GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, RANK,
      $                     RANKDIFF, NB, IMAT, RESULT
                         NFAIL = NFAIL + 1
@@ -351,13 +354,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', RANK =', I3,
      $      ', Diff =', I5, ', NB =', I4, ', type ', I2, ', Ratio =',
      $      G12.5 )
       RETURN
 *
-*     End of SCHKPS
+*     End of AB_SCHKPS
 *
       END

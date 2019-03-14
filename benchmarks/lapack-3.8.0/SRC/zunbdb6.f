@@ -1,4 +1,4 @@
-*> \brief \b ZUNBDB6
+*> \brief \b AB_AB_ZUNBDB6
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZUNBDB6 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunbdb6.f">
+*> Download AB_AB_ZUNBDB6 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZUNBDB6.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunbdb6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZUNBDB6.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunbdb6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZUNBDB6.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+*       SUBROUTINE AB_AB_ZUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
 *                           LDQ2, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *>\verbatim
 *>
-*> ZUNBDB6 orthogonalizes the column vector
+*> AB_AB_ZUNBDB6 orthogonalizes the column vector
 *>      X = [ X1 ]
 *>          [ X2 ]
 *> with respect to the columns of
@@ -151,7 +151,8 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+      SUBROUTINE AB_AB_ZUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ
+     $1, Q2,
      $                    LDQ2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -170,9 +171,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ALPHASQ, REALONE, REALZERO
+      DOUBLE PRECISION   ALPHASQ, REALONE, REAAB_LZERO
       PARAMETER          ( ALPHASQ = 0.01D0, REALONE = 1.0D0,
-     $                     REALZERO = 0.0D0 )
+     $                     REAAB_LZERO = 0.0D0 )
       COMPLEX*16         NEGONE, ONE, ZERO
       PARAMETER          ( NEGONE = (-1.0D0,0.0D0), ONE = (1.0D0,0.0D0),
      $                     ZERO = (0.0D0,0.0D0) )
@@ -182,7 +183,7 @@
       DOUBLE PRECISION   NORMSQ1, NORMSQ2, SCL1, SCL2, SSQ1, SSQ2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZLASSQ, XERBLA
+      EXTERNAL           AB_ZGEMV, AB_ZLASSQ, AB_XERBLA
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          MAX
@@ -211,19 +212,19 @@
       END IF
 *
       IF( INFO .NE. 0 ) THEN
-         CALL XERBLA( 'ZUNBDB6', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZUNBDB6', -INFO )
          RETURN
       END IF
 *
 *     First, project X onto the orthogonal complement of Q's column
 *     space
 *
-      SCL1 = REALZERO
+      SCL1 = REAAB_LZERO
       SSQ1 = REALONE
-      CALL ZLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
-      SCL2 = REALZERO
+      CALL AB_ZLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      SCL2 = REAAB_LZERO
       SSQ2 = REALONE
-      CALL ZLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
+      CALL AB_ZLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
       NORMSQ1 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
       IF( M1 .EQ. 0 ) THEN
@@ -231,23 +232,25 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL ZGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL AB_ZGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK
+     $,
      $               1 )
       END IF
 *
-      CALL ZGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL AB_ZGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 
+     $)
 *
-      CALL ZGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
+      CALL AB_ZGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
-      CALL ZGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
+      CALL AB_ZGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
      $            INCX2 )
 *
-      SCL1 = REALZERO
+      SCL1 = REAAB_LZERO
       SSQ1 = REALONE
-      CALL ZLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
-      SCL2 = REALZERO
+      CALL AB_ZLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      SCL2 = REAAB_LZERO
       SSQ2 = REALONE
-      CALL ZLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
+      CALL AB_ZLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
       NORMSQ2 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
 *     If projection is sufficiently large in norm, then stop.
@@ -273,26 +276,28 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL ZGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL AB_ZGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK
+     $,
      $               1 )
       END IF
 *
-      CALL ZGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL AB_ZGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 
+     $)
 *
-      CALL ZGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
+      CALL AB_ZGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
-      CALL ZGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
+      CALL AB_ZGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
      $            INCX2 )
 *
-      SCL1 = REALZERO
+      SCL1 = REAAB_LZERO
       SSQ1 = REALONE
-      CALL ZLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
-      SCL2 = REALZERO
+      CALL AB_ZLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      SCL2 = REAAB_LZERO
       SSQ2 = REALONE
-      CALL ZLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      CALL AB_ZLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       NORMSQ2 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
-*     If second projection is sufficiently large in norm, then do
+*     If AB_SECOND projection is sufficiently large in norm, then do
 *     nothing more. Alternatively, if it shrunk significantly, then
 *     truncate it to zero.
 *
@@ -307,7 +312,7 @@
 *
       RETURN
 *
-*     End of ZUNBDB6
+*     End of AB_AB_ZUNBDB6
 *
       END
 

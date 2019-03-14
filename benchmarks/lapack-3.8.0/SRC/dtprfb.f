@@ -1,4 +1,4 @@
-*> \brief \b DTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real or complex matrix, which is composed of two blocks.
+*> \brief \b AB_DTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real or complex matrix, which is composed of two blocks.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTPRFB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtprfb.f">
+*> Download AB_DTPRFB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTPRFB.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtprfb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTPRFB.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtprfb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTPRFB.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L,
+*       SUBROUTINE AB_DTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L,
 *                          V, LDV, T, LDT, A, LDA, B, LDB, WORK, LDWORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DTPRFB applies a real "triangular-pentagonal" block reflector H or its
+*> AB_DTPRFB applies a real "triangular-pentagonal" block reflector H or its
 *> transpose H**T to a real matrix C, which is composed of two
 *> blocks A and B, either from the left or right.
 *>
@@ -248,7 +248,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L,
+      SUBROUTINE AB_DTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L,
      $                   V, LDV, T, LDT, A, LDA, B, LDB, WORK, LDWORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -276,11 +276,11 @@
       LOGICAL   LEFT, FORWARD, COLUMN, RIGHT, BACKWARD, ROW
 *     ..
 *     .. External Functions ..
-      LOGICAL   LSAME
-      EXTERNAL  LSAME
+      LOGICAL   AB_LSAME
+      EXTERNAL  AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  DGEMM, DTRMM
+      EXTERNAL  AB_DGEMM, AB_DTRMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -288,10 +288,10 @@
 *
       IF( M.LE.0 .OR. N.LE.0 .OR. K.LE.0 .OR. L.LT.0 ) RETURN
 *
-      IF( LSAME( STOREV, 'C' ) ) THEN
+      IF( AB_LSAME( STOREV, 'C' ) ) THEN
          COLUMN = .TRUE.
          ROW = .FALSE.
-      ELSE IF ( LSAME( STOREV, 'R' ) ) THEN
+      ELSE IF ( AB_LSAME( STOREV, 'R' ) ) THEN
          COLUMN = .FALSE.
          ROW = .TRUE.
       ELSE
@@ -299,10 +299,10 @@
          ROW = .FALSE.
       END IF
 *
-      IF( LSAME( SIDE, 'L' ) ) THEN
+      IF( AB_LSAME( SIDE, 'L' ) ) THEN
          LEFT = .TRUE.
          RIGHT = .FALSE.
-      ELSE IF( LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'R' ) ) THEN
          LEFT = .FALSE.
          RIGHT = .TRUE.
       ELSE
@@ -310,10 +310,10 @@
          RIGHT = .FALSE.
       END IF
 *
-      IF( LSAME( DIRECT, 'F' ) ) THEN
+      IF( AB_LSAME( DIRECT, 'F' ) ) THEN
          FORWARD = .TRUE.
          BACKWARD = .FALSE.
-      ELSE IF( LSAME( DIRECT, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( DIRECT, 'B' ) ) THEN
          FORWARD = .FALSE.
          BACKWARD = .TRUE.
       ELSE
@@ -348,11 +348,11 @@
                WORK( I, J ) = B( M-L+I, J )
             END DO
          END DO
-         CALL DTRMM( 'L', 'U', 'T', 'N', L, N, ONE, V( MP, 1 ), LDV,
+         CALL AB_DTRMM( 'L', 'U', 'T', 'N', L, N, ONE, V( MP, 1 ), LDV,
      $               WORK, LDWORK )
-         CALL DGEMM( 'T', 'N', L, N, M-L, ONE, V, LDV, B, LDB,
+         CALL AB_DGEMM( 'T', 'N', L, N, M-L, ONE, V, LDV, B, LDB,
      $               ONE, WORK, LDWORK )
-         CALL DGEMM( 'T', 'N', K-L, N, M, ONE, V( 1, KP ), LDV,
+         CALL AB_DGEMM( 'T', 'N', K-L, N, M, ONE, V( 1, KP ), LDV,
      $               B, LDB, ZERO, WORK( KP, 1 ), LDWORK )
 *
          DO J = 1, N
@@ -361,7 +361,7 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'L', 'U', TRANS, 'N', K, N, ONE, T, LDT,
+         CALL AB_DTRMM( 'L', 'U', TRANS, 'N', K, N, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, N
@@ -370,11 +370,11 @@
             END DO
          END DO
 *
-         CALL DGEMM( 'N', 'N', M-L, N, K, -ONE, V, LDV, WORK, LDWORK,
+         CALL AB_DGEMM( 'N', 'N', M-L, N, K, -ONE, V, LDV, WORK, LDWORK,
      $               ONE, B, LDB )
-         CALL DGEMM( 'N', 'N', L, N, K-L, -ONE, V( MP, KP ), LDV,
+         CALL AB_DGEMM( 'N', 'N', L, N, K-L, -ONE, V( MP, KP ), LDV,
      $               WORK( KP, 1 ), LDWORK, ONE, B( MP, 1 ),  LDB )
-         CALL DTRMM( 'L', 'U', 'N', 'N', L, N, ONE, V( MP, 1 ), LDV,
+         CALL AB_DTRMM( 'L', 'U', 'N', 'N', L, N, ONE, V( MP, 1 ), LDV,
      $               WORK, LDWORK )
          DO J = 1, N
             DO I = 1, L
@@ -408,11 +408,11 @@
                WORK( I, J ) = B( I, N-L+J )
             END DO
          END DO
-         CALL DTRMM( 'R', 'U', 'N', 'N', M, L, ONE, V( NP, 1 ), LDV,
+         CALL AB_DTRMM( 'R', 'U', 'N', 'N', M, L, ONE, V( NP, 1 ), LDV,
      $               WORK, LDWORK )
-         CALL DGEMM( 'N', 'N', M, L, N-L, ONE, B, LDB,
+         CALL AB_DGEMM( 'N', 'N', M, L, N-L, ONE, B, LDB,
      $               V, LDV, ONE, WORK, LDWORK )
-         CALL DGEMM( 'N', 'N', M, K-L, N, ONE, B, LDB,
+         CALL AB_DGEMM( 'N', 'N', M, K-L, N, ONE, B, LDB,
      $               V( 1, KP ), LDV, ZERO, WORK( 1, KP ), LDWORK )
 *
          DO J = 1, K
@@ -421,7 +421,7 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'R', 'U', TRANS, 'N', M, K, ONE, T, LDT,
+         CALL AB_DTRMM( 'R', 'U', TRANS, 'N', M, K, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, K
@@ -430,11 +430,12 @@
             END DO
          END DO
 *
-         CALL DGEMM( 'N', 'T', M, N-L, K, -ONE, WORK, LDWORK,
+         CALL AB_DGEMM( 'N', 'T', M, N-L, K, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL DGEMM( 'N', 'T', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK,
+         CALL AB_DGEMM( 'N', 'T', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK
+     $,
      $               V( NP, KP ), LDV, ONE, B( 1, NP ), LDB )
-         CALL DTRMM( 'R', 'U', 'T', 'N', M, L, ONE, V( NP, 1 ), LDV,
+         CALL AB_DTRMM( 'R', 'U', 'T', 'N', M, L, ONE, V( NP, 1 ), LDV,
      $               WORK, LDWORK )
          DO J = 1, L
             DO I = 1, M
@@ -470,11 +471,11 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'L', 'L', 'T', 'N', L, N, ONE, V( 1, KP ), LDV,
+         CALL AB_DTRMM( 'L', 'L', 'T', 'N', L, N, ONE, V( 1, KP ), LDV,
      $               WORK( KP, 1 ), LDWORK )
-         CALL DGEMM( 'T', 'N', L, N, M-L, ONE, V( MP, KP ), LDV,
+         CALL AB_DGEMM( 'T', 'N', L, N, M-L, ONE, V( MP, KP ), LDV,
      $               B( MP, 1 ), LDB, ONE, WORK( KP, 1 ), LDWORK )
-         CALL DGEMM( 'T', 'N', K-L, N, M, ONE, V, LDV,
+         CALL AB_DGEMM( 'T', 'N', K-L, N, M, ONE, V, LDV,
      $               B, LDB, ZERO, WORK, LDWORK )
 *
          DO J = 1, N
@@ -483,7 +484,7 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'L', 'L', TRANS, 'N', K, N, ONE, T, LDT,
+         CALL AB_DTRMM( 'L', 'L', TRANS, 'N', K, N, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, N
@@ -492,11 +493,11 @@
             END DO
          END DO
 *
-         CALL DGEMM( 'N', 'N', M-L, N, K, -ONE, V( MP, 1 ), LDV,
+         CALL AB_DGEMM( 'N', 'N', M-L, N, K, -ONE, V( MP, 1 ), LDV,
      $               WORK, LDWORK, ONE, B( MP, 1 ), LDB )
-         CALL DGEMM( 'N', 'N', L, N, K-L, -ONE, V, LDV,
+         CALL AB_DGEMM( 'N', 'N', L, N, K-L, -ONE, V, LDV,
      $               WORK, LDWORK, ONE, B,  LDB )
-         CALL DTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, KP ), LDV,
+         CALL AB_DTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, KP ), LDV,
      $               WORK( KP, 1 ), LDWORK )
          DO J = 1, N
             DO I = 1, L
@@ -530,11 +531,11 @@
                WORK( I, K-L+J ) = B( I, J )
             END DO
          END DO
-         CALL DTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, KP ), LDV,
+         CALL AB_DTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, KP ), LDV,
      $               WORK( 1, KP ), LDWORK )
-         CALL DGEMM( 'N', 'N', M, L, N-L, ONE, B( 1, NP ), LDB,
+         CALL AB_DGEMM( 'N', 'N', M, L, N-L, ONE, B( 1, NP ), LDB,
      $               V( NP, KP ), LDV, ONE, WORK( 1, KP ), LDWORK )
-         CALL DGEMM( 'N', 'N', M, K-L, N, ONE, B, LDB,
+         CALL AB_DGEMM( 'N', 'N', M, K-L, N, ONE, B, LDB,
      $               V, LDV, ZERO, WORK, LDWORK )
 *
          DO J = 1, K
@@ -543,7 +544,7 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'R', 'L', TRANS, 'N', M, K, ONE, T, LDT,
+         CALL AB_DTRMM( 'R', 'L', TRANS, 'N', M, K, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, K
@@ -552,11 +553,11 @@
             END DO
          END DO
 *
-         CALL DGEMM( 'N', 'T', M, N-L, K, -ONE, WORK, LDWORK,
+         CALL AB_DGEMM( 'N', 'T', M, N-L, K, -ONE, WORK, LDWORK,
      $               V( NP, 1 ), LDV, ONE, B( 1, NP ), LDB )
-         CALL DGEMM( 'N', 'T', M, L, K-L, -ONE, WORK, LDWORK,
+         CALL AB_DGEMM( 'N', 'T', M, L, K-L, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL DTRMM( 'R', 'L', 'T', 'N', M, L, ONE, V( 1, KP ), LDV,
+         CALL AB_DTRMM( 'R', 'L', 'T', 'N', M, L, ONE, V( 1, KP ), LDV,
      $               WORK( 1, KP ), LDWORK )
          DO J = 1, L
             DO I = 1, M
@@ -590,11 +591,11 @@
                WORK( I, J ) = B( M-L+I, J )
             END DO
          END DO
-         CALL DTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, MP ), LDV,
+         CALL AB_DTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, MP ), LDV,
      $               WORK, LDB )
-         CALL DGEMM( 'N', 'N', L, N, M-L, ONE, V, LDV,B, LDB,
+         CALL AB_DGEMM( 'N', 'N', L, N, M-L, ONE, V, LDV,B, LDB,
      $               ONE, WORK, LDWORK )
-         CALL DGEMM( 'N', 'N', K-L, N, M, ONE, V( KP, 1 ), LDV,
+         CALL AB_DGEMM( 'N', 'N', K-L, N, M, ONE, V( KP, 1 ), LDV,
      $               B, LDB, ZERO, WORK( KP, 1 ), LDWORK )
 *
          DO J = 1, N
@@ -603,7 +604,7 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'L', 'U', TRANS, 'N', K, N, ONE, T, LDT,
+         CALL AB_DTRMM( 'L', 'U', TRANS, 'N', K, N, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, N
@@ -612,11 +613,11 @@
             END DO
          END DO
 *
-         CALL DGEMM( 'T', 'N', M-L, N, K, -ONE, V, LDV, WORK, LDWORK,
+         CALL AB_DGEMM( 'T', 'N', M-L, N, K, -ONE, V, LDV, WORK, LDWORK,
      $               ONE, B, LDB )
-         CALL DGEMM( 'T', 'N', L, N, K-L, -ONE, V( KP, MP ), LDV,
+         CALL AB_DGEMM( 'T', 'N', L, N, K-L, -ONE, V( KP, MP ), LDV,
      $               WORK( KP, 1 ), LDWORK, ONE, B( MP, 1 ), LDB )
-         CALL DTRMM( 'L', 'L', 'T', 'N', L, N, ONE, V( 1, MP ), LDV,
+         CALL AB_DTRMM( 'L', 'L', 'T', 'N', L, N, ONE, V( 1, MP ), LDV,
      $               WORK, LDWORK )
          DO J = 1, N
             DO I = 1, L
@@ -649,11 +650,11 @@
                WORK( I, J ) = B( I, N-L+J )
             END DO
          END DO
-         CALL DTRMM( 'R', 'L', 'T', 'N', M, L, ONE, V( 1, NP ), LDV,
+         CALL AB_DTRMM( 'R', 'L', 'T', 'N', M, L, ONE, V( 1, NP ), LDV,
      $               WORK, LDWORK )
-         CALL DGEMM( 'N', 'T', M, L, N-L, ONE, B, LDB, V, LDV,
+         CALL AB_DGEMM( 'N', 'T', M, L, N-L, ONE, B, LDB, V, LDV,
      $               ONE, WORK, LDWORK )
-         CALL DGEMM( 'N', 'T', M, K-L, N, ONE, B, LDB,
+         CALL AB_DGEMM( 'N', 'T', M, K-L, N, ONE, B, LDB,
      $               V( KP, 1 ), LDV, ZERO, WORK( 1, KP ), LDWORK )
 *
          DO J = 1, K
@@ -662,7 +663,7 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'R', 'U', TRANS, 'N', M, K, ONE, T, LDT,
+         CALL AB_DTRMM( 'R', 'U', TRANS, 'N', M, K, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, K
@@ -671,11 +672,12 @@
             END DO
          END DO
 *
-         CALL DGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
+         CALL AB_DGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL DGEMM( 'N', 'N', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK,
+         CALL AB_DGEMM( 'N', 'N', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK
+     $,
      $               V( KP, NP ), LDV, ONE, B( 1, NP ), LDB )
-         CALL DTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, NP ), LDV,
+         CALL AB_DTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, NP ), LDV,
      $               WORK, LDWORK )
          DO J = 1, L
             DO I = 1, M
@@ -709,11 +711,11 @@
                WORK( K-L+I, J ) = B( I, J )
             END DO
          END DO
-         CALL DTRMM( 'L', 'U', 'N', 'N', L, N, ONE, V( KP, 1 ), LDV,
+         CALL AB_DTRMM( 'L', 'U', 'N', 'N', L, N, ONE, V( KP, 1 ), LDV,
      $               WORK( KP, 1 ), LDWORK )
-         CALL DGEMM( 'N', 'N', L, N, M-L, ONE, V( KP, MP ), LDV,
+         CALL AB_DGEMM( 'N', 'N', L, N, M-L, ONE, V( KP, MP ), LDV,
      $               B( MP, 1 ), LDB, ONE, WORK( KP, 1 ), LDWORK )
-         CALL DGEMM( 'N', 'N', K-L, N, M, ONE, V, LDV, B, LDB,
+         CALL AB_DGEMM( 'N', 'N', K-L, N, M, ONE, V, LDV, B, LDB,
      $               ZERO, WORK, LDWORK )
 *
          DO J = 1, N
@@ -722,7 +724,7 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'L', 'L ', TRANS, 'N', K, N, ONE, T, LDT,
+         CALL AB_DTRMM( 'L', 'L ', TRANS, 'N', K, N, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, N
@@ -731,11 +733,11 @@
             END DO
          END DO
 *
-         CALL DGEMM( 'T', 'N', M-L, N, K, -ONE, V( 1, MP ), LDV,
+         CALL AB_DGEMM( 'T', 'N', M-L, N, K, -ONE, V( 1, MP ), LDV,
      $               WORK, LDWORK, ONE, B( MP, 1 ), LDB )
-         CALL DGEMM( 'T', 'N', L, N, K-L, -ONE, V, LDV,
+         CALL AB_DGEMM( 'T', 'N', L, N, K-L, -ONE, V, LDV,
      $               WORK, LDWORK, ONE, B, LDB )
-         CALL DTRMM( 'L', 'U', 'T', 'N', L, N, ONE, V( KP, 1 ), LDV,
+         CALL AB_DTRMM( 'L', 'U', 'T', 'N', L, N, ONE, V( KP, 1 ), LDV,
      $               WORK( KP, 1 ), LDWORK )
          DO J = 1, N
             DO I = 1, L
@@ -768,11 +770,11 @@
                WORK( I, K-L+J ) = B( I, J )
             END DO
          END DO
-         CALL DTRMM( 'R', 'U', 'T', 'N', M, L, ONE, V( KP, 1 ), LDV,
+         CALL AB_DTRMM( 'R', 'U', 'T', 'N', M, L, ONE, V( KP, 1 ), LDV,
      $               WORK( 1, KP ), LDWORK )
-         CALL DGEMM( 'N', 'T', M, L, N-L, ONE, B( 1, NP ), LDB,
+         CALL AB_DGEMM( 'N', 'T', M, L, N-L, ONE, B( 1, NP ), LDB,
      $               V( KP, NP ), LDV, ONE, WORK( 1, KP ), LDWORK )
-         CALL DGEMM( 'N', 'T', M, K-L, N, ONE, B, LDB, V, LDV,
+         CALL AB_DGEMM( 'N', 'T', M, K-L, N, ONE, B, LDB, V, LDV,
      $               ZERO, WORK, LDWORK )
 *
          DO J = 1, K
@@ -781,7 +783,7 @@
             END DO
          END DO
 *
-         CALL DTRMM( 'R', 'L', TRANS, 'N', M, K, ONE, T, LDT,
+         CALL AB_DTRMM( 'R', 'L', TRANS, 'N', M, K, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, K
@@ -790,11 +792,11 @@
             END DO
          END DO
 *
-         CALL DGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
+         CALL AB_DGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
      $               V( 1, NP ), LDV, ONE, B( 1, NP ), LDB )
-         CALL DGEMM( 'N', 'N', M, L, K-L , -ONE, WORK, LDWORK,
+         CALL AB_DGEMM( 'N', 'N', M, L, K-L , -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL DTRMM( 'R', 'U', 'N', 'N', M, L, ONE, V( KP, 1 ), LDV,
+         CALL AB_DTRMM( 'R', 'U', 'N', 'N', M, L, ONE, V( KP, 1 ), LDV,
      $               WORK( 1, KP ), LDWORK )
          DO J = 1, L
             DO I = 1, M
@@ -806,6 +808,6 @@
 *
       RETURN
 *
-*     End of DTPRFB
+*     End of AB_DTPRFB
 *
       END

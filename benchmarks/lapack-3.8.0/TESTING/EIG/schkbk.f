@@ -1,4 +1,4 @@
-*> \brief \b SCHKBK
+*> \brief \b AB_SCHKBK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKBK( NIN, NOUT )
+*       SUBROUTINE AB_SCHKBK( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,9 +20,9 @@
 *>
 *> \verbatim
 *>
-*> SCHKBK tests SGEBAK, a routine for backward transformation of
+*> AB_SCHKBK tests AB_SGEBAK, a routine for backward transformation of
 *> the computed right or left eigenvectors if the original matrix
-*> was preprocessed by balance subroutine SGEBAL.
+*> was preprocessed by balance subroutine AB_SGEBAL.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SCHKBK( NIN, NOUT )
+      SUBROUTINE AB_SCHKBK( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -67,8 +67,8 @@
 * ======================================================================
 *
 *     .. Parameters ..
-      INTEGER            LDE
-      PARAMETER          ( LDE = 20 )
+      INTEGER            AB_LDE
+      PARAMETER          ( AB_LDE = 20 )
       REAL               ZERO
       PARAMETER          ( ZERO = 0.0E0 )
 *     ..
@@ -78,14 +78,15 @@
 *     ..
 *     .. Local Arrays ..
       INTEGER            LMAX( 2 )
-      REAL               E( LDE, LDE ), EIN( LDE, LDE ), SCALE( LDE )
+      REAL               E( AB_LDE, AB_LDE ), EIN( AB_LDE, AB_LDE ), SCA
+     $LE( AB_LDE )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEBAK
+      EXTERNAL           AB_SGEBAK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -97,8 +98,8 @@
       NINFO = 0
       KNT = 0
       RMAX = ZERO
-      EPS = SLAMCH( 'E' )
-      SAFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'E' )
+      SAFMIN = AB_SLAMCH( 'S' )
 *
    10 CONTINUE
 *
@@ -116,7 +117,7 @@
    30 CONTINUE
 *
       KNT = KNT + 1
-      CALL SGEBAK( 'B', 'R', N, ILO, IHI, SCALE, N, E, LDE, INFO )
+      CALL AB_SGEBAK( 'B', 'R', N, ILO, IHI, SCALE, N, E, AB_LDE, INFO )
 *
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
@@ -143,7 +144,7 @@
    60 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of SGEBAK .. ' )
+ 9999 FORMAT( 1X, '.. test output of AB_SGEBAK .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error             = ', E12.3 )
@@ -158,6 +159,6 @@
 *
       RETURN
 *
-*     End of SCHKBK
+*     End of AB_SCHKBK
 *
       END

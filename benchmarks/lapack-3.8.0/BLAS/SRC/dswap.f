@@ -1,4 +1,4 @@
-*> \brief \b DSWAP
+*> \brief \b AB_DSWAP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSWAP(N,DX,INCX,DY,INCY)
+*       SUBROUTINE AB_DSWAP(N,DX,INCX,DY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    DSWAP interchanges two vectors.
+*>    AB_DSWAP interchanges two vectors.
 *>    uses unrolled loops for increments equal to 1.
 *> \endverbatim
 *
@@ -80,7 +80,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSWAP(N,DX,INCX,DY,INCY)
+      SUBROUTINE AB_DSWAP(N,DX,INCX,DY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

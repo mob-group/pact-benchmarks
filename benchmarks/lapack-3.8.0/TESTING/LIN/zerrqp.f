@@ -1,4 +1,4 @@
-*> \brief \b ZERRQP
+*> \brief \b AB_ZERRQP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZERRQP( PATH, NUNIT )
+*       SUBROUTINE AB_ZERRQP( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> ZERRQP tests the error exits for ZGEQP3.
+*> AB_ZERRQP tests the error exits for AB_ZGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZERRQP( PATH, NUNIT )
+      SUBROUTINE AB_ZERRQP( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -81,11 +81,11 @@
      $                   W( 2*NMAX+3*NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, ZGEQP3
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_ZGEQP3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -113,31 +113,31 @@
 *
 *     Test error exits for QR factorization with pivoting
 *
-      IF( LSAMEN( 2, C2, 'QP' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'QP' ) ) THEN
 *
-*        ZGEQP3
+*        AB_ZGEQP3
 *
-         SRNAMT = 'ZGEQP3'
+         SRNAMT = 'AB_ZGEQP3'
          INFOT = 1
-         CALL ZGEQP3( -1, 0, A, 1, IP, TAU, W, LW, RW, INFO )
-         CALL CHKXER( 'ZGEQP3', INFOT, NOUT, LERR, OK )
+         CALL AB_ZGEQP3( -1, 0, A, 1, IP, TAU, W, LW, RW, INFO )
+         CALL AB_CHKXER( 'AB_ZGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL ZGEQP3( 1, -1, A, 1, IP, TAU, W, LW, RW, INFO )
-         CALL CHKXER( 'ZGEQP3', INFOT, NOUT, LERR, OK )
+         CALL AB_ZGEQP3( 1, -1, A, 1, IP, TAU, W, LW, RW, INFO )
+         CALL AB_CHKXER( 'AB_ZGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL ZGEQP3( 2, 3, A, 1, IP, TAU, W, LW, RW, INFO )
-         CALL CHKXER( 'ZGEQP3', INFOT, NOUT, LERR, OK )
+         CALL AB_ZGEQP3( 2, 3, A, 1, IP, TAU, W, LW, RW, INFO )
+         CALL AB_CHKXER( 'AB_ZGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL ZGEQP3( 2, 2, A, 2, IP, TAU, W, LW-10, RW, INFO )
-         CALL CHKXER( 'ZGEQP3', INFOT, NOUT, LERR, OK )
+         CALL AB_ZGEQP3( 2, 2, A, 2, IP, TAU, W, LW-10, RW, INFO )
+         CALL AB_CHKXER( 'AB_ZGEQP3', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of ZERRQP
+*     End of AB_ZERRQP
 *
       END

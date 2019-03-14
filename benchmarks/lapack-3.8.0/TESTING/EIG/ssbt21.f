@@ -1,4 +1,4 @@
-*> \brief \b SSBT21
+*> \brief \b AB_SSBT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
+*       SUBROUTINE AB_SSBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
 *                          RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SSBT21  generally checks a decomposition of the form
+*> AB_SSBT21  generally checks a decomposition of the form
 *>
 *>         A = U S U'
 *>
@@ -54,7 +54,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, SSBT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_SSBT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -107,7 +107,7 @@
 *> \verbatim
 *>          U is REAL array, dimension (LDU, N)
 *>          The orthogonal matrix in the decomposition, expressed as a
-*>          dense matrix (i.e., not as a product of Householder
+*>          dense matrix (i.e., not as a product of HousehoAB_LDEr
 *>          transformations, Givens transformations, etc.)
 *> \endverbatim
 *>
@@ -143,7 +143,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SSBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
+      SUBROUTINE AB_SSBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -173,12 +173,13 @@
       REAL               ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE, SLANSB, SLANSP
-      EXTERNAL           LSAME, SLAMCH, SLANGE, SLANSB, SLANSP
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSB, AB_SLANSP
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE, AB_SLANSB, AB_S
+     $LANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SSPR, SSPR2
+      EXTERNAL           AB_SGEMM, AB_SSPR, AB_AB_SSPR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -195,7 +196,7 @@
       IKA = MAX( 0, MIN( N-1, KA ) )
       LW = ( N*( N+1 ) ) / 2
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -203,8 +204,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -212,7 +213,7 @@
 *
 *     Norm of A:
 *
-      ANORM = MAX( SLANSB( '1', CUPLO, N, IKA, A, LDA, WORK ), UNFL )
+      ANORM = MAX( AB_SLANSB( '1', CUPLO, N, IKA, A, LDA, WORK ), UNFL )
 *
 *     Compute error matrix:    Error = A - U S U'
 *
@@ -242,16 +243,17 @@
    50 CONTINUE
 *
       DO 60 J = 1, N
-         CALL SSPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
+         CALL AB_SSPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
    60 CONTINUE
 *
       IF( N.GT.1 .AND. KS.EQ.1 ) THEN
          DO 70 J = 1, N - 1
-            CALL SSPR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, J+1 ), 1,
+            CALL AB_AB_SSPR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, J+1
+     $ ), 1,
      $                  WORK )
    70    CONTINUE
       END IF
-      WNORM = SLANSP( '1', CUPLO, N, WORK, WORK( LW+1 ) )
+      WNORM = AB_SLANSP( '1', CUPLO, N, WORK, WORK( LW+1 ) )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -267,18 +269,19 @@
 *
 *     Compute  UU' - I
 *
-      CALL SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+      CALL AB_SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
      $            N )
 *
       DO 80 J = 1, N
          WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
    80 CONTINUE
 *
-      RESULT( 2 ) = MIN( SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) ),
+      RESULT( 2 ) = MIN( AB_SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
+     $,
      $              REAL( N ) ) / ( N*ULP )
 *
       RETURN
 *
-*     End of SSBT21
+*     End of AB_SSBT21
 *
       END

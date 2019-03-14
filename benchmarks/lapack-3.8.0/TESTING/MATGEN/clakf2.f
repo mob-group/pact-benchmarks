@@ -1,4 +1,4 @@
-*> \brief \b CLAKF2
+*> \brief \b AB_CLAKF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
+*       SUBROUTINE AB_CLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDZ, M, N
@@ -103,7 +103,7 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE CLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
+      SUBROUTINE AB_CLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,7 +128,7 @@
       INTEGER            I, IK, J, JK, L, MN, MN2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET
+      EXTERNAL           AB_CLASET
 *     ..
 *     .. Executable Statements ..
 *
@@ -136,7 +136,7 @@
 *
       MN = M*N
       MN2 = 2*MN
-      CALL CLASET( 'Full', MN2, MN2, ZERO, ZERO, Z, LDZ )
+      CALL AB_CLASET( 'Full', MN2, MN2, ZERO, ZERO, Z, LDZ )
 *
       IK = 1
       DO 50 L = 1, N
@@ -186,6 +186,6 @@
 *
       RETURN
 *
-*     End of CLAKF2
+*     End of AB_CLAKF2
 *
       END

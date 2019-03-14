@@ -1,4 +1,4 @@
-*> \brief \b CTREVC3
+*> \brief \b AB_AB_CTREVC3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTREVC3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrevc3.f">
+*> Download AB_AB_CTREVC3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CTREVC3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrevc3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CTREVC3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrevc3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CTREVC3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+*       SUBROUTINE AB_AB_CTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
 *                           LDVR, MM, M, WORK, LWORK, RWORK, LRWORK, INFO)
 *
 *       .. Scalar Arguments ..
@@ -38,10 +38,10 @@
 *>
 *> \verbatim
 *>
-*> CTREVC3 computes some or all of the right and/or left eigenvectors of
+*> AB_AB_CTREVC3 computes some or all of the right and/or left eigenvectors of
 *> a complex upper triangular matrix T.
 *> Matrices of this type are produced by the Schur factorization of
-*> a complex general matrix:  A = Q*T*Q**H, as computed by CHSEQR.
+*> a complex general matrix:  A = Q*T*Q**H, as computed by AB_CHSEQR.
 *>
 *> The right eigenvector x and the left eigenvector y of T corresponding
 *> to an eigenvalue w are defined by:
@@ -117,7 +117,7 @@
 *>          VL is COMPLEX array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Q of
-*>          Schur vectors returned by CHSEQR).
+*>          Schur vectors returned by AB_CHSEQR).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -140,7 +140,7 @@
 *>          VR is COMPLEX array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Q of
-*>          Schur vectors returned by CHSEQR).
+*>          Schur vectors returned by AB_CHSEQR).
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*X;
@@ -188,7 +188,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -204,7 +204,7 @@
 *>          If LRWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the RWORK array, returns
 *>          this value as the first entry of the RWORK array, and no error
-*>          message related to LRWORK is issued by XERBLA.
+*>          message related to LRWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -224,7 +224,7 @@
 *
 *> \date November 2017
 *
-*  @generated from ztrevc3.f, fortran z -> c, Tue Apr 19 01:47:44 2016
+*  @generated from AB_AB_ZTREVC3.f, fortran z -> c, Tue Apr 19 01:47:44 2016
 *
 *> \ingroup complexOTHERcomputational
 *
@@ -243,7 +243,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE AB_AB_CTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDV
+     $L, VR,
      $                    LDVR, MM, M, WORK, LWORK, RWORK, LRWORK, INFO)
       IMPLICIT NONE
 *
@@ -281,14 +282,16 @@
       COMPLEX         CDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV, ICAMAX
-      REAL   SLAMCH, SCASUM
-      EXTERNAL           LSAME, ILAENV, ICAMAX, SLAMCH, SCASUM
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV, AB_ICAMAX
+      REAL   AB_SLAMCH, AB_SCASUM
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_ICAMAX, AB_SLAMCH, AB_S
+     $CASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CCOPY, CLASET, CSSCAL, CGEMM, CGEMV,
-     $                   CLATRS, CLACPY, SLABAD
+      EXTERNAL           AB_XERBLA, AB_CCOPY, AB_CLASET, AB_CAB_SSCAL, A
+     $B_CGEMM, AB_CGEMV,
+     $                   AB_CLATRS, AB_CLACPY, AB_SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, CMPLX, CONJG, AIMAG, MAX
@@ -303,13 +306,13 @@
 *
 *     Decode and test the input parameters
 *
-      BOTHV  = LSAME( SIDE, 'B' )
-      RIGHTV = LSAME( SIDE, 'R' ) .OR. BOTHV
-      LEFTV  = LSAME( SIDE, 'L' ) .OR. BOTHV
+      BOTHV  = AB_LSAME( SIDE, 'B' )
+      RIGHTV = AB_LSAME( SIDE, 'R' ) .OR. BOTHV
+      LEFTV  = AB_LSAME( SIDE, 'L' ) .OR. BOTHV
 *
-      ALLV  = LSAME( HOWMNY, 'A' )
-      OVER  = LSAME( HOWMNY, 'B' )
-      SOMEV = LSAME( HOWMNY, 'S' )
+      ALLV  = AB_LSAME( HOWMNY, 'A' )
+      OVER  = AB_LSAME( HOWMNY, 'B' )
+      SOMEV = AB_LSAME( HOWMNY, 'S' )
 *
 *     Set M to the number of columns required to store the selected
 *     eigenvectors.
@@ -325,7 +328,7 @@
       END IF
 *
       INFO = 0
-      NB = ILAENV( 1, 'CTREVC', SIDE // HOWMNY, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_CTREVC', SIDE // HOWMNY, N, -1, -1, -1 )
       MAXWRK = N + 2*N*NB
       WORK(1) = MAXWRK
       RWORK(1) = N
@@ -350,7 +353,7 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTREVC3', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CTREVC3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -367,17 +370,17 @@
       IF( OVER .AND. LWORK .GE. N + 2*N*NBMIN ) THEN
          NB = (LWORK - N) / (2*N)
          NB = MIN( NB, NBMAX )
-         CALL CLASET( 'F', N, 1+2*NB, CZERO, CZERO, WORK, N )
+         CALL AB_CLASET( 'F', N, 1+2*NB, CZERO, CZERO, WORK, N )
       ELSE
          NB = 1
       END IF
 *
 *     Set the constants to control overflow.
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      CALL AB_SLABAD( UNFL, OVFL )
+      ULP = AB_SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *
 *     Store the diagonal elements of T in working array WORK.
@@ -391,7 +394,7 @@
 *
       RWORK( 1 ) = ZERO
       DO 30 J = 2, N
-         RWORK( J ) = SCASUM( J-1, T( 1, J ), 1 )
+         RWORK( J ) = AB_SCASUM( J-1, T( 1, J ), 1 )
    30 CONTINUE
 *
       IF( RIGHTV ) THEN
@@ -433,7 +436,7 @@
    50       CONTINUE
 *
             IF( KI.GT.1 ) THEN
-               CALL CLATRS( 'Upper', 'No transpose', 'Non-unit', 'Y',
+               CALL AB_CLATRS( 'Upper', 'No transpose', 'Non-unit', 'Y',
      $                      KI-1, T, LDT, WORK( 1 + IV*N ), SCALE,
      $                      RWORK, INFO )
                WORK( KI + IV*N ) = SCALE
@@ -444,11 +447,11 @@
             IF( .NOT.OVER ) THEN
 *              ------------------------------
 *              no back-transform: copy x to VR and normalize.
-               CALL CCOPY( KI, WORK( 1 + IV*N ), 1, VR( 1, IS ), 1 )
+               CALL AB_CCOPY( KI, WORK( 1 + IV*N ), 1, VR( 1, IS ), 1 )
 *
-               II = ICAMAX( KI, VR( 1, IS ), 1 )
+               II = AB_ICAMAX( KI, VR( 1, IS ), 1 )
                REMAX = ONE / CABS1( VR( II, IS ) )
-               CALL CSSCAL( KI, REMAX, VR( 1, IS ), 1 )
+               CALL AB_CAB_SSCAL( KI, REMAX, VR( 1, IS ), 1 )
 *
                DO 60 K = KI + 1, N
                   VR( K, IS ) = CZERO
@@ -458,13 +461,13 @@
 *              ------------------------------
 *              version 1: back-transform each vector with GEMV, Q*x.
                IF( KI.GT.1 )
-     $            CALL CGEMV( 'N', N, KI-1, CONE, VR, LDVR,
+     $            CALL AB_CGEMV( 'N', N, KI-1, CONE, VR, LDVR,
      $                        WORK( 1 + IV*N ), 1, CMPLX( SCALE ),
      $                        VR( 1, KI ), 1 )
 *
-               II = ICAMAX( N, VR( 1, KI ), 1 )
+               II = AB_ICAMAX( N, VR( 1, KI ), 1 )
                REMAX = ONE / CABS1( VR( II, KI ) )
-               CALL CSSCAL( N, REMAX, VR( 1, KI ), 1 )
+               CALL AB_CAB_SSCAL( N, REMAX, VR( 1, KI ), 1 )
 *
             ELSE
 *              ------------------------------
@@ -478,18 +481,19 @@
 *              When the number of vectors stored reaches NB,
 *              or if this was last vector, do the GEMM
                IF( (IV.EQ.1) .OR. (KI.EQ.1) ) THEN
-                  CALL CGEMM( 'N', 'N', N, NB-IV+1, KI+NB-IV, CONE,
+                  CALL AB_CGEMM( 'N', 'N', N, NB-IV+1, KI+NB-IV, CONE,
      $                        VR, LDVR,
      $                        WORK( 1 + (IV)*N    ), N,
      $                        CZERO,
      $                        WORK( 1 + (NB+IV)*N ), N )
 *                 normalize vectors
                   DO K = IV, NB
-                     II = ICAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
+                     II = AB_ICAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
                      REMAX = ONE / CABS1( WORK( II + (NB+K)*N ) )
-                     CALL CSSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
+                     CALL AB_CAB_SSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 
+     $1 )
                   END DO
-                  CALL CLACPY( 'F', N, NB-IV+1,
+                  CALL AB_CLACPY( 'F', N, NB-IV+1,
      $                         WORK( 1 + (NB+IV)*N ), N,
      $                         VR( 1, KI ), LDVR )
                   IV = NB
@@ -548,7 +552,8 @@
   100       CONTINUE
 *
             IF( KI.LT.N ) THEN
-               CALL CLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
+               CALL AB_CLATRS( 'Upper', 'Conjugate transpose', 'Non-unit
+     $',
      $                      'Y', N-KI, T( KI+1, KI+1 ), LDT,
      $                      WORK( KI+1 + IV*N ), SCALE, RWORK, INFO )
                WORK( KI + IV*N ) = SCALE
@@ -559,11 +564,12 @@
             IF( .NOT.OVER ) THEN
 *              ------------------------------
 *              no back-transform: copy x to VL and normalize.
-               CALL CCOPY( N-KI+1, WORK( KI + IV*N ), 1, VL(KI,IS), 1 )
+               CALL AB_CCOPY( N-KI+1, WORK( KI + IV*N ), 1, VL(KI,IS), 1
+     $ )
 *
-               II = ICAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
+               II = AB_ICAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
                REMAX = ONE / CABS1( VL( II, IS ) )
-               CALL CSSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
+               CALL AB_CAB_SSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
 *
                DO 110 K = 1, KI - 1
                   VL( K, IS ) = CZERO
@@ -573,13 +579,14 @@
 *              ------------------------------
 *              version 1: back-transform each vector with GEMV, Q*x.
                IF( KI.LT.N )
-     $            CALL CGEMV( 'N', N, N-KI, CONE, VL( 1, KI+1 ), LDVL,
+     $            CALL AB_CGEMV( 'N', N, N-KI, CONE, VL( 1, KI+1 ), LDVL
+     $,
      $                        WORK( KI+1 + IV*N ), 1, CMPLX( SCALE ),
      $                        VL( 1, KI ), 1 )
 *
-               II = ICAMAX( N, VL( 1, KI ), 1 )
+               II = AB_ICAMAX( N, VL( 1, KI ), 1 )
                REMAX = ONE / CABS1( VL( II, KI ) )
-               CALL CSSCAL( N, REMAX, VL( 1, KI ), 1 )
+               CALL AB_CAB_SSCAL( N, REMAX, VL( 1, KI ), 1 )
 *
             ELSE
 *              ------------------------------
@@ -594,18 +601,19 @@
 *              When the number of vectors stored reaches NB,
 *              or if this was last vector, do the GEMM
                IF( (IV.EQ.NB) .OR. (KI.EQ.N) ) THEN
-                  CALL CGEMM( 'N', 'N', N, IV, N-KI+IV, CONE,
+                  CALL AB_CGEMM( 'N', 'N', N, IV, N-KI+IV, CONE,
      $                        VL( 1, KI-IV+1 ), LDVL,
      $                        WORK( KI-IV+1 + (1)*N ), N,
      $                        CZERO,
      $                        WORK( 1 + (NB+1)*N ), N )
 *                 normalize vectors
                   DO K = 1, IV
-                     II = ICAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
+                     II = AB_ICAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
                      REMAX = ONE / CABS1( WORK( II + (NB+K)*N ) )
-                     CALL CSSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
+                     CALL AB_CAB_SSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 
+     $1 )
                   END DO
-                  CALL CLACPY( 'F', N, IV,
+                  CALL AB_CLACPY( 'F', N, IV,
      $                         WORK( 1 + (NB+1)*N ), N,
      $                         VL( 1, KI-IV+1 ), LDVL )
                   IV = 1
@@ -626,6 +634,6 @@
 *
       RETURN
 *
-*     End of CTREVC3
+*     End of AB_AB_CTREVC3
 *
       END

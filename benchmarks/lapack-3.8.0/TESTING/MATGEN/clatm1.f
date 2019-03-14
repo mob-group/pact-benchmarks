@@ -1,4 +1,4 @@
-*> \brief \b CLATM1
+*> \brief \b AB_CLATM1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
+*       SUBROUTINE AB_CLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST, INFO, IRSIGN, MODE, N
@@ -25,9 +25,9 @@
 *>
 *> \verbatim
 *>
-*>    CLATM1 computes the entries of D(1..N) as specified by
+*>    AB_CLATM1 computes the entries of D(1..N) as specified by
 *>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
-*>    of random numbers. CLATM1 is called by CLATMR to generate
+*>    of random numbers. AB_CLATM1 is called by AB_CLATMR to generate
 *>    random test matrices for LAPACK programs.
 *> \endverbatim
 *
@@ -92,7 +92,7 @@
 *>           linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to CLATM1
+*>           exit, and can be used in the next call to AB_CLATM1
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -135,7 +135,8 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE CLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
+      SUBROUTINE AB_CLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO
+     $ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,12 +164,12 @@
       COMPLEX            CTEMP
 *     ..
 *     .. External Functions ..
-      REAL               SLARAN
-      COMPLEX            CLARND
-      EXTERNAL           SLARAN, CLARND
+      REAL               AB_SLARAN
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_SLARAN, AB_CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARNV, XERBLA
+      EXTERNAL           AB_CLARNV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, LOG, REAL
@@ -202,7 +203,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLATM1', -INFO )
+         CALL AB_XERBLA( 'AB_CLATM1', -INFO )
          RETURN
       END IF
 *
@@ -259,14 +260,14 @@
    90    CONTINUE
          ALPHA = LOG( ONE / COND )
          DO 100 I = 1, N
-            D( I ) = EXP( ALPHA*SLARAN( ISEED ) )
+            D( I ) = EXP( ALPHA*AB_SLARAN( ISEED ) )
   100    CONTINUE
          GO TO 120
 *
 *        Randomly distributed D values from IDIST
 *
   110    CONTINUE
-         CALL CLARNV( IDIST, ISEED, N, D )
+         CALL AB_CLARNV( IDIST, ISEED, N, D )
 *
   120    CONTINUE
 *
@@ -276,7 +277,7 @@
          IF( ( MODE.NE.-6 .AND. MODE.NE.0 .AND. MODE.NE.6 ) .AND.
      $       IRSIGN.EQ.1 ) THEN
             DO 130 I = 1, N
-               CTEMP = CLARND( 3, ISEED )
+               CTEMP = AB_CLARND( 3, ISEED )
                D( I ) = D( I )*( CTEMP / ABS( CTEMP ) )
   130       CONTINUE
          END IF
@@ -295,6 +296,6 @@
 *
       RETURN
 *
-*     End of CLATM1
+*     End of AB_CLATM1
 *
       END

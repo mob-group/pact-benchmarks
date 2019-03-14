@@ -1,6 +1,6 @@
-*> \brief <b> SSYEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
+*> \brief <b> AB_AB_SSYEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
 *
-*  @generated from dsyev_2stage.f, fortran d -> s, Sat Nov  5 23:55:51 2016
+*  @generated from AB_AB_DSYEV_2STAGE.f, fortran d -> s, Sat Nov  5 23:55:51 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYEV_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevd_2stage.f">
+*> Download AB_AB_SSYEV_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_SSYEVD_2STAGE.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyevd_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_SSYEVD_2STAGE.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevd_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_SSYEVD_2STAGE.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, 
+*       SUBROUTINE AB_AB_SSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, 
 *                                INFO )
 *
 *       IMPLICIT NONE
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> SSYEV_2STAGE computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_AB_SSYEV_2STAGE computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A using the 2stage technique for
 *> the reduction to tridiagonal.
 *> \endverbatim
@@ -122,7 +122,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -180,7 +180,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, 
+      SUBROUTINE AB_AB_SSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWO
+     $RK, 
      $                         INFO )
 *
       IMPLICIT NONE
@@ -212,14 +213,16 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSY, ILAENV2STAGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_AB_ILAENV2STAGE
+      REAL               AB_SLAMCH, AB_SLANSY
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANSY, AB_AB_ILAENV2ST
+     $AGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASCL, SORGTR, SSCAL, SSTEQR, SSTERF,
-     $                   XERBLA, SSYTRD_2STAGE
+      EXTERNAL           AB_SLASCL, AB_SORGTR, AB_SSCAL, AB_SSTEQR, AB_S
+     $STERF,
+     $                   AB_XERBLA, AB_AB_SSYTRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -228,14 +231,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      LOWER = LSAME( UPLO, 'L' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      LOWER = AB_LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -244,10 +247,14 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-         IB    = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         KD    = AB_AB_ILAENV2STAGE( 1, 'AB_AB_SSYTRD_2STAGE', JOBZ, N, 
+     $-1, -1, -1 )
+         IB    = AB_AB_ILAENV2STAGE( 2, 'AB_AB_SSYTRD_2STAGE', JOBZ, N, 
+     $KD, -1, -1 )
+         LHTRD = AB_AB_ILAENV2STAGE( 3, 'AB_AB_SSYTRD_2STAGE', JOBZ, N, 
+     $KD, IB, -1 )
+         LWTRD = AB_AB_ILAENV2STAGE( 4, 'AB_AB_SSYTRD_2STAGE', JOBZ, N, 
+     $KD, IB, -1 )
          LWMIN = 2*N + LHTRD + LWTRD
          WORK( 1 )  = LWMIN
 *
@@ -256,7 +263,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYEV_2STAGE ', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SSYEV_2STAGE ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -278,8 +285,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      EPS    = SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS    = AB_SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN   = SQRT( SMLNUM )
@@ -287,7 +294,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = SLANSY( 'M', UPLO, N, A, LDA, WORK )
+      ANRM = AB_SLANSY( 'M', UPLO, N, A, LDA, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -297,9 +304,9 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 )
-     $   CALL SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+     $   CALL AB_SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
 *
-*     Call SSYTRD_2STAGE to reduce symmetric matrix to tridiagonal form.
+*     Call AB_AB_SSYTRD_2STAGE to reduce symmetric matrix to tridiagonal form.
 *
       INDE    = 1
       INDTAU  = INDE + N
@@ -307,22 +314,24 @@
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL SSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK( INDE ),
+      CALL AB_AB_SSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK( INDE ),
      $                    WORK( INDTAU ), WORK( INDHOUS ), LHTRD, 
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call SSTERF.  For eigenvectors, first call
-*     SORGTR to generate the orthogonal matrix, then call SSTEQR.
+*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, first call
+*     AB_SORGTR to generate the orthogonal matrix, then call AB_SSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL SSTERF( N, W, WORK( INDE ), INFO )
+         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
 *        Not available in this release, and agrument checking should not
 *        let it getting here
          RETURN
-         CALL SORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
+         CALL AB_SORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK )
+     $,
      $                LLWORK, IINFO )
-         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU ),
+         CALL AB_SSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU 
+     $),
      $                INFO )
       END IF
 *
@@ -334,7 +343,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     Set WORK(1) to optimal workspace size.
@@ -343,6 +352,6 @@
 *
       RETURN
 *
-*     End of SSYEV_2STAGE
+*     End of AB_AB_SSYEV_2STAGE
 *
       END

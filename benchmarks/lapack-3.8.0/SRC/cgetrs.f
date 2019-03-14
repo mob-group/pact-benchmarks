@@ -1,4 +1,4 @@
-*> \brief \b CGETRS
+*> \brief \b AB_CGETRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGETRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetrs.f">
+*> Download AB_CGETRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGETRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgetrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGETRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGETRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE AB_CGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> CGETRS solves a system of linear equations
+*> AB_CGETRS solves a system of linear equations
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B
 *> with a general N-by-N matrix A using the LU factorization computed
-*> by CGETRF.
+*> by AB_CGETRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -70,7 +70,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The factors L and U from the factorization A = P*L*U
-*>          as computed by CGETRF.
+*>          as computed by AB_CGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from CGETRF; for 1<=i<=N, row i of the
+*>          The pivot indices from AB_CGETRF; for 1<=i<=N, row i of the
 *>          matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -119,7 +119,7 @@
 *> \ingroup complexGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      SUBROUTINE AB_CGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -145,11 +145,11 @@
       LOGICAL            NOTRAN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASWP, CTRSM, XERBLA
+      EXTERNAL           AB_CLASWP, AB_CTRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -159,9 +159,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -173,7 +173,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGETRS', -INFO )
+         CALL AB_XERBLA( 'AB_CGETRS', -INFO )
          RETURN
       END IF
 *
@@ -188,16 +188,17 @@
 *
 *        Apply row interchanges to the right hand sides.
 *
-         CALL CLASWP( NRHS, B, LDB, 1, N, IPIV, 1 )
+         CALL AB_CLASWP( NRHS, B, LDB, 1, N, IPIV, 1 )
 *
 *        Solve L*X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Unit', N, NRHS,
+         CALL AB_CTRSM( 'Left', 'Lower', 'No transpose', 'Unit', N, NRHS
+     $,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve U*X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
+         CALL AB_CTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
       ELSE
 *
@@ -205,21 +206,22 @@
 *
 *        Solve U**T *X = B or U**H *X = B, overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Upper', TRANS, 'Non-unit', N, NRHS, ONE,
+         CALL AB_CTRSM( 'Left', 'Upper', TRANS, 'Non-unit', N, NRHS, ONE
+     $,
      $               A, LDA, B, LDB )
 *
 *        Solve L**T *X = B, or L**H *X = B overwriting B with X.
 *
-         CALL CTRSM( 'Left', 'Lower', TRANS, 'Unit', N, NRHS, ONE, A,
+         CALL AB_CTRSM( 'Left', 'Lower', TRANS, 'Unit', N, NRHS, ONE, A,
      $               LDA, B, LDB )
 *
 *        Apply row interchanges to the solution vectors.
 *
-         CALL CLASWP( NRHS, B, LDB, 1, N, IPIV, -1 )
+         CALL AB_CLASWP( NRHS, B, LDB, 1, N, IPIV, -1 )
       END IF
 *
       RETURN
 *
-*     End of CGETRS
+*     End of AB_CGETRS
 *
       END

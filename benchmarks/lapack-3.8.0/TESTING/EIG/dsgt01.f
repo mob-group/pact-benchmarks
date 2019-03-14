@@ -1,4 +1,4 @@
-*> \brief \b DSGT01
+*> \brief \b AB_DSGT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
+*       SUBROUTINE AB_DSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
 *                          WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -143,7 +143,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
+      SUBROUTINE AB_DSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D
+     $,
      $                   WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -171,11 +172,11 @@
       DOUBLE PRECISION   ANORM, ULP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSY
+      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSYMM
+      EXTERNAL           AB_DSCAL, AB_DSYMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -183,12 +184,12 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      ULP = DLAMCH( 'Epsilon' )
+      ULP = AB_DLAMCH( 'Epsilon' )
 *
 *     Compute product of 1-norms of A and Z.
 *
-      ANORM = DLANSY( '1', UPLO, N, A, LDA, WORK )*
-     $        DLANGE( '1', N, M, Z, LDZ, WORK )
+      ANORM = AB_DLANSY( '1', UPLO, N, A, LDA, WORK )*
+     $        AB_DLANGE( '1', N, M, Z, LDZ, WORK )
       IF( ANORM.EQ.ZERO )
      $   ANORM = ONE
 *
@@ -196,45 +197,50 @@
 *
 *        Norm of AZ - BZD
 *
-         CALL DSYMM( 'Left', UPLO, N, M, ONE, A, LDA, Z, LDZ, ZERO,
+         CALL AB_DSYMM( 'Left', UPLO, N, M, ONE, A, LDA, Z, LDZ, ZERO,
      $               WORK, N )
          DO 10 I = 1, M
-            CALL DSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL AB_DSCAL( N, D( I ), Z( 1, I ), 1 )
    10    CONTINUE
-         CALL DSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, -ONE,
+         CALL AB_DSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, -ONE,
      $               WORK, N )
 *
-         RESULT( 1 ) = ( DLANGE( '1', N, M, WORK, N, WORK ) / ANORM ) /
+         RESULT( 1 ) = ( AB_DLANGE( '1', N, M, WORK, N, WORK ) / ANORM )
+     $ /
      $                 ( N*ULP )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        Norm of ABZ - ZD
 *
-         CALL DSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, ZERO,
+         CALL AB_DSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, ZERO,
      $               WORK, N )
          DO 20 I = 1, M
-            CALL DSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL AB_DSCAL( N, D( I ), Z( 1, I ), 1 )
    20    CONTINUE
-         CALL DSYMM( 'Left', UPLO, N, M, ONE, A, LDA, WORK, N, -ONE, Z,
+         CALL AB_DSYMM( 'Left', UPLO, N, M, ONE, A, LDA, WORK, N, -ONE, 
+     $Z,
      $               LDZ )
 *
-         RESULT( 1 ) = ( DLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) /
+         RESULT( 1 ) = ( AB_DLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) 
+     $/
      $                 ( N*ULP )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
 *        Norm of BAZ - ZD
 *
-         CALL DSYMM( 'Left', UPLO, N, M, ONE, A, LDA, Z, LDZ, ZERO,
+         CALL AB_DSYMM( 'Left', UPLO, N, M, ONE, A, LDA, Z, LDZ, ZERO,
      $               WORK, N )
          DO 30 I = 1, M
-            CALL DSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL AB_DSCAL( N, D( I ), Z( 1, I ), 1 )
    30    CONTINUE
-         CALL DSYMM( 'Left', UPLO, N, M, ONE, B, LDB, WORK, N, -ONE, Z,
+         CALL AB_DSYMM( 'Left', UPLO, N, M, ONE, B, LDB, WORK, N, -ONE, 
+     $Z,
      $               LDZ )
 *
-         RESULT( 1 ) = ( DLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) /
+         RESULT( 1 ) = ( AB_DLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) 
+     $/
      $                 ( N*ULP )
       END IF
 *

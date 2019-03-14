@@ -1,4 +1,4 @@
-*> \brief \b SDISNA
+*> \brief \b AB_SDISNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SDISNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sdisna.f">
+*> Download AB_SDISNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SDISNA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sdisna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SDISNA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sdisna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SDISNA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SDISNA( JOB, M, N, D, SEP, INFO )
+*       SUBROUTINE AB_SDISNA( JOB, M, N, D, SEP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOB
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SDISNA computes the reciprocal condition numbers for the eigenvectors
+*> AB_SDISNA computes the reciprocal condition numbers for the eigenvectors
 *> of a real symmetric or complex Hermitian matrix or for the left or
 *> right singular vectors of a general m-by-n matrix. The reciprocal
 *> condition number is the 'gap' between the corresponding eigenvalue or
@@ -43,13 +43,13 @@
 *> The bound on the error, measured by angle in radians, in the I-th
 *> computed vector is given by
 *>
-*>        SLAMCH( 'E' ) * ( ANORM / SEP( I ) )
+*>        AB_SLAMCH( 'E' ) * ( ANORM / SEP( I ) )
 *>
 *> where ANORM = 2-norm(A) = max( abs( D(j) ) ).  SEP(I) is not allowed
-*> to be smaller than SLAMCH( 'E' )*ANORM in order to limit the size of
+*> to be smaller than AB_SLAMCH( 'E' )*ANORM in order to limit the size of
 *> the error bound.
 *>
-*> SDISNA may also be used to compute error bounds for eigenvectors of
+*> AB_SDISNA may also be used to compute error bounds for eigenvectors of
 *> the generalized symmetric definite eigenproblem.
 *> \endverbatim
 *
@@ -115,7 +115,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SDISNA( JOB, M, N, D, SEP, INFO )
+      SUBROUTINE AB_SDISNA( JOB, M, N, D, SEP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,24 +142,24 @@
       REAL               ANORM, EPS, NEWGAP, OLDGAP, SAFMIN, THRESH
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments
 *
       INFO = 0
-      EIGEN = LSAME( JOB, 'E' )
-      LEFT = LSAME( JOB, 'L' )
-      RIGHT = LSAME( JOB, 'R' )
+      EIGEN = AB_LSAME( JOB, 'E' )
+      LEFT = AB_LSAME( JOB, 'L' )
+      RIGHT = AB_LSAME( JOB, 'R' )
       SING = LEFT .OR. RIGHT
       IF( EIGEN ) THEN
          K = M
@@ -191,7 +191,7 @@
      $      INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDISNA', -INFO )
+         CALL AB_XERBLA( 'AB_SDISNA', -INFO )
          RETURN
       END IF
 *
@@ -203,7 +203,7 @@
 *     Compute reciprocal condition numbers
 *
       IF( K.EQ.1 ) THEN
-         SEP( 1 ) = SLAMCH( 'O' )
+         SEP( 1 ) = AB_SLAMCH( 'O' )
       ELSE
          OLDGAP = ABS( D( 2 )-D( 1 ) )
          SEP( 1 ) = OLDGAP
@@ -226,8 +226,8 @@
 *     Ensure that reciprocal condition numbers are not less than
 *     threshold, in order to limit the size of the error bound
 *
-      EPS = SLAMCH( 'E' )
-      SAFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'E' )
+      SAFMIN = AB_SLAMCH( 'S' )
       ANORM = MAX( ABS( D( 1 ) ), ABS( D( K ) ) )
       IF( ANORM.EQ.ZERO ) THEN
          THRESH = EPS
@@ -240,6 +240,6 @@
 *
       RETURN
 *
-*     End of SDISNA
+*     End of AB_SDISNA
 *
       END

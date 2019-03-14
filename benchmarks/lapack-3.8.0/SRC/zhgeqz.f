@@ -1,4 +1,4 @@
-*> \brief \b ZHGEQZ
+*> \brief \b AB_ZHGEQZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHGEQZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhgeqz.f">
+*> Download AB_ZHGEQZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHGEQZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhgeqz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHGEQZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhgeqz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHGEQZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
+*       SUBROUTINE AB_ZHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
 *                          ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK,
 *                          RWORK, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> ZHGEQZ computes the eigenvalues of a complex matrix pair (H,T),
+*> AB_ZHGEQZ computes the eigenvalues of a complex matrix pair (H,T),
 *> where H is an upper Hessenberg matrix and T is upper triangular,
 *> using the single-shift QZ method.
 *> Matrix pairs of this type are produced by the reduction to
@@ -47,7 +47,7 @@
 *>
 *>    A = Q1*H*Z1**H,  B = Q1*T*Z1**H,
 *>
-*> as computed by ZGGHRD.
+*> as computed by AB_ZGGHRD.
 *>
 *> If JOB='S', then the Hessenberg-triangular pair (H,T) is
 *> also reduced to generalized Schur form,
@@ -59,7 +59,7 @@
 *> Optionally, the unitary matrix Q from the generalized Schur
 *> factorization may be postmultiplied into an input matrix Q1, and the
 *> unitary matrix Z may be postmultiplied into an input matrix Z1.
-*> If Q1 and Z1 are the unitary matrices from ZGGHRD that reduced
+*> If Q1 and Z1 are the unitary matrices from AB_ZGGHRD that reduced
 *> the matrix pair (A,B) to generalized Hessenberg form, then the output
 *> matrices Q1*Q and Z1*Z are the unitary factors from the generalized
 *> Schur factorization of (A,B):
@@ -237,7 +237,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -280,7 +280,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
+      SUBROUTINE AB_ZHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, L
+     $DT,
      $                   ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK,
      $                   RWORK, INFO )
 *
@@ -323,12 +324,13 @@
      $                   U12, X
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANHS
-      EXTERNAL           LSAME, DLAMCH, ZLANHS
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHS
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARTG, ZLASET, ZROT, ZSCAL
+      EXTERNAL           AB_XERBLA, AB_ZLARTG, AB_ZLASET, AB_ZROT, AB_ZS
+     $CAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN,
@@ -344,36 +346,36 @@
 *
 *     Decode JOB, COMPQ, COMPZ
 *
-      IF( LSAME( JOB, 'E' ) ) THEN
+      IF( AB_LSAME( JOB, 'E' ) ) THEN
          ILSCHR = .FALSE.
          ISCHUR = 1
-      ELSE IF( LSAME( JOB, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( JOB, 'S' ) ) THEN
          ILSCHR = .TRUE.
          ISCHUR = 2
       ELSE
          ISCHUR = 0
       END IF
 *
-      IF( LSAME( COMPQ, 'N' ) ) THEN
+      IF( AB_LSAME( COMPQ, 'N' ) ) THEN
          ILQ = .FALSE.
          ICOMPQ = 1
-      ELSE IF( LSAME( COMPQ, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( COMPQ, 'V' ) ) THEN
          ILQ = .TRUE.
          ICOMPQ = 2
-      ELSE IF( LSAME( COMPQ, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( COMPQ, 'I' ) ) THEN
          ILQ = .TRUE.
          ICOMPQ = 3
       ELSE
          ICOMPQ = 0
       END IF
 *
-      IF( LSAME( COMPZ, 'N' ) ) THEN
+      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
          ILZ = .FALSE.
          ICOMPZ = 1
-      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
          ILZ = .TRUE.
          ICOMPZ = 2
-      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
          ILZ = .TRUE.
          ICOMPZ = 3
       ELSE
@@ -409,7 +411,7 @@
          INFO = -18
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHGEQZ', -INFO )
+         CALL AB_XERBLA( 'AB_ZHGEQZ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -426,17 +428,17 @@
 *     Initialize Q and Z
 *
       IF( ICOMPQ.EQ.3 )
-     $   CALL ZLASET( 'Full', N, N, CZERO, CONE, Q, LDQ )
+     $   CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Q, LDQ )
       IF( ICOMPZ.EQ.3 )
-     $   CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDZ )
+     $   CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDZ )
 *
 *     Machine Constants
 *
       IN = IHI + 1 - ILO
-      SAFMIN = DLAMCH( 'S' )
-      ULP = DLAMCH( 'E' )*DLAMCH( 'B' )
-      ANORM = ZLANHS( 'F', IN, H( ILO, ILO ), LDH, RWORK )
-      BNORM = ZLANHS( 'F', IN, T( ILO, ILO ), LDT, RWORK )
+      SAFMIN = AB_DLAMCH( 'S' )
+      ULP = AB_DLAMCH( 'E' )*AB_DLAMCH( 'B' )
+      ANORM = AB_ZLANHS( 'F', IN, H( ILO, ILO ), LDH, RWORK )
+      BNORM = AB_ZLANHS( 'F', IN, T( ILO, ILO ), LDT, RWORK )
       ATOL = MAX( SAFMIN, ULP*ANORM )
       BTOL = MAX( SAFMIN, ULP*BNORM )
       ASCALE = ONE / MAX( SAFMIN, ANORM )
@@ -451,13 +453,13 @@
             SIGNBC = DCONJG( T( J, J ) / ABSB )
             T( J, J ) = ABSB
             IF( ILSCHR ) THEN
-               CALL ZSCAL( J-1, SIGNBC, T( 1, J ), 1 )
-               CALL ZSCAL( J, SIGNBC, H( 1, J ), 1 )
+               CALL AB_ZSCAL( J-1, SIGNBC, T( 1, J ), 1 )
+               CALL AB_ZSCAL( J, SIGNBC, H( 1, J ), 1 )
             ELSE
-               CALL ZSCAL( 1, SIGNBC, H( J, J ), 1 )
+               CALL AB_ZSCAL( 1, SIGNBC, H( J, J ), 1 )
             END IF
             IF( ILZ )
-     $         CALL ZSCAL( N, SIGNBC, Z( 1, J ), 1 )
+     $         CALL AB_ZSCAL( N, SIGNBC, Z( 1, J ), 1 )
          ELSE
             T( J, J ) = CZERO
          END IF
@@ -566,15 +568,16 @@
                IF( ILAZRO .OR. ILAZR2 ) THEN
                   DO 20 JCH = J, ILAST - 1
                      CTEMP = H( JCH, JCH )
-                     CALL ZLARTG( CTEMP, H( JCH+1, JCH ), C, S,
+                     CALL AB_ZLARTG( CTEMP, H( JCH+1, JCH ), C, S,
      $                            H( JCH, JCH ) )
                      H( JCH+1, JCH ) = CZERO
-                     CALL ZROT( ILASTM-JCH, H( JCH, JCH+1 ), LDH,
+                     CALL AB_ZROT( ILASTM-JCH, H( JCH, JCH+1 ), LDH,
      $                          H( JCH+1, JCH+1 ), LDH, C, S )
-                     CALL ZROT( ILASTM-JCH, T( JCH, JCH+1 ), LDT,
+                     CALL AB_ZROT( ILASTM-JCH, T( JCH, JCH+1 ), LDT,
      $                          T( JCH+1, JCH+1 ), LDT, C, S )
                      IF( ILQ )
-     $                  CALL ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL AB_ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 
+     $1,
      $                             C, DCONJG( S ) )
                      IF( ILAZR2 )
      $                  H( JCH, JCH-1 ) = H( JCH, JCH-1 )*C
@@ -597,27 +600,30 @@
 *
                   DO 30 JCH = J, ILAST - 1
                      CTEMP = T( JCH, JCH+1 )
-                     CALL ZLARTG( CTEMP, T( JCH+1, JCH+1 ), C, S,
+                     CALL AB_ZLARTG( CTEMP, T( JCH+1, JCH+1 ), C, S,
      $                            T( JCH, JCH+1 ) )
                      T( JCH+1, JCH+1 ) = CZERO
                      IF( JCH.LT.ILASTM-1 )
-     $                  CALL ZROT( ILASTM-JCH-1, T( JCH, JCH+2 ), LDT,
+     $                  CALL AB_ZROT( ILASTM-JCH-1, T( JCH, JCH+2 ), LDT
+     $,
      $                             T( JCH+1, JCH+2 ), LDT, C, S )
-                     CALL ZROT( ILASTM-JCH+2, H( JCH, JCH-1 ), LDH,
+                     CALL AB_ZROT( ILASTM-JCH+2, H( JCH, JCH-1 ), LDH,
      $                          H( JCH+1, JCH-1 ), LDH, C, S )
                      IF( ILQ )
-     $                  CALL ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
+     $                  CALL AB_ZROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 
+     $1,
      $                             C, DCONJG( S ) )
                      CTEMP = H( JCH+1, JCH )
-                     CALL ZLARTG( CTEMP, H( JCH+1, JCH-1 ), C, S,
+                     CALL AB_ZLARTG( CTEMP, H( JCH+1, JCH-1 ), C, S,
      $                            H( JCH+1, JCH ) )
                      H( JCH+1, JCH-1 ) = CZERO
-                     CALL ZROT( JCH+1-IFRSTM, H( IFRSTM, JCH ), 1,
+                     CALL AB_ZROT( JCH+1-IFRSTM, H( IFRSTM, JCH ), 1,
      $                          H( IFRSTM, JCH-1 ), 1, C, S )
-                     CALL ZROT( JCH-IFRSTM, T( IFRSTM, JCH ), 1,
+                     CALL AB_ZROT( JCH-IFRSTM, T( IFRSTM, JCH ), 1,
      $                          T( IFRSTM, JCH-1 ), 1, C, S )
                      IF( ILZ )
-     $                  CALL ZROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ), 1,
+     $                  CALL AB_ZROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ), 
+     $1,
      $                             C, S )
    30             CONTINUE
                   GO TO 50
@@ -644,15 +650,16 @@
 *
    50    CONTINUE
          CTEMP = H( ILAST, ILAST )
-         CALL ZLARTG( CTEMP, H( ILAST, ILAST-1 ), C, S,
+         CALL AB_ZLARTG( CTEMP, H( ILAST, ILAST-1 ), C, S,
      $                H( ILAST, ILAST ) )
          H( ILAST, ILAST-1 ) = CZERO
-         CALL ZROT( ILAST-IFRSTM, H( IFRSTM, ILAST ), 1,
+         CALL AB_ZROT( ILAST-IFRSTM, H( IFRSTM, ILAST ), 1,
      $              H( IFRSTM, ILAST-1 ), 1, C, S )
-         CALL ZROT( ILAST-IFRSTM, T( IFRSTM, ILAST ), 1,
+         CALL AB_ZROT( ILAST-IFRSTM, T( IFRSTM, ILAST ), 1,
      $              T( IFRSTM, ILAST-1 ), 1, C, S )
          IF( ILZ )
-     $      CALL ZROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C, S )
+     $      CALL AB_ZROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C, S 
+     $)
 *
 *        H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA
 *
@@ -662,14 +669,16 @@
             SIGNBC = DCONJG( T( ILAST, ILAST ) / ABSB )
             T( ILAST, ILAST ) = ABSB
             IF( ILSCHR ) THEN
-               CALL ZSCAL( ILAST-IFRSTM, SIGNBC, T( IFRSTM, ILAST ), 1 )
-               CALL ZSCAL( ILAST+1-IFRSTM, SIGNBC, H( IFRSTM, ILAST ),
+               CALL AB_ZSCAL( ILAST-IFRSTM, SIGNBC, T( IFRSTM, ILAST ), 
+     $1 )
+               CALL AB_ZSCAL( ILAST+1-IFRSTM, SIGNBC, H( IFRSTM, ILAST )
+     $,
      $                     1 )
             ELSE
-               CALL ZSCAL( 1, SIGNBC, H( ILAST, ILAST ), 1 )
+               CALL AB_ZSCAL( 1, SIGNBC, H( ILAST, ILAST ), 1 )
             END IF
             IF( ILZ )
-     $         CALL ZSCAL( N, SIGNBC, Z( 1, ILAST ), 1 )
+     $         CALL AB_ZSCAL( N, SIGNBC, Z( 1, ILAST ), 1 )
          ELSE
             T( ILAST, ILAST ) = CZERO
          END IF
@@ -775,14 +784,14 @@
 *        Initial Q
 *
          CTEMP2 = ASCALE*H( ISTART+1, ISTART )
-         CALL ZLARTG( CTEMP, CTEMP2, C, S, CTEMP3 )
+         CALL AB_ZLARTG( CTEMP, CTEMP2, C, S, CTEMP3 )
 *
 *        Sweep
 *
          DO 150 J = ISTART, ILAST - 1
             IF( J.GT.ISTART ) THEN
                CTEMP = H( J, J-1 )
-               CALL ZLARTG( CTEMP, H( J+1, J-1 ), C, S, H( J, J-1 ) )
+               CALL AB_ZLARTG( CTEMP, H( J+1, J-1 ), C, S, H( J, J-1 ) )
                H( J+1, J-1 ) = CZERO
             END IF
 *
@@ -803,7 +812,7 @@
             END IF
 *
             CTEMP = T( J+1, J+1 )
-            CALL ZLARTG( CTEMP, T( J+1, J ), C, S, T( J+1, J+1 ) )
+            CALL AB_ZLARTG( CTEMP, T( J+1, J ), C, S, T( J+1, J+1 ) )
             T( J+1, J ) = CZERO
 *
             DO 120 JR = IFRSTM, MIN( J+2, ILAST )
@@ -847,13 +856,13 @@
             SIGNBC = DCONJG( T( J, J ) / ABSB )
             T( J, J ) = ABSB
             IF( ILSCHR ) THEN
-               CALL ZSCAL( J-1, SIGNBC, T( 1, J ), 1 )
-               CALL ZSCAL( J, SIGNBC, H( 1, J ), 1 )
+               CALL AB_ZSCAL( J-1, SIGNBC, T( 1, J ), 1 )
+               CALL AB_ZSCAL( J, SIGNBC, H( 1, J ), 1 )
             ELSE
-               CALL ZSCAL( 1, SIGNBC, H( J, J ), 1 )
+               CALL AB_ZSCAL( 1, SIGNBC, H( J, J ), 1 )
             END IF
             IF( ILZ )
-     $         CALL ZSCAL( N, SIGNBC, Z( 1, J ), 1 )
+     $         CALL AB_ZSCAL( N, SIGNBC, Z( 1, J ), 1 )
          ELSE
             T( J, J ) = CZERO
          END IF
@@ -871,6 +880,6 @@
       WORK( 1 ) = DCMPLX( N )
       RETURN
 *
-*     End of ZHGEQZ
+*     End of AB_ZHGEQZ
 *
       END

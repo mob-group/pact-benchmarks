@@ -1,4 +1,4 @@
-*> \brief \b DGBT02
+*> \brief \b AB_DGBT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
+*       SUBROUTINE AB_DGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
 *                          LDB, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DGBT02 computes the residual for a solution of a banded system of
+*> AB_DGBT02 computes the residual for a solution of a banded system of
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm( B - A*X ) / ( norm(A) * norm(X) * EPS).
 *> where EPS is the machine precision.
@@ -136,7 +136,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
+      SUBROUTINE AB_DGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B
+     $,
      $                   LDB, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,12 +165,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DASUM, DLAMCH
-      EXTERNAL           LSAME, DASUM, DLAMCH
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DASUM, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGBMV
+      EXTERNAL           AB_DGBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -185,20 +186,20 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N
          I1 = MAX( KD+1-J, 1 )
          I2 = MIN( KD+M-J, KL+KD )
-         ANORM = MAX( ANORM, DASUM( I2-I1+1, A( I1, J ), 1 ) )
+         ANORM = MAX( ANORM, AB_DASUM( I2-I1+1, A( I1, J ), 1 ) )
    10 CONTINUE
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
       END IF
 *
-      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
+      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
          N1 = N
       ELSE
          N1 = M
@@ -207,7 +208,7 @@
 *     Compute  B - A*X (or  B - A'*X )
 *
       DO 20 J = 1, NRHS
-         CALL DGBMV( TRANS, M, N, KL, KU, -ONE, A, LDA, X( 1, J ), 1,
+         CALL AB_DGBMV( TRANS, M, N, KL, KU, -ONE, A, LDA, X( 1, J ), 1,
      $               ONE, B( 1, J ), 1 )
    20 CONTINUE
 *
@@ -216,8 +217,8 @@
 *
       RESID = ZERO
       DO 30 J = 1, NRHS
-         BNORM = DASUM( N1, B( 1, J ), 1 )
-         XNORM = DASUM( N1, X( 1, J ), 1 )
+         BNORM = AB_DASUM( N1, B( 1, J ), 1 )
+         XNORM = AB_DASUM( N1, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -227,6 +228,6 @@
 *
       RETURN
 *
-*     End of DGBT02
+*     End of AB_DGBT02
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DSBT21
+*> \brief \b AB_DSBT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
+*       SUBROUTINE AB_DSBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
 *                          RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DSBT21  generally checks a decomposition of the form
+*> AB_DSBT21  generally checks a decomposition of the form
 *>
 *>         A = U S U'
 *>
@@ -54,7 +54,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, DSBT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_DSBT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -107,7 +107,7 @@
 *> \verbatim
 *>          U is DOUBLE PRECISION array, dimension (LDU, N)
 *>          The orthogonal matrix in the decomposition, expressed as a
-*>          dense matrix (i.e., not as a product of Householder
+*>          dense matrix (i.e., not as a product of HousehoAB_LDEr
 *>          transformations, Givens transformations, etc.)
 *> \endverbatim
 *>
@@ -143,7 +143,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DSBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
+      SUBROUTINE AB_DSBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -173,12 +173,13 @@
       DOUBLE PRECISION   ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSB, DLANSP
-      EXTERNAL           LSAME, DLAMCH, DLANGE, DLANSB, DLANSP
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSB, AB_DLANSP
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGE, AB_DLANSB, AB_D
+     $LANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DSPR, DSPR2
+      EXTERNAL           AB_DGEMM, AB_DSPR, AB_AB_DSPR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -195,7 +196,7 @@
       IKA = MAX( 0, MIN( N-1, KA ) )
       LW = ( N*( N+1 ) ) / 2
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -203,8 +204,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -212,7 +213,7 @@
 *
 *     Norm of A:
 *
-      ANORM = MAX( DLANSB( '1', CUPLO, N, IKA, A, LDA, WORK ), UNFL )
+      ANORM = MAX( AB_DLANSB( '1', CUPLO, N, IKA, A, LDA, WORK ), UNFL )
 *
 *     Compute error matrix:    Error = A - U S U'
 *
@@ -242,16 +243,17 @@
    50 CONTINUE
 *
       DO 60 J = 1, N
-         CALL DSPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
+         CALL AB_DSPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
    60 CONTINUE
 *
       IF( N.GT.1 .AND. KS.EQ.1 ) THEN
          DO 70 J = 1, N - 1
-            CALL DSPR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, J+1 ), 1,
+            CALL AB_AB_DSPR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, J+1
+     $ ), 1,
      $                  WORK )
    70    CONTINUE
       END IF
-      WNORM = DLANSP( '1', CUPLO, N, WORK, WORK( LW+1 ) )
+      WNORM = AB_DLANSP( '1', CUPLO, N, WORK, WORK( LW+1 ) )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -267,18 +269,19 @@
 *
 *     Compute  UU' - I
 *
-      CALL DGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+      CALL AB_DGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
      $            N )
 *
       DO 80 J = 1, N
          WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
    80 CONTINUE
 *
-      RESULT( 2 ) = MIN( DLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) ),
+      RESULT( 2 ) = MIN( AB_DLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
+     $,
      $              DBLE( N ) ) / ( N*ULP )
 *
       RETURN
 *
-*     End of DSBT21
+*     End of AB_DSBT21
 *
       END

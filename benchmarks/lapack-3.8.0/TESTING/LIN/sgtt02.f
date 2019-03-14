@@ -1,4 +1,4 @@
-*> \brief \b SGTT02
+*> \brief \b AB_SGTT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
+*       SUBROUTINE AB_SGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> SGTT02 computes the residual for the solution to a tridiagonal
+*> AB_SGTT02 computes the residual for the solution to a tridiagonal
 *> system of equations:
 *>    RESID = norm(B - op(A)*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
@@ -121,7 +121,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
+      SUBROUTINE AB_SGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -150,12 +150,12 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SASUM, SLAMCH, SLANGT
-      EXTERNAL           LSAME, SASUM, SLAMCH, SLANGT
+      LOGICAL            AB_LSAME
+      REAL               AB_SASUM, AB_SLAMCH, AB_SLANGT
+      EXTERNAL           AB_LSAME, AB_SASUM, AB_SLAMCH, AB_SLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAGTM
+      EXTERNAL           AB_SLAGTM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -171,15 +171,15 @@
 *     Compute the maximum over the number of right hand sides of
 *        norm(B - op(A)*X) / ( norm(A) * norm(X) * EPS ).
 *
-      IF( LSAME( TRANS, 'N' ) ) THEN
-         ANORM = SLANGT( '1', N, DL, D, DU )
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+         ANORM = AB_SLANGT( '1', N, DL, D, DU )
       ELSE
-         ANORM = SLANGT( 'I', N, DL, D, DU )
+         ANORM = AB_SLANGT( 'I', N, DL, D, DU )
       END IF
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -187,12 +187,12 @@
 *
 *     Compute B - op(A)*X.
 *
-      CALL SLAGTM( TRANS, N, NRHS, -ONE, DL, D, DU, X, LDX, ONE, B,
+      CALL AB_SLAGTM( TRANS, N, NRHS, -ONE, DL, D, DU, X, LDX, ONE, B,
      $             LDB )
 *
       DO 10 J = 1, NRHS
-         BNORM = SASUM( N, B( 1, J ), 1 )
-         XNORM = SASUM( N, X( 1, J ), 1 )
+         BNORM = AB_SASUM( N, B( 1, J ), 1 )
+         XNORM = AB_SASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -202,6 +202,6 @@
 *
       RETURN
 *
-*     End of SGTT02
+*     End of AB_SGTT02
 *
       END

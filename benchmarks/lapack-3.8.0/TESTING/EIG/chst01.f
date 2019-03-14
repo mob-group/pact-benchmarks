@@ -1,4 +1,4 @@
-*> \brief \b CHST01
+*> \brief \b AB_CHST01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
+*       SUBROUTINE AB_CHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
 *                          LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,14 +26,14 @@
 *>
 *> \verbatim
 *>
-*> CHST01 tests the reduction of a general matrix A to upper Hessenberg
+*> AB_CHST01 tests the reduction of a general matrix A to upper Hessenberg
 *> form:  A = Q*H*Q'.  Two test ratios are computed;
 *>
 *> RESULT(1) = norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )
 *> RESULT(2) = norm( I - Q'*Q ) / ( N * EPS )
 *>
 *> The matrix Q is assumed to be given explicitly as it would be
-*> following CGEHRD + CUNGHR.
+*> following AB_CGEHRD + AB_CUNGHR.
 *>
 *> In this version, ILO and IHI are not used, but they could be used
 *> to save some work if this is desired.
@@ -78,7 +78,7 @@
 *> \verbatim
 *>          H is COMPLEX array, dimension (LDH,N)
 *>          The upper Hessenberg matrix H from the reduction A = Q*H*Q'
-*>          as computed by CGEHRD.  H is assumed to be zero below the
+*>          as computed by AB_CGEHRD.  H is assumed to be zero below the
 *>          first subdiagonal.
 *> \endverbatim
 *>
@@ -92,7 +92,7 @@
 *> \verbatim
 *>          Q is COMPLEX array, dimension (LDQ,N)
 *>          The orthogonal matrix Q from the reduction A = Q*H*Q' as
-*>          computed by CGEHRD + CUNGHR.
+*>          computed by AB_CGEHRD + AB_CUNGHR.
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -137,7 +137,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
+      SUBROUTINE AB_CHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
      $                   LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -165,11 +165,11 @@
       REAL               ANORM, EPS, OVFL, SMLNUM, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CUNT01, SLABAD
+      EXTERNAL           AB_CGEMM, AB_CLACPY, AB_CUNT01, AB_SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN
@@ -184,10 +184,10 @@
          RETURN
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       OVFL = ONE / UNFL
-      CALL SLABAD( UNFL, OVFL )
+      CALL AB_SLABAD( UNFL, OVFL )
       SMLNUM = UNFL*N / EPS
 *
 *     Test 1:  Compute norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )
@@ -195,22 +195,23 @@
 *     Copy A to WORK
 *
       LDWORK = MAX( 1, N )
-      CALL CLACPY( ' ', N, N, A, LDA, WORK, LDWORK )
+      CALL AB_CLACPY( ' ', N, N, A, LDA, WORK, LDWORK )
 *
 *     Compute Q*H
 *
-      CALL CGEMM( 'No transpose', 'No transpose', N, N, N, CMPLX( ONE ),
+      CALL AB_CGEMM( 'No transpose', 'No transpose', N, N, N, CMPLX( ONE
+     $ ),
      $            Q, LDQ, H, LDH, CMPLX( ZERO ), WORK( LDWORK*N+1 ),
      $            LDWORK )
 *
 *     Compute A - Q*H*Q'
 *
-      CALL CGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
+      CALL AB_CGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
      $            CMPLX( -ONE ), WORK( LDWORK*N+1 ), LDWORK, Q, LDQ,
      $            CMPLX( ONE ), WORK, LDWORK )
 *
-      ANORM = MAX( CLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
-      WNORM = CLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      ANORM = MAX( AB_CLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
+      WNORM = AB_CLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
 *     Note that RESULT(1) cannot overflow and is bounded by 1/(N*EPS)
 *
@@ -218,11 +219,11 @@
 *
 *     Test 2:  Compute norm( I - Q'*Q ) / ( N * EPS )
 *
-      CALL CUNT01( 'Columns', N, N, Q, LDQ, WORK, LWORK, RWORK,
+      CALL AB_CUNT01( 'Columns', N, N, Q, LDQ, WORK, LWORK, RWORK,
      $             RESULT( 2 ) )
 *
       RETURN
 *
-*     End of CHST01
+*     End of AB_CHST01
 *
       END

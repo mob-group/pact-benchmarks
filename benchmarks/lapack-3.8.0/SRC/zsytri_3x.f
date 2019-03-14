@@ -1,4 +1,4 @@
-*> \brief \b ZSYTRI_3X
+*> \brief \b AB_AB_AB_ZSYTRI_3X
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZSYTRI_3X + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytri_3x.f">
+*> Download AB_AB_AB_ZSYTRI_3X + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_ZSYTRI_3X.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytri_3x.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_ZSYTRI_3X.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytri_3x.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_ZSYTRI_3X.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
+*       SUBROUTINE AB_AB_AB_ZSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,8 +34,8 @@
 *  =============
 *>
 *> \verbatim
-*> ZSYTRI_3X computes the inverse of a complex symmetric indefinite
-*> matrix A using the factorization computed by ZSYTRF_RK or ZSYTRF_BK:
+*> AB_AB_AB_ZSYTRI_3X computes the inverse of a complex symmetric indefinite
+*> matrix A using the factorization computed by AB_AB_ZSYTRF_RK or AB_ZSYTRF_BK:
 *>
 *>     A = P*U*D*(U**T)*(P**T) or A = P*L*D*(L**T)*(P**T),
 *>
@@ -69,7 +69,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, diagonal of the block diagonal matrix D and
-*>          factors U or L as computed by ZSYTRF_RK and ZSYTRF_BK:
+*>          factors U or L as computed by AB_AB_ZSYTRF_RK and AB_ZSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -111,7 +111,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by ZSYTRF_RK or ZSYTRF_BK.
+*>          as determined by AB_AB_ZSYTRF_RK or AB_ZSYTRF_BK.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -157,7 +157,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
+      SUBROUTINE AB_AB_AB_ZSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB,
+     $ INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -187,11 +188,12 @@
      $                   U11_I_J, U11_IP1_J
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZSYSWAPR, ZTRTRI, ZTRMM, XERBLA
+      EXTERNAL           AB_ZGEMM, AB_ZSYSWAPR, AB_ZTRTRI, AB_ZTRMM, AB_
+     $XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MOD
@@ -201,8 +203,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -213,7 +215,7 @@
 *     Quick return if possible
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZSYTRI_3X', -INFO )
+         CALL AB_XERBLA( 'AB_AB_AB_ZSYTRI_3X', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 )
@@ -266,7 +268,7 @@
 *
 *        invA = P * inv(U**T) * inv(D) * inv(U) * P**T.
 *
-         CALL ZTRTRI( UPLO, 'U', N, A, LDA, INFO )
+         CALL AB_ZTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *        inv(D) and inv(D) * inv(U)
 *
@@ -379,7 +381,7 @@
 *
 *           U11**T * invD1 * U11 -> U11
 *
-            CALL ZTRMM( 'L', 'U', 'T', 'U', NNB, NNB,
+            CALL AB_ZTRMM( 'L', 'U', 'T', 'U', NNB, NNB,
      $                 CONE, A( CUT+1, CUT+1 ), LDA, WORK( U11+1, 1 ),
      $                 N+NB+1 )
 *
@@ -391,7 +393,7 @@
 *
 *           U01**T * invD * U01 -> A( CUT+I, CUT+J )
 *
-            CALL ZGEMM( 'T', 'N', NNB, NNB, CUT, CONE, A( 1, CUT+1 ),
+            CALL AB_ZGEMM( 'T', 'N', NNB, NNB, CUT, CONE, A( 1, CUT+1 ),
      $                  LDA, WORK, N+NB+1, CZERO, WORK(U11+1,1),
      $                  N+NB+1 )
 
@@ -406,7 +408,7 @@
 *
 *           U01 =  U00**T * invD0 * U01
 *
-            CALL ZTRMM( 'L', UPLO, 'T', 'U', CUT, NNB,
+            CALL AB_ZTRMM( 'L', UPLO, 'T', 'U', CUT, NNB,
      $                  CONE, A, LDA, WORK, N+NB+1 )
 
 *
@@ -436,8 +438,10 @@
          DO I = 1, N
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL ZSYSWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL ZSYSWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL AB_ZSYSWAPR( UPLO, N, A, LDA, I ,IP 
+     $)
+                IF (I .GT. IP) CALL AB_ZSYSWAPR( UPLO, N, A, LDA, IP ,I 
+     $)
              END IF
          END DO
 *
@@ -447,7 +451,7 @@
 *
 *        inv A = P * inv(L**T) * inv(D) * inv(L) * P**T.
 *
-         CALL ZTRTRI( UPLO, 'U', N, A, LDA, INFO )
+         CALL AB_ZTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *        inv(D) and inv(D) * inv(L)
 *
@@ -559,7 +563,7 @@
 *
 *           L11**T * invD1 * L11 -> L11
 *
-            CALL ZTRMM( 'L', UPLO, 'T', 'U', NNB, NNB, CONE,
+            CALL AB_ZTRMM( 'L', UPLO, 'T', 'U', NNB, NNB, CONE,
      $                   A( CUT+1, CUT+1 ), LDA, WORK( U11+1, 1 ),
      $                   N+NB+1 )
 
@@ -574,7 +578,7 @@
 *
 *              L21**T * invD2*L21 -> A( CUT+I, CUT+J )
 *
-               CALL ZGEMM( 'T', 'N', NNB, NNB, N-NNB-CUT, CONE,
+               CALL AB_ZGEMM( 'T', 'N', NNB, NNB, N-NNB-CUT, CONE,
      $                     A( CUT+NNB+1, CUT+1 ), LDA, WORK, N+NB+1,
      $                     CZERO, WORK( U11+1, 1 ), N+NB+1 )
 
@@ -589,7 +593,7 @@
 *
 *              L01 =  L22**T * invD2 * L21
 *
-               CALL ZTRMM( 'L', UPLO, 'T', 'U', N-NNB-CUT, NNB, CONE,
+               CALL AB_ZTRMM( 'L', UPLO, 'T', 'U', N-NNB-CUT, NNB, CONE,
      $                     A( CUT+NNB+1, CUT+NNB+1 ), LDA, WORK,
      $                     N+NB+1 )
 *
@@ -632,8 +636,10 @@
          DO I = N, 1, -1
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL ZSYSWAPR( UPLO, N, A, LDA, I ,IP )
-                IF (I .GT. IP) CALL ZSYSWAPR( UPLO, N, A, LDA, IP ,I )
+                IF (I .LT. IP) CALL AB_ZSYSWAPR( UPLO, N, A, LDA, I ,IP 
+     $)
+                IF (I .GT. IP) CALL AB_ZSYSWAPR( UPLO, N, A, LDA, IP ,I 
+     $)
              END IF
          END DO
 *
@@ -641,7 +647,7 @@
 *
       RETURN
 *
-*     End of ZSYTRI_3X
+*     End of AB_AB_AB_ZSYTRI_3X
 *
       END
 

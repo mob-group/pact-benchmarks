@@ -1,4 +1,4 @@
-*> \brief \b CHETF2 computes the factorization of a complex Hermitian matrix, using the diagonal pivoting method (unblocked algorithm calling Level 2 BLAS).
+*> \brief \b AB_CHETF2 computes the factorization of a complex Hermitian matrix, using the diagonal pivoting method (unblocked algorithm calling Level 2 BLAS).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetf2.f">
+*> Download AB_CHETF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHETF2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHETF2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHETF2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETF2( UPLO, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE AB_CHETF2( UPLO, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CHETF2 computes the factorization of a complex Hermitian matrix A
+*> AB_CHETF2 computes the factorization of a complex Hermitian matrix A
 *> using the Bunch-Kaufman diagonal pivoting method:
 *>
 *>    A = U*D*U**H  or  A = L*D*L**H
@@ -142,7 +142,7 @@
 *>    Replace l.210 and l.392
 *>         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
 *>    by
-*>         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. SISNAN(ABSAKK) ) THEN
+*>         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. AB_SISNAN(ABSAKK) ) THEN
 *>
 *>  01-01-96 - Based on modifications by
 *>    J. Lewis, Boeing Computer Services Company
@@ -184,7 +184,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CHETF2( UPLO, N, A, LDA, IPIV, INFO )
+      SUBROUTINE AB_CHETF2( UPLO, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -216,13 +216,13 @@
       COMPLEX            D12, D21, T, WK, WKM1, WKP1, ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      INTEGER            ICAMAX
-      REAL               SLAPY2
-      EXTERNAL           LSAME, ICAMAX, SLAPY2, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      INTEGER            AB_ICAMAX
+      REAL               AB_SLAPY2
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAPY2, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHER, CSSCAL, CSWAP, XERBLA
+      EXTERNAL           AB_CHER, AB_CAB_SSCAL, AB_CSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, REAL, SQRT
@@ -238,8 +238,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -247,7 +247,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETF2', -INFO )
+         CALL AB_XERBLA( 'AB_CHETF2', -INFO )
          RETURN
       END IF
 *
@@ -281,13 +281,14 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.GT.1 ) THEN
-            IMAX = ICAMAX( K-1, A( 1, K ), 1 )
+            IMAX = AB_ICAMAX( K-1, A( 1, K ), 1 )
             COLMAX = CABS1( A( IMAX, K ) )
          ELSE
             COLMAX = ZERO
          END IF
 *
-         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. SISNAN(ABSAKK) ) THEN
+         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. AB_SISNAN(ABSAKK) ) TH
+     $EN
 *
 *           Column K is or underflow, or contains a NaN:
 *           set INFO and continue
@@ -307,10 +308,10 @@
 *              JMAX is the column-index of the largest off-diagonal
 *              element in row IMAX, and ROWMAX is its absolute value
 *
-               JMAX = IMAX + ICAMAX( K-IMAX, A( IMAX, IMAX+1 ), LDA )
+               JMAX = IMAX + AB_ICAMAX( K-IMAX, A( IMAX, IMAX+1 ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
                IF( IMAX.GT.1 ) THEN
-                  JMAX = ICAMAX( IMAX-1, A( 1, IMAX ), 1 )
+                  JMAX = AB_ICAMAX( IMAX-1, A( 1, IMAX ), 1 )
                   ROWMAX = MAX( ROWMAX, CABS1( A( JMAX, IMAX ) ) )
                END IF
 *
@@ -319,7 +320,8 @@
 *                 no interchange, use 1-by-1 pivot block
 *
                   KP = K
-               ELSE IF( ABS( REAL( A( IMAX, IMAX ) ) ).GE.ALPHA*ROWMAX )
+               ELSE IF( ABS( REAL( A( IMAX, IMAX ) ) ).GE.ALPHA*ROWMA
+     $X )
      $                   THEN
 *
 *                 interchange rows and columns K and IMAX, use 1-by-1
@@ -342,7 +344,7 @@
 *              Interchange rows and columns KK and KP in the leading
 *              submatrix A(1:k,1:k)
 *
-               CALL CSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
+               CALL AB_CSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
                DO 20 J = KP + 1, KK - 1
                   T = CONJG( A( J, KK ) )
                   A( J, KK ) = CONJG( A( KP, J ) )
@@ -379,11 +381,11 @@
 *              A := A - U(k)*D(k)*U(k)**H = A - W(k)*1/D(k)*W(k)**H
 *
                R1 = ONE / REAL( A( K, K ) )
-               CALL CHER( UPLO, K-1, -R1, A( 1, K ), 1, A, LDA )
+               CALL AB_CHER( UPLO, K-1, -R1, A( 1, K ), 1, A, LDA )
 *
 *              Store U(k) in column k
 *
-               CALL CSSCAL( K-1, R1, A( 1, K ), 1 )
+               CALL AB_CAB_SSCAL( K-1, R1, A( 1, K ), 1 )
             ELSE
 *
 *              2-by-2 pivot block D(k): columns k and k-1 now hold
@@ -400,7 +402,7 @@
 *
                IF( K.GT.2 ) THEN
 *
-                  D = SLAPY2( REAL( A( K-1, K ) ),
+                  D = AB_SLAPY2( REAL( A( K-1, K ) ),
      $                AIMAG( A( K-1, K ) ) )
                   D22 = REAL( A( K-1, K-1 ) ) / D
                   D11 = REAL( A( K, K ) ) / D
@@ -465,13 +467,14 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.LT.N ) THEN
-            IMAX = K + ICAMAX( N-K, A( K+1, K ), 1 )
+            IMAX = K + AB_ICAMAX( N-K, A( K+1, K ), 1 )
             COLMAX = CABS1( A( IMAX, K ) )
          ELSE
             COLMAX = ZERO
          END IF
 *
-         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. SISNAN(ABSAKK) ) THEN
+         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. AB_SISNAN(ABSAKK) ) TH
+     $EN
 *
 *           Column K is zero or underflow, contains a NaN:
 *           set INFO and continue
@@ -491,10 +494,11 @@
 *              JMAX is the column-index of the largest off-diagonal
 *              element in row IMAX, and ROWMAX is its absolute value
 *
-               JMAX = K - 1 + ICAMAX( IMAX-K, A( IMAX, K ), LDA )
+               JMAX = K - 1 + AB_ICAMAX( IMAX-K, A( IMAX, K ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
                IF( IMAX.LT.N ) THEN
-                  JMAX = IMAX + ICAMAX( N-IMAX, A( IMAX+1, IMAX ), 1 )
+                  JMAX = IMAX + AB_ICAMAX( N-IMAX, A( IMAX+1, IMAX ), 1 
+     $)
                   ROWMAX = MAX( ROWMAX, CABS1( A( JMAX, IMAX ) ) )
                END IF
 *
@@ -503,7 +507,8 @@
 *                 no interchange, use 1-by-1 pivot block
 *
                   KP = K
-               ELSE IF( ABS( REAL( A( IMAX, IMAX ) ) ).GE.ALPHA*ROWMAX )
+               ELSE IF( ABS( REAL( A( IMAX, IMAX ) ) ).GE.ALPHA*ROWMA
+     $X )
      $                   THEN
 *
 *                 interchange rows and columns K and IMAX, use 1-by-1
@@ -527,7 +532,8 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL AB_CSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 
+     $1 )
                DO 60 J = KK + 1, KP - 1
                   T = CONJG( A( J, KK ) )
                   A( J, KK ) = CONJG( A( KP, J ) )
@@ -566,12 +572,12 @@
 *                 A := A - L(k)*D(k)*L(k)**H = A - W(k)*(1/D(k))*W(k)**H
 *
                   R1 = ONE / REAL( A( K, K ) )
-                  CALL CHER( UPLO, N-K, -R1, A( K+1, K ), 1,
+                  CALL AB_CHER( UPLO, N-K, -R1, A( K+1, K ), 1,
      $                       A( K+1, K+1 ), LDA )
 *
 *                 Store L(k) in column K
 *
-                  CALL CSSCAL( N-K, R1, A( K+1, K ), 1 )
+                  CALL AB_CAB_SSCAL( N-K, R1, A( K+1, K ), 1 )
                END IF
             ELSE
 *
@@ -587,7 +593,7 @@
 *                 where L(k) and L(k+1) are the k-th and (k+1)-th
 *                 columns of L
 *
-                  D = SLAPY2( REAL( A( K+1, K ) ),
+                  D = AB_SLAPY2( REAL( A( K+1, K ) ),
      $                        AIMAG( A( K+1, K ) ) )
                   D11 = REAL( A( K+1, K+1 ) ) / D
                   D22 = REAL( A( K, K ) ) / D
@@ -629,6 +635,6 @@
    90 CONTINUE
       RETURN
 *
-*     End of CHETF2
+*     End of AB_CHETF2
 *
       END

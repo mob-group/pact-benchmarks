@@ -1,4 +1,4 @@
-*> \brief \b SDRVSY_ROOK
+*> \brief \b AB_AB_SDRVSY_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE SDRVSY_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+*     SUBROUTINE AB_AB_SDRVSY_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
 *    $                        NMAX, A, AFAC, AINV, B, X, XACT, WORK,
 *    $                        RWORK, IWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SDRVSY_ROOK tests the driver routines SSYSV_ROOK.
+*> AB_AB_SDRVSY_ROOK tests the driver routines AB_AB_SSYSV_ROOK.
 *> \endverbatim
 *
 *  Arguments:
@@ -149,7 +149,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE SDRVSY_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+      SUBROUTINE AB_AB_SDRVSY_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTE
+     $RR,
      $                        NMAX, A, AFAC, AINV, B, X, XACT, WORK,
      $                        RWORK, IWORK, NOUT )
 *
@@ -195,15 +196,18 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLANSY
-      EXTERNAL           SLANSY
+      REAL               AB_SLANSY
+      EXTERNAL           AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, SERRVX, SGET04, SLACPY,
-     $                   SLARHS, SLASET, SLATB4, SLATMS, SPOT02, SPOT05,
-     $                   SSYSV_ROOK, SSYT01_ROOK, SSYTRF_ROOK,
-     $                   SSYTRI_ROOK,
-     $                   XLAENV
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_SERRVX, AB_
+     $SGET04, AB_SLACPY,
+     $                   AB_SLARHS, AB_SLASET, AB_SLATB4, AB_SLATMS, AB_
+     $SPOT02, AB_SPOT05,
+     $                   AB_AB_SSYSV_ROOK, AB_AB_SSYT01_ROOK, AB_AB_SSYT
+     $RF_ROOK,
+     $                   AB_AB_SSYTRI_ROOK,
+     $                   AB_XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -246,16 +250,16 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL SERRVX( PATH, NOUT )
+     $   CALL AB_SERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for which the block
-*     routine should be used, which will be later returned by ILAENV.
+*     routine should be used, which will be later returned by AB_ILAENV.
 *
       NB = 1
       NBMIN = 2
-      CALL XLAENV( 1, NB )
-      CALL XLAENV( 2, NBMIN )
+      CALL AB_XLAENV( 1, NB )
+      CALL AB_XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -287,23 +291,24 @@
 *
 *              Begin generate the test matrix A.
 *
-*              Set up parameters with SLATB4 for the matrix generator
+*              Set up parameters with AB_SLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-               CALL SLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+               CALL AB_SLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                      MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with SLATMS.
+*              Generate a matrix with AB_SLATMS.
 *
-               SRNAMT = 'SLATMS'
-               CALL SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_SLATMS'
+               CALL AB_SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from SLATMS and handle error.
+*              Check error code from AB_SLATMS and handle error.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'SLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_SLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
 *                 Skip all tests for this generated matrix
@@ -387,7 +392,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by DSYSVX_ROOK.
+*                 the value returned by AB_AB_DSYSVX_ROOK.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -398,21 +403,23 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
+                     ANORM = AB_SLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *                    Factor the matrix A.
 *
-                     CALL SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL SSYTRF_ROOK( UPLO, N, AFAC, LDA, IWORK, WORK,
+                     CALL AB_SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_AB_SSYTRF_ROOK( UPLO, N, AFAC, LDA, IWORK, 
+     $WORK,
      $                            LWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-                     CALL SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                     CALL AB_SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      LWORK = (N+NB+1)*(NB+3)
-                     CALL SSYTRI_ROOK( UPLO, N, AINV, LDA, IWORK,
+                     CALL AB_AB_SSYTRI_ROOK( UPLO, N, AINV, LDA, IWORK,
      $                                 WORK, INFO )
-                     AINVNM = SLANSY( '1', UPLO, N, AINV, LDA, RWORK )
+                     AINVNM = AB_SLANSY( '1', UPLO, N, AINV, LDA, RWORK 
+     $)
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -425,23 +432,25 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'SLARHS'
-                  CALL SLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'AB_SLARHS'
+                  CALL AB_SLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, K
+     $U,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test SSYSV_ROOK  ---
+*                 --- Test AB_AB_SSYSV_ROOK  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
 *                    Factor the matrix and solve the system using
-*                    SSYSV_ROOK.
+*                    AB_AB_SSYSV_ROOK.
 *
-                     SRNAMT = 'SSYSV_ROOK'
-                     CALL SSYSV_ROOK( UPLO, N, NRHS, AFAC, LDA, IWORK,
+                     SRNAMT = 'AB_AB_SSYSV_ROOK'
+                     CALL AB_AB_SSYSV_ROOK( UPLO, N, NRHS, AFAC, LDA, IW
+     $ORK,
      $                                X, LDA, WORK, LWORK, INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -461,10 +470,11 @@
                         END IF
                      END IF
 *
-*                    Check error code from SSYSV_ROOK and handle error.
+*                    Check error code from AB_AB_SSYSV_ROOK and handle error.
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'SSYSV_ROOK', INFO, K, UPLO,
+                        CALL AB_ALAERH( PATH, 'AB_AB_SSYSV_ROOK', INFO, 
+     $K, UPLO,
      $                               N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 120
@@ -475,20 +485,22 @@
 *+    TEST 1      Reconstruct matrix from factors and compute
 *                 residual.
 *
-                     CALL SSYT01_ROOK( UPLO, N, A, LDA, AFAC, LDA,
+                     CALL AB_AB_SSYT01_ROOK( UPLO, N, A, LDA, AFAC, LDA,
      $                                 IWORK, AINV, LDA, RWORK,
      $                                 RESULT( 1 ) )
 *
 *+    TEST 2      Compute residual of the computed solution.
 *
-                     CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL SPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_SPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
+     $,
      $                            LDA, RWORK, RESULT( 2 ) )
 *
 *+    TEST 3
 *                 Check solution from generated exact solution.
 *
-                     CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -498,8 +510,9 @@
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'SSYSV_ROOK', UPLO,
+     $                        CALL AB_ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'AB_AB_SSYSV_ROOK', 
+     $UPLO,
      $                           N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -516,12 +529,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of SDRVSY_ROOK
+*     End of AB_AB_SDRVSY_ROOK
 *
       END

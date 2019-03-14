@@ -1,4 +1,4 @@
-*> \brief \b DGERQS
+*> \brief \b AB_AB_DGERQS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE AB_AB_DGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the RQ factorization
 *>     A = R*Q
-*> computed by DGERQF.
+*> computed by AB_AB_DGERQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          Details of the RQ factorization of the original matrix A as
-*>          returned by DGERQF.
+*>          returned by AB_AB_DGERQF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,7 +119,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+      SUBROUTINE AB_AB_DGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LW
+     $ORK,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -142,7 +143,7 @@
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASET, DORMRQ, DTRSM, XERBLA
+      EXTERNAL           AB_DLASET, AB_DORMRQ, AB_DTRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -162,12 +163,13 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
+     $0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGERQS', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DGERQS', -INFO )
          RETURN
       END IF
 *
@@ -178,20 +180,22 @@
 *
 *     Solve R*X = B(n-m+1:n,:)
 *
-      CALL DTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', M, NRHS,
+      CALL AB_DTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', M, NRH
+     $S,
      $            ONE, A( 1, N-M+1 ), LDA, B( N-M+1, 1 ), LDB )
 *
 *     Set B(1:n-m,:) to zero
 *
-      CALL DLASET( 'Full', N-M, NRHS, ZERO, ZERO, B, LDB )
+      CALL AB_DLASET( 'Full', N-M, NRHS, ZERO, ZERO, B, LDB )
 *
 *     B := Q' * B
 *
-      CALL DORMRQ( 'Left', 'Transpose', N, NRHS, M, A, LDA, TAU, B, LDB,
+      CALL AB_DORMRQ( 'Left', 'Transpose', N, NRHS, M, A, LDA, TAU, B, L
+     $DB,
      $             WORK, LWORK, INFO )
 *
       RETURN
 *
-*     End of DGERQS
+*     End of AB_AB_DGERQS
 *
       END

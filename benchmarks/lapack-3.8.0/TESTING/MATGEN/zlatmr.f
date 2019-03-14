@@ -1,4 +1,4 @@
-*> \brief \b ZLATMR
+*> \brief \b AB_ZLATMR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+*       SUBROUTINE AB_ZLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
 *                          RSIGN, GRADE, DL, MODEL, CONDL, DR, MODER,
 *                          CONDR, PIVTNG, IPIVOT, KL, KU, SPARSE, ANORM,
 *                          PACK, A, LDA, IWORK, INFO )
@@ -30,10 +30,10 @@
 *>
 *> \verbatim
 *>
-*>    ZLATMR generates random matrices of various types for testing
+*>    AB_ZLATMR generates random matrices of various types for testing
 *>    LAPACK programs.
 *>
-*>    ZLATMR operates by applying the following sequence of
+*>    AB_ZLATMR operates by applying the following sequence of
 *>    operations:
 *>
 *>      Generate a matrix A with random entries of distribution DIST
@@ -76,10 +76,10 @@
 *>             (if symmetric or Hermitian)
 *>         store the entire matrix in banded format
 *>
-*>    Note: If two calls to ZLATMR differ only in the PACK parameter,
+*>    Note: If two calls to AB_ZLATMR differ only in the PACK parameter,
 *>          they will generate mathematically equivalent matrices.
 *>
-*>          If two calls to ZLATMR both have full bandwidth (KL = M-1
+*>          If two calls to AB_ZLATMR both have full bandwidth (KL = M-1
 *>          and KU = N-1), and differ only in the PIVTNG and PACK
 *>          parameters, then the matrices generated will differ only
 *>          in the order of the rows and/or columns, and otherwise
@@ -126,7 +126,7 @@
 *>           uses a linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to ZLATMR
+*>           exit, and can be used in the next call to AB_ZLATMR
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -289,7 +289,7 @@
 *>           'B' or 'F' => both or full pivoting, i.e., on both sides.
 *>                         In this case, M must equal N
 *>
-*>           If two calls to ZLATMR both have full bandwidth (KL = M-1
+*>           If two calls to AB_ZLATMR both have full bandwidth (KL = M-1
 *>           and KU = N-1), and differ only in the PIVTNG and PACK
 *>           parameters, then the matrices generated will differ only
 *>           in the order of the rows and/or columns, and otherwise
@@ -302,7 +302,7 @@
 *>          IPIVOT is INTEGER array, dimension (N or M)
 *>           This array specifies the permutation used.  After the
 *>           basic matrix is generated, the rows, columns, or both
-*>           are permuted.   If, say, row pivoting is selected, ZLATMR
+*>           are permuted.   If, say, row pivoting is selected, AB_ZLATMR
 *>           starts with the *last* row and interchanges the M-th and
 *>           IPIVOT(M)-th rows, then moves to the next-to-last row,
 *>           interchanging the (M-1)-th and the IPIVOT(M-1)-th rows,
@@ -392,7 +392,7 @@
 *>           PB, HB or TB     - use 'B' or 'Q'
 *>           PP, HP or TP     - use 'C' or 'R'
 *>
-*>           If two calls to ZLATMR differ only in the PACK parameter,
+*>           If two calls to AB_ZLATMR differ only in the PACK parameter,
 *>           they will generate mathematically equivalent matrices.
 *>           Not modified.
 *> \endverbatim
@@ -464,10 +464,10 @@
 *>                  SYM='N', and either KU not equal to 0 or N not equal
 *>                  to M
 *>           -26 => LDA too small
-*>             1 => Error return from ZLATM1 (computing D)
+*>             1 => Error return from AB_ZLATM1 (computing D)
 *>             2 => Cannot scale diagonal to DMAX (max. entry is 0)
-*>             3 => Error return from ZLATM1 (computing DL)
-*>             4 => Error return from ZLATM1 (computing DR)
+*>             3 => Error return from AB_ZLATM1 (computing DL)
+*>             4 => Error return from AB_ZLATM1 (computing DR)
 *>             5 => ANORM is positive, but matrix constructed prior to
 *>                  attempting to scale it to have norm ANORM, is zero
 *> \endverbatim
@@ -485,7 +485,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE ZLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+      SUBROUTINE AB_ZLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
      $                   RSIGN, GRADE, DL, MODEL, CONDL, DR, MODER,
      $                   CONDR, PIVTNG, IPIVOT, KL, KU, SPARSE, ANORM,
      $                   PACK, A, LDA, IWORK, INFO )
@@ -530,14 +530,16 @@
       DOUBLE PRECISION   TEMPA( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   ZLANGB, ZLANGE, ZLANSB, ZLANSP, ZLANSY
-      COMPLEX*16         ZLATM2, ZLATM3
-      EXTERNAL           LSAME, ZLANGB, ZLANGE, ZLANSB, ZLANSP, ZLANSY,
-     $                   ZLATM2, ZLATM3
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_ZLANGB, AB_ZLANGE, AB_ZLANSB, AB_ZLANSP, AB_
+     $ZLANSY
+      COMPLEX*16         AB_ZLATM2, AB_ZLATM3
+      EXTERNAL           AB_LSAME, AB_ZLANGB, AB_ZLANGE, AB_ZLANSB, AB_Z
+     $LANSP, AB_ZLANSY,
+     $                   AB_ZLATM2, AB_ZLATM3
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZLATM1
+      EXTERNAL           AB_XERBLA, ZAB_DSCAL, AB_ZLATM1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, MOD
@@ -556,13 +558,13 @@
 *
 *     Decode DIST
 *
-      IF( LSAME( DIST, 'U' ) ) THEN
+      IF( AB_LSAME( DIST, 'U' ) ) THEN
          IDIST = 1
-      ELSE IF( LSAME( DIST, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'S' ) ) THEN
          IDIST = 2
-      ELSE IF( LSAME( DIST, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'N' ) ) THEN
          IDIST = 3
-      ELSE IF( LSAME( DIST, 'D' ) ) THEN
+      ELSE IF( AB_LSAME( DIST, 'D' ) ) THEN
          IDIST = 4
       ELSE
          IDIST = -1
@@ -570,11 +572,11 @@
 *
 *     Decode SYM
 *
-      IF( LSAME( SYM, 'H' ) ) THEN
+      IF( AB_LSAME( SYM, 'H' ) ) THEN
          ISYM = 0
-      ELSE IF( LSAME( SYM, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( SYM, 'N' ) ) THEN
          ISYM = 1
-      ELSE IF( LSAME( SYM, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( SYM, 'S' ) ) THEN
          ISYM = 2
       ELSE
          ISYM = -1
@@ -582,9 +584,9 @@
 *
 *     Decode RSIGN
 *
-      IF( LSAME( RSIGN, 'F' ) ) THEN
+      IF( AB_LSAME( RSIGN, 'F' ) ) THEN
          IRSIGN = 0
-      ELSE IF( LSAME( RSIGN, 'T' ) ) THEN
+      ELSE IF( AB_LSAME( RSIGN, 'T' ) ) THEN
          IRSIGN = 1
       ELSE
          IRSIGN = -1
@@ -592,20 +594,20 @@
 *
 *     Decode PIVTNG
 *
-      IF( LSAME( PIVTNG, 'N' ) ) THEN
+      IF( AB_LSAME( PIVTNG, 'N' ) ) THEN
          IPVTNG = 0
-      ELSE IF( LSAME( PIVTNG, ' ' ) ) THEN
+      ELSE IF( AB_LSAME( PIVTNG, ' ' ) ) THEN
          IPVTNG = 0
-      ELSE IF( LSAME( PIVTNG, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( PIVTNG, 'L' ) ) THEN
          IPVTNG = 1
          NPVTS = M
-      ELSE IF( LSAME( PIVTNG, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( PIVTNG, 'R' ) ) THEN
          IPVTNG = 2
          NPVTS = N
-      ELSE IF( LSAME( PIVTNG, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( PIVTNG, 'B' ) ) THEN
          IPVTNG = 3
          NPVTS = MIN( N, M )
-      ELSE IF( LSAME( PIVTNG, 'F' ) ) THEN
+      ELSE IF( AB_LSAME( PIVTNG, 'F' ) ) THEN
          IPVTNG = 3
          NPVTS = MIN( N, M )
       ELSE
@@ -614,19 +616,19 @@
 *
 *     Decode GRADE
 *
-      IF( LSAME( GRADE, 'N' ) ) THEN
+      IF( AB_LSAME( GRADE, 'N' ) ) THEN
          IGRADE = 0
-      ELSE IF( LSAME( GRADE, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( GRADE, 'L' ) ) THEN
          IGRADE = 1
-      ELSE IF( LSAME( GRADE, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( GRADE, 'R' ) ) THEN
          IGRADE = 2
-      ELSE IF( LSAME( GRADE, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( GRADE, 'B' ) ) THEN
          IGRADE = 3
-      ELSE IF( LSAME( GRADE, 'E' ) ) THEN
+      ELSE IF( AB_LSAME( GRADE, 'E' ) ) THEN
          IGRADE = 4
-      ELSE IF( LSAME( GRADE, 'H' ) ) THEN
+      ELSE IF( AB_LSAME( GRADE, 'H' ) ) THEN
          IGRADE = 5
-      ELSE IF( LSAME( GRADE, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( GRADE, 'S' ) ) THEN
          IGRADE = 6
       ELSE
          IGRADE = -1
@@ -634,21 +636,21 @@
 *
 *     Decode PACK
 *
-      IF( LSAME( PACK, 'N' ) ) THEN
+      IF( AB_LSAME( PACK, 'N' ) ) THEN
          IPACK = 0
-      ELSE IF( LSAME( PACK, 'U' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'U' ) ) THEN
          IPACK = 1
-      ELSE IF( LSAME( PACK, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'L' ) ) THEN
          IPACK = 2
-      ELSE IF( LSAME( PACK, 'C' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'C' ) ) THEN
          IPACK = 3
-      ELSE IF( LSAME( PACK, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'R' ) ) THEN
          IPACK = 4
-      ELSE IF( LSAME( PACK, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'B' ) ) THEN
          IPACK = 5
-      ELSE IF( LSAME( PACK, 'Q' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'Q' ) ) THEN
          IPACK = 6
-      ELSE IF( LSAME( PACK, 'Z' ) ) THEN
+      ELSE IF( AB_LSAME( PACK, 'Z' ) ) THEN
          IPACK = 7
       ELSE
          IPACK = -1
@@ -732,7 +734,8 @@
          INFO = -19
       ELSE IF( KL.LT.0 ) THEN
          INFO = -20
-      ELSE IF( KU.LT.0 .OR. ( ( ISYM.EQ.0 .OR. ISYM.EQ.2 ) .AND. KL.NE.
+      ELSE IF( KU.LT.0 .OR. ( ( ISYM.EQ.0 .OR. ISYM.EQ.2 ) .AND. KL.N
+     $E.
      $         KU ) ) THEN
          INFO = -21
       ELSE IF( SPARSE.LT.ZERO .OR. SPARSE.GT.ONE ) THEN
@@ -752,7 +755,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLATMR', -INFO )
+         CALL AB_XERBLA( 'AB_ZLATMR', -INFO )
          RETURN
       END IF
 *
@@ -774,7 +777,7 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, INFO )
+      CALL AB_ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = 1
          RETURN
@@ -814,7 +817,7 @@
 *
       IF( IGRADE.EQ.1 .OR. IGRADE.EQ.3 .OR. IGRADE.EQ.4 .OR. IGRADE.EQ.
      $    5 .OR. IGRADE.EQ.6 ) THEN
-         CALL ZLATM1( MODEL, CONDL, 0, IDIST, ISEED, DL, M, INFO )
+         CALL AB_ZLATM1( MODEL, CONDL, 0, IDIST, ISEED, DL, M, INFO )
          IF( INFO.NE.0 ) THEN
             INFO = 3
             RETURN
@@ -824,7 +827,7 @@
 *     Compute DR if grading set
 *
       IF( IGRADE.EQ.2 .OR. IGRADE.EQ.3 ) THEN
-         CALL ZLATM1( MODER, CONDR, 0, IDIST, ISEED, DR, N, INFO )
+         CALL AB_ZLATM1( MODER, CONDR, 0, IDIST, ISEED, DR, N, INFO )
          IF( INFO.NE.0 ) THEN
             INFO = 4
             RETURN
@@ -861,14 +864,14 @@
 *
       IF( FULBND ) THEN
 *
-*        Use ZLATM3 so matrices generated with differing PIVOTing only
+*        Use AB_ZLATM3 so matrices generated with differing PIVOTing only
 *        differ only in the order of their rows and/or columns.
 *
          IF( IPACK.EQ.0 ) THEN
             IF( ISYM.EQ.0 ) THEN
                DO 110 J = 1, N
                   DO 100 I = 1, J
-                     CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                       IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                       IWORK, SPARSE )
                      A( ISUB, JSUB ) = CTEMP
@@ -878,7 +881,7 @@
             ELSE IF( ISYM.EQ.1 ) THEN
                DO 130 J = 1, N
                   DO 120 I = 1, M
-                     CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                       IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                       IWORK, SPARSE )
                      A( ISUB, JSUB ) = CTEMP
@@ -887,7 +890,7 @@
             ELSE IF( ISYM.EQ.2 ) THEN
                DO 150 J = 1, N
                   DO 140 I = 1, J
-                     CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                       IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                       IWORK, SPARSE )
                      A( ISUB, JSUB ) = CTEMP
@@ -900,7 +903,8 @@
 *
             DO 170 J = 1, N
                DO 160 I = 1, J
-                  CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDI
+     $ST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -919,7 +923,8 @@
 *
             DO 190 J = 1, N
                DO 180 I = 1, J
-                  CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDI
+     $ST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -938,7 +943,8 @@
 *
             DO 210 J = 1, N
                DO 200 I = 1, J
-                  CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDI
+     $ST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
 *
@@ -966,7 +972,8 @@
 *
             DO 230 J = 1, N
                DO 220 I = 1, J
-                  CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDI
+     $ST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
 *
@@ -1001,7 +1008,7 @@
                   IF( I.LT.1 ) THEN
                      A( J-I+1, I+N ) = CZERO
                   ELSE
-                     CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                       IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                       IWORK, SPARSE )
                      MNSUB = MIN( ISUB, JSUB )
@@ -1019,7 +1026,8 @@
 *
             DO 270 J = 1, N
                DO 260 I = J - KUU, J
-                  CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
+                  CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDI
+     $ST,
      $                    ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                    SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -1037,7 +1045,7 @@
             IF( ISYM.NE.1 ) THEN
                DO 290 J = 1, N
                   DO 280 I = J - KUU, J
-                     CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                       IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                       IWORK, SPARSE )
                      MNSUB = MIN( ISUB, JSUB )
@@ -1062,7 +1070,7 @@
             ELSE IF( ISYM.EQ.1 ) THEN
                DO 310 J = 1, N
                   DO 300 I = J - KUU, J + KLL
-                     CTEMP = ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     CTEMP = AB_ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                       IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                       IWORK, SPARSE )
                      A( ISUB-JSUB+KUU+1, JSUB ) = CTEMP
@@ -1074,13 +1082,13 @@
 *
       ELSE
 *
-*        Use ZLATM2
+*        Use AB_ZLATM2
 *
          IF( IPACK.EQ.0 ) THEN
             IF( ISYM.EQ.0 ) THEN
                DO 330 J = 1, N
                   DO 320 I = 1, J
-                     A( I, J ) = ZLATM2( M, N, I, J, KL, KU, IDIST,
+                     A( I, J ) = AB_ZLATM2( M, N, I, J, KL, KU, IDIST,
      $                           ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                           IWORK, SPARSE )
                      A( J, I ) = DCONJG( A( I, J ) )
@@ -1089,7 +1097,7 @@
             ELSE IF( ISYM.EQ.1 ) THEN
                DO 350 J = 1, N
                   DO 340 I = 1, M
-                     A( I, J ) = ZLATM2( M, N, I, J, KL, KU, IDIST,
+                     A( I, J ) = AB_ZLATM2( M, N, I, J, KL, KU, IDIST,
      $                           ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                           IWORK, SPARSE )
   340             CONTINUE
@@ -1097,7 +1105,7 @@
             ELSE IF( ISYM.EQ.2 ) THEN
                DO 370 J = 1, N
                   DO 360 I = 1, J
-                     A( I, J ) = ZLATM2( M, N, I, J, KL, KU, IDIST,
+                     A( I, J ) = AB_ZLATM2( M, N, I, J, KL, KU, IDIST,
      $                           ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                           IWORK, SPARSE )
                      A( J, I ) = A( I, J )
@@ -1109,7 +1117,8 @@
 *
             DO 390 J = 1, N
                DO 380 I = 1, J
-                  A( I, J ) = ZLATM2( M, N, I, J, KL, KU, IDIST, ISEED,
+                  A( I, J ) = AB_ZLATM2( M, N, I, J, KL, KU, IDIST, ISEE
+     $D,
      $                        D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
                   IF( I.NE.J )
      $               A( J, I ) = CZERO
@@ -1121,11 +1130,11 @@
             DO 410 J = 1, N
                DO 400 I = 1, J
                   IF( ISYM.EQ.0 ) THEN
-                     A( J, I ) = DCONJG( ZLATM2( M, N, I, J, KL, KU,
+                     A( J, I ) = DCONJG( AB_ZLATM2( M, N, I, J, KL, KU,
      $                           IDIST, ISEED, D, IGRADE, DL, DR,
      $                           IPVTNG, IWORK, SPARSE ) )
                   ELSE
-                     A( J, I ) = ZLATM2( M, N, I, J, KL, KU, IDIST,
+                     A( J, I ) = AB_ZLATM2( M, N, I, J, KL, KU, IDIST,
      $                           ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                           IWORK, SPARSE )
                   END IF
@@ -1145,7 +1154,8 @@
                      ISUB = 1
                      JSUB = JSUB + 1
                   END IF
-                  A( ISUB, JSUB ) = ZLATM2( M, N, I, J, KL, KU, IDIST,
+                  A( ISUB, JSUB ) = AB_ZLATM2( M, N, I, J, KL, KU, IDIST
+     $,
      $                              ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                              IWORK, SPARSE )
   420          CONTINUE
@@ -1171,7 +1181,7 @@
                      JSUB = ( K-1 ) / LDA + 1
                      ISUB = K - LDA*( JSUB-1 )
 *
-                     A( ISUB, JSUB ) = ZLATM2( M, N, I, J, KL, KU,
+                     A( ISUB, JSUB ) = AB_ZLATM2( M, N, I, J, KL, KU,
      $                                 IDIST, ISEED, D, IGRADE, DL, DR,
      $                                 IPVTNG, IWORK, SPARSE )
                      IF( ISYM.EQ.0 )
@@ -1188,7 +1198,7 @@
                         ISUB = 1
                         JSUB = JSUB + 1
                      END IF
-                     A( ISUB, JSUB ) = ZLATM2( M, N, I, J, KL, KU,
+                     A( ISUB, JSUB ) = AB_ZLATM2( M, N, I, J, KL, KU,
      $                                 IDIST, ISEED, D, IGRADE, DL, DR,
      $                                 IPVTNG, IWORK, SPARSE )
   460             CONTINUE
@@ -1203,11 +1213,12 @@
                      A( J-I+1, I+N ) = CZERO
                   ELSE
                      IF( ISYM.EQ.0 ) THEN
-                        A( J-I+1, I ) = DCONJG( ZLATM2( M, N, I, J, KL,
+                        A( J-I+1, I ) = DCONJG( AB_ZLATM2( M, N, I, J, K
+     $L,
      $                                  KU, IDIST, ISEED, D, IGRADE, DL,
      $                                  DR, IPVTNG, IWORK, SPARSE ) )
                      ELSE
-                        A( J-I+1, I ) = ZLATM2( M, N, I, J, KL, KU,
+                        A( J-I+1, I ) = AB_ZLATM2( M, N, I, J, KL, KU,
      $                                  IDIST, ISEED, D, IGRADE, DL, DR,
      $                                  IPVTNG, IWORK, SPARSE )
                      END IF
@@ -1219,7 +1230,8 @@
 *
             DO 510 J = 1, N
                DO 500 I = J - KUU, J
-                  A( I-J+KUU+1, J ) = ZLATM2( M, N, I, J, KL, KU, IDIST,
+                  A( I-J+KUU+1, J ) = AB_ZLATM2( M, N, I, J, KL, KU, IDI
+     $ST,
      $                                ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                                IWORK, SPARSE )
   500          CONTINUE
@@ -1230,7 +1242,7 @@
             IF( ISYM.NE.1 ) THEN
                DO 530 J = 1, N
                   DO 520 I = J - KUU, J
-                     A( I-J+KUU+1, J ) = ZLATM2( M, N, I, J, KL, KU,
+                     A( I-J+KUU+1, J ) = AB_ZLATM2( M, N, I, J, KL, KU,
      $                                   IDIST, ISEED, D, IGRADE, DL,
      $                                   DR, IPVTNG, IWORK, SPARSE )
                      IF( I.LT.1 )
@@ -1248,7 +1260,7 @@
             ELSE IF( ISYM.EQ.1 ) THEN
                DO 550 J = 1, N
                   DO 540 I = J - KUU, J + KLL
-                     A( I-J+KUU+1, J ) = ZLATM2( M, N, I, J, KL, KU,
+                     A( I-J+KUU+1, J ) = AB_ZLATM2( M, N, I, J, KL, KU,
      $                                   IDIST, ISEED, D, IGRADE, DL,
      $                                   DR, IPVTNG, IWORK, SPARSE )
   540             CONTINUE
@@ -1262,21 +1274,21 @@
 *     5)      Scaling the norm
 *
       IF( IPACK.EQ.0 ) THEN
-         ONORM = ZLANGE( 'M', M, N, A, LDA, TEMPA )
+         ONORM = AB_ZLANGE( 'M', M, N, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.1 ) THEN
-         ONORM = ZLANSY( 'M', 'U', N, A, LDA, TEMPA )
+         ONORM = AB_ZLANSY( 'M', 'U', N, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.2 ) THEN
-         ONORM = ZLANSY( 'M', 'L', N, A, LDA, TEMPA )
+         ONORM = AB_ZLANSY( 'M', 'L', N, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.3 ) THEN
-         ONORM = ZLANSP( 'M', 'U', N, A, TEMPA )
+         ONORM = AB_ZLANSP( 'M', 'U', N, A, TEMPA )
       ELSE IF( IPACK.EQ.4 ) THEN
-         ONORM = ZLANSP( 'M', 'L', N, A, TEMPA )
+         ONORM = AB_ZLANSP( 'M', 'L', N, A, TEMPA )
       ELSE IF( IPACK.EQ.5 ) THEN
-         ONORM = ZLANSB( 'M', 'L', N, KLL, A, LDA, TEMPA )
+         ONORM = AB_ZLANSB( 'M', 'L', N, KLL, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.6 ) THEN
-         ONORM = ZLANSB( 'M', 'U', N, KUU, A, LDA, TEMPA )
+         ONORM = AB_ZLANSB( 'M', 'U', N, KUU, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.7 ) THEN
-         ONORM = ZLANGB( 'M', N, KLL, KUU, A, LDA, TEMPA )
+         ONORM = AB_ZLANGB( 'M', N, KLL, KUU, A, LDA, TEMPA )
       END IF
 *
       IF( ANORM.GE.ZERO ) THEN
@@ -1295,20 +1307,20 @@
 *
             IF( IPACK.LE.2 ) THEN
                DO 560 J = 1, N
-                  CALL ZDSCAL( M, ONE / ONORM, A( 1, J ), 1 )
-                  CALL ZDSCAL( M, ANORM, A( 1, J ), 1 )
+                  CALL ZAB_DSCAL( M, ONE / ONORM, A( 1, J ), 1 )
+                  CALL ZAB_DSCAL( M, ANORM, A( 1, J ), 1 )
   560          CONTINUE
 *
             ELSE IF( IPACK.EQ.3 .OR. IPACK.EQ.4 ) THEN
 *
-               CALL ZDSCAL( N*( N+1 ) / 2, ONE / ONORM, A, 1 )
-               CALL ZDSCAL( N*( N+1 ) / 2, ANORM, A, 1 )
+               CALL ZAB_DSCAL( N*( N+1 ) / 2, ONE / ONORM, A, 1 )
+               CALL ZAB_DSCAL( N*( N+1 ) / 2, ANORM, A, 1 )
 *
             ELSE IF( IPACK.GE.5 ) THEN
 *
                DO 570 J = 1, N
-                  CALL ZDSCAL( KLL+KUU+1, ONE / ONORM, A( 1, J ), 1 )
-                  CALL ZDSCAL( KLL+KUU+1, ANORM, A( 1, J ), 1 )
+                  CALL ZAB_DSCAL( KLL+KUU+1, ONE / ONORM, A( 1, J ), 1 )
+                  CALL ZAB_DSCAL( KLL+KUU+1, ANORM, A( 1, J ), 1 )
   570          CONTINUE
 *
             END IF
@@ -1319,17 +1331,18 @@
 *
             IF( IPACK.LE.2 ) THEN
                DO 580 J = 1, N
-                  CALL ZDSCAL( M, ANORM / ONORM, A( 1, J ), 1 )
+                  CALL ZAB_DSCAL( M, ANORM / ONORM, A( 1, J ), 1 )
   580          CONTINUE
 *
             ELSE IF( IPACK.EQ.3 .OR. IPACK.EQ.4 ) THEN
 *
-               CALL ZDSCAL( N*( N+1 ) / 2, ANORM / ONORM, A, 1 )
+               CALL ZAB_DSCAL( N*( N+1 ) / 2, ANORM / ONORM, A, 1 )
 *
             ELSE IF( IPACK.GE.5 ) THEN
 *
                DO 590 J = 1, N
-                  CALL ZDSCAL( KLL+KUU+1, ANORM / ONORM, A( 1, J ), 1 )
+                  CALL ZAB_DSCAL( KLL+KUU+1, ANORM / ONORM, A( 1, J ), 1
+     $ )
   590          CONTINUE
             END IF
 *
@@ -1337,6 +1350,6 @@
 *
       END IF
 *
-*     End of ZLATMR
+*     End of AB_ZLATMR
 *
       END

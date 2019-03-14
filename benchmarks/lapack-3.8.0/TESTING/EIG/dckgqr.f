@@ -1,4 +1,4 @@
-*> \brief \b DCKGQR
+*> \brief \b AB_DCKGQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
+*       SUBROUTINE AB_DCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
 *                          THRESH, NMAX, A, AF, AQ, AR, TAUA, B, BF, BZ,
 *                          BT, BWK, TAUB, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -29,9 +29,9 @@
 *>
 *> \verbatim
 *>
-*> DCKGQR tests
-*> DGGQRF: GQR factorization for N-by-M matrix A and N-by-P matrix B,
-*> DGGRQF: GRQ factorization for M-by-N matrix A and P-by-N matrix B.
+*> AB_DCKGQR tests
+*> AB_DGGQRF: GQR factorization for N-by-M matrix A and N-by-P matrix B,
+*> AB_DGGRQF: GRQ factorization for M-by-N matrix A and P-by-N matrix B.
 *> \endverbatim
 *
 *  Arguments:
@@ -189,7 +189,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If DLATMS returns an error code, the absolute value
+*>          > 0 :  If AB_DLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -206,7 +206,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
+      SUBROUTINE AB_DCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
      $                   THRESH, NMAX, A, AF, AQ, AR, TAUA, B, BF, BZ,
      $                   BT, BWK, TAUB, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -248,8 +248,9 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DGQRTS, DGRQTS, DLATB9,
-     $                   DLATMS
+      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_DGQRTS, 
+     $AB_DGRQTS, AB_DLATB9,
+     $                   AB_DLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -263,7 +264,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDA = NMAX
       LDB = NMAX
       LWORK = NMAX*NMAX
@@ -290,18 +291,19 @@
                   IF( .NOT.DOTYPE( IMAT ) )
      $               GO TO 30
 *
-*                 Test DGGRQF
+*                 Test AB_DGGRQF
 *
-*                 Set up parameters with DLATB9 and generate test
-*                 matrices A and B with DLATMS.
+*                 Set up parameters with AB_DLATB9 and generate test
+*                 matrices A and B with AB_DLATMS.
 *
-                  CALL DLATB9( 'GRQ', IMAT, M, P, N, TYPE, KLA, KUA,
+                  CALL AB_DLATB9( 'GRQ', IMAT, M, P, N, TYPE, KLA, KUA,
      $                         KLB, KUB, ANORM, BNORM, MODEA, MODEB,
      $                         CNDNMA, CNDNMB, DISTA, DISTB )
 *
 *                 Generate M by N matrix A
 *
-                  CALL DLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA,
+                  CALL AB_DLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA
+     $,
      $                         CNDNMA, ANORM, KLA, KUA, 'No packing', A,
      $                         LDA, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -312,7 +314,8 @@
 *
 *                 Generate P by N matrix B
 *
-                  CALL DLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB,
+                  CALL AB_DLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB
+     $,
      $                         CNDNMB, BNORM, KLB, KUB, 'No packing', B,
      $                         LDB, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -323,7 +326,8 @@
 *
                   NT = 4
 *
-                  CALL DGRQTS( M, P, N, A, AF, AQ, AR, LDA, TAUA, B, BF,
+                  CALL AB_DGRQTS( M, P, N, A, AF, AQ, AR, LDA, TAUA, B, 
+     $BF,
      $                         BZ, BT, BWK, LDB, TAUB, WORK, LWORK,
      $                         RWORK, RESULT )
 *
@@ -334,7 +338,7 @@
                      IF( RESULT( I ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                            FIRSTT = .FALSE.
-                           CALL ALAHDG( NOUT, 'GRQ' )
+                           CALL AB_AB_ALAHDG( NOUT, 'GRQ' )
                         END IF
                         WRITE( NOUT, FMT = 9998 )M, P, N, IMAT, I,
      $                     RESULT( I )
@@ -343,18 +347,19 @@
    10             CONTINUE
                   NRUN = NRUN + NT
 *
-*                 Test DGGQRF
+*                 Test AB_DGGQRF
 *
-*                 Set up parameters with DLATB9 and generate test
-*                 matrices A and B with DLATMS.
+*                 Set up parameters with AB_DLATB9 and generate test
+*                 matrices A and B with AB_DLATMS.
 *
-                  CALL DLATB9( 'GQR', IMAT, M, P, N, TYPE, KLA, KUA,
+                  CALL AB_DLATB9( 'GQR', IMAT, M, P, N, TYPE, KLA, KUA,
      $                         KLB, KUB, ANORM, BNORM, MODEA, MODEB,
      $                         CNDNMA, CNDNMB, DISTA, DISTB )
 *
 *                 Generate N-by-M matrix  A
 *
-                  CALL DLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA,
+                  CALL AB_DLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA
+     $,
      $                         CNDNMA, ANORM, KLA, KUA, 'No packing', A,
      $                         LDA, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -365,7 +370,8 @@
 *
 *                 Generate N-by-P matrix  B
 *
-                  CALL DLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEA,
+                  CALL AB_DLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEA
+     $,
      $                         CNDNMA, BNORM, KLB, KUB, 'No packing', B,
      $                         LDB, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -376,7 +382,8 @@
 *
                   NT = 4
 *
-                  CALL DGQRTS( N, M, P, A, AF, AQ, AR, LDA, TAUA, B, BF,
+                  CALL AB_DGQRTS( N, M, P, A, AF, AQ, AR, LDA, TAUA, B, 
+     $BF,
      $                         BZ, BT, BWK, LDB, TAUB, WORK, LWORK,
      $                         RWORK, RESULT )
 *
@@ -387,7 +394,7 @@
                      IF( RESULT( I ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                            FIRSTT = .FALSE.
-                           CALL ALAHDG( NOUT, PATH )
+                           CALL AB_AB_ALAHDG( NOUT, PATH )
                         END IF
                         WRITE( NOUT, FMT = 9997 )N, M, P, IMAT, I,
      $                     RESULT( I )
@@ -403,15 +410,15 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' DLATMS in DCKGQR:    INFO = ', I5 )
+ 9999 FORMAT( ' AB_DLATMS in AB_DCKGQR:    INFO = ', I5 )
  9998 FORMAT( ' M=', I4, ' P=', I4, ', N=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
  9997 FORMAT( ' N=', I4, ' M=', I4, ', P=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
       RETURN
 *
-*     End of DCKGQR
+*     End of AB_DCKGQR
 *
       END

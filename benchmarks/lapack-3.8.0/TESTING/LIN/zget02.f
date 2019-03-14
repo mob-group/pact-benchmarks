@@ -1,4 +1,4 @@
-*> \brief \b ZGET02
+*> \brief \b AB_ZGET02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE AB_ZGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZGET02 computes the residual for a solution of a system of linear
+*> AB_ZGET02 computes the residual for a solution of a system of linear
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
 *> where EPS is the machine epsilon.
@@ -130,7 +130,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE AB_ZGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -161,12 +161,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
-      EXTERNAL           LSAME, DLAMCH, DZASUM, ZLANGE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DZASUM, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM
+      EXTERNAL           AB_ZGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -180,7 +180,7 @@
          RETURN
       END IF
 *
-      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
+      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
          N1 = N
          N2 = M
       ELSE
@@ -190,8 +190,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANGE( '1', M, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANGE( '1', M, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -199,7 +199,8 @@
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *
-      CALL ZGEMM( TRANS, 'No transpose', N1, NRHS, N2, -CONE, A, LDA, X,
+      CALL AB_ZGEMM( TRANS, 'No transpose', N1, NRHS, N2, -CONE, A, LDA,
+     $ X,
      $            LDX, CONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -207,8 +208,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = DZASUM( N1, B( 1, J ), 1 )
-         XNORM = DZASUM( N2, X( 1, J ), 1 )
+         BNORM = AB_DZASUM( N1, B( 1, J ), 1 )
+         XNORM = AB_DZASUM( N2, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -218,6 +219,6 @@
 *
       RETURN
 *
-*     End of ZGET02
+*     End of AB_ZGET02
 *
       END

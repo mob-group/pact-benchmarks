@@ -1,4 +1,4 @@
-*> \brief \b DPBT02
+*> \brief \b AB_DPBT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE AB_DPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> DPBT02 computes the residual for a solution of a symmetric banded
+*> AB_DPBT02 computes the residual for a solution of a symmetric banded
 *> system of equations  A*x = b:
 *>    RESID = norm( B - A*X ) / ( norm(A) * norm(X) * EPS)
 *> where EPS is the machine precision.
@@ -72,7 +72,7 @@
 *>          UPLO = 'L', the lower triangular part of A is stored.  The
 *>          columns of the appropriate triangle are stored in the columns
 *>          of A and the diagonals of the triangle are stored in the rows
-*>          of A.  See DPBTRF for further details.
+*>          of A.  See AB_DPBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -133,7 +133,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE AB_DPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -162,11 +162,11 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANSB
-      EXTERNAL           DASUM, DLAMCH, DLANSB
+      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANSB
+      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSBMV
+      EXTERNAL           AB_DSBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -182,8 +182,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_DLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -192,7 +192,7 @@
 *     Compute  B - A*X
 *
       DO 10 J = 1, NRHS
-         CALL DSBMV( UPLO, N, KD, -ONE, A, LDA, X( 1, J ), 1, ONE,
+         CALL AB_DSBMV( UPLO, N, KD, -ONE, A, LDA, X( 1, J ), 1, ONE,
      $               B( 1, J ), 1 )
    10 CONTINUE
 *
@@ -201,8 +201,8 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         BNORM = DASUM( N, B( 1, J ), 1 )
-         XNORM = DASUM( N, X( 1, J ), 1 )
+         BNORM = AB_DASUM( N, B( 1, J ), 1 )
+         XNORM = AB_DASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -212,6 +212,6 @@
 *
       RETURN
 *
-*     End of DPBT02
+*     End of AB_DPBT02
 *
       END

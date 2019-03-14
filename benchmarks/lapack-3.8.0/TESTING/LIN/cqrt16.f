@@ -1,4 +1,4 @@
-*> \brief \b CQRT16
+*> \brief \b AB_CQRT16
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE AB_CQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CQRT16 computes the residual for a solution of a system of linear
+*> AB_CQRT16 computes the residual for a solution of a system of linear
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm(B - A*X) / ( max(m,n) * norm(A) * norm(X) * EPS ),
 *> where EPS is the machine epsilon.
@@ -130,7 +130,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE AB_CQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -161,12 +161,12 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE, SCASUM, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SCASUM, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE, AB_SCASUM, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM
+      EXTERNAL           AB_CGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -180,21 +180,22 @@
          RETURN
       END IF
 *
-      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
-         ANORM = CLANGE( 'I', M, N, A, LDA, RWORK )
+      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
+         ANORM = AB_CLANGE( 'I', M, N, A, LDA, RWORK )
          N1 = N
          N2 = M
       ELSE
-         ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
+         ANORM = AB_CLANGE( '1', M, N, A, LDA, RWORK )
          N1 = M
          N2 = N
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *
-      CALL CGEMM( TRANS, 'No transpose', N1, NRHS, N2, -CONE, A, LDA, X,
+      CALL AB_CGEMM( TRANS, 'No transpose', N1, NRHS, N2, -CONE, A, LDA,
+     $ X,
      $            LDX, CONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -202,8 +203,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = SCASUM( N1, B( 1, J ), 1 )
-         XNORM = SCASUM( N2, X( 1, J ), 1 )
+         BNORM = AB_SCASUM( N1, B( 1, J ), 1 )
+         XNORM = AB_SCASUM( N2, X( 1, J ), 1 )
          IF( ANORM.EQ.ZERO .AND. BNORM.EQ.ZERO ) THEN
             RESID = ZERO
          ELSE IF( ANORM.LE.ZERO .OR. XNORM.LE.ZERO ) THEN
@@ -216,6 +217,6 @@
 *
       RETURN
 *
-*     End of CQRT16
+*     End of AB_CQRT16
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SERRQRTP
+*> \brief \b AB_AB_AB_SERRQRTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SERRQRTP( PATH, NUNIT )
+*       SUBROUTINE AB_AB_AB_SERRQRTP( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> SERRQRTP tests the error exits for the REAL routines
+*> AB_AB_AB_SERRQRTP tests the error exits for the REAL routines
 *> that use the QRT decomposition of a triangular-pentagonal matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SERRQRTP( PATH, NUNIT )
+      SUBROUTINE AB_AB_AB_SERRQRTP( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,8 @@
      $                   B( NMAX, NMAX ), C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, STPQRT2, STPQRT,
-     $                   STPMQRT
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_STPQRT2, AB_STPQRT,
+     $                   AB_STPMQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,116 +114,116 @@
 *
 *     Error exits for TPQRT factorization
 *
-*     STPQRT
+*     AB_STPQRT
 *
-      SRNAMT = 'STPQRT'
+      SRNAMT = 'AB_STPQRT'
       INFOT = 1
-      CALL STPQRT( -1, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( -1, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL STPQRT( 1, -1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( 1, -1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL STPQRT( 0, 1, -1, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( 0, 1, -1, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL STPQRT( 0, 1, 1, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( 0, 1, 1, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL STPQRT( 0, 1, 0, 0, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( 0, 1, 0, 0, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL STPQRT( 0, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( 0, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL STPQRT( 1, 2, 0, 2, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( 1, 2, 0, 2, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL STPQRT( 2, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( 2, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL STPQRT( 2, 2, 1, 2, A, 2, B, 2, T, 1, W, INFO )
-      CALL CHKXER( 'STPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_STPQRT( 2, 2, 1, 2, A, 2, B, 2, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_STPQRT', INFOT, NOUT, LERR, OK )
 *
-*     STPQRT2
+*     AB_AB_STPQRT2
 *
-      SRNAMT = 'STPQRT2'
+      SRNAMT = 'AB_AB_STPQRT2'
       INFOT = 1
-      CALL STPQRT2( -1, 0, 0, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'STPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_STPQRT2( -1, 0, 0, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_STPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL STPQRT2( 0, -1, 0, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'STPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_STPQRT2( 0, -1, 0, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_STPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL STPQRT2( 0, 0, -1, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'STPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_STPQRT2( 0, 0, -1, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_STPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL STPQRT2( 2, 2, 0, A, 1, B, 2, T, 2, INFO )
-      CALL CHKXER( 'STPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_STPQRT2( 2, 2, 0, A, 1, B, 2, T, 2, INFO )
+      CALL AB_CHKXER( 'AB_AB_STPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL STPQRT2( 2, 2, 0, A, 2, B, 1, T, 2, INFO )
-      CALL CHKXER( 'STPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_STPQRT2( 2, 2, 0, A, 2, B, 1, T, 2, INFO )
+      CALL AB_CHKXER( 'AB_AB_STPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL STPQRT2( 2, 2, 0, A, 2, B, 2, T, 1, INFO )
-      CALL CHKXER( 'STPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_STPQRT2( 2, 2, 0, A, 2, B, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_STPQRT2', INFOT, NOUT, LERR, OK )
 *
-*     STPMQRT
+*     AB_STPMQRT
 *
-      SRNAMT = 'STPMQRT'
+      SRNAMT = 'AB_STPMQRT'
       INFOT = 1
-      CALL STPMQRT( '/', 'N', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( '/', 'N', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL STPMQRT( 'L', '/', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( 'L', '/', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL STPMQRT( 'L', 'N', -1, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( 'L', 'N', -1, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL STPMQRT( 'L', 'N', 0, -1, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( 'L', 'N', 0, -1, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL STPMQRT( 'L', 'N', 0, 0, -1, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( 'L', 'N', 0, 0, -1, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
       INFOT = 6
-      CALL STPMQRT( 'L', 'N', 0, 0, 0, -1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( 'L', 'N', 0, 0, 0, -1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL STPMQRT( 'L', 'N', 0, 0, 0, 0, 0, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( 'L', 'N', 0, 0, 0, 0, 0, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL STPMQRT( 'R', 'N', 1, 2, 1, 1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( 'R', 'N', 1, 2, 1, 1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL STPMQRT( 'L', 'N', 2, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_STPMQRT( 'L', 'N', 2, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL STPMQRT( 'R', 'N', 1, 1, 1, 1, 1, A, 1, T, 0, B, 1, C, 1,
+      CALL AB_STPMQRT( 'R', 'N', 1, 1, 1, 1, 1, A, 1, T, 0, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL STPMQRT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 0, C, 1,
+      CALL AB_STPMQRT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 0, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 15
-      CALL STPMQRT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 0,
+      CALL AB_STPMQRT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 0,
      $              W, INFO )
-      CALL CHKXER( 'STPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_STPMQRT', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of SERRQRT
+*     End of AB_AB_SERRQRT
 *
       END

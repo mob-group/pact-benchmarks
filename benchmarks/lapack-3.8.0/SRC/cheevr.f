@@ -1,4 +1,4 @@
-*> \brief <b> CHEEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
+*> \brief <b> AB_AB_CHEEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHEEVR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheevr.f">
+*> Download AB_AB_CHEEVR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CHEEVR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheevr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CHEEVR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheevr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CHEEVR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+*       SUBROUTINE AB_AB_CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
 *                          ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
 *                          RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
@@ -40,14 +40,14 @@
 *>
 *> \verbatim
 *>
-*> CHEEVR computes selected eigenvalues and, optionally, eigenvectors
+*> AB_AB_CHEEVR computes selected eigenvalues and, optionally, eigenvectors
 *> of a complex Hermitian matrix A.  Eigenvalues and eigenvectors can
 *> be selected by specifying either a range of values or a range of
 *> indices for the desired eigenvalues.
 *>
-*> CHEEVR first reduces the matrix A to tridiagonal form T with a call
-*> to CHETRD.  Then, whenever possible, CHEEVR calls CSTEMR to compute
-*> the eigenspectrum using Relatively Robust Representations.  CSTEMR
+*> AB_AB_CHEEVR first reduces the matrix A to tridiagonal form T with a call
+*> to AB_CHETRD.  Then, whenever possible, AB_AB_CHEEVR calls AB_CSTEMR to compute
+*> the eigenspectrum using Relatively Robust Representations.  AB_CSTEMR
 *> computes eigenvalues by the dqds algorithm, while orthogonal
 *> eigenvectors are computed from various "good" L D L^T representations
 *> (also known as Relatively Robust Representations). Gram-Schmidt
@@ -75,7 +75,7 @@
 *> The desired accuracy of the output can be specified by the input
 *> parameter ABSTOL.
 *>
-*> For more details, see DSTEMR's documentation and:
+*> For more details, see AB_DSTEMR's documentation and:
 *> - Inderjit S. Dhillon and Beresford N. Parlett: "Multiple representations
 *>   to compute orthogonal eigenvectors of symmetric tridiagonal matrices,"
 *>   Linear Algebra and its Applications, 387(1), pp. 1-28, August 2004.
@@ -88,12 +88,12 @@
 *>   UC Berkeley, May 1997.
 *>
 *>
-*> Note 1 : CHEEVR calls CSTEMR when the full spectrum is requested
+*> Note 1 : AB_AB_CHEEVR calls AB_CSTEMR when the full spectrum is requested
 *> on machines which conform to the ieee-754 floating point standard.
-*> CHEEVR calls SSTEBZ and CSTEIN on non-ieee machines and
+*> AB_AB_CHEEVR calls AB_SSTEBZ and AB_CSTEIN on non-ieee machines and
 *> when partial spectrum requests are made.
 *>
-*> Normal execution of CSTEMR may create NaNs and infinities and
+*> Normal execution of AB_CSTEMR may create NaNs and infinities and
 *> hence may abort due to a floating point exception in environments
 *> which do not handle NaNs and infinities in the ieee standard default
 *> manner.
@@ -116,8 +116,8 @@
 *>          = 'V': all eigenvalues in the half-open interval (VL,VU]
 *>                 will be found.
 *>          = 'I': the IL-th through IU-th eigenvalues will be found.
-*>          For RANGE = 'V' or 'I' and IU - IL < N - 1, SSTEBZ and
-*>          CSTEIN are called
+*>          For RANGE = 'V' or 'I' and IU - IL < N - 1, AB_SSTEBZ and
+*>          AB_CSTEIN are called
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -206,7 +206,7 @@
 *>          Kahan, LAPACK Working Note #3.
 *>
 *>          If high relative accuracy is important, set ABSTOL to
-*>          SLAMCH( 'Safe minimum' ).  Doing so will guarantee that
+*>          AB_SLAMCH( 'Safe minimum' ).  Doing so will guarantee that
 *>          eigenvalues are computed to high relative accuracy when
 *>          possible in future releases.  The current code does not
 *>          make any guarantees about high relative accuracy, but
@@ -257,9 +257,9 @@
 *>          The support of the eigenvectors in Z, i.e., the indices
 *>          indicating the nonzero elements in Z. The i-th eigenvector
 *>          is nonzero only in elements ISUPPZ( 2*i-1 ) through
-*>          ISUPPZ( 2*i ). This is an output of CSTEMR (tridiagonal
+*>          ISUPPZ( 2*i ). This is an output of AB_CSTEMR (tridiagonal
 *>          matrix). The support of the eigenvectors of A is typically
-*>          1:N because of the unitary transformations applied by CUNMTR.
+*>          1:N because of the unitary transformations applied by AB_CUNMTR.
 *>          Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1
 *> \endverbatim
 *>
@@ -274,14 +274,14 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,2*N).
 *>          For optimal efficiency, LWORK >= (NB+1)*N,
-*>          where NB is the max of the blocksize for CHETRD and for
-*>          CUNMTR as returned by ILAENV.
+*>          where NB is the max of the blocksize for AB_CHETRD and for
+*>          AB_CUNMTR as returned by AB_ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -300,7 +300,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -319,7 +319,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -353,7 +353,8 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
+      SUBROUTINE AB_AB_CHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL,
+     $ IU,
      $                   ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
@@ -393,14 +394,16 @@
      $                   SIGMA, SMLNUM, TMP1, VLL, VUU
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      REAL               CLANSY, SLAMCH
-      EXTERNAL           LSAME, ILAENV, CLANSY, SLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      REAL               AB_CLANSY, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_CLANSY, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRD, CSSCAL, CSTEMR, CSTEIN, CSWAP, CUNMTR,
-     $                   SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA
+      EXTERNAL           AB_CHETRD, AB_CAB_SSCAL, AB_CSTEMR, AB_CSTEIN, 
+     $AB_CSWAP, AB_CUNMTR,
+     $                   AB_SCOPY, AB_SSCAL, AB_SSTEBZ, AB_SSTERF, AB_XE
+     $RBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL, SQRT
@@ -409,13 +412,13 @@
 *
 *     Test the input parameters.
 *
-      IEEEOK = ILAENV( 10, 'CHEEVR', 'N', 1, 2, 3, 4 )
+      IEEEOK = AB_ILAENV( 10, 'AB_AB_CHEEVR', 'N', 1, 2, 3, 4 )
 *
-      LOWER = LSAME( UPLO, 'L' )
-      WANTZ = LSAME( JOBZ, 'V' )
-      ALLEIG = LSAME( RANGE, 'A' )
-      VALEIG = LSAME( RANGE, 'V' )
-      INDEIG = LSAME( RANGE, 'I' )
+      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      ALLEIG = AB_LSAME( RANGE, 'A' )
+      VALEIG = AB_LSAME( RANGE, 'V' )
+      INDEIG = AB_LSAME( RANGE, 'I' )
 *
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LRWORK.EQ.-1 ) .OR.
      $         ( LIWORK.EQ.-1 ) )
@@ -425,11 +428,11 @@
       LWMIN = MAX( 1, 2*N )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -454,8 +457,9 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = ILAENV( 1, 'CHETRD', UPLO, N, -1, -1, -1 )
-         NB = MAX( NB, ILAENV( 1, 'CUNMTR', UPLO, N, -1, -1, -1 ) )
+         NB = AB_ILAENV( 1, 'AB_CHETRD', UPLO, N, -1, -1, -1 )
+         NB = MAX( NB, AB_ILAENV( 1, 'AB_CUNMTR', UPLO, N, -1, -1, -1 ) 
+     $)
          LWKOPT = MAX( ( NB+1 )*N, LWMIN )
          WORK( 1 ) = LWKOPT
          RWORK( 1 ) = LRWMIN
@@ -471,7 +475,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHEEVR', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CHEEVR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -507,8 +511,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )
@@ -522,7 +526,7 @@
          VLL = VL
          VUU = VU
       END IF
-      ANRM = CLANSY( 'M', UPLO, N, A, LDA, RWORK )
+      ANRM = AB_CLANSY( 'M', UPLO, N, A, LDA, RWORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / ANRM
@@ -533,11 +537,11 @@
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
             DO 10 J = 1, N
-               CALL CSSCAL( N-J+1, SIGMA, A( J, J ), 1 )
+               CALL AB_CAB_SSCAL( N-J+1, SIGMA, A( J, J ), 1 )
    10       CONTINUE
          ELSE
             DO 20 J = 1, N
-               CALL CSSCAL( J, SIGMA, A( 1, J ), 1 )
+               CALL AB_CAB_SSCAL( J, SIGMA, A( 1, J ), 1 )
    20       CONTINUE
          END IF
          IF( ABSTOL.GT.0 )
@@ -549,10 +553,10 @@
       END IF
 
 *     Initialize indices into workspaces.  Note: The IWORK indices are
-*     used only if SSTERF or CSTEMR fail.
+*     used only if AB_SSTERF or AB_CSTEMR fail.
 
 *     WORK(INDTAU:INDTAU+N-1) stores the complex scalar factors of the
-*     elementary reflectors used in CHETRD.
+*     elementary reflectors used in AB_CHETRD.
       INDTAU = 1
 *     INDWK is the starting offset of the remaining complex workspace,
 *     and LLWORK is the remaining complex workspace size.
@@ -563,41 +567,41 @@
 *     entries.
       INDRD = 1
 *     RWORK(INDRE:INDRE+N-1) stores the off-diagonal entries of the
-*     tridiagonal matrix from CHETRD.
+*     tridiagonal matrix from AB_CHETRD.
       INDRE = INDRD + N
 *     RWORK(INDRDD:INDRDD+N-1) is a copy of the diagonal entries over
-*     -written by CSTEMR (the SSTERF path copies the diagonal to W).
+*     -written by AB_CSTEMR (the AB_SSTERF path copies the diagonal to W).
       INDRDD = INDRE + N
 *     RWORK(INDREE:INDREE+N-1) is a copy of the off-diagonal entries over
-*     -written while computing the eigenvalues in SSTERF and CSTEMR.
+*     -written while computing the eigenvalues in AB_SSTERF and AB_CSTEMR.
       INDREE = INDRDD + N
 *     INDRWK is the starting offset of the left-over real workspace, and
 *     LLRWORK is the remaining workspace size.
       INDRWK = INDREE + N
       LLRWORK = LRWORK - INDRWK + 1
 
-*     IWORK(INDIBL:INDIBL+M-1) corresponds to IBLOCK in SSTEBZ and
+*     IWORK(INDIBL:INDIBL+M-1) corresponds to IBLOCK in AB_SSTEBZ and
 *     stores the block indices of each of the M<=N eigenvalues.
       INDIBL = 1
-*     IWORK(INDISP:INDISP+NSPLIT-1) corresponds to ISPLIT in SSTEBZ and
+*     IWORK(INDISP:INDISP+NSPLIT-1) corresponds to ISPLIT in AB_SSTEBZ and
 *     stores the starting and finishing indices of each block.
       INDISP = INDIBL + N
 *     IWORK(INDIFL:INDIFL+N-1) stores the indices of eigenvectors
 *     that corresponding to eigenvectors that fail to converge in
-*     SSTEIN.  This information is discarded; if any fail, the driver
+*     AB_SSTEIN.  This information is discarded; if any fail, the driver
 *     returns INFO > 0.
       INDIFL = INDISP + N
 *     INDIWO is the offset of the remaining integer workspace.
       INDIWO = INDIFL + N
 
 *
-*     Call CHETRD to reduce Hermitian matrix to tridiagonal form.
+*     Call AB_CHETRD to reduce Hermitian matrix to tridiagonal form.
 *
-      CALL CHETRD( UPLO, N, A, LDA, RWORK( INDRD ), RWORK( INDRE ),
+      CALL AB_CHETRD( UPLO, N, A, LDA, RWORK( INDRD ), RWORK( INDRE ),
      $             WORK( INDTAU ), WORK( INDWK ), LLWORK, IINFO )
 *
 *     If all eigenvalues are desired
-*     then call SSTERF or CSTEMR and CUNMTR.
+*     then call AB_SSTERF or AB_CSTEMR and AB_CUNMTR.
 *
       TEST = .FALSE.
       IF( INDEIG ) THEN
@@ -607,31 +611,31 @@
       END IF
       IF( ( ALLEIG.OR.TEST ) .AND. ( IEEEOK.EQ.1 ) ) THEN
          IF( .NOT.WANTZ ) THEN
-            CALL SCOPY( N, RWORK( INDRD ), 1, W, 1 )
-            CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
-            CALL SSTERF( N, W, RWORK( INDREE ), INFO )
+            CALL AB_SCOPY( N, RWORK( INDRD ), 1, W, 1 )
+            CALL AB_SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
+            CALL AB_SSTERF( N, W, RWORK( INDREE ), INFO )
          ELSE
-            CALL SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
-            CALL SCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
+            CALL AB_SCOPY( N-1, RWORK( INDRE ), 1, RWORK( INDREE ), 1 )
+            CALL AB_SCOPY( N, RWORK( INDRD ), 1, RWORK( INDRDD ), 1 )
 *
             IF (ABSTOL .LE. TWO*N*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
             END IF
-            CALL CSTEMR( JOBZ, 'A', N, RWORK( INDRDD ),
+            CALL AB_CSTEMR( JOBZ, 'A', N, RWORK( INDRDD ),
      $                   RWORK( INDREE ), VL, VU, IL, IU, M, W,
      $                   Z, LDZ, N, ISUPPZ, TRYRAC,
      $                   RWORK( INDRWK ), LLRWORK,
      $                   IWORK, LIWORK, INFO )
 *
 *           Apply unitary matrix used in reduction to tridiagonal
-*           form to eigenvectors returned by CSTEMR.
+*           form to eigenvectors returned by AB_CSTEMR.
 *
             IF( WANTZ .AND. INFO.EQ.0 ) THEN
                INDWKN = INDWK
                LLWRKN = LWORK - INDWKN + 1
-               CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA,
+               CALL AB_CUNMTR( 'L', UPLO, 'N', N, M, A, LDA,
      $                      WORK( INDTAU ), Z, LDZ, WORK( INDWKN ),
      $                      LLWRKN, IINFO )
             END IF
@@ -645,8 +649,8 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call SSTEBZ and, if eigenvectors are desired, CSTEIN.
-*     Also call SSTEBZ and CSTEIN if CSTEMR fails.
+*     Otherwise, call AB_SSTEBZ and, if eigenvectors are desired, AB_CSTEIN.
+*     Also call AB_SSTEBZ and AB_CSTEIN if AB_CSTEMR fails.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -654,23 +658,24 @@
          ORDER = 'E'
       END IF
 
-      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
+      CALL AB_SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             RWORK( INDRD ), RWORK( INDRE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), RWORK( INDRWK ),
      $             IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL CSTEIN( N, RWORK( INDRD ), RWORK( INDRE ), M, W,
+         CALL AB_CSTEIN( N, RWORK( INDRD ), RWORK( INDRE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
      $                RWORK( INDRWK ), IWORK( INDIWO ), IWORK( INDIFL ),
      $                INFO )
 *
 *        Apply unitary matrix used in reduction to tridiagonal
-*        form to eigenvectors returned by CSTEIN.
+*        form to eigenvectors returned by AB_CSTEIN.
 *
          INDWKN = INDWK
          LLWRKN = LWORK - INDWKN + 1
-         CALL CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL AB_CUNMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z
+     $,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *
@@ -683,7 +688,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -706,7 +711,7 @@
                IWORK( INDIBL+I-1 ) = IWORK( INDIBL+J-1 )
                W( J ) = TMP1
                IWORK( INDIBL+J-1 ) = ITMP1
-               CALL CSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL AB_CSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
             END IF
    50    CONTINUE
       END IF
@@ -719,6 +724,6 @@
 *
       RETURN
 *
-*     End of CHEEVR
+*     End of AB_AB_CHEEVR
 *
       END

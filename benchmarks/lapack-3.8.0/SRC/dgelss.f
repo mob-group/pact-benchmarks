@@ -1,4 +1,4 @@
-*> \brief <b> DGELSS solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> AB_AB_DGELSS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGELSS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgelss.f">
+*> Download AB_AB_DGELSS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DGELSS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgelss.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DGELSS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgelss.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DGELSS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
+*       SUBROUTINE AB_AB_DGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGELSS computes the minimum norm solution to a real linear least
+*> AB_AB_DGELSS computes the minimum norm solution to a real linear least
 *> squares problem:
 *>
 *> Minimize 2-norm(| b - A*x |).
@@ -143,7 +143,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -169,7 +169,8 @@
 *> \ingroup doubleGEsolve
 *
 *  =====================================================================
-      SUBROUTINE DGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
+      SUBROUTINE AB_AB_DGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RAN
+     $K,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -196,23 +197,28 @@
       INTEGER            BDSPAC, BL, CHUNK, I, IASCL, IBSCL, IE, IL,
      $                   ITAU, ITAUP, ITAUQ, IWORK, LDWORK, MAXMN,
      $                   MAXWRK, MINMN, MINWRK, MM, MNTHR
-      INTEGER            LWORK_DGEQRF, LWORK_DORMQR, LWORK_DGEBRD,
-     $                   LWORK_DORMBR, LWORK_DORGBR, LWORK_DORMLQ,
-     $                   LWORK_DGELQF
+      INTEGER            LWORK_AB_AB_DGEQRF, LWORK_AB_DORMQR, LWORK_AB_D
+     $GEBRD,
+     $                   LWORK_AB_DORMBR, LWORK_AB_DORGBR, LWORK_AB_DORM
+     $LQ,
+     $                   LWORK_AB_AB_DGELQF
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM, THR
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDSQR, DCOPY, DGEBRD, DGELQF, DGEMM, DGEMV,
-     $                   DGEQRF, DLABAD, DLACPY, DLASCL, DLASET, DORGBR,
-     $                   DORMBR, DORMLQ, DORMQR, DRSCL, XERBLA
+      EXTERNAL           AB_DBDSQR, AB_DCOPY, AB_DGEBRD, AB_AB_DGELQF, A
+     $B_DGEMM, AB_DGEMV,
+     $                   AB_AB_DGEQRF, AB_DLABAD, AB_DLACPY, AB_DLASCL, 
+     $AB_DLASET, AB_DORGBR,
+     $                   AB_DORMBR, AB_DORMLQ, AB_DORMQR, AB_DRSCL, AB_X
+     $ERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           ILAENV, DLAMCH, DLANGE
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_ILAENV, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -242,53 +248,55 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by ILAENV.)
+*       following subroutine, as returned by AB_ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             MM = M
-            MNTHR = ILAENV( 6, 'DGELSS', ' ', M, N, NRHS, -1 )
+            MNTHR = AB_ILAENV( 6, 'AB_AB_DGELSS', ' ', M, N, NRHS, -1 )
             IF( M.GE.N .AND. M.GE.MNTHR ) THEN
 *
 *              Path 1a - overdetermined, with many more rows than
 *                        columns
 *
-*              Compute space needed for DGEQRF
-               CALL DGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO )
-               LWORK_DGEQRF=DUM(1)
-*              Compute space needed for DORMQR
-               CALL DORMQR( 'L', 'T', M, NRHS, N, A, LDA, DUM(1), B,
+*              Compute space needed for AB_AB_DGEQRF
+               CALL AB_AB_DGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO
+     $ )
+               LWORK_AB_AB_DGEQRF=DUM(1)
+*              Compute space needed for AB_DORMQR
+               CALL AB_DORMQR( 'L', 'T', M, NRHS, N, A, LDA, DUM(1), B,
      $                   LDB, DUM(1), -1, INFO )
-               LWORK_DORMQR=DUM(1)
+               LWORK_AB_DORMQR=DUM(1)
                MM = N
-               MAXWRK = MAX( MAXWRK, N + LWORK_DGEQRF )
-               MAXWRK = MAX( MAXWRK, N + LWORK_DORMQR )
+               MAXWRK = MAX( MAXWRK, N + LWORK_AB_AB_DGEQRF )
+               MAXWRK = MAX( MAXWRK, N + LWORK_AB_DORMQR )
             END IF
             IF( M.GE.N ) THEN
 *
 *              Path 1 - overdetermined or exactly determined
 *
-*              Compute workspace needed for DBDSQR
+*              Compute workspace needed for AB_DBDSQR
 *
                BDSPAC = MAX( 1, 5*N )
-*              Compute space needed for DGEBRD
-               CALL DGEBRD( MM, N, A, LDA, S, DUM(1), DUM(1),
+*              Compute space needed for AB_DGEBRD
+               CALL AB_DGEBRD( MM, N, A, LDA, S, DUM(1), DUM(1),
      $                      DUM(1), DUM(1), -1, INFO )
-               LWORK_DGEBRD=DUM(1)
-*              Compute space needed for DORMBR
-               CALL DORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, DUM(1),
+               LWORK_AB_DGEBRD=DUM(1)
+*              Compute space needed for AB_DORMBR
+               CALL AB_DORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, DUM(1
+     $),
      $                B, LDB, DUM(1), -1, INFO )
-               LWORK_DORMBR=DUM(1)
-*              Compute space needed for DORGBR
-               CALL DORGBR( 'P', N, N, N, A, LDA, DUM(1),
+               LWORK_AB_DORMBR=DUM(1)
+*              Compute space needed for AB_DORGBR
+               CALL AB_DORGBR( 'P', N, N, N, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
-               LWORK_DORGBR=DUM(1)
+               LWORK_AB_DORGBR=DUM(1)
 *              Compute total workspace needed
-               MAXWRK = MAX( MAXWRK, 3*N + LWORK_DGEBRD )
-               MAXWRK = MAX( MAXWRK, 3*N + LWORK_DORMBR )
-               MAXWRK = MAX( MAXWRK, 3*N + LWORK_DORGBR )
+               MAXWRK = MAX( MAXWRK, 3*N + LWORK_AB_DGEBRD )
+               MAXWRK = MAX( MAXWRK, 3*N + LWORK_AB_DORMBR )
+               MAXWRK = MAX( MAXWRK, 3*N + LWORK_AB_DORGBR )
                MAXWRK = MAX( MAXWRK, BDSPAC )
                MAXWRK = MAX( MAXWRK, N*NRHS )
                MINWRK = MAX( 3*N + MM, 3*N + NRHS, BDSPAC )
@@ -296,7 +304,7 @@
             END IF
             IF( N.GT.M ) THEN
 *
-*              Compute workspace needed for DBDSQR
+*              Compute workspace needed for AB_DBDSQR
 *
                BDSPAC = MAX( 1, 5*M )
                MINWRK = MAX( 3*M+NRHS, 3*M+N, BDSPAC )
@@ -305,57 +313,57 @@
 *                 Path 2a - underdetermined, with many more columns
 *                 than rows
 *
-*                 Compute space needed for DGELQF
-                  CALL DGELQF( M, N, A, LDA, DUM(1), DUM(1),
+*                 Compute space needed for AB_AB_DGELQF
+                  CALL AB_AB_DGELQF( M, N, A, LDA, DUM(1), DUM(1),
      $                -1, INFO )
-                  LWORK_DGELQF=DUM(1)
-*                 Compute space needed for DGEBRD
-                  CALL DGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
+                  LWORK_AB_AB_DGELQF=DUM(1)
+*                 Compute space needed for AB_DGEBRD
+                  CALL AB_DGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
      $                      DUM(1), DUM(1), -1, INFO )
-                  LWORK_DGEBRD=DUM(1)
-*                 Compute space needed for DORMBR
-                  CALL DORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA,
+                  LWORK_AB_DGEBRD=DUM(1)
+*                 Compute space needed for AB_DORMBR
+                  CALL AB_DORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA,
      $                DUM(1), B, LDB, DUM(1), -1, INFO )
-                  LWORK_DORMBR=DUM(1)
-*                 Compute space needed for DORGBR
-                  CALL DORGBR( 'P', M, M, M, A, LDA, DUM(1),
+                  LWORK_AB_DORMBR=DUM(1)
+*                 Compute space needed for AB_DORGBR
+                  CALL AB_DORGBR( 'P', M, M, M, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
-                  LWORK_DORGBR=DUM(1)
-*                 Compute space needed for DORMLQ
-                  CALL DORMLQ( 'L', 'T', N, NRHS, M, A, LDA, DUM(1),
+                  LWORK_AB_DORGBR=DUM(1)
+*                 Compute space needed for AB_DORMLQ
+                  CALL AB_DORMLQ( 'L', 'T', N, NRHS, M, A, LDA, DUM(1),
      $                 B, LDB, DUM(1), -1, INFO )
-                  LWORK_DORMLQ=DUM(1)
+                  LWORK_AB_DORMLQ=DUM(1)
 *                 Compute total workspace needed
-                  MAXWRK = M + LWORK_DGELQF
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_DGEBRD )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_DORMBR )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_DORGBR )
+                  MAXWRK = M + LWORK_AB_AB_DGELQF
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_AB_DGEBRD )
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_AB_DORMBR )
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_AB_DORGBR )
                   MAXWRK = MAX( MAXWRK, M*M + M + BDSPAC )
                   IF( NRHS.GT.1 ) THEN
                      MAXWRK = MAX( MAXWRK, M*M + M + M*NRHS )
                   ELSE
                      MAXWRK = MAX( MAXWRK, M*M + 2*M )
                   END IF
-                  MAXWRK = MAX( MAXWRK, M + LWORK_DORMLQ )
+                  MAXWRK = MAX( MAXWRK, M + LWORK_AB_DORMLQ )
                ELSE
 *
 *                 Path 2 - underdetermined
 *
-*                 Compute space needed for DGEBRD
-                  CALL DGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+*                 Compute space needed for AB_DGEBRD
+                  CALL AB_DGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
      $                      DUM(1), DUM(1), -1, INFO )
-                  LWORK_DGEBRD=DUM(1)
-*                 Compute space needed for DORMBR
-                  CALL DORMBR( 'Q', 'L', 'T', M, NRHS, M, A, LDA,
+                  LWORK_AB_DGEBRD=DUM(1)
+*                 Compute space needed for AB_DORMBR
+                  CALL AB_DORMBR( 'Q', 'L', 'T', M, NRHS, M, A, LDA,
      $                DUM(1), B, LDB, DUM(1), -1, INFO )
-                  LWORK_DORMBR=DUM(1)
-*                 Compute space needed for DORGBR
-                  CALL DORGBR( 'P', M, N, M, A, LDA, DUM(1),
+                  LWORK_AB_DORMBR=DUM(1)
+*                 Compute space needed for AB_DORGBR
+                  CALL AB_DORGBR( 'P', M, N, M, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
-                  LWORK_DORGBR=DUM(1)
-                  MAXWRK = 3*M + LWORK_DGEBRD
-                  MAXWRK = MAX( MAXWRK, 3*M + LWORK_DORMBR )
-                  MAXWRK = MAX( MAXWRK, 3*M + LWORK_DORGBR )
+                  LWORK_AB_DORGBR=DUM(1)
+                  MAXWRK = 3*M + LWORK_AB_DGEBRD
+                  MAXWRK = MAX( MAXWRK, 3*M + LWORK_AB_DORMBR )
+                  MAXWRK = MAX( MAXWRK, 3*M + LWORK_AB_DORGBR )
                   MAXWRK = MAX( MAXWRK, BDSPAC )
                   MAXWRK = MAX( MAXWRK, N*NRHS )
                END IF
@@ -369,7 +377,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGELSS', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DGELSS', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -384,53 +392,55 @@
 *
 *     Get machine parameters
 *
-      EPS = DLAMCH( 'P' )
-      SFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SFMIN = AB_DLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = DLANGE( 'M', M, N, A, LDA, WORK )
+      ANRM = AB_DLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL DLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
-         CALL DLASET( 'F', MINMN, 1, ZERO, ZERO, S, MINMN )
+         CALL AB_DLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL AB_DLASET( 'F', MINMN, 1, ZERO, ZERO, S, MINMN )
          RANK = 0
          GO TO 70
       END IF
 *
 *     Scale B if max element outside range [SMLNUM,BIGNUM]
 *
-      BNRM = DLANGE( 'M', M, NRHS, B, LDB, WORK )
+      BNRM = AB_DLANGE( 'M', M, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL DLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO 
+     $)
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL DLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO 
+     $)
          IBSCL = 2
       END IF
 *
@@ -452,19 +462,22 @@
 *           Compute A=Q*R
 *           (Workspace: need 2*N, prefer N+N*NB)
 *
-            CALL DGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+            CALL AB_AB_DGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK )
+     $,
      $                   LWORK-IWORK+1, INFO )
 *
 *           Multiply B by transpose(Q)
 *           (Workspace: need N+NRHS, prefer N+NRHS*NB)
 *
-            CALL DORMQR( 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAU ), B,
+            CALL AB_DORMQR( 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAU ), 
+     $B,
      $                   LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *           Zero out below R
 *
             IF( N.GT.1 )
-     $         CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ), LDA )
+     $         CALL AB_DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ), LDA
+     $ )
          END IF
 *
          IE = 1
@@ -475,20 +488,21 @@
 *        Bidiagonalize R in A
 *        (Workspace: need 3*N+MM, prefer 3*N+(MM+N)*NB)
 *
-         CALL DGEBRD( MM, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+         CALL AB_DGEBRD( MM, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
      $                WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                INFO )
 *
 *        Multiply B by transpose of left bidiagonalizing vectors of R
 *        (Workspace: need 3*N+NRHS, prefer 3*N+NRHS*NB)
 *
-         CALL DORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL AB_DORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, WORK( ITAUQ
+     $ ),
      $                B, LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors of R in A
 *        (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB)
 *
-         CALL DORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+         CALL AB_DORGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IWORK = IE + N
 *
@@ -497,7 +511,7 @@
 *          compute right singular vectors in A
 *        (Workspace: need BDSPAC)
 *
-         CALL DBDSQR( 'U', N, N, 0, NRHS, S, WORK( IE ), A, LDA, DUM,
+         CALL AB_DBDSQR( 'U', N, N, 0, NRHS, S, WORK( IE ), A, LDA, DUM,
      $                1, B, LDB, WORK( IWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -510,10 +524,11 @@
          RANK = 0
          DO 10 I = 1, N
             IF( S( I ).GT.THR ) THEN
-               CALL DRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL AB_DRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL DLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL AB_DLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB 
+     $)
             END IF
    10    CONTINUE
 *
@@ -521,20 +536,22 @@
 *        (Workspace: need N, prefer N*NRHS)
 *
          IF( LWORK.GE.LDB*NRHS .AND. NRHS.GT.1 ) THEN
-            CALL DGEMM( 'T', 'N', N, NRHS, N, ONE, A, LDA, B, LDB, ZERO,
+            CALL AB_DGEMM( 'T', 'N', N, NRHS, N, ONE, A, LDA, B, LDB, ZE
+     $RO,
      $                  WORK, LDB )
-            CALL DLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
+            CALL AB_DLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = LWORK / N
             DO 20 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL DGEMM( 'T', 'N', N, BL, N, ONE, A, LDA, B( 1, I ),
+               CALL AB_DGEMM( 'T', 'N', N, BL, N, ONE, A, LDA, B( 1, I )
+     $,
      $                     LDB, ZERO, WORK, N )
-               CALL DLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
+               CALL AB_DLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
    20       CONTINUE
          ELSE
-            CALL DGEMV( 'T', N, N, ONE, A, LDA, B, 1, ZERO, WORK, 1 )
-            CALL DCOPY( N, WORK, 1, B, 1 )
+            CALL AB_DGEMV( 'T', N, N, ONE, A, LDA, B, 1, ZERO, WORK, 1 )
+            CALL AB_DCOPY( N, WORK, 1, B, 1 )
          END IF
 *
       ELSE IF( N.GE.MNTHR .AND. LWORK.GE.4*M+M*M+
@@ -552,14 +569,14 @@
 *        Compute A=L*Q
 *        (Workspace: need 2*M, prefer M+M*NB)
 *
-         CALL DGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+         CALL AB_AB_DGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
          IL = IWORK
 *
 *        Copy L to WORK(IL), zeroing out above it
 *
-         CALL DLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWORK )
-         CALL DLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( IL+LDWORK ),
+         CALL AB_DLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWORK )
+         CALL AB_DLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( IL+LDWORK ),
      $                LDWORK )
          IE = IL + LDWORK*M
          ITAUQ = IE + M
@@ -569,21 +586,22 @@
 *        Bidiagonalize L in WORK(IL)
 *        (Workspace: need M*M+5*M, prefer M*M+4*M+2*M*NB)
 *
-         CALL DGEBRD( M, M, WORK( IL ), LDWORK, S, WORK( IE ),
+         CALL AB_DGEBRD( M, M, WORK( IL ), LDWORK, S, WORK( IE ),
      $                WORK( ITAUQ ), WORK( ITAUP ), WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
 *
 *        Multiply B by transpose of left bidiagonalizing vectors of L
 *        (Workspace: need M*M+4*M+NRHS, prefer M*M+4*M+NRHS*NB)
 *
-         CALL DORMBR( 'Q', 'L', 'T', M, NRHS, M, WORK( IL ), LDWORK,
+         CALL AB_DORMBR( 'Q', 'L', 'T', M, NRHS, M, WORK( IL ), LDWORK,
      $                WORK( ITAUQ ), B, LDB, WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors of R in WORK(IL)
 *        (Workspace: need M*M+5*M-1, prefer M*M+4*M+(M-1)*NB)
 *
-         CALL DORGBR( 'P', M, M, M, WORK( IL ), LDWORK, WORK( ITAUP ),
+         CALL AB_DORGBR( 'P', M, M, M, WORK( IL ), LDWORK, WORK( ITAUP )
+     $,
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IWORK = IE + M
 *
@@ -592,7 +610,7 @@
 *           multiplying B by transpose of left singular vectors
 *        (Workspace: need M*M+M+BDSPAC)
 *
-         CALL DBDSQR( 'U', M, M, 0, NRHS, S, WORK( IE ), WORK( IL ),
+         CALL AB_DBDSQR( 'U', M, M, 0, NRHS, S, WORK( IE ), WORK( IL ),
      $                LDWORK, A, LDA, B, LDB, WORK( IWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -605,10 +623,11 @@
          RANK = 0
          DO 30 I = 1, M
             IF( S( I ).GT.THR ) THEN
-               CALL DRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL AB_DRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL DLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL AB_DLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB 
+     $)
             END IF
    30    CONTINUE
          IWORK = IE
@@ -617,33 +636,36 @@
 *        (Workspace: need M*M+2*M, prefer M*M+M+M*NRHS)
 *
          IF( LWORK.GE.LDB*NRHS+IWORK-1 .AND. NRHS.GT.1 ) THEN
-            CALL DGEMM( 'T', 'N', M, NRHS, M, ONE, WORK( IL ), LDWORK,
+            CALL AB_DGEMM( 'T', 'N', M, NRHS, M, ONE, WORK( IL ), LDWORK
+     $,
      $                  B, LDB, ZERO, WORK( IWORK ), LDB )
-            CALL DLACPY( 'G', M, NRHS, WORK( IWORK ), LDB, B, LDB )
+            CALL AB_DLACPY( 'G', M, NRHS, WORK( IWORK ), LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = ( LWORK-IWORK+1 ) / M
             DO 40 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL DGEMM( 'T', 'N', M, BL, M, ONE, WORK( IL ), LDWORK,
+               CALL AB_DGEMM( 'T', 'N', M, BL, M, ONE, WORK( IL ), LDWOR
+     $K,
      $                     B( 1, I ), LDB, ZERO, WORK( IWORK ), M )
-               CALL DLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
+               CALL AB_DLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
      $                      LDB )
    40       CONTINUE
          ELSE
-            CALL DGEMV( 'T', M, M, ONE, WORK( IL ), LDWORK, B( 1, 1 ),
+            CALL AB_DGEMV( 'T', M, M, ONE, WORK( IL ), LDWORK, B( 1, 1 )
+     $,
      $                  1, ZERO, WORK( IWORK ), 1 )
-            CALL DCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
+            CALL AB_DCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
          END IF
 *
 *        Zero out below first M rows of B
 *
-         CALL DLASET( 'F', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ), LDB )
+         CALL AB_DLASET( 'F', N-M, NRHS, ZERO, ZERO, B( M+1, 1 ), LDB )
          IWORK = ITAU + M
 *
 *        Multiply transpose(Q) by B
 *        (Workspace: need M+NRHS, prefer M+NRHS*NB)
 *
-         CALL DORMLQ( 'L', 'T', N, NRHS, M, A, LDA, WORK( ITAU ), B,
+         CALL AB_DORMLQ( 'L', 'T', N, NRHS, M, A, LDA, WORK( ITAU ), B,
      $                LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
       ELSE
@@ -658,20 +680,21 @@
 *        Bidiagonalize A
 *        (Workspace: need 3*M+N, prefer 3*M+(M+N)*NB)
 *
-         CALL DGEBRD( M, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
+         CALL AB_DGEBRD( M, N, A, LDA, S, WORK( IE ), WORK( ITAUQ ),
      $                WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                INFO )
 *
 *        Multiply B by transpose of left bidiagonalizing vectors
 *        (Workspace: need 3*M+NRHS, prefer 3*M+NRHS*NB)
 *
-         CALL DORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL AB_DORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA, WORK( ITAUQ 
+     $),
      $                B, LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors in A
 *        (Workspace: need 4*M, prefer 3*M+M*NB)
 *
-         CALL DORGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
+         CALL AB_DORGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IWORK = IE + M
 *
@@ -680,7 +703,7 @@
 *           multiplying B by transpose of left singular vectors
 *        (Workspace: need BDSPAC)
 *
-         CALL DBDSQR( 'L', M, N, 0, NRHS, S, WORK( IE ), A, LDA, DUM,
+         CALL AB_DBDSQR( 'L', M, N, 0, NRHS, S, WORK( IE ), A, LDA, DUM,
      $                1, B, LDB, WORK( IWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -693,10 +716,11 @@
          RANK = 0
          DO 50 I = 1, M
             IF( S( I ).GT.THR ) THEN
-               CALL DRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL AB_DRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL DLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL AB_DLASET( 'F', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB 
+     $)
             END IF
    50    CONTINUE
 *
@@ -704,44 +728,50 @@
 *        (Workspace: need N, prefer N*NRHS)
 *
          IF( LWORK.GE.LDB*NRHS .AND. NRHS.GT.1 ) THEN
-            CALL DGEMM( 'T', 'N', N, NRHS, M, ONE, A, LDA, B, LDB, ZERO,
+            CALL AB_DGEMM( 'T', 'N', N, NRHS, M, ONE, A, LDA, B, LDB, ZE
+     $RO,
      $                  WORK, LDB )
-            CALL DLACPY( 'F', N, NRHS, WORK, LDB, B, LDB )
+            CALL AB_DLACPY( 'F', N, NRHS, WORK, LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = LWORK / N
             DO 60 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL DGEMM( 'T', 'N', N, BL, M, ONE, A, LDA, B( 1, I ),
+               CALL AB_DGEMM( 'T', 'N', N, BL, M, ONE, A, LDA, B( 1, I )
+     $,
      $                     LDB, ZERO, WORK, N )
-               CALL DLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
+               CALL AB_DLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
    60       CONTINUE
          ELSE
-            CALL DGEMV( 'T', M, N, ONE, A, LDA, B, 1, ZERO, WORK, 1 )
-            CALL DCOPY( N, WORK, 1, B, 1 )
+            CALL AB_DGEMV( 'T', M, N, ONE, A, LDA, B, 1, ZERO, WORK, 1 )
+            CALL AB_DCOPY( N, WORK, 1, B, 1 )
          END IF
       END IF
 *
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
-         CALL DLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO 
+     $)
+         CALL AB_DLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
-         CALL DLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO 
+     $)
+         CALL AB_DLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL DLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO 
+     $)
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO 
+     $)
       END IF
 *
    70 CONTINUE
       WORK( 1 ) = MAXWRK
       RETURN
 *
-*     End of DGELSS
+*     End of AB_AB_DGELSS
 *
       END

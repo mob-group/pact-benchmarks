@@ -1,4 +1,4 @@
-*> \brief \b SLCTSX
+*> \brief \b AB_SLCTSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION SLCTSX( AR, AI, BETA )
+*       LOGICAL          FUNCTION AB_SLCTSX( AR, AI, BETA )
 *
 *       .. Scalar Arguments ..
 *       REAL               AI, AR, BETA
@@ -21,7 +21,7 @@
 *> \verbatim
 *>
 *> This function is used to determine what eigenvalues will be
-*> selected.  If this is part of the test driver SDRGSX, do not
+*> selected.  If this is part of the test driver AB_SDRGSX, do not
 *> change the code UNLESS you are testing input examples and not
 *> using the built-in examples.
 *> \endverbatim
@@ -63,7 +63,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION SLCTSX( AR, AI, BETA )
+      LOGICAL          FUNCTION AB_SLCTSX( AR, AI, BETA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,9 +91,9 @@
       IF( FS ) THEN
          I = I + 1
          IF( I.LE.M ) THEN
-            SLCTSX = .FALSE.
+            AB_SLCTSX = .FALSE.
          ELSE
-            SLCTSX = .TRUE.
+            AB_SLCTSX = .TRUE.
          END IF
          IF( I.EQ.MPLUSN ) THEN
             FS = .FALSE.
@@ -102,9 +102,9 @@
       ELSE
          I = I + 1
          IF( I.LE.N ) THEN
-            SLCTSX = .TRUE.
+            AB_SLCTSX = .TRUE.
          ELSE
-            SLCTSX = .FALSE.
+            AB_SLCTSX = .FALSE.
          END IF
          IF( I.EQ.MPLUSN ) THEN
             FS = .TRUE.
@@ -113,13 +113,13 @@
       END IF
 *
 *       IF( AR/BETA.GT.0.0 )THEN
-*          SLCTSX = .TRUE.
+*          AB_SLCTSX = .TRUE.
 *       ELSE
-*          SLCTSX = .FALSE.
+*          AB_SLCTSX = .FALSE.
 *       END IF
 *
       RETURN
 *
-*     End of SLCTSX
+*     End of AB_SLCTSX
 *
       END

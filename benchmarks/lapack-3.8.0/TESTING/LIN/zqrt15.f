@@ -1,4 +1,4 @@
-*> \brief \b ZQRT15
+*> \brief \b AB_ZQRT15
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
+*       SUBROUTINE AB_ZQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
 *                          RANK, NORMA, NORMB, ISEED, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZQRT15 generates a matrix with full or deficient rank and of various
+*> AB_ZQRT15 generates a matrix with full or deficient rank and of various
 *> norms.
 *> \endverbatim
 *
@@ -146,7 +146,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
+      SUBROUTINE AB_ZQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
      $                   RANK, NORMA, NORMB, ISEED, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -182,12 +182,16 @@
       DOUBLE PRECISION   DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLARND, DZNRM2, ZLANGE
-      EXTERNAL           DASUM, DLAMCH, DLARND, DZNRM2, ZLANGE
+      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLARND, AB_DZNRM2, AB_Z
+     $LANGE
+      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLARND, AB_DZNRM2, AB_Z
+     $LANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLAORD, DLASCL, XERBLA, ZDSCAL, ZGEMM,
-     $                   ZLARF, ZLARNV, ZLAROR, ZLASCL, ZLASET
+      EXTERNAL           AB_DLABAD, AB_DLAORD, AB_DLASCL, AB_XERBLA, ZAB
+     $_DSCAL, AB_ZGEMM,
+     $                   AB_ZLARF, AB_ZLARNV, AB_ZLAROR, AB_ZLASCL, AB_Z
+     $LASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX, MIN
@@ -196,14 +200,14 @@
 *
       MN = MIN( M, N )
       IF( LWORK.LT.MAX( M+MN, MN*NRHS, 2*N+M ) ) THEN
-         CALL XERBLA( 'ZQRT15', 16 )
+         CALL AB_XERBLA( 'AB_ZQRT15', 16 )
          RETURN
       END IF
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
-      EPS = DLAMCH( 'Epsilon' )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      EPS = AB_DLAMCH( 'Epsilon' )
       SMLNUM = ( SMLNUM / EPS ) / EPS
       BIGNUM = ONE / SMLNUM
 *
@@ -217,7 +221,7 @@
             S( J ) = ZERO
    10    CONTINUE
       ELSE
-         CALL XERBLA( 'ZQRT15', 2 )
+         CALL AB_XERBLA( 'AB_ZQRT15', 2 )
       END IF
 *
       IF( RANK.GT.0 ) THEN
@@ -227,29 +231,29 @@
          S( 1 ) = ONE
          DO 30 J = 2, RANK
    20       CONTINUE
-            TEMP = DLARND( 1, ISEED )
+            TEMP = AB_DLARND( 1, ISEED )
             IF( TEMP.GT.SVMIN ) THEN
                S( J ) = ABS( TEMP )
             ELSE
                GO TO 20
             END IF
    30    CONTINUE
-         CALL DLAORD( 'Decreasing', RANK, S, 1 )
+         CALL AB_DLAORD( 'Decreasing', RANK, S, 1 )
 *
 *        Generate 'rank' columns of a random orthogonal matrix in A
 *
-         CALL ZLARNV( 2, ISEED, M, WORK )
-         CALL ZDSCAL( M, ONE / DZNRM2( M, WORK, 1 ), WORK, 1 )
-         CALL ZLASET( 'Full', M, RANK, CZERO, CONE, A, LDA )
-         CALL ZLARF( 'Left', M, RANK, WORK, 1, DCMPLX( TWO ), A, LDA,
+         CALL AB_ZLARNV( 2, ISEED, M, WORK )
+         CALL ZAB_DSCAL( M, ONE / AB_DZNRM2( M, WORK, 1 ), WORK, 1 )
+         CALL AB_ZLASET( 'Full', M, RANK, CZERO, CONE, A, LDA )
+         CALL AB_ZLARF( 'Left', M, RANK, WORK, 1, DCMPLX( TWO ), A, LDA,
      $               WORK( M+1 ) )
 *
 *        workspace used: m+mn
 *
 *        Generate consistent rhs in the range space of A
 *
-         CALL ZLARNV( 2, ISEED, RANK*NRHS, WORK )
-         CALL ZGEMM( 'No transpose', 'No transpose', M, NRHS, RANK,
+         CALL AB_ZLARNV( 2, ISEED, RANK*NRHS, WORK )
+         CALL AB_ZGEMM( 'No transpose', 'No transpose', M, NRHS, RANK,
      $               CONE, A, LDA, WORK, RANK, CZERO, B, LDB )
 *
 *        work space used: <= mn *nrhs
@@ -257,12 +261,13 @@
 *        generate (unscaled) matrix A
 *
          DO 40 J = 1, RANK
-            CALL ZDSCAL( M, S( J ), A( 1, J ), 1 )
+            CALL ZAB_DSCAL( M, S( J ), A( 1, J ), 1 )
    40    CONTINUE
          IF( RANK.LT.N )
-     $      CALL ZLASET( 'Full', M, N-RANK, CZERO, CZERO,
+     $      CALL AB_ZLASET( 'Full', M, N-RANK, CZERO, CZERO,
      $                   A( 1, RANK+1 ), LDA )
-         CALL ZLAROR( 'Right', 'No initialization', M, N, A, LDA, ISEED,
+         CALL AB_ZLAROR( 'Right', 'No initialization', M, N, A, LDA, ISE
+     $ED,
      $                WORK, INFO )
 *
       ELSE
@@ -274,48 +279,50 @@
          DO 50 J = 1, MN
             S( J ) = ZERO
    50    CONTINUE
-         CALL ZLASET( 'Full', M, N, CZERO, CZERO, A, LDA )
-         CALL ZLASET( 'Full', M, NRHS, CZERO, CZERO, B, LDB )
+         CALL AB_ZLASET( 'Full', M, N, CZERO, CZERO, A, LDA )
+         CALL AB_ZLASET( 'Full', M, NRHS, CZERO, CZERO, B, LDB )
 *
       END IF
 *
 *     Scale the matrix
 *
       IF( SCALE.NE.1 ) THEN
-         NORMA = ZLANGE( 'Max', M, N, A, LDA, DUMMY )
+         NORMA = AB_ZLANGE( 'Max', M, N, A, LDA, DUMMY )
          IF( NORMA.NE.ZERO ) THEN
             IF( SCALE.EQ.2 ) THEN
 *
 *              matrix scaled up
 *
-               CALL ZLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A,
+               CALL AB_ZLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A,
      $                      LDA, INFO )
-               CALL DLASCL( 'General', 0, 0, NORMA, BIGNUM, MN, 1, S,
+               CALL AB_DLASCL( 'General', 0, 0, NORMA, BIGNUM, MN, 1, S,
      $                      MN, INFO )
-               CALL ZLASCL( 'General', 0, 0, NORMA, BIGNUM, M, NRHS, B,
+               CALL AB_ZLASCL( 'General', 0, 0, NORMA, BIGNUM, M, NRHS, 
+     $B,
      $                      LDB, INFO )
             ELSE IF( SCALE.EQ.3 ) THEN
 *
 *              matrix scaled down
 *
-               CALL ZLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A,
+               CALL AB_ZLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A,
      $                      LDA, INFO )
-               CALL DLASCL( 'General', 0, 0, NORMA, SMLNUM, MN, 1, S,
+               CALL AB_DLASCL( 'General', 0, 0, NORMA, SMLNUM, MN, 1, S,
      $                      MN, INFO )
-               CALL ZLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, B,
+               CALL AB_ZLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, 
+     $B,
      $                      LDB, INFO )
             ELSE
-               CALL XERBLA( 'ZQRT15', 1 )
+               CALL AB_XERBLA( 'AB_ZQRT15', 1 )
                RETURN
             END IF
          END IF
       END IF
 *
-      NORMA = DASUM( MN, S, 1 )
-      NORMB = ZLANGE( 'One-norm', M, NRHS, B, LDB, DUMMY )
+      NORMA = AB_DASUM( MN, S, 1 )
+      NORMB = AB_ZLANGE( 'One-norm', M, NRHS, B, LDB, DUMMY )
 *
       RETURN
 *
-*     End of ZQRT15
+*     End of AB_ZQRT15
 *
       END

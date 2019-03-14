@@ -1,4 +1,4 @@
-*> \brief \b SQRT13
+*> \brief \b AB_SQRT13
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
+*       SUBROUTINE AB_SQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, M, N, SCALE
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> SQRT13 generates a full-rank matrix that may be scaled to have large
+*> AB_SQRT13 generates a full-rank matrix that may be scaled to have large
 *> or small norm.
 *> \endverbatim
 *
@@ -89,7 +89,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
+      SUBROUTINE AB_SQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -116,11 +116,11 @@
       REAL               BIGNUM, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           SASUM, SLAMCH, SLANGE
+      REAL               AB_SASUM, AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLARNV, SLASCL
+      EXTERNAL           AB_SLABAD, AB_SLARNV, AB_SLASCL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SIGN
@@ -136,9 +136,9 @@
 *     benign matrix
 *
       DO 10 J = 1, N
-         CALL SLARNV( 2, ISEED, M, A( 1, J ) )
+         CALL AB_SLARNV( 2, ISEED, M, A( 1, J ) )
          IF( J.LE.M ) THEN
-            A( J, J ) = A( J, J ) + SIGN( SASUM( M, A( 1, J ), 1 ),
+            A( J, J ) = A( J, J ) + SIGN( AB_SASUM( M, A( 1, J ), 1 ),
      $                  A( J, J ) )
          END IF
    10 CONTINUE
@@ -146,31 +146,33 @@
 *     scaled versions
 *
       IF( SCALE.NE.1 ) THEN
-         NORMA = SLANGE( 'Max', M, N, A, LDA, DUMMY )
-         SMLNUM = SLAMCH( 'Safe minimum' )
+         NORMA = AB_SLANGE( 'Max', M, N, A, LDA, DUMMY )
+         SMLNUM = AB_SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
-         CALL SLABAD( SMLNUM, BIGNUM )
-         SMLNUM = SMLNUM / SLAMCH( 'Epsilon' )
+         CALL AB_SLABAD( SMLNUM, BIGNUM )
+         SMLNUM = SMLNUM / AB_SLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *
          IF( SCALE.EQ.2 ) THEN
 *
 *           matrix scaled up
 *
-            CALL SLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA,
+            CALL AB_SLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA
+     $,
      $                   INFO )
          ELSE IF( SCALE.EQ.3 ) THEN
 *
 *           matrix scaled down
 *
-            CALL SLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A, LDA,
+            CALL AB_SLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A, LDA
+     $,
      $                   INFO )
          END IF
       END IF
 *
-      NORMA = SLANGE( 'One-norm', M, N, A, LDA, DUMMY )
+      NORMA = AB_SLANGE( 'One-norm', M, N, A, LDA, DUMMY )
       RETURN
 *
-*     End of SQRT13
+*     End of AB_SQRT13
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SGGBAL
+*> \brief \b AB_SGGBAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGGBAL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggbal.f">
+*> Download AB_SGGBAL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGGBAL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sggbal.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGGBAL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggbal.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGGBAL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+*       SUBROUTINE AB_SGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
 *                          RSCALE, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> SGGBAL balances a pair of general real matrices (A,B).  This
+*> AB_SGGBAL balances a pair of general real matrices (A,B).  This
 *> involves, first, permuting A and B by similarity transformations to
 *> isolate eigenvalues in the first 1 to ILO$-$1 and last IHI+1 to N
-*> elements on the diagonal; and second, applying a diagonal similarity
+*> elements on the diagonal; and AB_SECOND, applying a diagonal similarity
 *> transformation to rows and columns ILO to IHI to make the rows
 *> and columns as close in norm as possible. Both steps are optional.
 *>
@@ -174,7 +174,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+      SUBROUTINE AB_SGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
      $                   RSCALE, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,13 +208,13 @@
      $                   SFMIN, SUM, T, TA, TB, TC
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      REAL               SDOT, SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SDOT, SLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX
+      REAL               AB_SDOT, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SDOT, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SSCAL, SSWAP, XERBLA
+      EXTERNAL           AB_SAXPY, AB_SSCAL, AB_SSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG10, MAX, MIN, REAL, SIGN
@@ -224,8 +224,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.AB_LSAME( JOB, 'P' ) .AND
+     $.
+     $    .NOT.AB_LSAME( JOB, 'S' ) .AND. .NOT.AB_LSAME( JOB, 'B' ) ) TH
+     $EN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -235,7 +237,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGGBAL', -INFO )
+         CALL AB_XERBLA( 'AB_SGGBAL', -INFO )
          RETURN
       END IF
 *
@@ -255,7 +257,7 @@
          RETURN
       END IF
 *
-      IF( LSAME( JOB, 'N' ) ) THEN
+      IF( AB_LSAME( JOB, 'N' ) ) THEN
          ILO = 1
          IHI = N
          DO 10 I = 1, N
@@ -267,7 +269,7 @@
 *
       K = 1
       L = N
-      IF( LSAME( JOB, 'S' ) )
+      IF( AB_LSAME( JOB, 'S' ) )
      $   GO TO 190
 *
       GO TO 30
@@ -343,8 +345,8 @@
       LSCALE( M ) = I
       IF( I.EQ.M )
      $   GO TO 170
-      CALL SSWAP( N-K+1, A( I, K ), LDA, A( M, K ), LDA )
-      CALL SSWAP( N-K+1, B( I, K ), LDB, B( M, K ), LDB )
+      CALL AB_SSWAP( N-K+1, A( I, K ), LDA, A( M, K ), LDA )
+      CALL AB_SSWAP( N-K+1, B( I, K ), LDB, B( M, K ), LDB )
 *
 *     Permute columns M and J
 *
@@ -352,8 +354,8 @@
       RSCALE( M ) = J
       IF( J.EQ.M )
      $   GO TO 180
-      CALL SSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
-      CALL SSWAP( L, B( 1, J ), 1, B( 1, M ), 1 )
+      CALL AB_SSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
+      CALL AB_SSWAP( L, B( 1, J ), 1, B( 1, M ), 1 )
 *
   180 CONTINUE
       GO TO ( 20, 90 )IFLOW
@@ -362,7 +364,7 @@
       ILO = K
       IHI = L
 *
-      IF( LSAME( JOB, 'P' ) ) THEN
+      IF( AB_LSAME( JOB, 'P' ) ) THEN
          DO 195 I = ILO, IHI
             LSCALE( I ) = ONE
             RSCALE( I ) = ONE
@@ -419,8 +421,8 @@
 *
   250 CONTINUE
 *
-      GAMMA = SDOT( NR, WORK( ILO+4*N ), 1, WORK( ILO+4*N ), 1 ) +
-     $        SDOT( NR, WORK( ILO+5*N ), 1, WORK( ILO+5*N ), 1 )
+      GAMMA = AB_SDOT( NR, WORK( ILO+4*N ), 1, WORK( ILO+4*N ), 1 ) +
+     $        AB_SDOT( NR, WORK( ILO+5*N ), 1, WORK( ILO+5*N ), 1 )
 *
       EW = ZERO
       EWC = ZERO
@@ -437,11 +439,11 @@
       T = COEF5*( EWC-THREE*EW )
       TC = COEF5*( EW-THREE*EWC )
 *
-      CALL SSCAL( NR, BETA, WORK( ILO ), 1 )
-      CALL SSCAL( NR, BETA, WORK( ILO+N ), 1 )
+      CALL AB_SSCAL( NR, BETA, WORK( ILO ), 1 )
+      CALL AB_SSCAL( NR, BETA, WORK( ILO+N ), 1 )
 *
-      CALL SAXPY( NR, COEF, WORK( ILO+4*N ), 1, WORK( ILO+N ), 1 )
-      CALL SAXPY( NR, COEF, WORK( ILO+5*N ), 1, WORK( ILO ), 1 )
+      CALL AB_SAXPY( NR, COEF, WORK( ILO+4*N ), 1, WORK( ILO+N ), 1 )
+      CALL AB_SAXPY( NR, COEF, WORK( ILO+5*N ), 1, WORK( ILO ), 1 )
 *
       DO 270 I = ILO, IHI
          WORK( I ) = WORK( I ) + TC
@@ -484,8 +486,8 @@
          WORK( J+3*N ) = REAL( KOUNT )*WORK( J ) + SUM
   330 CONTINUE
 *
-      SUM = SDOT( NR, WORK( ILO+N ), 1, WORK( ILO+2*N ), 1 ) +
-     $      SDOT( NR, WORK( ILO ), 1, WORK( ILO+3*N ), 1 )
+      SUM = AB_SDOT( NR, WORK( ILO+N ), 1, WORK( ILO+2*N ), 1 ) +
+     $      AB_SDOT( NR, WORK( ILO ), 1, WORK( ILO+3*N ), 1 )
       ALPHA = GAMMA / SUM
 *
 *     Determine correction to current iteration
@@ -504,8 +506,10 @@
       IF( CMAX.LT.HALF )
      $   GO TO 350
 *
-      CALL SAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ), 1 )
-      CALL SAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ), 1 )
+      CALL AB_SAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ), 1 
+     $)
+      CALL AB_SAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ), 1 
+     $)
 *
       PGAMMA = GAMMA
       IT = IT + 1
@@ -515,22 +519,22 @@
 *     End generalized conjugate gradient iteration
 *
   350 CONTINUE
-      SFMIN = SLAMCH( 'S' )
+      SFMIN = AB_SLAMCH( 'S' )
       SFMAX = ONE / SFMIN
       LSFMIN = INT( LOG10( SFMIN ) / BASL+ONE )
       LSFMAX = INT( LOG10( SFMAX ) / BASL )
       DO 360 I = ILO, IHI
-         IRAB = ISAMAX( N-ILO+1, A( I, ILO ), LDA )
+         IRAB = AB_ISAMAX( N-ILO+1, A( I, ILO ), LDA )
          RAB = ABS( A( I, IRAB+ILO-1 ) )
-         IRAB = ISAMAX( N-ILO+1, B( I, ILO ), LDB )
+         IRAB = AB_ISAMAX( N-ILO+1, B( I, ILO ), LDB )
          RAB = MAX( RAB, ABS( B( I, IRAB+ILO-1 ) ) )
          LRAB = INT( LOG10( RAB+SFMIN ) / BASL+ONE )
          IR = LSCALE( I ) + SIGN( HALF, LSCALE( I ) )
          IR = MIN( MAX( IR, LSFMIN ), LSFMAX, LSFMAX-LRAB )
          LSCALE( I ) = SCLFAC**IR
-         ICAB = ISAMAX( IHI, A( 1, I ), 1 )
+         ICAB = AB_ISAMAX( IHI, A( 1, I ), 1 )
          CAB = ABS( A( ICAB, I ) )
-         ICAB = ISAMAX( IHI, B( 1, I ), 1 )
+         ICAB = AB_ISAMAX( IHI, B( 1, I ), 1 )
          CAB = MAX( CAB, ABS( B( ICAB, I ) ) )
          LCAB = INT( LOG10( CAB+SFMIN ) / BASL+ONE )
          JC = RSCALE( I ) + SIGN( HALF, RSCALE( I ) )
@@ -541,19 +545,19 @@
 *     Row scaling of matrices A and B
 *
       DO 370 I = ILO, IHI
-         CALL SSCAL( N-ILO+1, LSCALE( I ), A( I, ILO ), LDA )
-         CALL SSCAL( N-ILO+1, LSCALE( I ), B( I, ILO ), LDB )
+         CALL AB_SSCAL( N-ILO+1, LSCALE( I ), A( I, ILO ), LDA )
+         CALL AB_SSCAL( N-ILO+1, LSCALE( I ), B( I, ILO ), LDB )
   370 CONTINUE
 *
 *     Column scaling of matrices A and B
 *
       DO 380 J = ILO, IHI
-         CALL SSCAL( IHI, RSCALE( J ), A( 1, J ), 1 )
-         CALL SSCAL( IHI, RSCALE( J ), B( 1, J ), 1 )
+         CALL AB_SSCAL( IHI, RSCALE( J ), A( 1, J ), 1 )
+         CALL AB_SSCAL( IHI, RSCALE( J ), B( 1, J ), 1 )
   380 CONTINUE
 *
       RETURN
 *
-*     End of SGGBAL
+*     End of AB_SGGBAL
 *
       END

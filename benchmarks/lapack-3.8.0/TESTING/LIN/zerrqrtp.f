@@ -1,4 +1,4 @@
-*> \brief \b ZERRQRTP
+*> \brief \b AB_AB_AB_ZERRQRTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZERRQRTP( PATH, NUNIT )
+*       SUBROUTINE AB_AB_AB_ZERRQRTP( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> ZERRQRTP tests the error exits for the COMPLEX*16 routines
+*> AB_AB_AB_ZERRQRTP tests the error exits for the COMPLEX*16 routines
 *> that use the QRT decomposition of a triangular-pentagonal matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZERRQRTP( PATH, NUNIT )
+      SUBROUTINE AB_AB_AB_ZERRQRTP( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,8 @@
      $                   B( NMAX, NMAX ), C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, ZTPQRT2, ZTPQRT,
-     $                   ZTPMQRT
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_ZTPQRT2, AB_ZTPQRT,
+     $                   AB_ZTPMQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,116 +114,116 @@
 *
 *     Error exits for TPQRT factorization
 *
-*     ZTPQRT
+*     AB_ZTPQRT
 *
-      SRNAMT = 'ZTPQRT'
+      SRNAMT = 'AB_ZTPQRT'
       INFOT = 1
-      CALL ZTPQRT( -1, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( -1, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZTPQRT( 1, -1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( 1, -1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZTPQRT( 0, 1, -1, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( 0, 1, -1, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZTPQRT( 0, 1, 1, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( 0, 1, 1, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZTPQRT( 0, 1, 0, 0, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( 0, 1, 0, 0, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZTPQRT( 0, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( 0, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL ZTPQRT( 1, 2, 0, 2, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( 1, 2, 0, 2, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL ZTPQRT( 2, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( 2, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL ZTPQRT( 2, 2, 1, 2, A, 2, B, 2, T, 1, W, INFO )
-      CALL CHKXER( 'ZTPQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_ZTPQRT( 2, 2, 1, 2, A, 2, B, 2, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZTPQRT', INFOT, NOUT, LERR, OK )
 *
-*     ZTPQRT2
+*     AB_AB_ZTPQRT2
 *
-      SRNAMT = 'ZTPQRT2'
+      SRNAMT = 'AB_AB_ZTPQRT2'
       INFOT = 1
-      CALL ZTPQRT2( -1, 0, 0, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'ZTPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZTPQRT2( -1, 0, 0, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZTPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZTPQRT2( 0, -1, 0, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'ZTPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZTPQRT2( 0, -1, 0, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZTPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZTPQRT2( 0, 0, -1, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'ZTPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZTPQRT2( 0, 0, -1, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZTPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZTPQRT2( 2, 2, 0, A, 1, B, 2, T, 2, INFO )
-      CALL CHKXER( 'ZTPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZTPQRT2( 2, 2, 0, A, 1, B, 2, T, 2, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZTPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZTPQRT2( 2, 2, 0, A, 2, B, 1, T, 2, INFO )
-      CALL CHKXER( 'ZTPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZTPQRT2( 2, 2, 0, A, 2, B, 1, T, 2, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZTPQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL ZTPQRT2( 2, 2, 0, A, 2, B, 2, T, 1, INFO )
-      CALL CHKXER( 'ZTPQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZTPQRT2( 2, 2, 0, A, 2, B, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZTPQRT2', INFOT, NOUT, LERR, OK )
 *
-*     ZTPMQRT
+*     AB_ZTPMQRT
 *
-      SRNAMT = 'ZTPMQRT'
+      SRNAMT = 'AB_ZTPMQRT'
       INFOT = 1
-      CALL ZTPMQRT( '/', 'N', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( '/', 'N', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZTPMQRT( 'L', '/', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'L', '/', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZTPMQRT( 'L', 'N', -1, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'L', 'N', -1, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZTPMQRT( 'L', 'N', 0, -1, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'L', 'N', 0, -1, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZTPMQRT( 'L', 'N', 0, 0, -1, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'L', 'N', 0, 0, -1, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
       INFOT = 6
-      CALL ZTPMQRT( 'L', 'N', 0, 0, 0, -1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'L', 'N', 0, 0, 0, -1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZTPMQRT( 'L', 'N', 0, 0, 0, 0, 0, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'L', 'N', 0, 0, 0, 0, 0, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL ZTPMQRT( 'R', 'N', 1, 2, 1, 1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'R', 'N', 1, 2, 1, 1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL ZTPMQRT( 'L', 'N', 2, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'L', 'N', 2, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL ZTPMQRT( 'R', 'N', 1, 1, 1, 1, 1, A, 1, T, 0, B, 1, C, 1,
+      CALL AB_ZTPMQRT( 'R', 'N', 1, 1, 1, 1, 1, A, 1, T, 0, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL ZTPMQRT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 0, C, 1,
+      CALL AB_ZTPMQRT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 0, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 15
-      CALL ZTPMQRT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 0,
+      CALL AB_ZTPMQRT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 0,
      $              W, INFO )
-      CALL CHKXER( 'ZTPMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_ZTPMQRT', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of ZERRQRT
+*     End of AB_AB_ZERRQRT
 *
       END

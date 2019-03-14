@@ -1,4 +1,4 @@
-C> \brief \b SCEIL
+C> \brief \b AB_SCEIL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@ C> \brief \b SCEIL
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SCEIL( A )
+*       REAL FUNCTION AB_SCEIL( A )
 *
 *       .. Scalar Arguments ..
 *       REAL A
@@ -22,11 +22,11 @@ C> \brief \b SCEIL
 *       .. Executable Statements ..*
 *
 *       IF (A-INT(A).EQ.0) THEN
-*           SCEIL = A
+*           AB_SCEIL = A
 *       ELSE IF (A.GT.0) THEN
-*           SCEIL = INT(A)+1;
+*           AB_SCEIL = INT(A)+1;
 *       ELSE
-*           SCEIL = INT(A)
+*           AB_SCEIL = INT(A)
 *       END IF
 *
 *       RETURN
@@ -56,7 +56,7 @@ C> \date December 2016
 C> \ingroup variantsOTHERcomputational
 *
 *  =====================================================================
-      REAL FUNCTION SCEIL( A )
+      REAL FUNCTION AB_SCEIL( A )
 *
 *  -- LAPACK computational routine (version 3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -75,11 +75,11 @@ C> \ingroup variantsOTHERcomputational
 *     .. Executable Statements ..*
 *
       IF (A-INT(A).EQ.0) THEN
-          SCEIL = A
+          AB_SCEIL = A
       ELSE IF (A.GT.0) THEN
-          SCEIL = INT(A)+1;
+          AB_SCEIL = INT(A)+1;
       ELSE
-          SCEIL = INT(A)
+          AB_SCEIL = INT(A)
       END IF
 
       RETURN

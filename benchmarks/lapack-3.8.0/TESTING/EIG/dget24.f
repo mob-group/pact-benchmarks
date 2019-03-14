@@ -1,4 +1,4 @@
-*> \brief \b DGET24
+*> \brief \b AB_DGET24
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
+*       SUBROUTINE AB_DGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
 *                          H, HT, WR, WI, WRT, WIT, WRTMP, WITMP, VS,
 *                          LDVS, VS1, RCDEIN, RCDVIN, NSLCT, ISLCT,
 *                          RESULT, WORK, LWORK, IWORK, BWORK, INFO )
@@ -33,8 +33,8 @@
 *>
 *> \verbatim
 *>
-*>    DGET24 checks the nonsymmetric eigenvalue (Schur form) problem
-*>    expert driver DGEESX.
+*>    AB_DGET24 checks the nonsymmetric eigenvalue (Schur form) problem
+*>    expert driver AB_AB_DGEESX.
 *>
 *>    If COMP = .FALSE., the first 13 of the following tests will be
 *>    be performed on the input matrix A, and also tests 14 and 15
@@ -103,7 +103,7 @@
 *>    (16)  |RCONDE - RCDEIN| / cond(RCONDE)
 *>
 *>       RCONDE is the reciprocal average eigenvalue condition number
-*>       computed by DGEESX and RCDEIN (the precomputed true value)
+*>       computed by AB_AB_DGEESX and RCDEIN (the precomputed true value)
 *>       is supplied as input.  cond(RCONDE) is the condition number
 *>       of RCONDE, and takes errors in computing RCONDE into account,
 *>       so that the resulting quantity should be O(ULP). cond(RCONDE)
@@ -112,7 +112,7 @@
 *>    (17)  |RCONDV - RCDVIN| / cond(RCONDV)
 *>
 *>       RCONDV is the reciprocal right invariant subspace condition
-*>       number computed by DGEESX and RCDVIN (the precomputed true
+*>       number computed by AB_AB_DGEESX and RCDVIN (the precomputed true
 *>       value) is supplied as input. cond(RCONDV) is the condition
 *>       number of RCONDV, and takes errors in computing RCONDV into
 *>       account, so that the resulting quantity should be O(ULP).
@@ -187,13 +187,13 @@
 *> \param[out] H
 *> \verbatim
 *>          H is DOUBLE PRECISION array, dimension (LDA, N)
-*>          Another copy of the test matrix A, modified by DGEESX.
+*>          Another copy of the test matrix A, modified by AB_AB_DGEESX.
 *> \endverbatim
 *>
 *> \param[out] HT
 *> \verbatim
 *>          HT is DOUBLE PRECISION array, dimension (LDA, N)
-*>          Yet another copy of the test matrix A, modified by DGEESX.
+*>          Yet another copy of the test matrix A, modified by AB_AB_DGEESX.
 *> \endverbatim
 *>
 *> \param[out] WR
@@ -219,7 +219,7 @@
 *>          WIT is DOUBLE PRECISION array, dimension (N)
 *>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
-*>          but those computed when DGEESX only computes a partial
+*>          but those computed when AB_AB_DGEESX only computes a partial
 *>          eigendecomposition, i.e. not Schur vectors
 *> \endverbatim
 *>
@@ -301,7 +301,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The number of entries in WORK to be passed to DGEESX. This
+*>          The number of entries in WORK to be passed to AB_AB_DGEESX. This
 *>          must be at least 3*N, and N+N**2 if tests 14--16 are to
 *>          be performed.
 *> \endverbatim
@@ -321,7 +321,7 @@
 *>          INFO is INTEGER
 *>          If 0,  successful exit.
 *>          If <0, input parameter -INFO had an incorrect value.
-*>          If >0, DGEESX returned an error code, the absolute
+*>          If >0, AB_AB_DGEESX returned an error code, the absolute
 *>                 value of which is returned.
 *> \endverbatim
 *
@@ -338,7 +338,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
+      SUBROUTINE AB_DGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LD
+     $A,
      $                   H, HT, WR, WI, WRT, WIT, WRTMP, WITMP, VS,
      $                   LDVS, VS1, RCDEIN, RCDVIN, NSLCT, ISLCT,
      $                   RESULT, WORK, LWORK, IWORK, BWORK, INFO )
@@ -392,12 +393,13 @@
       COMMON             / SSLCT / SELOPT, SELDIM, SELVAL, SELWR, SELWI
 *     ..
 *     .. External Functions ..
-      LOGICAL            DSLECT
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DSLECT, DLAMCH, DLANGE
+      LOGICAL            AB_DSLECT
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DSLECT, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEESX, DGEMM, DLACPY, DORT01, XERBLA
+      EXTERNAL           AB_DCOPY, AB_AB_DGEESX, AB_DGEMM, AB_DLACPY, AB
+     $_DORT01, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN, SQRT
@@ -422,7 +424,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGET24', -INFO )
+         CALL AB_XERBLA( 'AB_DGET24', -INFO )
          RETURN
       END IF
 *
@@ -437,8 +439,8 @@
 *
 *     Important constants
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
 *
 *     Perform tests (1)-(13)
@@ -456,25 +458,27 @@
 *
 *        Compute Schur form and Schur vectors, and test them
 *
-         CALL DLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL DGEESX( 'V', SORT, DSLECT, 'N', N, H, LDA, SDIM, WR, WI,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL AB_AB_DGEESX( 'V', SORT, AB_DSLECT, 'N', N, H, LDA, SDIM, 
+     $WR, WI,
      $                VS, LDVS, RCONDE, RCONDV, WORK, LWORK, IWORK,
      $                LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 1+RSUB ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'DGEESX1', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_DGEESX1', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'DGEESX1', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX1', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
             RETURN
          END IF
          IF( ISORT.EQ.0 ) THEN
-            CALL DCOPY( N, WR, 1, WRTMP, 1 )
-            CALL DCOPY( N, WI, 1, WITMP, 1 )
+            CALL AB_DCOPY( N, WR, 1, WRTMP, 1 )
+            CALL AB_DCOPY( N, WI, 1, WITMP, 1 )
          END IF
 *
 *        Do Test (1) or Test (7)
@@ -502,20 +506,21 @@
 *
 *        Copy A to VS1, used as workspace
 *
-         CALL DLACPY( ' ', N, N, A, LDA, VS1, LDVS )
+         CALL AB_DLACPY( ' ', N, N, A, LDA, VS1, LDVS )
 *
 *        Compute Q*H and store in HT.
 *
-         CALL DGEMM( 'No transpose', 'No transpose', N, N, N, ONE, VS,
+         CALL AB_DGEMM( 'No transpose', 'No transpose', N, N, N, ONE, VS
+     $,
      $               LDVS, H, LDA, ZERO, HT, LDA )
 *
 *        Compute A - Q*H*Q'
 *
-         CALL DGEMM( 'No transpose', 'Transpose', N, N, N, -ONE, HT,
+         CALL AB_DGEMM( 'No transpose', 'Transpose', N, N, N, -ONE, HT,
      $               LDA, VS, LDVS, ONE, VS1, LDVS )
 *
-         ANORM = MAX( DLANGE( '1', N, N, A, LDA, WORK ), SMLNUM )
-         WNORM = DLANGE( '1', N, N, VS1, LDVS, WORK )
+         ANORM = MAX( AB_DLANGE( '1', N, N, A, LDA, WORK ), SMLNUM )
+         WNORM = AB_DLANGE( '1', N, N, VS1, LDVS, WORK )
 *
          IF( ANORM.GT.WNORM ) THEN
             RESULT( 2+RSUB ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -531,7 +536,7 @@
 *
 *        Test (3) or (9):  Compute norm( I - Q'*Q ) / ( N * ULP )
 *
-         CALL DORT01( 'Columns', N, N, VS, LDVS, WORK, LWORK,
+         CALL AB_DORT01( 'Columns', N, N, VS, LDVS, WORK, LWORK,
      $                RESULT( 3+RSUB ) )
 *
 *        Do Test (4) or Test (10)
@@ -565,17 +570,19 @@
 *
 *        Do Test (5) or Test (11)
 *
-         CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL DGEESX( 'N', SORT, DSLECT, 'N', N, HT, LDA, SDIM, WRT,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_DGEESX( 'N', SORT, AB_DSLECT, 'N', N, HT, LDA, SDIM,
+     $ WRT,
      $                WIT, VS, LDVS, RCONDE, RCONDV, WORK, LWORK, IWORK,
      $                LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 5+RSUB ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'DGEESX2', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_DGEESX2', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'DGEESX2', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX2', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -604,13 +611,13 @@
             RESULT( 13 ) = ZERO
             KNTEIG = 0
             DO 110 I = 1, N
-               IF( DSLECT( WR( I ), WI( I ) ) .OR.
-     $             DSLECT( WR( I ), -WI( I ) ) )KNTEIG = KNTEIG + 1
+               IF( AB_DSLECT( WR( I ), WI( I ) ) .OR.
+     $             AB_DSLECT( WR( I ), -WI( I ) ) )KNTEIG = KNTEIG + 1
                IF( I.LT.N ) THEN
-                  IF( ( DSLECT( WR( I+1 ), WI( I+1 ) ) .OR.
-     $                DSLECT( WR( I+1 ), -WI( I+1 ) ) ) .AND.
-     $                ( .NOT.( DSLECT( WR( I ),
-     $                WI( I ) ) .OR. DSLECT( WR( I ),
+                  IF( ( AB_DSLECT( WR( I+1 ), WI( I+1 ) ) .OR.
+     $                AB_DSLECT( WR( I+1 ), -WI( I+1 ) ) ) .AND.
+     $                ( .NOT.( AB_DSLECT( WR( I ),
+     $                WI( I ) ) .OR. AB_DSLECT( WR( I ),
      $                -WI( I ) ) ) ) .AND. IINFO.NE.N+2 )RESULT( 13 )
      $                = ULPINV
                END IF
@@ -631,18 +638,20 @@
          SORT = 'S'
          RESULT( 14 ) = ZERO
          RESULT( 15 ) = ZERO
-         CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL DGEESX( 'V', SORT, DSLECT, 'B', N, HT, LDA, SDIM1, WRT,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_DGEESX( 'V', SORT, AB_DSLECT, 'B', N, HT, LDA, SDIM1
+     $, WRT,
      $                WIT, VS1, LDVS, RCONDE, RCONDV, WORK, LWORK,
      $                IWORK, LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 14 ) = ULPINV
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'DGEESX3', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_DGEESX3', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'DGEESX3', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX3', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -666,18 +675,20 @@
 *
 *        Compute both RCONDE and RCONDV without VS, and compare
 *
-         CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL DGEESX( 'N', SORT, DSLECT, 'B', N, HT, LDA, SDIM1, WRT,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_DGEESX( 'N', SORT, AB_DSLECT, 'B', N, HT, LDA, SDIM1
+     $, WRT,
      $                WIT, VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK,
      $                IWORK, LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 14 ) = ULPINV
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'DGEESX4', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_DGEESX4', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'DGEESX4', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX4', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -708,17 +719,19 @@
 *
 *        Compute RCONDE with VS, and compare
 *
-         CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL DGEESX( 'V', SORT, DSLECT, 'E', N, HT, LDA, SDIM1, WRT,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_DGEESX( 'V', SORT, AB_DSLECT, 'E', N, HT, LDA, SDIM1
+     $, WRT,
      $                WIT, VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK,
      $                IWORK, LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 14 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'DGEESX5', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_DGEESX5', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'DGEESX5', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX5', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -747,17 +760,19 @@
 *
 *        Compute RCONDE without VS, and compare
 *
-         CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL DGEESX( 'N', SORT, DSLECT, 'E', N, HT, LDA, SDIM1, WRT,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_DGEESX( 'N', SORT, AB_DSLECT, 'E', N, HT, LDA, SDIM1
+     $, WRT,
      $                WIT, VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK,
      $                IWORK, LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 14 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'DGEESX6', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_DGEESX6', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'DGEESX6', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX6', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -786,17 +801,19 @@
 *
 *        Compute RCONDV with VS, and compare
 *
-         CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL DGEESX( 'V', SORT, DSLECT, 'V', N, HT, LDA, SDIM1, WRT,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_DGEESX( 'V', SORT, AB_DSLECT, 'V', N, HT, LDA, SDIM1
+     $, WRT,
      $                WIT, VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK,
      $                IWORK, LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'DGEESX7', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_DGEESX7', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'DGEESX7', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX7', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -825,17 +842,19 @@
 *
 *        Compute RCONDV without VS, and compare
 *
-         CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL DGEESX( 'N', SORT, DSLECT, 'V', N, HT, LDA, SDIM1, WRT,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_DGEESX( 'N', SORT, AB_DSLECT, 'V', N, HT, LDA, SDIM1
+     $, WRT,
      $                WIT, VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK,
      $                IWORK, LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'DGEESX8', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_DGEESX8', IINFO, N, JTY
+     $PE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'DGEESX8', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX8', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -872,7 +891,7 @@
       IF( COMP ) THEN
 *
 *        First set up SELOPT, SELDIM, SELVAL, SELWR, and SELWI so that
-*        the logical function DSLECT selects the eigenvalues specified
+*        the logical function AB_DSLECT selects the eigenvalues specified
 *        by NSLCT and ISLCT.
 *
          SELDIM = N
@@ -909,14 +928,16 @@
 *
 *        Compute condition numbers
 *
-         CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL DGEESX( 'N', 'S', DSLECT, 'B', N, HT, LDA, SDIM1, WRT,
+         CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL AB_AB_DGEESX( 'N', 'S', AB_DSLECT, 'B', N, HT, LDA, SDIM1,
+     $ WRT,
      $                WIT, VS1, LDVS, RCONDE, RCONDV, WORK, LWORK,
      $                IWORK, LIWORK, BWORK, IINFO )
          IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
             RESULT( 16 ) = ULPINV
             RESULT( 17 ) = ULPINV
-            WRITE( NOUNIT, FMT = 9999 )'DGEESX9', IINFO, N, ISEED( 1 )
+            WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGEESX9', IINFO, N, ISEED(
+     $ 1 )
             INFO = ABS( IINFO )
             GO TO 300
          END IF
@@ -924,7 +945,7 @@
 *        Compare condition number for average of selected eigenvalues
 *        taking its condition number into account
 *
-         ANORM = DLANGE( '1', N, N, A, LDA, WORK )
+         ANORM = AB_DLANGE( '1', N, N, A, LDA, WORK )
          V = MAX( DBLE( N )*EPS*ANORM, SMLNUM )
          IF( ANORM.EQ.ZERO )
      $      V = ONE
@@ -983,13 +1004,13 @@
 *
       END IF
 *
- 9999 FORMAT( ' DGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_DGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', INPUT EXAMPLE NUMBER = ', I4 )
- 9998 FORMAT( ' DGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' AB_DGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of DGET24
+*     End of AB_DGET24
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SCASUM
+*> \brief \b AB_SCASUM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SCASUM(N,CX,INCX)
+*       REAL FUNCTION AB_SCASUM(N,CX,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    SCASUM takes the sum of the (|Re(.)| + |Im(.)|)'s of a complex vector and
+*>    AB_SCASUM takes the sum of the (|Re(.)| + |Im(.)|)'s of a complex vector and
 *>    returns a single precision result.
 *> \endverbatim
 *
@@ -70,7 +70,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      REAL FUNCTION SCASUM(N,CX,INCX)
+      REAL FUNCTION AB_SCASUM(N,CX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -93,7 +93,7 @@
 *     .. Intrinsic Functions ..
       INTRINSIC ABS,AIMAG,REAL
 *     ..
-      SCASUM = 0.0e0
+      AB_SCASUM = 0.0e0
       STEMP = 0.0e0
       IF (N.LE.0 .OR. INCX.LE.0) RETURN
       IF (INCX.EQ.1) THEN
@@ -112,6 +112,6 @@
             STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
          END DO
       END IF
-      SCASUM = STEMP
+      AB_SCASUM = STEMP
       RETURN
       END

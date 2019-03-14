@@ -1,4 +1,4 @@
-*> \brief \b SLAED1 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is tridiagonal.
+*> \brief \b AB_SLAED1 used by AB_SSTEDC. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAED1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed1.f">
+*> Download AB_SLAED1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
+*       SUBROUTINE AB_SLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> SLAED1 computes the updated eigensystem of a diagonal
+*> AB_SLAED1 computes the updated eigensystem of a diagonal
 *> matrix after modification by a rank-one symmetric matrix.  This
 *> routine is used only for the eigenproblem which requires all
-*> eigenvalues and eigenvectors of a tridiagonal matrix.  SLAED7 handles
+*> eigenvalues and eigenvectors of a tridiagonal matrix.  AB_SLAED7 handles
 *> the case in which eigenvalues only or eigenvalues and eigenvectors
 *> of a full symmetric matrix (which was reduced to tridiagonal form)
 *> are desired.
@@ -47,7 +47,7 @@
 *>   T = Q(in) ( D(in) + RHO * Z*Z**T ) Q**T(in) = Q(out) * D(out) * Q**T(out)
 *>
 *>    where Z = Q**T*u, u is a vector of length N with ones in the
-*>    CUTPNT and CUTPNT + 1 th elements and zeros elsewhere.
+*>    CUTPNT and CUTPNT + 1 th elements and zeros ELSEwhere.
 *>
 *>    The eigenvectors of the original matrix are stored in Q, and the
 *>    eigenvalues are in D.  The algorithm consists of three stages:
@@ -56,11 +56,11 @@
 *>       when there are multiple eigenvalues or if there is a zero in
 *>       the Z vector.  For each such occurrence the dimension of the
 *>       secular equation problem is reduced by one.  This stage is
-*>       performed by the routine SLAED2.
+*>       performed by the routine AB_SLAED2.
 *>
-*>       The second stage consists of calculating the updated
+*>       The AB_SECOND stage consists of calculating the updated
 *>       eigenvalues. This is done by finding the roots of the secular
-*>       equation via the routine SLAED4 (as called by SLAED3).
+*>       equation via the routine AB_SLAED4 (as called by AB_SLAED3).
 *>       This routine also calculates the eigenvectors of the current
 *>       problem.
 *>
@@ -160,7 +160,8 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE SLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
+      SUBROUTINE AB_SLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWOR
+     $K,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -184,7 +185,8 @@
      $                   IQ2, IS, IW, IZ, K, N1, N2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAED2, SLAED3, SLAMRG, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SLAED2, AB_SLAED3, AB_SLAMRG, AB_X
+     $ERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -199,11 +201,12 @@
          INFO = -1
       ELSE IF( LDQ.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF( MIN( 1, N / 2 ).GT.CUTPNT .OR. ( N / 2 ).LT.CUTPNT ) THEN
+      ELSE IF( MIN( 1, N / 2 ).GT.CUTPNT .OR. ( N / 2 ).LT.CUTPNT ) T
+     $HEN
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLAED1', -INFO )
+         CALL AB_XERBLA( 'AB_SLAED1', -INFO )
          RETURN
       END IF
 *
@@ -214,7 +217,7 @@
 *
 *     The following values are integer pointers which indicate
 *     the portion of the workspace
-*     used by a particular array in SLAED2 and SLAED3.
+*     used by a particular array in AB_SLAED2 and AB_SLAED3.
 *
       IZ = 1
       IDLMDA = IZ + N
@@ -230,13 +233,14 @@
 *     Form the z-vector which consists of the last row of Q_1 and the
 *     first row of Q_2.
 *
-      CALL SCOPY( CUTPNT, Q( CUTPNT, 1 ), LDQ, WORK( IZ ), 1 )
+      CALL AB_SCOPY( CUTPNT, Q( CUTPNT, 1 ), LDQ, WORK( IZ ), 1 )
       CPP1 = CUTPNT + 1
-      CALL SCOPY( N-CUTPNT, Q( CPP1, CPP1 ), LDQ, WORK( IZ+CUTPNT ), 1 )
+      CALL AB_SCOPY( N-CUTPNT, Q( CPP1, CPP1 ), LDQ, WORK( IZ+CUTPNT ), 
+     $1 )
 *
 *     Deflate eigenvalues.
 *
-      CALL SLAED2( K, N, CUTPNT, D, Q, LDQ, INDXQ, RHO, WORK( IZ ),
+      CALL AB_SLAED2( K, N, CUTPNT, D, Q, LDQ, INDXQ, RHO, WORK( IZ ),
      $             WORK( IDLMDA ), WORK( IW ), WORK( IQ2 ),
      $             IWORK( INDX ), IWORK( INDXC ), IWORK( INDXP ),
      $             IWORK( COLTYP ), INFO )
@@ -249,7 +253,7 @@
       IF( K.NE.0 ) THEN
          IS = ( IWORK( COLTYP )+IWORK( COLTYP+1 ) )*CUTPNT +
      $        ( IWORK( COLTYP+1 )+IWORK( COLTYP+2 ) )*( N-CUTPNT ) + IQ2
-         CALL SLAED3( K, N, CUTPNT, D, Q, LDQ, RHO, WORK( IDLMDA ),
+         CALL AB_SLAED3( K, N, CUTPNT, D, Q, LDQ, RHO, WORK( IDLMDA ),
      $                WORK( IQ2 ), IWORK( INDXC ), IWORK( COLTYP ),
      $                WORK( IW ), WORK( IS ), INFO )
          IF( INFO.NE.0 )
@@ -259,7 +263,7 @@
 *
          N1 = K
          N2 = N - K
-         CALL SLAMRG( N1, N2, D, 1, -1, INDXQ )
+         CALL AB_SLAMRG( N1, N2, D, 1, -1, INDXQ )
       ELSE
          DO 10 I = 1, N
             INDXQ( I ) = I
@@ -269,6 +273,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of SLAED1
+*     End of AB_SLAED1
 *
       END

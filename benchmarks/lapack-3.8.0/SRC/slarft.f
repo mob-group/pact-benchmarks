@@ -1,4 +1,4 @@
-*> \brief \b SLARFT forms the triangular factor T of a block reflector H = I - vtvH
+*> \brief \b AB_AB_SLARFT forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLARFT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarft.f">
+*> Download AB_AB_SLARFT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SLARFT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarft.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SLARFT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarft.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SLARFT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE AB_AB_SLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SLARFT forms the triangular factor T of a real block reflector H
+*> AB_AB_SLARFT forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -161,7 +161,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      SUBROUTINE AB_AB_SLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT
+     $ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -186,11 +187,11 @@
       INTEGER            I, J, PREVLASTV, LASTV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, STRMV
+      EXTERNAL           AB_SGEMV, AB_STRMV
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
@@ -199,7 +200,7 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      IF( LSAME( DIRECT, 'F' ) ) THEN
+      IF( AB_LSAME( DIRECT, 'F' ) ) THEN
          PREVLASTV = N
          DO I = 1, K
             PREVLASTV = MAX( I, PREVLASTV )
@@ -214,7 +215,7 @@
 *
 *              general case
 *
-               IF( LSAME( STOREV, 'C' ) ) THEN
+               IF( AB_LSAME( STOREV, 'C' ) ) THEN
 *                 Skip any trailing zeros.
                   DO LASTV = N, I+1, -1
                      IF( V( LASTV, I ).NE.ZERO ) EXIT
@@ -226,7 +227,7 @@
 *
 *                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**T * V(i:j,i)
 *
-                  CALL SGEMV( 'Transpose', J-I, I-1, -TAU( I ),
+                  CALL AB_SGEMV( 'Transpose', J-I, I-1, -TAU( I ),
      $                        V( I+1, 1 ), LDV, V( I+1, I ), 1, ONE,
      $                        T( 1, I ), 1 )
                ELSE
@@ -241,14 +242,15 @@
 *
 *                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**T
 *
-                  CALL SGEMV( 'No transpose', I-1, J-I, -TAU( I ),
+                  CALL AB_SGEMV( 'No transpose', I-1, J-I, -TAU( I ),
      $                        V( 1, I+1 ), LDV, V( I, I+1 ), LDV,
      $                        ONE, T( 1, I ), 1 )
                END IF
 *
 *              T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i)
 *
-               CALL STRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T,
+               CALL AB_STRMV( 'Upper', 'No transpose', 'Non-unit', I-1, 
+     $T,
      $                     LDT, T( 1, I ), 1 )
                T( I, I ) = TAU( I )
                IF( I.GT.1 ) THEN
@@ -273,7 +275,7 @@
 *              general case
 *
                IF( I.LT.K ) THEN
-                  IF( LSAME( STOREV, 'C' ) ) THEN
+                  IF( AB_LSAME( STOREV, 'C' ) ) THEN
 *                    Skip any leading zeros.
                      DO LASTV = 1, I-1
                         IF( V( LASTV, I ).NE.ZERO ) EXIT
@@ -285,7 +287,8 @@
 *
 *                    T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**T * V(j:n-k+i,i)
 *
-                     CALL SGEMV( 'Transpose', N-K+I-J, K-I, -TAU( I ),
+                     CALL AB_SGEMV( 'Transpose', N-K+I-J, K-I, -TAU( I )
+     $,
      $                           V( J, I+1 ), LDV, V( J, I ), 1, ONE,
      $                           T( I+1, I ), 1 )
                   ELSE
@@ -300,14 +303,15 @@
 *
 *                    T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**T
 *
-                     CALL SGEMV( 'No transpose', K-I, N-K+I-J,
+                     CALL AB_SGEMV( 'No transpose', K-I, N-K+I-J,
      $                    -TAU( I ), V( I+1, J ), LDV, V( I, J ), LDV,
      $                    ONE, T( I+1, I ), 1 )
                   END IF
 *
 *                 T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i)
 *
-                  CALL STRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
+                  CALL AB_STRMV( 'Lower', 'No transpose', 'Non-unit', K-
+     $I,
      $                        T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
                   IF( I.GT.1 ) THEN
                      PREVLASTV = MIN( PREVLASTV, LASTV )
@@ -321,6 +325,6 @@
       END IF
       RETURN
 *
-*     End of SLARFT
+*     End of AB_AB_SLARFT
 *
       END

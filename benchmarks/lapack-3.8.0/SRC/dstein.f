@@ -1,4 +1,4 @@
-*> \brief \b DSTEIN
+*> \brief \b AB_DSTEIN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSTEIN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstein.f">
+*> Download AB_DSTEIN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSTEIN.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSTEIN.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSTEIN.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
+*       SUBROUTINE AB_DSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
 *                          IWORK, IFAIL, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DSTEIN computes the eigenvectors of a real symmetric tridiagonal
+*> AB_DSTEIN computes the eigenvectors of a real symmetric tridiagonal
 *> matrix T corresponding to specified eigenvalues, using inverse
 *> iteration.
 *>
@@ -79,7 +79,7 @@
 *>          which eigenvectors are to be computed.  The eigenvalues
 *>          should be grouped by split-off block and ordered from
 *>          smallest to largest within the block.  ( The output array
-*>          W from DSTEBZ with ORDER = 'B' is expected here. )
+*>          W from AB_DSTEBZ with ORDER = 'B' is expected here. )
 *> \endverbatim
 *>
 *> \param[in] IBLOCK
@@ -88,8 +88,8 @@
 *>          The submatrix indices associated with the corresponding
 *>          eigenvalues in W; IBLOCK(i)=1 if eigenvalue W(i) belongs to
 *>          the first submatrix from the top, =2 if W(i) belongs to
-*>          the second submatrix, etc.  ( The output array IBLOCK
-*>          from DSTEBZ is expected here. )
+*>          the AB_SECOND submatrix, etc.  ( The output array IBLOCK
+*>          from AB_DSTEBZ is expected here. )
 *> \endverbatim
 *>
 *> \param[in] ISPLIT
@@ -97,9 +97,9 @@
 *>          ISPLIT is INTEGER array, dimension (N)
 *>          The splitting points, at which T breaks up into submatrices.
 *>          The first submatrix consists of rows/columns 1 to
-*>          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1
+*>          ISPLIT( 1 ), the AB_SECOND of rows/columns ISPLIT( 1 )+1
 *>          through ISPLIT( 2 ), etc.
-*>          ( The output array ISPLIT from DSTEBZ is expected here. )
+*>          ( The output array ISPLIT from AB_DSTEBZ is expected here. )
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -171,7 +171,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
+      SUBROUTINE AB_DSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
      $                   IWORK, IFAIL, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,13 +208,14 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DDOT, DLAMCH, DNRM2
-      EXTERNAL           IDAMAX, DDOT, DLAMCH, DNRM2
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DNRM2
+      EXTERNAL           AB_IDAMAX, AB_DDOT, AB_DLAMCH, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLAGTF, DLAGTS, DLARNV, DSCAL,
-     $                   XERBLA
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DLAGTF, AB_DLAGTS, AB_DL
+     $ARNV, AB_DSCAL,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -250,7 +251,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSTEIN', -INFO )
+         CALL AB_XERBLA( 'AB_DSTEIN', -INFO )
          RETURN
       END IF
 *
@@ -265,9 +266,9 @@
 *
 *     Get machine constants.
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
-*     Initialize seed for random number generator DLARNV.
+*     Initialize seed for random number generator AB_DLARNV.
 *
       DO 40 I = 1, 4
          ISEED( I ) = 1
@@ -346,18 +347,19 @@
 *
 *           Get random starting vector.
 *
-            CALL DLARNV( 2, ISEED, BLKSIZ, WORK( INDRV1+1 ) )
+            CALL AB_DLARNV( 2, ISEED, BLKSIZ, WORK( INDRV1+1 ) )
 *
 *           Copy the matrix T so it won't be destroyed in factorization.
 *
-            CALL DCOPY( BLKSIZ, D( B1 ), 1, WORK( INDRV4+1 ), 1 )
-            CALL DCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV2+2 ), 1 )
-            CALL DCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV3+1 ), 1 )
+            CALL AB_DCOPY( BLKSIZ, D( B1 ), 1, WORK( INDRV4+1 ), 1 )
+            CALL AB_DCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV2+2 ), 1 )
+            CALL AB_DCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV3+1 ), 1 )
 *
 *           Compute LU factors with partial pivoting  ( PT = LU )
 *
             TOL = ZERO
-            CALL DLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ, WORK( INDRV2+2 ),
+            CALL AB_DLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ, WORK( INDRV2+2
+     $ ),
      $                   WORK( INDRV3+1 ), TOL, WORK( INDRV5+1 ), IWORK,
      $                   IINFO )
 *
@@ -370,15 +372,16 @@
 *
 *           Normalize and scale the righthand side vector Pb.
 *
-            JMAX = IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            JMAX = AB_IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
             SCL = BLKSIZ*ONENRM*MAX( EPS,
      $            ABS( WORK( INDRV4+BLKSIZ ) ) ) /
      $            ABS( WORK( INDRV1+JMAX ) )
-            CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
+            CALL AB_DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
 *
 *           Solve the system LU = Pb.
 *
-            CALL DLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ), WORK( INDRV2+2 ),
+            CALL AB_DLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ), WORK( INDRV2+2
+     $ ),
      $                   WORK( INDRV3+1 ), WORK( INDRV5+1 ), IWORK,
      $                   WORK( INDRV1+1 ), TOL, IINFO )
 *
@@ -391,9 +394,10 @@
      $         GPIND = J
             IF( GPIND.NE.J ) THEN
                DO 80 I = GPIND, J - 1
-                  ZTR = -DDOT( BLKSIZ, WORK( INDRV1+1 ), 1, Z( B1, I ),
+                  ZTR = -AB_DDOT( BLKSIZ, WORK( INDRV1+1 ), 1, Z( B1, I 
+     $),
      $                  1 )
-                  CALL DAXPY( BLKSIZ, ZTR, Z( B1, I ), 1,
+                  CALL AB_DAXPY( BLKSIZ, ZTR, Z( B1, I ), 1,
      $                        WORK( INDRV1+1 ), 1 )
    80          CONTINUE
             END IF
@@ -401,7 +405,7 @@
 *           Check the infinity norm of the iterate.
 *
    90       CONTINUE
-            JMAX = IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            JMAX = AB_IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
             NRM = ABS( WORK( INDRV1+JMAX ) )
 *
 *           Continue for additional iterations after norm reaches
@@ -425,11 +429,11 @@
 *           Accept iterate as jth eigenvector.
 *
   110       CONTINUE
-            SCL = ONE / DNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
-            JMAX = IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            SCL = ONE / AB_DNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            JMAX = AB_IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
             IF( WORK( INDRV1+JMAX ).LT.ZERO )
      $         SCL = -SCL
-            CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
+            CALL AB_DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
   120       CONTINUE
             DO 130 I = 1, N
                Z( I, J ) = ZERO
@@ -448,6 +452,6 @@
 *
       RETURN
 *
-*     End of DSTEIN
+*     End of AB_DSTEIN
 *
       END

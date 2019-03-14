@@ -1,4 +1,4 @@
-*> \brief \b ZUNGL2 generates all or part of the unitary matrix Q from an LQ factorization determined by cgelqf (unblocked algorithm).
+*> \brief \b AB_ZUNGL2 generates all or part of the unitary matrix Q from an LQ factorization determined by AB_AB_CGELQF (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZUNGL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungl2.f">
+*> Download AB_ZUNGL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNGL2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNGL2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNGL2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZUNGL2( M, N, K, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_ZUNGL2( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> ZUNGL2 generates an m-by-n complex matrix Q with orthonormal rows,
+*> AB_ZUNGL2 generates an m-by-n complex matrix Q with orthonormal rows,
 *> which is defined as the first m rows of a product of k elementary
 *> reflectors of order n
 *>
 *>       Q  =  H(k)**H . . . H(2)**H H(1)**H
 *>
-*> as returned by ZGELQF.
+*> as returned by AB_AB_ZGELQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the i-th row must contain the vector which defines
 *>          the elementary reflector H(i), for i = 1,2,...,k, as returned
-*>          by ZGELQF in the first k rows of its array argument A.
+*>          by AB_AB_ZGELQF in the first k rows of its array argument A.
 *>          On exit, the m by n matrix Q.
 *> \endverbatim
 *>
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by ZGELQF.
+*>          reflector H(i), as returned by AB_AB_ZGELQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -111,7 +111,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZUNGL2( M, N, K, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_ZUNGL2( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,7 +136,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACGV, ZLARF, ZSCAL
+      EXTERNAL           AB_XERBLA, AB_ZLACGV, AB_ZLARF, AB_ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -156,7 +156,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZUNGL2', -INFO )
+         CALL AB_XERBLA( 'AB_ZUNGL2', -INFO )
          RETURN
       END IF
 *
@@ -183,14 +183,14 @@
 *        Apply H(i)**H to A(i:m,i:n) from the right
 *
          IF( I.LT.N ) THEN
-            CALL ZLACGV( N-I, A( I, I+1 ), LDA )
+            CALL AB_ZLACGV( N-I, A( I, I+1 ), LDA )
             IF( I.LT.M ) THEN
                A( I, I ) = ONE
-               CALL ZLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+               CALL AB_ZLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
      $                     DCONJG( TAU( I ) ), A( I+1, I ), LDA, WORK )
             END IF
-            CALL ZSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
-            CALL ZLACGV( N-I, A( I, I+1 ), LDA )
+            CALL AB_ZSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
+            CALL AB_ZLACGV( N-I, A( I, I+1 ), LDA )
          END IF
          A( I, I ) = ONE - DCONJG( TAU( I ) )
 *
@@ -202,6 +202,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of ZUNGL2
+*     End of AB_ZUNGL2
 *
       END

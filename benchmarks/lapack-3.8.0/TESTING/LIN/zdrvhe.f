@@ -1,4 +1,4 @@
-*> \brief \b ZDRVHE
+*> \brief \b AB_ZDRVHE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZDRVHE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE AB_ZDRVHE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                          NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> ZDRVHE tests the driver routines ZHESV and -SVX.
+*> AB_ZDRVHE tests the driver routines AB_ZHESV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -149,7 +149,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZDRVHE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+      SUBROUTINE AB_ZDRVHE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX
+     $,
      $                   A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
 *
@@ -196,14 +197,17 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, ZLANHE
-      EXTERNAL           DGET06, ZLANHE
+      DOUBLE PRECISION   AB_DGET06, AB_ZLANHE
+      EXTERNAL           AB_DGET06, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
-     $                   ZHESV, ZHESVX, ZHET01, ZHETRF, ZHETRI2, ZLACPY,
-     $                   ZLAIPD, ZLARHS, ZLASET, ZLATB4, ZLATMS, ZPOT02,
-     $                   ZPOT05
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_XLAENV, AB_
+     $ZERRVX, AB_ZGET04,
+     $                   AB_ZHESV, AB_AB_ZHESVX, AB_ZHET01, AB_ZHETRF, A
+     $B_AB_ZHETRI2, AB_ZLACPY,
+     $                   AB_ZLAIPD, AB_ZLARHS, AB_ZLASET, AB_ZLATB4, AB_
+     $ZLATMS, AB_ZPOT02,
+     $                   AB_ZPOT05
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -238,15 +242,15 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL ZERRVX( PATH, NOUT )
+     $   CALL AB_ZERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
 *
       NB = 1
       NBMIN = 2
-      CALL XLAENV( 1, NB )
-      CALL XLAENV( 2, NBMIN )
+      CALL AB_XLAENV( 1, NB )
+      CALL AB_XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -276,21 +280,23 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with ZLATB4 and generate a test matrix
-*              with ZLATMS.
+*              Set up parameters with AB_ZLATB4 and generate a test matrix
+*              with AB_ZLATMS.
 *
-               CALL ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+               CALL AB_ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
+     $DE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'ZLATMS'
-               CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_ZLATMS'
+               CALL AB_ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from ZLATMS.
+*              Check error code from AB_ZLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_ZLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 160
                END IF
@@ -364,7 +370,7 @@
 *
 *              Set the imaginary part of the diagonals.
 *
-               CALL ZLAIPD( N, A, LDA+1, 0 )
+               CALL AB_ZLAIPD( N, A, LDA+1, 0 )
 *
                DO 150 IFACT = 1, NFACT
 *
@@ -373,7 +379,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by ZHESVX.
+*                 the value returned by AB_AB_ZHESVX.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -384,21 +390,23 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
+                     ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *                    Factor the matrix A.
 *
-                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL ZHETRF( UPLO, N, AFAC, LDA, IWORK, WORK,
+                     CALL AB_ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_ZHETRF( UPLO, N, AFAC, LDA, IWORK, WORK,
      $                            LWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-                     CALL ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                     CALL AB_ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      LWORK = (N+NB+1)*(NB+3)
-                     CALL ZHETRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+                     CALL AB_AB_ZHETRI2( UPLO, N, AINV, LDA, IWORK, WORK
+     $,
      $                            LWORK, INFO )
-                     AINVNM = ZLANHE( '1', UPLO, N, AINV, LDA, RWORK )
+                     AINVNM = AB_ZLANHE( '1', UPLO, N, AINV, LDA, RWORK 
+     $)
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -411,22 +419,22 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'ZLARHS'
-                  CALL ZLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'AB_ZLARHS'
+                  CALL AB_ZLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test ZHESV  ---
+*                 --- Test AB_ZHESV  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using ZHESV.
+*                    Factor the matrix and solve the system using AB_ZHESV.
 *
-                     SRNAMT = 'ZHESV '
-                     CALL ZHESV( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
+                     SRNAMT = 'AB_ZHESV '
+                     CALL AB_ZHESV( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                           LDA, WORK, LWORK, INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -446,10 +454,11 @@
                         END IF
                      END IF
 *
-*                    Check error code from ZHESV .
+*                    Check error code from AB_ZHESV .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'ZHESV ', INFO, K, UPLO, N,
+                        CALL AB_ALAERH( PATH, 'AB_ZHESV ', INFO, K, UPLO
+     $, N,
      $                               N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 120
@@ -460,18 +469,20 @@
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL ZHET01( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+                     CALL AB_ZHET01( UPLO, N, A, LDA, AFAC, LDA, IWORK,
      $                            AINV, LDA, RWORK, RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
+     $,
      $                            LDA, RWORK, RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -481,8 +492,9 @@
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'ZHESV ', UPLO, N,
+     $                        CALL AB_ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'AB_ZHESV ', UPLO, N
+     $,
      $                        IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -491,19 +503,20 @@
   120                CONTINUE
                   END IF
 *
-*                 --- Test ZHESVX ---
+*                 --- Test AB_AB_ZHESVX ---
 *
                   IF( IFACT.EQ.2 )
-     $               CALL ZLASET( UPLO, N, N, DCMPLX( ZERO ),
+     $               CALL AB_ZLASET( UPLO, N, N, DCMPLX( ZERO ),
      $                            DCMPLX( ZERO ), AFAC, LDA )
-                  CALL ZLASET( 'Full', N, NRHS, DCMPLX( ZERO ),
+                  CALL AB_ZLASET( 'Full', N, NRHS, DCMPLX( ZERO ),
      $                         DCMPLX( ZERO ), X, LDA )
 *
 *                 Solve the system and compute the condition number and
-*                 error bounds using ZHESVX.
+*                 error bounds using AB_AB_ZHESVX.
 *
-                  SRNAMT = 'ZHESVX'
-                  CALL ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AFAC, LDA,
+                  SRNAMT = 'AB_AB_ZHESVX'
+                  CALL AB_AB_ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AFAC, 
+     $LDA,
      $                         IWORK, B, LDA, X, LDA, RCOND, RWORK,
      $                         RWORK( NRHS+1 ), WORK, LWORK,
      $                         RWORK( 2*NRHS+1 ), INFO )
@@ -525,10 +538,11 @@
                      END IF
                   END IF
 *
-*                 Check the error code from ZHESVX.
+*                 Check the error code from AB_AB_ZHESVX.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'ZHESVX', INFO, K, FACT // UPLO,
+                     CALL AB_ALAERH( PATH, 'AB_AB_ZHESVX', INFO, K, FACT
+     $ // UPLO,
      $                            N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                            NERRS, NOUT )
                      GO TO 150
@@ -540,7 +554,8 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL ZHET01( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+                        CALL AB_ZHET01( UPLO, N, A, LDA, AFAC, LDA, IWOR
+     $K,
      $                               AINV, LDA, RWORK( 2*NRHS+1 ),
      $                               RESULT( 1 ) )
                         K1 = 1
@@ -550,28 +565,31 @@
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
+     $,
      $                            LDA, RWORK( 2*NRHS+1 ), RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
 *
 *                    Check the error bounds from iterative refinement.
 *
-                     CALL ZPOT05( UPLO, N, NRHS, A, LDA, B, LDA, X, LDA,
+                     CALL AB_ZPOT05( UPLO, N, NRHS, A, LDA, B, LDA, X, L
+     $DA,
      $                            XACT, LDA, RWORK, RWORK( NRHS+1 ),
      $                            RESULT( 4 ) )
                   ELSE
                      K1 = 6
                   END IF
 *
-*                 Compare RCOND from ZHESVX with the computed value
+*                 Compare RCOND from AB_AB_ZHESVX with the computed value
 *                 in RCONDC.
 *
-                  RESULT( 6 ) = DGET06( RCOND, RCONDC )
+                  RESULT( 6 ) = AB_DGET06( RCOND, RCONDC )
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
@@ -579,8 +597,9 @@
                   DO 140 K = K1, 6
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALADHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9998 )'ZHESVX', FACT, UPLO,
+     $                     CALL AB_ALADHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9998 )'AB_AB_ZHESVX', FACT, U
+     $PLO,
      $                     N, IMAT, K, RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -595,7 +614,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
@@ -603,6 +622,6 @@
      $      ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of ZDRVHE
+*     End of AB_ZDRVHE
 *
       END

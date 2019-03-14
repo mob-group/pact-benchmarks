@@ -1,4 +1,4 @@
-*> \brief \b SLAPTM
+*> \brief \b AB_SLAPTM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
+*       SUBROUTINE AB_SLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDB, LDX, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SLAPTM multiplies an N by NRHS matrix X by a symmetric tridiagonal
+*> AB_SLAPTM multiplies an N by NRHS matrix X by a symmetric tridiagonal
 *> matrix A and stores the result in a matrix B.  The operation has the
 *> form
 *>
@@ -114,7 +114,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
+      SUBROUTINE AB_SLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -198,6 +198,6 @@
       END IF
       RETURN
 *
-*     End of SLAPTM
+*     End of AB_SLAPTM
 *
       END

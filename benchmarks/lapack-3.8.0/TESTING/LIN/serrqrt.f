@@ -1,4 +1,4 @@
-*> \brief \b SERRQRT
+*> \brief \b AB_AB_SERRQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SERRQRT( PATH, NUNIT )
+*       SUBROUTINE AB_AB_SERRQRT( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> SERRQRT tests the error exits for the REAL routines
+*> AB_AB_SERRQRT tests the error exits for the REAL routines
 *> that use the QRT decomposition of a general matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SERRQRT( PATH, NUNIT )
+      SUBROUTINE AB_AB_SERRQRT( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,9 @@
      $                   C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, SGEQRT2, SGEQRT3, SGEQRT,
-     $                   SGEMQRT
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_AB_SGEQRT2, AB_AB_S
+     $GEQRT3, AB_AB_SGEQRT,
+     $                   AB_AB_SGEMQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,100 +115,111 @@
 *
 *     Error exits for QRT factorization
 *
-*     SGEQRT
+*     AB_AB_SGEQRT
 *
-      SRNAMT = 'SGEQRT'
+      SRNAMT = 'AB_AB_SGEQRT'
       INFOT = 1
-      CALL SGEQRT( -1, 0, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'SGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT( -1, 0, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL SGEQRT( 0, -1, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'SGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT( 0, -1, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL SGEQRT( 0, 0, 0, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'SGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT( 0, 0, 0, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL SGEQRT( 2, 1, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'SGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT( 2, 1, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL SGEQRT( 2, 2, 2, A, 2, T, 1, W, INFO )
-      CALL CHKXER( 'SGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT( 2, 2, 2, A, 2, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT', INFOT, NOUT, LERR, OK )
 *
-*     SGEQRT2
+*     AB_AB_AB_SGEQRT2
 *
-      SRNAMT = 'SGEQRT2'
+      SRNAMT = 'AB_AB_AB_SGEQRT2'
       INFOT = 1
-      CALL SGEQRT2( -1, 0, A, 1, T, 1, INFO )
-      CALL CHKXER( 'SGEQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_AB_SGEQRT2( -1, 0, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_AB_SGEQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL SGEQRT2( 0, -1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'SGEQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_AB_SGEQRT2( 0, -1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_AB_SGEQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL SGEQRT2( 2, 1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'SGEQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_AB_SGEQRT2( 2, 1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_AB_SGEQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL SGEQRT2( 2, 2, A, 2, T, 1, INFO )
-      CALL CHKXER( 'SGEQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_AB_SGEQRT2( 2, 2, A, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_AB_SGEQRT2', INFOT, NOUT, LERR, OK )
 *
-*     SGEQRT3
+*     AB_AB_SGEQRT3
 *
-      SRNAMT = 'SGEQRT3'
+      SRNAMT = 'AB_AB_SGEQRT3'
       INFOT = 1
-      CALL SGEQRT3( -1, 0, A, 1, T, 1, INFO )
-      CALL CHKXER( 'SGEQRT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT3( -1, 0, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT3', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL SGEQRT3( 0, -1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'SGEQRT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT3( 0, -1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT3', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL SGEQRT3( 2, 1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'SGEQRT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT3( 2, 1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT3', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL SGEQRT3( 2, 2, A, 2, T, 1, INFO )
-      CALL CHKXER( 'SGEQRT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEQRT3( 2, 2, A, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_SGEQRT3', INFOT, NOUT, LERR, OK )
 *
-*     SGEMQRT
+*     AB_AB_SGEMQRT
 *
-      SRNAMT = 'SGEMQRT'
+      SRNAMT = 'AB_AB_SGEMQRT'
       INFOT = 1
-      CALL SGEMQRT( '/', 'N', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( '/', 'N', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL SGEMQRT( 'L', '/', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'L', '/', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL SGEMQRT( 'L', 'N', -1, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'L', 'N', -1, 0, 0, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL SGEMQRT( 'L', 'N', 0, -1, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'L', 'N', 0, -1, 0, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL SGEMQRT( 'L', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'L', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL SGEMQRT( 'R', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'R', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL SGEMQRT( 'L', 'N', 0, 0, 0, 0, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'L', 'N', 0, 0, 0, 0, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL SGEMQRT( 'R', 'N', 1, 2, 1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'R', 'N', 1, 2, 1, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL SGEMQRT( 'L', 'N', 2, 1, 1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'L', 'N', 2, 1, 1, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL SGEMQRT( 'R', 'N', 1, 1, 1, 1, A, 1, T, 0, C, 1, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'R', 'N', 1, 1, 1, 1, A, 1, T, 0, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL SGEMQRT( 'L', 'N', 1, 1, 1, 1, A, 1, T, 1, C, 0, W, INFO )
-      CALL CHKXER( 'SGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_SGEMQRT( 'L', 'N', 1, 1, 1, 1, A, 1, T, 1, C, 0, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_SGEMQRT', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of SERRQRT
+*     End of AB_AB_SERRQRT
 *
       END

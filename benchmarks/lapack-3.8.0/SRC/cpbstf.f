@@ -1,4 +1,4 @@
-*> \brief \b CPBSTF
+*> \brief \b AB_CPBSTF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPBSTF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbstf.f">
+*> Download AB_CPBSTF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPBSTF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbstf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPBSTF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbstf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPBSTF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+*       SUBROUTINE AB_CPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> CPBSTF computes a split Cholesky factorization of a complex
+*> AB_CPBSTF computes a split Cholesky factorization of a complex
 *> Hermitian positive definite band matrix A.
 *>
-*> This routine is designed to be used in conjunction with CHBGST.
+*> This routine is designed to be used in conjunction with AB_CHBGST.
 *>
 *> The factorization has the form  A = S**H*S  where S is a band matrix
 *> of the same bandwidth as A and the following structure:
@@ -151,7 +151,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+      SUBROUTINE AB_CPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -178,11 +178,11 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHER, CLACGV, CSSCAL, XERBLA
+      EXTERNAL           AB_CHER, AB_CLACGV, AB_CAB_SSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL, SQRT
@@ -192,8 +192,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -203,7 +203,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPBSTF', -INFO )
+         CALL AB_XERBLA( 'AB_CPBSTF', -INFO )
          RETURN
       END IF
 *
@@ -238,8 +238,8 @@
 *           Compute elements j-km:j-1 of the j-th column and update the
 *           the leading submatrix within the band.
 *
-            CALL CSSCAL( KM, ONE / AJJ, AB( KD+1-KM, J ), 1 )
-            CALL CHER( 'Upper', KM, -ONE, AB( KD+1-KM, J ), 1,
+            CALL AB_CAB_SSCAL( KM, ONE / AJJ, AB( KD+1-KM, J ), 1 )
+            CALL AB_CHER( 'Upper', KM, -ONE, AB( KD+1-KM, J ), 1,
      $                 AB( KD+1, J-KM ), KLD )
    10    CONTINUE
 *
@@ -262,11 +262,11 @@
 *           trailing submatrix within the band.
 *
             IF( KM.GT.0 ) THEN
-               CALL CSSCAL( KM, ONE / AJJ, AB( KD, J+1 ), KLD )
-               CALL CLACGV( KM, AB( KD, J+1 ), KLD )
-               CALL CHER( 'Upper', KM, -ONE, AB( KD, J+1 ), KLD,
+               CALL AB_CAB_SSCAL( KM, ONE / AJJ, AB( KD, J+1 ), KLD )
+               CALL AB_CLACGV( KM, AB( KD, J+1 ), KLD )
+               CALL AB_CHER( 'Upper', KM, -ONE, AB( KD, J+1 ), KLD,
      $                    AB( KD+1, J+1 ), KLD )
-               CALL CLACGV( KM, AB( KD, J+1 ), KLD )
+               CALL AB_CLACGV( KM, AB( KD, J+1 ), KLD )
             END IF
    20    CONTINUE
       ELSE
@@ -289,11 +289,11 @@
 *           Compute elements j-km:j-1 of the j-th row and update the
 *           trailing submatrix within the band.
 *
-            CALL CSSCAL( KM, ONE / AJJ, AB( KM+1, J-KM ), KLD )
-            CALL CLACGV( KM, AB( KM+1, J-KM ), KLD )
-            CALL CHER( 'Lower', KM, -ONE, AB( KM+1, J-KM ), KLD,
+            CALL AB_CAB_SSCAL( KM, ONE / AJJ, AB( KM+1, J-KM ), KLD )
+            CALL AB_CLACGV( KM, AB( KM+1, J-KM ), KLD )
+            CALL AB_CHER( 'Lower', KM, -ONE, AB( KM+1, J-KM ), KLD,
      $                 AB( 1, J-KM ), KLD )
-            CALL CLACGV( KM, AB( KM+1, J-KM ), KLD )
+            CALL AB_CLACGV( KM, AB( KM+1, J-KM ), KLD )
    30    CONTINUE
 *
 *        Factorize the updated submatrix A(1:m,1:m) as U**H*U.
@@ -315,8 +315,8 @@
 *           trailing submatrix within the band.
 *
             IF( KM.GT.0 ) THEN
-               CALL CSSCAL( KM, ONE / AJJ, AB( 2, J ), 1 )
-               CALL CHER( 'Lower', KM, -ONE, AB( 2, J ), 1,
+               CALL AB_CAB_SSCAL( KM, ONE / AJJ, AB( 2, J ), 1 )
+               CALL AB_CHER( 'Lower', KM, -ONE, AB( 2, J ), 1,
      $                    AB( 1, J+1 ), KLD )
             END IF
    40    CONTINUE
@@ -327,6 +327,6 @@
       INFO = J
       RETURN
 *
-*     End of CPBSTF
+*     End of AB_CPBSTF
 *
       END

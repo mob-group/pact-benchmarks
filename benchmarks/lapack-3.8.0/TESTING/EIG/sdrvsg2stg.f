@@ -1,4 +1,4 @@
-*> \brief \b SDRVSG2STG
+*> \brief \b AB_AB_SDRVSG2STG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_AB_SDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                              NOUNIT, A, LDA, B, LDB, D, D2, Z, LDZ, AB,
 *                              BB, AP, BP, WORK, NWORK, IWORK, LIWORK, 
 *                              RESULT, INFO )
@@ -33,48 +33,48 @@
 *>
 *> \verbatim
 *>
-*>      SDRVSG2STG checks the real symmetric generalized eigenproblem
+*>      AB_AB_SDRVSG2STG checks the real symmetric generalized eigenproblem
 *>      drivers.
 *>
-*>              SSYGV computes all eigenvalues and, optionally,
+*>              AB_SSYGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite generalized
 *>              eigenproblem.
 *>
-*>              SSYGVD computes all eigenvalues and, optionally,
+*>              AB_AB_SSYGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite generalized
 *>              eigenproblem using a divide and conquer algorithm.
 *>
-*>              SSYGVX computes selected eigenvalues and, optionally,
+*>              AB_AB_SSYGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite generalized
 *>              eigenproblem.
 *>
-*>              SSPGV computes all eigenvalues and, optionally,
+*>              AB_SSPGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite generalized
 *>              eigenproblem in packed storage.
 *>
-*>              SSPGVD computes all eigenvalues and, optionally,
+*>              AB_AB_SSPGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite generalized
 *>              eigenproblem in packed storage using a divide and
 *>              conquer algorithm.
 *>
-*>              SSPGVX computes selected eigenvalues and, optionally,
+*>              AB_AB_SSPGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite generalized
 *>              eigenproblem in packed storage.
 *>
-*>              SSBGV computes all eigenvalues and, optionally,
+*>              AB_SSBGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite banded
 *>              generalized eigenproblem.
 *>
-*>              SSBGVD computes all eigenvalues and, optionally,
+*>              AB_AB_SSBGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite banded
 *>              generalized eigenproblem using a divide and conquer
 *>              algorithm.
 *>
-*>              SSBGVX computes selected eigenvalues and, optionally,
+*>              AB_AB_SSBGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a real symmetric-definite banded
 *>              generalized eigenproblem.
 *>
-*>      When SDRVSG2STG is called, a number of matrix "sizes" ("n's") and a
+*>      When AB_AB_SDRVSG2STG is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix A of the given type will be
 *>      generated; a random well-conditioned matrix B is also generated
@@ -82,39 +82,39 @@
 *>
 *>      For each pair (A,B), the following tests are performed:
 *>
-*>      (1) SSYGV with ITYPE = 1 and UPLO ='U':
+*>      (1) AB_SSYGV with ITYPE = 1 and UPLO ='U':
 *>
 *>              | A Z - B Z D | / ( |A| |Z| n ulp )
 *>              | D - D2 | / ( |D| ulp )   where D is computed by
-*>                                         SSYGV and  D2 is computed by
-*>                                         SSYGV_2STAGE. This test is
-*>                                         only performed for SSYGV
+*>                                         AB_SSYGV and  D2 is computed by
+*>                                         AB_AB_SSYGV_2STAGE. This test is
+*>                                         only performed for AB_SSYGV
 *>
-*>      (2) as (1) but calling SSPGV
-*>      (3) as (1) but calling SSBGV
+*>      (2) as (1) but calling AB_SSPGV
+*>      (3) as (1) but calling AB_SSBGV
 *>      (4) as (1) but with UPLO = 'L'
-*>      (5) as (4) but calling SSPGV
-*>      (6) as (4) but calling SSBGV
+*>      (5) as (4) but calling AB_SSPGV
+*>      (6) as (4) but calling AB_SSBGV
 *>
-*>      (7) SSYGV with ITYPE = 2 and UPLO ='U':
+*>      (7) AB_SSYGV with ITYPE = 2 and UPLO ='U':
 *>
 *>              | A B Z - Z D | / ( |A| |Z| n ulp )
 *>
-*>      (8) as (7) but calling SSPGV
+*>      (8) as (7) but calling AB_SSPGV
 *>      (9) as (7) but with UPLO = 'L'
-*>      (10) as (9) but calling SSPGV
+*>      (10) as (9) but calling AB_SSPGV
 *>
-*>      (11) SSYGV with ITYPE = 3 and UPLO ='U':
+*>      (11) AB_SSYGV with ITYPE = 3 and UPLO ='U':
 *>
 *>              | B A Z - Z D | / ( |A| |Z| n ulp )
 *>
-*>      (12) as (11) but calling SSPGV
+*>      (12) as (11) but calling AB_SSPGV
 *>      (13) as (11) but with UPLO = 'L'
-*>      (14) as (13) but calling SSPGV
+*>      (14) as (13) but calling AB_SSPGV
 *>
-*>      SSYGVD, SSPGVD and SSBGVD performed the same 14 tests.
+*>      AB_AB_SSYGVD, AB_AB_SSPGVD and AB_AB_SSBGVD performed the same 14 tests.
 *>
-*>      SSYGVX, SSPGVX and SSBGVX performed the above 14 tests with
+*>      AB_AB_SSYGVX, AB_AB_SSPGVX and AB_AB_SSBGVX performed the above 14 tests with
 *>      the parameter RANGE = 'A', 'N' and 'I', respectively.
 *>
 *>      The "sizes" are specified by an array NN(1:NSIZES); the value
@@ -173,7 +173,7 @@
 *> \verbatim
 *>  NSIZES  INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          SDRVSG2STG does nothing.  It must be at least zero.
+*>          AB_AB_SDRVSG2STG does nothing.  It must be at least zero.
 *>          Not modified.
 *>
 *>  NN      INTEGER array, dimension (NSIZES)
@@ -183,7 +183,7 @@
 *>          Not modified.
 *>
 *>  NTYPES  INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, SDRVSG2STG
+*>          The number of elements in DOTYPE.   If it is zero, AB_AB_SDRVSG2STG
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -209,7 +209,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to SDRVSG2STG to continue the same random number
+*>          next call to AB_AB_SDRVSG2STG to continue the same random number
 *>          sequence.
 *>          Modified.
 *>
@@ -240,7 +240,7 @@
 *>
 *>  B       REAL             array, dimension (LDB , max(NN))
 *>          Used to hold the symmetric positive definite matrix for
-*>          the generailzed problem.
+*>          the generaiAB_LZEd problem.
 *>          On exit, B contains the last matrix actually
 *>          used.
 *>          Modified.
@@ -312,8 +312,8 @@
 *>          -16: LDZ < 1 or LDZ < NMAX.
 *>          -21: NWORK too small.
 *>          -23: LIWORK too small.
-*>          If  SLATMR, SLATMS, SSYGV, SSPGV, SSBGV, SSYGVD, SSPGVD,
-*>              SSBGVD, SSYGVX, SSPGVX or SSBGVX returns an error code,
+*>          If  AB_SLATMR, AB_SLATMS, AB_SSYGV, AB_SSPGV, AB_SSBGV, AB_AB_SSYGVD, AB_AB_SSPGVD,
+*>              AB_AB_SSBGVD, AB_AB_SSYGVX, AB_AB_SSPGVX or AB_AB_SSBGVX returns an error code,
 *>              the absolute value of it is returned.
 *>          Modified.
 *>
@@ -329,7 +329,7 @@
 *>       NMAX            Largest value in NN.
 *>       NMATS           The number of matrices generated so far.
 *>       NERRS           The number of tests which have exceeded THRESH
-*>                       so far (computed by SLAFTS).
+*>                       so far (computed by AB_SLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
 *>
@@ -357,7 +357,8 @@
 *> \ingroup real_eig
 *
 *  =====================================================================
-      SUBROUTINE SDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_AB_SDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, TH
+     $RESH,
      $                       NOUNIT, A, LDA, B, LDB, D, D2, Z, LDZ, AB,
      $                       BB, AP, BP, WORK, NWORK, IWORK, LIWORK, 
      $                       RESULT, INFO )
@@ -406,15 +407,18 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLARND
-      EXTERNAL           LSAME, SLAMCH, SLARND
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_SLARND
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLACPY, SLAFTS, SLASET, SLASUM, SLATMR,
-     $                   SLATMS, SSBGV, SSBGVD, SSBGVX, SSGT01, SSPGV,
-     $                   SSPGVD, SSPGVX, SSYGV, SSYGVD, SSYGVX, XERBLA,
-     $                   SSYGV_2STAGE
+      EXTERNAL           AB_SLABAD, AB_SLACPY, AB_SLAFTS, AB_SLASET, AB_
+     $SLASUM, AB_SLATMR,
+     $                   AB_SLATMS, AB_SSBGV, AB_AB_SSBGVD, AB_AB_SSBGVX
+     $, AB_SSGT01, AB_SSPGV,
+     $                   AB_AB_SSPGVD, AB_AB_SSPGVX, AB_SSYGV, AB_AB_SSY
+     $GVD, AB_AB_SSYGVX, AB_XERBLA,
+     $                   AB_AB_SSYGV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -460,7 +464,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SDRVSG2STG', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SDRVSG2STG', -INFO )
          RETURN
       END IF
 *
@@ -471,10 +475,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
-      CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
+      CALL AB_SLABAD( UNFL, OVFL )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -560,7 +564,7 @@
 *
                KA = 0
                KB = 0
-               CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+               CALL AB_SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
 *
             ELSE IF( ITYPE.EQ.2 ) THEN
 *
@@ -568,7 +572,7 @@
 *
                KA = 0
                KB = 0
-               CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+               CALL AB_SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
                DO 80 JCOL = 1, N
                   A( JCOL, JCOL ) = ANORM
    80          CONTINUE
@@ -579,7 +583,7 @@
 *
                KA = 0
                KB = 0
-               CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL AB_SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -589,7 +593,7 @@
 *
                KA = MAX( 0, N-1 )
                KB = KA
-               CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL AB_SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -599,7 +603,7 @@
 *
                KA = 0
                KB = 0
-               CALL SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+               CALL AB_SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -610,7 +614,7 @@
 *
                KA = MAX( 0, N-1 )
                KB = KA
-               CALL SLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, ONE,
+               CALL AB_SLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -635,7 +639,7 @@
                END IF
                KA = MAX( 0, MIN( N-1, KA9 ) )
                KB = MAX( 0, MIN( N-1, KB9 ) )
-               CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL AB_SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, KA, KA, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -658,8 +662,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( N-1 )*AB_SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( N-1 )*AB_SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -667,8 +671,8 @@
                END IF
             END IF
 *
-*           3) Call SSYGV, SSPGV, SSBGV, SSYGVD, SSPGVD, SSBGVD,
-*              SSYGVX, SSPGVX, and SSBGVX, do tests.
+*           3) Call AB_SSYGV, AB_SSPGV, AB_SSBGV, AB_AB_SSYGVD, AB_AB_SSPGVD, AB_AB_SSBGVD,
+*              AB_AB_SSYGVX, AB_AB_SSPGVX, and AB_AB_SSBGVX, do tests.
 *
 *           loop over the three generalized problems
 *                 IBTYPE = 1: A*x = (lambda)*B*x
@@ -688,21 +692,23 @@
 *                 Generate random well-conditioned positive definite
 *                 matrix B, of bandwidth not greater than that of A.
 *
-                  CALL SLATMS( N, N, 'U', ISEED, 'P', WORK, 5, TEN, ONE,
+                  CALL AB_SLATMS( N, N, 'U', ISEED, 'P', WORK, 5, TEN, O
+     $NE,
      $                         KB, KB, UPLO, B, LDB, WORK( N+1 ),
      $                         IINFO )
 *
-*                 Test SSYGV
+*                 Test AB_SSYGV
 *
                   NTEST = NTEST + 1
 *
-                  CALL SLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL AB_SLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL AB_SLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL SSYGV( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, D,
+                  CALL AB_SSYGV( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, 
+     $D,
      $                        WORK, NWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSYGV(V,' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_SSYGV(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -715,21 +721,21 @@
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
-*                 Test SSYGV_2STAGE
+*                 Test AB_AB_SSYGV_2STAGE
 *
                   NTEST = NTEST + 1
 *
-                  CALL SLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL AB_SLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL AB_SLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL SSYGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
+                  CALL AB_AB_SSYGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
      $                               BB, LDB, D2, WORK, NWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )
-     $                  'SSYGV_2STAGE(V,' // UPLO //
+     $                  'AB_AB_SSYGV_2STAGE(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -742,7 +748,8 @@
 *
 *                 Do Test
 *
-C                  CALL SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+C                  CALL AB_SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z
+     $,
 C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *           
 *           
@@ -761,17 +768,19 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
                   RESULT( NTEST ) = TEMP2 / 
      $                              MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
 *
-*                 Test SSYGVD
+*                 Test AB_AB_SSYGVD
 *
                   NTEST = NTEST + 1
 *
-                  CALL SLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL AB_SLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL AB_SLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL SSYGVD( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, D,
+                  CALL AB_AB_SSYGVD( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, L
+     $DB, D,
      $                         WORK, NWORK, IWORK, LIWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSYGVD(V,' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYGVD(V,' // UPL
+     $O //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -784,22 +793,24 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
-*                 Test SSYGVX
+*                 Test AB_AB_SSYGVX
 *
                   NTEST = NTEST + 1
 *
-                  CALL SLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL AB_SLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL AB_SLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL SSYGVX( IBTYPE, 'V', 'A', UPLO, N, AB, LDA, BB,
+                  CALL AB_AB_SSYGVX( IBTYPE, 'V', 'A', UPLO, N, AB, LDA,
+     $ BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
      $                         IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSYGVX(V,A' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYGVX(V,A' // UP
+     $LO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -812,13 +823,13 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
-                  CALL SLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL AB_SLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL AB_SLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
 *                 since we do not know the exact eigenvalues of this
 *                 eigenpair, we just set VL and VU as constants.
@@ -827,12 +838,13 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   VL = ZERO
                   VU = ANORM
-                  CALL SSYGVX( IBTYPE, 'V', 'V', UPLO, N, AB, LDA, BB,
+                  CALL AB_AB_SSYGVX( IBTYPE, 'V', 'V', UPLO, N, AB, LDA,
+     $ BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
      $                         IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSYGVX(V,V,' //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYGVX(V,V,' //
      $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -845,20 +857,21 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
-                  CALL SLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL SLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL AB_SLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL AB_SLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL SSYGVX( IBTYPE, 'V', 'I', UPLO, N, AB, LDA, BB,
+                  CALL AB_AB_SSYGVX( IBTYPE, 'V', 'I', UPLO, N, AB, LDA,
+     $ BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, IWORK( N+1 ), IWORK,
      $                         IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSYGVX(V,I,' //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSYGVX(V,I,' //
      $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -871,18 +884,18 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
   100             CONTINUE
 *
-*                 Test SSPGV
+*                 Test AB_SSPGV
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( LSAME( UPLO, 'U' ) ) THEN
+                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 120 J = 1, N
                         DO 110 I = 1, J
@@ -902,10 +915,11 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   140                CONTINUE
                   END IF
 *
-                  CALL SSPGV( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ,
+                  CALL AB_SSPGV( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ
+     $,
      $                        WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSPGV(V,' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_SSPGV(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -918,16 +932,16 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
-*                 Test SSPGVD
+*                 Test AB_AB_SSPGVD
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( LSAME( UPLO, 'U' ) ) THEN
+                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 160 J = 1, N
                         DO 150 I = 1, J
@@ -947,10 +961,12 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   180                CONTINUE
                   END IF
 *
-                  CALL SSPGVD( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ,
+                  CALL AB_AB_SSPGVD( IBTYPE, 'V', UPLO, N, AP, BP, D, Z,
+     $ LDZ,
      $                         WORK, NWORK, IWORK, LIWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSPGVD(V,' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPGVD(V,' // UPL
+     $O //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -963,16 +979,16 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
-*                 Test SSPGVX
+*                 Test AB_AB_SSPGVX
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( LSAME( UPLO, 'U' ) ) THEN
+                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 200 J = 1, N
                         DO 190 I = 1, J
@@ -992,11 +1008,13 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   220                CONTINUE
                   END IF
 *
-                  CALL SSPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, VL,
+                  CALL AB_AB_SSPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, 
+     $VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSPGVX(V,A' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPGVX(V,A' // UP
+     $LO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1009,14 +1027,14 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( LSAME( UPLO, 'U' ) ) THEN
+                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 240 J = 1, N
                         DO 230 I = 1, J
@@ -1038,11 +1056,13 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   VL = ZERO
                   VU = ANORM
-                  CALL SSPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, VL,
+                  CALL AB_AB_SSPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, 
+     $VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSPGVX(V,V' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPGVX(V,V' // UP
+     $LO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1055,14 +1075,14 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( LSAME( UPLO, 'U' ) ) THEN
+                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 280 J = 1, N
                         DO 270 I = 1, J
@@ -1082,11 +1102,13 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   300                CONTINUE
                   END IF
 *
-                  CALL SSPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, VL,
+                  CALL AB_AB_SSPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, 
+     $VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'SSPGVX(V,I' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSPGVX(V,I' // UP
+     $LO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1099,20 +1121,20 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL AB_SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
   310             CONTINUE
 *
                   IF( IBTYPE.EQ.1 ) THEN
 *
-*                    TEST SSBGV
+*                    TEST AB_SSBGV
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( LSAME( UPLO, 'U' ) ) THEN
+                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
                         DO 340 J = 1, N
                            DO 320 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1132,10 +1154,11 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   370                   CONTINUE
                      END IF
 *
-                     CALL SSBGV( 'V', UPLO, N, KA, KB, AB, LDA, BB, LDB,
+                     CALL AB_SSBGV( 'V', UPLO, N, KA, KB, AB, LDA, BB, L
+     $DB,
      $                           D, Z, LDZ, WORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'SSBGV(V,' //
+                        WRITE( NOUNIT, FMT = 9999 )'AB_SSBGV(V,' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1148,16 +1171,17 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                     CALL AB_SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB,
+     $ Z,
      $                            LDZ, D, WORK, RESULT( NTEST ) )
 *
-*                    TEST SSBGVD
+*                    TEST AB_AB_SSBGVD
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( LSAME( UPLO, 'U' ) ) THEN
+                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
                         DO 400 J = 1, N
                            DO 380 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1177,11 +1201,12 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   430                   CONTINUE
                      END IF
 *
-                     CALL SSBGVD( 'V', UPLO, N, KA, KB, AB, LDA, BB,
+                     CALL AB_AB_SSBGVD( 'V', UPLO, N, KA, KB, AB, LDA, B
+     $B,
      $                            LDB, D, Z, LDZ, WORK, NWORK, IWORK,
      $                            LIWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'SSBGVD(V,' //
+                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBGVD(V,' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1194,16 +1219,17 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                     CALL AB_SSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB,
+     $ Z,
      $                            LDZ, D, WORK, RESULT( NTEST ) )
 *
-*                    Test SSBGVX
+*                    Test AB_AB_SSBGVX
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( LSAME( UPLO, 'U' ) ) THEN
+                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
                         DO 460 J = 1, N
                            DO 440 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1223,12 +1249,13 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   490                   CONTINUE
                      END IF
 *
-                     CALL SSBGVX( 'V', 'A', UPLO, N, KA, KB, AB, LDA,
+                     CALL AB_AB_SSBGVX( 'V', 'A', UPLO, N, KA, KB, AB, L
+     $DA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'SSBGVX(V,A' //
+                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBGVX(V,A' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1241,7 +1268,8 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                     CALL AB_SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB,
+     $ Z,
      $                            LDZ, D, WORK, RESULT( NTEST ) )
 *
 *
@@ -1249,7 +1277,7 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( LSAME( UPLO, 'U' ) ) THEN
+                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
                         DO 520 J = 1, N
                            DO 500 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1271,12 +1299,13 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
                      VL = ZERO
                      VU = ANORM
-                     CALL SSBGVX( 'V', 'V', UPLO, N, KA, KB, AB, LDA,
+                     CALL AB_AB_SSBGVX( 'V', 'V', UPLO, N, KA, KB, AB, L
+     $DA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'SSBGVX(V,V' //
+                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBGVX(V,V' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1289,14 +1318,15 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                     CALL AB_SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB,
+     $ Z,
      $                            LDZ, D, WORK, RESULT( NTEST ) )
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( LSAME( UPLO, 'U' ) ) THEN
+                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
                         DO 580 J = 1, N
                            DO 560 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1316,12 +1346,13 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
   610                   CONTINUE
                      END IF
 *
-                     CALL SSBGVX( 'V', 'I', UPLO, N, KA, KB, AB, LDA,
+                     CALL AB_AB_SSBGVX( 'V', 'I', UPLO, N, KA, KB, AB, L
+     $DA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'SSBGVX(V,I' //
+                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_SSBGVX(V,I' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1334,7 +1365,8 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                     CALL AB_SSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB,
+     $ Z,
      $                            LDZ, D, WORK, RESULT( NTEST ) )
 *
                   END IF
@@ -1345,19 +1377,20 @@ C     $                         LDZ, D, WORK, RESULT( NTEST ) )
 *           End of Loop -- Check for RESULT(j) > THRESH
 *
             NTESTT = NTESTT + NTEST
-            CALL SLAFTS( 'SSG', N, N, JTYPE, NTEST, RESULT, IOLDSD,
+            CALL AB_SLAFTS( 'SSG', N, N, JTYPE, NTEST, RESULT, IOLDSD,
      $                   THRESH, NOUNIT, NERRS )
   640    CONTINUE
   650 CONTINUE
 *
 *     Summary
 *
-      CALL SLASUM( 'SSG', NOUNIT, NERRS, NTESTT )
+      CALL AB_SLASUM( 'SSG', NOUNIT, NERRS, NTESTT )
 *
       RETURN
 *
-*     End of SDRVSG2STG
+*     End of AB_AB_SDRVSG2STG
 *
- 9999 FORMAT( ' SDRVSG2STG: ', A, ' returned INFO=', I6, '.', / 9X,
+ 9999 FORMAT( ' AB_AB_SDRVSG2STG: ', A, ' returned INFO=', I6, '.', / 9X
+     $,
      $    'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
       END

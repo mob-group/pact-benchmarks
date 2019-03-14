@@ -1,4 +1,4 @@
-*> \brief <b> DGTSVX computes the solution to system of linear equations A * X = B for GT matrices </b>
+*> \brief <b> AB_AB_DGTSVX computes the solution to system of linear equations A * X = B for GT matrices </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGTSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtsvx.f">
+*> Download AB_AB_DGTSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DGTSVX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DGTSVX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DGTSVX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+*       SUBROUTINE AB_AB_DGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
 *                          DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
 *                          WORK, IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> DGTSVX uses the LU factorization to compute the solution to a real
+*> AB_AB_DGTSVX uses the LU factorization to compute the solution to a real
 *> system of linear equations A * X = B or A**T * X = B,
 *> where A is a tridiagonal matrix of order N and X and B are N-by-NRHS
 *> matrices.
@@ -136,7 +136,7 @@
 *>          DLF is DOUBLE PRECISION array, dimension (N-1)
 *>          If FACT = 'F', then DLF is an input argument and on entry
 *>          contains the (n-1) multipliers that define the matrix L from
-*>          the LU factorization of A as computed by DGTTRF.
+*>          the LU factorization of A as computed by AB_DGTTRF.
 *>
 *>          If FACT = 'N', then DLF is an output argument and on exit
 *>          contains the (n-1) multipliers that define the matrix L from
@@ -169,11 +169,11 @@
 *> \verbatim
 *>          DU2 is DOUBLE PRECISION array, dimension (N-2)
 *>          If FACT = 'F', then DU2 is an input argument and on entry
-*>          contains the (n-2) elements of the second superdiagonal of
+*>          contains the (n-2) elements of the AB_SECOND superdiagonal of
 *>          U.
 *>
 *>          If FACT = 'N', then DU2 is an output argument and on exit
-*>          contains the (n-2) elements of the second superdiagonal of
+*>          contains the (n-2) elements of the AB_SECOND superdiagonal of
 *>          U.
 *> \endverbatim
 *>
@@ -182,7 +182,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the LU factorization of A as
-*>          computed by DGTTRF.
+*>          computed by AB_DGTTRF.
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains the pivot indices from the LU factorization of A;
@@ -289,7 +289,8 @@
 *> \ingroup doubleGTsolve
 *
 *  =====================================================================
-      SUBROUTINE DGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+      SUBROUTINE AB_AB_DGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF,
+     $ DUF,
      $                   DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
 *
@@ -322,13 +323,14 @@
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGT
-      EXTERNAL           LSAME, DLAMCH, DLANGT
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGT
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGTCON, DGTRFS, DGTTRF, DGTTRS, DLACPY,
-     $                   XERBLA
+      EXTERNAL           AB_DCOPY, AB_DGTCON, AB_DGTRFS, AB_DGTTRF, AB_D
+     $GTTRS, AB_DLACPY,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -336,12 +338,13 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
+      NOFACT = AB_LSAME( FACT, 'N' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .N
+     $OT.
+     $         AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -353,7 +356,7 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGTSVX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DGTSVX', -INFO )
          RETURN
       END IF
 *
@@ -361,12 +364,12 @@
 *
 *        Compute the LU factorization of A.
 *
-         CALL DCOPY( N, D, 1, DF, 1 )
+         CALL AB_DCOPY( N, D, 1, DF, 1 )
          IF( N.GT.1 ) THEN
-            CALL DCOPY( N-1, DL, 1, DLF, 1 )
-            CALL DCOPY( N-1, DU, 1, DUF, 1 )
+            CALL AB_DCOPY( N-1, DL, 1, DLF, 1 )
+            CALL AB_DCOPY( N-1, DU, 1, DUF, 1 )
          END IF
-         CALL DGTTRF( N, DLF, DF, DUF, DU2, IPIV, INFO )
+         CALL AB_DGTTRF( N, DLF, DF, DUF, DU2, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -383,32 +386,34 @@
       ELSE
          NORM = 'I'
       END IF
-      ANORM = DLANGT( NORM, N, DL, D, DU )
+      ANORM = AB_DLANGT( NORM, N, DL, D, DU )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL DGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WORK,
+      CALL AB_DGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WO
+     $RK,
      $             IWORK, INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL DGTTRS( TRANS, N, NRHS, DLF, DF, DUF, DU2, IPIV, X, LDX,
+      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_DGTTRS( TRANS, N, NRHS, DLF, DF, DUF, DU2, IPIV, X, LDX,
      $             INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL DGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV,
+      CALL AB_DGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV
+     $,
      $             B, LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.DLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_DLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       RETURN
 *
-*     End of DGTSVX
+*     End of AB_AB_DGTSVX
 *
       END

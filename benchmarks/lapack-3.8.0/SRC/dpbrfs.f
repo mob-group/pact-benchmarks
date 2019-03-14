@@ -1,4 +1,4 @@
-*> \brief \b DPBRFS
+*> \brief \b AB_DPBRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPBRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbrfs.f">
+*> Download AB_DPBRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPBRFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPBRFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPBRFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
+*       SUBROUTINE AB_DPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
 *                          LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> DPBRFS improves the computed solution to a system of linear
+*> AB_DPBRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is symmetric positive definite
 *> and banded, and provides error bounds and backward error estimates
 *> for the solution.
@@ -94,7 +94,7 @@
 *>          AFB is DOUBLE PRECISION array, dimension (LDAFB,N)
 *>          The triangular factor U or L from the Cholesky factorization
 *>          A = U**T*U or A = L*L**T of the band matrix A as computed by
-*>          DPBTRF, in the same storage format as A (see AB).
+*>          AB_DPBTRF, in the same storage format as A (see AB).
 *> \endverbatim
 *>
 *> \param[in] LDAFB
@@ -118,7 +118,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is DOUBLE PRECISION array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by DPBTRS.
+*>          On entry, the solution matrix X, as computed by AB_DPBTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -186,7 +186,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
+      SUBROUTINE AB_DPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
      $                   LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -227,23 +227,24 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLACN2, DPBTRS, DSBMV, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DLACN2, AB_DPBTRS, AB_DS
+     $BMV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -261,7 +262,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPBRFS', -INFO )
+         CALL AB_XERBLA( 'AB_DPBRFS', -INFO )
          RETURN
       END IF
 *
@@ -278,8 +279,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = MIN( N+1, 2*KD+2 )
-      EPS = DLAMCH( 'Epsilon' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -295,8 +296,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL DCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL DSBMV( UPLO, N, KD, -ONE, AB, LDAB, X( 1, J ), 1, ONE,
+         CALL AB_DCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL AB_DSBMV( UPLO, N, KD, -ONE, AB, LDAB, X( 1, J ), 1, ONE,
      $               WORK( N+1 ), 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -360,9 +361,9 @@
 *
 *           Update solution and try again.
 *
-            CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+            CALL AB_DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
      $                   INFO )
-            CALL DAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
+            CALL AB_DAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -386,7 +387,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use DLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_DLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -400,14 +401,16 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL AB_DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
+     $,
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+               CALL AB_DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), 
+     $N,
      $                      INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
@@ -419,7 +422,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
   120          CONTINUE
-               CALL DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+               CALL AB_DPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), 
+     $N,
      $                      INFO )
             END IF
             GO TO 100
@@ -438,6 +442,6 @@
 *
       RETURN
 *
-*     End of DPBRFS
+*     End of AB_DPBRFS
 *
       END

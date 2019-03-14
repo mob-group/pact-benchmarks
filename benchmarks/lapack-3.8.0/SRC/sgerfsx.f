@@ -1,4 +1,4 @@
-*> \brief \b SGERFSX
+*> \brief \b AB_AB_AB_SGERFSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGERFSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgerfsx.f">
+*> Download AB_AB_AB_SGERFSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_SGERFSX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgerfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_SGERFSX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_SGERFSX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE AB_AB_AB_SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
 *                           ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
 *                           WORK, IWORK, INFO )
@@ -44,7 +44,7 @@
 *>
 *> \verbatim
 *>
-*>    SGERFSX improves the computed solution to a system of linear
+*>    AB_AB_AB_SGERFSX improves the computed solution to a system of linear
 *>    equations and provides error bounds and backward error estimates
 *>    for the solution.  In addition to normwise error bound, the code
 *>    provides maximum componentwise error bound if possible.  See
@@ -122,7 +122,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>     The factors L and U from the factorization A = P*L*U
-*>     as computed by SGETRF.
+*>     as computed by AB_SGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -134,7 +134,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>     The pivot indices from SGETRF; for 1<=i<=N, row i of the
+*>     The pivot indices from AB_SGETRF; for 1<=i<=N, row i of the
 *>     matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -183,7 +183,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>     On entry, the solution matrix X, as computed by SGETRS.
+*>     On entry, the solution matrix X, as computed by AB_SGETRS.
 *>     On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -241,21 +241,21 @@
 *>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The second index in ERR_BNDS_NORM(:,err) contains the following
+*>     The AB_SECOND index in ERR_BNDS_NORM(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * slamch('Epsilon').
+*>              sqrt(n) * AB_SLAMCH('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * slamch('Epsilon'). This error bound should only
+*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * slamch('Epsilon') to determine if the error
+*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -289,21 +289,21 @@
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The second index in ERR_BNDS_COMP(:,err) contains the following
+*>     The AB_SECOND index in ERR_BNDS_COMP(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * slamch('Epsilon').
+*>              sqrt(n) * AB_SLAMCH('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * slamch('Epsilon'). This error bound should only
+*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * slamch('Epsilon') to determine if the error
+*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -355,7 +355,7 @@
 *>       PARAMS(LA_LINRX_CWISE_I = 3) : Flag determining if the code
 *>            will attempt to find a solution with small componentwise
 *>            relative error in the double-precision algorithm.  Positive
-*>            is true, 0.0 is false.
+*>            is true, 0.0 is FALSE.
 *>         Default: 1.0 (attempt componentwise convergence)
 *> \endverbatim
 *>
@@ -409,7 +409,8 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE AB_AB_AB_SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LD
+     $AF, IPIV,
      $                    R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, IWORK, INFO )
@@ -469,24 +470,24 @@
       REAL               RTHRESH, UNSTABLE_THRESH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, SGECON, SLA_GERFSX_EXTENDED
+      EXTERNAL           AB_XERBLA, AB_SGECON, AB_SLA_GERFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, ILATRANS, ILAPREC
-      EXTERNAL           SLAMCH, SLANGE, SLA_GERCOND
-      REAL               SLAMCH, SLANGE, SLA_GERCOND
-      LOGICAL            LSAME
-      INTEGER            ILATRANS, ILAPREC
+      EXTERNAL           AB_LSAME, AB_ILATRANS, AB_ILAPREC
+      EXTERNAL           AB_SLAMCH, AB_SLANGE, SLA_GERCOND
+      REAL               AB_SLAMCH, AB_SLANGE, SLA_GERCOND
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILATRANS, AB_ILAPREC
 *     ..
 *     .. Executable Statements ..
 *
 *     Check the input parameters.
 *
       INFO = 0
-      TRANS_TYPE = ILATRANS( TRANS )
+      TRANS_TYPE = AB_ILATRANS( TRANS )
       REF_TYPE = INT( ITREF_DEFAULT )
       IF ( NPARAMS .GE. LA_LINRX_ITREF_I ) THEN
          IF ( PARAMS( LA_LINRX_ITREF_I ) .LT. 0.0 ) THEN
@@ -498,7 +499,7 @@
 *
 *     Set default parameters.
 *
-      ILLRCOND_THRESH = REAL( N ) * SLAMCH( 'Epsilon' )
+      ILLRCOND_THRESH = REAL( N ) * AB_SLAMCH( 'Epsilon' )
       ITHRESH = INT( ITHRESH_DEFAULT )
       RTHRESH = RTHRESH_DEFAULT
       UNSTABLE_THRESH = DZTHRESH_DEFAULT
@@ -530,16 +531,16 @@
          N_NORMS = 2
       END IF
 *
-      NOTRAN = LSAME( TRANS, 'N' )
-      ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
-      COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
+      COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
 *
 *     Test input parameters.
 *
       IF( TRANS_TYPE.EQ.-1 ) THEN
         INFO = -1
       ELSE IF( .NOT.ROWEQU .AND. .NOT.COLEQU .AND.
-     $         .NOT.LSAME( EQUED, 'N' ) ) THEN
+     $         .NOT.AB_LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
       ELSE IF( N.LT.0 ) THEN
         INFO = -3
@@ -555,7 +556,7 @@
         INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'SGERFSX', -INFO )
+        CALL AB_XERBLA( 'AB_AB_AB_SGERFSX', -INFO )
         RETURN
       END IF
 *
@@ -608,24 +609,25 @@
       ELSE
          NORM = '1'
       END IF
-      ANORM = SLANGE( NORM, N, N, A, LDA, WORK )
-      CALL SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
+      ANORM = AB_SLANGE( NORM, N, N, A, LDA, WORK )
+      CALL AB_SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO
+     $ )
 *
 *     Perform refinement on each right-hand side
 *
       IF ( REF_TYPE .NE. 0 ) THEN
 
-         PREC_TYPE = ILAPREC( 'D' )
+         PREC_TYPE = AB_ILAPREC( 'D' )
 
          IF ( NOTRAN ) THEN
-            CALL SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
+            CALL AB_SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
      $           NRHS, A, LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK(N+1), WORK(1), WORK(2*N+1),
      $           WORK(1), RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH,
      $           IGNORE_CWISE, INFO )
          ELSE
-            CALL SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
+            CALL AB_SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
      $           NRHS, A, LDA, AF, LDAF, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK(N+1), WORK(1), WORK(2*N+1),
@@ -634,7 +636,7 @@
          END IF
       END IF
 
-      ERR_LBND = MAX( 10.0, SQRT( REAL( N ) ) ) * SLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0, SQRT( REAL( N ) ) ) * AB_SLAMCH( 'Epsilon' )
       IF ( N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1 ) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).
@@ -663,7 +665,8 @@
                ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) = 1.0
                ERR_BNDS_NORM( J, LA_LINRX_TRUST_I ) = 0.0
                IF ( INFO .LE. N ) INFO = N + J
-            ELSE IF ( ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) .LT. ERR_LBND )
+            ELSE IF ( ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) .LT. ERR_LBN
+     $D )
      $     THEN
                ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) = ERR_LBND
                ERR_BNDS_NORM( J, LA_LINRX_TRUST_I ) = 1.0
@@ -687,7 +690,7 @@
 *     the inverse condition number is set to 0.0 when the estimated
 *     cwise error is at least CWISE_WRONG.
 *
-         CWISE_WRONG = SQRT( SLAMCH( 'Epsilon' ) )
+         CWISE_WRONG = SQRT( AB_SLAMCH( 'Epsilon' ) )
          DO J = 1, NRHS
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $           THEN
@@ -726,6 +729,6 @@
 *
       RETURN
 *
-*     End of SGERFSX
+*     End of AB_AB_AB_SGERFSX
 *
       END

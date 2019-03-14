@@ -1,4 +1,4 @@
-*> \brief \b ZGSVTS3
+*> \brief \b AB_ZGSVTS3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
+*       SUBROUTINE AB_ZGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
 *                           LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
 *                           LWORK, RWORK, RESULT )
 *
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> ZGSVTS3 tests ZGGSVD3, which computes the GSVD of an M-by-N matrix A
+*> AB_ZGSVTS3 tests AB_AB_ZGGSVD3, which computes the GSVD of an M-by-N matrix A
 *> and a P-by-N matrix B:
 *>              U'*A*Q = D1*R and V'*B*Q = D2*R.
 *> \endverbatim
@@ -64,8 +64,8 @@
 *> \param[out] AF
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDA,N)
-*>          Details of the GSVD of A and B, as returned by ZGGSVD3,
-*>          see ZGGSVD3 for further details.
+*>          Details of the GSVD of A and B, as returned by AB_AB_ZGGSVD3,
+*>          see AB_AB_ZGGSVD3 for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -84,8 +84,8 @@
 *> \param[out] BF
 *> \verbatim
 *>          BF is COMPLEX*16 array, dimension (LDB,N)
-*>          Details of the GSVD of A and B, as returned by ZGGSVD3,
-*>          see ZGGSVD3 for further details.
+*>          Details of the GSVD of A and B, as returned by AB_AB_ZGGSVD3,
+*>          see AB_AB_ZGGSVD3 for further details.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -142,7 +142,7 @@
 *>
 *>          The generalized singular value pairs of A and B, the
 *>          ``diagonal'' matrices D1 and D2 are constructed from
-*>          ALPHA and BETA, see subroutine ZGGSVD3 for details.
+*>          ALPHA and BETA, see subroutine AB_AB_ZGGSVD3 for details.
 *> \endverbatim
 *>
 *> \param[out] R
@@ -205,7 +205,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
+      SUBROUTINE AB_ZGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
      $                    LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
      $                    LWORK, RWORK, RESULT )
 *
@@ -239,32 +239,34 @@
       DOUBLE PRECISION   ANORM, BNORM, RESID, TEMP, ULP, ULPINV, UNFL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHE
-      EXTERNAL           DLAMCH, ZLANGE, ZLANHE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, ZGEMM, ZGGSVD3, ZHERK, ZLACPY, ZLASET
+      EXTERNAL           AB_DCOPY, AB_ZGEMM, AB_AB_ZGGSVD3, AB_AB_ZHERK,
+     $ AB_ZLACPY, AB_ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL ZLACPY( 'Full', P, N, B, LDB, BF, LDB )
+      CALL AB_ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL AB_ZLACPY( 'Full', P, N, B, LDB, BF, LDB )
 *
-      ANORM = MAX( ZLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( ZLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
+      ANORM = MAX( AB_ZLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( AB_ZLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
 *
 *     Factorize the matrices A and B in the arrays AF and BF.
 *
-      CALL ZGGSVD3( 'U', 'V', 'Q', M, N, P, K, L, AF, LDA, BF, LDB,
+      CALL AB_AB_ZGGSVD3( 'U', 'V', 'Q', M, N, P, K, L, AF, LDA, BF, LDB
+     $,
      $              ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK, LWORK,
      $              RWORK, IWORK, INFO )
 *
@@ -286,10 +288,12 @@
 *
 *     Compute A:= U'*A*Q - D1*R
 *
-      CALL ZGEMM( 'No transpose', 'No transpose', M, N, N, CONE, A, LDA,
+      CALL AB_ZGEMM( 'No transpose', 'No transpose', M, N, N, CONE, A, L
+     $DA,
      $            Q, LDQ, CZERO, WORK, LDA )
 *
-      CALL ZGEMM( 'Conjugate transpose', 'No transpose', M, N, M, CONE,
+      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', M, N, M, CON
+     $E,
      $            U, LDU, WORK, LDA, CZERO, A, LDA )
 *
       DO 60 I = 1, K
@@ -306,7 +310,7 @@
 *
 *     Compute norm( U'*A*Q - D1*R ) / ( MAX(1,M,N)*norm(A)*ULP ) .
 *
-      RESID = ZLANGE( '1', M, N, A, LDA, RWORK )
+      RESID = AB_ZLANGE( '1', M, N, A, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / DBLE( MAX( 1, M, N ) ) ) / ANORM ) /
      $                 ULP
@@ -316,10 +320,12 @@
 *
 *     Compute B := V'*B*Q - D2*R
 *
-      CALL ZGEMM( 'No transpose', 'No transpose', P, N, N, CONE, B, LDB,
+      CALL AB_ZGEMM( 'No transpose', 'No transpose', P, N, N, CONE, B, L
+     $DB,
      $            Q, LDQ, CZERO, WORK, LDB )
 *
-      CALL ZGEMM( 'Conjugate transpose', 'No transpose', P, N, P, CONE,
+      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', P, N, P, CON
+     $E,
      $            V, LDV, WORK, LDB, CZERO, B, LDB )
 *
       DO 100 I = 1, L
@@ -330,7 +336,7 @@
 *
 *     Compute norm( V'*B*Q - D2*R ) / ( MAX(P,N)*norm(B)*ULP ) .
 *
-      RESID = ZLANGE( '1', P, N, B, LDB, RWORK )
+      RESID = AB_ZLANGE( '1', P, N, B, LDB, RWORK )
       IF( BNORM.GT.ZERO ) THEN
          RESULT( 2 ) = ( ( RESID / DBLE( MAX( 1, P, N ) ) ) / BNORM ) /
      $                 ULP
@@ -340,40 +346,43 @@
 *
 *     Compute I - U'*U
 *
-      CALL ZLASET( 'Full', M, M, CZERO, CONE, WORK, LDQ )
-      CALL ZHERK( 'Upper', 'Conjugate transpose', M, M, -ONE, U, LDU,
+      CALL AB_ZLASET( 'Full', M, M, CZERO, CONE, WORK, LDQ )
+      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', M, M, -ONE, U, L
+     $DU,
      $            ONE, WORK, LDU )
 *
 *     Compute norm( I - U'*U ) / ( M * ULP ) .
 *
-      RESID = ZLANHE( '1', 'Upper', M, WORK, LDU, RWORK )
+      RESID = AB_ZLANHE( '1', 'Upper', M, WORK, LDU, RWORK )
       RESULT( 3 ) = ( RESID / DBLE( MAX( 1, M ) ) ) / ULP
 *
 *     Compute I - V'*V
 *
-      CALL ZLASET( 'Full', P, P, CZERO, CONE, WORK, LDV )
-      CALL ZHERK( 'Upper', 'Conjugate transpose', P, P, -ONE, V, LDV,
+      CALL AB_ZLASET( 'Full', P, P, CZERO, CONE, WORK, LDV )
+      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', P, P, -ONE, V, L
+     $DV,
      $            ONE, WORK, LDV )
 *
 *     Compute norm( I - V'*V ) / ( P * ULP ) .
 *
-      RESID = ZLANHE( '1', 'Upper', P, WORK, LDV, RWORK )
+      RESID = AB_ZLANHE( '1', 'Upper', P, WORK, LDV, RWORK )
       RESULT( 4 ) = ( RESID / DBLE( MAX( 1, P ) ) ) / ULP
 *
 *     Compute I - Q'*Q
 *
-      CALL ZLASET( 'Full', N, N, CZERO, CONE, WORK, LDQ )
-      CALL ZHERK( 'Upper', 'Conjugate transpose', N, N, -ONE, Q, LDQ,
+      CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, WORK, LDQ )
+      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', N, N, -ONE, Q, L
+     $DQ,
      $            ONE, WORK, LDQ )
 *
 *     Compute norm( I - Q'*Q ) / ( N * ULP ) .
 *
-      RESID = ZLANHE( '1', 'Upper', N, WORK, LDQ, RWORK )
+      RESID = AB_ZLANHE( '1', 'Upper', N, WORK, LDQ, RWORK )
       RESULT( 5 ) = ( RESID / DBLE( MAX( 1, N ) ) ) / ULP
 *
 *     Check sorting
 *
-      CALL DCOPY( N, ALPHA, 1, RWORK, 1 )
+      CALL AB_DCOPY( N, ALPHA, 1, RWORK, 1 )
       DO 110 I = K + 1, MIN( K+L, M )
          J = IWORK( I )
          IF( I.NE.J ) THEN
@@ -391,6 +400,6 @@
 *
       RETURN
 *
-*     End of ZGSVTS3
+*     End of AB_ZGSVTS3
 *
       END

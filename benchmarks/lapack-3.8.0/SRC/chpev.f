@@ -1,4 +1,4 @@
-*> \brief <b> CHPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> AB_CHPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHPEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpev.f">
+*> Download AB_CHPEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHPEV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpev.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHPEV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpev.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHPEV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK,
+*       SUBROUTINE AB_CHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CHPEV computes all the eigenvalues and, optionally, eigenvectors of a
+*> AB_CHPEV computes all the eigenvalues and, optionally, eigenvectors of a
 *> complex Hermitian matrix in packed storage.
 *> \endverbatim
 *
@@ -135,7 +135,7 @@
 *> \ingroup complexOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE CHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK,
+      SUBROUTINE AB_CHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK,
      $                  INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -166,13 +166,14 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANHP, SLAMCH
-      EXTERNAL           LSAME, CLANHP, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANHP, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANHP, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPTRD, CSSCAL, CSTEQR, CUPGTR, SSCAL, SSTERF,
-     $                   XERBLA
+      EXTERNAL           AB_CHPTRD, AB_CAB_SSCAL, AB_CSTEQR, AB_CUPGTR, 
+     $AB_SSCAL, AB_SSTERF,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -181,12 +182,13 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR. LSAME( UPLO, 'U' ) ) )
+      ELSE IF( .NOT.( AB_LSAME( UPLO, 'L' ) .OR. AB_LSAME( UPLO, 'U' 
+     $) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -196,7 +198,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHPEV ', -INFO )
+         CALL AB_XERBLA( 'AB_CHPEV ', -INFO )
          RETURN
       END IF
 *
@@ -215,8 +217,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )
@@ -224,7 +226,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = CLANHP( 'M', UPLO, N, AP, RWORK )
+      ANRM = AB_CLANHP( 'M', UPLO, N, AP, RWORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -234,27 +236,27 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL CSSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
+         CALL AB_CAB_SSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
       END IF
 *
-*     Call CHPTRD to reduce Hermitian packed matrix to tridiagonal form.
+*     Call AB_CHPTRD to reduce Hermitian packed matrix to tridiagonal form.
 *
       INDE = 1
       INDTAU = 1
-      CALL CHPTRD( UPLO, N, AP, W, RWORK( INDE ), WORK( INDTAU ),
+      CALL AB_CHPTRD( UPLO, N, AP, W, RWORK( INDE ), WORK( INDTAU ),
      $             IINFO )
 *
-*     For eigenvalues only, call SSTERF.  For eigenvectors, first call
-*     CUPGTR to generate the orthogonal matrix, then call CSTEQR.
+*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, first call
+*     AB_CUPGTR to generate the orthogonal matrix, then call AB_CSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL SSTERF( N, W, RWORK( INDE ), INFO )
+         CALL AB_SSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
          INDWRK = INDTAU + N
-         CALL CUPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
+         CALL AB_CUPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
      $                WORK( INDWRK ), IINFO )
          INDRWK = INDE + N
-         CALL CSTEQR( JOBZ, N, W, RWORK( INDE ), Z, LDZ,
+         CALL AB_CSTEQR( JOBZ, N, W, RWORK( INDE ), Z, LDZ,
      $                RWORK( INDRWK ), INFO )
       END IF
 *
@@ -266,11 +268,11 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
       RETURN
 *
-*     End of CHPEV
+*     End of AB_CHPEV
 *
       END

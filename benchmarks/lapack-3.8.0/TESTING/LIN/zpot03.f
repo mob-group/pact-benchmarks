@@ -1,4 +1,4 @@
-*> \brief \b ZPOT03
+*> \brief \b AB_ZPOT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+*       SUBROUTINE AB_ZPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
 *                          RWORK, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> ZPOT03 computes the residual for a Hermitian matrix times its
+*> AB_ZPOT03 computes the residual for a Hermitian matrix times its
 *> inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -123,7 +123,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+      SUBROUTINE AB_ZPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
      $                   RWORK, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -156,12 +156,12 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHE
-      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANHE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHEMM
+      EXTERNAL           AB_ZHEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG
@@ -178,9 +178,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
-      AINVNM = ZLANHE( '1', UPLO, N, AINV, LDAINV, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )
+      AINVNM = AB_ZLANHE( '1', UPLO, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -188,10 +188,10 @@
       END IF
       RCOND = ( ONE / ANORM ) / AINVNM
 *
-*     Expand AINV into a full matrix and call ZHEMM to multiply
+*     Expand AINV into a full matrix and call AB_ZHEMM to multiply
 *     AINV on the left by A.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J - 1
                AINV( J, I ) = DCONJG( AINV( I, J ) )
@@ -204,7 +204,7 @@
    30       CONTINUE
    40    CONTINUE
       END IF
-      CALL ZHEMM( 'Left', UPLO, N, N, -CONE, A, LDA, AINV, LDAINV,
+      CALL AB_ZHEMM( 'Left', UPLO, N, N, -CONE, A, LDA, AINV, LDAINV,
      $            CZERO, WORK, LDWORK )
 *
 *     Add the identity matrix to WORK .
@@ -215,12 +215,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = ZLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = AB_ZLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / DBLE( N )
 *
       RETURN
 *
-*     End of ZPOT03
+*     End of AB_ZPOT03
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form.
+*> \brief \b AB_DLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLABRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlabrd.f">
+*> Download AB_DLABRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLABRD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlabrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLABRD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlabrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLABRD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
+*       SUBROUTINE AB_DLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
 *                          LDY )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DLABRD reduces the first NB rows and columns of a real general
+*> AB_DLABRD reduces the first NB rows and columns of a real general
 *> m by n matrix A to upper or lower bidiagonal form by an orthogonal
 *> transformation Q**T * A * P, and returns the matrices X and Y which
 *> are needed to apply the transformation to the unreduced part of A.
@@ -43,7 +43,7 @@
 *> If m >= n, A is reduced to upper bidiagonal form; if m < n, to lower
 *> bidiagonal form.
 *>
-*> This is an auxiliary routine called by DGEBRD
+*> This is an auxiliary routine called by AB_DGEBRD
 *> \endverbatim
 *
 *  Arguments:
@@ -207,7 +207,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
+      SUBROUTINE AB_DLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, 
+     $Y,
      $                   LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -233,7 +234,7 @@
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DLARFG, DSCAL
+      EXTERNAL           AB_DGEMV, AB_AB_DLARFG, AB_DSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -253,14 +254,15 @@
 *
 *           Update A(i:m,i)
 *
-            CALL DGEMV( 'No transpose', M-I+1, I-1, -ONE, A( I, 1 ),
+            CALL AB_DGEMV( 'No transpose', M-I+1, I-1, -ONE, A( I, 1 ),
      $                  LDA, Y( I, 1 ), LDY, ONE, A( I, I ), 1 )
-            CALL DGEMV( 'No transpose', M-I+1, I-1, -ONE, X( I, 1 ),
+            CALL AB_DGEMV( 'No transpose', M-I+1, I-1, -ONE, X( I, 1 ),
      $                  LDX, A( 1, I ), 1, ONE, A( I, I ), 1 )
 *
 *           Generate reflection Q(i) to annihilate A(i+1:m,i)
 *
-            CALL DLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
+            CALL AB_AB_DLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 
+     $1,
      $                   TAUQ( I ) )
             D( I ) = A( I, I )
             IF( I.LT.N ) THEN
@@ -268,45 +270,53 @@
 *
 *              Compute Y(i+1:n,i)
 *
-               CALL DGEMV( 'Transpose', M-I+1, N-I, ONE, A( I, I+1 ),
+               CALL AB_DGEMV( 'Transpose', M-I+1, N-I, ONE, A( I, I+1 ),
      $                     LDA, A( I, I ), 1, ZERO, Y( I+1, I ), 1 )
-               CALL DGEMV( 'Transpose', M-I+1, I-1, ONE, A( I, 1 ), LDA,
+               CALL AB_DGEMV( 'Transpose', M-I+1, I-1, ONE, A( I, 1 ), L
+     $DA,
      $                     A( I, I ), 1, ZERO, Y( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 
+     $),
      $                     LDY, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL DGEMV( 'Transpose', M-I+1, I-1, ONE, X( I, 1 ), LDX,
+               CALL AB_DGEMV( 'Transpose', M-I+1, I-1, ONE, X( I, 1 ), L
+     $DX,
      $                     A( I, I ), 1, ZERO, Y( 1, I ), 1 )
-               CALL DGEMV( 'Transpose', I-1, N-I, -ONE, A( 1, I+1 ),
+               CALL AB_DGEMV( 'Transpose', I-1, N-I, -ONE, A( 1, I+1 ),
      $                     LDA, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL DSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
+               CALL AB_DSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
 *
 *              Update A(i,i+1:n)
 *
-               CALL DGEMV( 'No transpose', N-I, I, -ONE, Y( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', N-I, I, -ONE, Y( I+1, 1 ),
      $                     LDY, A( I, 1 ), LDA, ONE, A( I, I+1 ), LDA )
-               CALL DGEMV( 'Transpose', I-1, N-I, -ONE, A( 1, I+1 ),
+               CALL AB_DGEMV( 'Transpose', I-1, N-I, -ONE, A( 1, I+1 ),
      $                     LDA, X( I, 1 ), LDX, ONE, A( I, I+1 ), LDA )
 *
 *              Generate reflection P(i) to annihilate A(i,i+2:n)
 *
-               CALL DLARFG( N-I, A( I, I+1 ), A( I, MIN( I+2, N ) ),
+               CALL AB_AB_DLARFG( N-I, A( I, I+1 ), A( I, MIN( I+2, N ) 
+     $),
      $                      LDA, TAUP( I ) )
                E( I ) = A( I, I+1 )
                A( I, I+1 ) = ONE
 *
 *              Compute X(i+1:m,i)
 *
-               CALL DGEMV( 'No transpose', M-I, N-I, ONE, A( I+1, I+1 ),
+               CALL AB_DGEMV( 'No transpose', M-I, N-I, ONE, A( I+1, I+1
+     $ ),
      $                     LDA, A( I, I+1 ), LDA, ZERO, X( I+1, I ), 1 )
-               CALL DGEMV( 'Transpose', N-I, I, ONE, Y( I+1, 1 ), LDY,
+               CALL AB_DGEMV( 'Transpose', N-I, I, ONE, Y( I+1, 1 ), LDY
+     $,
      $                     A( I, I+1 ), LDA, ZERO, X( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', M-I, I, -ONE, A( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', M-I, I, -ONE, A( I+1, 1 ),
      $                     LDA, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL DGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
+               CALL AB_DGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 )
+     $,
      $                     LDA, A( I, I+1 ), LDA, ZERO, X( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 
+     $),
      $                     LDX, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL DSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
+               CALL AB_DSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
             END IF
    10    CONTINUE
       ELSE
@@ -317,14 +327,16 @@
 *
 *           Update A(i,i:n)
 *
-            CALL DGEMV( 'No transpose', N-I+1, I-1, -ONE, Y( I, 1 ),
+            CALL AB_DGEMV( 'No transpose', N-I+1, I-1, -ONE, Y( I, 1 ),
      $                  LDY, A( I, 1 ), LDA, ONE, A( I, I ), LDA )
-            CALL DGEMV( 'Transpose', I-1, N-I+1, -ONE, A( 1, I ), LDA,
+            CALL AB_DGEMV( 'Transpose', I-1, N-I+1, -ONE, A( 1, I ), LDA
+     $,
      $                  X( I, 1 ), LDX, ONE, A( I, I ), LDA )
 *
 *           Generate reflection P(i) to annihilate A(i,i+1:n)
 *
-            CALL DLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ), LDA,
+            CALL AB_AB_DLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ), 
+     $LDA,
      $                   TAUP( I ) )
             D( I ) = A( I, I )
             IF( I.LT.M ) THEN
@@ -332,50 +344,61 @@
 *
 *              Compute X(i+1:m,i)
 *
-               CALL DGEMV( 'No transpose', M-I, N-I+1, ONE, A( I+1, I ),
+               CALL AB_DGEMV( 'No transpose', M-I, N-I+1, ONE, A( I+1, I
+     $ ),
      $                     LDA, A( I, I ), LDA, ZERO, X( I+1, I ), 1 )
-               CALL DGEMV( 'Transpose', N-I+1, I-1, ONE, Y( I, 1 ), LDY,
+               CALL AB_DGEMV( 'Transpose', N-I+1, I-1, ONE, Y( I, 1 ), L
+     $DY,
      $                     A( I, I ), LDA, ZERO, X( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 
+     $),
      $                     LDA, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL DGEMV( 'No transpose', I-1, N-I+1, ONE, A( 1, I ),
+               CALL AB_DGEMV( 'No transpose', I-1, N-I+1, ONE, A( 1, I )
+     $,
      $                     LDA, A( I, I ), LDA, ZERO, X( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 
+     $),
      $                     LDX, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL DSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
+               CALL AB_DSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
 *
 *              Update A(i+1:m,i)
 *
-               CALL DGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 
+     $),
      $                     LDA, Y( I, 1 ), LDY, ONE, A( I+1, I ), 1 )
-               CALL DGEMV( 'No transpose', M-I, I, -ONE, X( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', M-I, I, -ONE, X( I+1, 1 ),
      $                     LDX, A( 1, I ), 1, ONE, A( I+1, I ), 1 )
 *
 *              Generate reflection Q(i) to annihilate A(i+2:m,i)
 *
-               CALL DLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I ), 1,
+               CALL AB_AB_DLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I 
+     $), 1,
      $                      TAUQ( I ) )
                E( I ) = A( I+1, I )
                A( I+1, I ) = ONE
 *
 *              Compute Y(i+1:n,i)
 *
-               CALL DGEMV( 'Transpose', M-I, N-I, ONE, A( I+1, I+1 ),
+               CALL AB_DGEMV( 'Transpose', M-I, N-I, ONE, A( I+1, I+1 ),
      $                     LDA, A( I+1, I ), 1, ZERO, Y( I+1, I ), 1 )
-               CALL DGEMV( 'Transpose', M-I, I-1, ONE, A( I+1, 1 ), LDA,
+               CALL AB_DGEMV( 'Transpose', M-I, I-1, ONE, A( I+1, 1 ), L
+     $DA,
      $                     A( I+1, I ), 1, ZERO, Y( 1, I ), 1 )
-               CALL DGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 ),
+               CALL AB_DGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 
+     $),
      $                     LDY, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL DGEMV( 'Transpose', M-I, I, ONE, X( I+1, 1 ), LDX,
+               CALL AB_DGEMV( 'Transpose', M-I, I, ONE, X( I+1, 1 ), LDX
+     $,
      $                     A( I+1, I ), 1, ZERO, Y( 1, I ), 1 )
-               CALL DGEMV( 'Transpose', I, N-I, -ONE, A( 1, I+1 ), LDA,
+               CALL AB_DGEMV( 'Transpose', I, N-I, -ONE, A( 1, I+1 ), LD
+     $A,
      $                     Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL DSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
+               CALL AB_DSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
             END IF
    20    CONTINUE
       END IF
       RETURN
 *
-*     End of DLABRD
+*     End of AB_DLABRD
 *
       END

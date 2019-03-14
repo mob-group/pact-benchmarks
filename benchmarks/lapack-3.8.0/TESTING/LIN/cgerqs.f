@@ -1,4 +1,4 @@
-*> \brief \b CGERQS
+*> \brief \b AB_CGERQS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE AB_CGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the RQ factorization
 *>     A = R*Q
-*> computed by CGERQF.
+*> computed by AB_CGERQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          Details of the RQ factorization of the original matrix A as
-*>          returned by CGERQF.
+*>          returned by AB_CGERQF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,7 +119,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+      SUBROUTINE AB_CGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK
+     $,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -143,7 +144,7 @@
      $                   CONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET, CTRSM, CUNMRQ, XERBLA
+      EXTERNAL           AB_CLASET, AB_CTRSM, AB_CUNMRQ, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -163,12 +164,13 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
+     $0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGERQS', -INFO )
+         CALL AB_XERBLA( 'AB_CGERQS', -INFO )
          RETURN
       END IF
 *
@@ -179,20 +181,21 @@
 *
 *     Solve R*X = B(n-m+1:n,:)
 *
-      CALL CTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', M, NRHS,
+      CALL AB_CTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', M, NRH
+     $S,
      $            CONE, A( 1, N-M+1 ), LDA, B( N-M+1, 1 ), LDB )
 *
 *     Set B(1:n-m,:) to zero
 *
-      CALL CLASET( 'Full', N-M, NRHS, CZERO, CZERO, B, LDB )
+      CALL AB_CLASET( 'Full', N-M, NRHS, CZERO, CZERO, B, LDB )
 *
 *     B := Q' * B
 *
-      CALL CUNMRQ( 'Left', 'Conjugate transpose', N, NRHS, M, A, LDA,
+      CALL AB_CUNMRQ( 'Left', 'Conjugate transpose', N, NRHS, M, A, LDA,
      $             TAU, B, LDB, WORK, LWORK, INFO )
 *
       RETURN
 *
-*     End of CGERQS
+*     End of AB_CGERQS
 *
       END

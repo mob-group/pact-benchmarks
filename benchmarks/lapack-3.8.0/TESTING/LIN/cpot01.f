@@ -1,4 +1,4 @@
-*> \brief \b CPOT01
+*> \brief \b AB_CPOT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
+*       SUBROUTINE AB_CPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> CPOT01 reconstructs a Hermitian positive definite matrix  A  from
+*> AB_CPOT01 reconstructs a Hermitian positive definite matrix  A  from
 *> its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -104,7 +104,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
+      SUBROUTINE AB_CPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID 
+     $)
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,13 +134,13 @@
       COMPLEX            TC
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANHE, SLAMCH
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CLANHE, SLAMCH, CDOTC
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANHE, AB_SLAMCH
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CLANHE, AB_SLAMCH, AB_CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHER, CSCAL, CTRMV
+      EXTERNAL           AB_CHER, AB_CSCAL, AB_CTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, REAL
@@ -155,8 +156,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -174,17 +175,17 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 20 K = N, 1, -1
 *
 *           Compute the (K,K) element of the result.
 *
-            TR = CDOTC( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
+            TR = AB_CDOTC( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
             AFAC( K, K ) = TR
 *
 *           Compute the rest of column K.
 *
-            CALL CTRMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
+            CALL AB_CTRMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
 *
    20    CONTINUE
@@ -198,20 +199,20 @@
 *           columns K+1 through N.
 *
             IF( K+1.LE.N )
-     $         CALL CHER( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
+     $         CALL AB_CHER( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
      $                    AFAC( K+1, K+1 ), LDAFAC )
 *
 *           Scale column K by the diagonal element.
 *
             TC = AFAC( K, K )
-            CALL CSCAL( N-K+1, TC, AFAC( K, K ), 1 )
+            CALL AB_CSCAL( N-K+1, TC, AFAC( K, K ), 1 )
 *
    30    CONTINUE
       END IF
 *
 *     Compute the difference  L*L' - A (or U'*U - A).
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 50 J = 1, N
             DO 40 I = 1, J - 1
                AFAC( I, J ) = AFAC( I, J ) - A( I, J )
@@ -229,12 +230,12 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = CLANHE( '1', UPLO, N, AFAC, LDAFAC, RWORK )
+      RESID = AB_CLANHE( '1', UPLO, N, AFAC, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / REAL( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of CPOT01
+*     End of AB_CPOT01
 *
       END

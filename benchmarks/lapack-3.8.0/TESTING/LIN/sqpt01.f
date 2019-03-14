@@ -1,4 +1,4 @@
-*> \brief \b SQPT01
+*> \brief \b AB_SQPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION SQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
+*       REAL             FUNCTION AB_SQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
 *                        WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> SQPT01 tests the QR-factorization with pivoting of a matrix A.  The
+*> AB_SQPT01 tests the QR-factorization with pivoting of a matrix A.  The
 *> array AF contains the (possibly partial) QR-factorization of A, where
 *> the upper triangle of AF(1:k,1:k) is a partial triangular factor,
 *> the entries below the diagonal in the first k columns are the
-*> Householder vectors, and the rest of AF contains a partially updated
+*> HousehoAB_LDEr vectors, and the rest of AF contains a partially updated
 *> matrix.
 *>
 *> This function returns ||A*P - Q*R||/(||norm(A)||*eps*M)
@@ -67,9 +67,9 @@
 *> \param[in] AF
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
-*>          The (possibly partial) output of SGEQPF.  The upper triangle
+*>          The (possibly partial) output of AB_SGEQPF.  The upper triangle
 *>          of AF(1:k,1:k) is a partial triangular factor, the entries
-*>          below the diagonal in the first k columns are the Householder
+*>          below the diagonal in the first k columns are the HousehoAB_LDEr
 *>          vectors, and the rest of AF contains a partially updated
 *>          matrix.
 *> \endverbatim
@@ -83,14 +83,14 @@
 *> \param[in] TAU
 *> \verbatim
 *>          TAU is REAL array, dimension (K)
-*>          Details of the Householder transformations as returned by
-*>          SGEQPF.
+*>          Details of the HousehoAB_LDEr transformations as returned by
+*>          AB_SGEQPF.
 *> \endverbatim
 *>
 *> \param[in] JPVT
 *> \verbatim
 *>          JPVT is INTEGER array, dimension (N)
-*>          Pivot information as returned by SGEQPF.
+*>          Pivot information as returned by AB_SGEQPF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -117,7 +117,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      REAL             FUNCTION SQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
+      REAL             FUNCTION AB_SQPT01( M, N, K, A, AF, LDA, TAU, JPV
+     $T,
      $                 WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -148,23 +149,23 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SORMQR, XERBLA
+      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SORMQR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      SQPT01 = ZERO
+      AB_SQPT01 = ZERO
 *
 *     Test if there is enough workspace
 *
       IF( LWORK.LT.M*N+N ) THEN
-         CALL XERBLA( 'SQPT01', 10 )
+         CALL AB_XERBLA( 'AB_SQPT01', 10 )
          RETURN
       END IF
 *
@@ -173,7 +174,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      NORMA = SLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      NORMA = AB_SLANGE( 'One-norm', M, N, A, LDA, RWORK )
 *
       DO 30 J = 1, K
          DO 10 I = 1, MIN( J, M )
@@ -184,27 +185,29 @@
    20    CONTINUE
    30 CONTINUE
       DO 40 J = K + 1, N
-         CALL SCOPY( M, AF( 1, J ), 1, WORK( ( J-1 )*M+1 ), 1 )
+         CALL AB_SCOPY( M, AF( 1, J ), 1, WORK( ( J-1 )*M+1 ), 1 )
    40 CONTINUE
 *
-      CALL SORMQR( 'Left', 'No transpose', M, N, K, AF, LDA, TAU, WORK,
+      CALL AB_SORMQR( 'Left', 'No transpose', M, N, K, AF, LDA, TAU, WOR
+     $K,
      $             M, WORK( M*N+1 ), LWORK-M*N, INFO )
 *
       DO 50 J = 1, N
 *
 *        Compare i-th column of QR and jpvt(i)-th column of A
 *
-         CALL SAXPY( M, -ONE, A( 1, JPVT( J ) ), 1, WORK( ( J-1 )*M+1 ),
+         CALL AB_SAXPY( M, -ONE, A( 1, JPVT( J ) ), 1, WORK( ( J-1 )*M+1
+     $ ),
      $               1 )
    50 CONTINUE
 *
-      SQPT01 = SLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
-     $         ( REAL( MAX( M, N ) )*SLAMCH( 'Epsilon' ) )
+      AB_SQPT01 = AB_SLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
+     $         ( REAL( MAX( M, N ) )*AB_SLAMCH( 'Epsilon' ) )
       IF( NORMA.NE.ZERO )
-     $   SQPT01 = SQPT01 / NORMA
+     $   AB_SQPT01 = AB_SQPT01 / NORMA
 *
       RETURN
 *
-*     End of SQPT01
+*     End of AB_SQPT01
 *
       END

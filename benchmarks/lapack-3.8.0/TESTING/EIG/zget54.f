@@ -1,4 +1,4 @@
-*> \brief \b ZGET54
+*> \brief \b AB_ZGET54
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+*       SUBROUTINE AB_ZGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
 *                          LDV, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZGET54 checks a generalized decomposition of the form
+*> AB_ZGET54 checks a generalized decomposition of the form
 *>
 *>          A = U*S*V'  and B = U*T* V'
 *>
@@ -44,7 +44,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, DGET54 does nothing.
+*>          The size of the matrix.  If it is zero, AB_DGET54 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -153,7 +153,8 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+      SUBROUTINE AB_ZGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V
+     $,
      $                   LDV, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -187,11 +188,11 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZLACPY
+      EXTERNAL           AB_ZGEMM, AB_ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -204,36 +205,37 @@
 *
 *     Constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     compute the norm of (A,B)
 *
-      CALL ZLACPY( 'Full', N, N, A, LDA, WORK, N )
-      CALL ZLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
-      ABNORM = MAX( ZLANGE( '1', N, 2*N, WORK, N, DUM ), UNFL )
+      CALL AB_ZLACPY( 'Full', N, N, A, LDA, WORK, N )
+      CALL AB_ZLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
+      ABNORM = MAX( AB_ZLANGE( '1', N, 2*N, WORK, N, DUM ), UNFL )
 *
 *     Compute W1 = A - U*S*V', and put in the array WORK(1:N*N)
 *
-      CALL ZLACPY( ' ', N, N, A, LDA, WORK, N )
-      CALL ZGEMM( 'N', 'N', N, N, N, CONE, U, LDU, S, LDS, CZERO,
+      CALL AB_ZLACPY( ' ', N, N, A, LDA, WORK, N )
+      CALL AB_ZGEMM( 'N', 'N', N, N, N, CONE, U, LDU, S, LDS, CZERO,
      $            WORK( N*N+1 ), N )
 *
-      CALL ZGEMM( 'N', 'C', N, N, N, -CONE, WORK( N*N+1 ), N, V, LDV,
+      CALL AB_ZGEMM( 'N', 'C', N, N, N, -CONE, WORK( N*N+1 ), N, V, LDV,
      $            CONE, WORK, N )
 *
 *     Compute W2 = B - U*T*V', and put in the workarray W(N*N+1:2*N*N)
 *
-      CALL ZLACPY( ' ', N, N, B, LDB, WORK( N*N+1 ), N )
-      CALL ZGEMM( 'N', 'N', N, N, N, CONE, U, LDU, T, LDT, CZERO,
+      CALL AB_ZLACPY( ' ', N, N, B, LDB, WORK( N*N+1 ), N )
+      CALL AB_ZGEMM( 'N', 'N', N, N, N, CONE, U, LDU, T, LDT, CZERO,
      $            WORK( 2*N*N+1 ), N )
 *
-      CALL ZGEMM( 'N', 'C', N, N, N, -CONE, WORK( 2*N*N+1 ), N, V, LDV,
+      CALL AB_ZGEMM( 'N', 'C', N, N, N, -CONE, WORK( 2*N*N+1 ), N, V, LD
+     $V,
      $            CONE, WORK( N*N+1 ), N )
 *
 *     Compute norm(W)/ ( ulp*norm((A,B)) )
 *
-      WNORM = ZLANGE( '1', N, 2*N, WORK, N, DUM )
+      WNORM = AB_ZLANGE( '1', N, 2*N, WORK, N, DUM )
 *
       IF( ABNORM.GT.WNORM ) THEN
          RESULT = ( WNORM / ABNORM ) / ( 2*N*ULP )
@@ -247,6 +249,6 @@
 *
       RETURN
 *
-*     End of ZGET54
+*     End of AB_ZGET54
 *
       END

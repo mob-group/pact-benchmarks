@@ -1,4 +1,4 @@
-*> \brief \b CQRT02
+*> \brief \b AB_CQRT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_CQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> CQRT02 tests CUNGQR, which generates an m-by-n matrix Q with
+*> AB_CQRT02 tests AB_CUNGQR, which generates an m-by-n matrix Q with
 *> orthonornmal columns that is defined as the product of k elementary
 *> reflectors.
 *>
-*> Given the QR factorization of an m-by-n matrix A, CQRT02 generates
+*> Given the QR factorization of an m-by-n matrix A, AB_CQRT02 generates
 *> the orthogonal matrix Q defined by the factorization of the first k
 *> columns of A; it compares R(1:n,1:k) with Q(1:m,1:n)'*A(1:m,1:k),
 *> and checks that the columns of Q are orthonormal.
@@ -62,14 +62,14 @@
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
-*>          The m-by-n matrix A which was factorized by CQRT01.
+*>          The m-by-n matrix A which was factorized by AB_CQRT01.
 *> \endverbatim
 *>
 *> \param[in] AF
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDA,N)
-*>          Details of the QR factorization of A, as returned by CGEQRF.
-*>          See CGEQRF for further details.
+*>          Details of the QR factorization of A, as returned by AB_AB_CGEQRF.
+*>          See AB_AB_CGEQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -132,7 +132,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_CQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -162,11 +162,12 @@
       REAL               ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, CLANSY, SLAMCH
-      EXTERNAL           CLANGE, CLANSY, SLAMCH
+      REAL               AB_CLANGE, AB_CLANSY, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_CLANSY, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHERK, CLACPY, CLASET, CUNGQR
+      EXTERNAL           AB_CGEMM, AB_AB_CHERK, AB_CLACPY, AB_CLASET, AB
+     $_CUNGQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, REAL
@@ -179,32 +180,33 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the first k columns of the factorization to the array Q
 *
-      CALL CLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
-      CALL CLACPY( 'Lower', M-1, K, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
+      CALL AB_CLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
+      CALL AB_CLACPY( 'Lower', M-1, K, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
 *
 *     Generate the first n columns of the matrix Q
 *
-      SRNAMT = 'CUNGQR'
-      CALL CUNGQR( M, N, K, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_CUNGQR'
+      CALL AB_CUNGQR( M, N, K, Q, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy R(1:n,1:k)
 *
-      CALL CLASET( 'Full', N, K, CMPLX( ZERO ), CMPLX( ZERO ), R, LDA )
-      CALL CLACPY( 'Upper', N, K, AF, LDA, R, LDA )
+      CALL AB_CLASET( 'Full', N, K, CMPLX( ZERO ), CMPLX( ZERO ), R, LDA
+     $ )
+      CALL AB_CLACPY( 'Upper', N, K, AF, LDA, R, LDA )
 *
 *     Compute R(1:n,1:k) - Q(1:m,1:n)' * A(1:m,1:k)
 *
-      CALL CGEMM( 'Conjugate transpose', 'No transpose', N, K, M,
+      CALL AB_CGEMM( 'Conjugate transpose', 'No transpose', N, K, M,
      $            CMPLX( -ONE ), Q, LDA, A, LDA, CMPLX( ONE ), R, LDA )
 *
 *     Compute norm( R - Q'*A ) / ( M * norm(A) * EPS ) .
 *
-      ANORM = CLANGE( '1', M, K, A, LDA, RWORK )
-      RESID = CLANGE( '1', N, K, R, LDA, RWORK )
+      ANORM = AB_CLANGE( '1', M, K, A, LDA, RWORK )
+      RESID = AB_CLANGE( '1', N, K, R, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / REAL( MAX( 1, M ) ) ) / ANORM ) / EPS
       ELSE
@@ -213,18 +215,20 @@
 *
 *     Compute I - Q'*Q
 *
-      CALL CLASET( 'Full', N, N, CMPLX( ZERO ), CMPLX( ONE ), R, LDA )
-      CALL CHERK( 'Upper', 'Conjugate transpose', N, M, -ONE, Q, LDA,
+      CALL AB_CLASET( 'Full', N, N, CMPLX( ZERO ), CMPLX( ONE ), R, LDA 
+     $)
+      CALL AB_AB_CHERK( 'Upper', 'Conjugate transpose', N, M, -ONE, Q, L
+     $DA,
      $            ONE, R, LDA )
 *
 *     Compute norm( I - Q'*Q ) / ( M * EPS ) .
 *
-      RESID = CLANSY( '1', 'Upper', N, R, LDA, RWORK )
+      RESID = AB_CLANSY( '1', 'Upper', N, R, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / REAL( MAX( 1, M ) ) ) / EPS
 *
       RETURN
 *
-*     End of CQRT02
+*     End of AB_CQRT02
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CERRTZ
+*> \brief \b AB_CERRTZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CERRTZ( PATH, NUNIT )
+*       SUBROUTINE AB_CERRTZ( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CERRTZ tests the error exits for CTZRZF.
+*> AB_CERRTZ tests the error exits for AB_CTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CERRTZ( PATH, NUNIT )
+      SUBROUTINE AB_CERRTZ( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -78,11 +78,11 @@
       COMPLEX            A( NMAX, NMAX ), TAU( NMAX ), W( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, CTZRZF
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_CTZRZF
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -111,34 +111,34 @@
 *     Test error exits for the trapezoidal routines.
 *
       WRITE( NOUT, FMT = * )
-      IF( LSAMEN( 2, C2, 'TZ' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'TZ' ) ) THEN
 *
-*        CTZRZF
+*        AB_CTZRZF
 *
-         SRNAMT = 'CTZRZF'
+         SRNAMT = 'AB_CTZRZF'
          INFOT = 1
-         CALL CTZRZF( -1, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'CTZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_CTZRZF( -1, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CTZRZF( 1, 0, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'CTZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_CTZRZF( 1, 0, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CTZRZF( 2, 2, A, 1, TAU, W, 1, INFO )
-         CALL CHKXER( 'CTZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_CTZRZF( 2, 2, A, 1, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CTZRZF( 2, 2, A, 2, TAU, W, 0, INFO )
-         CALL CHKXER( 'CTZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_CTZRZF( 2, 2, A, 2, TAU, W, 0, INFO )
+         CALL AB_CHKXER( 'AB_CTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CTZRZF( 2, 3, A, 2, TAU, W, 1, INFO )
-         CALL CHKXER( 'CTZRZF', INFOT, NOUT, LERR, OK )
+         CALL AB_CTZRZF( 2, 3, A, 2, TAU, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CTZRZF', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of CERRTZ
+*     End of AB_CERRTZ
 *
       END

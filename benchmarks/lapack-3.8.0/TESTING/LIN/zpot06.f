@@ -1,4 +1,4 @@
-*> \brief \b ZPOT06
+*> \brief \b AB_ZPOT06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE AB_ZPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZPOT06 computes the residual for a solution of a system of linear
+*> AB_ZPOT06 computes the residual for a solution of a system of linear
 *> equations  A*x = b :
 *>    RESID = norm(B - A*X,inf) / ( norm(A,inf) * norm(X,inf) * EPS ),
 *> where EPS is the machine epsilon.
@@ -124,7 +124,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE AB_ZPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -157,13 +157,13 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH, ZLANSY
-      EXTERNAL           LSAME, IZAMAX, DLAMCH, ZLANSY
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IZAMAX
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANSY
+      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH, AB_ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHEMM
+      EXTERNAL           AB_ZHEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -186,8 +186,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANSY( 'I', UPLO, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANSY( 'I', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -196,7 +196,7 @@
 *     Compute  B - A*X  and store in B.
       IFAIL=0
 *
-      CALL ZHEMM( 'Left', UPLO, N, NRHS, NEGCONE, A, LDA, X,
+      CALL AB_ZHEMM( 'Left', UPLO, N, NRHS, NEGCONE, A, LDA, X,
      $            LDX, CONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -204,8 +204,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = CABS1(B(IZAMAX( N, B( 1, J ), 1 ),J))
-         XNORM = CABS1(X(IZAMAX( N, X( 1, J ), 1 ),J))
+         BNORM = CABS1(B(AB_IZAMAX( N, B( 1, J ), 1 ),J))
+         XNORM = CABS1(X(AB_IZAMAX( N, X( 1, J ), 1 ),J))
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -215,6 +215,6 @@
 *
       RETURN
 *
-*     End of ZPOT06
+*     End of AB_ZPOT06
 *
       END

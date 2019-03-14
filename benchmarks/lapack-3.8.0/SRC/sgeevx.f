@@ -1,4 +1,4 @@
-*> \brief <b> SGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*> \brief <b> AB_AB_SGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGEEVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeevx.f">
+*> Download AB_AB_SGEEVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SGEEVX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeevx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SGEEVX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeevx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SGEEVX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, WR, WI,
+*       SUBROUTINE AB_AB_SGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, WR, WI,
 *                          VL, LDVL, VR, LDVR, ILO, IHI, SCALE, ABNRM,
 *                          RCONDE, RCONDV, WORK, LWORK, IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> SGEEVX computes for an N-by-N real nonsymmetric matrix A, the
+*> AB_AB_SGEEVX computes for an N-by-N real nonsymmetric matrix A, the
 *> eigenvalues and, optionally, the left and/or right eigenvectors.
 *>
 *> Optionally also, it computes a balancing transformation to improve
@@ -266,7 +266,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -296,12 +296,13 @@
 *
 *> \date June 2016
 *
-*  @generated from dgeevx.f, fortran d -> s, Tue Apr 19 01:47:44 2016
+*  @generated from AB_AB_DGEEVX.f, fortran d -> s, Tue Apr 19 01:47:44 2016
 *
 *> \ingroup realGEeigen
 *
 *  =====================================================================
-      SUBROUTINE SGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, WR, WI,
+      SUBROUTINE AB_AB_SGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, W
+     $R, WI,
      $                   VL, LDVL, VR, LDVR, ILO, IHI, SCALE, ABNRM,
      $                   RCONDE, RCONDV, WORK, LWORK, IWORK, INFO )
       implicit none
@@ -335,7 +336,8 @@
       CHARACTER          JOB, SIDE
       INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K,
      $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
-      REAL               ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
+      REAL               ANRM, BIGNUM, CS, AB_CSCALE, EPS, R, SCL, SMLNU
+     $M,
      $                   SN
 *     ..
 *     .. Local Arrays ..
@@ -343,16 +345,19 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEBAK, SGEBAL, SGEHRD, SHSEQR, SLABAD, SLACPY,
-     $                   SLARTG, SLASCL, SORGHR, SROT, SSCAL, STREVC3,
-     $                   STRSNA, XERBLA
+      EXTERNAL           AB_SGEBAK, AB_SGEBAL, AB_SGEHRD, AB_SHSEQR, AB_
+     $SLABAD, AB_SLACPY,
+     $                   AB_SLARTG, AB_SLASCL, AB_SORGHR, AB_SROT, AB_SS
+     $CAL, AB_AB_STREVC3,
+     $                   AB_STRSNA, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX, ILAENV
-      REAL               SLAMCH, SLANGE, SLAPY2, SNRM2
-      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SLANGE, SLAPY2,
-     $                   SNRM2
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX, AB_ILAENV
+      REAL               AB_SLAMCH, AB_SLANGE, AB_SLAPY2, AB_SNRM2
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_ILAENV, AB_SLAMCH, AB_S
+     $LANGE, AB_SLAPY2,
+     $                   AB_SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -363,21 +368,25 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      WANTVL = LSAME( JOBVL, 'V' )
-      WANTVR = LSAME( JOBVR, 'V' )
-      WNTSNN = LSAME( SENSE, 'N' )
-      WNTSNE = LSAME( SENSE, 'E' )
-      WNTSNV = LSAME( SENSE, 'V' )
-      WNTSNB = LSAME( SENSE, 'B' )
-      IF( .NOT.( LSAME( BALANC, 'N' ) .OR. LSAME( BALANC, 'S' )
-     $      .OR. LSAME( BALANC, 'P' ) .OR. LSAME( BALANC, 'B' ) ) )
+      WANTVL = AB_LSAME( JOBVL, 'V' )
+      WANTVR = AB_LSAME( JOBVR, 'V' )
+      WNTSNN = AB_LSAME( SENSE, 'N' )
+      WNTSNE = AB_LSAME( SENSE, 'E' )
+      WNTSNV = AB_LSAME( SENSE, 'V' )
+      WNTSNB = AB_LSAME( SENSE, 'B' )
+      IF( .NOT.( AB_LSAME( BALANC, 'N' ) .OR. AB_LSAME( BALANC, 'S' )
+     $      .OR. AB_LSAME( BALANC, 'P' ) .OR. AB_LSAME( BALANC, 'B' ) ) 
+     $)
      $     THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTVL ) .AND. ( .NOT.LSAME( JOBVL, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTVL ) .AND. ( .NOT.AB_LSAME( JOBVL, 'N' ) ) 
+     $) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.AB_LSAME( JOBVR, 'N' ) ) 
+     $) THEN
          INFO = -3
-      ELSE IF( .NOT.( WNTSNN .OR. WNTSNE .OR. WNTSNB .OR. WNTSNV ) .OR.
+      ELSE IF( .NOT.( WNTSNN .OR. WNTSNE .OR. WNTSNB .OR. WNTSNV ) .O
+     $R.
      $         ( ( WNTSNE .OR. WNTSNB ) .AND. .NOT.( WANTVL .AND.
      $         WANTVR ) ) ) THEN
          INFO = -4
@@ -396,8 +405,8 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by ILAENV.
-*       HSWORK refers to the workspace preferred by SHSEQR, as
+*       following subroutine, as returned by AB_ILAENV.
+*       HSWORK refers to the workspace preferred by AB_SHSEQR, as
 *       calculated below. HSWORK is computed assuming ILO=1 and IHI=N,
 *       the worst case.)
 *
@@ -406,30 +415,32 @@
             MINWRK = 1
             MAXWRK = 1
          ELSE
-            MAXWRK = N + N*ILAENV( 1, 'SGEHRD', ' ', N, 1, N, 0 )
+            MAXWRK = N + N*AB_ILAENV( 1, 'AB_SGEHRD', ' ', N, 1, N, 0 )
 *
             IF( WANTVL ) THEN
-               CALL STREVC3( 'L', 'B', SELECT, N, A, LDA,
+               CALL AB_AB_STREVC3( 'L', 'B', SELECT, N, A, LDA,
      $                       VL, LDVL, VR, LDVR,
      $                       N, NOUT, WORK, -1, IERR )
                LWORK_TREVC = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + LWORK_TREVC )
-               CALL SHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VL, LDVL,
+               CALL AB_SHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VL, LD
+     $VL,
      $                WORK, -1, INFO )
             ELSE IF( WANTVR ) THEN
-               CALL STREVC3( 'R', 'B', SELECT, N, A, LDA,
+               CALL AB_AB_STREVC3( 'R', 'B', SELECT, N, A, LDA,
      $                       VL, LDVL, VR, LDVR,
      $                       N, NOUT, WORK, -1, IERR )
                LWORK_TREVC = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + LWORK_TREVC )
-               CALL SHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VR, LDVR,
+               CALL AB_SHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VR, LD
+     $VR,
      $                WORK, -1, INFO )
             ELSE
                IF( WNTSNN ) THEN
-                  CALL SHSEQR( 'E', 'N', N, 1, N, A, LDA, WR, WI, VR,
+                  CALL AB_SHSEQR( 'E', 'N', N, 1, N, A, LDA, WR, WI, VR,
      $                LDVR, WORK, -1, INFO )
                ELSE
-                  CALL SHSEQR( 'S', 'N', N, 1, N, A, LDA, WR, WI, VR,
+                  CALL AB_SHSEQR( 'S', 'N', N, 1, N, A, LDA, WR, WI, VR,
      $                LDVR, WORK, -1, INFO )
                END IF
             END IF
@@ -447,7 +458,8 @@
                IF( ( .NOT.WNTSNN ) .AND. ( .NOT.WNTSNE ) )
      $            MINWRK = MAX( MINWRK, N*N + 6*N )
                MAXWRK = MAX( MAXWRK, HSWORK )
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'SORGHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*AB_ILAENV( 1, 'AB_SOR
+     $GHR',
      $                       ' ', N, 1, N, -1 ) )
                IF( ( .NOT.WNTSNN ) .AND. ( .NOT.WNTSNE ) )
      $            MAXWRK = MAX( MAXWRK, N*N + 6*N )
@@ -463,7 +475,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGEEVX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SGEEVX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -476,35 +488,37 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ICOND = 0
-      ANRM = SLANGE( 'M', N, N, A, LDA, DUM )
+      ANRM = AB_SLANGE( 'M', N, N, A, LDA, DUM )
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.
-         CSCALE = SMLNUM
+         AB_CSCALE = SMLNUM
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
-         CSCALE = BIGNUM
+         AB_CSCALE = BIGNUM
       END IF
       IF( SCALEA )
-     $   CALL SLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
+     $   CALL AB_SLASCL( 'G', 0, 0, ANRM, AB_CSCALE, N, N, A, LDA, IERR 
+     $)
 *
 *     Balance the matrix and compute ABNRM
 *
-      CALL SGEBAL( BALANC, N, A, LDA, ILO, IHI, SCALE, IERR )
-      ABNRM = SLANGE( '1', N, N, A, LDA, DUM )
+      CALL AB_SGEBAL( BALANC, N, A, LDA, ILO, IHI, SCALE, IERR )
+      ABNRM = AB_SLANGE( '1', N, N, A, LDA, DUM )
       IF( SCALEA ) THEN
          DUM( 1 ) = ABNRM
-         CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, 1, 1, DUM, 1, IERR )
+         CALL AB_SLASCL( 'G', 0, 0, AB_CSCALE, ANRM, 1, 1, DUM, 1, IERR 
+     $)
          ABNRM = DUM( 1 )
       END IF
 *
@@ -513,28 +527,30 @@
 *
       ITAU = 1
       IWRK = ITAU + N
-      CALL SGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
+      CALL AB_SGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
      $             LWORK-IWRK+1, IERR )
 *
       IF( WANTVL ) THEN
 *
 *        Want left eigenvectors
-*        Copy Householder vectors to VL
+*        Copy HousehoAB_LDEr vectors to VL
 *
          SIDE = 'L'
-         CALL SLACPY( 'L', N, N, A, LDA, VL, LDVL )
+         CALL AB_SLACPY( 'L', N, N, A, LDA, VL, LDVL )
 *
 *        Generate orthogonal matrix in VL
 *        (Workspace: need 2*N-1, prefer N+(N-1)*NB)
 *
-         CALL SORGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ), WORK( IWRK ),
+         CALL AB_SORGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ), WORK( IWRK
+     $ ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VL
 *        (Workspace: need 1, prefer HSWORK (see comments) )
 *
          IWRK = ITAU
-         CALL SHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, WR, WI, VL, LDVL,
+         CALL AB_SHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, WR, WI, VL, LDVL
+     $,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
 *
          IF( WANTVR ) THEN
@@ -543,28 +559,30 @@
 *           Copy Schur vectors to VR
 *
             SIDE = 'B'
-            CALL SLACPY( 'F', N, N, VL, LDVL, VR, LDVR )
+            CALL AB_SLACPY( 'F', N, N, VL, LDVL, VR, LDVR )
          END IF
 *
       ELSE IF( WANTVR ) THEN
 *
 *        Want right eigenvectors
-*        Copy Householder vectors to VR
+*        Copy HousehoAB_LDEr vectors to VR
 *
          SIDE = 'R'
-         CALL SLACPY( 'L', N, N, A, LDA, VR, LDVR )
+         CALL AB_SLACPY( 'L', N, N, A, LDA, VR, LDVR )
 *
 *        Generate orthogonal matrix in VR
 *        (Workspace: need 2*N-1, prefer N+(N-1)*NB)
 *
-         CALL SORGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ), WORK( IWRK ),
+         CALL AB_SORGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ), WORK( IWRK
+     $ ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VR
 *        (Workspace: need 1, prefer HSWORK (see comments) )
 *
          IWRK = ITAU
-         CALL SHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, WR, WI, VR, LDVR,
+         CALL AB_SHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, WR, WI, VR, LDVR
+     $,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
 *
       ELSE
@@ -581,11 +599,12 @@
 *        (Workspace: need 1, prefer HSWORK (see comments) )
 *
          IWRK = ITAU
-         CALL SHSEQR( JOB, 'N', N, ILO, IHI, A, LDA, WR, WI, VR, LDVR,
+         CALL AB_SHSEQR( JOB, 'N', N, ILO, IHI, A, LDA, WR, WI, VR, LDVR
+     $,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
       END IF
 *
-*     If INFO .NE. 0 from SHSEQR, then quit
+*     If INFO .NE. 0 from AB_SHSEQR, then quit
 *
       IF( INFO.NE.0 )
      $   GO TO 50
@@ -595,7 +614,8 @@
 *        Compute left and/or right eigenvectors
 *        (Workspace: need 3*N, prefer N + 2*N*NB)
 *
-         CALL STREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+         CALL AB_AB_STREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR,
+     $ LDVR,
      $                 N, NOUT, WORK( IWRK ), LWORK-IWRK+1, IERR )
       END IF
 *
@@ -603,7 +623,8 @@
 *     (Workspace: need N*N+6*N unless SENSE = 'E')
 *
       IF( .NOT.WNTSNN ) THEN
-         CALL STRSNA( SENSE, 'A', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+         CALL AB_STRSNA( SENSE, 'A', SELECT, N, A, LDA, VL, LDVL, VR, LD
+     $VR,
      $                RCONDE, RCONDV, N, NOUT, WORK( IWRK ), N, IWORK,
      $                ICOND )
       END IF
@@ -612,26 +633,26 @@
 *
 *        Undo balancing of left eigenvectors
 *
-         CALL SGEBAK( BALANC, 'L', N, ILO, IHI, SCALE, N, VL, LDVL,
+         CALL AB_SGEBAK( BALANC, 'L', N, ILO, IHI, SCALE, N, VL, LDVL,
      $                IERR )
 *
 *        Normalize left eigenvectors and make largest component real
 *
          DO 20 I = 1, N
             IF( WI( I ).EQ.ZERO ) THEN
-               SCL = ONE / SNRM2( N, VL( 1, I ), 1 )
-               CALL SSCAL( N, SCL, VL( 1, I ), 1 )
+               SCL = ONE / AB_SNRM2( N, VL( 1, I ), 1 )
+               CALL AB_SSCAL( N, SCL, VL( 1, I ), 1 )
             ELSE IF( WI( I ).GT.ZERO ) THEN
-               SCL = ONE / SLAPY2( SNRM2( N, VL( 1, I ), 1 ),
-     $               SNRM2( N, VL( 1, I+1 ), 1 ) )
-               CALL SSCAL( N, SCL, VL( 1, I ), 1 )
-               CALL SSCAL( N, SCL, VL( 1, I+1 ), 1 )
+               SCL = ONE / AB_SLAPY2( AB_SNRM2( N, VL( 1, I ), 1 ),
+     $               AB_SNRM2( N, VL( 1, I+1 ), 1 ) )
+               CALL AB_SSCAL( N, SCL, VL( 1, I ), 1 )
+               CALL AB_SSCAL( N, SCL, VL( 1, I+1 ), 1 )
                DO 10 K = 1, N
                   WORK( K ) = VL( K, I )**2 + VL( K, I+1 )**2
    10          CONTINUE
-               K = ISAMAX( N, WORK, 1 )
-               CALL SLARTG( VL( K, I ), VL( K, I+1 ), CS, SN, R )
-               CALL SROT( N, VL( 1, I ), 1, VL( 1, I+1 ), 1, CS, SN )
+               K = AB_ISAMAX( N, WORK, 1 )
+               CALL AB_SLARTG( VL( K, I ), VL( K, I+1 ), CS, SN, R )
+               CALL AB_SROT( N, VL( 1, I ), 1, VL( 1, I+1 ), 1, CS, SN )
                VL( K, I+1 ) = ZERO
             END IF
    20    CONTINUE
@@ -641,26 +662,26 @@
 *
 *        Undo balancing of right eigenvectors
 *
-         CALL SGEBAK( BALANC, 'R', N, ILO, IHI, SCALE, N, VR, LDVR,
+         CALL AB_SGEBAK( BALANC, 'R', N, ILO, IHI, SCALE, N, VR, LDVR,
      $                IERR )
 *
 *        Normalize right eigenvectors and make largest component real
 *
          DO 40 I = 1, N
             IF( WI( I ).EQ.ZERO ) THEN
-               SCL = ONE / SNRM2( N, VR( 1, I ), 1 )
-               CALL SSCAL( N, SCL, VR( 1, I ), 1 )
+               SCL = ONE / AB_SNRM2( N, VR( 1, I ), 1 )
+               CALL AB_SSCAL( N, SCL, VR( 1, I ), 1 )
             ELSE IF( WI( I ).GT.ZERO ) THEN
-               SCL = ONE / SLAPY2( SNRM2( N, VR( 1, I ), 1 ),
-     $               SNRM2( N, VR( 1, I+1 ), 1 ) )
-               CALL SSCAL( N, SCL, VR( 1, I ), 1 )
-               CALL SSCAL( N, SCL, VR( 1, I+1 ), 1 )
+               SCL = ONE / AB_SLAPY2( AB_SNRM2( N, VR( 1, I ), 1 ),
+     $               AB_SNRM2( N, VR( 1, I+1 ), 1 ) )
+               CALL AB_SSCAL( N, SCL, VR( 1, I ), 1 )
+               CALL AB_SSCAL( N, SCL, VR( 1, I+1 ), 1 )
                DO 30 K = 1, N
                   WORK( K ) = VR( K, I )**2 + VR( K, I+1 )**2
    30          CONTINUE
-               K = ISAMAX( N, WORK, 1 )
-               CALL SLARTG( VR( K, I ), VR( K, I+1 ), CS, SN, R )
-               CALL SROT( N, VR( 1, I ), 1, VR( 1, I+1 ), 1, CS, SN )
+               K = AB_ISAMAX( N, WORK, 1 )
+               CALL AB_SLARTG( VR( K, I ), VR( K, I+1 ), CS, SN, R )
+               CALL AB_SROT( N, VR( 1, I ), 1, VR( 1, I+1 ), 1, CS, SN )
                VR( K, I+1 ) = ZERO
             END IF
    40    CONTINUE
@@ -670,18 +691,21 @@
 *
    50 CONTINUE
       IF( SCALEA ) THEN
-         CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1, WR( INFO+1 ),
+         CALL AB_SLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N-INFO, 1, WR( INFO
+     $+1 ),
      $                MAX( N-INFO, 1 ), IERR )
-         CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1, WI( INFO+1 ),
+         CALL AB_SLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N-INFO, 1, WI( INFO
+     $+1 ),
      $                MAX( N-INFO, 1 ), IERR )
          IF( INFO.EQ.0 ) THEN
             IF( ( WNTSNV .OR. WNTSNB ) .AND. ICOND.EQ.0 )
-     $         CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, N, 1, RCONDV, N,
+     $         CALL AB_SLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N, 1, RCONDV,
+     $ N,
      $                      IERR )
          ELSE
-            CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, WR, N,
+            CALL AB_SLASCL( 'G', 0, 0, AB_CSCALE, ANRM, ILO-1, 1, WR, N,
      $                   IERR )
-            CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, WI, N,
+            CALL AB_SLASCL( 'G', 0, 0, AB_CSCALE, ANRM, ILO-1, 1, WI, N,
      $                   IERR )
          END IF
       END IF
@@ -689,6 +713,6 @@
       WORK( 1 ) = MAXWRK
       RETURN
 *
-*     End of SGEEVX
+*     End of AB_AB_SGEEVX
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> ZHEEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
+*> \brief <b> AB_AB_AB_ZHEEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
 *
 *  @precisions fortran z -> s d c
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHEEVD_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheevd_2stage.f">
+*> Download AB_AB_AB_ZHEEVD_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_ZHEEVD_2STAGE.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zheevd_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_ZHEEVD_2STAGE.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheevd_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_ZHEEVD_2STAGE.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+*       SUBROUTINE AB_AB_AB_ZHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
 *                          RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> ZHEEVD_2STAGE computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_AB_AB_ZHEEVD_2STAGE computes all eigenvalues and, optionally, eigenvectors of a
 *> complex Hermitian matrix A using the 2stage technique for
 *> the reduction to tridiagonal.  If eigenvectors are desired, it uses a
 *> divide and conquer algorithm.
@@ -133,7 +133,7 @@
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -156,7 +156,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -177,7 +177,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -250,7 +250,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE AB_AB_AB_ZHEEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK,
+     $ LWORK,
      $                   RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -290,14 +291,16 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
-      DOUBLE PRECISION   DLAMCH, ZLANHE
-      EXTERNAL           LSAME, DLAMCH, ZLANHE, ILAENV2STAGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_AB_ILAENV2STAGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHE, AB_AB_ILAENV2ST
+     $AGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZLACPY, ZLASCL,
-     $                   ZSTEDC, ZUNMTR, ZHETRD_2STAGE
+      EXTERNAL           AB_DSCAL, AB_DSTERF, AB_XERBLA, AB_ZLACPY, AB_Z
+     $LASCL,
+     $                   AB_ZSTEDC, AB_ZUNMTR, AB_AB_ZHETRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, SQRT 
@@ -306,14 +309,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      LOWER = LSAME( UPLO, 'L' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      LOWER = AB_LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 .OR. LRWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -327,13 +330,13 @@
             LRWMIN = 1
             LIWMIN = 1
          ELSE
-            KD    = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', JOBZ,
+            KD    = AB_AB_ILAENV2STAGE( 1, 'AB_AB_ZHETRD_2STAGE', JOBZ,
      $                            N, -1, -1, -1 )
-            IB    = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', JOBZ,
+            IB    = AB_AB_ILAENV2STAGE( 2, 'AB_AB_ZHETRD_2STAGE', JOBZ,
      $                            N, KD, -1, -1 )
-            LHTRD = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', JOBZ,
+            LHTRD = AB_AB_ILAENV2STAGE( 3, 'AB_AB_ZHETRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
-            LWTRD = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', JOBZ,
+            LWTRD = AB_AB_ILAENV2STAGE( 4, 'AB_AB_ZHETRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
             IF( WANTZ ) THEN
                LWMIN = 2*N + N*N
@@ -359,7 +362,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHEEVD_2STAGE', -INFO )
+         CALL AB_XERBLA( 'AB_AB_AB_ZHEEVD_2STAGE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -379,8 +382,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      EPS    = DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS    = AB_DLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN   = SQRT( SMLNUM )
@@ -388,7 +391,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = ZLANHE( 'M', UPLO, N, A, LDA, RWORK )
+      ANRM = AB_ZLANHE( 'M', UPLO, N, A, LDA, RWORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -398,9 +401,9 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 )
-     $   CALL ZLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+     $   CALL AB_ZLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
 *
-*     Call ZHETRD_2STAGE to reduce Hermitian matrix to tridiagonal form.
+*     Call AB_AB_ZHETRD_2STAGE to reduce Hermitian matrix to tridiagonal form.
 *
       INDE    = 1
       INDRWK  = INDE + N
@@ -412,25 +415,25 @@
       INDWK2  = INDWRK + N*N
       LLWRK2  = LWORK - INDWK2 + 1
 *
-      CALL ZHETRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, RWORK( INDE ),
+      CALL AB_AB_ZHETRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, RWORK( INDE ),
      $                    WORK( INDTAU ), WORK( INDHOUS ), LHTRD, 
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call DSTERF.  For eigenvectors, first call
-*     ZSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
-*     tridiagonal matrix, then call ZUNMTR to multiply it to the
-*     Householder transformations represented as Householder vectors in
+*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, first call
+*     AB_ZSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
+*     tridiagonal matrix, then call AB_ZUNMTR to multiply it to the
+*     HousehoAB_LDEr transformations represented as HousehoAB_LDEr vectors in
 *     A.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL DSTERF( N, W, RWORK( INDE ), INFO )
+         CALL AB_DSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL ZSTEDC( 'I', N, W, RWORK( INDE ), WORK( INDWRK ), N,
+         CALL AB_ZSTEDC( 'I', N, W, RWORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, RWORK( INDRWK ), LLRWK,
      $                IWORK, LIWORK, INFO )
-         CALL ZUNMTR( 'L', UPLO, 'N', N, N, A, LDA, WORK( INDTAU ),
+         CALL AB_ZUNMTR( 'L', UPLO, 'N', N, N, A, LDA, WORK( INDTAU ),
      $                WORK( INDWRK ), N, WORK( INDWK2 ), LLWRK2, IINFO )
-         CALL ZLACPY( 'A', N, N, WORK( INDWRK ), N, A, LDA )
+         CALL AB_ZLACPY( 'A', N, N, WORK( INDWRK ), N, A, LDA )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
@@ -441,7 +444,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
       WORK( 1 )  = LWMIN
@@ -450,6 +453,6 @@
 *
       RETURN
 *
-*     End of ZHEEVD_2STAGE
+*     End of AB_AB_AB_ZHEEVD_2STAGE
 *
       END

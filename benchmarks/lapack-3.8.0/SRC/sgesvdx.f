@@ -1,4 +1,4 @@
-*> \brief <b> SGESVDX computes the singular value decomposition (SVD) for GE matrices</b>
+*> \brief <b> AB_AB_AB_SGESVDX computes the singular value decomposition (SVD) for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGESVDX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvdx.f">
+*> Download AB_AB_AB_SGESVDX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_SGESVDX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesvdx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_SGESVDX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvdx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_SGESVDX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE SGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
+*     SUBROUTINE AB_AB_AB_SGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
 *    $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
 *    $                    LWORK, IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*>  SGESVDX computes the singular value decomposition (SVD) of a real
+*>  AB_AB_AB_SGESVDX computes the singular value decomposition (SVD) of a real
 *>  M-by-N matrix A, optionally computing the left and/or right singular
 *>  vectors. The SVD is written
 *>
@@ -53,9 +53,9 @@
 *>  are returned in descending order.  The first min(m,n) columns of
 *>  U and V are the left and right singular vectors of A.
 *>
-*>  SGESVDX uses an eigenvalue problem for obtaining the SVD, which
+*>  AB_AB_AB_SGESVDX uses an eigenvalue problem for obtaining the SVD, which
 *>  allows for the computation of a subset of singular values and
-*>  vectors. See SBDSVDX for details.
+*>  vectors. See AB_SBDSVDX for details.
 *>
 *>  Note that the routine returns V**T, not V.
 *> \endverbatim
@@ -224,7 +224,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -232,7 +232,7 @@
 *>          IWORK is INTEGER array, dimension (12*MIN(M,N))
 *>          If INFO = 0, the first NS elements of IWORK are zero. If INFO > 0,
 *>          then IWORK contains the indices of the eigenvectors that failed
-*>          to converge in SBDSVDX/SSTEVX.
+*>          to converge in AB_SBDSVDX/AB_AB_SSTEVX.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -241,9 +241,9 @@
 *>           = 0:  successful exit
 *>           < 0:  if INFO = -i, the i-th argument had an illegal value
 *>           > 0:  if INFO = i, then i eigenvectors failed to converge
-*>                 in SBDSVDX/SSTEVX.
+*>                 in AB_SBDSVDX/AB_AB_SSTEVX.
 *>                 if INFO = N*2 + 1, an internal error occurred in
-*>                 SBDSVDX
+*>                 AB_SBDSVDX
 *> \endverbatim
 *
 *  Authors:
@@ -259,7 +259,8 @@
 *> \ingroup realGEsing
 *
 *  =====================================================================
-      SUBROUTINE SGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
+      SUBROUTINE AB_AB_AB_SGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL,
+     $ VU,
      $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
      $                    LWORK, IWORK, INFO )
 *
@@ -297,15 +298,17 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SBDSVDX, SGEBRD, SGELQF, SGEQRF, SLACPY,
-     $                   SLASCL, SLASET, SORMBR, SORMLQ, SORMQR,
-     $                   SCOPY, XERBLA
+      EXTERNAL           AB_SBDSVDX, AB_SGEBRD, AB_AB_SGELQF, AB_AB_SGEQ
+     $RF, AB_SLACPY,
+     $                   AB_SLASCL, AB_SLASET, AB_SORMBR, AB_SORMLQ, AB_
+     $SORMQR,
+     $                   AB_SCOPY, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -316,27 +319,27 @@
 *
       NS = 0
       INFO = 0
-      ABSTOL = 2*SLAMCH('S')
+      ABSTOL = 2*AB_SLAMCH('S')
       LQUERY = ( LWORK.EQ.-1 )
       MINMN = MIN( M, N )
 
-      WANTU = LSAME( JOBU, 'V' )
-      WANTVT = LSAME( JOBVT, 'V' )
+      WANTU = AB_LSAME( JOBU, 'V' )
+      WANTVT = AB_LSAME( JOBVT, 'V' )
       IF( WANTU .OR. WANTVT ) THEN
          JOBZ = 'V'
       ELSE
          JOBZ = 'N'
       END IF
-      ALLS = LSAME( RANGE, 'A' )
-      VALS = LSAME( RANGE, 'V' )
-      INDS = LSAME( RANGE, 'I' )
+      ALLS = AB_LSAME( RANGE, 'A' )
+      VALS = AB_LSAME( RANGE, 'V' )
+      INDS = AB_LSAME( RANGE, 'I' )
 *
       INFO = 0
-      IF( .NOT.LSAME( JOBU, 'V' ) .AND.
-     $    .NOT.LSAME( JOBU, 'N' ) ) THEN
+      IF( .NOT.AB_LSAME( JOBU, 'V' ) .AND.
+     $    .NOT.AB_LSAME( JOBU, 'N' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( JOBVT, 'V' ) .AND.
-     $         .NOT.LSAME( JOBVT, 'N' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( JOBVT, 'V' ) .AND.
+     $         .NOT.AB_LSAME( JOBVT, 'N' ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLS .OR. VALS .OR. INDS ) ) THEN
          INFO = -3
@@ -380,29 +383,34 @@
 *     minimal amount of workspace needed at that point in the code,
 *     as well as the preferred amount for good performance.
 *     NB refers to the optimal block size for the immediately
-*     following subroutine, as returned by ILAENV.)
+*     following subroutine, as returned by AB_ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             IF( M.GE.N ) THEN
-               MNTHR = ILAENV( 6, 'SGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = AB_ILAENV( 6, 'AB_AB_SGESVD', JOBU // JOBVT, M, N
+     $, 0, 0 )
                IF( M.GE.MNTHR ) THEN
 *
 *                 Path 1 (M much larger than N)
 *
                   MAXWRK = N +
-     $                     N*ILAENV( 1, 'SGEQRF', ' ', M, N, -1, -1 )
+     $                     N*AB_ILAENV( 1, 'AB_AB_SGEQRF', ' ', M, N, -1
+     $, -1 )
                   MAXWRK = MAX( MAXWRK, N*(N+5) + 2*N*
-     $                     ILAENV( 1, 'SGEBRD', ' ', N, N, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SGEBRD', ' ', N, N, -1, -1 
+     $) )
                   IF (WANTU) THEN
                       MAXWRK = MAX(MAXWRK,N*(N*3+6)+N*
-     $                     ILAENV( 1, 'SORMQR', ' ', N, N, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SORMQR', ' ', N, N, -1, -1 
+     $) )
                   END IF
                   IF (WANTVT) THEN
                       MAXWRK = MAX(MAXWRK,N*(N*3+6)+N*
-     $                     ILAENV( 1, 'SORMLQ', ' ', N, N, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SORMLQ', ' ', N, N, -1, -1 
+     $) )
                   END IF
                   MINWRK = N*(N*3+20)
                ELSE
@@ -410,34 +418,42 @@
 *                 Path 2 (M at least N, but not much larger)
 *
                   MAXWRK = 4*N + ( M+N )*
-     $                     ILAENV( 1, 'SGEBRD', ' ', M, N, -1, -1 )
+     $                     AB_ILAENV( 1, 'AB_SGEBRD', ' ', M, N, -1, -1 
+     $)
                   IF (WANTU) THEN
                       MAXWRK = MAX(MAXWRK,N*(N*2+5)+N*
-     $                     ILAENV( 1, 'SORMQR', ' ', N, N, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SORMQR', ' ', N, N, -1, -1 
+     $) )
                   END IF
                   IF (WANTVT) THEN
                       MAXWRK = MAX(MAXWRK,N*(N*2+5)+N*
-     $                     ILAENV( 1, 'SORMLQ', ' ', N, N, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SORMLQ', ' ', N, N, -1, -1 
+     $) )
                   END IF
                   MINWRK = MAX(N*(N*2+19),4*N+M)
                END IF
             ELSE
-               MNTHR = ILAENV( 6, 'SGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = AB_ILAENV( 6, 'AB_AB_SGESVD', JOBU // JOBVT, M, N
+     $, 0, 0 )
                IF( N.GE.MNTHR ) THEN
 *
 *                 Path 1t (N much larger than M)
 *
                   MAXWRK = M +
-     $                     M*ILAENV( 1, 'SGELQF', ' ', M, N, -1, -1 )
+     $                     M*AB_ILAENV( 1, 'AB_AB_SGELQF', ' ', M, N, -1
+     $, -1 )
                   MAXWRK = MAX( MAXWRK, M*(M+5) + 2*M*
-     $                     ILAENV( 1, 'SGEBRD', ' ', M, M, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SGEBRD', ' ', M, M, -1, -1 
+     $) )
                   IF (WANTU) THEN
                       MAXWRK = MAX(MAXWRK,M*(M*3+6)+M*
-     $                     ILAENV( 1, 'SORMQR', ' ', M, M, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SORMQR', ' ', M, M, -1, -1 
+     $) )
                   END IF
                   IF (WANTVT) THEN
                       MAXWRK = MAX(MAXWRK,M*(M*3+6)+M*
-     $                     ILAENV( 1, 'SORMLQ', ' ', M, M, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SORMLQ', ' ', M, M, -1, -1 
+     $) )
                   END IF
                   MINWRK = M*(M*3+20)
                ELSE
@@ -445,14 +461,17 @@
 *                 Path 2t (N at least M, but not much larger)
 *
                   MAXWRK = 4*M + ( M+N )*
-     $                     ILAENV( 1, 'SGEBRD', ' ', M, N, -1, -1 )
+     $                     AB_ILAENV( 1, 'AB_SGEBRD', ' ', M, N, -1, -1 
+     $)
                   IF (WANTU) THEN
                       MAXWRK = MAX(MAXWRK,M*(M*2+5)+M*
-     $                     ILAENV( 1, 'SORMQR', ' ', M, M, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SORMQR', ' ', M, M, -1, -1 
+     $) )
                   END IF
                   IF (WANTVT) THEN
                       MAXWRK = MAX(MAXWRK,M*(M*2+5)+M*
-     $                     ILAENV( 1, 'SORMLQ', ' ', M, M, -1, -1 ) )
+     $                     AB_ILAENV( 1, 'AB_SORMLQ', ' ', M, M, -1, -1 
+     $) )
                   END IF
                   MINWRK = MAX(M*(M*2+19),4*M+N)
                END IF
@@ -467,7 +486,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGESVDX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_AB_SGESVDX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -497,20 +516,20 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SQRT( SLAMCH( 'S' ) ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = SQRT( AB_SLAMCH( 'S' ) ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = SLANGE( 'M', M, N, A, LDA, DUM )
+      ANRM = AB_SLANGE( 'M', M, N, A, LDA, DUM )
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1
-         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          ISCL = 1
-         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
       END IF
 *
       IF( M.GE.N ) THEN
@@ -531,7 +550,8 @@
 *
             ITAU = 1
             ITEMP = ITAU + N
-            CALL SGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP ),
+            CALL AB_AB_SGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP )
+     $,
      $                   LWORK-ITEMP+1, INFO )
 *
 *           Copy R into WORK and bidiagonalize it:
@@ -543,9 +563,11 @@
             ITAUQ = IE + N
             ITAUP = ITAUQ + N
             ITEMP = ITAUP + N
-            CALL SLACPY( 'U', N, N, A, LDA, WORK( IQRF ), N )
-            CALL SLASET( 'L', N-1, N-1, ZERO, ZERO, WORK( IQRF+1 ), N )
-            CALL SGEBRD( N, N, WORK( IQRF ), N, WORK( ID ), WORK( IE ),
+            CALL AB_SLACPY( 'U', N, N, A, LDA, WORK( IQRF ), N )
+            CALL AB_SLASET( 'L', N-1, N-1, ZERO, ZERO, WORK( IQRF+1 ), N
+     $ )
+            CALL AB_SGEBRD( N, N, WORK( IQRF ), N, WORK( ID ), WORK( IE 
+     $),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
@@ -554,7 +576,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + N*(N*2+1)
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ), WORK( IE ),
+            CALL AB_SBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ), WORK( IE 
+     $),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    N*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -563,22 +586,23 @@
             IF( WANTU ) THEN
                J = ITGKZ
                DO I = 1, NS
-                  CALL SCOPY( N, WORK( J ), 1, U( 1,I ), 1 )
+                  CALL AB_SCOPY( N, WORK( J ), 1, U( 1,I ), 1 )
                   J = J + N*2
                END DO
-               CALL SLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ), LDU )
+               CALL AB_SLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ), LDU
+     $ )
 *
-*              Call SORMBR to compute QB*UB.
+*              Call AB_SORMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL SORMBR( 'Q', 'L', 'N', N, NS, N, WORK( IQRF ), N,
+               CALL AB_SORMBR( 'Q', 'L', 'N', N, NS, N, WORK( IQRF ), N,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
 *
-*              Call SORMQR to compute Q*(QB*UB).
+*              Call AB_SORMQR to compute Q*(QB*UB).
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL SORMQR( 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_SORMQR( 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAU ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -588,14 +612,14 @@
             IF( WANTVT) THEN
                J = ITGKZ + N
                DO I = 1, NS
-                  CALL SCOPY( N, WORK( J ), 1, VT( I,1 ), LDVT )
+                  CALL AB_SCOPY( N, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + N*2
                END DO
 *
-*              Call SORMBR to compute VB**T * PB**T
+*              Call AB_SORMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL SORMBR( 'P', 'R', 'T', NS, N, N, WORK( IQRF ), N,
+               CALL AB_SORMBR( 'P', 'R', 'T', NS, N, N, WORK( IQRF ), N,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -614,7 +638,7 @@
             ITAUQ = IE + N
             ITAUP = ITAUQ + N
             ITEMP = ITAUP + N
-            CALL SGEBRD( M, N, A, LDA, WORK( ID ), WORK( IE ),
+            CALL AB_SGEBRD( M, N, A, LDA, WORK( ID ), WORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
@@ -623,7 +647,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + N*(N*2+1)
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ), WORK( IE ),
+            CALL AB_SBDSVDX( 'U', JOBZ, RNGTGK, N, WORK( ID ), WORK( IE 
+     $),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    N*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -632,15 +657,16 @@
             IF( WANTU ) THEN
                J = ITGKZ
                DO I = 1, NS
-                  CALL SCOPY( N, WORK( J ), 1, U( 1,I ), 1 )
+                  CALL AB_SCOPY( N, WORK( J ), 1, U( 1,I ), 1 )
                   J = J + N*2
                END DO
-               CALL SLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ), LDU )
+               CALL AB_SLASET( 'A', M-N, NS, ZERO, ZERO, U( N+1,1 ), LDU
+     $ )
 *
-*              Call SORMBR to compute QB*UB.
+*              Call AB_SORMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL SORMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_SORMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, IERR )
             END IF
@@ -650,14 +676,14 @@
             IF( WANTVT) THEN
                J = ITGKZ + N
                DO I = 1, NS
-                  CALL SCOPY( N, WORK( J ), 1, VT( I,1 ), LDVT )
+                  CALL AB_SCOPY( N, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + N*2
                END DO
 *
-*              Call SORMBR to compute VB**T * PB**T
+*              Call AB_SORMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL SORMBR( 'P', 'R', 'T', NS, N, N, A, LDA,
+               CALL AB_SORMBR( 'P', 'R', 'T', NS, N, N, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, IERR )
             END IF
@@ -679,7 +705,8 @@
 *
             ITAU = 1
             ITEMP = ITAU + M
-            CALL SGELQF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP ),
+            CALL AB_AB_SGELQF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP )
+     $,
      $                   LWORK-ITEMP+1, INFO )
 
 *           Copy L into WORK and bidiagonalize it:
@@ -691,9 +718,11 @@
             ITAUQ = IE + M
             ITAUP = ITAUQ + M
             ITEMP = ITAUP + M
-            CALL SLACPY( 'L', M, M, A, LDA, WORK( ILQF ), M )
-            CALL SLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( ILQF+M ), M )
-            CALL SGEBRD( M, M, WORK( ILQF ), M, WORK( ID ), WORK( IE ),
+            CALL AB_SLACPY( 'L', M, M, A, LDA, WORK( ILQF ), M )
+            CALL AB_SLASET( 'U', M-1, M-1, ZERO, ZERO, WORK( ILQF+M ), M
+     $ )
+            CALL AB_SGEBRD( M, M, WORK( ILQF ), M, WORK( ID ), WORK( IE 
+     $),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
@@ -702,7 +731,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + M*(M*2+1)
-            CALL SBDSVDX( 'U', JOBZ, RNGTGK, M, WORK( ID ), WORK( IE ),
+            CALL AB_SBDSVDX( 'U', JOBZ, RNGTGK, M, WORK( ID ), WORK( IE 
+     $),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    M*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -711,14 +741,14 @@
             IF( WANTU ) THEN
                J = ITGKZ
                DO I = 1, NS
-                  CALL SCOPY( M, WORK( J ), 1, U( 1,I ), 1 )
+                  CALL AB_SCOPY( M, WORK( J ), 1, U( 1,I ), 1 )
                   J = J + M*2
                END DO
 *
-*              Call SORMBR to compute QB*UB.
+*              Call AB_SORMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL SORMBR( 'Q', 'L', 'N', M, NS, M, WORK( ILQF ), M,
+               CALL AB_SORMBR( 'Q', 'L', 'N', M, NS, M, WORK( ILQF ), M,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -728,22 +758,23 @@
             IF( WANTVT) THEN
                J = ITGKZ + M
                DO I = 1, NS
-                  CALL SCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
+                  CALL AB_SCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
+               CALL AB_SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LD
+     $VT)
 *
-*              Call SORMBR to compute (VB**T)*(PB**T)
+*              Call AB_SORMBR to compute (VB**T)*(PB**T)
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL SORMBR( 'P', 'R', 'T', NS, M, M, WORK( ILQF ), M,
+               CALL AB_SORMBR( 'P', 'R', 'T', NS, M, M, WORK( ILQF ), M,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
 *
-*              Call SORMLQ to compute ((VB**T)*(PB**T))*Q.
+*              Call AB_SORMLQ to compute ((VB**T)*(PB**T))*Q.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL SORMLQ( 'R', 'N', NS, N, M, A, LDA,
+               CALL AB_SORMLQ( 'R', 'N', NS, N, M, A, LDA,
      $                      WORK( ITAU ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -762,7 +793,7 @@
             ITAUQ = IE + M
             ITAUP = ITAUQ + M
             ITEMP = ITAUP + M
-            CALL SGEBRD( M, N, A, LDA, WORK( ID ), WORK( IE ),
+            CALL AB_SGEBRD( M, N, A, LDA, WORK( ID ), WORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
@@ -771,7 +802,8 @@
 *
             ITGKZ = ITEMP
             ITEMP = ITGKZ + M*(M*2+1)
-            CALL SBDSVDX( 'L', JOBZ, RNGTGK, M, WORK( ID ), WORK( IE ),
+            CALL AB_SBDSVDX( 'L', JOBZ, RNGTGK, M, WORK( ID ), WORK( IE 
+     $),
      $                    VL, VU, ILTGK, IUTGK, NS, S, WORK( ITGKZ ),
      $                    M*2, WORK( ITEMP ), IWORK, INFO)
 *
@@ -780,14 +812,14 @@
             IF( WANTU ) THEN
                J = ITGKZ
                DO I = 1, NS
-                  CALL SCOPY( M, WORK( J ), 1, U( 1,I ), 1 )
+                  CALL AB_SCOPY( M, WORK( J ), 1, U( 1,I ), 1 )
                   J = J + M*2
                END DO
 *
-*              Call SORMBR to compute QB*UB.
+*              Call AB_SORMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL SORMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_SORMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -797,15 +829,16 @@
             IF( WANTVT) THEN
                J = ITGKZ + M
                DO I = 1, NS
-                  CALL SCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
+                  CALL AB_SCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
+               CALL AB_SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LD
+     $VT)
 *
-*              Call SORMBR to compute VB**T * PB**T
+*              Call AB_SORMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL SORMBR( 'P', 'R', 'T', NS, N, M, A, LDA,
+               CALL AB_SORMBR( 'P', 'R', 'T', NS, N, M, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -816,10 +849,10 @@
 *
       IF( ISCL.EQ.1 ) THEN
          IF( ANRM.GT.BIGNUM )
-     $      CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1,
+     $      CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1,
      $                   S, MINMN, INFO )
          IF( ANRM.LT.SMLNUM )
-     $      CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1,
+     $      CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1,
      $                   S, MINMN, INFO )
       END IF
 *
@@ -829,6 +862,6 @@
 *
       RETURN
 *
-*     End of SGESVDX
+*     End of AB_AB_AB_SGESVDX
 *
       END

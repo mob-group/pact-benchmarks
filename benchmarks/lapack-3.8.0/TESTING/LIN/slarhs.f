@@ -1,4 +1,4 @@
-*> \brief \b SLARHS
+*> \brief \b AB_SLARHS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS,
+*       SUBROUTINE AB_SLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS,
 *                          A, LDA, X, LDX, B, LDB, ISEED, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> SLARHS chooses a set of NRHS random solution vectors and sets
+*> AB_SLARHS chooses a set of NRHS random solution vectors and sets
 *> up the right hand sides for the linear system
 *>    op( A ) * X = B,
 *> where op( A ) may be A or A' (transpose of A).
@@ -178,7 +178,7 @@
 *> \verbatim
 *>          ISEED is INTEGER array, dimension (4)
 *>          The seed vector for the random number generator (used in
-*>          SLATMS).  Modified on exit.
+*>          AB_SLATMS).  Modified on exit.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -201,7 +201,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS,
+      SUBROUTINE AB_SLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS
+     $,
      $                   A, LDA, X, LDX, B, LDB, ISEED, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -232,12 +233,14 @@
       INTEGER            J, MB, NX
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, LSAMEN
-      EXTERNAL           LSAME, LSAMEN
+      LOGICAL            AB_LSAME, AB_AB_LSAMEN
+      EXTERNAL           AB_LSAME, AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGBMV, SGEMM, SLACPY, SLARNV, SSBMV, SSPMV,
-     $                   SSYMM, STBMV, STPMV, STRMM, XERBLA
+      EXTERNAL           AB_SGBMV, AB_SGEMM, AB_SLACPY, AB_SLARNV, AB_SS
+     $BMV, AB_SSPMV,
+     $                   AB_SSYMM, AB_STBMV, AB_STPMV, AB_STRMM, AB_XERB
+     $LA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -249,23 +252,27 @@
       INFO = 0
       C1 = PATH( 1: 1 )
       C2 = PATH( 2: 3 )
-      TRAN = LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' )
+      TRAN = AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' )
       NOTRAN = .NOT.TRAN
-      GEN = LSAME( PATH( 2: 2 ), 'G' )
-      QRS = LSAME( PATH( 2: 2 ), 'Q' ) .OR. LSAME( PATH( 3: 3 ), 'Q' )
-      SYM = LSAME( PATH( 2: 2 ), 'P' ) .OR. LSAME( PATH( 2: 2 ), 'S' )
-      TRI = LSAME( PATH( 2: 2 ), 'T' )
-      BAND = LSAME( PATH( 3: 3 ), 'B' )
-      IF( .NOT.LSAME( C1, 'Single precision' ) ) THEN
+      GEN = AB_LSAME( PATH( 2: 2 ), 'G' )
+      QRS = AB_LSAME( PATH( 2: 2 ), 'Q' ) .OR. AB_LSAME( PATH( 3: 3 ), '
+     $Q' )
+      SYM = AB_LSAME( PATH( 2: 2 ), 'P' ) .OR. AB_LSAME( PATH( 2: 2 ), '
+     $S' )
+      TRI = AB_LSAME( PATH( 2: 2 ), 'T' )
+      BAND = AB_LSAME( PATH( 3: 3 ), 'B' )
+      IF( .NOT.AB_LSAME( C1, 'Single precision' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( XTYPE, 'N' ) .OR. LSAME( XTYPE, 'C' ) ) )
+      ELSE IF( .NOT.( AB_LSAME( XTYPE, 'N' ) .OR. AB_LSAME( XTYPE, 'C
+     $' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( ( SYM .OR. TRI ) .AND. .NOT.
-     $         ( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) ) THEN
+     $         ( AB_LSAME( UPLO, 'U' ) .OR. AB_LSAME( UPLO, 'L' ) ) ) TH
+     $EN
          INFO = -3
       ELSE IF( ( GEN .OR. QRS ) .AND. .NOT.
-     $         ( TRAN .OR. LSAME( TRANS, 'N' ) ) ) THEN
+     $         ( TRAN .OR. AB_LSAME( TRANS, 'N' ) ) ) THEN
          INFO = -4
       ELSE IF( M.LT.0 ) THEN
          INFO = -5
@@ -289,7 +296,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLARHS', -INFO )
+         CALL AB_XERBLA( 'AB_SLARHS', -INFO )
          RETURN
       END IF
 *
@@ -302,99 +309,108 @@
          NX = N
          MB = M
       END IF
-      IF( .NOT.LSAME( XTYPE, 'C' ) ) THEN
+      IF( .NOT.AB_LSAME( XTYPE, 'C' ) ) THEN
          DO 10 J = 1, NRHS
-            CALL SLARNV( 2, ISEED, N, X( 1, J ) )
+            CALL AB_SLARNV( 2, ISEED, N, X( 1, J ) )
    10    CONTINUE
       END IF
 *
 *     Multiply X by op( A ) using an appropriate
 *     matrix multiply routine.
 *
-      IF( LSAMEN( 2, C2, 'GE' ) .OR. LSAMEN( 2, C2, 'QR' ) .OR.
-     $    LSAMEN( 2, C2, 'LQ' ) .OR. LSAMEN( 2, C2, 'QL' ) .OR.
-     $    LSAMEN( 2, C2, 'RQ' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'GE' ) .OR. AB_AB_LSAMEN( 2, C2, 'QR' ) .
+     $OR.
+     $    AB_AB_LSAMEN( 2, C2, 'LQ' ) .OR. AB_AB_LSAMEN( 2, C2, 'QL' ) .
+     $OR.
+     $    AB_AB_LSAMEN( 2, C2, 'RQ' ) ) THEN
 *
 *        General matrix
 *
-         CALL SGEMM( TRANS, 'N', MB, NRHS, NX, ONE, A, LDA, X, LDX,
+         CALL AB_SGEMM( TRANS, 'N', MB, NRHS, NX, ONE, A, LDA, X, LDX,
      $               ZERO, B, LDB )
 *
-      ELSE IF( LSAMEN( 2, C2, 'PO' ) .OR. LSAMEN( 2, C2, 'SY' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PO' ) .OR. AB_AB_LSAMEN( 2, C2, 
+     $'SY' ) ) THEN
 *
 *        Symmetric matrix, 2-D storage
 *
-         CALL SSYMM( 'Left', UPLO, N, NRHS, ONE, A, LDA, X, LDX, ZERO,
+         CALL AB_SSYMM( 'Left', UPLO, N, NRHS, ONE, A, LDA, X, LDX, ZERO
+     $,
      $               B, LDB )
 *
-      ELSE IF( LSAMEN( 2, C2, 'GB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GB' ) ) THEN
 *
 *        General matrix, band storage
 *
          DO 20 J = 1, NRHS
-            CALL SGBMV( TRANS, MB, NX, KL, KU, ONE, A, LDA, X( 1, J ),
+            CALL AB_SGBMV( TRANS, MB, NX, KL, KU, ONE, A, LDA, X( 1, J )
+     $,
      $                  1, ZERO, B( 1, J ), 1 )
    20    CONTINUE
 *
-      ELSE IF( LSAMEN( 2, C2, 'PB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PB' ) ) THEN
 *
 *        Symmetric matrix, band storage
 *
          DO 30 J = 1, NRHS
-            CALL SSBMV( UPLO, N, KL, ONE, A, LDA, X( 1, J ), 1, ZERO,
+            CALL AB_SSBMV( UPLO, N, KL, ONE, A, LDA, X( 1, J ), 1, ZERO,
      $                  B( 1, J ), 1 )
    30    CONTINUE
 *
-      ELSE IF( LSAMEN( 2, C2, 'PP' ) .OR. LSAMEN( 2, C2, 'SP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PP' ) .OR. AB_AB_LSAMEN( 2, C2, 
+     $'SP' ) ) THEN
 *
 *        Symmetric matrix, packed storage
 *
          DO 40 J = 1, NRHS
-            CALL SSPMV( UPLO, N, ONE, A, X( 1, J ), 1, ZERO, B( 1, J ),
+            CALL AB_SSPMV( UPLO, N, ONE, A, X( 1, J ), 1, ZERO, B( 1, J 
+     $),
      $                  1 )
    40    CONTINUE
 *
-      ELSE IF( LSAMEN( 2, C2, 'TR' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'TR' ) ) THEN
 *
 *        Triangular matrix.  Note that for triangular matrices,
 *           KU = 1 => non-unit triangular
 *           KU = 2 => unit triangular
 *
-         CALL SLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
+         CALL AB_SLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
          IF( KU.EQ.2 ) THEN
             DIAG = 'U'
          ELSE
             DIAG = 'N'
          END IF
-         CALL STRMM( 'Left', UPLO, TRANS, DIAG, N, NRHS, ONE, A, LDA, B,
+         CALL AB_STRMM( 'Left', UPLO, TRANS, DIAG, N, NRHS, ONE, A, LDA,
+     $ B,
      $               LDB )
 *
-      ELSE IF( LSAMEN( 2, C2, 'TP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'TP' ) ) THEN
 *
 *        Triangular matrix, packed storage
 *
-         CALL SLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
+         CALL AB_SLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
          IF( KU.EQ.2 ) THEN
             DIAG = 'U'
          ELSE
             DIAG = 'N'
          END IF
          DO 50 J = 1, NRHS
-            CALL STPMV( UPLO, TRANS, DIAG, N, A, B( 1, J ), 1 )
+            CALL AB_STPMV( UPLO, TRANS, DIAG, N, A, B( 1, J ), 1 )
    50    CONTINUE
 *
-      ELSE IF( LSAMEN( 2, C2, 'TB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'TB' ) ) THEN
 *
 *        Triangular matrix, banded storage
 *
-         CALL SLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
+         CALL AB_SLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
          IF( KU.EQ.2 ) THEN
             DIAG = 'U'
          ELSE
             DIAG = 'N'
          END IF
          DO 60 J = 1, NRHS
-            CALL STBMV( UPLO, TRANS, DIAG, N, KL, A, LDA, B( 1, J ), 1 )
+            CALL AB_STBMV( UPLO, TRANS, DIAG, N, KL, A, LDA, B( 1, J ), 
+     $1 )
    60    CONTINUE
 *
       ELSE
@@ -402,11 +418,11 @@
 *        If PATH is none of the above, return with an error code.
 *
          INFO = -1
-         CALL XERBLA( 'SLARHS', -INFO )
+         CALL AB_XERBLA( 'AB_SLARHS', -INFO )
       END IF
 *
       RETURN
 *
-*     End of SLARHS
+*     End of AB_SLARHS
 *
       END

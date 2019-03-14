@@ -1,4 +1,4 @@
-*> \brief \b DLSETS
+*> \brief \b AB_DAB_LSETS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
+*       SUBROUTINE AB_DAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
 *                          X, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -22,8 +22,8 @@
 *>
 *> \verbatim
 *>
-*> DLSETS tests DGGLSE - a subroutine for solving linear equality
-*> constrained least square problem (LSE).
+*> AB_DAB_LSETS tests AB_DGGAB_LSE - a subroutine for solving linear equality
+*> constrained least square problem (AB_LSE).
 *> \endverbatim
 *
 *  Arguments:
@@ -86,7 +86,7 @@
 *> \param[in] C
 *> \verbatim
 *>          C is DOUBLE PRECISION array, dimension( M )
-*>          the vector C in the LSE problem.
+*>          the vector C in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] CF
@@ -97,7 +97,7 @@
 *> \param[in] D
 *> \verbatim
 *>          D is DOUBLE PRECISION array, dimension( P )
-*>          the vector D in the LSE problem.
+*>          the vector D in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] DF
@@ -108,7 +108,7 @@
 *> \param[out] X
 *> \verbatim
 *>          X is DOUBLE PRECISION array, dimension( N )
-*>          solution vector X in the LSE problem.
+*>          solution vector X in the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -148,7 +148,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
+      SUBROUTINE AB_DAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D
+     $, DF,
      $                   X, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -171,39 +172,42 @@
       INTEGER            INFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGET02, DGGLSE, DLACPY
+      EXTERNAL           AB_DCOPY, AB_DGET02, AB_DGGAB_LSE, AB_DLACPY
 *     ..
 *     .. Executable Statements ..
 *
 *     Copy the matrices A and B to the arrays AF and BF,
 *     and the vectors C and D to the arrays CF and DF,
 *
-      CALL DLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL DLACPY( 'Full', P, N, B, LDB, BF, LDB )
-      CALL DCOPY( M, C, 1, CF, 1 )
-      CALL DCOPY( P, D, 1, DF, 1 )
+      CALL AB_DLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL AB_DLACPY( 'Full', P, N, B, LDB, BF, LDB )
+      CALL AB_DCOPY( M, C, 1, CF, 1 )
+      CALL AB_DCOPY( P, D, 1, DF, 1 )
 *
-*     Solve LSE problem
+*     Solve AB_LSE problem
 *
-      CALL DGGLSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X, WORK, LWORK,
+      CALL AB_DGGAB_LSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X, WORK, LWO
+     $RK,
      $             INFO )
 *
-*     Test the residual for the solution of LSE
+*     Test the residual for the solution of AB_LSE
 *
 *     Compute RESULT(1) = norm( A*x - c ) / norm(A)*norm(X)*EPS
 *
-      CALL DCOPY( M, C, 1, CF, 1 )
-      CALL DCOPY( P, D, 1, DF, 1 )
-      CALL DGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M, RWORK,
+      CALL AB_DCOPY( M, C, 1, CF, 1 )
+      CALL AB_DCOPY( P, D, 1, DF, 1 )
+      CALL AB_DGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M, RWOR
+     $K,
      $             RESULT( 1 ) )
 *
 *     Compute result(2) = norm( B*x - d ) / norm(B)*norm(X)*EPS
 *
-      CALL DGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P, RWORK,
+      CALL AB_DGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P, RWOR
+     $K,
      $             RESULT( 2 ) )
 *
       RETURN
 *
-*     End of DLSETS
+*     End of AB_DAB_LSETS
 *
       END

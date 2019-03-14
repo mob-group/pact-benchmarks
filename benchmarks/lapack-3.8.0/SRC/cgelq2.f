@@ -1,4 +1,4 @@
-*> \brief \b CGELQ2 computes the LQ factorization of a general rectangular matrix using an unblocked algorithm.
+*> \brief \b AB_AB_CGELQ2 computes the LQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGELQ2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgelq2.f">
+*> Download AB_AB_CGELQ2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CGELQ2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgelq2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CGELQ2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgelq2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CGELQ2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGELQ2( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_AB_CGELQ2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CGELQ2 computes an LQ factorization of a complex m by n matrix A:
+*> AB_AB_CGELQ2 computes an LQ factorization of a complex m by n matrix A:
 *> A = L * Q.
 *> \endverbatim
 *
@@ -119,7 +119,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGELQ2( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_AB_CGELQ2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,7 +144,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARF, CLARFG, XERBLA
+      EXTERNAL           AB_CLACGV, AB_CLARF, AB_AB_CLARFG, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -162,7 +162,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGELQ2', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CGELQ2', -INFO )
          RETURN
       END IF
 *
@@ -172,23 +172,24 @@
 *
 *        Generate elementary reflector H(i) to annihilate A(i,i+1:n)
 *
-         CALL CLACGV( N-I+1, A( I, I ), LDA )
+         CALL AB_CLACGV( N-I+1, A( I, I ), LDA )
          ALPHA = A( I, I )
-         CALL CLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
+         CALL AB_AB_CLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
      $                TAU( I ) )
          IF( I.LT.M ) THEN
 *
 *           Apply H(i) to A(i+1:m,i:n) from the right
 *
             A( I, I ) = ONE
-            CALL CLARF( 'Right', M-I, N-I+1, A( I, I ), LDA, TAU( I ),
+            CALL AB_CLARF( 'Right', M-I, N-I+1, A( I, I ), LDA, TAU( I )
+     $,
      $                  A( I+1, I ), LDA, WORK )
          END IF
          A( I, I ) = ALPHA
-         CALL CLACGV( N-I+1, A( I, I ), LDA )
+         CALL AB_CLACGV( N-I+1, A( I, I ), LDA )
    10 CONTINUE
       RETURN
 *
-*     End of CGELQ2
+*     End of AB_AB_CGELQ2
 *
       END

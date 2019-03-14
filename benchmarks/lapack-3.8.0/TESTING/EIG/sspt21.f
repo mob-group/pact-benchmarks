@@ -1,4 +1,4 @@
-*> \brief \b SSPT21
+*> \brief \b AB_SSPT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
+*       SUBROUTINE AB_SSPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
 *                          TAU, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SSPT21  generally checks a decomposition of the form
+*> AB_SSPT21  generally checks a decomposition of the form
 *>
 *>         A = U S U'
 *>
@@ -34,9 +34,9 @@
 *> is orthogonal, and S is diagonal (if KBAND=0) or symmetric
 *> tridiagonal (if KBAND=1).  If ITYPE=1, then U is represented as a
 *> dense matrix, otherwise the U is expressed as a product of
-*> Householder transformations, whose vectors are stored in the array
+*> HousehoAB_LDEr transformations, whose vectors are stored in the array
 *> "V" and whose scaling constants are in "TAU"; we shall use the
-*> letter "V" to refer to the product of Householder transformations
+*> letter "V" to refer to the product of HousehoAB_LDEr transformations
 *> (which should be equal to U).
 *>
 *> Specifically, if ITYPE=1, then:
@@ -66,7 +66,7 @@
 *> AP.
 *>
 *> For ITYPE > 1, the transformation U is expressed as a product
-*> of Householder transformations:
+*> of HousehoAB_LDEr transformations:
 *>
 *>    If UPLO='U', then  V = H(n-1)...H(1),  where
 *>
@@ -95,11 +95,11 @@
 *>          1: U expressed as a dense orthogonal matrix:
 *>             RESULT(1) = | A - U S U' | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU' | / ( n ulp )
 *>
-*>          2: U expressed as a product V of Housholder transformations:
+*>          2: U expressed as a product V of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | A - V S V' | / ( |A| n ulp )
 *>
 *>          3: U expressed both as a dense orthogonal matrix and
-*>             as a product of Housholder transformations:
+*>             as a product of HoushoAB_LDEr transformations:
 *>             RESULT(1) = | I - VU' | / ( n ulp )
 *> \endverbatim
 *>
@@ -115,7 +115,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, SSPT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_SSPT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -170,7 +170,7 @@
 *> \verbatim
 *>          VP is REAL array, dimension (N*(N+1)/2)
 *>          If ITYPE=2 or 3, the columns of this array contain the
-*>          Householder vectors used to describe the orthogonal matrix
+*>          HousehoAB_LDEr vectors used to describe the orthogonal matrix
 *>          in the decomposition, as described in purpose.
 *>          *NOTE* If ITYPE=2 or 3, V is modified and restored.  The
 *>          subdiagonal (if UPLO='L') or the superdiagonal (if UPLO='U')
@@ -183,7 +183,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)' in the Householder transformation H(j) of
+*>          v(j) v(j)' in the HousehoAB_LDEr transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *> \endverbatim
@@ -216,7 +216,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SSPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
+      SUBROUTINE AB_SSPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
      $                   TAU, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -248,13 +248,15 @@
       REAL               ANORM, TEMP, ULP, UNFL, VSAVE, WNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLANGE, SLANSP
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLANGE, SLANSP
+      LOGICAL            AB_LSAME
+      REAL               AB_SDOT, AB_SLAMCH, AB_SLANGE, AB_SLANSP
+      EXTERNAL           AB_LSAME, AB_SDOT, AB_SLAMCH, AB_SLANGE, AB_SLA
+     $NSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMM, SLACPY, SLASET, SOPMTR,
-     $                   SSPMV, SSPR, SSPR2
+      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SGEMM, AB_SLACPY, AB_SLA
+     $SET, AB_SOPMTR,
+     $                   AB_SSPMV, AB_SSPR, AB_AB_SSPR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -271,7 +273,7 @@
 *
       LAP = ( N*( N+1 ) ) / 2
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -279,8 +281,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -296,7 +298,7 @@
       IF( ITYPE.EQ.3 ) THEN
          ANORM = ONE
       ELSE
-         ANORM = MAX( SLANSP( '1', CUPLO, N, AP, WORK ), UNFL )
+         ANORM = MAX( AB_SLANSP( '1', CUPLO, N, AP, WORK ), UNFL )
       END IF
 *
 *     Compute error matrix:
@@ -305,26 +307,27 @@
 *
 *        ITYPE=1: error = A - U S U'
 *
-         CALL SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
-         CALL SCOPY( LAP, AP, 1, WORK, 1 )
+         CALL AB_SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+         CALL AB_SCOPY( LAP, AP, 1, WORK, 1 )
 *
          DO 10 J = 1, N
-            CALL SSPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
+            CALL AB_SSPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
             DO 20 J = 1, N - 1
-               CALL SSPR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, J+1 ),
+               CALL AB_AB_SSPR2( CUPLO, N, -E( J ), U( 1, J ), 1, U( 1, 
+     $J+1 ),
      $                     1, WORK )
    20       CONTINUE
          END IF
-         WNORM = SLANSP( '1', CUPLO, N, WORK, WORK( N**2+1 ) )
+         WNORM = AB_SLANSP( '1', CUPLO, N, WORK, WORK( N**2+1 ) )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        ITYPE=2: error = V S V' - A
 *
-         CALL SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+         CALL AB_SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
 *
          IF( LOWER ) THEN
             WORK( LAP ) = D( N )
@@ -341,13 +344,15 @@
                IF( TAU( J ).NE.ZERO ) THEN
                   VSAVE = VP( JP+J+1 )
                   VP( JP+J+1 ) = ONE
-                  CALL SSPMV( 'L', N-J, ONE, WORK( JP1+J+1 ),
+                  CALL AB_SSPMV( 'L', N-J, ONE, WORK( JP1+J+1 ),
      $                        VP( JP+J+1 ), 1, ZERO, WORK( LAP+1 ), 1 )
-                  TEMP = -HALF*TAU( J )*SDOT( N-J, WORK( LAP+1 ), 1,
+                  TEMP = -HALF*TAU( J )*AB_SDOT( N-J, WORK( LAP+1 ), 1,
      $                   VP( JP+J+1 ), 1 )
-                  CALL SAXPY( N-J, TEMP, VP( JP+J+1 ), 1, WORK( LAP+1 ),
+                  CALL AB_SAXPY( N-J, TEMP, VP( JP+J+1 ), 1, WORK( LAP+1
+     $ ),
      $                        1 )
-                  CALL SSPR2( 'L', N-J, -TAU( J ), VP( JP+J+1 ), 1,
+                  CALL AB_AB_SSPR2( 'L', N-J, -TAU( J ), VP( JP+J+1 ), 1
+     $,
      $                        WORK( LAP+1 ), 1, WORK( JP1+J+1 ) )
                   VP( JP+J+1 ) = VSAVE
                END IF
@@ -368,13 +373,14 @@
                IF( TAU( J ).NE.ZERO ) THEN
                   VSAVE = VP( JP1+J )
                   VP( JP1+J ) = ONE
-                  CALL SSPMV( 'U', J, ONE, WORK, VP( JP1+1 ), 1, ZERO,
+                  CALL AB_SSPMV( 'U', J, ONE, WORK, VP( JP1+1 ), 1, ZERO
+     $,
      $                        WORK( LAP+1 ), 1 )
-                  TEMP = -HALF*TAU( J )*SDOT( J, WORK( LAP+1 ), 1,
+                  TEMP = -HALF*TAU( J )*AB_SDOT( J, WORK( LAP+1 ), 1,
      $                   VP( JP1+1 ), 1 )
-                  CALL SAXPY( J, TEMP, VP( JP1+1 ), 1, WORK( LAP+1 ),
+                  CALL AB_SAXPY( J, TEMP, VP( JP1+1 ), 1, WORK( LAP+1 ),
      $                        1 )
-                  CALL SSPR2( 'U', J, -TAU( J ), VP( JP1+1 ), 1,
+                  CALL AB_AB_SSPR2( 'U', J, -TAU( J ), VP( JP1+1 ), 1,
      $                        WORK( LAP+1 ), 1, WORK )
                   VP( JP1+J ) = VSAVE
                END IF
@@ -385,7 +391,7 @@
          DO 70 J = 1, LAP
             WORK( J ) = WORK( J ) - AP( J )
    70    CONTINUE
-         WNORM = SLANSP( '1', CUPLO, N, WORK, WORK( LAP+1 ) )
+         WNORM = AB_SLANSP( '1', CUPLO, N, WORK, WORK( LAP+1 ) )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -393,8 +399,8 @@
 *
          IF( N.LT.2 )
      $      RETURN
-         CALL SLACPY( ' ', N, N, U, LDU, WORK, N )
-         CALL SOPMTR( 'R', CUPLO, 'T', N, N, VP, TAU, WORK, N,
+         CALL AB_SLACPY( ' ', N, N, U, LDU, WORK, N )
+         CALL AB_SOPMTR( 'R', CUPLO, 'T', N, N, VP, TAU, WORK, N,
      $                WORK( N**2+1 ), IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = TEN / ULP
@@ -405,7 +411,7 @@
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
    80    CONTINUE
 *
-         WNORM = SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
+         WNORM = AB_SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
       END IF
 *
       IF( ANORM.GT.WNORM ) THEN
@@ -423,19 +429,20 @@
 *     Compute  UU' - I
 *
       IF( ITYPE.EQ.1 ) THEN
-         CALL SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+         CALL AB_SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WO
+     $RK,
      $               N )
 *
          DO 90 J = 1, N
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - ONE
    90    CONTINUE
 *
-         RESULT( 2 ) = MIN( SLANGE( '1', N, N, WORK, N,
+         RESULT( 2 ) = MIN( AB_SLANGE( '1', N, N, WORK, N,
      $                 WORK( N**2+1 ) ), REAL( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of SSPT21
+*     End of AB_SSPT21
 *
       END

@@ -98,26 +98,27 @@
       COMPLEX            WORKARF( (NMAX*(NMAX+1))/2 )
       COMPLEX            WORKAP( (NMAX*(NMAX+1))/2 )
       COMPLEX            WORKARFINV( (NMAX*(NMAX+1))/2 )
-      COMPLEX            C_WORK_CLATMS( 3 * NMAX )
-      COMPLEX            C_WORK_CPOT02( NMAX, MAXRHS )
-      COMPLEX            C_WORK_CPOT03( NMAX, NMAX )
-      REAL               S_WORK_CLATMS( NMAX )
-      REAL               S_WORK_CLANHE( NMAX )
-      REAL               S_WORK_CPOT01( NMAX )
-      REAL               S_WORK_CPOT02( NMAX )
-      REAL               S_WORK_CPOT03( NMAX )
+      COMPLEX            C_WORK_AB_CLATMS( 3 * NMAX )
+      COMPLEX            C_WORK_AB_CPOT02( NMAX, MAXRHS )
+      COMPLEX            C_WORK_AB_CPOT03( NMAX, NMAX )
+      REAL               S_WORK_AB_CLATMS( NMAX )
+      REAL               S_WORK_AB_CLANHE( NMAX )
+      REAL               S_WORK_AB_CPOT01( NMAX )
+      REAL               S_WORK_AB_CPOT02( NMAX )
+      REAL               S_WORK_AB_CPOT03( NMAX )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SECOND
-      EXTERNAL           SLAMCH, SECOND
+      REAL               AB_SLAMCH, AB_SECOND
+      EXTERNAL           AB_SLAMCH, AB_SECOND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ILAVER, CDRVRFP, CDRVRF1, CDRVRF2, CDRVRF3,
-     +                   CDRVRF4
+      EXTERNAL           AB_ILAVER, AB_CDRVRFP, AB_CDRVRF1, AB_CDRVRF2, 
+     $AB_CDRVRF3,
+     +                   AB_CDRVRF4
 *     ..
 *     .. Executable Statements ..
 *
-      S1 = SECOND( )
+      S1 = AB_SECOND( )
       FATAL = .FALSE.
 *
 *     Read a dummy line.
@@ -126,7 +127,7 @@
 *
 *     Report LAPACK version tag (e.g. LAPACK-3.2.0)
 *
-      CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      CALL AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
       WRITE( NOUT, FMT = 9994 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read the values of N
@@ -220,60 +221,62 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      EPS = SLAMCH( 'Underflow threshold' )
+      EPS = AB_SLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'underflow', EPS
-      EPS = SLAMCH( 'Overflow threshold' )
+      EPS = AB_SLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'overflow ', EPS
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'precision', EPS
       WRITE( NOUT, FMT = * )
 *
 *     Test the error exit of:
 *
       IF( TSTERR )
-     $   CALL CERRRFP( NOUT )
+     $   CALL AB_CERRRFP( NOUT )
 *
-*    Test the routines: cpftrf, cpftri, cpftrs (as in CDRVPO).
-*    This also tests the routines: ctfsm, ctftri, ctfttr, ctrttf.
+*    Test the routines: AB_CPFTRF, AB_CPFTRI, AB_CPFTRS (as in AB_CDRVPO).
+*    This also tests the routines: AB_CTFSM, AB_CTFTRI, AB_CTFTTR, AB_CTRTTF.
 *
-      CALL CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
+      CALL AB_CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
      $              WORKA, WORKASAV, WORKAFAC, WORKAINV, WORKB,
      $              WORKBSAV, WORKXACT, WORKX, WORKARF, WORKARFINV,
-     $              C_WORK_CLATMS, C_WORK_CPOT02,
-     $              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
-     $              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
+     $              C_WORK_AB_CLATMS, C_WORK_AB_CPOT02,
+     $              C_WORK_AB_CPOT03, S_WORK_AB_CLATMS, S_WORK_AB_CLANHE
+     $,
+     $              S_WORK_AB_CPOT01, S_WORK_AB_CPOT02, S_WORK_AB_CPOT03
+     $ )
 *
-*    Test the routine: clanhf
+*    Test the routine: AB_CLANHF
 *
-      CALL CDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
-     +              S_WORK_CLANHE )
+      CALL AB_CDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
+     +              S_WORK_AB_CLANHE )
 *
 *    Test the conversion routines:
-*       chfttp, ctpthf, ctfttr, ctrttf, ctrttp and ctpttr.
+*       chfttp, ctpthf, AB_CTFTTR, AB_CTRTTF, AB_CTRTTP and AB_CTPTTR.
 *
-      CALL CDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
+      CALL AB_CDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
      +              WORKAP, WORKASAV )
 *
-*    Test the routine: ctfsm
+*    Test the routine: AB_CTFSM
 *
-      CALL CDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
-     +              WORKAINV, WORKAFAC, S_WORK_CLANHE,
-     +              C_WORK_CPOT03, C_WORK_CPOT02 )
+      CALL AB_CDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
+     +              WORKAINV, WORKAFAC, S_WORK_AB_CLANHE,
+     +              C_WORK_AB_CPOT03, C_WORK_AB_CPOT02 )
 *
 *
-*    Test the routine: chfrk
+*    Test the routine: AB_CHFRK
 *
-      CALL CDRVRF4( NOUT, NN, NVAL, THRESH, WORKA, WORKAFAC, NMAX,
-     +              WORKARF, WORKAINV, NMAX, S_WORK_CLANHE)
+      CALL AB_CDRVRF4( NOUT, NN, NVAL, THRESH, WORKA, WORKAFAC, NMAX,
+     +              WORKARF, WORKAINV, NMAX, S_WORK_AB_CLANHE)
 *
       CLOSE ( NIN )
-      S2 = SECOND( )
+      S2 = AB_SECOND( )
       WRITE( NOUT, FMT = 9998 )
       WRITE( NOUT, FMT = 9997 )S2 - S1
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )
- 9997 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9997 FORMAT( ' Total time used = ', F12.2, ' AB_SECONDs', / )
  9996 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be >=',
      $      I6 )
  9995 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be <=',

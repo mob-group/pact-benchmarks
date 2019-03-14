@@ -1,4 +1,4 @@
-*> \brief \b ZLCTES
+*> \brief \b AB_ZLCTES
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION ZLCTES( Z, D )
+*       LOGICAL          FUNCTION AB_ZLCTES( Z, D )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16         D, Z
@@ -20,12 +20,12 @@
 *>
 *> \verbatim
 *>
-*> ZLCTES returns .TRUE. if the eigenvalue Z/D is to be selected
+*> AB_ZLCTES returns .TRUE. if the eigenvalue Z/D is to be selected
 *> (specifically, in this subroutine, if the real part of the
 *> eigenvalue is negative), and otherwise it returns .FALSE..
 *>
-*> It is used by the test routine ZDRGES to test whether the driver
-*> routine ZGGES successfully sorts eigenvalues.
+*> It is used by the test routine AB_ZDRGES to test whether the driver
+*> routine AB_ZGGES successfully sorts eigenvalues.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION ZLCTES( Z, D )
+      LOGICAL          FUNCTION AB_ZLCTES( Z, D )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,23 +85,23 @@
 *     .. Executable Statements ..
 *
       IF( D.EQ.CZERO ) THEN
-         ZLCTES = ( DBLE( Z ).LT.ZERO )
+         AB_ZLCTES = ( DBLE( Z ).LT.ZERO )
       ELSE
          IF( DBLE( Z ).EQ.ZERO .OR. DBLE( D ).EQ.ZERO ) THEN
-            ZLCTES = ( SIGN( ONE, DIMAG( Z ) ).NE.
+            AB_ZLCTES = ( SIGN( ONE, DIMAG( Z ) ).NE.
      $               SIGN( ONE, DIMAG( D ) ) )
          ELSE IF( DIMAG( Z ).EQ.ZERO .OR. DIMAG( D ).EQ.ZERO ) THEN
-            ZLCTES = ( SIGN( ONE, DBLE( Z ) ).NE.
+            AB_ZLCTES = ( SIGN( ONE, DBLE( Z ) ).NE.
      $               SIGN( ONE, DBLE( D ) ) )
          ELSE
             ZMAX = MAX( ABS( DBLE( Z ) ), ABS( DIMAG( Z ) ) )
-            ZLCTES = ( ( DBLE( Z ) / ZMAX )*DBLE( D )+
+            AB_ZLCTES = ( ( DBLE( Z ) / ZMAX )*DBLE( D )+
      $               ( DIMAG( Z ) / ZMAX )*DIMAG( D ).LT.ZERO )
          END IF
       END IF
 *
       RETURN
 *
-*     End of ZLCTES
+*     End of AB_ZLCTES
 *
       END

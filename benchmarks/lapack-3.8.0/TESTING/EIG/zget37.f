@@ -1,4 +1,4 @@
-*> \brief \b ZGET37
+*> \brief \b AB_ZGET37
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET37( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_ZGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, NIN
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> ZGET37 tests ZTRSNA, a routine for estimating condition numbers of
+*> AB_ZGET37 tests AB_ZTRSNA, a routine for estimating condition numbers of
 *> eigenvalues and/or right eigenvectors of a matrix.
 *>
 *> The test matrices are read from a file with logical unit number NIN.
@@ -37,7 +37,7 @@
 *> \verbatim
 *>          RMAX is DOUBLE PRECISION array, dimension (3)
 *>          Value of the largest test ratio.
-*>          RMAX(1) = largest ratio comparing different calls to ZTRSNA
+*>          RMAX(1) = largest ratio comparing different calls to AB_ZTRSNA
 *>          RMAX(2) = largest error in reciprocal condition
 *>                    numbers taking their conditioning into account
 *>          RMAX(3) = largest error in reciprocal condition
@@ -50,17 +50,17 @@
 *>          LMAX is INTEGER array, dimension (3)
 *>          LMAX(i) is example number where largest test ratio
 *>          RMAX(i) is achieved. Also:
-*>          If ZGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*>          If ZHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*>          If ZTRSNA returns INFO nonzero on example i, LMAX(3)=i
+*>          If AB_ZGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If AB_ZHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If AB_ZTRSNA returns INFO nonzero on example i, LMAX(3)=i
 *> \endverbatim
 *>
 *> \param[out] NINFO
 *> \verbatim
 *>          NINFO is INTEGER array, dimension (3)
-*>          NINFO(1) = No. of times ZGEHRD returned INFO nonzero
-*>          NINFO(2) = No. of times ZHSEQR returned INFO nonzero
-*>          NINFO(3) = No. of times ZTRSNA returned INFO nonzero
+*>          NINFO(1) = No. of times AB_ZGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times AB_ZHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times AB_ZTRSNA returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -88,7 +88,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZGET37( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_ZGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,22 +130,23 @@
      $                   WORK( LWORK ), WTMP( LDT )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLABAD, DSCAL, ZCOPY, ZDSCAL, ZGEHRD,
-     $                   ZHSEQR, ZLACPY, ZTREVC, ZTRSNA
+      EXTERNAL           AB_DCOPY, AB_DLABAD, AB_DSCAL, AB_ZCOPY, ZAB_DS
+     $CAL, AB_ZGEHRD,
+     $                   AB_ZHSEQR, AB_ZLACPY, AB_ZTREVC, AB_ZTRSNA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DIMAG, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *
@@ -178,23 +179,24 @@
       DO 30 I = 1, N
          READ( NIN, FMT = * )WRIN( I ), WIIN( I ), SIN( I ), SEPIN( I )
    30 CONTINUE
-      TNRM = ZLANGE( 'M', N, N, TMP, LDT, RWORK )
+      TNRM = AB_ZLANGE( 'M', N, N, TMP, LDT, RWORK )
       DO 260 ISCL = 1, 3
 *
 *        Scale input matrix
 *
          KNT = KNT + 1
-         CALL ZLACPY( 'F', N, N, TMP, LDT, T, LDT )
+         CALL AB_ZLACPY( 'F', N, N, TMP, LDT, T, LDT )
          VMUL = VAL( ISCL )
          DO 40 I = 1, N
-            CALL ZDSCAL( N, VMUL, T( 1, I ), 1 )
+            CALL ZAB_DSCAL( N, VMUL, T( 1, I ), 1 )
    40    CONTINUE
          IF( TNRM.EQ.ZERO )
      $      VMUL = ONE
 *
 *        Compute eigenvalues and eigenvectors
 *
-         CALL ZGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
+         CALL AB_ZGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
+     $N,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 1 ) = KNT
@@ -209,7 +211,7 @@
 *
 *        Compute Schur form
 *
-         CALL ZHSEQR( 'S', 'N', N, 1, N, T, LDT, W, CDUM, 1, WORK,
+         CALL AB_ZHSEQR( 'S', 'N', N, 1, N, T, LDT, W, CDUM, 1, WORK,
      $                LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 2 ) = KNT
@@ -222,12 +224,14 @@
          DO 70 I = 1, N
             SELECT( I ) = .TRUE.
    70    CONTINUE
-         CALL ZTREVC( 'B', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT, N,
+         CALL AB_ZTREVC( 'B', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT, 
+     $N,
      $                M, WORK, RWORK, INFO )
 *
 *        Compute condition numbers
 *
-         CALL ZTRSNA( 'B', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT, S,
+         CALL AB_ZTRSNA( 'B', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT, 
+     $S,
      $                SEP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -238,7 +242,7 @@
 *        Sort eigenvalues and condition numbers lexicographically
 *        to compare with inputs
 *
-         CALL ZCOPY( N, W, 1, WTMP, 1 )
+         CALL AB_ZCOPY( N, W, 1, WTMP, 1 )
          IF( ISRT.EQ.0 ) THEN
 *
 *           Sort by increasing real part
@@ -254,9 +258,9 @@
                WSRT( I ) = DIMAG( W( I ) )
    90       CONTINUE
          END IF
-         CALL DCOPY( N, S, 1, STMP, 1 )
-         CALL DCOPY( N, SEP, 1, SEPTMP, 1 )
-         CALL DSCAL( N, ONE / VMUL, SEPTMP, 1 )
+         CALL AB_DCOPY( N, S, 1, STMP, 1 )
+         CALL AB_DCOPY( N, SEP, 1, SEPTMP, 1 )
+         CALL AB_DSCAL( N, ONE / VMUL, SEPTMP, 1 )
          DO 110 I = 1, N - 1
             KMIN = I
             VMIN = WSRT( I )
@@ -336,7 +340,8 @@
                VMAX = ONE / EPS
             ELSE IF( SEPIN( I )-TOLIN.GT.SEPTMP( I )+TOL ) THEN
                VMAX = ( SEPIN( I )-TOLIN ) / ( SEPTMP( I )+TOL )
-            ELSE IF( SEPIN( I )+TOLIN.LT.EPS*( SEPTMP( I )-TOL ) ) THEN
+            ELSE IF( SEPIN( I )+TOLIN.LT.EPS*( SEPTMP( I )-TOL ) ) TH
+     $EN
                VMAX = ONE / EPS
             ELSE IF( SEPIN( I )+TOLIN.LT.SEPTMP( I )-TOL ) THEN
                VMAX = ( SEPTMP( I )-TOL ) / ( SEPIN( I )+TOLIN )
@@ -403,9 +408,9 @@
 *
          VMAX = ZERO
          DUM( 1 ) = -ONE
-         CALL DCOPY( N, DUM, 0, STMP, 1 )
-         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL ZTRSNA( 'E', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_ZTRSNA( 'E', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -421,9 +426,9 @@
 *
 *        Compute eigenvector condition numbers only and compare
 *
-         CALL DCOPY( N, DUM, 0, STMP, 1 )
-         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL ZTRSNA( 'V', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_ZTRSNA( 'V', 'A', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -442,9 +447,9 @@
          DO 180 I = 1, N
             SELECT( I ) = .TRUE.
   180    CONTINUE
-         CALL DCOPY( N, DUM, 0, STMP, 1 )
-         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL ZTRSNA( 'B', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_ZTRSNA( 'B', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -460,9 +465,9 @@
 *
 *        Compute eigenvalue condition numbers using SELECT and compare
 *
-         CALL DCOPY( N, DUM, 0, STMP, 1 )
-         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL ZTRSNA( 'E', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_ZTRSNA( 'E', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -478,9 +483,9 @@
 *
 *        Compute eigenvector condition numbers using SELECT and compare
 *
-         CALL DCOPY( N, DUM, 0, STMP, 1 )
-         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL ZTRSNA( 'V', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
+         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL AB_ZTRSNA( 'V', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -499,7 +504,7 @@
      $         LMAX( 1 ) = KNT
          END IF
 *
-*        Select second and next to last eigenvalues
+*        Select AB_SECOND and next to last eigenvalues
 *
          DO 220 I = 1, N
             SELECT( I ) = .FALSE.
@@ -509,22 +514,22 @@
             ICMP = 1
             LCMP( 1 ) = 2
             SELECT( 2 ) = .TRUE.
-            CALL ZCOPY( N, RE( 1, 2 ), 1, RE( 1, 1 ), 1 )
-            CALL ZCOPY( N, LE( 1, 2 ), 1, LE( 1, 1 ), 1 )
+            CALL AB_ZCOPY( N, RE( 1, 2 ), 1, RE( 1, 1 ), 1 )
+            CALL AB_ZCOPY( N, LE( 1, 2 ), 1, LE( 1, 1 ), 1 )
          END IF
          IF( N.GT.3 ) THEN
             ICMP = 2
             LCMP( 2 ) = N - 1
             SELECT( N-1 ) = .TRUE.
-            CALL ZCOPY( N, RE( 1, N-1 ), 1, RE( 1, 2 ), 1 )
-            CALL ZCOPY( N, LE( 1, N-1 ), 1, LE( 1, 2 ), 1 )
+            CALL AB_ZCOPY( N, RE( 1, N-1 ), 1, RE( 1, 2 ), 1 )
+            CALL AB_ZCOPY( N, LE( 1, N-1 ), 1, LE( 1, 2 ), 1 )
          END IF
 *
 *        Compute all selected condition numbers
 *
-         CALL DCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL ZTRSNA( 'B', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_DCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_ZTRSNA( 'B', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -541,9 +546,9 @@
 *
 *        Compute selected eigenvalue condition numbers
 *
-         CALL DCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL ZTRSNA( 'E', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_DCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_ZTRSNA( 'E', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -560,9 +565,9 @@
 *
 *        Compute selected eigenvector condition numbers
 *
-         CALL DCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL ZTRSNA( 'V', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
+         CALL AB_DCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL AB_DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL AB_ZTRSNA( 'V', 'S', SELECT, N, T, LDT, LE, LDT, RE, LDT,
      $                STMP, SEPTMP, N, M, WORK, N, RWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -584,6 +589,6 @@
   260 CONTINUE
       GO TO 10
 *
-*     End of ZGET37
+*     End of AB_ZGET37
 *
       END

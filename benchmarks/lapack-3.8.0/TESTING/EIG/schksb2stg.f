@@ -1,4 +1,4 @@
-*> \brief \b SCHKSBSTG
+*> \brief \b AB_SCHKSBSTG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKSB2STG( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE,
+*       SUBROUTINE AB_AB_SCHKSB2STG( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE,
 *                          ISEED, THRESH, NOUNIT, A, LDA, SD, SE, D1,
 *                          D2, D3, U, LDU, WORK, LWORK, RESULT, INFO )
 *
@@ -30,53 +30,53 @@
 *>
 *> \verbatim
 *>
-*> SCHKSBSTG tests the reduction of a symmetric band matrix to tridiagonal
+*> AB_SCHKSBSTG tests the reduction of a symmetric band matrix to tridiagonal
 *> form, used with the symmetric eigenvalue problem.
 *>
-*> SSBTRD factors a symmetric band matrix A as  U S U' , where ' means
+*> AB_SSBTRD factors a symmetric band matrix A as  U S U' , where ' means
 *> transpose, S is symmetric tridiagonal, and U is orthogonal.
-*> SSBTRD can use either just the lower or just the upper triangle
-*> of A; SCHKSBSTG checks both cases.
+*> AB_SSBTRD can use either just the lower or just the upper triangle
+*> of A; AB_SCHKSBSTG checks both cases.
 *>
-*> SSYTRD_SB2ST factors a symmetric band matrix A as  U S U' , 
+*> AB_SSYTRD_SB2ST factors a symmetric band matrix A as  U S U' , 
 *> where ' means transpose, S is symmetric tridiagonal, and U is
-*> orthogonal. SSYTRD_SB2ST can use either just the lower or just
-*> the upper triangle of A; SCHKSBSTG checks both cases.
+*> orthogonal. AB_SSYTRD_SB2ST can use either just the lower or just
+*> the upper triangle of A; AB_SCHKSBSTG checks both cases.
 *>
-*> SSTEQR factors S as  Z D1 Z'.  
+*> AB_SSTEQR factors S as  Z D1 Z'.  
 *> D1 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of SSBTRD "U" (used as reference for SSYTRD_SB2ST)
+*> and from the S resulting of AB_SSBTRD "U" (used as reference for AB_SSYTRD_SB2ST)
 *> D2 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of SSYTRD_SB2ST "U".
+*> and from the S resulting of AB_SSYTRD_SB2ST "U".
 *> D3 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of SSYTRD_SB2ST "L".
+*> and from the S resulting of AB_SSYTRD_SB2ST "L".
 *>
-*> When SCHKSBSTG is called, a number of matrix "sizes" ("n's"), a number
+*> When AB_SCHKSBSTG is called, a number of matrix "sizes" ("n's"), a number
 *> of bandwidths ("k's"), and a number of matrix "types" are
 *> specified.  For each size ("n"), each bandwidth ("k") less than or
 *> equal to "n", and each type of matrix, one matrix will be generated
 *> and used to test the symmetric banded reduction routine.  For each
 *> matrix, a number of tests will be performed:
 *>
-*> (1)     | A - V S V' | / ( |A| n ulp )  computed by SSBTRD with
+*> (1)     | A - V S V' | / ( |A| n ulp )  computed by AB_SSBTRD with
 *>                                         UPLO='U'
 *>
 *> (2)     | I - UU' | / ( n ulp )
 *>
-*> (3)     | A - V S V' | / ( |A| n ulp )  computed by SSBTRD with
+*> (3)     | A - V S V' | / ( |A| n ulp )  computed by AB_SSBTRD with
 *>                                         UPLO='L'
 *>
 *> (4)     | I - UU' | / ( n ulp )
 *>
 *> (5)     | D1 - D2 | / ( |D1| ulp )      where D1 is computed by
-*>                                         SSBTRD with UPLO='U' and
+*>                                         AB_SSBTRD with UPLO='U' and
 *>                                         D2 is computed by
-*>                                         SSYTRD_SB2ST with UPLO='U'
+*>                                         AB_SSYTRD_SB2ST with UPLO='U'
 *>
 *> (6)     | D1 - D3 | / ( |D1| ulp )      where D1 is computed by
-*>                                         SSBTRD with UPLO='U' and
+*>                                         AB_SSBTRD with UPLO='U' and
 *>                                         D3 is computed by
-*>                                         SSYTRD_SB2ST with UPLO='L'
+*>                                         AB_SSYTRD_SB2ST with UPLO='L'
 *>
 *> The "sizes" are specified by an array NN(1:NSIZES); the value of
 *> each element NN(j) specifies one size.
@@ -125,7 +125,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          SCHKSBSTG does nothing.  It must be at least zero.
+*>          AB_SCHKSBSTG does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -140,7 +140,7 @@
 *> \verbatim
 *>          NWDTHS is INTEGER
 *>          The number of bandwidths to use.  If it is zero,
-*>          SCHKSBSTG does nothing.  It must be at least zero.
+*>          AB_SCHKSBSTG does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] KK
@@ -153,7 +153,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, SCHKSBSTG
+*>          The number of elements in DOTYPE.   If it is zero, AB_SCHKSBSTG
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -183,7 +183,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to SCHKSBSTG to continue the same random number
+*>          next call to AB_SCHKSBSTG to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -224,20 +224,20 @@
 *> \verbatim
 *>          SD is REAL array, dimension (max(NN))
 *>          Used to hold the diagonal of the tridiagonal matrix computed
-*>          by SSBTRD.
+*>          by AB_SSBTRD.
 *> \endverbatim
 *>
 *> \param[out] SE
 *> \verbatim
 *>          SE is REAL array, dimension (max(NN))
 *>          Used to hold the off-diagonal of the tridiagonal matrix
-*>          computed by SSBTRD.
+*>          computed by AB_SSBTRD.
 *> \endverbatim
 *>
 *> \param[out] U
 *> \verbatim
 *>          U is REAL array, dimension (LDU, max(NN))
-*>          Used to hold the orthogonal matrix computed by SSBTRD.
+*>          Used to hold the orthogonal matrix computed by AB_SSBTRD.
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -312,7 +312,8 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SCHKSB2STG( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE,
+      SUBROUTINE AB_AB_SCHKSB2STG( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYP
+     $E,
      $                   ISEED, THRESH, NOUNIT, A, LDA, SD, SE, D1,
      $                   D2, D3, U, LDU, WORK, LWORK, RESULT, INFO )
 *
@@ -358,12 +359,14 @@
      $                   KMODE( MAXTYP ), KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SLASET, SLASUM, SLATMR, SLATMS, SSBT21,
-     $                   SSBTRD, XERBLA, SSYTRD_SB2ST, SSTEQR
+      EXTERNAL           AB_SLACPY, AB_SLASET, AB_SLASUM, AB_SLATMR, AB_
+     $SLATMS, AB_SSBT21,
+     $                   AB_SSBTRD, AB_XERBLA, AB_SSYTRD_SB2ST, AB_SSTEQ
+     $R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -422,7 +425,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SCHKSBSTG', -INFO )
+         CALL AB_XERBLA( 'AB_SCHKSBSTG', -INFO )
          RETURN
       END IF
 *
@@ -433,9 +436,9 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -512,7 +515,7 @@
 *
    70          CONTINUE
 *
-               CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+               CALL AB_SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
                IINFO = 0
                IF( JTYPE.LE.15 ) THEN
                   COND = ULPINV
@@ -539,7 +542,8 @@
 *
 *                 Diagonal Matrix, [Eigen]values Specified
 *
-                  CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+                  CALL AB_SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, CO
+     $ND,
      $                         ANORM, 0, 0, 'Q', A( K+1, 1 ), LDA,
      $                         WORK( N+1 ), IINFO )
 *
@@ -547,7 +551,8 @@
 *
 *                 Symmetric, eigenvalues specified
 *
-                  CALL SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+                  CALL AB_SLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, CO
+     $ND,
      $                         ANORM, K, K, 'Q', A, LDA, WORK( N+1 ),
      $                         IINFO )
 *
@@ -555,7 +560,8 @@
 *
 *                 Diagonal, random eigenvalues
 *
-                  CALL SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+                  CALL AB_SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, O
+     $NE,
      $                         'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                         ZERO, ANORM, 'Q', A( K+1, 1 ), LDA,
@@ -565,7 +571,8 @@
 *
 *                 Symmetric, random eigenvalues
 *
-                  CALL SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+                  CALL AB_SLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, O
+     $NE,
      $                         'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, K, K,
      $                         ZERO, ANORM, 'Q', A, LDA, IDUMMA, IINFO )
@@ -574,7 +581,8 @@
 *
 *                 Positive definite, eigenvalues specified.
 *
-                  CALL SLATMS( N, N, 'S', ISEED, 'P', WORK, IMODE, COND,
+                  CALL AB_SLATMS( N, N, 'S', ISEED, 'P', WORK, IMODE, CO
+     $ND,
      $                         ANORM, K, K, 'Q', A, LDA, WORK( N+1 ),
      $                         IINFO )
 *
@@ -584,7 +592,8 @@
 *
                   IF( N.GT.1 )
      $               K = MAX( 1, K )
-                  CALL SLATMS( N, N, 'S', ISEED, 'P', WORK, IMODE, COND,
+                  CALL AB_SLATMS( N, N, 'S', ISEED, 'P', WORK, IMODE, CO
+     $ND,
      $                         ANORM, 1, 1, 'Q', A( K, 1 ), LDA,
      $                         WORK( N+1 ), IINFO )
                   DO 90 I = 2, N
@@ -610,16 +619,17 @@
 *
   100          CONTINUE
 *
-*              Call SSBTRD to compute S and U from upper triangle.
+*              Call AB_SSBTRD to compute S and U from upper triangle.
 *
-               CALL SLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
+               CALL AB_SLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
 *
                NTEST = 1
-               CALL SSBTRD( 'V', 'U', N, K, WORK, LDA, SD, SE, U, LDU,
+               CALL AB_SSBTRD( 'V', 'U', N, K, WORK, LDA, SD, SE, U, LDU
+     $,
      $                      WORK( LDA*N+1 ), IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBTRD(U)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSBTRD(U)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -632,29 +642,29 @@
 *
 *              Do tests 1 and 2
 *
-               CALL SSBT21( 'Upper', N, K, 1, A, LDA, SD, SE, U, LDU,
+               CALL AB_SSBT21( 'Upper', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RESULT( 1 ) )
 *
-*              Before converting A into lower for SSBTRD, run SSYTRD_SB2ST 
+*              Before converting A into lower for AB_SSBTRD, run AB_SSYTRD_SB2ST 
 *              otherwise matrix A will be converted to lower and then need
 *              to be converted back to upper in order to run the upper case 
-*              ofSSYTRD_SB2ST
+*              ofAB_SSYTRD_SB2ST
 *            
 *              Compute D1 the eigenvalues resulting from the tridiagonal
-*              form using the SSBTRD and used as reference to compare
-*              with the SSYTRD_SB2ST routine
+*              form using the AB_SSBTRD and used as reference to compare
+*              with the AB_SSYTRD_SB2ST routine
 *            
-*              Compute D1 from the SSBTRD and used as reference for the
-*              SSYTRD_SB2ST
+*              Compute D1 from the AB_SSBTRD and used as reference for the
+*              AB_SSYTRD_SB2ST
 *            
-               CALL SCOPY( N, SD, 1, D1, 1 )
+               CALL AB_SCOPY( N, SD, 1, D1, 1 )
                IF( N.GT.0 )
-     $            CALL SCOPY( N-1, SE, 1, WORK, 1 )
+     $            CALL AB_SCOPY( N-1, SE, 1, WORK, 1 )
 *            
-               CALL SSTEQR( 'N', N, D1, WORK, WORK( N+1 ), LDU,
+               CALL AB_SSTEQR( 'N', N, D1, WORK, WORK( N+1 ), LDU,
      $                      WORK( N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEQR(N)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSTEQR(N)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -665,29 +675,30 @@
                   END IF
                END IF
 *            
-*              SSYTRD_SB2ST Upper case is used to compute D2.
+*              AB_SSYTRD_SB2ST Upper case is used to compute D2.
 *              Note to set SD and SE to zero to be sure not reusing 
 *              the one from above. Compare it with D1 computed 
-*              using the SSBTRD.
+*              using the AB_SSBTRD.
 *            
-               CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
-               CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
-               CALL SLACPY( ' ', K+1, N, A, LDA, U, LDU )
+               CALL AB_SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
+               CALL AB_SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
+               CALL AB_SLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH
-               CALL SSYTRD_SB2ST( 'N', 'N', "U", N, K, U, LDU, SD, SE, 
+               CALL AB_SSYTRD_SB2ST( 'N', 'N', "U", N, K, U, LDU, SD, SE
+     $, 
      $                      WORK, LH, WORK( LH+1 ), LW, IINFO )
 *            
-*              Compute D2 from the SSYTRD_SB2ST Upper case
+*              Compute D2 from the AB_SSYTRD_SB2ST Upper case
 *            
-               CALL SCOPY( N, SD, 1, D2, 1 )
+               CALL AB_SCOPY( N, SD, 1, D2, 1 )
                IF( N.GT.0 )
-     $            CALL SCOPY( N-1, SE, 1, WORK, 1 )
+     $            CALL AB_SCOPY( N-1, SE, 1, WORK, 1 )
 *            
-               CALL SSTEQR( 'N', N, D2, WORK, WORK( N+1 ), LDU,
+               CALL AB_SSTEQR( 'N', N, D2, WORK, WORK( N+1 ), LDU,
      $                      WORK( N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEQR(N)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSTEQR(N)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -712,16 +723,17 @@
   130             CONTINUE
   140          CONTINUE
 *
-*              Call SSBTRD to compute S and U from lower triangle
+*              Call AB_SSBTRD to compute S and U from lower triangle
 *
-               CALL SLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
+               CALL AB_SLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
 *
                NTEST = 3
-               CALL SSBTRD( 'V', 'L', N, K, WORK, LDA, SD, SE, U, LDU,
+               CALL AB_SSBTRD( 'V', 'L', N, K, WORK, LDA, SD, SE, U, LDU
+     $,
      $                      WORK( LDA*N+1 ), IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSBTRD(L)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSBTRD(L)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -735,32 +747,33 @@
 *
 *              Do tests 3 and 4
 *
-               CALL SSBT21( 'Lower', N, K, 1, A, LDA, SD, SE, U, LDU,
+               CALL AB_SSBT21( 'Lower', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RESULT( 3 ) )
 *
-*              SSYTRD_SB2ST Lower case is used to compute D3.
+*              AB_SSYTRD_SB2ST Lower case is used to compute D3.
 *              Note to set SD and SE to zero to be sure not reusing 
 *              the one from above. Compare it with D1 computed 
-*              using the SSBTRD. 
+*              using the AB_SSBTRD. 
 *           
-               CALL SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
-               CALL SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
-               CALL SLACPY( ' ', K+1, N, A, LDA, U, LDU )
+               CALL AB_SLASET( 'Full', N, 1, ZERO, ZERO, SD, 1 )
+               CALL AB_SLASET( 'Full', N, 1, ZERO, ZERO, SE, 1 )
+               CALL AB_SLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH
-               CALL SSYTRD_SB2ST( 'N', 'N', "L", N, K, U, LDU, SD, SE, 
+               CALL AB_SSYTRD_SB2ST( 'N', 'N', "L", N, K, U, LDU, SD, SE
+     $, 
      $                      WORK, LH, WORK( LH+1 ), LW, IINFO )
 *           
 *              Compute D3 from the 2-stage Upper case
 *           
-               CALL SCOPY( N, SD, 1, D3, 1 )
+               CALL AB_SCOPY( N, SD, 1, D3, 1 )
                IF( N.GT.0 )
-     $            CALL SCOPY( N-1, SE, 1, WORK, 1 )
+     $            CALL AB_SCOPY( N-1, SE, 1, WORK, 1 )
 *           
-               CALL SSTEQR( 'N', N, D3, WORK, WORK( N+1 ), LDU,
+               CALL AB_SSTEQR( 'N', N, D3, WORK, WORK( N+1 ), LDU,
      $                      WORK( N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'SSTEQR(N)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_SSTEQR(N)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -802,7 +815,7 @@
                   IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                    If this is the first test to fail,
-*                    print a header to the data file.
+*                    print a AB_HEADER to the data file.
 *
                      IF( NERRS.EQ.0 ) THEN
                         WRITE( NOUNIT, FMT = 9998 )'SSB'
@@ -824,15 +837,16 @@
 *
 *     Summary
 *
-      CALL SLASUM( 'SSB', NOUNIT, NERRS, NTESTT )
+      CALL AB_SLASUM( 'SSB', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' SCHKSBSTG: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_SCHKSBSTG: ', A, ' returned INFO=', I6, '.', / 9X, 'N
+     $=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
  9998 FORMAT( / 1X, A3,
      $      ' -- Real Symmetric Banded Tridiagonal Reduction Routines' )
- 9997 FORMAT( ' Matrix types (see SCHKSBSTG for details): ' )
+ 9997 FORMAT( ' Matrix types (see AB_SCHKSBSTG for details): ' )
 *
  9996 FORMAT( / ' Special Matrices:',
      $      / '  1=Zero matrix.                        ',
@@ -863,6 +877,6 @@
  9993 FORMAT( ' N=', I5, ', K=', I4, ', seed=', 4( I4, ',' ), ' type ',
      $      I2, ', test(', I2, ')=', G10.3 )
 *
-*     End of SCHKSBSTG
+*     End of AB_SCHKSBSTG
 *
       END

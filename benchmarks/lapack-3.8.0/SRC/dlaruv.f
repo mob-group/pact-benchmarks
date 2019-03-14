@@ -1,4 +1,4 @@
-*> \brief \b DLARUV returns a vector of n random real numbers from a uniform distribution.
+*> \brief \b AB_DLARUV returns a vector of n random real numbers from a uniform distribution.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARUV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaruv.f">
+*> Download AB_DLARUV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARUV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaruv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARUV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaruv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARUV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARUV( ISEED, N, X )
+*       SUBROUTINE AB_DLARUV( ISEED, N, X )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> DLARUV returns a vector of n random real numbers from a uniform (0,1)
+*> AB_DLARUV returns a vector of n random real numbers from a uniform (0,1)
 *> distribution (n <= 128).
 *>
-*> This is an auxiliary routine called by DLARNV and ZLARNV.
+*> This is an auxiliary routine called by AB_DLARNV and AB_ZLARNV.
 *> \endverbatim
 *
 *  Arguments:
@@ -93,7 +93,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLARUV( ISEED, N, X )
+      SUBROUTINE AB_DLARUV( ISEED, N, X )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -441,6 +441,6 @@
       ISEED( 4 ) = IT4
       RETURN
 *
-*     End of DLARUV
+*     End of AB_DLARUV
 *
       END

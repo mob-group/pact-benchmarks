@@ -1,4 +1,4 @@
-*> \brief \b CERRQL
+*> \brief \b AB_CERRQL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CERRQL( PATH, NUNIT )
+*       SUBROUTINE AB_CERRQL( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CERRQL tests the error exits for the COMPLEX routines
+*> AB_CERRQL tests the error exits for the COMPLEX routines
 *> that use the QL decomposition of a general matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CERRQL( PATH, NUNIT )
+      SUBROUTINE AB_CERRQL( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -79,8 +79,9 @@
      $                   W( NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CGEQL2, CGEQLF, CGEQLS, CHKXER, CUNG2L,
-     $                   CUNGQL, CUNM2L, CUNMQL
+      EXTERNAL           AB_ALAESM, AB_CGEQL2, AB_CGEQLF, AB_CGEQLS, AB_
+     $CHKXER, AB_CUNG2L,
+     $                   AB_CUNGQL, AB_CUNM2L, AB_CUNMQL
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,187 +115,187 @@
 *
 *     Error exits for QL factorization
 *
-*     CGEQLF
+*     AB_CGEQLF
 *
-      SRNAMT = 'CGEQLF'
+      SRNAMT = 'AB_CGEQLF'
       INFOT = 1
-      CALL CGEQLF( -1, 0, A, 1, B, W, 1, INFO )
-      CALL CHKXER( 'CGEQLF', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLF( -1, 0, A, 1, B, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CGEQLF( 0, -1, A, 1, B, W, 1, INFO )
-      CALL CHKXER( 'CGEQLF', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLF( 0, -1, A, 1, B, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CGEQLF( 2, 1, A, 1, B, W, 1, INFO )
-      CALL CHKXER( 'CGEQLF', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLF( 2, 1, A, 1, B, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLF', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL CGEQLF( 1, 2, A, 1, B, W, 1, INFO )
-      CALL CHKXER( 'CGEQLF', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLF( 1, 2, A, 1, B, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLF', INFOT, NOUT, LERR, OK )
 *
-*     CGEQL2
+*     AB_CGEQL2
 *
-      SRNAMT = 'CGEQL2'
+      SRNAMT = 'AB_CGEQL2'
       INFOT = 1
-      CALL CGEQL2( -1, 0, A, 1, B, W, INFO )
-      CALL CHKXER( 'CGEQL2', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQL2( -1, 0, A, 1, B, W, INFO )
+      CALL AB_CHKXER( 'AB_CGEQL2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CGEQL2( 0, -1, A, 1, B, W, INFO )
-      CALL CHKXER( 'CGEQL2', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQL2( 0, -1, A, 1, B, W, INFO )
+      CALL AB_CHKXER( 'AB_CGEQL2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CGEQL2( 2, 1, A, 1, B, W, INFO )
-      CALL CHKXER( 'CGEQL2', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQL2( 2, 1, A, 1, B, W, INFO )
+      CALL AB_CHKXER( 'AB_CGEQL2', INFOT, NOUT, LERR, OK )
 *
-*     CGEQLS
+*     AB_CGEQLS
 *
-      SRNAMT = 'CGEQLS'
+      SRNAMT = 'AB_CGEQLS'
       INFOT = 1
-      CALL CGEQLS( -1, 0, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'CGEQLS', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLS( -1, 0, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLS', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CGEQLS( 0, -1, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'CGEQLS', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLS( 0, -1, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLS', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CGEQLS( 1, 2, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'CGEQLS', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLS( 1, 2, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLS', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CGEQLS( 0, 0, -1, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'CGEQLS', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLS( 0, 0, -1, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLS', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CGEQLS( 2, 1, 0, A, 1, X, B, 2, W, 1, INFO )
-      CALL CHKXER( 'CGEQLS', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLS( 2, 1, 0, A, 1, X, B, 2, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLS', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL CGEQLS( 2, 1, 0, A, 2, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'CGEQLS', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLS( 2, 1, 0, A, 2, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLS', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL CGEQLS( 1, 1, 2, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'CGEQLS', INFOT, NOUT, LERR, OK )
+      CALL AB_CGEQLS( 1, 1, 2, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CGEQLS', INFOT, NOUT, LERR, OK )
 *
-*     CUNGQL
+*     AB_CUNGQL
 *
-      SRNAMT = 'CUNGQL'
+      SRNAMT = 'AB_CUNGQL'
       INFOT = 1
-      CALL CUNGQL( -1, 0, 0, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'CUNGQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNGQL( -1, 0, 0, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNGQL', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CUNGQL( 0, -1, 0, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'CUNGQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNGQL( 0, -1, 0, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNGQL', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CUNGQL( 1, 2, 0, A, 1, X, W, 2, INFO )
-      CALL CHKXER( 'CUNGQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNGQL( 1, 2, 0, A, 1, X, W, 2, INFO )
+      CALL AB_CHKXER( 'AB_CUNGQL', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CUNGQL( 0, 0, -1, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'CUNGQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNGQL( 0, 0, -1, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNGQL', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CUNGQL( 1, 1, 2, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'CUNGQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNGQL( 1, 1, 2, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNGQL', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CUNGQL( 2, 1, 0, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'CUNGQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNGQL( 2, 1, 0, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNGQL', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL CUNGQL( 2, 2, 0, A, 2, X, W, 1, INFO )
-      CALL CHKXER( 'CUNGQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNGQL( 2, 2, 0, A, 2, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNGQL', INFOT, NOUT, LERR, OK )
 *
-*     CUNG2L
+*     AB_CUNG2L
 *
-      SRNAMT = 'CUNG2L'
+      SRNAMT = 'AB_CUNG2L'
       INFOT = 1
-      CALL CUNG2L( -1, 0, 0, A, 1, X, W, INFO )
-      CALL CHKXER( 'CUNG2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNG2L( -1, 0, 0, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNG2L', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CUNG2L( 0, -1, 0, A, 1, X, W, INFO )
-      CALL CHKXER( 'CUNG2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNG2L( 0, -1, 0, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNG2L', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CUNG2L( 1, 2, 0, A, 1, X, W, INFO )
-      CALL CHKXER( 'CUNG2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNG2L( 1, 2, 0, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNG2L', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CUNG2L( 0, 0, -1, A, 1, X, W, INFO )
-      CALL CHKXER( 'CUNG2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNG2L( 0, 0, -1, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNG2L', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CUNG2L( 2, 1, 2, A, 2, X, W, INFO )
-      CALL CHKXER( 'CUNG2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNG2L( 2, 1, 2, A, 2, X, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNG2L', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CUNG2L( 2, 1, 0, A, 1, X, W, INFO )
-      CALL CHKXER( 'CUNG2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNG2L( 2, 1, 0, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNG2L', INFOT, NOUT, LERR, OK )
 *
-*     CUNMQL
+*     AB_CUNMQL
 *
-      SRNAMT = 'CUNMQL'
+      SRNAMT = 'AB_CUNMQL'
       INFOT = 1
-      CALL CUNMQL( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CUNMQL( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CUNMQL( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CUNMQL( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CUNMQL( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CUNMQL( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CUNMQL( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL CUNMQL( 'L', 'N', 2, 1, 0, A, 1, X, AF, 2, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'L', 'N', 2, 1, 0, A, 1, X, AF, 2, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL CUNMQL( 'R', 'N', 1, 2, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'R', 'N', 1, 2, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL CUNMQL( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL CUNMQL( 'L', 'N', 1, 2, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'L', 'N', 1, 2, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL CUNMQL( 'R', 'N', 2, 1, 0, A, 1, X, AF, 2, W, 1, INFO )
-      CALL CHKXER( 'CUNMQL', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNMQL( 'R', 'N', 2, 1, 0, A, 1, X, AF, 2, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_CUNMQL', INFOT, NOUT, LERR, OK )
 *
-*     CUNM2L
+*     AB_CUNM2L
 *
-      SRNAMT = 'CUNM2L'
+      SRNAMT = 'AB_CUNM2L'
       INFOT = 1
-      CALL CUNM2L( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CUNM2L( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL CUNM2L( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CUNM2L( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CUNM2L( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CUNM2L( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL CUNM2L( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL CUNM2L( 'L', 'N', 2, 1, 0, A, 1, X, AF, 2, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'L', 'N', 2, 1, 0, A, 1, X, AF, 2, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL CUNM2L( 'R', 'N', 1, 2, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'R', 'N', 1, 2, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL CUNM2L( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, INFO )
-      CALL CHKXER( 'CUNM2L', INFOT, NOUT, LERR, OK )
+      CALL AB_CUNM2L( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_CUNM2L', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of CERRQL
+*     End of AB_CERRQL
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZQRT01P
+*> \brief \b AB_AB_ZQRT01P
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZQRT01P( M, N, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_AB_ZQRT01P( M, N, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> ZQRT01P tests ZGEQRFP, which computes the QR factorization of an m-by-n
-*> matrix A, and partially tests ZUNGQR which forms the m-by-m
+*> AB_AB_ZQRT01P tests AB_AB_AB_ZGEQRFP, which computes the QR factorization of an m-by-n
+*> matrix A, and partially tests AB_ZUNGQR which forms the m-by-m
 *> orthogonal matrix Q.
 *>
-*> ZQRT01P compares R with Q'*A, and checks that Q is orthogonal.
+*> AB_AB_ZQRT01P compares R with Q'*A, and checks that Q is orthogonal.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,8 +57,8 @@
 *> \param[out] AF
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDA,N)
-*>          Details of the QR factorization of A, as returned by ZGEQRFP.
-*>          See ZGEQRFP for further details.
+*>          Details of the QR factorization of A, as returned by AB_AB_AB_ZGEQRFP.
+*>          See AB_AB_AB_ZGEQRFP for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (min(M,N))
 *>          The scalar factors of the elementary reflectors, as returned
-*>          by ZGEQRFP.
+*>          by AB_AB_AB_ZGEQRFP.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -123,7 +123,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZQRT01P( M, N, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_AB_ZQRT01P( M, N, A, AF, Q, R, LDA, TAU, WORK, LWORK
+     $,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -153,11 +154,12 @@
       DOUBLE PRECISION   ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSY
-      EXTERNAL           DLAMCH, ZLANGE, ZLANSY
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANSY
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE, AB_ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZGEQRFP, ZHERK, ZLACPY, ZLASET, ZUNGQR
+      EXTERNAL           AB_ZGEMM, AB_AB_AB_ZGEQRFP, AB_AB_ZHERK, AB_ZLA
+     $CPY, AB_ZLASET, AB_ZUNGQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -171,43 +173,43 @@
 *     .. Executable Statements ..
 *
       MINMN = MIN( M, N )
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL AB_ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
 *
 *     Factorize the matrix A in the array AF.
 *
-      SRNAMT = 'ZGEQRFP'
-      CALL ZGEQRFP( M, N, AF, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_AB_AB_ZGEQRFP'
+      CALL AB_AB_AB_ZGEQRFP( M, N, AF, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy details of Q
 *
-      CALL ZLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
-      CALL ZLACPY( 'Lower', M-1, N, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
+      CALL AB_ZLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
+      CALL AB_ZLACPY( 'Lower', M-1, N, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
 *
 *     Generate the m-by-m matrix Q
 *
-      SRNAMT = 'ZUNGQR'
-      CALL ZUNGQR( M, M, MINMN, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_ZUNGQR'
+      CALL AB_ZUNGQR( M, M, MINMN, Q, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy R
 *
-      CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), R,
+      CALL AB_ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), R,
      $             LDA )
-      CALL ZLACPY( 'Upper', M, N, AF, LDA, R, LDA )
+      CALL AB_ZLACPY( 'Upper', M, N, AF, LDA, R, LDA )
 *
 *     Compute R - Q'*A
 *
-      CALL ZGEMM( 'Conjugate transpose', 'No transpose', M, N, M,
+      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', M, N, M,
      $            DCMPLX( -ONE ), Q, LDA, A, LDA, DCMPLX( ONE ), R,
      $            LDA )
 *
 *     Compute norm( R - Q'*A ) / ( M * norm(A) * EPS ) .
 *
-      ANORM = ZLANGE( '1', M, N, A, LDA, RWORK )
-      RESID = ZLANGE( '1', M, N, R, LDA, RWORK )
+      ANORM = AB_ZLANGE( '1', M, N, A, LDA, RWORK )
+      RESID = AB_ZLANGE( '1', M, N, R, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / DBLE( MAX( 1, M ) ) ) / ANORM ) / EPS
       ELSE
@@ -216,18 +218,20 @@
 *
 *     Compute I - Q'*Q
 *
-      CALL ZLASET( 'Full', M, M, DCMPLX( ZERO ), DCMPLX( ONE ), R, LDA )
-      CALL ZHERK( 'Upper', 'Conjugate transpose', M, M, -ONE, Q, LDA,
+      CALL AB_ZLASET( 'Full', M, M, DCMPLX( ZERO ), DCMPLX( ONE ), R, LD
+     $A )
+      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', M, M, -ONE, Q, L
+     $DA,
      $            ONE, R, LDA )
 *
 *     Compute norm( I - Q'*Q ) / ( M * EPS ) .
 *
-      RESID = ZLANSY( '1', 'Upper', M, R, LDA, RWORK )
+      RESID = AB_ZLANSY( '1', 'Upper', M, R, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / DBLE( MAX( 1, M ) ) ) / EPS
 *
       RETURN
 *
-*     End of ZQRT01P
+*     End of AB_AB_ZQRT01P
 *
       END

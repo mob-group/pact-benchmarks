@@ -1,4 +1,4 @@
-*> \brief \b CLATB5
+*> \brief \b AB_CLATB5
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM, MODE,
+*       SUBROUTINE AB_CLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM, MODE,
 *                          CNDNUM, DIST )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CLATB5 sets parameters for the matrix generator based on the type
+*> AB_CLATB5 sets parameters for the matrix generator based on the type
 *> of matrix to be generated.
 *> \endverbatim
 *
@@ -111,7 +111,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM, MODE,
+      SUBROUTINE AB_CLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM, MODE,
      $                   CNDNUM, DIST )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -142,14 +142,14 @@
       CHARACTER*2        C2
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD
+      EXTERNAL           AB_SLABAD
 *     ..
 *     .. Save statement ..
       SAVE               EPS, SMALL, LARGE, BADC1, BADC2, FIRST
@@ -163,16 +163,16 @@
 *
       IF( FIRST ) THEN
          FIRST = .FALSE.
-         EPS = SLAMCH( 'Precision' )
+         EPS = AB_SLAMCH( 'Precision' )
          BADC2 = TENTH / EPS
          BADC1 = SQRT( BADC2 )
-         SMALL = SLAMCH( 'Safe minimum' )
+         SMALL = AB_SLAMCH( 'Safe minimum' )
          LARGE = ONE / SMALL
 *
 *        If it looks like we're on a Cray, take the square root of
 *        SMALL and LARGE to avoid overflow and underflow problems.
 *
-         CALL SLABAD( SMALL, LARGE )
+         CALL AB_SLABAD( SMALL, LARGE )
          SMALL = SHRINK*( SMALL / EPS )
          LARGE = ONE / SMALL
       END IF
@@ -229,6 +229,6 @@
 *
       RETURN
 *
-*     End of SLATB5
+*     End of AB_SLATB5
 *
       END

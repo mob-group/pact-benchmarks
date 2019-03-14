@@ -1,4 +1,4 @@
-*> \brief \b DLATTP
+*> \brief \b AB_DLATTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, B, WORK,
+*       SUBROUTINE AB_DLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, B, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DLATTP generates a triangular test matrix in packed storage.
+*> AB_DLATTP generates a triangular test matrix in packed storage.
 *> IMAT and UPLO uniquely specify the properties of the test
 *> matrix, which is returned in the array AP.
 *> \endverbatim
@@ -71,7 +71,7 @@
 *> \verbatim
 *>          ISEED is INTEGER array, dimension (4)
 *>          The seed vector for the random number generator (used in
-*>          DLATMS).  Modified on exit.
+*>          AB_DLATMS).  Modified on exit.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -122,7 +122,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, B, WORK,
+      SUBROUTINE AB_DLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, B, WOR
+     $K,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -157,14 +158,15 @@
      $                   Z
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLARND
-      EXTERNAL           LSAME, IDAMAX, DLAMCH, DLARND
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DLAMCH, AB_DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLARNV, DLATB4, DLATMS, DROT, DROTG,
-     $                   DSCAL
+      EXTERNAL           AB_DLABAD, AB_DLARNV, AB_DLATB4, AB_DLATMS, AB_
+     $DROT, AB_AB_DROTG,
+     $                   AB_DSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SIGN, SQRT
@@ -173,11 +175,11 @@
 *
       PATH( 1: 1 ) = 'Double precision'
       PATH( 2: 3 ) = 'TP'
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
       IF( ( IMAT.GE.7 .AND. IMAT.LE.10 ) .OR. IMAT.EQ.18 ) THEN
          DIAG = 'U'
       ELSE
@@ -190,15 +192,15 @@
       IF( N.LE.0 )
      $   RETURN
 *
-*     Call DLATB4 to set parameters for SLATMS.
+*     Call AB_DLATB4 to set parameters for AB_SLATMS.
 *
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
-         CALL DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+         CALL AB_DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                CNDNUM, DIST )
          PACKIT = 'C'
       ELSE
-         CALL DLATB4( PATH, -IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+         CALL AB_DLATB4( PATH, -IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                CNDNUM, DIST )
          PACKIT = 'R'
       END IF
@@ -206,7 +208,8 @@
 *     IMAT <= 6:  Non-unit triangular matrix
 *
       IF( IMAT.LE.6 ) THEN
-         CALL DLATMS( N, N, DIST, ISEED, TYPE, B, MODE, CNDNUM, ANORM,
+         CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, B, MODE, CNDNUM, ANORM
+     $,
      $                KL, KU, PACKIT, A, N, WORK, INFO )
 *
 *     IMAT > 6:  Unit triangular matrix
@@ -331,7 +334,7 @@
                WORK( J+1 ) = PLUS2
                WORK( N+J+1 ) = ZERO
                PLUS1 = STAR1 / PLUS2
-               REXP = DLARND( 2, ISEED )
+               REXP = AB_DLARND( 2, ISEED )
                STAR1 = STAR1*( SFAC**REXP )
                IF( REXP.LT.ZERO ) THEN
                   STAR1 = -SFAC**( ONE-REXP )
@@ -395,7 +398,7 @@
                JCNEXT = JC + J
                RA = A( JCNEXT+J-1 )
                RB = TWO
-               CALL DROTG( RA, RB, C, S )
+               CALL AB_AB_DROTG( RA, RB, C, S )
 *
 *              Multiply by [ c  s; -s  c] on the left.
 *
@@ -412,7 +415,8 @@
 *              Multiply by [-c -s;  s -c] on the right.
 *
                IF( J.GT.1 )
-     $            CALL DROT( J-1, A( JCNEXT ), 1, A( JC ), 1, -C, -S )
+     $            CALL AB_DROT( J-1, A( JCNEXT ), 1, A( JC ), 1, -C, -S 
+     $)
 *
 *              Negate A(J,J+1).
 *
@@ -425,12 +429,13 @@
                JCNEXT = JC + N - J + 1
                RA = A( JC+1 )
                RB = TWO
-               CALL DROTG( RA, RB, C, S )
+               CALL AB_AB_DROTG( RA, RB, C, S )
 *
 *              Multiply by [ c -s;  s  c] on the right.
 *
                IF( N.GT.J+1 )
-     $            CALL DROT( N-J-1, A( JCNEXT+1 ), 1, A( JC+2 ), 1, C,
+     $            CALL AB_DROT( N-J-1, A( JCNEXT+1 ), 1, A( JC+2 ), 1, C
+     $,
      $                       -S )
 *
 *              Multiply by [-c  s; -s -c] on the left.
@@ -465,14 +470,14 @@
          IF( UPPER ) THEN
             JC = 1
             DO 180 J = 1, N
-               CALL DLARNV( 2, ISEED, J, A( JC ) )
+               CALL AB_DLARNV( 2, ISEED, J, A( JC ) )
                A( JC+J-1 ) = SIGN( TWO, A( JC+J-1 ) )
                JC = JC + J
   180       CONTINUE
          ELSE
             JC = 1
             DO 190 J = 1, N
-               CALL DLARNV( 2, ISEED, N-J+1, A( JC ) )
+               CALL AB_DLARNV( 2, ISEED, N-J+1, A( JC ) )
                A( JC ) = SIGN( TWO, A( JC ) )
                JC = JC + N - J + 1
   190       CONTINUE
@@ -480,11 +485,11 @@
 *
 *        Set the right hand side so that the largest value is BIGNUM.
 *
-         CALL DLARNV( 2, ISEED, N, B )
-         IY = IDAMAX( N, B, 1 )
+         CALL AB_DLARNV( 2, ISEED, N, B )
+         IY = AB_IDAMAX( N, B, 1 )
          BNORM = ABS( B( IY ) )
          BSCAL = BIGNUM / MAX( ONE, BNORM )
-         CALL DSCAL( N, BSCAL, B, 1 )
+         CALL AB_DSCAL( N, BSCAL, B, 1 )
 *
       ELSE IF( IMAT.EQ.12 ) THEN
 *
@@ -492,23 +497,23 @@
 *        cause immediate overflow when dividing by T(j,j).
 *        In type 12, the offdiagonal elements are small (CNORM(j) < 1).
 *
-         CALL DLARNV( 2, ISEED, N, B )
+         CALL AB_DLARNV( 2, ISEED, N, B )
          TSCAL = ONE / MAX( ONE, DBLE( N-1 ) )
          IF( UPPER ) THEN
             JC = 1
             DO 200 J = 1, N
-               CALL DLARNV( 2, ISEED, J-1, A( JC ) )
-               CALL DSCAL( J-1, TSCAL, A( JC ), 1 )
-               A( JC+J-1 ) = SIGN( ONE, DLARND( 2, ISEED ) )
+               CALL AB_DLARNV( 2, ISEED, J-1, A( JC ) )
+               CALL AB_DSCAL( J-1, TSCAL, A( JC ), 1 )
+               A( JC+J-1 ) = SIGN( ONE, AB_DLARND( 2, ISEED ) )
                JC = JC + J
   200       CONTINUE
             A( N*( N+1 ) / 2 ) = SMLNUM
          ELSE
             JC = 1
             DO 210 J = 1, N
-               CALL DLARNV( 2, ISEED, N-J, A( JC+1 ) )
-               CALL DSCAL( N-J, TSCAL, A( JC+1 ), 1 )
-               A( JC ) = SIGN( ONE, DLARND( 2, ISEED ) )
+               CALL AB_DLARNV( 2, ISEED, N-J, A( JC+1 ) )
+               CALL AB_DSCAL( N-J, TSCAL, A( JC+1 ), 1 )
+               A( JC ) = SIGN( ONE, AB_DLARND( 2, ISEED ) )
                JC = JC + N - J + 1
   210       CONTINUE
             A( 1 ) = SMLNUM
@@ -520,20 +525,20 @@
 *        cause immediate overflow when dividing by T(j,j).
 *        In type 13, the offdiagonal elements are O(1) (CNORM(j) > 1).
 *
-         CALL DLARNV( 2, ISEED, N, B )
+         CALL AB_DLARNV( 2, ISEED, N, B )
          IF( UPPER ) THEN
             JC = 1
             DO 220 J = 1, N
-               CALL DLARNV( 2, ISEED, J-1, A( JC ) )
-               A( JC+J-1 ) = SIGN( ONE, DLARND( 2, ISEED ) )
+               CALL AB_DLARNV( 2, ISEED, J-1, A( JC ) )
+               A( JC+J-1 ) = SIGN( ONE, AB_DLARND( 2, ISEED ) )
                JC = JC + J
   220       CONTINUE
             A( N*( N+1 ) / 2 ) = SMLNUM
          ELSE
             JC = 1
             DO 230 J = 1, N
-               CALL DLARNV( 2, ISEED, N-J, A( JC+1 ) )
-               A( JC ) = SIGN( ONE, DLARND( 2, ISEED ) )
+               CALL AB_DLARNV( 2, ISEED, N-J, A( JC+1 ) )
+               A( JC ) = SIGN( ONE, AB_DLARND( 2, ISEED ) )
                JC = JC + N - J + 1
   230       CONTINUE
             A( 1 ) = SMLNUM
@@ -605,7 +610,7 @@
 *
          TEXP = ONE / MAX( ONE, DBLE( N-1 ) )
          TSCAL = SMLNUM**TEXP
-         CALL DLARNV( 2, ISEED, N, B )
+         CALL AB_DLARNV( 2, ISEED, N, B )
          IF( UPPER ) THEN
             JC = 1
             DO 310 J = 1, N
@@ -640,7 +645,7 @@
          IF( UPPER ) THEN
             JC = 1
             DO 340 J = 1, N
-               CALL DLARNV( 2, ISEED, J, A( JC ) )
+               CALL AB_DLARNV( 2, ISEED, J, A( JC ) )
                IF( J.NE.IY ) THEN
                   A( JC+J-1 ) = SIGN( TWO, A( JC+J-1 ) )
                ELSE
@@ -651,7 +656,7 @@
          ELSE
             JC = 1
             DO 350 J = 1, N
-               CALL DLARNV( 2, ISEED, N-J+1, A( JC ) )
+               CALL AB_DLARNV( 2, ISEED, N-J+1, A( JC ) )
                IF( J.NE.IY ) THEN
                   A( JC ) = SIGN( TWO, A( JC ) )
                ELSE
@@ -660,8 +665,8 @@
                JC = JC + N - J + 1
   350       CONTINUE
          END IF
-         CALL DLARNV( 2, ISEED, N, B )
-         CALL DSCAL( N, TWO, B, 1 )
+         CALL AB_DLARNV( 2, ISEED, N, B )
+         CALL AB_DSCAL( N, TWO, B, 1 )
 *
       ELSE IF( IMAT.EQ.17 ) THEN
 *
@@ -715,7 +720,7 @@
          IF( UPPER ) THEN
             JC = 1
             DO 390 J = 1, N
-               CALL DLARNV( 2, ISEED, J-1, A( JC ) )
+               CALL AB_DLARNV( 2, ISEED, J-1, A( JC ) )
                A( JC+J-1 ) = ZERO
                JC = JC + J
   390       CONTINUE
@@ -723,7 +728,7 @@
             JC = 1
             DO 400 J = 1, N
                IF( J.LT.N )
-     $            CALL DLARNV( 2, ISEED, N-J, A( JC+1 ) )
+     $            CALL AB_DLARNV( 2, ISEED, N-J, A( JC+1 ) )
                A( JC ) = ZERO
                JC = JC + N - J + 1
   400       CONTINUE
@@ -731,11 +736,11 @@
 *
 *        Set the right hand side so that the largest value is BIGNUM.
 *
-         CALL DLARNV( 2, ISEED, N, B )
-         IY = IDAMAX( N, B, 1 )
+         CALL AB_DLARNV( 2, ISEED, N, B )
+         IY = AB_IDAMAX( N, B, 1 )
          BNORM = ABS( B( IY ) )
          BSCAL = BIGNUM / MAX( ONE, BNORM )
-         CALL DSCAL( N, BSCAL, B, 1 )
+         CALL AB_DSCAL( N, BSCAL, B, 1 )
 *
       ELSE IF( IMAT.EQ.19 ) THEN
 *
@@ -748,7 +753,7 @@
          IF( UPPER ) THEN
             JC = 1
             DO 420 J = 1, N
-               CALL DLARNV( 2, ISEED, J, A( JC ) )
+               CALL AB_DLARNV( 2, ISEED, J, A( JC ) )
                DO 410 I = 1, J
                   A( JC+I-1 ) = SIGN( TLEFT, A( JC+I-1 ) ) +
      $                          TSCAL*A( JC+I-1 )
@@ -758,7 +763,7 @@
          ELSE
             JC = 1
             DO 440 J = 1, N
-               CALL DLARNV( 2, ISEED, N-J+1, A( JC ) )
+               CALL AB_DLARNV( 2, ISEED, N-J+1, A( JC ) )
                DO 430 I = J, N
                   A( JC+I-J ) = SIGN( TLEFT, A( JC+I-J ) ) +
      $                          TSCAL*A( JC+I-J )
@@ -766,14 +771,14 @@
                JC = JC + N - J + 1
   440       CONTINUE
          END IF
-         CALL DLARNV( 2, ISEED, N, B )
-         CALL DSCAL( N, TWO, B, 1 )
+         CALL AB_DLARNV( 2, ISEED, N, B )
+         CALL AB_DSCAL( N, TWO, B, 1 )
       END IF
 *
 *     Flip the matrix across its counter-diagonal if the transpose will
 *     be used.
 *
-      IF( .NOT.LSAME( TRANS, 'N' ) ) THEN
+      IF( .NOT.AB_LSAME( TRANS, 'N' ) ) THEN
          IF( UPPER ) THEN
             JJ = 1
             JR = N*( N+1 ) / 2
@@ -807,6 +812,6 @@
 *
       RETURN
 *
-*     End of DLATTP
+*     End of AB_DLATTP
 *
       END

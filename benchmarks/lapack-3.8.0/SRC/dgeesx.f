@@ -1,4 +1,4 @@
-*> \brief <b> DGEESX computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
+*> \brief <b> AB_AB_DGEESX computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEESX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeesx.f">
+*> Download AB_AB_DGEESX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DGEESX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeesx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DGEESX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeesx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DGEESX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM,
+*       SUBROUTINE AB_AB_DGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM,
 *                          WR, WI, VS, LDVS, RCONDE, RCONDV, WORK, LWORK,
 *                          IWORK, LIWORK, BWORK, INFO )
 *
@@ -44,7 +44,7 @@
 *>
 *> \verbatim
 *>
-*> DGEESX computes for an N-by-N real nonsymmetric matrix A, the
+*> AB_AB_DGEESX computes for an N-by-N real nonsymmetric matrix A, the
 *> eigenvalues, the real Schur form T, and, optionally, the matrix of
 *> Schur vectors Z.  This gives the Schur factorization A = Z*T*(Z**T).
 *>
@@ -213,7 +213,7 @@
 *>          only calculates upper bounds on the optimal sizes of the
 *>          arrays WORK and IWORK, returns these values as the first
 *>          entries of the WORK and IWORK arrays, and no error messages
-*>          related to LWORK or LIWORK are issued by XERBLA.
+*>          related to LWORK or LIWORK are issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -235,7 +235,7 @@
 *>          routine only calculates upper bounds on the optimal sizes of
 *>          the arrays WORK and IWORK, returns these values as the first
 *>          entries of the WORK and IWORK arrays, and no error messages
-*>          related to LWORK or LIWORK are issued by XERBLA.
+*>          related to LWORK or LIWORK are issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] BWORK
@@ -277,7 +277,8 @@
 *> \ingroup doubleGEeigen
 *
 *  =====================================================================
-      SUBROUTINE DGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM,
+      SUBROUTINE AB_AB_DGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SD
+     $IM,
      $                   WR, WI, VS, LDVS, RCONDE, RCONDV, WORK, LWORK,
      $                   IWORK, LIWORK, BWORK, INFO )
 *
@@ -314,20 +315,23 @@
       INTEGER            HSWORK, I, I1, I2, IBAL, ICOND, IERR, IEVAL,
      $                   IHI, ILO, INXT, IP, ITAU, IWRK, LIWRK, LWRK,
      $                   MAXWRK, MINWRK
-      DOUBLE PRECISION   ANRM, BIGNUM, CSCALE, EPS, SMLNUM
+      DOUBLE PRECISION   ANRM, BIGNUM, AB_CSCALE, EPS, SMLNUM
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEBAK, DGEBAL, DGEHRD, DHSEQR, DLACPY,
-     $                   DLASCL, DORGHR, DSWAP, DTRSEN, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DGEBAK, AB_DGEBAL, AB_DGEHRD, AB_D
+     $HSEQR, AB_DLACPY,
+     $                   AB_DLASCL, AB_DORGHR, AB_DSWAP, AB_DTRSEN, AB_X
+     $ERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, ILAENV, DLABAD, DLAMCH, DLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLABAD, AB_DLAMCH, AB_D
+     $LANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -337,19 +341,21 @@
 *     Test the input arguments
 *
       INFO = 0
-      WANTVS = LSAME( JOBVS, 'V' )
-      WANTST = LSAME( SORT, 'S' )
-      WANTSN = LSAME( SENSE, 'N' )
-      WANTSE = LSAME( SENSE, 'E' )
-      WANTSV = LSAME( SENSE, 'V' )
-      WANTSB = LSAME( SENSE, 'B' )
+      WANTVS = AB_LSAME( JOBVS, 'V' )
+      WANTST = AB_LSAME( SORT, 'S' )
+      WANTSN = AB_LSAME( SENSE, 'N' )
+      WANTSE = AB_LSAME( SENSE, 'E' )
+      WANTSV = AB_LSAME( SENSE, 'V' )
+      WANTSB = AB_LSAME( SENSE, 'B' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
-      IF( ( .NOT.WANTVS ) .AND. ( .NOT.LSAME( JOBVS, 'N' ) ) ) THEN
+      IF( ( .NOT.WANTVS ) .AND. ( .NOT.AB_LSAME( JOBVS, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.AB_LSAME( SORT, 'N' ) ) )
+     $ THEN
          INFO = -2
-      ELSE IF( .NOT.( WANTSN .OR. WANTSE .OR. WANTSV .OR. WANTSB ) .OR.
+      ELSE IF( .NOT.( WANTSN .OR. WANTSE .OR. WANTSV .OR. WANTSB ) .O
+     $R.
      $         ( .NOT.WANTST .AND. .NOT.WANTSN ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
@@ -366,12 +372,12 @@
 *       code, as well as the preferred amount for good performance.
 *       IWorkspace refers to integer workspace.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by ILAENV.
-*       HSWORK refers to the workspace preferred by DHSEQR, as
+*       following subroutine, as returned by AB_ILAENV.
+*       HSWORK refers to the workspace preferred by AB_DHSEQR, as
 *       calculated below. HSWORK is computed assuming ILO=1 and IHI=N,
 *       the worst case.
 *       If SENSE = 'E', 'V' or 'B', then the amount of workspace needed
-*       depends on SDIM, which is computed by the routine DTRSEN later
+*       depends on SDIM, which is computed by the routine AB_DTRSEN later
 *       in the code.)
 *
       IF( INFO.EQ.0 ) THEN
@@ -380,18 +386,20 @@
             MINWRK = 1
             LWRK = 1
          ELSE
-            MAXWRK = 2*N + N*ILAENV( 1, 'DGEHRD', ' ', N, 1, N, 0 )
+            MAXWRK = 2*N + N*AB_ILAENV( 1, 'AB_DGEHRD', ' ', N, 1, N, 0 
+     $)
             MINWRK = 3*N
 *
-            CALL DHSEQR( 'S', JOBVS, N, 1, N, A, LDA, WR, WI, VS, LDVS,
+            CALL AB_DHSEQR( 'S', JOBVS, N, 1, N, A, LDA, WR, WI, VS, LDV
+     $S,
      $             WORK, -1, IEVAL )
             HSWORK = WORK( 1 )
 *
             IF( .NOT.WANTVS ) THEN
                MAXWRK = MAX( MAXWRK, N + HSWORK )
             ELSE
-               MAXWRK = MAX( MAXWRK, 2*N + ( N - 1 )*ILAENV( 1,
-     $                       'DORGHR', ' ', N, 1, N, -1 ) )
+               MAXWRK = MAX( MAXWRK, 2*N + ( N - 1 )*AB_ILAENV( 1,
+     $                       'AB_DORGHR', ' ', N, 1, N, -1 ) )
                MAXWRK = MAX( MAXWRK, N + HSWORK )
             END IF
             LWRK = MAXWRK
@@ -411,7 +419,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEESX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_DGEESX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -426,51 +434,53 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = DLANGE( 'M', N, N, A, LDA, DUM )
+      ANRM = AB_DLANGE( 'M', N, N, A, LDA, DUM )
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.
-         CSCALE = SMLNUM
+         AB_CSCALE = SMLNUM
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
-         CSCALE = BIGNUM
+         AB_CSCALE = BIGNUM
       END IF
       IF( SCALEA )
-     $   CALL DLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
+     $   CALL AB_DLASCL( 'G', 0, 0, ANRM, AB_CSCALE, N, N, A, LDA, IERR 
+     $)
 *
 *     Permute the matrix to make it more nearly triangular
 *     (RWorkspace: need N)
 *
       IBAL = 1
-      CALL DGEBAL( 'P', N, A, LDA, ILO, IHI, WORK( IBAL ), IERR )
+      CALL AB_DGEBAL( 'P', N, A, LDA, ILO, IHI, WORK( IBAL ), IERR )
 *
 *     Reduce to upper Hessenberg form
 *     (RWorkspace: need 3*N, prefer 2*N+N*NB)
 *
       ITAU = N + IBAL
       IWRK = N + ITAU
-      CALL DGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
+      CALL AB_DGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
      $             LWORK-IWRK+1, IERR )
 *
       IF( WANTVS ) THEN
 *
-*        Copy Householder vectors to VS
+*        Copy HousehoAB_LDEr vectors to VS
 *
-         CALL DLACPY( 'L', N, N, A, LDA, VS, LDVS )
+         CALL AB_DLACPY( 'L', N, N, A, LDA, VS, LDVS )
 *
 *        Generate orthogonal matrix in VS
 *        (RWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *
-         CALL DORGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ), WORK( IWRK ),
+         CALL AB_DORGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ), WORK( IWRK
+     $ ),
      $                LWORK-IWRK+1, IERR )
       END IF
 *
@@ -480,7 +490,7 @@
 *     (RWorkspace: need N+1, prefer N+HSWORK (see comments) )
 *
       IWRK = ITAU
-      CALL DHSEQR( 'S', JOBVS, N, ILO, IHI, A, LDA, WR, WI, VS, LDVS,
+      CALL AB_DHSEQR( 'S', JOBVS, N, ILO, IHI, A, LDA, WR, WI, VS, LDVS,
      $             WORK( IWRK ), LWORK-IWRK+1, IEVAL )
       IF( IEVAL.GT.0 )
      $   INFO = IEVAL
@@ -489,8 +499,10 @@
 *
       IF( WANTST .AND. INFO.EQ.0 ) THEN
          IF( SCALEA ) THEN
-            CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, N, 1, WR, N, IERR )
-            CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, N, 1, WI, N, IERR )
+            CALL AB_DLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N, 1, WR, N, IER
+     $R )
+            CALL AB_DLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N, 1, WI, N, IER
+     $R )
          END IF
          DO 10 I = 1, N
             BWORK( I ) = SELECT( WR( I ), WI( I ) )
@@ -503,7 +515,8 @@
 *        (IWorkspace: if SENSE is 'V' or 'B', need SDIM*(N-SDIM)
 *                     otherwise, need 0 )
 *
-         CALL DTRSEN( SENSE, JOBVS, BWORK, N, A, LDA, VS, LDVS, WR, WI,
+         CALL AB_DTRSEN( SENSE, JOBVS, BWORK, N, A, LDA, VS, LDVS, WR, W
+     $I,
      $                SDIM, RCONDE, RCONDV, WORK( IWRK ), LWORK-IWRK+1,
      $                IWORK, LIWORK, ICOND )
          IF( .NOT.WANTSN )
@@ -520,7 +533,7 @@
             INFO = -18
          ELSE IF( ICOND.GT.0 ) THEN
 *
-*           DTRSEN failed to reorder or to restore standard Schur form
+*           AB_DTRSEN failed to reorder or to restore standard Schur form
 *
             INFO = ICOND + N
          END IF
@@ -531,7 +544,8 @@
 *        Undo balancing
 *        (RWorkspace: need N)
 *
-         CALL DGEBAK( 'P', 'R', N, ILO, IHI, WORK( IBAL ), N, VS, LDVS,
+         CALL AB_DGEBAK( 'P', 'R', N, ILO, IHI, WORK( IBAL ), N, VS, LDV
+     $S,
      $                IERR )
       END IF
 *
@@ -539,14 +553,16 @@
 *
 *        Undo scaling for the Schur form of A
 *
-         CALL DLASCL( 'H', 0, 0, CSCALE, ANRM, N, N, A, LDA, IERR )
-         CALL DCOPY( N, A, LDA+1, WR, 1 )
+         CALL AB_DLASCL( 'H', 0, 0, AB_CSCALE, ANRM, N, N, A, LDA, IERR 
+     $)
+         CALL AB_DCOPY( N, A, LDA+1, WR, 1 )
          IF( ( WANTSV .OR. WANTSB ) .AND. INFO.EQ.0 ) THEN
             DUM( 1 ) = RCONDV
-            CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, 1, 1, DUM, 1, IERR )
+            CALL AB_DLASCL( 'G', 0, 0, AB_CSCALE, ANRM, 1, 1, DUM, 1, IE
+     $RR )
             RCONDV = DUM( 1 )
          END IF
-         IF( CSCALE.EQ.SMLNUM ) THEN
+         IF( AB_CSCALE.EQ.SMLNUM ) THEN
 *
 *           If scaling back towards underflow, adjust WI if an
 *           offdiagonal element of a 2-by-2 block in the Schur form
@@ -555,7 +571,8 @@
             IF( IEVAL.GT.0 ) THEN
                I1 = IEVAL + 1
                I2 = IHI - 1
-               CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, WI, N,
+               CALL AB_DLASCL( 'G', 0, 0, AB_CSCALE, ANRM, ILO-1, 1, WI,
+     $ N,
      $                      IERR )
             ELSE IF( WANTST ) THEN
                I1 = 1
@@ -579,11 +596,12 @@
                      WI( I ) = ZERO
                      WI( I+1 ) = ZERO
                      IF( I.GT.1 )
-     $                  CALL DSWAP( I-1, A( 1, I ), 1, A( 1, I+1 ), 1 )
+     $                  CALL AB_DSWAP( I-1, A( 1, I ), 1, A( 1, I+1 ), 1
+     $ )
                      IF( N.GT.I+1 )
-     $                  CALL DSWAP( N-I-1, A( I, I+2 ), LDA,
+     $                  CALL AB_DSWAP( N-I-1, A( I, I+2 ), LDA,
      $                              A( I+1, I+2 ), LDA )
-                     CALL DSWAP( N, VS( 1, I ), 1, VS( 1, I+1 ), 1 )
+                     CALL AB_DSWAP( N, VS( 1, I ), 1, VS( 1, I+1 ), 1 )
                      A( I, I+1 ) = A( I+1, I )
                      A( I+1, I ) = ZERO
                   END IF
@@ -591,7 +609,7 @@
                END IF
    20       CONTINUE
          END IF
-         CALL DLASCL( 'G', 0, 0, CSCALE, ANRM, N-IEVAL, 1,
+         CALL AB_DLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N-IEVAL, 1,
      $                WI( IEVAL+1 ), MAX( N-IEVAL, 1 ), IERR )
       END IF
 *
@@ -644,6 +662,6 @@
 *
       RETURN
 *
-*     End of DGEESX
+*     End of AB_AB_DGEESX
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SASUM
+*> \brief \b AB_SASUM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SASUM(N,SX,INCX)
+*       REAL FUNCTION AB_SASUM(N,SX,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    SASUM takes the sum of the absolute values.
+*>    AB_SASUM takes the sum of the absolute values.
 *>    uses unrolled loops for increment equal to one.
 *> \endverbatim
 *
@@ -70,7 +70,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      REAL FUNCTION SASUM(N,SX,INCX)
+      REAL FUNCTION AB_SASUM(N,SX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -93,7 +93,7 @@
 *     .. Intrinsic Functions ..
       INTRINSIC ABS,MOD
 *     ..
-      SASUM = 0.0e0
+      AB_SASUM = 0.0e0
       STEMP = 0.0e0
       IF (N.LE.0 .OR. INCX.LE.0) RETURN
       IF (INCX.EQ.1) THEN
@@ -108,7 +108,7 @@
                STEMP = STEMP + ABS(SX(I))
             END DO
             IF (N.LT.6) THEN
-               SASUM = STEMP
+               AB_SASUM = STEMP
                RETURN
             END IF
          END IF
@@ -127,6 +127,6 @@
             STEMP = STEMP + ABS(SX(I))
          END DO
       END IF
-      SASUM = STEMP
+      AB_SASUM = STEMP
       RETURN
       END

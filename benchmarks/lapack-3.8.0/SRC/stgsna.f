@@ -1,4 +1,4 @@
-*> \brief \b STGSNA
+*> \brief \b AB_STGSNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download STGSNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsna.f">
+*> Download AB_STGSNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STGSNA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STGSNA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STGSNA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
+*       SUBROUTINE AB_STGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
 *                          LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
 *                          IWORK, INFO )
 *
@@ -39,13 +39,13 @@
 *>
 *> \verbatim
 *>
-*> STGSNA estimates reciprocal condition numbers for specified
+*> AB_STGSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or eigenvectors of a matrix pair (A, B) in
 *> generalized real Schur canonical form (or of any matrix pair
 *> (Q*A*Z**T, Q*B*Z**T) with orthogonal matrices Q and Z, where
 *> Z**T denotes the transpose of Z.
 *>
-*> (A, B) must be in generalized real Schur form (as returned by SGGES),
+*> (A, B) must be in generalized real Schur form (as returned by AB_SGGES),
 *> i.e. A is block upper triangular with 1-by-1 and 2-by-2 diagonal
 *> blocks. B is upper triangular.
 *>
@@ -121,7 +121,7 @@
 *>          If JOB = 'E' or 'B', VL must contain left eigenvectors of
 *>          (A, B), corresponding to the eigenpairs specified by HOWMNY
 *>          and SELECT. The eigenvectors must be stored in consecutive
-*>          columns of VL, as returned by STGEVC.
+*>          columns of VL, as returned by AB_STGEVC.
 *>          If JOB = 'V', VL is not referenced.
 *> \endverbatim
 *>
@@ -138,7 +138,7 @@
 *>          If JOB = 'E' or 'B', VR must contain right eigenvectors of
 *>          (A, B), corresponding to the eigenpairs specified by HOWMNY
 *>          and SELECT. The eigenvectors must be stored in consecutive
-*>          columns ov VR, as returned by STGEVC.
+*>          columns ov VR, as returned by AB_STGEVC.
 *>          If JOB = 'V', VR is not referenced.
 *> \endverbatim
 *>
@@ -206,7 +206,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -285,9 +285,9 @@
 *>     Kronecker product between the matrices X and Y.
 *>
 *>     Note that if the default method for computing DIF(i) is wanted
-*>     (see SLATDF), then the parameter DIFDRI (see below) should be
-*>     changed from 3 to 4 (routine SLATDF(IJOB = 2 will be used)).
-*>     See STGSYL for more details.
+*>     (see AB_SLATDF), then the parameter DIFDRI (see below) should be
+*>     changed from 3 to 4 (routine AB_SLATDF(IJOB = 2 will be used)).
+*>     See AB_STGSYL for more details.
 *>
 *>  b) If the i-th and (i+1)-th eigenvalues are complex conjugate pair,
 *>
@@ -329,8 +329,8 @@
 *>                   [ kron(T11**T, In-2)  -kron(I2, T22) ]
 *>
 *>     Note that if the default method for computing DIF is wanted (see
-*>     SLATDF), then the parameter DIFDRI (see below) should be changed
-*>     from 3 to 4 (routine SLATDF(IJOB = 2 will be used)). See STGSYL
+*>     AB_SLATDF), then the parameter DIFDRI (see below) should be changed
+*>     from 3 to 4 (routine AB_SLATDF(IJOB = 2 will be used)). See AB_STGSYL
 *>     for more details.
 *>
 *>  For each eigenvalue/vector specified by SELECT, DIF stores a
@@ -377,7 +377,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
+      SUBROUTINE AB_STGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
      $                   LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -418,12 +418,14 @@
       REAL               DUMMY( 1 ), DUMMY1( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLAPY2, SNRM2
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLAPY2, SNRM2
+      LOGICAL            AB_LSAME
+      REAL               AB_SDOT, AB_SLAMCH, AB_SLAPY2, AB_SNRM2
+      EXTERNAL           AB_LSAME, AB_SDOT, AB_SLAMCH, AB_SLAPY2, AB_SNR
+     $M2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SLACPY, SLAG2, STGEXC, STGSYL, XERBLA
+      EXTERNAL           AB_SGEMV, AB_SLACPY, AB_SLAG2, AB_STGEXC, AB_ST
+     $GSYL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -432,18 +434,18 @@
 *
 *     Decode and test the input parameters
 *
-      WANTBH = LSAME( JOB, 'B' )
-      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTDF = LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTBH = AB_LSAME( JOB, 'B' )
+      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTDF = AB_LSAME( JOB, 'V' ) .OR. WANTBH
 *
-      SOMCON = LSAME( HOWMNY, 'S' )
+      SOMCON = AB_LSAME( HOWMNY, 'S' )
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
 *
       IF( .NOT.WANTS .AND. .NOT.WANTDF ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
+      ELSE IF( .NOT.AB_LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -488,7 +490,8 @@
 *
          IF( N.EQ.0 ) THEN
             LWMIN = 1
-         ELSE IF( LSAME( JOB, 'V' ) .OR. LSAME( JOB, 'B' ) ) THEN
+         ELSE IF( AB_LSAME( JOB, 'V' ) .OR. AB_LSAME( JOB, 'B' ) ) TH
+     $EN
             LWMIN = 2*N*( N + 2 ) + 16
          ELSE
             LWMIN = N
@@ -503,7 +506,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STGSNA', -INFO )
+         CALL AB_XERBLA( 'AB_STGSNA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -516,8 +519,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       KS = 0
       PAIR = .FALSE.
 *
@@ -557,33 +560,35 @@
 *
 *              Complex eigenvalue pair.
 *
-               RNRM = SLAPY2( SNRM2( N, VR( 1, KS ), 1 ),
-     $                SNRM2( N, VR( 1, KS+1 ), 1 ) )
-               LNRM = SLAPY2( SNRM2( N, VL( 1, KS ), 1 ),
-     $                SNRM2( N, VL( 1, KS+1 ), 1 ) )
-               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
+               RNRM = AB_SLAPY2( AB_SNRM2( N, VR( 1, KS ), 1 ),
+     $                AB_SNRM2( N, VR( 1, KS+1 ), 1 ) )
+               LNRM = AB_SLAPY2( AB_SNRM2( N, VL( 1, KS ), 1 ),
+     $                AB_SNRM2( N, VL( 1, KS+1 ), 1 ) )
+               CALL AB_SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZE
+     $RO,
      $                     WORK, 1 )
-               TMPRR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               TMPRI = SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
-               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS+1 ), 1,
+               TMPRR = AB_SDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               TMPRI = AB_SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
+               CALL AB_SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS+1 ), 1,
      $                     ZERO, WORK, 1 )
-               TMPII = SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
-               TMPIR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               TMPII = AB_SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
+               TMPIR = AB_SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                UHAV = TMPRR + TMPII
                UHAVI = TMPIR - TMPRI
-               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
+               CALL AB_SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZE
+     $RO,
      $                     WORK, 1 )
-               TMPRR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               TMPRI = SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
-               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS+1 ), 1,
+               TMPRR = AB_SDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               TMPRI = AB_SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
+               CALL AB_SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS+1 ), 1,
      $                     ZERO, WORK, 1 )
-               TMPII = SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
-               TMPIR = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               TMPII = AB_SDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
+               TMPIR = AB_SDOT( N, WORK, 1, VL( 1, KS ), 1 )
                UHBV = TMPRR + TMPII
                UHBVI = TMPIR - TMPRI
-               UHAV = SLAPY2( UHAV, UHAVI )
-               UHBV = SLAPY2( UHBV, UHBVI )
-               COND = SLAPY2( UHAV, UHBV )
+               UHAV = AB_SLAPY2( UHAV, UHAVI )
+               UHBV = AB_SLAPY2( UHBV, UHBVI )
+               COND = AB_SLAPY2( UHAV, UHBV )
                S( KS ) = COND / ( RNRM*LNRM )
                S( KS+1 ) = S( KS )
 *
@@ -591,15 +596,17 @@
 *
 *              Real eigenvalue.
 *
-               RNRM = SNRM2( N, VR( 1, KS ), 1 )
-               LNRM = SNRM2( N, VL( 1, KS ), 1 )
-               CALL SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
+               RNRM = AB_SNRM2( N, VR( 1, KS ), 1 )
+               LNRM = AB_SNRM2( N, VL( 1, KS ), 1 )
+               CALL AB_SGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZE
+     $RO,
      $                     WORK, 1 )
-               UHAV = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               CALL SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
+               UHAV = AB_SDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               CALL AB_SGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZE
+     $RO,
      $                     WORK, 1 )
-               UHBV = SDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               COND = SLAPY2( UHAV, UHBV )
+               UHBV = AB_SDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               COND = AB_SLAPY2( UHAV, UHBV )
                IF( COND.EQ.ZERO ) THEN
                   S( KS ) = -ONE
                ELSE
@@ -610,7 +617,7 @@
 *
          IF( WANTDF ) THEN
             IF( N.EQ.1 ) THEN
-               DIF( KS ) = SLAPY2( A( 1, 1 ), B( 1, 1 ) )
+               DIF( KS ) = AB_SLAPY2( A( 1, 1 ), B( 1, 1 ) )
                GO TO 20
             END IF
 *
@@ -629,7 +636,7 @@
                WORK( 6 ) = B( K+1, K )
                WORK( 7 ) = B( K, K+1 )
                WORK( 8 ) = B( K+1, K+1 )
-               CALL SLAG2( WORK, 2, WORK( 5 ), 2, SMLNUM*EPS, BETA,
+               CALL AB_SLAG2( WORK, 2, WORK( 5 ), 2, SMLNUM*EPS, BETA,
      $                     DUMMY1( 1 ), ALPHAR, DUMMY( 1 ), ALPHAI )
                ALPRQT = ONE
                C1 = TWO*( ALPHAR*ALPHAR+ALPHAI*ALPHAI+BETA*BETA )
@@ -643,12 +650,13 @@
 *           Copy the matrix (A, B) to the array WORK and swap the
 *           diagonal block beginning at A(k,k) to the (1,1) position.
 *
-            CALL SLACPY( 'Full', N, N, A, LDA, WORK, N )
-            CALL SLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
+            CALL AB_SLACPY( 'Full', N, N, A, LDA, WORK, N )
+            CALL AB_SLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
             IFST = K
             ILST = 1
 *
-            CALL STGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ), N,
+            CALL AB_STGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*
+     $N+1 ), N,
      $                   DUMMY, 1, DUMMY1, 1, IFST, ILST,
      $                   WORK( N*N*2+1 ), LWORK-2*N*N, IERR )
 *
@@ -674,7 +682,8 @@
                ELSE
                   I = N*N + 1
                   IZ = 2*N*N + 1
-                  CALL STGSYL( 'N', DIFDRI, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL AB_STGSYL( 'N', DIFDRI, N2, N1, WORK( N*N1+N1+1 )
+     $,
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ),
@@ -695,6 +704,6 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of STGSNA
+*     End of AB_STGSNA
 *
       END

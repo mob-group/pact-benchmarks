@@ -1,4 +1,4 @@
-*> \brief \b CQLT01
+*> \brief \b AB_CQLT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_CQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> CQLT01 tests CGEQLF, which computes the QL factorization of an m-by-n
-*> matrix A, and partially tests CUNGQL which forms the m-by-m
+*> AB_CQLT01 tests AB_CGEQLF, which computes the QL factorization of an m-by-n
+*> matrix A, and partially tests AB_CUNGQL which forms the m-by-m
 *> orthogonal matrix Q.
 *>
-*> CQLT01 compares L with Q'*A, and checks that Q is orthogonal.
+*> AB_CQLT01 compares L with Q'*A, and checks that Q is orthogonal.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,8 +57,8 @@
 *> \param[out] AF
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDA,N)
-*>          Details of the QL factorization of A, as returned by CGEQLF.
-*>          See CGEQLF for further details.
+*>          Details of the QL factorization of A, as returned by AB_CGEQLF.
+*>          See AB_CGEQLF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (min(M,N))
 *>          The scalar factors of the elementary reflectors, as returned
-*>          by CGEQLF.
+*>          by AB_CGEQLF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -123,7 +123,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_CQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -153,11 +153,12 @@
       REAL               ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, CLANSY, SLAMCH
-      EXTERNAL           CLANGE, CLANSY, SLAMCH
+      REAL               AB_CLANGE, AB_CLANSY, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_CLANSY, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CGEQLF, CHERK, CLACPY, CLASET, CUNGQL
+      EXTERNAL           AB_CGEMM, AB_CGEQLF, AB_AB_CHERK, AB_CLACPY, AB
+     $_CLASET, AB_CUNGQL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -171,61 +172,63 @@
 *     .. Executable Statements ..
 *
       MINMN = MIN( M, N )
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL CLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL AB_CLACPY( 'Full', M, N, A, LDA, AF, LDA )
 *
 *     Factorize the matrix A in the array AF.
 *
-      SRNAMT = 'CGEQLF'
-      CALL CGEQLF( M, N, AF, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_CGEQLF'
+      CALL AB_CGEQLF( M, N, AF, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy details of Q
 *
-      CALL CLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
+      CALL AB_CLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
       IF( M.GE.N ) THEN
          IF( N.LT.M .AND. N.GT.0 )
-     $      CALL CLACPY( 'Full', M-N, N, AF, LDA, Q( 1, M-N+1 ), LDA )
+     $      CALL AB_CLACPY( 'Full', M-N, N, AF, LDA, Q( 1, M-N+1 ), LDA 
+     $)
          IF( N.GT.1 )
-     $      CALL CLACPY( 'Upper', N-1, N-1, AF( M-N+1, 2 ), LDA,
+     $      CALL AB_CLACPY( 'Upper', N-1, N-1, AF( M-N+1, 2 ), LDA,
      $                   Q( M-N+1, M-N+2 ), LDA )
       ELSE
          IF( M.GT.1 )
-     $      CALL CLACPY( 'Upper', M-1, M-1, AF( 1, N-M+2 ), LDA,
+     $      CALL AB_CLACPY( 'Upper', M-1, M-1, AF( 1, N-M+2 ), LDA,
      $                   Q( 1, 2 ), LDA )
       END IF
 *
 *     Generate the m-by-m matrix Q
 *
-      SRNAMT = 'CUNGQL'
-      CALL CUNGQL( M, M, MINMN, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_CUNGQL'
+      CALL AB_CUNGQL( M, M, MINMN, Q, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy L
 *
-      CALL CLASET( 'Full', M, N, CMPLX( ZERO ), CMPLX( ZERO ), L, LDA )
+      CALL AB_CLASET( 'Full', M, N, CMPLX( ZERO ), CMPLX( ZERO ), L, LDA
+     $ )
       IF( M.GE.N ) THEN
          IF( N.GT.0 )
-     $      CALL CLACPY( 'Lower', N, N, AF( M-N+1, 1 ), LDA,
+     $      CALL AB_CLACPY( 'Lower', N, N, AF( M-N+1, 1 ), LDA,
      $                   L( M-N+1, 1 ), LDA )
       ELSE
          IF( N.GT.M .AND. M.GT.0 )
-     $      CALL CLACPY( 'Full', M, N-M, AF, LDA, L, LDA )
+     $      CALL AB_CLACPY( 'Full', M, N-M, AF, LDA, L, LDA )
          IF( M.GT.0 )
-     $      CALL CLACPY( 'Lower', M, M, AF( 1, N-M+1 ), LDA,
+     $      CALL AB_CLACPY( 'Lower', M, M, AF( 1, N-M+1 ), LDA,
      $                   L( 1, N-M+1 ), LDA )
       END IF
 *
 *     Compute L - Q'*A
 *
-      CALL CGEMM( 'Conjugate transpose', 'No transpose', M, N, M,
+      CALL AB_CGEMM( 'Conjugate transpose', 'No transpose', M, N, M,
      $            CMPLX( -ONE ), Q, LDA, A, LDA, CMPLX( ONE ), L, LDA )
 *
 *     Compute norm( L - Q'*A ) / ( M * norm(A) * EPS ) .
 *
-      ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
-      RESID = CLANGE( '1', M, N, L, LDA, RWORK )
+      ANORM = AB_CLANGE( '1', M, N, A, LDA, RWORK )
+      RESID = AB_CLANGE( '1', M, N, L, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / REAL( MAX( 1, M ) ) ) / ANORM ) / EPS
       ELSE
@@ -234,18 +237,20 @@
 *
 *     Compute I - Q'*Q
 *
-      CALL CLASET( 'Full', M, M, CMPLX( ZERO ), CMPLX( ONE ), L, LDA )
-      CALL CHERK( 'Upper', 'Conjugate transpose', M, M, -ONE, Q, LDA,
+      CALL AB_CLASET( 'Full', M, M, CMPLX( ZERO ), CMPLX( ONE ), L, LDA 
+     $)
+      CALL AB_AB_CHERK( 'Upper', 'Conjugate transpose', M, M, -ONE, Q, L
+     $DA,
      $            ONE, L, LDA )
 *
 *     Compute norm( I - Q'*Q ) / ( M * EPS ) .
 *
-      RESID = CLANSY( '1', 'Upper', M, L, LDA, RWORK )
+      RESID = AB_CLANSY( '1', 'Upper', M, L, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / REAL( MAX( 1, M ) ) ) / EPS
 *
       RETURN
 *
-*     End of CQLT01
+*     End of AB_CQLT01
 *
       END

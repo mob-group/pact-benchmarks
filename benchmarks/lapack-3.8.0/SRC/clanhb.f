@@ -1,4 +1,4 @@
-*> \brief \b CLANHB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a Hermitian band matrix.
+*> \brief \b AB_CLANHB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a Hermitian band matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLANHB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clanhb.f">
+*> Download AB_CLANHB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLANHB.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clanhb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLANHB.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clanhb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLANHB.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION CLANHB( NORM, UPLO, N, K, AB, LDAB,
+*       REAL             FUNCTION AB_CLANHB( NORM, UPLO, N, K, AB, LDAB,
 *                        WORK )
 *
 *       .. Scalar Arguments ..
@@ -36,15 +36,15 @@
 *>
 *> \verbatim
 *>
-*> CLANHB  returns the value of the one norm,  or the Frobenius norm, or
+*> AB_CLANHB  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the element of  largest absolute value  of an
 *> n by n hermitian band matrix A,  with k super-diagonals.
 *> \endverbatim
 *>
-*> \return CLANHB
+*> \return AB_CLANHB
 *> \verbatim
 *>
-*>    CLANHB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    AB_CLANHB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -64,7 +64,7 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in CLANHB as described
+*>          Specifies the value to be returned in AB_CLANHB as described
 *>          above.
 *> \endverbatim
 *>
@@ -80,7 +80,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, CLANHB is
+*>          The order of the matrix A.  N >= 0.  When N = 0, AB_CLANHB is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -129,7 +129,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      REAL             FUNCTION CLANHB( NORM, UPLO, N, K, AB, LDAB,
+      REAL             FUNCTION AB_CLANHB( NORM, UPLO, N, K, AB, LDAB,
      $                 WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -157,11 +157,11 @@
       REAL               ABSA, SCALE, SUM, VALUE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      EXTERNAL           LSAME, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      EXTERNAL           AB_LSAME, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASSQ
+      EXTERNAL           AB_CLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -170,37 +170,38 @@
 *
       IF( N.EQ.0 ) THEN
          VALUE = ZERO
-      ELSE IF( LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
          VALUE = ZERO
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
             DO 20 J = 1, N
                DO 10 I = MAX( K+2-J, 1 ), K
                   SUM = ABS( AB( I, J ) )
-                  IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                  IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
    10          CONTINUE
                SUM = ABS( REAL( AB( K+1, J ) ) )
-               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
    20       CONTINUE
          ELSE
             DO 40 J = 1, N
                SUM = ABS( REAL( AB( 1, J ) ) )
-               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
                DO 30 I = 2, MIN( N+1-J, K+1 )
                   SUM = ABS( AB( I, J ) )
-                  IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                  IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
    30          CONTINUE
    40       CONTINUE
          END IF
-      ELSE IF( ( LSAME( NORM, 'I' ) ) .OR. ( LSAME( NORM, 'O' ) ) .OR.
+      ELSE IF( ( AB_LSAME( NORM, 'I' ) ) .OR. ( AB_LSAME( NORM, 'O' )
+     $ ) .OR.
      $         ( NORM.EQ.'1' ) ) THEN
 *
 *        Find normI(A) ( = norm1(A), since A is hermitian).
 *
          VALUE = ZERO
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
             DO 60 J = 1, N
                SUM = ZERO
                L = K + 1 - J
@@ -213,7 +214,7 @@
    60       CONTINUE
             DO 70 I = 1, N
                SUM = WORK( I )
-               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
    70       CONTINUE
          ELSE
             DO 80 I = 1, N
@@ -227,25 +228,27 @@
                   SUM = SUM + ABSA
                   WORK( I ) = WORK( I ) + ABSA
    90          CONTINUE
-               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
   100       CONTINUE
          END IF
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' )
+     $ ) ) THEN
 *
 *        Find normF(A).
 *
          SCALE = ZERO
          SUM = ONE
          IF( K.GT.0 ) THEN
-            IF( LSAME( UPLO, 'U' ) ) THEN
+            IF( AB_LSAME( UPLO, 'U' ) ) THEN
                DO 110 J = 2, N
-                  CALL CLASSQ( MIN( J-1, K ), AB( MAX( K+2-J, 1 ), J ),
+                  CALL AB_CLASSQ( MIN( J-1, K ), AB( MAX( K+2-J, 1 ), J 
+     $),
      $                         1, SCALE, SUM )
   110          CONTINUE
                L = K + 1
             ELSE
                DO 120 J = 1, N - 1
-                  CALL CLASSQ( MIN( N-J, K ), AB( 2, J ), 1, SCALE,
+                  CALL AB_CLASSQ( MIN( N-J, K ), AB( 2, J ), 1, SCALE,
      $                         SUM )
   120          CONTINUE
                L = 1
@@ -268,9 +271,9 @@
          VALUE = SCALE*SQRT( SUM )
       END IF
 *
-      CLANHB = VALUE
+      AB_CLANHB = VALUE
       RETURN
 *
-*     End of CLANHB
+*     End of AB_CLANHB
 *
       END

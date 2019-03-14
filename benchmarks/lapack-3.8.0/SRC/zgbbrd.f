@@ -1,4 +1,4 @@
-*> \brief \b ZGBBRD
+*> \brief \b AB_ZGBBRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGBBRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbbrd.f">
+*> Download AB_ZGBBRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGBBRD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgbbrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGBBRD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbbrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGBBRD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
+*       SUBROUTINE AB_ZGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
 *                          LDQ, PT, LDPT, C, LDC, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> ZGBBRD reduces a complex general m-by-n band matrix A to real upper
+*> AB_ZGBBRD reduces a complex general m-by-n band matrix A to real upper
 *> bidiagonal form B by a unitary transformation: Q**H * A * P = B.
 *>
 *> The routine computes B, and optionally forms Q or P**H, or computes
@@ -190,7 +190,7 @@
 *> \ingroup complex16GBcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
+      SUBROUTINE AB_ZGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
      $                   LDQ, PT, LDPT, C, LDC, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -225,27 +225,29 @@
       COMPLEX*16         RA, RB, RS, T
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARGV, ZLARTG, ZLARTV, ZLASET, ZROT,
-     $                   ZSCAL
+      EXTERNAL           AB_XERBLA, AB_ZLARGV, AB_ZLARTG, AB_ZLARTV, AB_
+     $ZLASET, AB_ZROT,
+     $                   AB_ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
-      WANTB = LSAME( VECT, 'B' )
-      WANTQ = LSAME( VECT, 'Q' ) .OR. WANTB
-      WANTPT = LSAME( VECT, 'P' ) .OR. WANTB
+      WANTB = AB_LSAME( VECT, 'B' )
+      WANTQ = AB_LSAME( VECT, 'Q' ) .OR. WANTB
+      WANTPT = AB_LSAME( VECT, 'P' ) .OR. WANTB
       WANTC = NCC.GT.0
       KLU1 = KL + KU + 1
       INFO = 0
-      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.LSAME( VECT, 'N' ) )
+      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.AB_LSAME( VECT, 'N' ) 
+     $)
      $     THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
@@ -268,16 +270,16 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGBBRD', -INFO )
+         CALL AB_XERBLA( 'AB_ZGBBRD', -INFO )
          RETURN
       END IF
 *
 *     Initialize Q and P**H to the unit matrix, if needed
 *
       IF( WANTQ )
-     $   CALL ZLASET( 'Full', M, M, CZERO, CONE, Q, LDQ )
+     $   CALL AB_ZLASET( 'Full', M, M, CZERO, CONE, Q, LDQ )
       IF( WANTPT )
-     $   CALL ZLASET( 'Full', N, N, CZERO, CONE, PT, LDPT )
+     $   CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, PT, LDPT )
 *
 *     Quick return if possible.
 *
@@ -329,7 +331,7 @@
 *              which have been created below the band
 *
                IF( NR.GT.0 )
-     $            CALL ZLARGV( NR, AB( KLU1, J1-KLM-1 ), INCA,
+     $            CALL AB_ZLARGV( NR, AB( KLU1, J1-KLM-1 ), INCA,
      $                         WORK( J1 ), KB1, RWORK( J1 ), KB1 )
 *
 *              apply plane rotations from the left
@@ -341,7 +343,8 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL ZLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA,
+     $               CALL AB_ZLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA
+     $,
      $                            AB( KLU1-L+1, J1-KLM+L-1 ), INCA,
      $                            RWORK( J1 ), WORK( J1 ), KB1 )
    10          CONTINUE
@@ -352,11 +355,11 @@
 *                    generate plane rotation to annihilate a(i+ml-1,i)
 *                    within the band, and apply rotation from the left
 *
-                     CALL ZLARTG( AB( KU+ML-1, I ), AB( KU+ML, I ),
+                     CALL AB_ZLARTG( AB( KU+ML-1, I ), AB( KU+ML, I ),
      $                            RWORK( I+ML-1 ), WORK( I+ML-1 ), RA )
                      AB( KU+ML-1, I ) = RA
                      IF( I.LT.N )
-     $                  CALL ZROT( MIN( KU+ML-2, N-I ),
+     $                  CALL AB_ZROT( MIN( KU+ML-2, N-I ),
      $                             AB( KU+ML-2, I+1 ), LDAB-1,
      $                             AB( KU+ML-1, I+1 ), LDAB-1,
      $                             RWORK( I+ML-1 ), WORK( I+ML-1 ) )
@@ -370,7 +373,7 @@
 *                 accumulate product of plane rotations in Q
 *
                   DO 20 J = J1, J2, KB1
-                     CALL ZROT( M, Q( 1, J-1 ), 1, Q( 1, J ), 1,
+                     CALL AB_ZROT( M, Q( 1, J-1 ), 1, Q( 1, J ), 1,
      $                          RWORK( J ), DCONJG( WORK( J ) ) )
    20             CONTINUE
                END IF
@@ -380,7 +383,8 @@
 *                 apply plane rotations to C
 *
                   DO 30 J = J1, J2, KB1
-                     CALL ZROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC,
+                     CALL AB_ZROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC
+     $,
      $                          RWORK( J ), WORK( J ) )
    30             CONTINUE
                END IF
@@ -406,7 +410,7 @@
 *              which have been generated above the band
 *
                IF( NR.GT.0 )
-     $            CALL ZLARGV( NR, AB( 1, J1+KUN-1 ), INCA,
+     $            CALL AB_ZLARGV( NR, AB( 1, J1+KUN-1 ), INCA,
      $                         WORK( J1+KUN ), KB1, RWORK( J1+KUN ),
      $                         KB1 )
 *
@@ -419,7 +423,7 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL ZLARTV( NRT, AB( L+1, J1+KUN-1 ), INCA,
+     $               CALL AB_ZLARTV( NRT, AB( L+1, J1+KUN-1 ), INCA,
      $                            AB( L, J1+KUN ), INCA,
      $                            RWORK( J1+KUN ), WORK( J1+KUN ), KB1 )
    50          CONTINUE
@@ -430,11 +434,11 @@
 *                    generate plane rotation to annihilate a(i,i+mu-1)
 *                    within the band, and apply rotation from the right
 *
-                     CALL ZLARTG( AB( KU-MU+3, I+MU-2 ),
+                     CALL AB_ZLARTG( AB( KU-MU+3, I+MU-2 ),
      $                            AB( KU-MU+2, I+MU-1 ),
      $                            RWORK( I+MU-1 ), WORK( I+MU-1 ), RA )
                      AB( KU-MU+3, I+MU-2 ) = RA
-                     CALL ZROT( MIN( KL+MU-2, M-I ),
+                     CALL AB_ZROT( MIN( KL+MU-2, M-I ),
      $                          AB( KU-MU+4, I+MU-2 ), 1,
      $                          AB( KU-MU+3, I+MU-1 ), 1,
      $                          RWORK( I+MU-1 ), WORK( I+MU-1 ) )
@@ -448,7 +452,7 @@
 *                 accumulate product of plane rotations in P**H
 *
                   DO 60 J = J1, J2, KB1
-                     CALL ZROT( N, PT( J+KUN-1, 1 ), LDPT,
+                     CALL AB_ZROT( N, PT( J+KUN-1, 1 ), LDPT,
      $                          PT( J+KUN, 1 ), LDPT, RWORK( J+KUN ),
      $                          DCONJG( WORK( J+KUN ) ) )
    60             CONTINUE
@@ -489,17 +493,17 @@
 *        elements on subdiagonal elements
 *
          DO 100 I = 1, MIN( M-1, N )
-            CALL ZLARTG( AB( 1, I ), AB( 2, I ), RC, RS, RA )
+            CALL AB_ZLARTG( AB( 1, I ), AB( 2, I ), RC, RS, RA )
             AB( 1, I ) = RA
             IF( I.LT.N ) THEN
                AB( 2, I ) = RS*AB( 1, I+1 )
                AB( 1, I+1 ) = RC*AB( 1, I+1 )
             END IF
             IF( WANTQ )
-     $         CALL ZROT( M, Q( 1, I ), 1, Q( 1, I+1 ), 1, RC,
+     $         CALL AB_ZROT( M, Q( 1, I ), 1, Q( 1, I+1 ), 1, RC,
      $                    DCONJG( RS ) )
             IF( WANTC )
-     $         CALL ZROT( NCC, C( I, 1 ), LDC, C( I+1, 1 ), LDC, RC,
+     $         CALL AB_ZROT( NCC, C( I, 1 ), LDC, C( I+1, 1 ), LDC, RC,
      $                    RS )
   100    CONTINUE
       ELSE
@@ -514,14 +518,14 @@
 *
             RB = AB( KU, M+1 )
             DO 110 I = M, 1, -1
-               CALL ZLARTG( AB( KU+1, I ), RB, RC, RS, RA )
+               CALL AB_ZLARTG( AB( KU+1, I ), RB, RC, RS, RA )
                AB( KU+1, I ) = RA
                IF( I.GT.1 ) THEN
                   RB = -DCONJG( RS )*AB( KU, I )
                   AB( KU, I ) = RC*AB( KU, I )
                END IF
                IF( WANTPT )
-     $            CALL ZROT( N, PT( I, 1 ), LDPT, PT( M+1, 1 ), LDPT,
+     $            CALL AB_ZROT( N, PT( I, 1 ), LDPT, PT( M+1, 1 ), LDPT,
      $                       RC, DCONJG( RS ) )
   110       CONTINUE
          END IF
@@ -540,9 +544,9 @@
             T = CONE
          END IF
          IF( WANTQ )
-     $      CALL ZSCAL( M, T, Q( 1, I ), 1 )
+     $      CALL AB_ZSCAL( M, T, Q( 1, I ), 1 )
          IF( WANTC )
-     $      CALL ZSCAL( NCC, DCONJG( T ), C( I, 1 ), LDC )
+     $      CALL AB_ZSCAL( NCC, DCONJG( T ), C( I, 1 ), LDC )
          IF( I.LT.MINMN ) THEN
             IF( KU.EQ.0 .AND. KL.EQ.0 ) THEN
                E( I ) = ZERO
@@ -561,13 +565,13 @@
                   T = CONE
                END IF
                IF( WANTPT )
-     $            CALL ZSCAL( N, T, PT( I+1, 1 ), LDPT )
+     $            CALL AB_ZSCAL( N, T, PT( I+1, 1 ), LDPT )
                T = AB( KU+1, I+1 )*DCONJG( T )
             END IF
          END IF
   120 CONTINUE
       RETURN
 *
-*     End of ZGBBRD
+*     End of AB_ZGBBRD
 *
       END

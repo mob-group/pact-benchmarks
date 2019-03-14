@@ -1,4 +1,4 @@
-*> \brief \b ZTPLQT2 computes a LQ factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q.
+*> \brief \b AB_AB_ZTPLQT2 computes a LQ factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTPLQT2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztplqt2.f">
+*> Download AB_AB_ZTPLQT2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZTPLQT2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztplqt2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZTPLQT2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztplqt2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZTPLQT2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
+*       SUBROUTINE AB_AB_ZTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER   INFO, LDA, LDB, LDT, N, M, L
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZTPLQT2 computes a LQ a factorization of a complex "triangular-pentagonal"
+*> AB_AB_ZTPLQT2 computes a LQ a factorization of a complex "triangular-pentagonal"
 *> matrix C, which is composed of a triangular block A and pentagonal block B,
 *> using the compact WY representation for Q.
 *> \endverbatim
@@ -175,7 +175,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
+      SUBROUTINE AB_AB_ZTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -200,7 +200,7 @@
       COMPLEX*16   ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  ZLARFG, ZGEMV, ZGERC, ZTRMV, XERBLA
+      EXTERNAL  AB_AB_ZLARFG, AB_ZGEMV, AB_ZGERC, AB_ZTRMV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX, MIN
@@ -224,7 +224,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTPLQT2', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZTPLQT2', -INFO )
          RETURN
       END IF
 *
@@ -237,7 +237,7 @@
 *        Generate elementary reflector H(I) to annihilate B(I,:)
 *
          P = N-L+MIN( L, I )
-         CALL ZLARFG( P+1, A( I, I ), B( I, 1 ), LDB, T( 1, I ) )
+         CALL AB_AB_ZLARFG( P+1, A( I, I ), B( I, 1 ), LDB, T( 1, I ) )
          T(1,I)=CONJG(T(1,I))
          IF( I.LT.M ) THEN
             DO J = 1, P
@@ -249,7 +249,7 @@
             DO J = 1, M-I
                T( M, J ) = (A( I+J, I ))
             END DO
-            CALL ZGEMV( 'N', M-I, P, ONE, B( I+1, 1 ), LDB,
+            CALL AB_ZGEMV( 'N', M-I, P, ONE, B( I+1, 1 ), LDB,
      $                  B( I, 1 ), LDB, ONE, T( M, 1 ), LDT )
 *
 *           C(I+1:M,I:N) = C(I+1:M,I:N) + alpha * C(I,I:N)*W(M-1:1)^H
@@ -258,7 +258,7 @@
             DO J = 1, M-I
                A( I+J, I ) = A( I+J, I ) + ALPHA*(T( M, J ))
             END DO
-            CALL ZGERC( M-I, P, (ALPHA),  T( M, 1 ), LDT,
+            CALL AB_ZGERC( M-I, P, (ALPHA),  T( M, 1 ), LDT,
      $          B( I, 1 ), LDB, B( I+1, 1 ), LDB )
             DO J = 1, P
                B( I, J ) = CONJG(B(I,J))
@@ -286,18 +286,18 @@
          DO J = 1, P
             T( I, J ) = (ALPHA*B( I, N-L+J ))
          END DO
-         CALL ZTRMV( 'L', 'N', 'N', P, B( 1, NP ), LDB,
+         CALL AB_ZTRMV( 'L', 'N', 'N', P, B( 1, NP ), LDB,
      $               T( I, 1 ), LDT )
 *
 *        Rectangular part of B2
 *
-         CALL ZGEMV( 'N', I-1-P, L,  ALPHA, B( MP, NP ), LDB,
+         CALL AB_ZGEMV( 'N', I-1-P, L,  ALPHA, B( MP, NP ), LDB,
      $               B( I, NP ), LDB, ZERO, T( I,MP ), LDT )
 *
 *        B1
 
 *
-         CALL ZGEMV( 'N', I-1, N-L, ALPHA, B, LDB, B( I, 1 ), LDB,
+         CALL AB_ZGEMV( 'N', I-1, N-L, ALPHA, B, LDB, B( I, 1 ), LDB,
      $               ONE, T( I, 1 ), LDT )
 *
 
@@ -307,7 +307,7 @@
          DO J = 1, I-1
             T(I,J)=CONJG(T(I,J))
          END DO
-         CALL ZTRMV( 'L', 'C', 'N', I-1, T, LDT, T( I, 1 ), LDT )
+         CALL AB_ZTRMV( 'L', 'C', 'N', I-1, T, LDT, T( I, 1 ), LDT )
          DO J = 1, I-1
             T(I,J)=CONJG(T(I,J))
          END DO
@@ -328,6 +328,6 @@
       END DO
 
 *
-*     End of ZTPLQT2
+*     End of AB_AB_ZTPLQT2
 *
       END

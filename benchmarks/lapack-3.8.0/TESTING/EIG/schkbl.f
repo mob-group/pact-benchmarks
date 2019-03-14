@@ -1,4 +1,4 @@
-*> \brief \b SCHKBL
+*> \brief \b AB_SCHKBL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKBL( NIN, NOUT )
+*       SUBROUTINE AB_SCHKBL( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> SCHKBL tests SGEBAL, a routine for balancing a general real
+*> AB_SCHKBL tests AB_SGEBAL, a routine for balancing a general real
 *> matrix and isolating some of its eigenvalues.
 *> \endverbatim
 *
@@ -52,7 +52,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SCHKBL( NIN, NOUT )
+      SUBROUTINE AB_SCHKBL( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -82,11 +82,11 @@
      $                   SCALE( LDA ), SCALIN( LDA )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEBAL
+      EXTERNAL           AB_SGEBAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -100,8 +100,8 @@
       KNT = 0
       RMAX = ZERO
       VMAX = ZERO
-      SFMIN = SLAMCH( 'S' )
-      MEPS = SLAMCH( 'E' )
+      SFMIN = AB_SLAMCH( 'S' )
+      MEPS = AB_SLAMCH( 'E' )
 *
    10 CONTINUE
 *
@@ -118,10 +118,10 @@
    30 CONTINUE
       READ( NIN, FMT = * )( SCALIN( I ), I = 1, N )
 *
-      ANORM = SLANGE( 'M', N, N, A, LDA, DUMMY )
+      ANORM = AB_SLANGE( 'M', N, N, A, LDA, DUMMY )
       KNT = KNT + 1
 *
-      CALL SGEBAL( 'B', N, A, LDA, ILO, IHI, SCALE, INFO )
+      CALL AB_SGEBAL( 'B', N, A, LDA, ILO, IHI, SCALE, INFO )
 *
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
@@ -158,7 +158,7 @@
    70 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of SGEBAL .. ' )
+ 9999 FORMAT( 1X, '.. test output of AB_SGEBAL .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error            = ', E12.3 )
@@ -175,6 +175,6 @@
 *
       RETURN
 *
-*     End of SCHKBL
+*     End of AB_SCHKBL
 *
       END

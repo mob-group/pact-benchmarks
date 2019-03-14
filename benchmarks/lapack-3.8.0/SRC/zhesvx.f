@@ -1,4 +1,4 @@
-*> \brief <b> ZHESVX computes the solution to system of linear equations A * X = B for HE matrices</b>
+*> \brief <b> AB_AB_ZHESVX computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHESVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesvx.f">
+*> Download AB_AB_ZHESVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZHESVX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZHESVX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZHESVX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+*       SUBROUTINE AB_AB_ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
 *                          LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
 *                          RWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> ZHESVX uses the diagonal pivoting factorization to compute the
+*> AB_AB_ZHESVX uses the diagonal pivoting factorization to compute the
 *> solution to a complex system of linear equations A * X = B,
 *> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
 *> matrices.
@@ -137,7 +137,7 @@
 *>          If FACT = 'F', then AF is an input argument and on entry
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**H or A = L*D*L**H as computed by ZHETRF.
+*>          A = U*D*U**H or A = L*D*L**H as computed by AB_ZHETRF.
 *>
 *>          If FACT = 'N', then AF is an output argument and on exit
 *>          returns the block diagonal matrix D and the multipliers used
@@ -156,7 +156,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by ZHETRF.
+*>          of D, as determined by AB_ZHETRF.
 *>          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
 *>          interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and
@@ -167,7 +167,7 @@
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by ZHETRF.
+*>          of D, as determined by AB_ZHETRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -236,12 +236,12 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= max(1,2*N), and for best
 *>          performance, when FACT = 'N', LWORK >= max(1,2*N,N*NB), where
-*>          NB is the optimal blocksize for ZHETRF.
+*>          NB is the optimal blocksize for AB_ZHETRF.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -281,7 +281,8 @@
 *> \ingroup complex16HEsolve
 *
 *  =====================================================================
-      SUBROUTINE ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+      SUBROUTINE AB_AB_ZHESVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IP
+     $IV, B,
      $                   LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
      $                   RWORK, INFO )
 *
@@ -314,13 +315,14 @@
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, ZLANHE
-      EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANHE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHECON, ZHERFS, ZHETRF, ZHETRS, ZLACPY
+      EXTERNAL           AB_XERBLA, AB_ZHECON, AB_AB_ZHERFS, AB_ZHETRF, 
+     $AB_ZHETRS, AB_ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -330,11 +332,12 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
+      NOFACT = AB_LSAME( FACT, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
+      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 
+     $'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -356,14 +359,14 @@
       IF( INFO.EQ.0 ) THEN
          LWKOPT = MAX( 1, 2*N )
          IF( NOFACT ) THEN
-            NB = ILAENV( 1, 'ZHETRF', UPLO, N, -1, -1, -1 )
+            NB = AB_ILAENV( 1, 'AB_ZHETRF', UPLO, N, -1, -1, -1 )
             LWKOPT = MAX( LWKOPT, N*NB )
          END IF
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHESVX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZHESVX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -373,8 +376,8 @@
 *
 *        Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
-         CALL ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL ZHETRF( UPLO, N, AF, LDAF, IPIV, WORK, LWORK, INFO )
+         CALL AB_ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL AB_ZHETRF( UPLO, N, AF, LDAF, IPIV, WORK, LWORK, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -386,32 +389,34 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = ZLANHE( 'I', UPLO, N, A, LDA, RWORK )
+      ANORM = AB_ZLANHE( 'I', UPLO, N, A, LDA, RWORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, INFO )
+      CALL AB_ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, INFO 
+     $)
 *
 *     Compute the solution vectors X.
 *
-      CALL ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL ZHETRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
+      CALL AB_ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_ZHETRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL ZHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB, X,
+      CALL AB_AB_ZHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB, 
+     $X,
      $             LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.DLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_DLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       WORK( 1 ) = LWKOPT
 *
       RETURN
 *
-*     End of ZHESVX
+*     End of AB_AB_ZHESVX
 *
       END

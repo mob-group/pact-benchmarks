@@ -1,4 +1,4 @@
-*> \brief \b CQPT01
+*> \brief \b AB_CQPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION CQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
+*       REAL             FUNCTION AB_CQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
 *                        WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> CQPT01 tests the QR-factorization with pivoting of a matrix A.  The
+*> AB_CQPT01 tests the QR-factorization with pivoting of a matrix A.  The
 *> array AF contains the (possibly partial) QR-factorization of A, where
 *> the upper triangle of AF(1:k,1:k) is a partial triangular factor,
 *> the entries below the diagonal in the first k columns are the
-*> Householder vectors, and the rest of AF contains a partially updated
+*> HousehoAB_LDEr vectors, and the rest of AF contains a partially updated
 *> matrix.
 *>
 *> This function returns ||A*P - Q*R||/(||norm(A)||*eps*M)
@@ -67,9 +67,9 @@
 *> \param[in] AF
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDA,N)
-*>          The (possibly partial) output of CGEQPF.  The upper triangle
+*>          The (possibly partial) output of AB_CGEQPF.  The upper triangle
 *>          of AF(1:k,1:k) is a partial triangular factor, the entries
-*>          below the diagonal in the first k columns are the Householder
+*>          below the diagonal in the first k columns are the HousehoAB_LDEr
 *>          vectors, and the rest of AF contains a partially updated
 *>          matrix.
 *> \endverbatim
@@ -83,14 +83,14 @@
 *> \param[in] TAU
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (K)
-*>          Details of the Householder transformations as returned by
-*>          CGEQPF.
+*>          Details of the HousehoAB_LDEr transformations as returned by
+*>          AB_CGEQPF.
 *> \endverbatim
 *>
 *> \param[in] JPVT
 *> \verbatim
 *>          JPVT is INTEGER array, dimension (N)
-*>          Pivot information as returned by CGEQPF.
+*>          Pivot information as returned by AB_CGEQPF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -117,7 +117,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      REAL             FUNCTION CQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
+      REAL             FUNCTION AB_CQPT01( M, N, K, A, AF, LDA, TAU, JPV
+     $T,
      $                 WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -148,23 +149,23 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CUNMQR, XERBLA
+      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CUNMQR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      CQPT01 = ZERO
+      AB_CQPT01 = ZERO
 *
 *     Test if there is enough workspace
 *
       IF( LWORK.LT.M*N+N ) THEN
-         CALL XERBLA( 'CQPT01', 10 )
+         CALL AB_XERBLA( 'AB_CQPT01', 10 )
          RETURN
       END IF
 *
@@ -173,7 +174,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      NORMA = CLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      NORMA = AB_CLANGE( 'One-norm', M, N, A, LDA, RWORK )
 *
       DO 30 J = 1, K
          DO 10 I = 1, MIN( J, M )
@@ -184,27 +185,28 @@
    20    CONTINUE
    30 CONTINUE
       DO 40 J = K + 1, N
-         CALL CCOPY( M, AF( 1, J ), 1, WORK( ( J-1 )*M+1 ), 1 )
+         CALL AB_CCOPY( M, AF( 1, J ), 1, WORK( ( J-1 )*M+1 ), 1 )
    40 CONTINUE
 *
-      CALL CUNMQR( 'Left', 'No transpose', M, N, K, AF, LDA, TAU, WORK,
+      CALL AB_CUNMQR( 'Left', 'No transpose', M, N, K, AF, LDA, TAU, WOR
+     $K,
      $             M, WORK( M*N+1 ), LWORK-M*N, INFO )
 *
       DO 50 J = 1, N
 *
 *        Compare i-th column of QR and jpvt(i)-th column of A
 *
-         CALL CAXPY( M, CMPLX( -ONE ), A( 1, JPVT( J ) ), 1,
+         CALL AB_CAXPY( M, CMPLX( -ONE ), A( 1, JPVT( J ) ), 1,
      $               WORK( ( J-1 )*M+1 ), 1 )
    50 CONTINUE
 *
-      CQPT01 = CLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
-     $         ( REAL( MAX( M, N ) )*SLAMCH( 'Epsilon' ) )
+      AB_CQPT01 = AB_CLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
+     $         ( REAL( MAX( M, N ) )*AB_SLAMCH( 'Epsilon' ) )
       IF( NORMA.NE.ZERO )
-     $   CQPT01 = CQPT01 / NORMA
+     $   AB_CQPT01 = AB_CQPT01 / NORMA
 *
       RETURN
 *
-*     End of CQPT01
+*     End of AB_CQPT01
 *
       END

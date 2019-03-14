@@ -1,4 +1,4 @@
-*> \brief \b CDRVHE_ROOK
+*> \brief \b AB_AB_CDRVHE_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVHE_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+*       SUBROUTINE AB_AB_CDRVHE_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
 *                               NMAX, A, AFAC, AINV, B, X, XACT, WORK, RWORK,
 *                               IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> CDRVHE_ROOK tests the driver routines CHESV_ROOK.
+*> AB_AB_CDRVHE_ROOK tests the driver routines AB_AB_CHESV_ROOK.
 *> \endverbatim
 *
 *  Arguments:
@@ -149,7 +149,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVHE_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+      SUBROUTINE AB_AB_CDRVHE_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTE
+     $RR,
      $                        NMAX, A, AFAC, AINV, B, X, XACT, WORK,
      $                        RWORK, IWORK, NOUT )
 *
@@ -197,14 +198,16 @@
 
 *     ..
 *     .. External Functions ..
-      REAL               CLANHE
-      EXTERNAL           CLANHE
+      REAL               AB_CLANHE
+      EXTERNAL           AB_CLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, CERRVX,
-     $                   CGET04, CLACPY, CLARHS, CLATB4, CLATMS,
-     $                   CHESV_ROOK, CHET01_ROOK, CPOT02,
-     $                   CHETRF_ROOK, CHETRI_ROOK
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_XLAENV, AB_
+     $CERRVX,
+     $                   AB_CGET04, AB_CLACPY, AB_CLARHS, AB_CLATB4, AB_
+     $CLATMS,
+     $                   AB_AB_CHESV_ROOK, AB_AB_CHET01_ROOK, AB_CPOT02,
+     $                   AB_AB_CHETRF_ROOK, AB_AB_CHETRI_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -247,16 +250,16 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRVX( PATH, NOUT )
+     $   CALL AB_CERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for which the block
-*     routine should be used, which will be later returned by ILAENV.
+*     routine should be used, which will be later returned by AB_ILAENV.
 *
       NB = 1
       NBMIN = 2
-      CALL XLAENV( 1, NB )
-      CALL XLAENV( 2, NBMIN )
+      CALL AB_XLAENV( 1, NB )
+      CALL AB_XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -288,23 +291,25 @@
 *
 *                 Begin generate the test matrix A.
 *
-*                 Set up parameters with CLATB4 for the matrix generator
+*                 Set up parameters with AB_CLATB4 for the matrix generator
 *                 based on the type of matrix to be generated.
 *
-                  CALL CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+                  CALL AB_CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANO
+     $RM,
      $                         MODE, CNDNUM, DIST )
 *
-*                 Generate a matrix with CLATMS.
+*                 Generate a matrix with AB_CLATMS.
 *
-                  SRNAMT = 'CLATMS'
-                  CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'AB_CLATMS'
+                  CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
      $                         WORK, INFO )
 *
-*                 Check error code from CLATMS and handle error.
+*                 Check error code from AB_CLATMS and handle error.
 *
                   IF( INFO.NE.0 ) THEN
-                     CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N,
+                     CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, UPLO, N
+     $, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
                      GO TO 160
                   END IF
@@ -387,7 +392,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by CHESVX_ROOK.
+*                 the value returned by AB_AB_CHESVX_ROOK.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -398,21 +403,23 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
+                     ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *                    Factor the matrix A.
 *
-                     CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL CHETRF_ROOK( UPLO, N, AFAC, LDA, IWORK, WORK,
+                     CALL AB_CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_AB_CHETRF_ROOK( UPLO, N, AFAC, LDA, IWORK, 
+     $WORK,
      $                                 LWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-                     CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                     CALL AB_CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      LWORK = (N+NB+1)*(NB+3)
-                     CALL CHETRI_ROOK( UPLO, N, AINV, LDA, IWORK,
+                     CALL AB_AB_CHETRI_ROOK( UPLO, N, AINV, LDA, IWORK,
      $                                 WORK, INFO )
-                     AINVNM = CLANHE( '1', UPLO, N, AINV, LDA, RWORK )
+                     AINVNM = AB_CLANHE( '1', UPLO, N, AINV, LDA, RWORK 
+     $)
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -425,23 +432,25 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'CLARHS'
-                  CALL CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'AB_CLARHS'
+                  CALL AB_CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, K
+     $U,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test CHESV_ROOK  ---
+*                 --- Test AB_AB_CHESV_ROOK  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
 *                    Factor the matrix and solve the system using
-*                    CHESV_ROOK.
+*                    AB_AB_CHESV_ROOK.
 *
-                     SRNAMT = 'CHESV_ROOK'
-                     CALL CHESV_ROOK( UPLO, N, NRHS, AFAC, LDA, IWORK,
+                     SRNAMT = 'AB_AB_CHESV_ROOK'
+                     CALL AB_AB_CHESV_ROOK( UPLO, N, NRHS, AFAC, LDA, IW
+     $ORK,
      $                                X, LDA, WORK, LWORK, INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -461,10 +470,11 @@
                         END IF
                      END IF
 *
-*                    Check error code from CHESV_ROOK and handle error.
+*                    Check error code from AB_AB_CHESV_ROOK and handle error.
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'CHESV_ROOK', INFO, K, UPLO,
+                        CALL AB_ALAERH( PATH, 'AB_AB_CHESV_ROOK', INFO, 
+     $K, UPLO,
      $                               N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 120
@@ -475,20 +485,22 @@
 *+    TEST 1      Reconstruct matrix from factors and compute
 *                 residual.
 *
-                     CALL CHET01_ROOK( UPLO, N, A, LDA, AFAC, LDA,
+                     CALL AB_AB_CHET01_ROOK( UPLO, N, A, LDA, AFAC, LDA,
      $                                 IWORK, AINV, LDA, RWORK,
      $                                 RESULT( 1 ) )
 *
 *+    TEST 2      Compute residual of the computed solution.
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_CPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
+     $,
      $                            LDA, RWORK, RESULT( 2 ) )
 *
 *+    TEST 3
 *                 Check solution from generated exact solution.
 *
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -498,8 +510,9 @@
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'CHESV_ROOK', UPLO,
+     $                        CALL AB_ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'AB_AB_CHESV_ROOK', 
+     $UPLO,
      $                            N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -516,12 +529,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of CDRVHE_ROOK
+*     End of AB_AB_CDRVHE_ROOK
 *
       END

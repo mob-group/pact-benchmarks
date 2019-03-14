@@ -1,4 +1,4 @@
-*> \brief \b SSPTRF
+*> \brief \b AB_SSPTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSPTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssptrf.f">
+*> Download AB_SSPTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSPTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssptrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSPTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssptrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSPTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSPTRF( UPLO, N, AP, IPIV, INFO )
+*       SUBROUTINE AB_SSPTRF( UPLO, N, AP, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SSPTRF computes the factorization of a real symmetric matrix A stored
+*> AB_SSPTRF computes the factorization of a real symmetric matrix A stored
 *> in packed format using the Bunch-Kaufman diagonal pivoting method:
 *>
 *>    A = U*D*U**T  or  A = L*D*L**T
@@ -155,7 +155,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SSPTRF( UPLO, N, AP, IPIV, INFO )
+      SUBROUTINE AB_SSPTRF( UPLO, N, AP, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -187,12 +187,12 @@
      $                   ROWMAX, T, WK, WKM1, WKP1
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      EXTERNAL           LSAME, ISAMAX
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX
+      EXTERNAL           AB_LSAME, AB_ISAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSPR, SSWAP, XERBLA
+      EXTERNAL           AB_SSCAL, AB_SSPR, AB_SSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -202,14 +202,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSPTRF', -INFO )
+         CALL AB_XERBLA( 'AB_SSPTRF', -INFO )
          RETURN
       END IF
 *
@@ -244,7 +244,7 @@
 *        column K, and COLMAX is its absolute value
 *
          IF( K.GT.1 ) THEN
-            IMAX = ISAMAX( K-1, AP( KC ), 1 )
+            IMAX = AB_ISAMAX( K-1, AP( KC ), 1 )
             COLMAX = ABS( AP( KC+IMAX-1 ) )
          ELSE
             COLMAX = ZERO
@@ -277,7 +277,7 @@
    20          CONTINUE
                KPC = ( IMAX-1 )*IMAX / 2 + 1
                IF( IMAX.GT.1 ) THEN
-                  JMAX = ISAMAX( IMAX-1, AP( KPC ), 1 )
+                  JMAX = AB_ISAMAX( IMAX-1, AP( KPC ), 1 )
                   ROWMAX = MAX( ROWMAX, ABS( AP( KPC+JMAX-1 ) ) )
                END IF
 *
@@ -286,7 +286,8 @@
 *                 no interchange, use 1-by-1 pivot block
 *
                   KP = K
-               ELSE IF( ABS( AP( KPC+IMAX-1 ) ).GE.ALPHA*ROWMAX ) THEN
+               ELSE IF( ABS( AP( KPC+IMAX-1 ) ).GE.ALPHA*ROWMAX ) THE
+     $N
 *
 *                 interchange rows and columns K and IMAX, use 1-by-1
 *                 pivot block
@@ -310,7 +311,7 @@
 *              Interchange rows and columns KK and KP in the leading
 *              submatrix A(1:k,1:k)
 *
-               CALL SSWAP( KP-1, AP( KNC ), 1, AP( KPC ), 1 )
+               CALL AB_SSWAP( KP-1, AP( KNC ), 1, AP( KPC ), 1 )
                KX = KPC + KP - 1
                DO 30 J = KP + 1, KK - 1
                   KX = KX + J - 1
@@ -343,11 +344,11 @@
 *              A := A - U(k)*D(k)*U(k)**T = A - W(k)*1/D(k)*W(k)**T
 *
                R1 = ONE / AP( KC+K-1 )
-               CALL SSPR( UPLO, K-1, -R1, AP( KC ), 1, AP )
+               CALL AB_SSPR( UPLO, K-1, -R1, AP( KC ), 1, AP )
 *
 *              Store U(k) in column k
 *
-               CALL SSCAL( K-1, R1, AP( KC ), 1 )
+               CALL AB_SSCAL( K-1, R1, AP( KC ), 1 )
             ELSE
 *
 *              2-by-2 pivot block D(k): columns k and k-1 now hold
@@ -432,7 +433,7 @@
 *        column K, and COLMAX is its absolute value
 *
          IF( K.LT.N ) THEN
-            IMAX = K + ISAMAX( N-K, AP( KC+1 ), 1 )
+            IMAX = K + AB_ISAMAX( N-K, AP( KC+1 ), 1 )
             COLMAX = ABS( AP( KC+IMAX-K ) )
          ELSE
             COLMAX = ZERO
@@ -467,7 +468,7 @@
    70          CONTINUE
                KPC = NPP - ( N-IMAX+1 )*( N-IMAX+2 ) / 2 + 1
                IF( IMAX.LT.N ) THEN
-                  JMAX = IMAX + ISAMAX( N-IMAX, AP( KPC+1 ), 1 )
+                  JMAX = IMAX + AB_ISAMAX( N-IMAX, AP( KPC+1 ), 1 )
                   ROWMAX = MAX( ROWMAX, ABS( AP( KPC+JMAX-IMAX ) ) )
                END IF
 *
@@ -501,7 +502,8 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL SSWAP( N-KP, AP( KNC+KP-KK+1 ), 1, AP( KPC+1 ),
+     $            CALL AB_SSWAP( N-KP, AP( KNC+KP-KK+1 ), 1, AP( KPC+1 )
+     $,
      $                        1 )
                KX = KNC + KP - KK
                DO 80 J = KK + 1, KP - 1
@@ -537,12 +539,12 @@
 *                 A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T
 *
                   R1 = ONE / AP( KC )
-                  CALL SSPR( UPLO, N-K, -R1, AP( KC+1 ), 1,
+                  CALL AB_SSPR( UPLO, N-K, -R1, AP( KC+1 ), 1,
      $                       AP( KC+N-K+1 ) )
 *
 *                 Store L(k) in column K
 *
-                  CALL SSCAL( N-K, R1, AP( KC+1 ), 1 )
+                  CALL AB_SSCAL( N-K, R1, AP( KC+1 ), 1 )
                END IF
             ELSE
 *
@@ -609,6 +611,6 @@
   110 CONTINUE
       RETURN
 *
-*     End of SSPTRF
+*     End of AB_SSPTRF
 *
       END

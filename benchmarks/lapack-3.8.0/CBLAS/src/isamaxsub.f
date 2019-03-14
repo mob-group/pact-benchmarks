@@ -1,15 +1,15 @@
-c     isamaxsub.f
+c     AB_AB_ISAMAXsub.f
 c
-c     The program is a fortran wrapper for isamax.
+c     The program is a fortran wrapper for AB_ISAMAX.
 c     Witten by Keita Teranishi.  2/11/1998
 c
-      subroutine isamaxsub(n,x,incx,iamax)
+      subroutine AB_AB_ISAMAXsub(n,x,incx,iamax)
 c
-      external isamax
-      integer  isamax,iamax
+      external AB_ISAMAX
+      integer  AB_ISAMAX,iamax
       integer n,incx
       real x(*)
 c
-      iamax=isamax(n,x,incx)
+      iamax=AB_ISAMAX(n,x,incx)
       return
       end

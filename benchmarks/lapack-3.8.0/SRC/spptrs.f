@@ -1,4 +1,4 @@
-*> \brief \b SPPTRS
+*> \brief \b AB_SPPTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPPTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spptrs.f">
+*> Download AB_SPPTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPPTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spptrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPPTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spptrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPPTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
+*       SUBROUTINE AB_SPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> SPPTRS solves a system of linear equations A*X = B with a symmetric
+*> AB_SPPTRS solves a system of linear equations A*X = B with a symmetric
 *> positive definite matrix A in packed storage using the Cholesky
-*> factorization A = U**T*U or A = L*L**T computed by SPPTRF.
+*> factorization A = U**T*U or A = L*L**T computed by AB_SPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -106,7 +106,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
+      SUBROUTINE AB_SPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,11 +128,11 @@
       INTEGER            I
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           STPSV, XERBLA
+      EXTERNAL           AB_STPSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -142,8 +142,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -153,7 +153,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPPTRS', -INFO )
+         CALL AB_XERBLA( 'AB_SPPTRS', -INFO )
          RETURN
       END IF
 *
@@ -170,12 +170,12 @@
 *
 *           Solve U**T *X = B, overwriting B with X.
 *
-            CALL STPSV( 'Upper', 'Transpose', 'Non-unit', N, AP,
+            CALL AB_STPSV( 'Upper', 'Transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL STPSV( 'Upper', 'No transpose', 'Non-unit', N, AP,
+            CALL AB_STPSV( 'Upper', 'No transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
    10    CONTINUE
       ELSE
@@ -186,18 +186,18 @@
 *
 *           Solve L*Y = B, overwriting B with X.
 *
-            CALL STPSV( 'Lower', 'No transpose', 'Non-unit', N, AP,
+            CALL AB_STPSV( 'Lower', 'No transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
 *
 *           Solve L**T *X = Y, overwriting B with X.
 *
-            CALL STPSV( 'Lower', 'Transpose', 'Non-unit', N, AP,
+            CALL AB_STPSV( 'Lower', 'Transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of SPPTRS
+*     End of AB_SPPTRS
 *
       END

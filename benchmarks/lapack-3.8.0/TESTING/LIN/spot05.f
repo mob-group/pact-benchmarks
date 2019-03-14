@@ -1,4 +1,4 @@
-*> \brief \b SPOT05
+*> \brief \b AB_SPOT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPOT05( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
+*       SUBROUTINE AB_SPOT05( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
 *                          LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SPOT05 tests the error bounds from iterative refinement for the
+*> AB_SPOT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> symmetric n by n matrix.
 *>
@@ -161,7 +161,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SPOT05( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
+      SUBROUTINE AB_SPOT05( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
      $                   LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -190,10 +190,10 @@
       REAL               AXBI, DIFF, EPS, ERRBND, OVFL, TMP, UNFL, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -208,10 +208,10 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
 *
 *     Test 1:  Compute the maximum of
 *        norm(X - XACT) / ( norm(X) * FERR )
@@ -219,7 +219,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = ISAMAX( N, X( 1, J ), 1 )
+         IMAX = AB_ISAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( ABS( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -282,6 +282,6 @@
 *
       RETURN
 *
-*     End of SPOT05
+*     End of AB_SPOT05
 *
       END

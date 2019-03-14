@@ -1,4 +1,4 @@
-*> \brief \b DPTT05
+*> \brief \b AB_DPTT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
+*       SUBROUTINE AB_DPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
 *                          FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DPTT05 tests the error bounds from iterative refinement for the
+*> AB_DPTT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> symmetric tridiagonal matrix of order n.
 *>
@@ -147,7 +147,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
+      SUBROUTINE AB_DPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
      $                   FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -175,9 +175,9 @@
       DOUBLE PRECISION   AXBI, DIFF, EPS, ERRBND, OVFL, TMP, UNFL, XNORM
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           IDAMAX, DLAMCH
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -192,8 +192,8 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       NZ = 4
 *
@@ -203,7 +203,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = IDAMAX( N, X( 1, J ), 1 )
+         IMAX = AB_IDAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( ABS( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -256,6 +256,6 @@
 *
       RETURN
 *
-*     End of DPTT05
+*     End of AB_DPTT05
 *
       END

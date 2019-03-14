@@ -1,4 +1,4 @@
-*> \brief \b CLARF applies an elementary reflector to a general rectangular matrix.
+*> \brief \b AB_CLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLARF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarf.f">
+*> Download AB_CLARF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE AB_CLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CLARF applies a complex elementary reflector H to a complex M-by-N
+*> AB_CLARF applies a complex elementary reflector H to a complex M-by-N
 *> matrix C, from either the left or the right. H is represented in the
 *> form
 *>
@@ -126,7 +126,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE AB_CLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -154,16 +154,16 @@
       INTEGER            I, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGERC
+      EXTERNAL           AB_CGEMV, AB_CGERC
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILACLR, ILACLC
-      EXTERNAL           LSAME, ILACLR, ILACLC
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILACLR, AB_ILACLC
+      EXTERNAL           AB_LSAME, AB_ILACLR, AB_ILACLC
 *     ..
 *     .. Executable Statements ..
 *
-      APPLYLEFT = LSAME( SIDE, 'L' )
+      APPLYLEFT = AB_LSAME( SIDE, 'L' )
       LASTV = 0
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
@@ -186,10 +186,10 @@
          END DO
          IF( APPLYLEFT ) THEN
 !     Scan for the last non-zero column in C(1:lastv,:).
-            LASTC = ILACLC(LASTV, N, C, LDC)
+            LASTC = AB_ILACLC(LASTV, N, C, LDC)
          ELSE
 !     Scan for the last non-zero row in C(:,1:lastv).
-            LASTC = ILACLR(M, LASTV, C, LDC)
+            LASTC = AB_ILACLR(M, LASTV, C, LDC)
          END IF
       END IF
 !     Note that lastc.eq.0 renders the BLAS operations null; no special
@@ -202,12 +202,13 @@
 *
 *           w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1)
 *
-            CALL CGEMV( 'Conjugate transpose', LASTV, LASTC, ONE,
+            CALL AB_CGEMV( 'Conjugate transpose', LASTV, LASTC, ONE,
      $           C, LDC, V, INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H
 *
-            CALL CGERC( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
+            CALL AB_CGERC( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC 
+     $)
          END IF
       ELSE
 *
@@ -217,16 +218,17 @@
 *
 *           w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
 *
-            CALL CGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
+            CALL AB_CGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
      $           V, INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H
 *
-            CALL CGERC( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
+            CALL AB_CGERC( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC 
+     $)
          END IF
       END IF
       RETURN
 *
-*     End of CLARF
+*     End of AB_CLARF
 *
       END

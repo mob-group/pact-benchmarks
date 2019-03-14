@@ -1,4 +1,4 @@
-*> \brief \b DRZT01
+*> \brief \b AB_DRZT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DRZT01( M, N, A, AF, LDA, TAU, WORK,
+*       DOUBLE PRECISION FUNCTION AB_DRZT01( M, N, A, AF, LDA, TAU, WORK,
 *                        LWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,9 +25,9 @@
 *>
 *> \verbatim
 *>
-*> DRZT01 returns
+*> AB_DRZT01 returns
 *>      || A - R*Q || / ( M * eps * ||A|| )
-*> for an upper trapezoidal A that was factored with DTZRZF.
+*> for an upper trapezoidal A that was factored with AB_DTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -54,7 +54,7 @@
 *> \param[in] AF
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDA,N)
-*>          The output of DTZRZF for input matrix A.
+*>          The output of AB_DTZRZF for input matrix A.
 *>          The lower triangle is not referenced.
 *> \endverbatim
 *>
@@ -67,8 +67,8 @@
 *> \param[in] TAU
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (M)
-*>          Details of the Householder transformations as returned by
-*>          DTZRZF.
+*>          Details of the HousehoAB_LDEr transformations as returned by
+*>          AB_DTZRZF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -95,7 +95,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DRZT01( M, N, A, AF, LDA, TAU, WORK,
+      DOUBLE PRECISION FUNCTION AB_DRZT01( M, N, A, AF, LDA, TAU, WORK,
      $                 LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -125,21 +125,21 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DLASET, DORMRZ, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DLASET, AB_DORMRZ, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      DRZT01 = ZERO
+      AB_DRZT01 = ZERO
 *
       IF( LWORK.LT.M*N+M ) THEN
-         CALL XERBLA( 'DRZT01', 8 )
+         CALL AB_XERBLA( 'AB_DRZT01', 8 )
          RETURN
       END IF
 *
@@ -148,11 +148,11 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      NORMA = DLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      NORMA = AB_DLANGE( 'One-norm', M, N, A, LDA, RWORK )
 *
 *     Copy upper triangle R
 *
-      CALL DLASET( 'Full', M, N, ZERO, ZERO, WORK, M )
+      CALL AB_DLASET( 'Full', M, N, ZERO, ZERO, WORK, M )
       DO 20 J = 1, M
          DO 10 I = 1, J
             WORK( ( J-1 )*M+I ) = AF( I, J )
@@ -161,23 +161,25 @@
 *
 *     R = R * P(1) * ... *P(m)
 *
-      CALL DORMRZ( 'Right', 'No tranpose', M, N, M, N-M, AF, LDA, TAU,
+      CALL AB_DORMRZ( 'Right', 'No tranpose', M, N, M, N-M, AF, LDA, TAU
+     $,
      $             WORK, M, WORK( M*N+1 ), LWORK-M*N, INFO )
 *
 *     R = R - A
 *
       DO 30 I = 1, N
-         CALL DAXPY( M, -ONE, A( 1, I ), 1, WORK( ( I-1 )*M+1 ), 1 )
+         CALL AB_DAXPY( M, -ONE, A( 1, I ), 1, WORK( ( I-1 )*M+1 ), 1 )
    30 CONTINUE
 *
-      DRZT01 = DLANGE( 'One-norm', M, N, WORK, M, RWORK )
+      AB_DRZT01 = AB_DLANGE( 'One-norm', M, N, WORK, M, RWORK )
 *
-      DRZT01 = DRZT01 / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+      AB_DRZT01 = AB_DRZT01 / ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N )
+     $ ) )
       IF( NORMA.NE.ZERO )
-     $   DRZT01 = DRZT01 / NORMA
+     $   AB_DRZT01 = AB_DRZT01 / NORMA
 *
       RETURN
 *
-*     End of DRZT01
+*     End of AB_DRZT01
 *
       END

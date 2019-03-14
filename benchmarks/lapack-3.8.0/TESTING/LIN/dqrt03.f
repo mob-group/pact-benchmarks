@@ -1,4 +1,4 @@
-*> \brief \b DQRT03
+*> \brief \b AB_DQRT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DQRT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_DQRT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> DQRT03 tests DORMQR, which computes Q*C, Q'*C, C*Q or C*Q'.
+*> AB_DQRT03 tests AB_DORMQR, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
-*> DQRT03 compares the results of a call to DORMQR with the results of
-*> forming Q explicitly by a call to DORGQR and then performing matrix
-*> multiplication by a call to DGEMM.
+*> AB_DQRT03 compares the results of a call to AB_DORMQR with the results of
+*> forming Q explicitly by a call to AB_DORGQR and then performing matrix
+*> multiplication by a call to AB_DGEMM.
 *> \endverbatim
 *
 *  Arguments:
@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDA,N)
 *>          Details of the QR factorization of an m-by-n matrix, as
-*>          returned by DGEQRF. See DGEQRF for further details.
+*>          returned by AB_AB_DGEQRF. See AB_AB_DGEQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -133,7 +133,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DQRT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_DQRT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK
+     $,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,12 +165,13 @@
       DOUBLE PRECISION   CNORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, DLAMCH, DLANGE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLARNV, DLASET, DORGQR, DORMQR
+      EXTERNAL           AB_DGEMM, AB_DLACPY, AB_DLARNV, AB_DLASET, AB_D
+     $ORGQR, AB_DORMQR
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
@@ -188,17 +190,17 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the first k columns of the factorization to the array Q
 *
-      CALL DLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
-      CALL DLACPY( 'Lower', M-1, K, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
+      CALL AB_DLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
+      CALL AB_DLACPY( 'Lower', M-1, K, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
 *
 *     Generate the m-by-m matrix Q
 *
-      SRNAMT = 'DORGQR'
-      CALL DORGQR( M, M, K, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_DORGQR'
+      CALL AB_DORGQR( M, M, K, Q, LDA, TAU, WORK, LWORK, INFO )
 *
       DO 30 ISIDE = 1, 2
          IF( ISIDE.EQ.1 ) THEN
@@ -214,9 +216,9 @@
 *        Generate MC by NC matrix C
 *
          DO 10 J = 1, NC
-            CALL DLARNV( 2, ISEED, MC, C( 1, J ) )
+            CALL AB_DLARNV( 2, ISEED, MC, C( 1, J ) )
    10    CONTINUE
-         CNORM = DLANGE( '1', MC, NC, C, LDA, RWORK )
+         CNORM = AB_DLANGE( '1', MC, NC, C, LDA, RWORK )
          IF( CNORM.EQ.0.0D0 )
      $      CNORM = ONE
 *
@@ -229,27 +231,30 @@
 *
 *           Copy C
 *
-            CALL DLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
+            CALL AB_DLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
 *
 *           Apply Q or Q' to C
 *
-            SRNAMT = 'DORMQR'
-            CALL DORMQR( SIDE, TRANS, MC, NC, K, AF, LDA, TAU, CC, LDA,
+            SRNAMT = 'AB_DORMQR'
+            CALL AB_DORMQR( SIDE, TRANS, MC, NC, K, AF, LDA, TAU, CC, LD
+     $A,
      $                   WORK, LWORK, INFO )
 *
 *           Form explicit product and subtract
 *
-            IF( LSAME( SIDE, 'L' ) ) THEN
-               CALL DGEMM( TRANS, 'No transpose', MC, NC, MC, -ONE, Q,
+            IF( AB_LSAME( SIDE, 'L' ) ) THEN
+               CALL AB_DGEMM( TRANS, 'No transpose', MC, NC, MC, -ONE, Q
+     $,
      $                     LDA, C, LDA, ONE, CC, LDA )
             ELSE
-               CALL DGEMM( 'No transpose', TRANS, MC, NC, NC, -ONE, C,
+               CALL AB_DGEMM( 'No transpose', TRANS, MC, NC, NC, -ONE, C
+     $,
      $                     LDA, Q, LDA, ONE, CC, LDA )
             END IF
 *
 *           Compute error in the difference
 *
-            RESID = DLANGE( '1', MC, NC, CC, LDA, RWORK )
+            RESID = AB_DLANGE( '1', MC, NC, CC, LDA, RWORK )
             RESULT( ( ISIDE-1 )*2+ITRANS ) = RESID /
      $         ( DBLE( MAX( 1, M ) )*CNORM*EPS )
 *
@@ -258,6 +263,6 @@
 *
       RETURN
 *
-*     End of DQRT03
+*     End of AB_DQRT03
 *
       END

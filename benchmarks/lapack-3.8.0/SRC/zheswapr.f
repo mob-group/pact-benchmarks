@@ -1,4 +1,4 @@
-*> \brief \b ZHESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
+*> \brief \b AB_ZHESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHESWAPR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheswapr.f">
+*> Download AB_ZHESWAPR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHESWAPR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zheswapr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHESWAPR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheswapr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHESWAPR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHESWAPR( UPLO, N, A, LDA, I1, I2)
+*       SUBROUTINE AB_ZHESWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *       .. Scalar Arguments ..
 *       CHARACTER        UPLO
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZHESWAPR applies an elementary permutation on the rows and the columns of
+*> AB_ZHESWAPR applies an elementary permutation on the rows and the columns of
 *> a hermitian matrix.
 *> \endverbatim
 *
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the NB diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by CSYTRF.
+*>          used to obtain the factor U or L as computed by AB_CSYTRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -84,7 +84,7 @@
 *> \param[in] I2
 *> \verbatim
 *>          I2 is INTEGER
-*>          Index of the second row to swap
+*>          Index of the AB_SECOND row to swap
 *> \endverbatim
 *
 *  Authors:
@@ -100,7 +100,7 @@
 *> \ingroup complex16HEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZHESWAPR( UPLO, N, A, LDA, I1, I2)
+      SUBROUTINE AB_ZHESWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,23 +123,23 @@
       COMPLEX*16            TMP
 *
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZSWAP
+      EXTERNAL           AB_ZSWAP
 *     ..
 *     .. Executable Statements ..
 *
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF (UPPER) THEN
 *
 *         UPPER
 *         first swap
 *          - swap column I1 and I2 from I1 to I1-1
-         CALL ZSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
+         CALL AB_ZSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
 *
-*          second swap :
+*          AB_SECOND swap :
 *          - swap A(I1,I1) and A(I2,I2)
 *          - swap row I1 from I1+1 to I2-1 with col I2 from I1+1 to I2-1
 *          - swap A(I2,I1) and A(I1,I2)
@@ -170,9 +170,9 @@
 *         LOWER
 *         first swap
 *          - swap row I1 and I2 from 1 to I1-1
-         CALL ZSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
+         CALL AB_ZSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
 *
-*         second swap :
+*         AB_SECOND swap :
 *          - swap A(I1,I1) and A(I2,I2)
 *          - swap col I1 from I1+1 to I2-1 with row I2 from I1+1 to I2-1
 *          - swap A(I2,I1) and A(I1,I2)
@@ -199,5 +199,5 @@
 *
       ENDIF
 
-      END SUBROUTINE ZHESWAPR
+      END SUBROUTINE AB_ZHESWAPR
 

@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
+*      SUBROUTINE AB_ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
 *     $                LDT, C, LDC, WORK, LWORK, INFO )
 *
 *
@@ -26,7 +26,7 @@
 *>    TRANS = 'C':      Q**H * C       C * Q**H
 *>    where Q is a real orthogonal matrix defined as the product of blocked
 *>    elementary reflectors computed by short wide LQ
-*>    factorization (ZLASWLQ)
+*>    factorization (AB_ZLASWLQ)
 *> \endverbatim
 *
 *  Arguments:
@@ -95,7 +95,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the blocked
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          ZLASWLQ in the first k rows of its array argument A.
+*>          AB_ZLASWLQ in the first k rows of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -148,7 +148,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -179,12 +179,12 @@
 *>   Q(3) zeros out the bottom MB-N rows of rows [1:M,2*NB-M+1:3*NB-2*M] of A
 *>   . . .
 *>
-*> Q(1) is computed by GELQT, which represents Q(1) by Householder vectors
+*> Q(1) is computed by GELQT, which represents Q(1) by HousehoAB_LDEr vectors
 *> stored under the diagonal of rows 1:MB of A, and by upper triangular
 *> block reflectors, stored in array T(1:LDT,1:N).
 *> For more information see Further Details in GELQT.
 *>
-*> Q(i) for i>1 is computed by TPLQT, which represents Q(i) by Householder vectors
+*> Q(i) for i>1 is computed by TPLQT, which represents Q(i) by HousehoAB_LDEr vectors
 *> stored in columns [(i-1)*(NB-M)+M+1:i*(NB-M)+M] of A, and by upper triangular
 *> block reflectors, stored in array T(1:LDT,(i-1)*M+1:i*M).
 *> The last Q(k) may use fewer rows.
@@ -199,7 +199,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
+      SUBROUTINE AB_ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
      $    LDT, C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -224,20 +224,20 @@
       INTEGER    I, II, KK, LW, CTR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     .. External Subroutines ..
-      EXTERNAL    ZTPMLQT, ZGEMLQT, XERBLA
+      EXTERNAL    AB_ZTPMLQT, AB_AB_ZGEMLQT, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments
 *
       LQUERY  = LWORK.LT.0
-      NOTRAN  = LSAME( TRANS, 'N' )
-      TRAN    = LSAME( TRANS, 'C' )
-      LEFT    = LSAME( SIDE, 'L' )
-      RIGHT   = LSAME( SIDE, 'R' )
+      NOTRAN  = AB_LSAME( TRANS, 'N' )
+      TRAN    = AB_LSAME( TRANS, 'C' )
+      LEFT    = AB_LSAME( SIDE, 'L' )
+      RIGHT   = AB_LSAME( SIDE, 'R' )
       IF (LEFT) THEN
         LW = N * MB
       ELSE
@@ -266,7 +266,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'ZLAMSWLQ', -INFO )
+        CALL AB_XERBLA( 'AB_ZLAMSWLQ', -INFO )
         WORK(1) = LW
         RETURN
       ELSE IF (LQUERY) THEN
@@ -281,7 +281,7 @@
       END IF
 *
       IF((NB.LE.K).OR.(NB.GE.MAX(M,N,K))) THEN
-        CALL ZGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
+        CALL AB_AB_ZGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
      $        T, LDT, C, LDC, WORK, INFO)
         RETURN
       END IF
@@ -295,7 +295,7 @@
 *
           IF (KK.GT.0) THEN
             II=M-KK+1
-            CALL ZTPMLQT('L','C',KK , N, K, 0, MB, A(1,II), LDA,
+            CALL AB_ZTPMLQT('L','C',KK , N, K, 0, MB, A(1,II), LDA,
      $        T(1,CTR*K+1), LDT, C(1,1), LDC,
      $        C(II,1), LDC, WORK, INFO )
           ELSE
@@ -307,7 +307,7 @@
 *         Multiply Q to the current block of C (1:M,I:I+NB)
 *
             CTR = CTR - 1
-            CALL ZTPMLQT('L','C',NB-K , N, K, 0,MB, A(1,I), LDA,
+            CALL AB_ZTPMLQT('L','C',NB-K , N, K, 0,MB, A(1,I), LDA,
      $          T(1,CTR*K+1),LDT, C(1,1), LDC,
      $          C(I,1), LDC, WORK, INFO )
 
@@ -315,7 +315,7 @@
 *
 *         Multiply Q to the first block of C (1:M,1:NB)
 *
-          CALL ZGEMLQT('L','C',NB , N, K, MB, A(1,1), LDA, T
+          CALL AB_AB_ZGEMLQT('L','C',NB , N, K, MB, A(1,1), LDA, T
      $              ,LDT ,C(1,1), LDC, WORK, INFO )
 *
       ELSE IF (LEFT.AND.NOTRAN) THEN
@@ -325,14 +325,14 @@
          KK = MOD((M-K),(NB-K))
          II=M-KK+1
          CTR = 1
-         CALL ZGEMLQT('L','N',NB , N, K, MB, A(1,1), LDA, T
+         CALL AB_AB_ZGEMLQT('L','N',NB , N, K, MB, A(1,1), LDA, T
      $              ,LDT ,C(1,1), LDC, WORK, INFO )
 *
          DO I=NB+1,II-NB+K,(NB-K)
 *
 *         Multiply Q to the current block of C (I:I+NB,1:N)
 *
-          CALL ZTPMLQT('L','N',NB-K , N, K, 0,MB, A(1,I), LDA,
+          CALL AB_ZTPMLQT('L','N',NB-K , N, K, 0,MB, A(1,I), LDA,
      $         T(1, CTR * K + 1), LDT, C(1,1), LDC,
      $         C(I,1), LDC, WORK, INFO )
           CTR = CTR + 1
@@ -342,7 +342,7 @@
 *
 *         Multiply Q to the last block of C
 *
-          CALL ZTPMLQT('L','N',KK , N, K, 0, MB, A(1,II), LDA,
+          CALL AB_ZTPMLQT('L','N',KK , N, K, 0, MB, A(1,II), LDA,
      $        T(1, CTR * K + 1), LDT, C(1,1), LDC,
      $        C(II,1), LDC, WORK, INFO )
 *
@@ -356,7 +356,7 @@
           CTR = (N-K)/(NB-K)
           IF (KK.GT.0) THEN
             II=N-KK+1
-            CALL ZTPMLQT('R','N',M , KK, K, 0, MB, A(1, II), LDA,
+            CALL AB_ZTPMLQT('R','N',M , KK, K, 0, MB, A(1, II), LDA,
      $        T(1, CTR * K + 1), LDT, C(1,1), LDC,
      $        C(1,II), LDC, WORK, INFO )
           ELSE
@@ -368,7 +368,7 @@
 *         Multiply Q to the current block of C (1:M,I:I+MB)
 *
           CTR = CTR - 1
-          CALL ZTPMLQT('R','N', M, NB-K, K, 0, MB, A(1, I), LDA,
+          CALL AB_ZTPMLQT('R','N', M, NB-K, K, 0, MB, A(1, I), LDA,
      $        T(1, CTR * K + 1), LDT, C(1,1), LDC,
      $        C(1,I), LDC, WORK, INFO )
 
@@ -376,7 +376,7 @@
 *
 *         Multiply Q to the first block of C (1:M,1:MB)
 *
-          CALL ZGEMLQT('R','N',M , NB, K, MB, A(1,1), LDA, T
+          CALL AB_AB_ZGEMLQT('R','N',M , NB, K, MB, A(1,1), LDA, T
      $            ,LDT ,C(1,1), LDC, WORK, INFO )
 *
       ELSE IF (RIGHT.AND.TRAN) THEN
@@ -385,7 +385,7 @@
 *
          KK = MOD((N-K),(NB-K))
          II=N-KK+1
-         CALL ZGEMLQT('R','C',M , NB, K, MB, A(1,1), LDA, T
+         CALL AB_AB_ZGEMLQT('R','C',M , NB, K, MB, A(1,1), LDA, T
      $            ,LDT ,C(1,1), LDC, WORK, INFO )
          CTR = 1
 *
@@ -393,7 +393,7 @@
 *
 *         Multiply Q to the current block of C (1:M,I:I+MB)
 *
-          CALL ZTPMLQT('R','C',M , NB-K, K, 0,MB, A(1,I), LDA,
+          CALL AB_ZTPMLQT('R','C',M , NB-K, K, 0,MB, A(1,I), LDA,
      $       T(1,CTR *K+1), LDT, C(1,1), LDC,
      $       C(1,I), LDC, WORK, INFO )
           CTR = CTR + 1
@@ -403,7 +403,7 @@
 *
 *       Multiply Q to the last block of C
 *
-          CALL ZTPMLQT('R','C',M , KK, K, 0,MB, A(1,II), LDA,
+          CALL AB_ZTPMLQT('R','C',M , KK, K, 0,MB, A(1,II), LDA,
      $      T(1, CTR * K + 1),LDT, C(1,1), LDC,
      $      C(1,II), LDC, WORK, INFO )
 *
@@ -414,6 +414,6 @@
       WORK(1) = LW
       RETURN
 *
-*     End of ZLAMSWLQ
+*     End of AB_ZLAMSWLQ
 *
       END

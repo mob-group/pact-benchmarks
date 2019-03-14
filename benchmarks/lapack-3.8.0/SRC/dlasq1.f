@@ -1,4 +1,4 @@
-*> \brief \b DLASQ1 computes the singular values of a real square bidiagonal matrix. Used by sbdsqr.
+*> \brief \b AB_DLASQ1 computes the singular values of a real square bidiagonal matrix. Used by AB_SBDSQR.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLASQ1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasq1.f">
+*> Download AB_DLASQ1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASQ1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasq1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASQ1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasq1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASQ1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLASQ1( N, D, E, WORK, INFO )
+*       SUBROUTINE AB_DLASQ1( N, D, E, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DLASQ1 computes the singular values of a real N-by-N bidiagonal
+*> AB_DLASQ1 computes the singular values of a real N-by-N bidiagonal
 *> matrix with diagonal D and off-diagonal E. The singular values
 *> are computed to high relative accuracy, in the absence of
 *> denormalization, underflow and overflow. The algorithm was first
@@ -88,7 +88,7 @@
 *>                  iterations (in inner while loop)  On exit D and E
 *>                  represent a matrix with the same singular values
 *>                  which the calling subroutine could use to finish the
-*>                  computation, or even feed back into DLASQ1
+*>                  computation, or even feed back into AB_DLASQ1
 *>             = 3, termination criterion of outer while loop not met
 *>                  (program created more than N unreduced blocks)
 *> \endverbatim
@@ -106,7 +106,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DLASQ1( N, D, E, WORK, INFO )
+      SUBROUTINE AB_DLASQ1( N, D, E, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,11 +131,12 @@
       DOUBLE PRECISION   EPS, SCALE, SAFMIN, SIGMN, SIGMX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAS2, DLASCL, DLASQ2, DLASRT, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DLAS2, AB_DLASCL, AB_DLASQ2, AB_AB
+     $_DLASRT, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -145,7 +146,7 @@
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL XERBLA( 'DLASQ1', -INFO )
+         CALL AB_XERBLA( 'AB_DLASQ1', -INFO )
          RETURN
       ELSE IF( N.EQ.0 ) THEN
          RETURN
@@ -153,7 +154,7 @@
          D( 1 ) = ABS( D( 1 ) )
          RETURN
       ELSE IF( N.EQ.2 ) THEN
-         CALL DLAS2( D( 1 ), E( 1 ), D( 2 ), SIGMN, SIGMX )
+         CALL AB_DLAS2( D( 1 ), E( 1 ), D( 2 ), SIGMN, SIGMX )
          D( 1 ) = SIGMX
          D( 2 ) = SIGMN
          RETURN
@@ -171,7 +172,7 @@
 *     Early return if SIGMX is zero (matrix is already diagonal).
 *
       IF( SIGMX.EQ.ZERO ) THEN
-         CALL DLASRT( 'D', N, D, IINFO )
+         CALL AB_AB_DLASRT( 'D', N, D, IINFO )
          RETURN
       END IF
 *
@@ -182,12 +183,12 @@
 *     Copy D and E into WORK (in the Z format) and scale (squaring the
 *     input data makes scaling by a power of the radix pointless).
 *
-      EPS = DLAMCH( 'Precision' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SCALE = SQRT( EPS / SAFMIN )
-      CALL DCOPY( N, D, 1, WORK( 1 ), 2 )
-      CALL DCOPY( N-1, E, 1, WORK( 2 ), 2 )
-      CALL DLASCL( 'G', 0, 0, SIGMX, SCALE, 2*N-1, 1, WORK, 2*N-1,
+      CALL AB_DCOPY( N, D, 1, WORK( 1 ), 2 )
+      CALL AB_DCOPY( N-1, E, 1, WORK( 2 ), 2 )
+      CALL AB_DLASCL( 'G', 0, 0, SIGMX, SCALE, 2*N-1, 1, WORK, 2*N-1,
      $             IINFO )
 *
 *     Compute the q's and e's.
@@ -197,13 +198,13 @@
    30 CONTINUE
       WORK( 2*N ) = ZERO
 *
-      CALL DLASQ2( N, WORK, INFO )
+      CALL AB_DLASQ2( N, WORK, INFO )
 *
       IF( INFO.EQ.0 ) THEN
          DO 40 I = 1, N
             D( I ) = SQRT( WORK( I ) )
    40    CONTINUE
-         CALL DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, D, N, IINFO )
+         CALL AB_DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, D, N, IINFO )
       ELSE IF( INFO.EQ.2 ) THEN
 *
 *     Maximum number of iterations exceeded.  Move data from WORK
@@ -213,12 +214,12 @@
             D( I ) = SQRT( WORK( 2*I-1 ) )
             E( I ) = SQRT( WORK( 2*I ) )
          END DO
-         CALL DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, D, N, IINFO )
-         CALL DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, E, N, IINFO )
+         CALL AB_DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, D, N, IINFO )
+         CALL AB_DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, E, N, IINFO )
       END IF
 *
       RETURN
 *
-*     End of DLASQ1
+*     End of AB_DLASQ1
 *
       END

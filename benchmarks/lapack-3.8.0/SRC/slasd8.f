@@ -1,4 +1,4 @@
-*> \brief \b SLASD8 finds the square roots of the roots of the secular equation, and stores, for each element in D, the distance to its two nearest poles. Used by sbdsdc.
+*> \brief \b AB_SLASD8 finds the square roots of the roots of the secular equation, and stores, for each element in D, the distance to its two nearest poles. Used by AB_SBDSDC.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASD8 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd8.f">
+*> Download AB_SLASD8 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASD8.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd8.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASD8.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd8.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASD8.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,
+*       SUBROUTINE AB_SLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,
 *                          DSIGMA, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,14 +36,14 @@
 *>
 *> \verbatim
 *>
-*> SLASD8 finds the square roots of the roots of the secular equation,
+*> AB_SLASD8 finds the square roots of the roots of the secular equation,
 *> as defined by the values in DSIGMA and Z. It makes the appropriate
-*> calls to SLASD4, and stores, for each  element in D, the distance
+*> calls to AB_SLASD4, and stores, for each  element in D, the distance
 *> to its two nearest poles (elements in DSIGMA). It also updates
 *> the arrays VF and VL, the first and last components of all the
 *> right singular vectors of the original bidiagonal matrix.
 *>
-*> SLASD8 is called from SLASD6.
+*> AB_SLASD8 is called from AB_SLASD6.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          K is INTEGER
 *>          The number of terms in the rational function to be solved
-*>          by SLASD4.  K >= 1.
+*>          by AB_SLASD4.  K >= 1.
 *> \endverbatim
 *>
 *> \param[out] D
@@ -163,7 +163,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,
+      SUBROUTINE AB_SLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,
      $                   DSIGMA, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -191,11 +191,12 @@
       REAL               DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, RHO, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLASCL, SLASD4, SLASET, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SLASCL, AB_SLASD4, AB_SLASET, AB_X
+     $ERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SDOT, SLAMC3, SNRM2
-      EXTERNAL           SDOT, SLAMC3, SNRM2
+      REAL               AB_SDOT, AB_SLAMC3, AB_SNRM2
+      EXTERNAL           AB_SDOT, AB_SLAMC3, AB_SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN, SQRT
@@ -214,7 +215,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLASD8', -INFO )
+         CALL AB_XERBLA( 'AB_SLASD8', -INFO )
          RETURN
       END IF
 *
@@ -248,7 +249,8 @@
 *     this code.
 *
       DO 10 I = 1, K
-         DSIGMA( I ) = SLAMC3( DSIGMA( I ), DSIGMA( I ) ) - DSIGMA( I )
+         DSIGMA( I ) = AB_SLAMC3( DSIGMA( I ), DSIGMA( I ) ) - DSIGMA( I
+     $ )
    10 CONTINUE
 *
 *     Book keeping.
@@ -261,19 +263,19 @@
 *
 *     Normalize Z.
 *
-      RHO = SNRM2( K, Z, 1 )
-      CALL SLASCL( 'G', 0, 0, RHO, ONE, K, 1, Z, K, INFO )
+      RHO = AB_SNRM2( K, Z, 1 )
+      CALL AB_SLASCL( 'G', 0, 0, RHO, ONE, K, 1, Z, K, INFO )
       RHO = RHO*RHO
 *
 *     Initialize WORK(IWK3).
 *
-      CALL SLASET( 'A', K, 1, ONE, ONE, WORK( IWK3 ), K )
+      CALL AB_SLASET( 'A', K, 1, ONE, ONE, WORK( IWK3 ), K )
 *
 *     Compute the updated singular values, the arrays DIFL, DIFR,
 *     and the updated Z.
 *
       DO 40 J = 1, K
-         CALL SLASD4( K, J, DSIGMA, Z, WORK( IWK1 ), RHO, D( J ),
+         CALL AB_SLASD4( K, J, DSIGMA, Z, WORK( IWK1 ), RHO, D( J ),
      $                WORK( IWK2 ), INFO )
 *
 *        If the root finder fails, report the convergence failure.
@@ -316,27 +318,29 @@
          END IF
          WORK( J ) = -Z( J ) / DIFLJ / ( DSIGMA( J )+DJ )
          DO 60 I = 1, J - 1
-            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ), DSIGJ )-DIFLJ )
+            WORK( I ) = Z( I ) / ( AB_SLAMC3( DSIGMA( I ), DSIGJ )-DIFLJ
+     $ )
      $                   / ( DSIGMA( I )+DJ )
    60    CONTINUE
          DO 70 I = J + 1, K
-            WORK( I ) = Z( I ) / ( SLAMC3( DSIGMA( I ), DSIGJP )+DIFRJ )
+            WORK( I ) = Z( I ) / ( AB_SLAMC3( DSIGMA( I ), DSIGJP )+DIFR
+     $J )
      $                   / ( DSIGMA( I )+DJ )
    70    CONTINUE
-         TEMP = SNRM2( K, WORK, 1 )
-         WORK( IWK2I+J ) = SDOT( K, WORK, 1, VF, 1 ) / TEMP
-         WORK( IWK3I+J ) = SDOT( K, WORK, 1, VL, 1 ) / TEMP
+         TEMP = AB_SNRM2( K, WORK, 1 )
+         WORK( IWK2I+J ) = AB_SDOT( K, WORK, 1, VF, 1 ) / TEMP
+         WORK( IWK3I+J ) = AB_SDOT( K, WORK, 1, VL, 1 ) / TEMP
          IF( ICOMPQ.EQ.1 ) THEN
             DIFR( J, 2 ) = TEMP
          END IF
    80 CONTINUE
 *
-      CALL SCOPY( K, WORK( IWK2 ), 1, VF, 1 )
-      CALL SCOPY( K, WORK( IWK3 ), 1, VL, 1 )
+      CALL AB_SCOPY( K, WORK( IWK2 ), 1, VF, 1 )
+      CALL AB_SCOPY( K, WORK( IWK3 ), 1, VL, 1 )
 *
       RETURN
 *
-*     End of SLASD8
+*     End of AB_SLASD8
 *
       END
 

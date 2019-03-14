@@ -1,4 +1,4 @@
-*> \brief \b ZGET35
+*> \brief \b AB_ZGET35
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET35( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_ZGET35( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NIN, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> ZGET35 tests ZTRSYL, a routine for solving the Sylvester matrix
+*> AB_ZGET35 tests AB_ZTRSYL, a routine for solving the Sylvester matrix
 *> equation
 *>
 *>    op(A)*X + ISGN*X*op(B) = scale*C,
@@ -82,7 +82,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZGET35( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_ZGET35( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -121,11 +121,11 @@
      $                   CSAV( LDT, LDT ), CTMP( LDT, LDT )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZGEMM, ZTRSYL
+      EXTERNAL           AB_DLABAD, AB_ZGEMM, AB_ZTRSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -134,10 +134,10 @@
 *
 *     Get machine parameters
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -207,12 +207,12 @@
    90                         CONTINUE
   100                      CONTINUE
                            KNT = KNT + 1
-                           CALL ZTRSYL( TRANA, TRANB, ISGN, M, N, A,
+                           CALL AB_ZTRSYL( TRANA, TRANB, ISGN, M, N, A,
      $                                  LDT, B, LDT, C, LDT, SCALE,
      $                                  INFO )
                            IF( INFO.NE.0 )
      $                        NINFO = NINFO + 1
-                           XNRM = ZLANGE( 'M', M, N, C, LDT, DUM )
+                           XNRM = AB_ZLANGE( 'M', M, N, C, LDT, DUM )
                            RMUL = CONE
                            IF( XNRM.GT.ONE .AND. TNRM.GT.ONE ) THEN
                               IF( XNRM.GT.BIGNUM / TNRM ) THEN
@@ -220,13 +220,13 @@
                                  RMUL = CONE / RMUL
                               END IF
                            END IF
-                           CALL ZGEMM( TRANA, 'N', M, N, M, RMUL, A,
+                           CALL AB_ZGEMM( TRANA, 'N', M, N, M, RMUL, A,
      $                                 LDT, C, LDT, -SCALE*RMUL, CSAV,
      $                                 LDT )
-                           CALL ZGEMM( 'N', TRANB, M, N, N,
+                           CALL AB_ZGEMM( 'N', TRANB, M, N, N,
      $                                 DBLE( ISGN )*RMUL, C, LDT, B,
      $                                 LDT, CONE, CSAV, LDT )
-                           RES1 = ZLANGE( 'M', M, N, CSAV, LDT, DUM )
+                           RES1 = AB_ZLANGE( 'M', M, N, CSAV, LDT, DUM )
                            RES = RES1 / MAX( SMLNUM, SMLNUM*XNRM,
      $                           ( ( ABS( RMUL )*TNRM )*EPS )*XNRM )
                            IF( RES.GT.RMAX ) THEN
@@ -242,6 +242,6 @@
   170 CONTINUE
       GO TO 10
 *
-*     End of ZGET35
+*     End of AB_ZGET35
 *
       END

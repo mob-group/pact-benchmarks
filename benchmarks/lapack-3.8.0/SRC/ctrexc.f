@@ -1,4 +1,4 @@
-*> \brief \b CTREXC
+*> \brief \b AB_CTREXC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTREXC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrexc.f">
+*> Download AB_CTREXC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTREXC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrexc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTREXC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrexc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTREXC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
+*       SUBROUTINE AB_CTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          COMPQ
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CTREXC reorders the Schur factorization of a complex matrix
+*> AB_CTREXC reorders the Schur factorization of a complex matrix
 *> A = Q*T*Q**H, so that the diagonal element of T with row index IFST
 *> is moved to row ILST.
 *>
@@ -124,7 +124,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
+      SUBROUTINE AB_CTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,11 +148,11 @@
       COMPLEX            SN, T11, T22, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARTG, CROT, XERBLA
+      EXTERNAL           AB_CLARTG, AB_CROT, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX
@@ -162,14 +162,15 @@
 *     Decode and test the input parameters.
 *
       INFO = 0
-      WANTQ = LSAME( COMPQ, 'V' )
-      IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
+      WANTQ = AB_LSAME( COMPQ, 'V' )
+      IF( .NOT.AB_LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       ELSE IF( LDT.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.MAX( 1, N ) ) ) THEN
+      ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.MAX( 1, N ) ) ) THE
+     $N
          INFO = -6
       ELSE IF(( IFST.LT.1 .OR. IFST.GT.N ).AND.( N.GT.0 )) THEN
          INFO = -7
@@ -177,7 +178,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTREXC', -INFO )
+         CALL AB_XERBLA( 'AB_CTREXC', -INFO )
          RETURN
       END IF
 *
@@ -211,14 +212,16 @@
 *
 *        Determine the transformation to perform the interchange.
 *
-         CALL CLARTG( T( K, K+1 ), T22-T11, CS, SN, TEMP )
+         CALL AB_CLARTG( T( K, K+1 ), T22-T11, CS, SN, TEMP )
 *
 *        Apply transformation to the matrix T.
 *
          IF( K+2.LE.N )
-     $      CALL CROT( N-K-1, T( K, K+2 ), LDT, T( K+1, K+2 ), LDT, CS,
+     $      CALL AB_CROT( N-K-1, T( K, K+2 ), LDT, T( K+1, K+2 ), LDT, C
+     $S,
      $                 SN )
-         CALL CROT( K-1, T( 1, K ), 1, T( 1, K+1 ), 1, CS, CONJG( SN ) )
+         CALL AB_CROT( K-1, T( 1, K ), 1, T( 1, K+1 ), 1, CS, CONJG( SN 
+     $) )
 *
          T( K, K ) = T22
          T( K+1, K+1 ) = T11
@@ -227,7 +230,7 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL CROT( N, Q( 1, K ), 1, Q( 1, K+1 ), 1, CS,
+            CALL AB_CROT( N, Q( 1, K ), 1, Q( 1, K+1 ), 1, CS,
      $                 CONJG( SN ) )
          END IF
 *
@@ -235,6 +238,6 @@
 *
       RETURN
 *
-*     End of CTREXC
+*     End of AB_CTREXC
 *
       END

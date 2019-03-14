@@ -1,4 +1,4 @@
-*> \brief \b DCHKRQ
+*> \brief \b AB_DCHKRQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+*       SUBROUTINE AB_DCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
 *                          NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AR, AC,
 *                          B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
 *
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> DCHKRQ tests DGERQF, DORGRQ and DORMRQ.
+*> AB_DCHKRQ tests AB_AB_DGERQF, AB_DORGRQ and AB_DORMRQ.
 *> \endverbatim
 *
 *  Arguments:
@@ -197,7 +197,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+      SUBROUTINE AB_DCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVA
+     $L,
      $                   NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AR, AC,
      $                   B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
 *
@@ -243,9 +244,11 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRRQ, DGERQS, DGET02,
-     $                   DLACPY, DLARHS, DLATB4, DLATMS, DRQT01, DRQT02,
-     $                   DRQT03, XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_DERRRQ, AB_A
+     $B_DGERQS, AB_DGET02,
+     $                   AB_DLACPY, AB_DLARHS, AB_DLATB4, AB_DLATMS, AB_
+     $DRQT01, AB_DRQT02,
+     $                   AB_DRQT03, AB_XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -278,9 +281,9 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL DERRRQ( PATH, NOUT )
+     $   CALL AB_DERRRQ( PATH, NOUT )
       INFOT = 0
-      CALL XLAENV( 2, 2 )
+      CALL AB_XLAENV( 2, 2 )
 *
       LDA = NMAX
       LWORK = NMAX*MAX( NMAX, NRHS )
@@ -302,28 +305,30 @@
                IF( .NOT.DOTYPE( IMAT ) )
      $            GO TO 50
 *
-*              Set up parameters with DLATB4 and generate a test matrix
-*              with DLATMS.
+*              Set up parameters with AB_DLATB4 and generate a test matrix
+*              with AB_DLATMS.
 *
-               CALL DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
+               CALL AB_DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MO
+     $DE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'DLATMS'
-               CALL DLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_DLATMS'
+               CALL AB_DLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, 'No packing', A, LDA,
      $                      WORK, INFO )
 *
-*              Check error code from DLATMS.
+*              Check error code from AB_DLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, ' ', M, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, ' ', M, N,
+     $ -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 50
                END IF
 *
 *              Set some values for K: the first value must be MINMN,
-*              corresponding to the call of DRQT01; other values are
-*              used in the calls of DRQT02, and must not exceed MINMN.
+*              corresponding to the call of AB_DRQT01; other values are
+*              used in the calls of AB_DRQT02, and must not exceed MINMN.
 *
                KVAL( 1 ) = MINMN
                KVAL( 2 ) = 0
@@ -348,38 +353,40 @@
 *
                   DO 30 INB = 1, NNB
                      NB = NBVAL( INB )
-                     CALL XLAENV( 1, NB )
+                     CALL AB_XLAENV( 1, NB )
                      NX = NXVAL( INB )
-                     CALL XLAENV( 3, NX )
+                     CALL AB_XLAENV( 3, NX )
                      DO I = 1, NTESTS
                         RESULT( I ) = ZERO
                      END DO
                      NT = 2
                      IF( IK.EQ.1 ) THEN
 *
-*                       Test DGERQF
+*                       Test AB_AB_DGERQF
 *
-                        CALL DRQT01( M, N, A, AF, AQ, AR, LDA, TAU,
+                        CALL AB_DRQT01( M, N, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      ELSE IF( M.LE.N ) THEN
 *
-*                       Test DORGRQ, using factorization
-*                       returned by DRQT01
+*                       Test AB_DORGRQ, using factorization
+*                       returned by AB_DRQT01
 *
-                        CALL DRQT02( M, N, K, A, AF, AQ, AR, LDA, TAU,
+                        CALL AB_DRQT02( M, N, K, A, AF, AQ, AR, LDA, TAU
+     $,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
 
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test DORMRQ, using factorization returned
-*                       by DRQT01
+*                       Test AB_DORMRQ, using factorization returned
+*                       by AB_DRQT01
 *
-                        CALL DRQT03( M, N, K, AF, AC, AR, AQ, LDA, TAU,
+                        CALL AB_DRQT03( M, N, K, AF, AC, AR, AQ, LDA, TA
+     $U,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
                         NT = NT + 4
 *
-*                       If M>=N and K=N, call DGERQS to solve a system
+*                       If M>=N and K=N, call AB_AB_DGERQS to solve a system
 *                       with NRHS right hand sides and compute the
 *                       residual.
 *
@@ -388,26 +395,29 @@
 *                          Generate a solution and set the right
 *                          hand side.
 *
-                           SRNAMT = 'DLARHS'
-                           CALL DLARHS( PATH, 'New', 'Full',
+                           SRNAMT = 'AB_DLARHS'
+                           CALL AB_DLARHS( PATH, 'New', 'Full',
      $                                  'No transpose', M, N, 0, 0,
      $                                  NRHS, A, LDA, XACT, LDA, B, LDA,
      $                                  ISEED, INFO )
 *
-                           CALL DLACPY( 'Full', M, NRHS, B, LDA,
+                           CALL AB_DLACPY( 'Full', M, NRHS, B, LDA,
      $                                  X( N-M+1 ), LDA )
-                           SRNAMT = 'DGERQS'
-                           CALL DGERQS( M, N, NRHS, AF, LDA, TAU, X,
+                           SRNAMT = 'AB_AB_DGERQS'
+                           CALL AB_AB_DGERQS( M, N, NRHS, AF, LDA, TAU, 
+     $X,
      $                                  LDA, WORK, LWORK, INFO )
 *
-*                          Check error code from DGERQS.
+*                          Check error code from AB_AB_DGERQS.
 *
                            IF( INFO.NE.0 )
-     $                        CALL ALAERH( PATH, 'DGERQS', INFO, 0, ' ',
+     $                        CALL AB_ALAERH( PATH, 'AB_AB_DGERQS', INFO
+     $, 0, ' ',
      $                                     M, N, NRHS, -1, NB, IMAT,
      $                                     NFAIL, NERRS, NOUT )
 *
-                           CALL DGET02( 'No transpose', M, N, NRHS, A,
+                           CALL AB_DGET02( 'No transpose', M, N, NRHS, A
+     $,
      $                                  LDA, X, LDA, B, LDA, RWORK,
      $                                  RESULT( 7 ) )
                            NT = NT + 1
@@ -420,7 +430,7 @@
                      DO 20 I = 1, NT
                         IF( RESULT( I ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
+     $                        CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9999 )M, N, K, NB, NX,
      $                        IMAT, I, RESULT( I )
                            NFAIL = NFAIL + 1
@@ -435,12 +445,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M=', I5, ', N=', I5, ', K=', I5, ', NB=', I4, ', NX=',
      $      I5, ', type ', I2, ', test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of DCHKRQ
+*     End of AB_DCHKRQ
 *
       END

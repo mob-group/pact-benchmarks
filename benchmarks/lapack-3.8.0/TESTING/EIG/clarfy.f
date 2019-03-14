@@ -1,4 +1,4 @@
-*> \brief \b CLARFY
+*> \brief \b AB_AB_CLARFY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE AB_AB_CLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> CLARFY applies an elementary reflector, or Householder matrix, H,
+*> AB_AB_CLARFY applies an elementary reflector, or HousehoAB_LDEr matrix, H,
 *> to an n x n Hermitian matrix C, from both the left and the right.
 *>
 *> H is represented in the form
@@ -106,7 +106,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE AB_AB_CLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,11 +134,11 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CHEMV, CHER2
+      EXTERNAL           AB_CAXPY, AB_CHEMV, AB_AB_CHER2
 *     ..
 *     .. External Functions ..
-      COMPLEX            CDOTC
-      EXTERNAL           CDOTC
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_CDOTC
 *     ..
 *     .. Executable Statements ..
 *
@@ -147,17 +147,17 @@
 *
 *     Form  w:= C * v
 *
-      CALL CHEMV( UPLO, N, ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
+      CALL AB_CHEMV( UPLO, N, ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
 *
-      ALPHA = -HALF*TAU*CDOTC( N, WORK, 1, V, INCV )
-      CALL CAXPY( N, ALPHA, V, INCV, WORK, 1 )
+      ALPHA = -HALF*TAU*AB_CDOTC( N, WORK, 1, V, INCV )
+      CALL AB_CAXPY( N, ALPHA, V, INCV, WORK, 1 )
 *
 *     C := C - v * w' - w * v'
 *
-      CALL CHER2( UPLO, N, -TAU, V, INCV, WORK, 1, C, LDC )
+      CALL AB_AB_CHER2( UPLO, N, -TAU, V, INCV, WORK, 1, C, LDC )
 *
       RETURN
 *
-*     End of CLARFY
+*     End of AB_AB_CLARFY
 *
       END

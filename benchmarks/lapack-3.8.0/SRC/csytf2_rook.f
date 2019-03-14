@@ -1,4 +1,4 @@
-*> \brief \b CSYTF2_ROOK computes the factorization of a complex symmetric indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm).
+*> \brief \b AB_AB_CSYTF2_ROOK computes the factorization of a complex symmetric indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CSYTF2_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytf2_rook.f">
+*> Download AB_AB_CSYTF2_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CSYTF2_ROOK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytf2_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CSYTF2_ROOK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytf2_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CSYTF2_ROOK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSYTF2_ROOK( UPLO, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE AB_AB_CSYTF2_ROOK( UPLO, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CSYTF2_ROOK computes the factorization of a complex symmetric matrix A
+*> AB_AB_CSYTF2_ROOK computes the factorization of a complex symmetric matrix A
 *> using the bounded Bunch-Kaufman ("rook") diagonal pivoting method:
 *>
 *>    A = U*D*U**T  or  A = L*D*L**T
@@ -192,7 +192,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CSYTF2_ROOK( UPLO, N, A, LDA, IPIV, INFO )
+      SUBROUTINE AB_AB_CSYTF2_ROOK( UPLO, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -226,13 +226,13 @@
       COMPLEX            D11, D12, D21, D22, T, WK, WKM1, WKP1, Z
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ICAMAX, SLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ICAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSCAL, CSWAP, CSYR, XERBLA
+      EXTERNAL           AB_CSCAL, AB_CSWAP, AB_CSYR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT, AIMAG, REAL
@@ -248,8 +248,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -257,7 +257,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CSYTF2_ROOK', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CSYTF2_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -267,7 +267,7 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = SLAMCH( 'S' )
+      SFMIN = AB_SLAMCH( 'S' )
 *
       IF( UPPER ) THEN
 *
@@ -296,7 +296,7 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.GT.1 ) THEN
-            IMAX = ICAMAX( K-1, A( 1, K ), 1 )
+            IMAX = AB_ICAMAX( K-1, A( 1, K ), 1 )
             COLMAX = CABS1( A( IMAX, K ) )
          ELSE
             COLMAX = ZERO
@@ -337,7 +337,7 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = IMAX + ICAMAX( K-IMAX, A( IMAX, IMAX+1 ),
+                     JMAX = IMAX + AB_ICAMAX( K-IMAX, A( IMAX, IMAX+1 ),
      $                                    LDA )
                      ROWMAX = CABS1( A( IMAX, JMAX ) )
                   ELSE
@@ -345,7 +345,7 @@
                   END IF
 *
                   IF( IMAX.GT.1 ) THEN
-                     ITEMP = ICAMAX( IMAX-1, A( 1, IMAX ), 1 )
+                     ITEMP = AB_ICAMAX( IMAX-1, A( 1, IMAX ), 1 )
                      STEMP = CABS1( A( ITEMP, IMAX ) )
                      IF( STEMP.GT.ROWMAX ) THEN
                         ROWMAX = STEMP
@@ -368,7 +368,8 @@
 *                 Equivalent to testing for ROWMAX .EQ. COLMAX,
 *                 used to handle NaN and Inf
 *
-                  ELSE IF( ( P.EQ.JMAX ).OR.( ROWMAX.LE.COLMAX ) ) THEN
+                  ELSE IF( ( P.EQ.JMAX ).OR.( ROWMAX.LE.COLMAX ) ) TH
+     $EN
 *
 *                    interchange rows and columns K+1 and IMAX,
 *                    use 2-by-2 pivot block
@@ -401,16 +402,16 @@
 *              submatrix A(1:k,1:k) if we have a 2-by-2 pivot
 *
                IF( P.GT.1 )
-     $            CALL CSWAP( P-1, A( 1, K ), 1, A( 1, P ), 1 )
+     $            CALL AB_CSWAP( P-1, A( 1, K ), 1, A( 1, P ), 1 )
                IF( P.LT.(K-1) )
-     $            CALL CSWAP( K-P-1, A( P+1, K ), 1, A( P, P+1 ),
+     $            CALL AB_CSWAP( K-P-1, A( P+1, K ), 1, A( P, P+1 ),
      $                     LDA )
                T = A( K, K )
                A( K, K ) = A( P, P )
                A( P, P ) = T
             END IF
 *
-*           Second swap
+*           AB_SECOND swap
 *
             KK = K - KSTEP + 1
             IF( KP.NE.KK ) THEN
@@ -419,9 +420,10 @@
 *              submatrix A(1:k,1:k)
 *
                IF( KP.GT.1 )
-     $            CALL CSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
+     $            CALL AB_CSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
                IF( ( KK.GT.1 ) .AND. ( KP.LT.(KK-1) ) )
-     $            CALL CSWAP( KK-KP-1, A( KP+1, KK ), 1, A( KP, KP+1 ),
+     $            CALL AB_CSWAP( KK-KP-1, A( KP+1, KK ), 1, A( KP, KP+1 
+     $),
      $                     LDA )
                T = A( KK, KK )
                A( KK, KK ) = A( KP, KP )
@@ -455,11 +457,12 @@
 *                       = A - W(k)*1/D(k)*W(k)**T
 *
                      D11 = CONE / A( K, K )
-                     CALL CSYR( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA )
+                     CALL AB_CSYR( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA
+     $ )
 *
 *                    Store U(k) in column k
 *
-                     CALL CSCAL( K-1, D11, A( 1, K ), 1 )
+                     CALL AB_CSCAL( K-1, D11, A( 1, K ), 1 )
                   ELSE
 *
 *                    Store L(k) in column K
@@ -474,7 +477,8 @@
 *                       = A - W(k)*(1/D(k))*W(k)**T
 *                       = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T
 *
-                     CALL CSYR( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA )
+                     CALL AB_CSYR( UPLO, K-1, -D11, A( 1, K ), 1, A, LDA
+     $ )
                   END IF
                END IF
 *
@@ -564,7 +568,7 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.LT.N ) THEN
-            IMAX = K + ICAMAX( N-K, A( K+1, K ), 1 )
+            IMAX = K + AB_ICAMAX( N-K, A( K+1, K ), 1 )
             COLMAX = CABS1( A( IMAX, K ) )
          ELSE
             COLMAX = ZERO
@@ -604,14 +608,16 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = K - 1 + ICAMAX( IMAX-K, A( IMAX, K ), LDA )
+                     JMAX = K - 1 + AB_ICAMAX( IMAX-K, A( IMAX, K ), LDA
+     $ )
                      ROWMAX = CABS1( A( IMAX, JMAX ) )
                   ELSE
                      ROWMAX = ZERO
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + ICAMAX( N-IMAX, A( IMAX+1, IMAX ),
+                     ITEMP = IMAX + AB_ICAMAX( N-IMAX, A( IMAX+1, IMAX )
+     $,
      $                                     1 )
                      STEMP = CABS1( A( ITEMP, IMAX ) )
                      IF( STEMP.GT.ROWMAX ) THEN
@@ -635,7 +641,8 @@
 *                 Equivalent to testing for ROWMAX .EQ. COLMAX,
 *                 used to handle NaN and Inf
 *
-                  ELSE IF( ( P.EQ.JMAX ).OR.( ROWMAX.LE.COLMAX ) ) THEN
+                  ELSE IF( ( P.EQ.JMAX ).OR.( ROWMAX.LE.COLMAX ) ) TH
+     $EN
 *
 *                    interchange rows and columns K+1 and IMAX,
 *                    use 2-by-2 pivot block
@@ -668,15 +675,16 @@
 *              submatrix A(k:n,k:n) if we have a 2-by-2 pivot
 *
                IF( P.LT.N )
-     $            CALL CSWAP( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
+     $            CALL AB_CSWAP( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
                IF( P.GT.(K+1) )
-     $            CALL CSWAP( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA )
+     $            CALL AB_CSWAP( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA
+     $ )
                T = A( K, K )
                A( K, K ) = A( P, P )
                A( P, P ) = T
             END IF
 *
-*           Second swap
+*           AB_SECOND swap
 *
             KK = K + KSTEP - 1
             IF( KP.NE.KK ) THEN
@@ -685,9 +693,11 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL CSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
+     $            CALL AB_CSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 
+     $1 )
                IF( ( KK.LT.N ) .AND. ( KP.GT.(KK+1) ) )
-     $            CALL CSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
+     $            CALL AB_CSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 
+     $),
      $                     LDA )
                T = A( KK, KK )
                A( KK, KK ) = A( KP, KP )
@@ -721,12 +731,12 @@
 *                       = A - W(k)*(1/D(k))*W(k)**T
 *
                      D11 = CONE / A( K, K )
-                     CALL CSYR( UPLO, N-K, -D11, A( K+1, K ), 1,
+                     CALL AB_CSYR( UPLO, N-K, -D11, A( K+1, K ), 1,
      $                          A( K+1, K+1 ), LDA )
 *
 *                    Store L(k) in column k
 *
-                     CALL CSCAL( N-K, D11, A( K+1, K ), 1 )
+                     CALL AB_CSCAL( N-K, D11, A( K+1, K ), 1 )
                   ELSE
 *
 *                    Store L(k) in column k
@@ -741,7 +751,7 @@
 *                       = A - W(k)*(1/D(k))*W(k)**T
 *                       = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T
 *
-                     CALL CSYR( UPLO, N-K, -D11, A( K+1, K ), 1,
+                     CALL AB_CSYR( UPLO, N-K, -D11, A( K+1, K ), 1,
      $                          A( K+1, K+1 ), LDA )
                   END IF
                END IF
@@ -816,6 +826,6 @@
 *
       RETURN
 *
-*     End of CSYTF2_ROOK
+*     End of AB_AB_CSYTF2_ROOK
 *
       END

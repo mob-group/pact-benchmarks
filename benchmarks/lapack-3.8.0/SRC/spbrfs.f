@@ -1,4 +1,4 @@
-*> \brief \b SPBRFS
+*> \brief \b AB_SPBRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPBRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbrfs.f">
+*> Download AB_SPBRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPBRFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPBRFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPBRFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
+*       SUBROUTINE AB_SPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
 *                          LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> SPBRFS improves the computed solution to a system of linear
+*> AB_SPBRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is symmetric positive definite
 *> and banded, and provides error bounds and backward error estimates
 *> for the solution.
@@ -94,7 +94,7 @@
 *>          AFB is REAL array, dimension (LDAFB,N)
 *>          The triangular factor U or L from the Cholesky factorization
 *>          A = U**T*U or A = L*L**T of the band matrix A as computed by
-*>          SPBTRF, in the same storage format as A (see AB).
+*>          AB_SPBTRF, in the same storage format as A (see AB).
 *> \endverbatim
 *>
 *> \param[in] LDAFB
@@ -118,7 +118,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by SPBTRS.
+*>          On entry, the solution matrix X, as computed by AB_SPBTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -186,7 +186,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
+      SUBROUTINE AB_SPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
      $                   LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -227,23 +227,24 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLACN2, SPBTRS, SSBMV, XERBLA
+      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SLACN2, AB_SPBTRS, AB_SS
+     $BMV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -261,7 +262,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPBRFS', -INFO )
+         CALL AB_XERBLA( 'AB_SPBRFS', -INFO )
          RETURN
       END IF
 *
@@ -278,8 +279,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = MIN( N+1, 2*KD+2 )
-      EPS = SLAMCH( 'Epsilon' )
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -295,8 +296,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL SSBMV( UPLO, N, KD, -ONE, AB, LDAB, X( 1, J ), 1, ONE,
+         CALL AB_SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL AB_SSBMV( UPLO, N, KD, -ONE, AB, LDAB, X( 1, J ), 1, ONE,
      $               WORK( N+1 ), 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -360,9 +361,9 @@
 *
 *           Update solution and try again.
 *
-            CALL SPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+            CALL AB_SPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
      $                   INFO )
-            CALL SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
+            CALL AB_SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -386,7 +387,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use SLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_SLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -400,14 +401,16 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL AB_SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
+     $,
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL SPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+               CALL AB_SPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), 
+     $N,
      $                      INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
@@ -419,7 +422,8 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
   120          CONTINUE
-               CALL SPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), N,
+               CALL AB_SPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK( N+1 ), 
+     $N,
      $                      INFO )
             END IF
             GO TO 100
@@ -438,6 +442,6 @@
 *
       RETURN
 *
-*     End of SPBRFS
+*     End of AB_SPBRFS
 *
       END

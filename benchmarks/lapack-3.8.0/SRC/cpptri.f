@@ -1,4 +1,4 @@
-*> \brief \b CPPTRI
+*> \brief \b AB_CPPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpptri.f">
+*> Download AB_CPPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPPTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpptri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPPTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPPTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPPTRI( UPLO, N, AP, INFO )
+*       SUBROUTINE AB_CPPTRI( UPLO, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> CPPTRI computes the inverse of a complex Hermitian positive definite
+*> AB_CPPTRI computes the inverse of a complex Hermitian positive definite
 *> matrix A using the Cholesky factorization A = U**H*U or A = L*L**H
-*> computed by CPPTRF.
+*> computed by AB_CPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -91,7 +91,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPPTRI( UPLO, N, AP, INFO )
+      SUBROUTINE AB_CPPTRI( UPLO, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,12 +118,13 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CDOTC
+      LOGICAL            AB_LSAME
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPR, CSSCAL, CTPMV, CTPTRI, XERBLA
+      EXTERNAL           AB_CHPR, AB_CAB_SSCAL, AB_CTPMV, AB_CTPTRI, AB_
+     $XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -133,14 +134,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPPTRI', -INFO )
+         CALL AB_XERBLA( 'AB_CPPTRI', -INFO )
          RETURN
       END IF
 *
@@ -151,7 +152,7 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL CTPTRI( UPLO, 'Non-unit', N, AP, INFO )
+      CALL AB_CTPTRI( UPLO, 'Non-unit', N, AP, INFO )
       IF( INFO.GT.0 )
      $   RETURN
       IF( UPPER ) THEN
@@ -163,9 +164,9 @@
             JC = JJ + 1
             JJ = JJ + J
             IF( J.GT.1 )
-     $         CALL CHPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
+     $         CALL AB_CHPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
             AJJ = AP( JJ )
-            CALL CSSCAL( J, AJJ, AP( JC ), 1 )
+            CALL AB_CAB_SSCAL( J, AJJ, AP( JC ), 1 )
    10    CONTINUE
 *
       ELSE
@@ -175,9 +176,11 @@
          JJ = 1
          DO 20 J = 1, N
             JJN = JJ + N - J + 1
-            AP( JJ ) = REAL( CDOTC( N-J+1, AP( JJ ), 1, AP( JJ ), 1 ) )
+            AP( JJ ) = REAL( AB_CDOTC( N-J+1, AP( JJ ), 1, AP( JJ ), 1 )
+     $ )
             IF( J.LT.N )
-     $         CALL CTPMV( 'Lower', 'Conjugate transpose', 'Non-unit',
+     $         CALL AB_CTPMV( 'Lower', 'Conjugate transpose', 'Non-unit'
+     $,
      $                     N-J, AP( JJN ), AP( JJ+1 ), 1 )
             JJ = JJN
    20    CONTINUE
@@ -185,6 +188,6 @@
 *
       RETURN
 *
-*     End of CPPTRI
+*     End of AB_CPPTRI
 *
       END

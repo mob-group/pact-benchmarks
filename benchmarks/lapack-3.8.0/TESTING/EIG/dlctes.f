@@ -1,4 +1,4 @@
-*> \brief \b DLCTES
+*> \brief \b AB_DLCTES
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION DLCTES( ZR, ZI, D )
+*       LOGICAL          FUNCTION AB_DLCTES( ZR, ZI, D )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   D, ZI, ZR
@@ -20,13 +20,13 @@
 *>
 *> \verbatim
 *>
-*> DLCTES returns .TRUE. if the eigenvalue (ZR/D) + sqrt(-1)*(ZI/D)
+*> AB_DLCTES returns .TRUE. if the eigenvalue (ZR/D) + sqrt(-1)*(ZI/D)
 *> is to be selected (specifically, in this subroutine, if the real
 *> part of the eigenvalue is negative), and otherwise it returns
 *> .FALSE..
 *>
-*> It is used by the test routine DDRGES to test whether the driver
-*> routine DGGES successfully sorts eigenvalues.
+*> It is used by the test routine AB_DDRGES to test whether the driver
+*> routine AB_DGGES successfully sorts eigenvalues.
 *> \endverbatim
 *
 *  Arguments:
@@ -66,7 +66,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION DLCTES( ZR, ZI, D )
+      LOGICAL          FUNCTION AB_DLCTES( ZR, ZI, D )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -89,13 +89,13 @@
 *     .. Executable Statements ..
 *
       IF( D.EQ.ZERO ) THEN
-         DLCTES = ( ZR.LT.ZERO )
+         AB_DLCTES = ( ZR.LT.ZERO )
       ELSE
-         DLCTES = ( SIGN( ONE, ZR ).NE.SIGN( ONE, D ) )
+         AB_DLCTES = ( SIGN( ONE, ZR ).NE.SIGN( ONE, D ) )
       END IF
 *
       RETURN
 *
-*     End of DLCTES
+*     End of AB_DLCTES
 *
       END

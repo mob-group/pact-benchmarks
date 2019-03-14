@@ -1,4 +1,4 @@
-*> \brief \b ZGELQT
+*> \brief \b AB_AB_ZGELQT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqt.f">
+*> Download AB_AB_DGEQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZGELQT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgelqt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZGELQT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgelqt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZGELQT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
+*       SUBROUTINE AB_AB_ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER INFO, LDA, LDT, M, N, MB
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZGELQT computes a blocked LQ factorization of a complex M-by-N matrix A
+*> AB_AB_ZGELQT computes a blocked LQ factorization of a complex M-by-N matrix A
 *> using the compact WY representation of Q.
 *> \endverbatim
 *
@@ -137,7 +137,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
+      SUBROUTINE AB_AB_ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -158,7 +158,7 @@
       INTEGER    I, IB, IINFO, K
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   ZGELQT3, ZLARFB, XERBLA
+      EXTERNAL   AB_AB_ZGELQT3, AB_AB_ZLARFB, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -169,7 +169,8 @@
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
-      ELSE IF( MB.LT.1 .OR. (MB.GT.MIN(M,N) .AND. MIN(M,N).GT.0 ))THEN
+      ELSE IF( MB.LT.1 .OR. (MB.GT.MIN(M,N) .AND. MIN(M,N).GT.0 ))THE
+     $N
          INFO = -3
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -5
@@ -177,7 +178,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGELQT', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZGELQT', -INFO )
          RETURN
       END IF
 *
@@ -193,18 +194,19 @@
 *
 *     Compute the LQ factorization of the current block A(I:M,I:I+IB-1)
 *
-         CALL ZGELQT3( IB, N-I+1, A(I,I), LDA, T(1,I), LDT, IINFO )
+         CALL AB_AB_ZGELQT3( IB, N-I+1, A(I,I), LDA, T(1,I), LDT, IINFO 
+     $)
          IF( I+IB.LE.M ) THEN
 *
 *     Update by applying H**T to A(I:M,I+IB:N) from the right
 *
-         CALL ZLARFB( 'R', 'N', 'F', 'R', M-I-IB+1, N-I+1, IB,
+         CALL AB_AB_ZLARFB( 'R', 'N', 'F', 'R', M-I-IB+1, N-I+1, IB,
      $                   A( I, I ), LDA, T( 1, I ), LDT,
      $                   A( I+IB, I ), LDA, WORK , M-I-IB+1 )
          END IF
       END DO
       RETURN
 *
-*     End of ZGELQT
+*     End of AB_AB_ZGELQT
 *
       END

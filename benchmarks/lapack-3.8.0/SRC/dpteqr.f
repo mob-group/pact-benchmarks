@@ -1,4 +1,4 @@
-*> \brief \b DPTEQR
+*> \brief \b AB_DPTEQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPTEQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpteqr.f">
+*> Download AB_DPTEQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPTEQR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpteqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPTEQR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpteqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPTEQR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+*       SUBROUTINE AB_DPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          COMPZ
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> DPTEQR computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_DPTEQR computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric positive definite tridiagonal matrix by first factoring the
-*> matrix using DPTTRF, and then calling DBDSQR to compute the singular
+*> matrix using AB_DPTTRF, and then calling AB_DBDSQR to compute the singular
 *> values of the bidiagonal factor.
 *>
 *> This routine computes the eigenvalues of the positive definite
@@ -46,7 +46,7 @@
 *> more accurately than, for example, with the standard QR method.
 *>
 *> The eigenvectors of a full or band symmetric positive definite matrix
-*> can also be found if DSYTRD, DSPTRD, or DSBTRD has been used to
+*> can also be found if AB_DSYTRD, AB_DSPTRD, or AB_DSBTRD has been used to
 *> reduce this matrix to tridiagonal form. (The reduction to tridiagonal
 *> form, however, may preclude the possibility of obtaining high
 *> relative accuracy in the small eigenvalues of the original matrix, if
@@ -143,7 +143,7 @@
 *> \ingroup doublePTcomputational
 *
 *  =====================================================================
-      SUBROUTINE DPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+      SUBROUTINE AB_DPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -165,11 +165,11 @@
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDSQR, DLASET, DPTTRF, XERBLA
+      EXTERNAL           AB_DBDSQR, AB_DLASET, AB_DPTTRF, AB_XERBLA
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   C( 1, 1 ), VT( 1, 1 )
@@ -186,11 +186,11 @@
 *
       INFO = 0
 *
-      IF( LSAME( COMPZ, 'N' ) ) THEN
+      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
          ICOMPZ = 0
-      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
          ICOMPZ = 1
-      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
          ICOMPZ = 2
       ELSE
          ICOMPZ = -1
@@ -204,7 +204,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPTEQR', -INFO )
+         CALL AB_XERBLA( 'AB_DPTEQR', -INFO )
          RETURN
       END IF
 *
@@ -219,11 +219,11 @@
          RETURN
       END IF
       IF( ICOMPZ.EQ.2 )
-     $   CALL DLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
+     $   CALL AB_DLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
 *
-*     Call DPTTRF to factor the matrix.
+*     Call AB_DPTTRF to factor the matrix.
 *
-      CALL DPTTRF( N, D, E, INFO )
+      CALL AB_DPTTRF( N, D, E, INFO )
       IF( INFO.NE.0 )
      $   RETURN
       DO 10 I = 1, N
@@ -233,7 +233,7 @@
          E( I ) = E( I )*D( I )
    20 CONTINUE
 *
-*     Call DBDSQR to compute the singular values/vectors of the
+*     Call AB_DBDSQR to compute the singular values/vectors of the
 *     bidiagonal factor.
 *
       IF( ICOMPZ.GT.0 ) THEN
@@ -241,7 +241,7 @@
       ELSE
          NRU = 0
       END IF
-      CALL DBDSQR( 'Lower', N, 0, NRU, 0, D, E, VT, 1, Z, LDZ, C, 1,
+      CALL AB_DBDSQR( 'Lower', N, 0, NRU, 0, D, E, VT, 1, Z, LDZ, C, 1,
      $             WORK, INFO )
 *
 *     Square the singular values.
@@ -256,6 +256,6 @@
 *
       RETURN
 *
-*     End of DPTEQR
+*     End of AB_DPTEQR
 *
       END

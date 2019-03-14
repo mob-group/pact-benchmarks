@@ -1,4 +1,4 @@
-*> \brief \b SLA_PORCOND estimates the Skeel condition number for a symmetric positive-definite matrix.
+*> \brief \b AB_SLA_PORCOND estimates the Skeel condition number for a symmetric positive-definite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLA_PORCOND + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_porcond.f">
+*> Download AB_SLA_PORCOND + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLA_PORCOND.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_porcond.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLA_PORCOND.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_porcond.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLA_PORCOND.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF, CMODE, C,
+*       REAL FUNCTION AB_SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF, CMODE, C,
 *                                  INFO, WORK, IWORK )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*>    SLA_PORCOND Estimates the Skeel condition number of  op(A) * op2(C)
+*>    AB_SLA_PORCOND Estimates the Skeel condition number of  op(A) * op2(C)
 *>    where op2 is determined by CMODE as follows
 *>    CMODE =  1    op2(C) = C
 *>    CMODE =  0    op2(C) = I
@@ -81,7 +81,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>     The triangular factor U or L from the Cholesky factorization
-*>     A = U**T*U or A = L*L**T, as computed by SPOTRF.
+*>     A = U**T*U or A = L*L**T, as computed by AB_SPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -137,7 +137,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      REAL FUNCTION SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF, CMODE, C,
+      REAL FUNCTION AB_SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF, CMODE, C,
      $                           INFO, WORK, IWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -166,34 +166,34 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SPOTRS, XERBLA
+      EXTERNAL           AB_SLACN2, AB_SPOTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      SLA_PORCOND = 0.0
+      AB_SLA_PORCOND = 0.0
 *
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLA_PORCOND', -INFO )
+         CALL AB_XERBLA( 'AB_SLA_PORCOND', -INFO )
          RETURN
       END IF
 
       IF( N.EQ.0 ) THEN
-         SLA_PORCOND = 1.0
+         AB_SLA_PORCOND = 1.0
          RETURN
       END IF
       UP = .FALSE.
-      IF ( LSAME( UPLO, 'U' ) ) UP = .TRUE.
+      IF ( AB_LSAME( UPLO, 'U' ) ) UP = .TRUE.
 *
 *     Compute the equilibration matrix R such that
 *     inv(R)*A*C has unit 1-norm.
@@ -260,7 +260,7 @@
 
       KASE = 0
    10 CONTINUE
-      CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -271,9 +271,9 @@
             END DO
 
             IF (UP) THEN
-               CALL SPOTRS( 'Upper', N, 1, AF, LDAF, WORK, N, INFO )
+               CALL AB_SPOTRS( 'Upper', N, 1, AF, LDAF, WORK, N, INFO )
             ELSE
-               CALL SPOTRS( 'Lower', N, 1, AF, LDAF, WORK, N, INFO )
+               CALL AB_SPOTRS( 'Lower', N, 1, AF, LDAF, WORK, N, INFO )
             ENDIF
 *
 *           Multiply by inv(C).
@@ -302,9 +302,9 @@
             END IF
 
             IF ( UP ) THEN
-               CALL SPOTRS( 'Upper', N, 1, AF, LDAF, WORK, N, INFO )
+               CALL AB_SPOTRS( 'Upper', N, 1, AF, LDAF, WORK, N, INFO )
             ELSE
-               CALL SPOTRS( 'Lower', N, 1, AF, LDAF, WORK, N, INFO )
+               CALL AB_SPOTRS( 'Lower', N, 1, AF, LDAF, WORK, N, INFO )
             ENDIF
 *
 *           Multiply by R.
@@ -319,7 +319,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0 )
-     $   SLA_PORCOND = ( 1.0 / AINVNM )
+     $   AB_SLA_PORCOND = ( 1.0 / AINVNM )
 *
       RETURN
 *

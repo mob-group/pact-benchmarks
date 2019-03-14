@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZERRLQT( PATH, NUNIT )
+*       SUBROUTINE AB_AB_ZERRLQT( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> ZERRLQT tests the error exits for the COMPLEX routines
+*> AB_AB_ZERRLQT tests the error exits for the COMPLEX routines
 *> that use the LQT decomposition of a general matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE ZERRLQT( PATH, NUNIT )
+      SUBROUTINE AB_AB_ZERRLQT( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,9 @@
      $                   C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, ZGELQT3, ZGELQT,
-     $                   ZGEMLQT
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_ZGELQT3, AB_AB_ZGEL
+     $QT,
+     $                   AB_AB_ZGEMLQT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,84 +115,95 @@
 *
 *     Error exits for LQT factorization
 *
-*     ZGELQT
+*     AB_AB_ZGELQT
 *
-      SRNAMT = 'ZGELQT'
+      SRNAMT = 'AB_AB_ZGELQT'
       INFOT = 1
-      CALL ZGELQT( -1, 0, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT( -1, 0, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZGELQT( 0, -1, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT( 0, -1, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZGELQT( 0, 0, 0, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT( 0, 0, 0, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGELQT( 2, 1, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'ZGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT( 2, 1, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZGELQT( 2, 2, 2, A, 2, T, 1, W, INFO )
-      CALL CHKXER( 'ZGELQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT( 2, 2, 2, A, 2, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT', INFOT, NOUT, LERR, OK )
 *
-*     ZGELQT3
+*     AB_AB_ZGELQT3
 *
-      SRNAMT = 'ZGELQT3'
+      SRNAMT = 'AB_AB_ZGELQT3'
       INFOT = 1
-      CALL ZGELQT3( -1, 0, A, 1, T, 1, INFO )
-      CALL CHKXER( 'ZGELQT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT3( -1, 0, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT3', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZGELQT3( 0, -1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'ZGELQT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT3( 0, -1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT3', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGELQT3( 2, 2, A, 1, T, 1, INFO )
-      CALL CHKXER( 'ZGELQT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT3( 2, 2, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT3', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL ZGELQT3( 2, 2, A, 2, T, 1, INFO )
-      CALL CHKXER( 'ZGELQT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQT3( 2, 2, A, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQT3', INFOT, NOUT, LERR, OK )
 *
-*     ZGEMLQT
+*     AB_AB_ZGEMLQT
 *
-      SRNAMT = 'ZGEMLQT'
+      SRNAMT = 'AB_AB_ZGEMLQT'
       INFOT = 1
-      CALL ZGEMLQT( '/', 'N', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( '/', 'N', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZGEMLQT( 'L', '/', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'L', '/', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZGEMLQT( 'L', 'N', -1, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'L', 'N', -1, 0, 0, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGEMLQT( 'L', 'N', 0, -1, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'L', 'N', 0, -1, 0, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMLQT( 'L', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'L', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGEMLQT( 'R', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'R', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL ZGEMLQT( 'L', 'N', 0, 0, 0, 0, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'L', 'N', 0, 0, 0, 0, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL ZGEMLQT( 'R', 'N', 2, 2, 2, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'R', 'N', 2, 2, 2, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL ZGEMLQT( 'L', 'N', 2, 2, 2, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'L', 'N', 2, 2, 2, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL ZGEMLQT( 'R', 'N', 1, 1, 1, 1, A, 1, T, 0, C, 1, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'R', 'N', 1, 1, 1, 1, A, 1, T, 0, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL ZGEMLQT( 'L', 'N', 1, 1, 1, 1, A, 1, T, 1, C, 0, W, INFO )
-      CALL CHKXER( 'ZGEMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGEMLQT( 'L', 'N', 1, 1, 1, 1, A, 1, T, 1, C, 0, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_ZGEMLQT', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of ZERRLQT
+*     End of AB_AB_ZERRLQT
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CGERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm.
+*> \brief \b AB_CGERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGERQ2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgerq2.f">
+*> Download AB_CGERQ2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGERQ2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgerq2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGERQ2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgerq2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGERQ2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGERQ2( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_CGERQ2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CGERQ2 computes an RQ factorization of a complex m by n matrix A:
+*> AB_CGERQ2 computes an RQ factorization of a complex m by n matrix A:
 *> A = R * Q.
 *> \endverbatim
 *
@@ -121,7 +121,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGERQ2( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_CGERQ2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,7 +146,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARF, CLARFG, XERBLA
+      EXTERNAL           AB_CLACGV, AB_CLARF, AB_AB_CLARFG, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +164,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGERQ2', -INFO )
+         CALL AB_XERBLA( 'AB_CGERQ2', -INFO )
          RETURN
       END IF
 *
@@ -175,21 +175,21 @@
 *        Generate elementary reflector H(i) to annihilate
 *        A(m-k+i,1:n-k+i-1)
 *
-         CALL CLACGV( N-K+I, A( M-K+I, 1 ), LDA )
+         CALL AB_CLACGV( N-K+I, A( M-K+I, 1 ), LDA )
          ALPHA = A( M-K+I, N-K+I )
-         CALL CLARFG( N-K+I, ALPHA, A( M-K+I, 1 ), LDA,
+         CALL AB_AB_CLARFG( N-K+I, ALPHA, A( M-K+I, 1 ), LDA,
      $                TAU( I ) )
 *
 *        Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right
 *
          A( M-K+I, N-K+I ) = ONE
-         CALL CLARF( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
+         CALL AB_CLARF( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
      $               TAU( I ), A, LDA, WORK )
          A( M-K+I, N-K+I ) = ALPHA
-         CALL CLACGV( N-K+I-1, A( M-K+I, 1 ), LDA )
+         CALL AB_CLACGV( N-K+I-1, A( M-K+I, 1 ), LDA )
    10 CONTINUE
       RETURN
 *
-*     End of CGERQ2
+*     End of AB_CGERQ2
 *
       END

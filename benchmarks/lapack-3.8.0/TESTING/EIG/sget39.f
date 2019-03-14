@@ -1,4 +1,4 @@
-*> \brief \b SGET39
+*> \brief \b AB_SGET39
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGET39( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE AB_SGET39( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> SGET39 tests SLAQTR, a routine for solving the real or
+*> AB_SGET39 tests AB_SLAQTR, a routine for solving the real or
 *> special complex quasi upper triangular system
 *>
 *>      op(T)*p = scale*c,
@@ -47,7 +47,7 @@
 *> Scale is an output less than or equal to 1, chosen to avoid
 *> overflow in X.
 *> This subroutine is specially designed for the condition number
-*> estimation in the eigenproblem routine STRSNA.
+*> estimation in the eigenproblem routine AB_STRSNA.
 *>
 *> The test code verifies that the following residual is order 1:
 *>
@@ -101,7 +101,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SGET39( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE AB_SGET39( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,12 +128,13 @@
      $                   SCALE, SMLNUM, W, XNORM
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               SASUM, SDOT, SLAMCH, SLANGE
-      EXTERNAL           ISAMAX, SASUM, SDOT, SLAMCH, SLANGE
+      INTEGER            AB_ISAMAX
+      REAL               AB_SASUM, AB_SDOT, AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_ISAMAX, AB_SASUM, AB_SDOT, AB_SLAMCH, AB_SLA
+     $NGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SLABAD, SLAQTR
+      EXTERNAL           AB_SCOPY, AB_SGEMV, AB_SLABAD, AB_SLAQTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, COS, MAX, REAL, SIN, SQRT
@@ -159,10 +160,10 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -230,13 +231,14 @@
                            D( I ) = SIN( REAL( I ) )*VM4( IVM4 )
    40                   CONTINUE
 *
-                        NORM = SLANGE( '1', N, N, T, LDT, WORK )
-                        K = ISAMAX( N, B, 1 )
+                        NORM = AB_SLANGE( '1', N, N, T, LDT, WORK )
+                        K = AB_ISAMAX( N, B, 1 )
                         NORMTB = NORM + ABS( B( K ) ) + ABS( W )
 *
-                        CALL SCOPY( N, D, 1, X, 1 )
+                        CALL AB_SCOPY( N, D, 1, X, 1 )
                         KNT = KNT + 1
-                        CALL SLAQTR( .FALSE., .TRUE., N, T, LDT, DUM,
+                        CALL AB_SLAQTR( .FALSE., .TRUE., N, T, LDT, D
+     $UM,
      $                               DUMM, SCALE, X, WORK, INFO )
                         IF( INFO.NE.0 )
      $                     NINFO = NINFO + 1
@@ -244,11 +246,12 @@
 *                       || T*x - scale*d || /
 *                         max(ulp*||T||*||x||,smlnum/ulp*||T||,smlnum)
 *
-                        CALL SCOPY( N, D, 1, Y, 1 )
-                        CALL SGEMV( 'No transpose', N, N, ONE, T, LDT,
+                        CALL AB_SCOPY( N, D, 1, Y, 1 )
+                        CALL AB_SGEMV( 'No transpose', N, N, ONE, T, LDT
+     $,
      $                              X, 1, -SCALE, Y, 1 )
-                        XNORM = SASUM( N, X, 1 )
-                        RESID = SASUM( N, Y, 1 )
+                        XNORM = AB_SASUM( N, X, 1 )
+                        RESID = AB_SASUM( N, Y, 1 )
                         DOMIN = MAX( SMLNUM, ( SMLNUM / EPS )*NORM,
      $                          ( NORM*EPS )*XNORM )
                         RESID = RESID / DOMIN
@@ -257,9 +260,9 @@
                            LMAX = KNT
                         END IF
 *
-                        CALL SCOPY( N, D, 1, X, 1 )
+                        CALL AB_SCOPY( N, D, 1, X, 1 )
                         KNT = KNT + 1
-                        CALL SLAQTR( .TRUE., .TRUE., N, T, LDT, DUM,
+                        CALL AB_SLAQTR( .TRUE., .TRUE., N, T, LDT, DUM,
      $                               DUMM, SCALE, X, WORK, INFO )
                         IF( INFO.NE.0 )
      $                     NINFO = NINFO + 1
@@ -267,11 +270,12 @@
 *                       || T*x - scale*d || /
 *                         max(ulp*||T||*||x||,smlnum/ulp*||T||,smlnum)
 *
-                        CALL SCOPY( N, D, 1, Y, 1 )
-                        CALL SGEMV( 'Transpose', N, N, ONE, T, LDT, X,
+                        CALL AB_SCOPY( N, D, 1, Y, 1 )
+                        CALL AB_SGEMV( 'Transpose', N, N, ONE, T, LDT, X
+     $,
      $                              1, -SCALE, Y, 1 )
-                        XNORM = SASUM( N, X, 1 )
-                        RESID = SASUM( N, Y, 1 )
+                        XNORM = AB_SASUM( N, X, 1 )
+                        RESID = AB_SASUM( N, Y, 1 )
                         DOMIN = MAX( SMLNUM, ( SMLNUM / EPS )*NORM,
      $                          ( NORM*EPS )*XNORM )
                         RESID = RESID / DOMIN
@@ -280,9 +284,10 @@
                            LMAX = KNT
                         END IF
 *
-                        CALL SCOPY( 2*N, D, 1, X, 1 )
+                        CALL AB_SCOPY( 2*N, D, 1, X, 1 )
                         KNT = KNT + 1
-                        CALL SLAQTR( .FALSE., .FALSE., N, T, LDT, B, W,
+                        CALL AB_SLAQTR( .FALSE., .FALSE., N, T, LD
+     $T, B, W,
      $                               SCALE, X, WORK, INFO )
                         IF( INFO.NE.0 )
      $                     NINFO = NINFO + 1
@@ -292,35 +297,38 @@
 *                                  smlnum/ulp * (||T||+||B||), smlnum )
 *
 *
-                        CALL SCOPY( 2*N, D, 1, Y, 1 )
-                        Y( 1 ) = SDOT( N, B, 1, X( 1+N ), 1 ) +
+                        CALL AB_SCOPY( 2*N, D, 1, Y, 1 )
+                        Y( 1 ) = AB_SDOT( N, B, 1, X( 1+N ), 1 ) +
      $                           SCALE*Y( 1 )
                         DO 50 I = 2, N
                            Y( I ) = W*X( I+N ) + SCALE*Y( I )
    50                   CONTINUE
-                        CALL SGEMV( 'No transpose', N, N, ONE, T, LDT,
+                        CALL AB_SGEMV( 'No transpose', N, N, ONE, T, LDT
+     $,
      $                              X, 1, -ONE, Y, 1 )
 *
-                        Y( 1+N ) = SDOT( N, B, 1, X, 1 ) -
+                        Y( 1+N ) = AB_SDOT( N, B, 1, X, 1 ) -
      $                             SCALE*Y( 1+N )
                         DO 60 I = 2, N
                            Y( I+N ) = W*X( I ) - SCALE*Y( I+N )
    60                   CONTINUE
-                        CALL SGEMV( 'No transpose', N, N, ONE, T, LDT,
+                        CALL AB_SGEMV( 'No transpose', N, N, ONE, T, LDT
+     $,
      $                              X( 1+N ), 1, ONE, Y( 1+N ), 1 )
 *
-                        RESID = SASUM( 2*N, Y, 1 )
+                        RESID = AB_SASUM( 2*N, Y, 1 )
                         DOMIN = MAX( SMLNUM, ( SMLNUM / EPS )*NORMTB,
-     $                          EPS*( NORMTB*SASUM( 2*N, X, 1 ) ) )
+     $                          EPS*( NORMTB*AB_SASUM( 2*N, X, 1 ) ) )
                         RESID = RESID / DOMIN
                         IF( RESID.GT.RMAX ) THEN
                            RMAX = RESID
                            LMAX = KNT
                         END IF
 *
-                        CALL SCOPY( 2*N, D, 1, X, 1 )
+                        CALL AB_SCOPY( 2*N, D, 1, X, 1 )
                         KNT = KNT + 1
-                        CALL SLAQTR( .TRUE., .FALSE., N, T, LDT, B, W,
+                        CALL AB_SLAQTR( .TRUE., .FALSE., N, T, LDT, B
+     $, W,
      $                               SCALE, X, WORK, INFO )
                         IF( INFO.NE.0 )
      $                     NINFO = NINFO + 1
@@ -329,13 +337,14 @@
 *                          max(ulp*(||T||+||B||)*(||x1||+||x2||),
 *                                  smlnum/ulp * (||T||+||B||), smlnum )
 *
-                        CALL SCOPY( 2*N, D, 1, Y, 1 )
+                        CALL AB_SCOPY( 2*N, D, 1, Y, 1 )
                         Y( 1 ) = B( 1 )*X( 1+N ) - SCALE*Y( 1 )
                         DO 70 I = 2, N
                            Y( I ) = B( I )*X( 1+N ) + W*X( I+N ) -
      $                              SCALE*Y( I )
    70                   CONTINUE
-                        CALL SGEMV( 'Transpose', N, N, ONE, T, LDT, X,
+                        CALL AB_SGEMV( 'Transpose', N, N, ONE, T, LDT, X
+     $,
      $                              1, ONE, Y, 1 )
 *
                         Y( 1+N ) = B( 1 )*X( 1 ) + SCALE*Y( 1+N )
@@ -343,12 +352,12 @@
                            Y( I+N ) = B( I )*X( 1 ) + W*X( I ) +
      $                                SCALE*Y( I+N )
    80                   CONTINUE
-                        CALL SGEMV( 'Transpose', N, N, ONE, T, LDT,
+                        CALL AB_SGEMV( 'Transpose', N, N, ONE, T, LDT,
      $                              X( 1+N ), 1, -ONE, Y( 1+N ), 1 )
 *
-                        RESID = SASUM( 2*N, Y, 1 )
+                        RESID = AB_SASUM( 2*N, Y, 1 )
                         DOMIN = MAX( SMLNUM, ( SMLNUM / EPS )*NORMTB,
-     $                          EPS*( NORMTB*SASUM( 2*N, X, 1 ) ) )
+     $                          EPS*( NORMTB*AB_SASUM( 2*N, X, 1 ) ) )
                         RESID = RESID / DOMIN
                         IF( RESID.GT.RMAX ) THEN
                            RMAX = RESID
@@ -364,6 +373,6 @@
 *
       RETURN
 *
-*     End of SGET39
+*     End of AB_SGET39
 *
       END

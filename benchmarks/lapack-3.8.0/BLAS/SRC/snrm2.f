@@ -1,4 +1,4 @@
-*> \brief \b SNRM2
+*> \brief \b AB_SNRM2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SNRM2(N,X,INCX)
+*       REAL FUNCTION AB_SNRM2(N,X,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,10 +23,10 @@
 *>
 *> \verbatim
 *>
-*> SNRM2 returns the euclidean norm of a vector via the function
+*> AB_SNRM2 returns the euclidean norm of a vector via the function
 *> name, so that
 *>
-*>    SNRM2 := sqrt( x'*x ).
+*>    AB_SNRM2 := sqrt( x'*x ).
 *> \endverbatim
 *
 *  Arguments:
@@ -67,12 +67,12 @@
 *> \verbatim
 *>
 *>  -- This version written on 25-October-1982.
-*>     Modified on 14-October-1993 to inline the call to SLASSQ.
+*>     Modified on 14-October-1993 to inline the call to AB_SLASSQ.
 *>     Sven Hammarling, Nag Ltd.
 *> \endverbatim
 *>
 *  =====================================================================
-      REAL FUNCTION SNRM2(N,X,INCX)
+      REAL FUNCTION AB_SNRM2(N,X,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -108,7 +108,7 @@
           SSQ = ONE
 *        The following loop is equivalent to this call to the LAPACK
 *        auxiliary routine:
-*        CALL SLASSQ( N, X, INCX, SCALE, SSQ )
+*        CALL AB_SLASSQ( N, X, INCX, SCALE, SSQ )
 *
           DO 10 IX = 1,1 + (N-1)*INCX,INCX
               IF (X(IX).NE.ZERO) THEN
@@ -124,9 +124,9 @@
           NORM = SCALE*SQRT(SSQ)
       END IF
 *
-      SNRM2 = NORM
+      AB_SNRM2 = NORM
       RETURN
 *
-*     End of SNRM2.
+*     End of AB_SNRM2.
 *
       END

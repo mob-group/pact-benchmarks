@@ -1,4 +1,4 @@
-*> \brief \b DLAMCH
+*> \brief \b AB_DLAMCH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
+*      DOUBLE PRECISION FUNCTION AB_DLAMCH( CMACH )
 *
 *
 *> \par Purpose:
@@ -16,7 +16,7 @@
 *>
 *> \verbatim
 *>
-*> DLAMCH determines double precision machine parameters.
+*> AB_DLAMCH determines double precision machine parameters.
 *> \endverbatim
 *
 *  Arguments:
@@ -24,17 +24,17 @@
 *
 *> \param[in] CMACH
 *> \verbatim
-*>          Specifies the value to be returned by DLAMCH:
-*>          = 'E' or 'e',   DLAMCH := eps
-*>          = 'S' or 's ,   DLAMCH := sfmin
-*>          = 'B' or 'b',   DLAMCH := base
-*>          = 'P' or 'p',   DLAMCH := eps*base
-*>          = 'N' or 'n',   DLAMCH := t
-*>          = 'R' or 'r',   DLAMCH := rnd
-*>          = 'M' or 'm',   DLAMCH := emin
-*>          = 'U' or 'u',   DLAMCH := rmin
-*>          = 'L' or 'l',   DLAMCH := emax
-*>          = 'O' or 'o',   DLAMCH := rmax
+*>          Specifies the value to be returned by AB_DLAMCH:
+*>          = 'E' or 'e',   AB_DLAMCH := eps
+*>          = 'S' or 's ,   AB_DLAMCH := sfmin
+*>          = 'B' or 'b',   AB_DLAMCH := base
+*>          = 'P' or 'p',   AB_DLAMCH := eps*base
+*>          = 'N' or 'n',   AB_DLAMCH := t
+*>          = 'R' or 'r',   AB_DLAMCH := rnd
+*>          = 'M' or 'm',   AB_DLAMCH := emin
+*>          = 'U' or 'u',   AB_DLAMCH := rmin
+*>          = 'L' or 'l',   AB_DLAMCH := emax
+*>          = 'O' or 'o',   AB_DLAMCH := rmax
 *>          where
 *>          eps   = relative machine precision
 *>          sfmin = safe minimum, such that 1/sfmin does not overflow
@@ -61,7 +61,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
+      DOUBLE PRECISION FUNCTION AB_DLAMCH( CMACH )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -82,8 +82,8 @@
       DOUBLE PRECISION   RND, EPS, SFMIN, SMALL, RMACH
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DIGITS, EPSILON, HUGE, MAXEXPONENT,
@@ -102,9 +102,9 @@
          EPS = EPSILON(ZERO)
       END IF
 *
-      IF( LSAME( CMACH, 'E' ) ) THEN
+      IF( AB_LSAME( CMACH, 'E' ) ) THEN
          RMACH = EPS
-      ELSE IF( LSAME( CMACH, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'S' ) ) THEN
          SFMIN = TINY(ZERO)
          SMALL = ONE / HUGE(ZERO)
          IF( SMALL.GE.SFMIN ) THEN
@@ -115,38 +115,38 @@
             SFMIN = SMALL*( ONE+EPS )
          END IF
          RMACH = SFMIN
-      ELSE IF( LSAME( CMACH, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'B' ) ) THEN
          RMACH = RADIX(ZERO)
-      ELSE IF( LSAME( CMACH, 'P' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'P' ) ) THEN
          RMACH = EPS * RADIX(ZERO)
-      ELSE IF( LSAME( CMACH, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'N' ) ) THEN
          RMACH = DIGITS(ZERO)
-      ELSE IF( LSAME( CMACH, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'R' ) ) THEN
          RMACH = RND
-      ELSE IF( LSAME( CMACH, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'M' ) ) THEN
          RMACH = MINEXPONENT(ZERO)
-      ELSE IF( LSAME( CMACH, 'U' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'U' ) ) THEN
          RMACH = tiny(zero)
-      ELSE IF( LSAME( CMACH, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'L' ) ) THEN
          RMACH = MAXEXPONENT(ZERO)
-      ELSE IF( LSAME( CMACH, 'O' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'O' ) ) THEN
          RMACH = HUGE(ZERO)
       ELSE
          RMACH = ZERO
       END IF
 *
-      DLAMCH = RMACH
+      AB_DLAMCH = RMACH
       RETURN
 *
-*     End of DLAMCH
+*     End of AB_DLAMCH
 *
       END
 ************************************************************************
-*> \brief \b DLAMC3
+*> \brief \b AB_DLAMC3
 *> \details
 *> \b Purpose:
 *> \verbatim
-*> DLAMC3  is intended to force  A  and  B  to be stored prior to doing
+*> AB_DLAMC3  is intended to force  A  and  B  to be stored prior to doing
 *> the addition of  A  and  B ,  for use in situations where optimizers
 *> might hold one of these in a register.
 *> \endverbatim
@@ -165,7 +165,7 @@
 *>          The values A and B.
 *> \endverbatim
 *>
-      DOUBLE PRECISION FUNCTION DLAMC3( A, B )
+      DOUBLE PRECISION FUNCTION AB_DLAMC3( A, B )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -178,11 +178,11 @@
 *
 *     .. Executable Statements ..
 *
-      DLAMC3 = A + B
+      AB_DLAMC3 = A + B
 *
       RETURN
 *
-*     End of DLAMC3
+*     End of AB_DLAMC3
 *
       END
 *

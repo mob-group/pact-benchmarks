@@ -1,4 +1,4 @@
-*> \brief \b CLATTP
+*> \brief \b AB_CLATTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP, B, WORK,
+*       SUBROUTINE AB_CLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP, B, WORK,
 *                          RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CLATTP generates a triangular test matrix in packed storage.
+*> AB_CLATTP generates a triangular test matrix in packed storage.
 *> IMAT and UPLO uniquely specify the properties of the test matrix,
 *> which is returned in the array AP.
 *> \endverbatim
@@ -72,7 +72,7 @@
 *> \verbatim
 *>          ISEED is INTEGER array, dimension (4)
 *>          The seed vector for the random number generator (used in
-*>          CLATMS).  Modified on exit.
+*>          AB_CLATMS).  Modified on exit.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -128,7 +128,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP, B, WORK,
+      SUBROUTINE AB_CLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP, B, WO
+     $RK,
      $                   RWORK, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,15 +165,16 @@
       COMPLEX            CTEMP, PLUS1, PLUS2, RA, RB, S, STAR1
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ICAMAX
-      REAL               SLAMCH
-      COMPLEX            CLARND
-      EXTERNAL           LSAME, ICAMAX, SLAMCH, CLARND
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ICAMAX
+      REAL               AB_SLAMCH
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH, AB_CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARNV, CLATB4, CLATMS, CROT, CROTG, CSSCAL,
-     $                   SLABAD, SLARNV
+      EXTERNAL           AB_CLARNV, AB_CLATB4, AB_CLATMS, AB_CROT, AB_AB
+     $_CROTG, AB_CAB_SSCAL,
+     $                   AB_SLABAD, AB_SLARNV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, CONJG, MAX, REAL, SQRT
@@ -181,11 +183,11 @@
 *
       PATH( 1: 1 ) = 'Complex precision'
       PATH( 2: 3 ) = 'TP'
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
       IF( ( IMAT.GE.7 .AND. IMAT.LE.10 ) .OR. IMAT.EQ.18 ) THEN
          DIAG = 'U'
       ELSE
@@ -198,15 +200,15 @@
       IF( N.LE.0 )
      $   RETURN
 *
-*     Call CLATB4 to set parameters for CLATMS.
+*     Call AB_CLATB4 to set parameters for AB_CLATMS.
 *
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
-         CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+         CALL AB_CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                CNDNUM, DIST )
          PACKIT = 'C'
       ELSE
-         CALL CLATB4( PATH, -IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+         CALL AB_CLATB4( PATH, -IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                CNDNUM, DIST )
          PACKIT = 'R'
       END IF
@@ -214,7 +216,7 @@
 *     IMAT <= 6:  Non-unit triangular matrix
 *
       IF( IMAT.LE.6 ) THEN
-         CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CNDNUM,
+         CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CNDNUM,
      $                ANORM, KL, KU, PACKIT, AP, N, WORK, INFO )
 *
 *     IMAT > 6:  Unit triangular matrix
@@ -328,9 +330,9 @@
 *
 *        where c = w / sqrt(w**2+4) and s = 2 / sqrt(w**2+4).
 *
-         STAR1 = 0.25*CLARND( 5, ISEED )
+         STAR1 = 0.25*AB_CLARND( 5, ISEED )
          SFAC = 0.5
-         PLUS1 = SFAC*CLARND( 5, ISEED )
+         PLUS1 = SFAC*AB_CLARND( 5, ISEED )
          DO 90 J = 1, N, 2
             PLUS2 = STAR1 / PLUS1
             WORK( J ) = PLUS1
@@ -339,11 +341,11 @@
                WORK( J+1 ) = PLUS2
                WORK( N+J+1 ) = ZERO
                PLUS1 = STAR1 / PLUS2
-               REXP = CLARND( 2, ISEED )
+               REXP = AB_CLARND( 2, ISEED )
                IF( REXP.LT.ZERO ) THEN
-                  STAR1 = -SFAC**( ONE-REXP )*CLARND( 5, ISEED )
+                  STAR1 = -SFAC**( ONE-REXP )*AB_CLARND( 5, ISEED )
                ELSE
-                  STAR1 = SFAC**( ONE+REXP )*CLARND( 5, ISEED )
+                  STAR1 = SFAC**( ONE+REXP )*AB_CLARND( 5, ISEED )
                END IF
             END IF
    90    CONTINUE
@@ -402,7 +404,7 @@
                JCNEXT = JC + J
                RA = AP( JCNEXT+J-1 )
                RB = TWO
-               CALL CROTG( RA, RB, C, S )
+               CALL AB_AB_CROTG( RA, RB, C, S )
 *
 *              Multiply by [ c  s; -conjg(s)  c] on the left.
 *
@@ -420,7 +422,8 @@
 *              Multiply by [-c -s;  conjg(s) -c] on the right.
 *
                IF( J.GT.1 )
-     $            CALL CROT( J-1, AP( JCNEXT ), 1, AP( JC ), 1, -C, -S )
+     $            CALL AB_CROT( J-1, AP( JCNEXT ), 1, AP( JC ), 1, -C, -
+     $S )
 *
 *              Negate A(J,J+1).
 *
@@ -433,13 +436,14 @@
                JCNEXT = JC + N - J + 1
                RA = AP( JC+1 )
                RB = TWO
-               CALL CROTG( RA, RB, C, S )
+               CALL AB_AB_CROTG( RA, RB, C, S )
                S = CONJG( S )
 *
 *              Multiply by [ c -s;  conjg(s) c] on the right.
 *
                IF( N.GT.J+1 )
-     $            CALL CROT( N-J-1, AP( JCNEXT+1 ), 1, AP( JC+2 ), 1, C,
+     $            CALL AB_CROT( N-J-1, AP( JCNEXT+1 ), 1, AP( JC+2 ), 1,
+     $ C,
      $                       -S )
 *
 *              Multiply by [-c  s; -conjg(s) -c] on the left.
@@ -475,27 +479,27 @@
          IF( UPPER ) THEN
             JC = 1
             DO 180 J = 1, N
-               CALL CLARNV( 4, ISEED, J-1, AP( JC ) )
-               AP( JC+J-1 ) = CLARND( 5, ISEED )*TWO
+               CALL AB_CLARNV( 4, ISEED, J-1, AP( JC ) )
+               AP( JC+J-1 ) = AB_CLARND( 5, ISEED )*TWO
                JC = JC + J
   180       CONTINUE
          ELSE
             JC = 1
             DO 190 J = 1, N
                IF( J.LT.N )
-     $            CALL CLARNV( 4, ISEED, N-J, AP( JC+1 ) )
-               AP( JC ) = CLARND( 5, ISEED )*TWO
+     $            CALL AB_CLARNV( 4, ISEED, N-J, AP( JC+1 ) )
+               AP( JC ) = AB_CLARND( 5, ISEED )*TWO
                JC = JC + N - J + 1
   190       CONTINUE
          END IF
 *
 *        Set the right hand side so that the largest value is BIGNUM.
 *
-         CALL CLARNV( 2, ISEED, N, B )
-         IY = ICAMAX( N, B, 1 )
+         CALL AB_CLARNV( 2, ISEED, N, B )
+         IY = AB_ICAMAX( N, B, 1 )
          BNORM = ABS( B( IY ) )
          BSCAL = BIGNUM / MAX( ONE, BNORM )
-         CALL CSSCAL( N, BSCAL, B, 1 )
+         CALL AB_CAB_SSCAL( N, BSCAL, B, 1 )
 *
       ELSE IF( IMAT.EQ.12 ) THEN
 *
@@ -503,23 +507,23 @@
 *        cause immediate overflow when dividing by T(j,j).
 *        In type 12, the offdiagonal elements are small (CNORM(j) < 1).
 *
-         CALL CLARNV( 2, ISEED, N, B )
+         CALL AB_CLARNV( 2, ISEED, N, B )
          TSCAL = ONE / MAX( ONE, REAL( N-1 ) )
          IF( UPPER ) THEN
             JC = 1
             DO 200 J = 1, N
-               CALL CLARNV( 4, ISEED, J-1, AP( JC ) )
-               CALL CSSCAL( J-1, TSCAL, AP( JC ), 1 )
-               AP( JC+J-1 ) = CLARND( 5, ISEED )
+               CALL AB_CLARNV( 4, ISEED, J-1, AP( JC ) )
+               CALL AB_CAB_SSCAL( J-1, TSCAL, AP( JC ), 1 )
+               AP( JC+J-1 ) = AB_CLARND( 5, ISEED )
                JC = JC + J
   200       CONTINUE
             AP( N*( N+1 ) / 2 ) = SMLNUM*AP( N*( N+1 ) / 2 )
          ELSE
             JC = 1
             DO 210 J = 1, N
-               CALL CLARNV( 2, ISEED, N-J, AP( JC+1 ) )
-               CALL CSSCAL( N-J, TSCAL, AP( JC+1 ), 1 )
-               AP( JC ) = CLARND( 5, ISEED )
+               CALL AB_CLARNV( 2, ISEED, N-J, AP( JC+1 ) )
+               CALL AB_CAB_SSCAL( N-J, TSCAL, AP( JC+1 ), 1 )
+               AP( JC ) = AB_CLARND( 5, ISEED )
                JC = JC + N - J + 1
   210       CONTINUE
             AP( 1 ) = SMLNUM*AP( 1 )
@@ -531,20 +535,20 @@
 *        cause immediate overflow when dividing by T(j,j).
 *        In type 13, the offdiagonal elements are O(1) (CNORM(j) > 1).
 *
-         CALL CLARNV( 2, ISEED, N, B )
+         CALL AB_CLARNV( 2, ISEED, N, B )
          IF( UPPER ) THEN
             JC = 1
             DO 220 J = 1, N
-               CALL CLARNV( 4, ISEED, J-1, AP( JC ) )
-               AP( JC+J-1 ) = CLARND( 5, ISEED )
+               CALL AB_CLARNV( 4, ISEED, J-1, AP( JC ) )
+               AP( JC+J-1 ) = AB_CLARND( 5, ISEED )
                JC = JC + J
   220       CONTINUE
             AP( N*( N+1 ) / 2 ) = SMLNUM*AP( N*( N+1 ) / 2 )
          ELSE
             JC = 1
             DO 230 J = 1, N
-               CALL CLARNV( 4, ISEED, N-J, AP( JC+1 ) )
-               AP( JC ) = CLARND( 5, ISEED )
+               CALL AB_CLARNV( 4, ISEED, N-J, AP( JC+1 ) )
+               AP( JC ) = AB_CLARND( 5, ISEED )
                JC = JC + N - J + 1
   230       CONTINUE
             AP( 1 ) = SMLNUM*AP( 1 )
@@ -564,9 +568,9 @@
                   AP( JC+I-1 ) = ZERO
   240          CONTINUE
                IF( JCOUNT.LE.2 ) THEN
-                  AP( JC+J-1 ) = SMLNUM*CLARND( 5, ISEED )
+                  AP( JC+J-1 ) = SMLNUM*AB_CLARND( 5, ISEED )
                ELSE
-                  AP( JC+J-1 ) = CLARND( 5, ISEED )
+                  AP( JC+J-1 ) = AB_CLARND( 5, ISEED )
                END IF
                JCOUNT = JCOUNT + 1
                IF( JCOUNT.GT.4 )
@@ -581,9 +585,9 @@
                   AP( JC+I-J ) = ZERO
   260          CONTINUE
                IF( JCOUNT.LE.2 ) THEN
-                  AP( JC ) = SMLNUM*CLARND( 5, ISEED )
+                  AP( JC ) = SMLNUM*AB_CLARND( 5, ISEED )
                ELSE
-                  AP( JC ) = CLARND( 5, ISEED )
+                  AP( JC ) = AB_CLARND( 5, ISEED )
                END IF
                JCOUNT = JCOUNT + 1
                IF( JCOUNT.GT.4 )
@@ -598,13 +602,13 @@
             B( 1 ) = ZERO
             DO 280 I = N, 2, -2
                B( I ) = ZERO
-               B( I-1 ) = SMLNUM*CLARND( 5, ISEED )
+               B( I-1 ) = SMLNUM*AB_CLARND( 5, ISEED )
   280       CONTINUE
          ELSE
             B( N ) = ZERO
             DO 290 I = 1, N - 1, 2
                B( I ) = ZERO
-               B( I+1 ) = SMLNUM*CLARND( 5, ISEED )
+               B( I+1 ) = SMLNUM*AB_CLARND( 5, ISEED )
   290       CONTINUE
          END IF
 *
@@ -616,7 +620,7 @@
 *
          TEXP = ONE / MAX( ONE, REAL( N-1 ) )
          TSCAL = SMLNUM**TEXP
-         CALL CLARNV( 4, ISEED, N, B )
+         CALL AB_CLARNV( 4, ISEED, N, B )
          IF( UPPER ) THEN
             JC = 1
             DO 310 J = 1, N
@@ -625,7 +629,7 @@
   300          CONTINUE
                IF( J.GT.1 )
      $            AP( JC+J-2 ) = CMPLX( -ONE, -ONE )
-               AP( JC+J-1 ) = TSCAL*CLARND( 5, ISEED )
+               AP( JC+J-1 ) = TSCAL*AB_CLARND( 5, ISEED )
                JC = JC + J
   310       CONTINUE
             B( N ) = CMPLX( ONE, ONE )
@@ -637,7 +641,7 @@
   320          CONTINUE
                IF( J.LT.N )
      $            AP( JC+1 ) = CMPLX( -ONE, -ONE )
-               AP( JC ) = TSCAL*CLARND( 5, ISEED )
+               AP( JC ) = TSCAL*AB_CLARND( 5, ISEED )
                JC = JC + N - J + 1
   330       CONTINUE
             B( 1 ) = CMPLX( ONE, ONE )
@@ -651,9 +655,9 @@
          IF( UPPER ) THEN
             JC = 1
             DO 340 J = 1, N
-               CALL CLARNV( 4, ISEED, J, AP( JC ) )
+               CALL AB_CLARNV( 4, ISEED, J, AP( JC ) )
                IF( J.NE.IY ) THEN
-                  AP( JC+J-1 ) = CLARND( 5, ISEED )*TWO
+                  AP( JC+J-1 ) = AB_CLARND( 5, ISEED )*TWO
                ELSE
                   AP( JC+J-1 ) = ZERO
                END IF
@@ -662,17 +666,17 @@
          ELSE
             JC = 1
             DO 350 J = 1, N
-               CALL CLARNV( 4, ISEED, N-J+1, AP( JC ) )
+               CALL AB_CLARNV( 4, ISEED, N-J+1, AP( JC ) )
                IF( J.NE.IY ) THEN
-                  AP( JC ) = CLARND( 5, ISEED )*TWO
+                  AP( JC ) = AB_CLARND( 5, ISEED )*TWO
                ELSE
                   AP( JC ) = ZERO
                END IF
                JC = JC + N - J + 1
   350       CONTINUE
          END IF
-         CALL CLARNV( 2, ISEED, N, B )
-         CALL CSSCAL( N, TWO, B, 1 )
+         CALL AB_CLARNV( 2, ISEED, N, B )
+         CALL AB_CAB_SSCAL( N, TWO, B, 1 )
 *
       ELSE IF( IMAT.EQ.17 ) THEN
 *
@@ -726,7 +730,7 @@
          IF( UPPER ) THEN
             JC = 1
             DO 390 J = 1, N
-               CALL CLARNV( 4, ISEED, J-1, AP( JC ) )
+               CALL AB_CLARNV( 4, ISEED, J-1, AP( JC ) )
                AP( JC+J-1 ) = ZERO
                JC = JC + J
   390       CONTINUE
@@ -734,7 +738,7 @@
             JC = 1
             DO 400 J = 1, N
                IF( J.LT.N )
-     $            CALL CLARNV( 4, ISEED, N-J, AP( JC+1 ) )
+     $            CALL AB_CLARNV( 4, ISEED, N-J, AP( JC+1 ) )
                AP( JC ) = ZERO
                JC = JC + N - J + 1
   400       CONTINUE
@@ -742,26 +746,26 @@
 *
 *        Set the right hand side so that the largest value is BIGNUM.
 *
-         CALL CLARNV( 2, ISEED, N, B )
-         IY = ICAMAX( N, B, 1 )
+         CALL AB_CLARNV( 2, ISEED, N, B )
+         IY = AB_ICAMAX( N, B, 1 )
          BNORM = ABS( B( IY ) )
          BSCAL = BIGNUM / MAX( ONE, BNORM )
-         CALL CSSCAL( N, BSCAL, B, 1 )
+         CALL AB_CAB_SSCAL( N, BSCAL, B, 1 )
 *
       ELSE IF( IMAT.EQ.19 ) THEN
 *
 *        Type 19:  Generate a triangular matrix with elements between
 *        BIGNUM/(n-1) and BIGNUM so that at least one of the column
 *        norms will exceed BIGNUM.
-*        1/3/91:  CLATPS no longer can handle this case
+*        1/3/91:  AB_CLATPS no longer can handle this case
 *
          TLEFT = BIGNUM / MAX( ONE, REAL( N-1 ) )
          TSCAL = BIGNUM*( REAL( N-1 ) / MAX( ONE, REAL( N ) ) )
          IF( UPPER ) THEN
             JC = 1
             DO 420 J = 1, N
-               CALL CLARNV( 5, ISEED, J, AP( JC ) )
-               CALL SLARNV( 1, ISEED, J, RWORK )
+               CALL AB_CLARNV( 5, ISEED, J, AP( JC ) )
+               CALL AB_SLARNV( 1, ISEED, J, RWORK )
                DO 410 I = 1, J
                   AP( JC+I-1 ) = AP( JC+I-1 )*( TLEFT+RWORK( I )*TSCAL )
   410          CONTINUE
@@ -770,8 +774,8 @@
          ELSE
             JC = 1
             DO 440 J = 1, N
-               CALL CLARNV( 5, ISEED, N-J+1, AP( JC ) )
-               CALL SLARNV( 1, ISEED, N-J+1, RWORK )
+               CALL AB_CLARNV( 5, ISEED, N-J+1, AP( JC ) )
+               CALL AB_SLARNV( 1, ISEED, N-J+1, RWORK )
                DO 430 I = J, N
                   AP( JC+I-J ) = AP( JC+I-J )*
      $                           ( TLEFT+RWORK( I-J+1 )*TSCAL )
@@ -779,14 +783,14 @@
                JC = JC + N - J + 1
   440       CONTINUE
          END IF
-         CALL CLARNV( 2, ISEED, N, B )
-         CALL CSSCAL( N, TWO, B, 1 )
+         CALL AB_CLARNV( 2, ISEED, N, B )
+         CALL AB_CAB_SSCAL( N, TWO, B, 1 )
       END IF
 *
 *     Flip the matrix across its counter-diagonal if the transpose will
 *     be used.
 *
-      IF( .NOT.LSAME( TRANS, 'N' ) ) THEN
+      IF( .NOT.AB_LSAME( TRANS, 'N' ) ) THEN
          IF( UPPER ) THEN
             JJ = 1
             JR = N*( N+1 ) / 2
@@ -820,6 +824,6 @@
 *
       RETURN
 *
-*     End of CLATTP
+*     End of AB_CLATTP
 *
       END

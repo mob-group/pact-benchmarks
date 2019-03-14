@@ -1,4 +1,4 @@
-*> \brief \b XERBLA
+*> \brief \b AB_XERBLA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE XERBLA( SRNAME, INFO )
+*       SUBROUTINE AB_XERBLA( SRNAME, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*(*)      SRNAME
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> This is a special version of XERBLA to be used only as part of
+*> This is a special version of AB_XERBLA to be used only as part of
 *> the test program for testing error exits from the LAPACK routines.
 *> Error messages are printed if INFO.NE.INFOT or if SRNAME.NE.SRNAMT,
 *> where INFOT and SRNAMT are values stored in COMMON.
@@ -33,7 +33,7 @@
 *> \param[in] SRNAME
 *> \verbatim
 *>          SRNAME is CHARACTER*(*)
-*>          The name of the subroutine calling XERBLA.  This name should
+*>          The name of the subroutine calling AB_XERBLA.  This name should
 *>          match the COMMON variable SRNAMT.
 *> \endverbatim
 *>
@@ -68,12 +68,12 @@
 *>  NOUT    INTEGER      Unit number for printing error messages
 *>  OK      LOGICAL      Set to .TRUE. if INFO = INFOT and
 *>                       SRNAME = SRNAMT, otherwise set to .FALSE.
-*>  LERR    LOGICAL      Set to .TRUE., indicating that XERBLA was called
+*>  LERR    LOGICAL      Set to .TRUE., indicating that AB_XERBLA was called
 *>  SRNAMT  CHARACTER*(*) Expected name of calling subroutine
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE XERBLA( SRNAME, INFO )
+      SUBROUTINE AB_XERBLA( SRNAME, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -120,13 +120,13 @@
       END IF
       RETURN
 *
- 9999 FORMAT( ' *** XERBLA was called from ', A, ' with INFO = ', I6,
+ 9999 FORMAT( ' *** AB_XERBLA was called from ', A, ' with INFO = ', I6,
      $      ' instead of ', I2, ' ***' )
- 9998 FORMAT( ' *** XERBLA was called with SRNAME = ', A,
+ 9998 FORMAT( ' *** AB_XERBLA was called with SRNAME = ', A,
      $      ' instead of ', A9, ' ***' )
  9997 FORMAT( ' *** On entry to ', A, ' parameter number ', I6,
      $      ' had an illegal value ***' )
 *
-*     End of XERBLA
+*     End of AB_XERBLA
 *
       END

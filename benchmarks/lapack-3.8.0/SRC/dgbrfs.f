@@ -1,4 +1,4 @@
-*> \brief \b DGBRFS
+*> \brief \b AB_DGBRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGBRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbrfs.f">
+*> Download AB_DGBRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGBRFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGBRFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGBRFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+*       SUBROUTINE AB_DGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
 *                          IPIV, B, LDB, X, LDX, FERR, BERR, WORK, IWORK,
 *                          INFO )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> DGBRFS improves the computed solution to a system of linear
+*> AB_DGBRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is banded, and provides
 *> error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -99,7 +99,7 @@
 *> \verbatim
 *>          AFB is DOUBLE PRECISION array, dimension (LDAFB,N)
 *>          Details of the LU factorization of the band matrix A, as
-*>          computed by DGBTRF.  U is stored as an upper triangular band
+*>          computed by AB_DGBTRF.  U is stored as an upper triangular band
 *>          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
 *>          the multipliers used during the factorization are stored in
 *>          rows KL+KU+2 to 2*KL+KU+1.
@@ -114,7 +114,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from DGBTRF; for 1<=i<=N, row i of the
+*>          The pivot indices from AB_DGBTRF; for 1<=i<=N, row i of the
 *>          matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -133,7 +133,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is DOUBLE PRECISION array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by DGBTRS.
+*>          On entry, the solution matrix X, as computed by AB_DGBTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -201,7 +201,8 @@
 *> \ingroup doubleGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE AB_DGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB
+     $,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, IWORK,
      $                   INFO )
 *
@@ -244,24 +245,25 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGBMV, DGBTRS, DLACN2, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGBMV, AB_DGBTRS, AB_DLA
+     $CN2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -281,7 +283,7 @@
          INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGBRFS', -INFO )
+         CALL AB_XERBLA( 'AB_DGBRFS', -INFO )
          RETURN
       END IF
 *
@@ -304,8 +306,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = MIN( KL+KU+2, N+1 )
-      EPS = DLAMCH( 'Epsilon' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -322,8 +324,9 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
-         CALL DCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL DGBMV( TRANS, N, N, KL, KU, -ONE, AB, LDAB, X( 1, J ), 1,
+         CALL AB_DCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL AB_DGBMV( TRANS, N, N, KL, KU, -ONE, AB, LDAB, X( 1, J ), 
+     $1,
      $               ONE, WORK( N+1 ), 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -381,9 +384,9 @@
 *
 *           Update solution and try again.
 *
-            CALL DGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV,
+            CALL AB_DGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV,
      $                   WORK( N+1 ), N, INFO )
-            CALL DAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
+            CALL AB_DAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -407,7 +410,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use DLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_DLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -421,14 +424,15 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL AB_DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
+     $,
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL DGBTRS( TRANST, N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL AB_DGBTRS( TRANST, N, KL, KU, 1, AFB, LDAFB, IPIV,
      $                      WORK( N+1 ), N, INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
@@ -440,7 +444,7 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( N+I )*WORK( I )
   120          CONTINUE
-               CALL DGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL AB_DGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV,
      $                      WORK( N+1 ), N, INFO )
             END IF
             GO TO 100
@@ -459,6 +463,6 @@
 *
       RETURN
 *
-*     End of DGBRFS
+*     End of AB_DGBRFS
 *
       END

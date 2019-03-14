@@ -1,4 +1,4 @@
-*> \brief \b SSYCONVF
+*> \brief \b AB_AB_AB_SSYCONVF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYCONVF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyconvf.f">
+*> Download AB_AB_AB_SSYCONVF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_SSYCONVF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyconvf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_SSYCONVF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyconvf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_SSYCONVF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
+*       SUBROUTINE AB_AB_AB_SSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY
@@ -35,21 +35,21 @@
 *>
 *> \verbatim
 *> If parameter WAY = 'C':
-*> SSYCONVF converts the factorization output format used in
-*> SSYTRF provided on entry in parameter A into the factorization
-*> output format used in SSYTRF_RK (or SSYTRF_BK) that is stored
+*> AB_AB_AB_SSYCONVF converts the factorization output format used in
+*> AB_SSYTRF provided on entry in parameter A into the factorization
+*> output format used in AB_AB_SSYTRF_RK (or AB_SSYTRF_BK) that is stored
 *> on exit in parameters A and E. It also coverts in place details of
-*> the intechanges stored in IPIV from the format used in SSYTRF into
-*> the format used in SSYTRF_RK (or SSYTRF_BK).
+*> the intechanges stored in IPIV from the format used in AB_SSYTRF into
+*> the format used in AB_AB_SSYTRF_RK (or AB_SSYTRF_BK).
 *>
 *> If parameter WAY = 'R':
-*> SSYCONVF performs the conversion in reverse direction, i.e.
-*> converts the factorization output format used in SSYTRF_RK
-*> (or SSYTRF_BK) provided on entry in parameters A and E into
-*> the factorization output format used in SSYTRF that is stored
+*> AB_AB_AB_SSYCONVF performs the conversion in reverse direction, i.e.
+*> converts the factorization output format used in AB_AB_SSYTRF_RK
+*> (or AB_SSYTRF_BK) provided on entry in parameters A and E into
+*> the factorization output format used in AB_SSYTRF that is stored
 *> on exit in parameter A. It also coverts in place details of
-*> the intechanges stored in IPIV from the format used in SSYTRF_RK
-*> (or SSYTRF_BK) into the format used in SSYTRF.
+*> the intechanges stored in IPIV from the format used in AB_AB_SSYTRF_RK
+*> (or AB_SSYTRF_BK) into the format used in AB_SSYTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -84,7 +84,7 @@
 *>          1) If WAY ='C':
 *>
 *>          On entry, contains factorization details in format used in
-*>          SSYTRF:
+*>          AB_SSYTRF:
 *>            a) all elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A and on superdiagonal
 *>               (or subdiagonal) of A, and
@@ -94,7 +94,7 @@
 *>               in the superdiagonal part of A.
 *>
 *>          On exit, contains factorization details in format used in
-*>          SSYTRF_RK or SSYTRF_BK:
+*>          AB_AB_SSYTRF_RK or AB_SSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -105,7 +105,7 @@
 *>          2) If WAY = 'R':
 *>
 *>          On entry, contains factorization details in format used in
-*>          SSYTRF_RK or SSYTRF_BK:
+*>          AB_AB_SSYTRF_RK or AB_SSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -114,7 +114,7 @@
 *>               If UPLO = 'L': factor L in the subdiagonal part of A.
 *>
 *>          On exit, contains factorization details in format used in
-*>          SSYTRF:
+*>          AB_SSYTRF:
 *>            a) all elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A and on superdiagonal
 *>               (or subdiagonal) of A, and
@@ -161,17 +161,17 @@
 *>
 *>          1) If WAY ='C':
 *>          On entry, details of the interchanges and the block
-*>          structure of D in the format used in SSYTRF.
+*>          structure of D in the format used in AB_SSYTRF.
 *>          On exit, details of the interchanges and the block
-*>          structure of D in the format used in SSYTRF_RK
-*>          ( or SSYTRF_BK).
+*>          structure of D in the format used in AB_AB_SSYTRF_RK
+*>          ( or AB_SSYTRF_BK).
 *>
 *>          1) If WAY ='R':
 *>          On entry, details of the interchanges and the block
-*>          structure of D in the format used in SSYTRF_RK
-*>          ( or SSYTRF_BK).
+*>          structure of D in the format used in AB_AB_SSYTRF_RK
+*>          ( or AB_SSYTRF_BK).
 *>          On exit, details of the interchanges and the block
-*>          structure of D in the format used in SSYTRF.
+*>          structure of D in the format used in AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -204,7 +204,8 @@
 *>
 *> \endverbatim
 *  =====================================================================
-      SUBROUTINE SSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
+      SUBROUTINE AB_AB_AB_SSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO 
+     $)
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -227,11 +228,11 @@
       PARAMETER          ( ZERO = 0.0E+0 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *
 *     .. External Subroutines ..
-      EXTERNAL           SSWAP, XERBLA
+      EXTERNAL           AB_SSWAP, AB_XERBLA
 *     .. Local Scalars ..
       LOGICAL            UPPER, CONVERT
       INTEGER            I, IP
@@ -239,11 +240,11 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      CONVERT = LSAME( WAY, 'C' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      CONVERT = AB_LSAME( WAY, 'C' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.CONVERT .AND. .NOT.LSAME( WAY, 'R' ) ) THEN
+      ELSE IF( .NOT.CONVERT .AND. .NOT.AB_LSAME( WAY, 'R' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -252,7 +253,7 @@
 
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYCONVF', -INFO )
+         CALL AB_XERBLA( 'AB_AB_AB_SSYCONVF', -INFO )
          RETURN
       END IF
 *
@@ -305,7 +306,7 @@
                   IP = IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL SSWAP( N-I, A( I, I+1 ), LDA,
+                        CALL AB_SSWAP( N-I, A( I, I+1 ), LDA,
      $                              A( IP, I+1 ), LDA )
                      END IF
                   END IF
@@ -319,7 +320,7 @@
                   IP = -IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.(I-1) ) THEN
-                        CALL SSWAP( N-I, A( I-1, I+1 ), LDA,
+                        CALL AB_SSWAP( N-I, A( I-1, I+1 ), LDA,
      $                              A( IP, I+1 ), LDA )
                      END IF
                   END IF
@@ -358,7 +359,7 @@
                   IP = IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL SSWAP( N-I, A( IP, I+1 ), LDA,
+                        CALL AB_SSWAP( N-I, A( IP, I+1 ), LDA,
      $                              A( I, I+1 ), LDA )
                      END IF
                   END IF
@@ -373,7 +374,7 @@
                   IP = -IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.(I-1) ) THEN
-                        CALL SSWAP( N-I, A( IP, I+1 ), LDA,
+                        CALL AB_SSWAP( N-I, A( IP, I+1 ), LDA,
      $                              A( I-1, I+1 ), LDA )
                      END IF
                   END IF
@@ -449,7 +450,7 @@
                   IP = IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL SSWAP( I-1, A( I, 1 ), LDA,
+                        CALL AB_SSWAP( I-1, A( I, 1 ), LDA,
      $                              A( IP, 1 ), LDA )
                      END IF
                   END IF
@@ -463,7 +464,7 @@
                   IP = -IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.(I+1) ) THEN
-                        CALL SSWAP( I-1, A( I+1, 1 ), LDA,
+                        CALL AB_SSWAP( I-1, A( I+1, 1 ), LDA,
      $                              A( IP, 1 ), LDA )
                      END IF
                   END IF
@@ -502,7 +503,7 @@
                   IP = IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL SSWAP( I-1, A( IP, 1 ), LDA,
+                        CALL AB_SSWAP( I-1, A( IP, 1 ), LDA,
      $                              A( I, 1 ), LDA )
                      END IF
                   END IF
@@ -517,7 +518,7 @@
                   IP = -IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.(I+1) ) THEN
-                        CALL SSWAP( I-1, A( IP, 1 ), LDA,
+                        CALL AB_SSWAP( I-1, A( IP, 1 ), LDA,
      $                              A( I+1, 1 ), LDA )
                      END IF
                   END IF
@@ -554,6 +555,6 @@
 
       RETURN
 *
-*     End of SSYCONVF
+*     End of AB_AB_AB_SSYCONVF
 *
       END

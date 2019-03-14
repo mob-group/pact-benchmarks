@@ -1,4 +1,4 @@
-*> \brief \b DPOT03
+*> \brief \b AB_DPOT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+*       SUBROUTINE AB_DPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
 *                          RWORK, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> DPOT03 computes the residual for a symmetric matrix times its
+*> AB_DPOT03 computes the residual for a symmetric matrix times its
 *> inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -122,7 +122,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+      SUBROUTINE AB_DPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
      $                   RWORK, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,12 +151,12 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           LSAME, DLAMCH, DLANGE, DLANSY
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSY
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGE, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYMM
+      EXTERNAL           AB_DSYMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -173,9 +173,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
-      AINVNM = DLANSY( '1', UPLO, N, AINV, LDAINV, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_DLANSY( '1', UPLO, N, A, LDA, RWORK )
+      AINVNM = AB_DLANSY( '1', UPLO, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -183,10 +183,10 @@
       END IF
       RCOND = ( ONE / ANORM ) / AINVNM
 *
-*     Expand AINV into a full matrix and call DSYMM to multiply
+*     Expand AINV into a full matrix and call AB_DSYMM to multiply
 *     AINV on the left by A.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J - 1
                AINV( J, I ) = AINV( I, J )
@@ -199,7 +199,8 @@
    30       CONTINUE
    40    CONTINUE
       END IF
-      CALL DSYMM( 'Left', UPLO, N, N, -ONE, A, LDA, AINV, LDAINV, ZERO,
+      CALL AB_DSYMM( 'Left', UPLO, N, N, -ONE, A, LDA, AINV, LDAINV, ZER
+     $O,
      $            WORK, LDWORK )
 *
 *     Add the identity matrix to WORK .
@@ -210,12 +211,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = DLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = AB_DLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / DBLE( N )
 *
       RETURN
 *
-*     End of DPOT03
+*     End of AB_DPOT03
 *
       END

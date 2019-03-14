@@ -1,4 +1,4 @@
-*> \brief \b ZLAHRD reduces the first nb columns of a general rectangular matrix A so that elements below the k-th subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
+*> \brief \b AB_ZLAHRD reduces the first nb columns of a general rectangular matrix A so that elements below the k-th subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAHRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahrd.f">
+*> Download AB_ZLAHRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAHRD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlahrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAHRD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAHRD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+*       SUBROUTINE AB_ZLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LDT, LDY, N, NB
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine ZLAHR2.
+*> This routine is deprecated and has been replaced by routine AB_ZLAHR2.
 *>
-*> ZLAHRD reduces the first NB columns of a complex general n-by-(n-k+1)
+*> AB_ZLAHRD reduces the first NB columns of a complex general n-by-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
 *> reduction is performed by a unitary similarity transformation
 *> Q**H * A * Q. The routine returns the matrices V and T which determine
@@ -165,7 +165,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+      SUBROUTINE AB_ZLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -192,8 +192,9 @@
       COMPLEX*16         EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZGEMV, ZLACGV, ZLARFG, ZSCAL,
-     $                   ZTRMV
+      EXTERNAL           AB_ZAXPY, AB_ZCOPY, AB_ZGEMV, AB_ZLACGV, AB_AB_
+     $ZLARFG, AB_ZSCAL,
+     $                   AB_ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -212,10 +213,10 @@
 *
 *           Compute i-th column of A - Y * V**H
 *
-            CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
-            CALL ZGEMV( 'No transpose', N, I-1, -ONE, Y, LDY,
+            CALL AB_ZLACGV( I-1, A( K+I-1, 1 ), LDA )
+            CALL AB_ZGEMV( 'No transpose', N, I-1, -ONE, Y, LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( 1, I ), 1 )
-            CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
+            CALL AB_ZLACGV( I-1, A( K+I-1, 1 ), LDA )
 *
 *           Apply I - V * T**H * V**H to this column (call it b) from the
 *           left, using the last column of T as workspace
@@ -227,31 +228,33 @@
 *
 *           w := V1**H * b1
 *
-            CALL ZCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
-            CALL ZTRMV( 'Lower', 'Conjugate transpose', 'Unit', I-1,
+            CALL AB_ZCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
+            CALL AB_ZTRMV( 'Lower', 'Conjugate transpose', 'Unit', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
 *
 *           w := w + V2**H *b2
 *
-            CALL ZGEMV( 'Conjugate transpose', N-K-I+1, I-1, ONE,
+            CALL AB_ZGEMV( 'Conjugate transpose', N-K-I+1, I-1, ONE,
      $                  A( K+I, 1 ), LDA, A( K+I, I ), 1, ONE,
      $                  T( 1, NB ), 1 )
 *
 *           w := T**H *w
 *
-            CALL ZTRMV( 'Upper', 'Conjugate transpose', 'Non-unit', I-1,
+            CALL AB_ZTRMV( 'Upper', 'Conjugate transpose', 'Non-unit', I
+     $-1,
      $                  T, LDT, T( 1, NB ), 1 )
 *
 *           b2 := b2 - V2*w
 *
-            CALL ZGEMV( 'No transpose', N-K-I+1, I-1, -ONE, A( K+I, 1 ),
+            CALL AB_ZGEMV( 'No transpose', N-K-I+1, I-1, -ONE, A( K+I, 1
+     $ ),
      $                  LDA, T( 1, NB ), 1, ONE, A( K+I, I ), 1 )
 *
 *           b1 := b1 - V1*w
 *
-            CALL ZTRMV( 'Lower', 'No transpose', 'Unit', I-1,
+            CALL AB_ZTRMV( 'Lower', 'No transpose', 'Unit', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
-            CALL ZAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
+            CALL AB_ZAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
 *
             A( K+I-1, I-1 ) = EI
          END IF
@@ -260,25 +263,28 @@
 *        A(k+i+1:n,i)
 *
          EI = A( K+I, I )
-         CALL ZLARFG( N-K-I+1, EI, A( MIN( K+I+1, N ), I ), 1,
+         CALL AB_AB_ZLARFG( N-K-I+1, EI, A( MIN( K+I+1, N ), I ), 1,
      $                TAU( I ) )
          A( K+I, I ) = ONE
 *
 *        Compute  Y(1:n,i)
 *
-         CALL ZGEMV( 'No transpose', N, N-K-I+1, ONE, A( 1, I+1 ), LDA,
+         CALL AB_ZGEMV( 'No transpose', N, N-K-I+1, ONE, A( 1, I+1 ), LD
+     $A,
      $               A( K+I, I ), 1, ZERO, Y( 1, I ), 1 )
-         CALL ZGEMV( 'Conjugate transpose', N-K-I+1, I-1, ONE,
+         CALL AB_ZGEMV( 'Conjugate transpose', N-K-I+1, I-1, ONE,
      $               A( K+I, 1 ), LDA, A( K+I, I ), 1, ZERO, T( 1, I ),
      $               1 )
-         CALL ZGEMV( 'No transpose', N, I-1, -ONE, Y, LDY, T( 1, I ), 1,
+         CALL AB_ZGEMV( 'No transpose', N, I-1, -ONE, Y, LDY, T( 1, I ),
+     $ 1,
      $               ONE, Y( 1, I ), 1 )
-         CALL ZSCAL( N, TAU( I ), Y( 1, I ), 1 )
+         CALL AB_ZSCAL( N, TAU( I ), Y( 1, I ), 1 )
 *
 *        Compute T(1:i,i)
 *
-         CALL ZSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
-         CALL ZTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T, LDT,
+         CALL AB_ZSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
+         CALL AB_ZTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T, LDT
+     $,
      $               T( 1, I ), 1 )
          T( I, I ) = TAU( I )
 *
@@ -287,6 +293,6 @@
 *
       RETURN
 *
-*     End of ZLAHRD
+*     End of AB_ZLAHRD
 *
       END

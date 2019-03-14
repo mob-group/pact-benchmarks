@@ -1,4 +1,4 @@
-*> \brief \b CCHKPS
+*> \brief \b AB_CCHKPS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
+*       SUBROUTINE AB_CCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
 *                          THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
 *                          RWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKPS tests CPSTRF.
+*> AB_CCHKPS tests AB_CPSTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -150,7 +150,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
+      SUBROUTINE AB_CCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL
+     $,
      $                   THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
      $                   RWORK, NOUT )
 *
@@ -192,8 +193,10 @@
       CHARACTER          UPLOS( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRPS, CLACPY,
-     $                   CLATB5, CLATMT, CPST01, CPSTRF, XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CERRPS, AB_C
+     $LACPY,
+     $                   AB_CLATB5, AB_CLATMT, AB_CPST01, AB_CPSTRF, AB_
+     $XLAENV
 *     ..
 *     .. Scalars in Common ..
       INTEGER            INFOT, NUNIT
@@ -227,7 +230,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRPS( PATH, NOUT )
+     $   CALL AB_CERRPS( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of N in NVAL
@@ -266,21 +269,21 @@
                DO 120 IUPLO = 1, 2
                   UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with CLATB5 and generate a test matrix
-*              with CLATMT.
+*              Set up parameters with AB_CLATB5 and generate a test matrix
+*              with AB_CLATMT.
 *
-                  CALL CLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM,
+                  CALL AB_CLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
-                  SRNAMT = 'CLATMT'
-                  CALL CLATMT( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'AB_CLATMT'
+                  CALL AB_CLATMT( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, RANK, KL, KU, UPLO, A,
      $                         LDA, WORK, INFO )
 *
-*              Check error code from CLATMT.
+*              Check error code from AB_CLATMT.
 *
                   IF( INFO.NE.0 ) THEN
-                    CALL ALAERH( PATH, 'CLATMT', INFO, 0, UPLO, N,
+                    CALL AB_ALAERH( PATH, 'AB_CLATMT', INFO, 0, UPLO, N,
      $                           N, -1, -1, -1, IMAT, NFAIL, NERRS,
      $                           NOUT )
                      GO TO 120
@@ -290,26 +293,26 @@
 *
                   DO 110 INB = 1, NNB
                      NB = NBVAL( INB )
-                     CALL XLAENV( 1, NB )
+                     CALL AB_XLAENV( 1, NB )
 *
 *                 Compute the pivoted L*L' or U'*U factorization
 *                 of the matrix.
 *
-                     CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     SRNAMT = 'CPSTRF'
+                     CALL AB_CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     SRNAMT = 'AB_CPSTRF'
 *
 *                 Use default tolerance
 *
                      TOL = -ONE
-                     CALL CPSTRF( UPLO, N, AFAC, LDA, PIV, COMPRANK,
+                     CALL AB_CPSTRF( UPLO, N, AFAC, LDA, PIV, COMPRANK,
      $                            TOL, RWORK, INFO )
 *
-*                 Check error code from CPSTRF.
+*                 Check error code from AB_CPSTRF.
 *
                      IF( (INFO.LT.IZERO)
      $                    .OR.(INFO.NE.IZERO.AND.RANK.EQ.N)
      $                    .OR.(INFO.LE.IZERO.AND.RANK.LT.N) ) THEN
-                        CALL ALAERH( PATH, 'CPSTRF', INFO, IZERO,
+                        CALL AB_ALAERH( PATH, 'AB_CPSTRF', INFO, IZERO,
      $                               UPLO, N, N, -1, -1, NB, IMAT,
      $                               NFAIL, NERRS, NOUT )
                         GO TO 110
@@ -324,7 +327,8 @@
 *
 *                 PERM holds permuted L*L^T or U^T*U
 *
-                     CALL CPST01( UPLO, N, A, LDA, AFAC, LDA, PERM, LDA,
+                     CALL AB_CPST01( UPLO, N, A, LDA, AFAC, LDA, PERM, L
+     $DA,
      $                            PIV, RWORK, RESULT, COMPRANK )
 *
 *                 Print information about the tests that did not pass
@@ -335,7 +339,7 @@
                      RANKDIFF = RANK - COMPRANK
                      IF( RESULT.GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, RANK,
      $                     RANKDIFF, NB, IMAT, RESULT
                         NFAIL = NFAIL + 1
@@ -350,13 +354,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', RANK =', I3,
      $      ', Diff =', I5, ', NB =', I4, ', type ', I2, ', Ratio =',
      $      G12.5 )
       RETURN
 *
-*     End of CCHKPS
+*     End of AB_CCHKPS
 *
       END

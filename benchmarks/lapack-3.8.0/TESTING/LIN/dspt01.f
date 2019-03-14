@@ -1,4 +1,4 @@
-*> \brief \b DSPT01
+*> \brief \b AB_DSPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+*       SUBROUTINE AB_DSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> DSPT01 reconstructs a symmetric indefinite packed matrix A from its
+*> AB_DSPT01 reconstructs a symmetric indefinite packed matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>      norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -63,13 +63,13 @@
 *>          The factored form of the matrix A, stored as a packed
 *>          triangular matrix.  AFAC contains the block diagonal matrix D
 *>          and the multipliers used to obtain the factor L or U from the
-*>          block L*D*L' or U*D*U' factorization as computed by DSPTRF.
+*>          block L*D*L' or U*D*U' factorization as computed by AB_DSPTRF.
 *> \endverbatim
 *>
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from DSPTRF.
+*>          The pivot indices from AB_DSPTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -108,7 +108,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+      SUBROUTINE AB_DSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID
+     $ )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,12 +137,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANSP, DLANSY
-      EXTERNAL           LSAME, DLAMCH, DLANSP, DLANSY
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSP, AB_DLANSY
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANSP, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASET, DLAVSP
+      EXTERNAL           AB_DLASET, AB_DLAVSP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -157,26 +158,27 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANSP( '1', UPLO, N, A, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_DLANSP( '1', UPLO, N, A, RWORK )
 *
 *     Initialize C to the identity matrix.
 *
-      CALL DLASET( 'Full', N, N, ZERO, ONE, C, LDC )
+      CALL AB_DLASET( 'Full', N, N, ZERO, ONE, C, LDC )
 *
-*     Call DLAVSP to form the product D * U' (or D * L' ).
+*     Call AB_DLAVSP to form the product D * U' (or D * L' ).
 *
-      CALL DLAVSP( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, IPIV, C,
+      CALL AB_DLAVSP( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, IPIV, C
+     $,
      $             LDC, INFO )
 *
-*     Call DLAVSP again to multiply by U ( or L ).
+*     Call AB_DLAVSP again to multiply by U ( or L ).
 *
-      CALL DLAVSP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
+      CALL AB_DLAVSP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
      $             LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          JC = 0
          DO 20 J = 1, N
             DO 10 I = 1, J
@@ -196,7 +198,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = DLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_DLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -207,6 +209,6 @@
 *
       RETURN
 *
-*     End of DSPT01
+*     End of AB_DSPT01
 *
       END

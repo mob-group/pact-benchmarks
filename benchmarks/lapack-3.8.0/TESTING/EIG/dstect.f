@@ -1,4 +1,4 @@
-*> \brief \b DSTECT
+*> \brief \b AB_DSTECT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSTECT( N, A, B, SHIFT, NUM )
+*       SUBROUTINE AB_DSTECT( N, A, B, SHIFT, NUM )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NUM
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    DSTECT counts the number NUM of eigenvalues of a tridiagonal
+*>    AB_DSTECT counts the number NUM of eigenvalues of a tridiagonal
 *>    matrix T which are less than or equal to SHIFT. T has
 *>    diagonal entries A(1), ... , A(N), and offdiagonal entries
 *>    B(1), ..., B(N-1).
@@ -80,7 +80,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DSTECT( N, A, B, SHIFT, NUM )
+      SUBROUTINE AB_DSTECT( N, A, B, SHIFT, NUM )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -107,8 +107,8 @@
      $                   TOM, U, UNFL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -117,8 +117,8 @@
 *
 *     Get machine constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
 *
 *     Find largest entry
 *
@@ -182,6 +182,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of DSTECT
+*     End of AB_DSTECT
 *
       END

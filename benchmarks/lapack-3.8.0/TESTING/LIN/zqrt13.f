@@ -1,4 +1,4 @@
-*> \brief \b ZQRT13
+*> \brief \b AB_ZQRT13
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
+*       SUBROUTINE AB_ZQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, M, N, SCALE
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> ZQRT13 generates a full-rank matrix that may be scaled to have large
+*> AB_ZQRT13 generates a full-rank matrix that may be scaled to have large
 *> or small norm.
 *> \endverbatim
 *
@@ -89,7 +89,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
+      SUBROUTINE AB_ZQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -116,11 +116,11 @@
       DOUBLE PRECISION   BIGNUM, SMLNUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
-      EXTERNAL           DLAMCH, DZASUM, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZLARNV, ZLASCL
+      EXTERNAL           AB_DLABAD, AB_ZLARNV, AB_ZLASCL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, SIGN
@@ -136,9 +136,10 @@
 *     benign matrix
 *
       DO 10 J = 1, N
-         CALL ZLARNV( 2, ISEED, M, A( 1, J ) )
+         CALL AB_ZLARNV( 2, ISEED, M, A( 1, J ) )
          IF( J.LE.M ) THEN
-            A( J, J ) = A( J, J ) + DCMPLX( SIGN( DZASUM( M, A( 1, J ),
+            A( J, J ) = A( J, J ) + DCMPLX( SIGN( AB_DZASUM( M, A( 1, J 
+     $),
      $                  1 ), DBLE( A( J, J ) ) ) )
          END IF
    10 CONTINUE
@@ -146,31 +147,33 @@
 *     scaled versions
 *
       IF( SCALE.NE.1 ) THEN
-         NORMA = ZLANGE( 'Max', M, N, A, LDA, DUMMY )
-         SMLNUM = DLAMCH( 'Safe minimum' )
+         NORMA = AB_ZLANGE( 'Max', M, N, A, LDA, DUMMY )
+         SMLNUM = AB_DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
-         CALL DLABAD( SMLNUM, BIGNUM )
-         SMLNUM = SMLNUM / DLAMCH( 'Epsilon' )
+         CALL AB_DLABAD( SMLNUM, BIGNUM )
+         SMLNUM = SMLNUM / AB_DLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *
          IF( SCALE.EQ.2 ) THEN
 *
 *           matrix scaled up
 *
-            CALL ZLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA,
+            CALL AB_ZLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A, LDA
+     $,
      $                   INFO )
          ELSE IF( SCALE.EQ.3 ) THEN
 *
 *           matrix scaled down
 *
-            CALL ZLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A, LDA,
+            CALL AB_ZLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A, LDA
+     $,
      $                   INFO )
          END IF
       END IF
 *
-      NORMA = ZLANGE( 'One-norm', M, N, A, LDA, DUMMY )
+      NORMA = AB_ZLANGE( 'One-norm', M, N, A, LDA, DUMMY )
       RETURN
 *
-*     End of ZQRT13
+*     End of AB_ZQRT13
 *
       END

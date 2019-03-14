@@ -1,4 +1,4 @@
-*> \brief \b ZLARTG generates a plane rotation with real cosine and complex sine.
+*> \brief \b AB_ZLARTG generates a plane rotation with real cosine and complex sine.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLARTG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlartg.f">
+*> Download AB_ZLARTG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLARTG.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlartg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLARTG.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlartg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLARTG.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLARTG( F, G, CS, SN, R )
+*       SUBROUTINE AB_ZLARTG( F, G, CS, SN, R )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   CS
@@ -31,13 +31,13 @@
 *>
 *> \verbatim
 *>
-*> ZLARTG generates a plane rotation so that
+*> AB_ZLARTG generates a plane rotation so that
 *>
 *>    [  CS  SN  ]     [ F ]     [ R ]
 *>    [  __      ]  .  [   ]  =  [   ]   where CS**2 + |SN|**2 = 1.
 *>    [ -SN  CS  ]     [ G ]     [ 0 ]
 *>
-*> This is a faster version of the BLAS1 routine ZROTG, except for
+*> This is a faster version of the BLAS1 routine AB_AB_ZROTG, except for
 *> the following differences:
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=1 and SN=0.
@@ -56,7 +56,7 @@
 *> \param[in] G
 *> \verbatim
 *>          G is COMPLEX*16
-*>          The second component of vector to be rotated.
+*>          The AB_SECOND component of vector to be rotated.
 *> \endverbatim
 *>
 *> \param[out] CS
@@ -101,7 +101,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLARTG( F, G, CS, SN, R )
+      SUBROUTINE AB_ZLARTG( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,9 +129,9 @@
       COMPLEX*16         FF, FS, GS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLAPY2
-      LOGICAL            DISNAN
-      EXTERNAL           DLAMCH, DLAPY2, DISNAN
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
+      LOGICAL            AB_DISNAN
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2, AB_DISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, INT, LOG,
@@ -146,10 +146,10 @@
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = DLAMCH( 'S' )
-      EPS = DLAMCH( 'E' )
-      SAFMN2 = DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $         LOG( DLAMCH( 'B' ) ) / TWO )
+      SAFMIN = AB_DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'E' )
+      SAFMN2 = AB_DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $         LOG( AB_DLAMCH( 'B' ) ) / TWO )
       SAFMX2 = ONE / SAFMN2
       SCALE = MAX( ABS1( F ), ABS1( G ) )
       FS = F
@@ -164,7 +164,7 @@
          IF( SCALE.GE.SAFMX2 )
      $      GO TO 10
       ELSE IF( SCALE.LE.SAFMN2 ) THEN
-         IF( G.EQ.CZERO.OR.DISNAN( ABS( G ) ) ) THEN
+         IF( G.EQ.CZERO.OR.AB_DISNAN( ABS( G ) ) ) THEN
             CS = ONE
             SN = CZERO
             R = F
@@ -186,13 +186,13 @@
 *
          IF( F.EQ.CZERO ) THEN
             CS = ZERO
-            R = DLAPY2( DBLE( G ), DIMAG( G ) )
+            R = AB_DLAPY2( DBLE( G ), DIMAG( G ) )
 *           Do complex/real division explicitly with two real divisions
-            D = DLAPY2( DBLE( GS ), DIMAG( GS ) )
+            D = AB_DLAPY2( DBLE( GS ), DIMAG( GS ) )
             SN = DCMPLX( DBLE( GS ) / D, -DIMAG( GS ) / D )
             RETURN
          END IF
-         F2S = DLAPY2( DBLE( FS ), DIMAG( FS ) )
+         F2S = AB_DLAPY2( DBLE( FS ), DIMAG( FS ) )
 *        G2 and G2S are accurate
 *        G2 is at least SAFMIN, and G2S is at least SAFMN2
          G2S = SQRT( G2 )
@@ -207,12 +207,12 @@
 *        Make sure abs(FF) = 1
 *        Do complex/real division explicitly with 2 real divisions
          IF( ABS1( F ).GT.ONE ) THEN
-            D = DLAPY2( DBLE( F ), DIMAG( F ) )
+            D = AB_DLAPY2( DBLE( F ), DIMAG( F ) )
             FF = DCMPLX( DBLE( F ) / D, DIMAG( F ) / D )
          ELSE
             DR = SAFMX2*DBLE( F )
             DI = SAFMX2*DIMAG( F )
-            D = DLAPY2( DR, DI )
+            D = AB_DLAPY2( DR, DI )
             FF = DCMPLX( DR / D, DI / D )
          END IF
          SN = FF*DCMPLX( DBLE( GS ) / G2S, -DIMAG( GS ) / G2S )
@@ -245,6 +245,6 @@
       END IF
       RETURN
 *
-*     End of ZLARTG
+*     End of AB_ZLARTG
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZCHKQ3
+*> \brief \b AB_ZCHKQ3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+*       SUBROUTINE AB_ZCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
 *                          THRESH, A, COPYA, S, TAU, WORK, RWORK,
 *                          IWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKQ3 tests ZGEQP3.
+*> AB_ZCHKQ3 tests AB_ZGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -154,7 +154,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+      SUBROUTINE AB_ZCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVA
+     $L,
      $                   THRESH, A, COPYA, S, TAU, WORK, RWORK,
      $                   IWORK, NOUT )
 *
@@ -199,12 +200,13 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZQPT01, ZQRT11, ZQRT12
-      EXTERNAL           DLAMCH, ZQPT01, ZQRT11, ZQRT12
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZQPT01, AB_ZQRT11, AB_ZQRT12
+      EXTERNAL           AB_DLAMCH, AB_ZQPT01, AB_ZQRT11, AB_ZQRT12
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHD, ALASUM, DLAORD, ICOPY, XLAENV, ZGEQP3,
-     $                   ZLACPY, ZLASET, ZLATMS
+      EXTERNAL           AB_ALAHD, AB_ALASUM, AB_DLAORD, AB_ICOPY, AB_XL
+     $AENV, AB_ZGEQP3,
+     $                   AB_ZLACPY, AB_ZLASET, AB_ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -233,7 +235,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       INFOT = 0
 *
       DO 90 IM = 1, NM
@@ -261,7 +263,7 @@
 *                 3:  geometric distribution of singular values
 *                 4:  first n/2 columns fixed
 *                 5:  last n/2 columns fixed
-*                 6:  every second column fixed
+*                 6:  every AB_SECOND column fixed
 *
                MODE = IMODE
                IF( IMODE.GT.3 )
@@ -274,12 +276,13 @@
                   IWORK( I ) = 0
    20          CONTINUE
                IF( IMODE.EQ.1 ) THEN
-                  CALL ZLASET( 'Full', M, N, CZERO, CZERO, COPYA, LDA )
+                  CALL AB_ZLASET( 'Full', M, N, CZERO, CZERO, COPYA, LDA
+     $ )
                   DO 30 I = 1, MNMIN
                      S( I ) = ZERO
    30             CONTINUE
                ELSE
-                  CALL ZLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
+                  CALL AB_ZLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
      $                         MODE, ONE / EPS, ONE, M, N, 'No packing',
      $                         COPYA, LDA, WORK, INFO )
                   IF( IMODE.GE.4 ) THEN
@@ -300,7 +303,7 @@
                         IWORK( I ) = 1
    40                CONTINUE
                   END IF
-                  CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
+                  CALL AB_DLAORD( 'Decreasing', MNMIN, S, 1 )
                END IF
 *
                DO 60 INB = 1, NNB
@@ -308,37 +311,38 @@
 *                 Do for each pair of values (NB,NX) in NBVAL and NXVAL.
 *
                   NB = NBVAL( INB )
-                  CALL XLAENV( 1, NB )
+                  CALL AB_XLAENV( 1, NB )
                   NX = NXVAL( INB )
-                  CALL XLAENV( 3, NX )
+                  CALL AB_XLAENV( 3, NX )
 *
 *                 Save A and its singular values and a copy of
 *                 vector IWORK.
 *
-                  CALL ZLACPY( 'All', M, N, COPYA, LDA, A, LDA )
-                  CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
+                  CALL AB_ZLACPY( 'All', M, N, COPYA, LDA, A, LDA )
+                  CALL AB_ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
 *
 *                 Workspace needed.
 *
                   LW = NB*( N+1 )
 *
-                  SRNAMT = 'ZGEQP3'
-                  CALL ZGEQP3( M, N, A, LDA, IWORK( N+1 ), TAU, WORK,
+                  SRNAMT = 'AB_ZGEQP3'
+                  CALL AB_ZGEQP3( M, N, A, LDA, IWORK( N+1 ), TAU, WORK,
      $                         LW, RWORK, INFO )
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = ZQRT12( M, N, A, LDA, S, WORK,
+                  RESULT( 1 ) = AB_ZQRT12( M, N, A, LDA, S, WORK,
      $                          LWORK, RWORK )
 *
 *                 Compute norm( A*P - Q*R )
 *
-                  RESULT( 2 ) = ZQPT01( M, N, MNMIN, COPYA, A, LDA, TAU,
+                  RESULT( 2 ) = AB_ZQPT01( M, N, MNMIN, COPYA, A, LDA, T
+     $AU,
      $                          IWORK( N+1 ), WORK, LWORK )
 *
 *                 Compute Q'*Q
 *
-                  RESULT( 3 ) = ZQRT11( M, MNMIN, A, LDA, TAU, WORK,
+                  RESULT( 3 ) = AB_ZQRT11( M, MNMIN, A, LDA, TAU, WORK,
      $                          LWORK )
 *
 *                 Print information about the tests that did not pass
@@ -347,8 +351,8 @@
                   DO 50 K = 1, NTESTS
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9999 )'ZGEQP3', M, N, NB,
+     $                     CALL AB_ALAHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9999 )'AB_ZGEQP3', M, N, NB,
      $                     IMODE, K, RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -362,11 +366,11 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ' M =', I5, ', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
 *
-*     End of ZCHKQ3
+*     End of AB_ZCHKQ3
 *
       END

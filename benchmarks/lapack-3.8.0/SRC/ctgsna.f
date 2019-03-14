@@ -1,4 +1,4 @@
-*> \brief \b CTGSNA
+*> \brief \b AB_CTGSNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTGSNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgsna.f">
+*> Download AB_CTGSNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTGSNA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTGSNA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTGSNA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
+*       SUBROUTINE AB_CTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
 *                          LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
 *                          IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> CTGSNA estimates reciprocal condition numbers for specified
+*> AB_CTGSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or eigenvectors of a matrix pair (A, B).
 *>
 *> (A, B) must be in generalized Schur canonical form, that is, A and
@@ -114,7 +114,7 @@
 *>          IF JOB = 'E' or 'B', VL must contain left eigenvectors of
 *>          (A, B), corresponding to the eigenpairs specified by HOWMNY
 *>          and SELECT.  The eigenvectors must be stored in consecutive
-*>          columns of VL, as returned by CTGEVC.
+*>          columns of VL, as returned by AB_CTGEVC.
 *>          If JOB = 'V', VL is not referenced.
 *> \endverbatim
 *>
@@ -131,7 +131,7 @@
 *>          IF JOB = 'E' or 'B', VR must contain right eigenvectors of
 *>          (A, B), corresponding to the eigenpairs specified by HOWMNY
 *>          and SELECT.  The eigenvectors must be stored in consecutive
-*>          columns of VR, as returned by CTGEVC.
+*>          columns of VR, as returned by AB_CTGEVC.
 *>          If JOB = 'V', VR is not referenced.
 *> \endverbatim
 *>
@@ -264,7 +264,7 @@
 *>  matrices X and Y.
 *>
 *>  We approximate the smallest singular value of Zl with an upper
-*>  bound. This is done by CLATDF.
+*>  bound. This is done by AB_CLATDF.
 *>
 *>  An approximate error bound for a computed eigenvector VL(i) or
 *>  VR(i) is given by
@@ -307,7 +307,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
+      SUBROUTINE AB_CTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
      $                   LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -345,13 +345,15 @@
       COMPLEX            DUMMY( 1 ), DUMMY1( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SCNRM2, SLAMCH, SLAPY2
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, SCNRM2, SLAMCH, SLAPY2, CDOTC
+      LOGICAL            AB_LSAME
+      REAL               AB_SCNRM2, AB_SLAMCH, AB_SLAPY2
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_SCNRM2, AB_SLAMCH, AB_SLAPY2, AB_C
+     $DOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CLACPY, CTGEXC, CTGSYL, SLABAD, XERBLA
+      EXTERNAL           AB_CGEMV, AB_CLACPY, AB_CTGEXC, AB_CTGSYL, AB_S
+     $LABAD, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX
@@ -360,18 +362,18 @@
 *
 *     Decode and test the input parameters
 *
-      WANTBH = LSAME( JOB, 'B' )
-      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTDF = LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTBH = AB_LSAME( JOB, 'B' )
+      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTDF = AB_LSAME( JOB, 'V' ) .OR. WANTBH
 *
-      SOMCON = LSAME( HOWMNY, 'S' )
+      SOMCON = AB_LSAME( HOWMNY, 'S' )
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
 *
       IF( .NOT.WANTS .AND. .NOT.WANTDF ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
+      ELSE IF( .NOT.AB_LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -400,7 +402,8 @@
 *
          IF( N.EQ.0 ) THEN
             LWMIN = 1
-         ELSE IF( LSAME( JOB, 'V' ) .OR. LSAME( JOB, 'B' ) ) THEN
+         ELSE IF( AB_LSAME( JOB, 'V' ) .OR. AB_LSAME( JOB, 'B' ) ) TH
+     $EN
             LWMIN = 2*N*N
          ELSE
             LWMIN = N
@@ -415,7 +418,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTGSNA', -INFO )
+         CALL AB_XERBLA( 'AB_CTGSNA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -428,10 +431,10 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
       KS = 0
       DO 20 K = 1, N
 *
@@ -450,15 +453,15 @@
 *           Compute the reciprocal condition number of the k-th
 *           eigenvalue.
 *
-            RNRM = SCNRM2( N, VR( 1, KS ), 1 )
-            LNRM = SCNRM2( N, VL( 1, KS ), 1 )
-            CALL CGEMV( 'N', N, N, CMPLX( ONE, ZERO ), A, LDA,
+            RNRM = AB_SCNRM2( N, VR( 1, KS ), 1 )
+            LNRM = AB_SCNRM2( N, VL( 1, KS ), 1 )
+            CALL AB_CGEMV( 'N', N, N, CMPLX( ONE, ZERO ), A, LDA,
      $                  VR( 1, KS ), 1, CMPLX( ZERO, ZERO ), WORK, 1 )
-            YHAX = CDOTC( N, WORK, 1, VL( 1, KS ), 1 )
-            CALL CGEMV( 'N', N, N, CMPLX( ONE, ZERO ), B, LDB,
+            YHAX = AB_CDOTC( N, WORK, 1, VL( 1, KS ), 1 )
+            CALL AB_CGEMV( 'N', N, N, CMPLX( ONE, ZERO ), B, LDB,
      $                  VR( 1, KS ), 1, CMPLX( ZERO, ZERO ), WORK, 1 )
-            YHBX = CDOTC( N, WORK, 1, VL( 1, KS ), 1 )
-            COND = SLAPY2( ABS( YHAX ), ABS( YHBX ) )
+            YHBX = AB_CDOTC( N, WORK, 1, VL( 1, KS ), 1 )
+            COND = AB_SLAPY2( ABS( YHAX ), ABS( YHBX ) )
             IF( COND.EQ.ZERO ) THEN
                S( KS ) = -ONE
             ELSE
@@ -468,7 +471,8 @@
 *
          IF( WANTDF ) THEN
             IF( N.EQ.1 ) THEN
-               DIF( KS ) = SLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1, 1 ) ) )
+               DIF( KS ) = AB_SLAPY2( ABS( A( 1, 1 ) ), ABS( B( 1, 1 ) )
+     $ )
             ELSE
 *
 *              Estimate the reciprocal condition number of the k-th
@@ -477,12 +481,13 @@
 *              Copy the matrix (A, B) to the array WORK and move the
 *              (k,k)th pair to the (1,1) position.
 *
-               CALL CLACPY( 'Full', N, N, A, LDA, WORK, N )
-               CALL CLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
+               CALL AB_CLACPY( 'Full', N, N, A, LDA, WORK, N )
+               CALL AB_CLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
                IFST = K
                ILST = 1
 *
-               CALL CTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
+               CALL AB_CTGEXC( .FALSE., .FALSE., N, WORK, N, WORK(
+     $ N*N+1 ),
      $                      N, DUMMY, 1, DUMMY1, 1, IFST, ILST, IERR )
 *
                IF( IERR.GT.0 ) THEN
@@ -501,7 +506,8 @@
                   N1 = 1
                   N2 = N - N1
                   I = N*N + 1
-                  CALL CTGSYL( 'N', IDIFJB, N2, N1, WORK( N*N1+N1+1 ),
+                  CALL AB_CTGSYL( 'N', IDIFJB, N2, N1, WORK( N*N1+N1+1 )
+     $,
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ), DUMMY,
@@ -514,6 +520,6 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of CTGSNA
+*     End of AB_CTGSNA
 *
       END

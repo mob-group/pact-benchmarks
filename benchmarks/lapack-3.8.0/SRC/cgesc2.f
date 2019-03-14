@@ -1,4 +1,4 @@
-*> \brief \b CGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by sgetc2.
+*> \brief \b AB_CGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by AB_SGETC2.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGESC2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgesc2.f">
+*> Download AB_CGESC2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGESC2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgesc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGESC2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgesc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGESC2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+*       SUBROUTINE AB_CGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, N
@@ -35,12 +35,12 @@
 *>
 *> \verbatim
 *>
-*> CGESC2 solves a system of linear equations
+*> AB_CGESC2 solves a system of linear equations
 *>
 *>           A * X = scale* RHS
 *>
 *> with a general N-by-N matrix A using the LU factorization with
-*> complete pivoting computed by CGETC2.
+*> complete pivoting computed by AB_CGETC2.
 *>
 *> \endverbatim
 *
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA, N)
 *>          On entry, the  LU part of the factorization of the n-by-n
-*>          matrix A computed by CGETC2:  A = P * L * U * Q
+*>          matrix A computed by AB_CGETC2:  A = P * L * U * Q
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -113,7 +113,7 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE CGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+      SUBROUTINE AB_CGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,12 +141,12 @@
       COMPLEX            TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASWP, CSCAL, SLABAD
+      EXTERNAL           AB_CLASWP, AB_CSCAL, AB_SLABAD
 *     ..
 *     .. External Functions ..
-      INTEGER            ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           ICAMAX, SLAMCH
+      INTEGER            AB_ICAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_ICAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, REAL
@@ -155,14 +155,14 @@
 *
 *     Set constant to control overflow
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *
-      CALL CLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
+      CALL AB_CLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
 *
 *     Solve for L part
 *
@@ -178,10 +178,10 @@
 *
 *     Check for scaling
 *
-      I = ICAMAX( N, RHS, 1 )
+      I = AB_ICAMAX( N, RHS, 1 )
       IF( TWO*SMLNUM*ABS( RHS( I ) ).GT.ABS( A( N, N ) ) ) THEN
          TEMP = CMPLX( ONE / TWO, ZERO ) / ABS( RHS( I ) )
-         CALL CSCAL( N, TEMP, RHS( 1 ), 1 )
+         CALL AB_CSCAL( N, TEMP, RHS( 1 ), 1 )
          SCALE = SCALE*REAL( TEMP )
       END IF
       DO 40 I = N, 1, -1
@@ -194,9 +194,9 @@
 *
 *     Apply permutations JPIV to the solution (RHS)
 *
-      CALL CLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
+      CALL AB_CLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
       RETURN
 *
-*     End of CGESC2
+*     End of AB_CGESC2
 *
       END

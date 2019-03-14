@@ -1,4 +1,4 @@
-*> \brief \b ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix.
+*> \brief \b AB_ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAESY + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaesy.f">
+*> Download AB_ZLAESY + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAESY.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaesy.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAESY.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaesy.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAESY.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
+*       SUBROUTINE AB_ZLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16         A, B, C, CS1, EVSCAL, RT1, RT2, SN1
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAESY computes the eigendecomposition of a 2-by-2 symmetric matrix
+*> AB_ZLAESY computes the eigendecomposition of a 2-by-2 symmetric matrix
 *>    ( ( A, B );( B, C ) )
 *> provided the norm of the matrix of eigenvectors is larger than
 *> some threshold value.
@@ -113,7 +113,7 @@
 *> \ingroup complex16SYauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
+      SUBROUTINE AB_ZLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -216,6 +216,6 @@
       END IF
       RETURN
 *
-*     End of ZLAESY
+*     End of AB_ZLAESY
 *
       END

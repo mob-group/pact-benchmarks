@@ -1,4 +1,4 @@
-*> \brief \b DGET54
+*> \brief \b AB_DGET54
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+*       SUBROUTINE AB_DGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
 *                          LDV, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> DGET54 checks a generalized decomposition of the form
+*> AB_DGET54 checks a generalized decomposition of the form
 *>
 *>          A = U*S*V'  and B = U*T* V'
 *>
@@ -44,7 +44,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, DGET54 does nothing.
+*>          The size of the matrix.  If it is zero, AB_DGET54 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -153,7 +153,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+      SUBROUTINE AB_DGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V
+     $,
      $                   LDV, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -184,11 +185,11 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY
+      EXTERNAL           AB_DGEMM, AB_DLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -201,36 +202,37 @@
 *
 *     Constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     compute the norm of (A,B)
 *
-      CALL DLACPY( 'Full', N, N, A, LDA, WORK, N )
-      CALL DLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
-      ABNORM = MAX( DLANGE( '1', N, 2*N, WORK, N, DUM ), UNFL )
+      CALL AB_DLACPY( 'Full', N, N, A, LDA, WORK, N )
+      CALL AB_DLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
+      ABNORM = MAX( AB_DLANGE( '1', N, 2*N, WORK, N, DUM ), UNFL )
 *
 *     Compute W1 = A - U*S*V', and put in the array WORK(1:N*N)
 *
-      CALL DLACPY( ' ', N, N, A, LDA, WORK, N )
-      CALL DGEMM( 'N', 'N', N, N, N, ONE, U, LDU, S, LDS, ZERO,
+      CALL AB_DLACPY( ' ', N, N, A, LDA, WORK, N )
+      CALL AB_DGEMM( 'N', 'N', N, N, N, ONE, U, LDU, S, LDS, ZERO,
      $            WORK( N*N+1 ), N )
 *
-      CALL DGEMM( 'N', 'C', N, N, N, -ONE, WORK( N*N+1 ), N, V, LDV,
+      CALL AB_DGEMM( 'N', 'C', N, N, N, -ONE, WORK( N*N+1 ), N, V, LDV,
      $            ONE, WORK, N )
 *
 *     Compute W2 = B - U*T*V', and put in the workarray W(N*N+1:2*N*N)
 *
-      CALL DLACPY( ' ', N, N, B, LDB, WORK( N*N+1 ), N )
-      CALL DGEMM( 'N', 'N', N, N, N, ONE, U, LDU, T, LDT, ZERO,
+      CALL AB_DLACPY( ' ', N, N, B, LDB, WORK( N*N+1 ), N )
+      CALL AB_DGEMM( 'N', 'N', N, N, N, ONE, U, LDU, T, LDT, ZERO,
      $            WORK( 2*N*N+1 ), N )
 *
-      CALL DGEMM( 'N', 'C', N, N, N, -ONE, WORK( 2*N*N+1 ), N, V, LDV,
+      CALL AB_DGEMM( 'N', 'C', N, N, N, -ONE, WORK( 2*N*N+1 ), N, V, LDV
+     $,
      $            ONE, WORK( N*N+1 ), N )
 *
 *     Compute norm(W)/ ( ulp*norm((A,B)) )
 *
-      WNORM = DLANGE( '1', N, 2*N, WORK, N, DUM )
+      WNORM = AB_DLANGE( '1', N, 2*N, WORK, N, DUM )
 *
       IF( ABNORM.GT.WNORM ) THEN
          RESULT = ( WNORM / ABNORM ) / ( 2*N*ULP )
@@ -244,6 +246,6 @@
 *
       RETURN
 *
-*     End of DGET54
+*     End of AB_DGET54
 *
       END

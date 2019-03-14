@@ -1,4 +1,4 @@
-*> \brief \b DERRLQTP
+*> \brief \b AB_AB_AB_DERRLQTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DERRLQTP( PATH, NUNIT )
+*       SUBROUTINE AB_AB_AB_DERRLQTP( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DERRLQTP tests the error exits for the REAL routines
+*> AB_AB_AB_DERRLQTP tests the error exits for the REAL routines
 *> that use the LQT decomposition of a triangular-pentagonal matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DERRLQTP( PATH, NUNIT )
+      SUBROUTINE AB_AB_AB_DERRLQTP( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,8 @@
      $                   B( NMAX, NMAX ), C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, DTPLQT2, DTPLQT,
-     $                   DTPMLQT
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_DTPLQT2, AB_DTPLQT,
+     $                   AB_DTPMLQT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,112 +114,112 @@
 *
 *     Error exits for TPLQT factorization
 *
-*     DTPLQT
+*     AB_DTPLQT
 *
-      SRNAMT = 'DTPLQT'
+      SRNAMT = 'AB_DTPLQT'
       INFOT = 1
-      CALL DTPLQT( -1, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( -1, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DTPLQT( 1, -1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( 1, -1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL DTPLQT( 0, 1, -1, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( 0, 1, -1, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL DTPLQT( 0, 1, 1, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( 0, 1, 1, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DTPLQT( 0, 1, 0, 0, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( 0, 1, 0, 0, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DTPLQT( 1, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( 1, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL DTPLQT( 2, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( 2, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL DTPLQT( 2, 1, 0, 1, A, 2, B, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( 2, 1, 0, 1, A, 2, B, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL DTPLQT( 2, 2, 1, 2, A, 2, B, 2, T, 1, W, INFO )
-      CALL CHKXER( 'DTPLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_DTPLQT( 2, 2, 1, 2, A, 2, B, 2, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_DTPLQT', INFOT, NOUT, LERR, OK )
 *
-*     DTPLQT2
+*     AB_AB_DTPLQT2
 *
-      SRNAMT = 'DTPLQT2'
+      SRNAMT = 'AB_AB_DTPLQT2'
       INFOT = 1
-      CALL DTPLQT2( -1, 0, 0, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'DTPLQT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DTPLQT2( -1, 0, 0, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_DTPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DTPLQT2( 0, -1, 0, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'DTPLQT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DTPLQT2( 0, -1, 0, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_DTPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL DTPLQT2( 0, 0, -1, A, 1, B, 1, T, 1, INFO )
-      CALL CHKXER( 'DTPLQT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DTPLQT2( 0, 0, -1, A, 1, B, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_DTPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DTPLQT2( 2, 2, 0, A, 1, B, 2, T, 2, INFO )
-      CALL CHKXER( 'DTPLQT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DTPLQT2( 2, 2, 0, A, 1, B, 2, T, 2, INFO )
+      CALL AB_CHKXER( 'AB_AB_DTPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL DTPLQT2( 2, 2, 0, A, 2, B, 1, T, 2, INFO )
-      CALL CHKXER( 'DTPLQT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DTPLQT2( 2, 2, 0, A, 2, B, 1, T, 2, INFO )
+      CALL AB_CHKXER( 'AB_AB_DTPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL DTPLQT2( 2, 2, 0, A, 2, B, 2, T, 1, INFO )
-      CALL CHKXER( 'DTPLQT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DTPLQT2( 2, 2, 0, A, 2, B, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_DTPLQT2', INFOT, NOUT, LERR, OK )
 *
-*     DTPMLQT
+*     AB_DTPMLQT
 *
-      SRNAMT = 'DTPMLQT'
+      SRNAMT = 'AB_DTPMLQT'
       INFOT = 1
-      CALL DTPMLQT( '/', 'N', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_DTPMLQT( '/', 'N', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DTPMLQT( 'L', '/', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_DTPMLQT( 'L', '/', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL DTPMLQT( 'L', 'N', -1, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_DTPMLQT( 'L', 'N', -1, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DTPMLQT( 'L', 'N', 0, -1, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_DTPMLQT( 'L', 'N', 0, -1, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DTPMLQT( 'L', 'N', 0, 0, -1, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_DTPMLQT( 'L', 'N', 0, 0, -1, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
       INFOT = 6
-      CALL DTPMLQT( 'L', 'N', 0, 0, 0, -1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_DTPMLQT( 'L', 'N', 0, 0, 0, -1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL DTPMLQT( 'L', 'N', 0, 0, 0, 0, 0, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_DTPMLQT( 'L', 'N', 0, 0, 0, 0, 0, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL DTPMLQT( 'R', 'N', 2, 2, 2, 1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL AB_DTPMLQT( 'R', 'N', 2, 2, 2, 1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL DTPMLQT( 'R', 'N', 1, 1, 1, 1, 1, A, 1, T, 0, B, 1, C, 1,
+      CALL AB_DTPMLQT( 'R', 'N', 1, 1, 1, 1, 1, A, 1, T, 0, B, 1, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL DTPMLQT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 0, C, 1,
+      CALL AB_DTPMLQT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 0, C, 1,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 15
-      CALL DTPMLQT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 0,
+      CALL AB_DTPMLQT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 0,
      $              W, INFO )
-      CALL CHKXER( 'DTPMLQT', INFOT, NOUT, LERR, OK )
+      CALL AB_CHKXER( 'AB_DTPMLQT', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of DERRLQT
+*     End of AB_AB_DERRLQT
 *
       END

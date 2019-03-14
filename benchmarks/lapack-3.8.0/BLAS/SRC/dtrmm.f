@@ -1,4 +1,4 @@
-*> \brief \b DTRMM
+*> \brief \b AB_DTRMM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+*       SUBROUTINE AB_DTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION ALPHA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DTRMM  performs one of the matrix-matrix operations
+*> AB_DTRMM  performs one of the matrix-matrix operations
 *>
 *>    B := alpha*op( A )*B,   or   B := alpha*B*op( A ),
 *>
@@ -175,7 +175,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+      SUBROUTINE AB_DTRMM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
 *
 *  -- Reference BLAS level3 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -194,11 +194,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -215,25 +215,26 @@
 *
 *     Test the input parameters.
 *
-      LSIDE = LSAME(SIDE,'L')
+      LSIDE = AB_LSAME(SIDE,'L')
       IF (LSIDE) THEN
           NROWA = M
       ELSE
           NROWA = N
       END IF
-      NOUNIT = LSAME(DIAG,'N')
-      UPPER = LSAME(UPLO,'U')
+      NOUNIT = AB_LSAME(DIAG,'N')
+      UPPER = AB_LSAME(UPLO,'U')
 *
       INFO = 0
-      IF ((.NOT.LSIDE) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
+      IF ((.NOT.LSIDE) .AND. (.NOT.AB_LSAME(SIDE,'R'))) THEN
           INFO = 1
-      ELSE IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
+      ELSE IF ((.NOT.UPPER) .AND. (.NOT.AB_LSAME(UPLO,'L'))) THEN
           INFO = 2
-      ELSE IF ((.NOT.LSAME(TRANSA,'N')) .AND.
-     +         (.NOT.LSAME(TRANSA,'T')) .AND.
-     +         (.NOT.LSAME(TRANSA,'C'))) THEN
+      ELSE IF ((.NOT.AB_LSAME(TRANSA,'N')) .AND.
+     +         (.NOT.AB_LSAME(TRANSA,'T')) .AND.
+     +         (.NOT.AB_LSAME(TRANSA,'C'))) THEN
           INFO = 3
-      ELSE IF ((.NOT.LSAME(DIAG,'U')) .AND. (.NOT.LSAME(DIAG,'N'))) THEN
+      ELSE IF ((.NOT.AB_LSAME(DIAG,'U')) .AND. (.NOT.AB_LSAME(DIAG,'N
+     $'))) THEN
           INFO = 4
       ELSE IF (M.LT.0) THEN
           INFO = 5
@@ -245,7 +246,7 @@
           INFO = 11
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('DTRMM ',INFO)
+          CALL AB_XERBLA('AB_DTRMM ',INFO)
           RETURN
       END IF
 *
@@ -267,7 +268,7 @@
 *     Start the operations.
 *
       IF (LSIDE) THEN
-          IF (LSAME(TRANSA,'N')) THEN
+          IF (AB_LSAME(TRANSA,'N')) THEN
 *
 *           Form  B := alpha*A*B.
 *
@@ -327,7 +328,7 @@
               END IF
           END IF
       ELSE
-          IF (LSAME(TRANSA,'N')) THEN
+          IF (AB_LSAME(TRANSA,'N')) THEN
 *
 *           Form  B := alpha*B*A.
 *
@@ -410,6 +411,6 @@
 *
       RETURN
 *
-*     End of DTRMM .
+*     End of AB_DTRMM .
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CCHKPB
+*> \brief \b AB_CCHKPB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKPB( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*       SUBROUTINE AB_CCHKPB( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
 *                          THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
 *                          XACT, WORK, RWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKPB tests CPBTRF, -TRS, -RFS, and -CON.
+*> AB_CCHKPB tests AB_CPBTRF, -TRS, -RFS, and -CON.
 *> \endverbatim
 *
 *  Arguments:
@@ -164,7 +164,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKPB( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+      SUBROUTINE AB_CCHKPB( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                   THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
      $                   XACT, WORK, RWORK, NOUT )
 *
@@ -211,14 +211,17 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, CLANHB, SGET06
-      EXTERNAL           CLANGE, CLANHB, SGET06
+      REAL               AB_CLANGE, AB_CLANHB, AB_SGET06
+      EXTERNAL           AB_CLANGE, AB_CLANHB, AB_SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CCOPY, CERRPO, CGET04,
-     $                   CLACPY, CLAIPD, CLARHS, CLASET, CLATB4, CLATMS,
-     $                   CPBCON, CPBRFS, CPBT01, CPBT02, CPBT05, CPBTRF,
-     $                   CPBTRS, CSWAP, XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CCOPY, AB_CE
+     $RRPO, AB_CGET04,
+     $                   AB_CLACPY, AB_CLAIPD, AB_CLARHS, AB_CLASET, AB_
+     $CLATB4, AB_CLATMS,
+     $                   AB_CPBCON, AB_CPBRFS, AB_CPBT01, AB_CPBT02, AB_
+     $CPBT05, AB_CPBTRF,
+     $                   AB_CPBTRS, AB_CSWAP, AB_XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN
@@ -251,7 +254,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRPO( PATH, NOUT )
+     $   CALL AB_CERRPO( PATH, NOUT )
       INFOT = 0
       KDVAL( 1 ) = 0
 *
@@ -310,21 +313,24 @@
 *
                   IF( .NOT.ZEROT .OR. .NOT.DOTYPE( 1 ) ) THEN
 *
-*                    Set up parameters with CLATB4 and generate a test
-*                    matrix with CLATMS.
+*                    Set up parameters with AB_CLATB4 and generate a test
+*                    matrix with AB_CLATMS.
 *
-                     CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+                     CALL AB_CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANO
+     $RM,
      $                            MODE, CNDNUM, DIST )
 *
-                     SRNAMT = 'CLATMS'
-                     CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                     SRNAMT = 'AB_CLATMS'
+                     CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MOD
+     $E,
      $                            CNDNUM, ANORM, KD, KD, PACKIT,
      $                            A( KOFF ), LDAB, WORK, INFO )
 *
-*                    Check error code from CLATMS.
+*                    Check error code from AB_CLATMS.
 *
                      IF( INFO.NE.0 ) THEN
-                        CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N,
+                        CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, UPLO
+     $, N,
      $                               N, KD, KD, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
                         GO TO 60
@@ -337,19 +343,19 @@
                      IW = 2*LDA + 1
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDAB + KD + 1
-                        CALL CCOPY( IZERO-I1, WORK( IW ), 1,
+                        CALL AB_CCOPY( IZERO-I1, WORK( IW ), 1,
      $                              A( IOFF-IZERO+I1 ), 1 )
                         IW = IW + IZERO - I1
-                        CALL CCOPY( I2-IZERO+1, WORK( IW ), 1,
+                        CALL AB_CCOPY( I2-IZERO+1, WORK( IW ), 1,
      $                              A( IOFF ), MAX( LDAB-1, 1 ) )
                      ELSE
                         IOFF = ( I1-1 )*LDAB + 1
-                        CALL CCOPY( IZERO-I1, WORK( IW ), 1,
+                        CALL AB_CCOPY( IZERO-I1, WORK( IW ), 1,
      $                              A( IOFF+IZERO-I1 ),
      $                              MAX( LDAB-1, 1 ) )
                         IOFF = ( IZERO-1 )*LDAB + 1
                         IW = IW + IZERO - I1
-                        CALL CCOPY( I2-IZERO+1, WORK( IW ), 1,
+                        CALL AB_CCOPY( I2-IZERO+1, WORK( IW ), 1,
      $                              A( IOFF ), 1 )
                      END IF
                   END IF
@@ -379,18 +385,18 @@
 *
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDAB + KD + 1
-                        CALL CSWAP( IZERO-I1, A( IOFF-IZERO+I1 ), 1,
+                        CALL AB_CSWAP( IZERO-I1, A( IOFF-IZERO+I1 ), 1,
      $                              WORK( IW ), 1 )
                         IW = IW + IZERO - I1
-                        CALL CSWAP( I2-IZERO+1, A( IOFF ),
+                        CALL AB_CSWAP( I2-IZERO+1, A( IOFF ),
      $                              MAX( LDAB-1, 1 ), WORK( IW ), 1 )
                      ELSE
                         IOFF = ( I1-1 )*LDAB + 1
-                        CALL CSWAP( IZERO-I1, A( IOFF+IZERO-I1 ),
+                        CALL AB_CSWAP( IZERO-I1, A( IOFF+IZERO-I1 ),
      $                              MAX( LDAB-1, 1 ), WORK( IW ), 1 )
                         IOFF = ( IZERO-1 )*LDAB + 1
                         IW = IW + IZERO - I1
-                        CALL CSWAP( I2-IZERO+1, A( IOFF ), 1,
+                        CALL AB_CSWAP( I2-IZERO+1, A( IOFF ), 1,
      $                              WORK( IW ), 1 )
                      END IF
                   END IF
@@ -398,28 +404,30 @@
 *                 Set the imaginary part of the diagonals.
 *
                   IF( IUPLO.EQ.1 ) THEN
-                     CALL CLAIPD( N, A( KD+1 ), LDAB, 0 )
+                     CALL AB_CLAIPD( N, A( KD+1 ), LDAB, 0 )
                   ELSE
-                     CALL CLAIPD( N, A( 1 ), LDAB, 0 )
+                     CALL AB_CLAIPD( N, A( 1 ), LDAB, 0 )
                   END IF
 *
 *                 Do for each value of NB in NBVAL
 *
                   DO 50 INB = 1, NNB
                      NB = NBVAL( INB )
-                     CALL XLAENV( 1, NB )
+                     CALL AB_XLAENV( 1, NB )
 *
 *                    Compute the L*L' or U'*U factorization of the band
 *                    matrix.
 *
-                     CALL CLACPY( 'Full', KD+1, N, A, LDAB, AFAC, LDAB )
-                     SRNAMT = 'CPBTRF'
-                     CALL CPBTRF( UPLO, N, KD, AFAC, LDAB, INFO )
+                     CALL AB_CLACPY( 'Full', KD+1, N, A, LDAB, AFAC, LDA
+     $B )
+                     SRNAMT = 'AB_CPBTRF'
+                     CALL AB_CPBTRF( UPLO, N, KD, AFAC, LDAB, INFO )
 *
-*                    Check error code from CPBTRF.
+*                    Check error code from AB_CPBTRF.
 *
                      IF( INFO.NE.IZERO ) THEN
-                        CALL ALAERH( PATH, 'CPBTRF', INFO, IZERO, UPLO,
+                        CALL AB_ALAERH( PATH, 'AB_CPBTRF', INFO, IZERO, 
+     $UPLO,
      $                               N, N, KD, KD, NB, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 50
@@ -434,16 +442,16 @@
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL CLACPY( 'Full', KD+1, N, AFAC, LDAB, AINV,
+                     CALL AB_CLACPY( 'Full', KD+1, N, AFAC, LDAB, AINV,
      $                            LDAB )
-                     CALL CPBT01( UPLO, N, KD, A, LDAB, AINV, LDAB,
+                     CALL AB_CPBT01( UPLO, N, KD, A, LDAB, AINV, LDAB,
      $                            RWORK, RESULT( 1 ) )
 *
 *                    Print the test ratio if it is .GE. THRESH.
 *
                      IF( RESULT( 1 ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, KD, NB, IMAT,
      $                     1, RESULT( 1 )
                         NFAIL = NFAIL + 1
@@ -458,16 +466,18 @@
 *                    Form the inverse of A so we can get a good estimate
 *                    of RCONDC = 1/(norm(A) * norm(inv(A))).
 *
-                     CALL CLASET( 'Full', N, N, CMPLX( ZERO ),
+                     CALL AB_CLASET( 'Full', N, N, CMPLX( ZERO ),
      $                            CMPLX( ONE ), AINV, LDA )
-                     SRNAMT = 'CPBTRS'
-                     CALL CPBTRS( UPLO, N, KD, N, AFAC, LDAB, AINV, LDA,
+                     SRNAMT = 'AB_CPBTRS'
+                     CALL AB_CPBTRS( UPLO, N, KD, N, AFAC, LDAB, AINV, L
+     $DA,
      $                            INFO )
 *
 *                    Compute RCONDC = 1/(norm(A) * norm(inv(A))).
 *
-                     ANORM = CLANHB( '1', UPLO, N, KD, A, LDAB, RWORK )
-                     AINVNM = CLANGE( '1', N, N, AINV, LDA, RWORK )
+                     ANORM = AB_CLANHB( '1', UPLO, N, KD, A, LDAB, RWORK
+     $ )
+                     AINVNM = AB_CLANGE( '1', N, N, AINV, LDA, RWORK )
                      IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                         RCONDC = ONE
                      ELSE
@@ -480,53 +490,63 @@
 *+    TEST 2
 *                    Solve and compute residual for A * X = B.
 *
-                        SRNAMT = 'CLARHS'
-                        CALL CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KD,
+                        SRNAMT = 'AB_CLARHS'
+                        CALL AB_CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KD
+     $,
      $                               KD, NRHS, A, LDAB, XACT, LDA, B,
      $                               LDA, ISEED, INFO )
-                        CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA 
+     $)
 *
-                        SRNAMT = 'CPBTRS'
-                        CALL CPBTRS( UPLO, N, KD, NRHS, AFAC, LDAB, X,
+                        SRNAMT = 'AB_CPBTRS'
+                        CALL AB_CPBTRS( UPLO, N, KD, NRHS, AFAC, LDAB, X
+     $,
      $                               LDA, INFO )
 *
-*                    Check error code from CPBTRS.
+*                    Check error code from AB_CPBTRS.
 *
                         IF( INFO.NE.0 )
-     $                     CALL ALAERH( PATH, 'CPBTRS', INFO, 0, UPLO,
+     $                     CALL AB_ALAERH( PATH, 'AB_CPBTRS', INFO, 0, U
+     $PLO,
      $                                  N, N, KD, KD, NRHS, IMAT, NFAIL,
      $                                  NERRS, NOUT )
 *
-                        CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK,
+                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK,
      $                               LDA )
-                        CALL CPBT02( UPLO, N, KD, NRHS, A, LDAB, X, LDA,
+                        CALL AB_CPBT02( UPLO, N, KD, NRHS, A, LDAB, X, L
+     $DA,
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
 *
 *+    TEST 3
 *                    Check solution from generated exact solution.
 *
-                        CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                        CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCON
+     $DC,
      $                               RESULT( 3 ) )
 *
 *+    TESTS 4, 5, and 6
 *                    Use iterative refinement to improve the solution.
 *
-                        SRNAMT = 'CPBRFS'
-                        CALL CPBRFS( UPLO, N, KD, NRHS, A, LDAB, AFAC,
+                        SRNAMT = 'AB_CPBRFS'
+                        CALL AB_CPBRFS( UPLO, N, KD, NRHS, A, LDAB, AFAC
+     $,
      $                               LDAB, B, LDA, X, LDA, RWORK,
      $                               RWORK( NRHS+1 ), WORK,
      $                               RWORK( 2*NRHS+1 ), INFO )
 *
-*                    Check error code from CPBRFS.
+*                    Check error code from AB_CPBRFS.
 *
                         IF( INFO.NE.0 )
-     $                     CALL ALAERH( PATH, 'CPBRFS', INFO, 0, UPLO,
+     $                     CALL AB_ALAERH( PATH, 'AB_CPBRFS', INFO, 0, U
+     $PLO,
      $                                  N, N, KD, KD, NRHS, IMAT, NFAIL,
      $                                  NERRS, NOUT )
 *
-                        CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                        CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCON
+     $DC,
      $                               RESULT( 4 ) )
-                        CALL CPBT05( UPLO, N, KD, NRHS, A, LDAB, B, LDA,
+                        CALL AB_CPBT05( UPLO, N, KD, NRHS, A, LDAB, B, L
+     $DA,
      $                               X, LDA, XACT, LDA, RWORK,
      $                               RWORK( NRHS+1 ), RESULT( 5 ) )
 *
@@ -536,7 +556,7 @@
                         DO 30 K = 2, 6
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL ALAHD( NOUT, PATH )
+     $                           CALL AB_ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9998 )UPLO, N, KD,
      $                           NRHS, IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
@@ -548,24 +568,26 @@
 *+    TEST 7
 *                    Get an estimate of RCOND = 1/CNDNUM.
 *
-                     SRNAMT = 'CPBCON'
-                     CALL CPBCON( UPLO, N, KD, AFAC, LDAB, ANORM, RCOND,
+                     SRNAMT = 'AB_CPBCON'
+                     CALL AB_CPBCON( UPLO, N, KD, AFAC, LDAB, ANORM, RCO
+     $ND,
      $                            WORK, RWORK, INFO )
 *
-*                    Check error code from CPBCON.
+*                    Check error code from AB_CPBCON.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'CPBCON', INFO, 0, UPLO, N,
+     $                  CALL AB_ALAERH( PATH, 'AB_CPBCON', INFO, 0, UPLO
+     $, N,
      $                               N, KD, KD, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
-                     RESULT( 7 ) = SGET06( RCOND, RCONDC )
+                     RESULT( 7 ) = AB_SGET06( RCOND, RCONDC )
 *
 *                    Print the test ratio if it is .GE. THRESH.
 *
                      IF( RESULT( 7 ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9997 )UPLO, N, KD, IMAT, 7,
      $                     RESULT( 7 )
                         NFAIL = NFAIL + 1
@@ -579,7 +601,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO=''', A1, ''', N=', I5, ', KD=', I5, ', NB=', I4,
      $      ', type ', I2, ', test ', I2, ', ratio= ', G12.5 )
@@ -589,6 +611,6 @@
      $      ' type ', I2, ', test(', I2, ') = ', G12.5 )
       RETURN
 *
-*     End of CCHKPB
+*     End of AB_CCHKPB
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZSYTRF_AA
+*> \brief \b AB_AB_ZSYTRF_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZSYTRF_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytrf_aa.f">
+*> Download AB_AB_ZSYTRF_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZSYTRF_AA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytrf_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZSYTRF_AA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrf_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZSYTRF_AA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE AB_AB_ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZSYTRF_AA computes the factorization of a complex symmetric matrix A
+*> AB_AB_ZSYTRF_AA computes the factorization of a complex symmetric matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**T  or  A = L*T*L**T
@@ -107,7 +107,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -130,7 +130,8 @@
 *> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
+      SUBROUTINE AB_AB_ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, IN
+     $FO)
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -160,13 +161,14 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASYF_AA, ZGEMM, ZGEMV, ZSCAL, ZCOPY,
-     $                   ZSWAP, XERBLA
+      EXTERNAL           AB_AB_ZLASYF_AA, AB_ZGEMM, AB_ZGEMV, AB_ZSCAL, 
+     $AB_ZCOPY,
+     $                   AB_ZSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -175,14 +177,14 @@
 *
 *     Determine the block size
 *
-      NB = ILAENV( 1, 'ZSYTRF_AA', UPLO, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_AB_ZSYTRF_AA', UPLO, N, -1, -1, -1 )
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -198,7 +200,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZSYTRF_AA', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZSYTRF_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -228,10 +230,10 @@
 *
 *        Copy first row A(1, 1:N) into H(1:n) (stored in WORK(1:N))
 *
-         CALL ZCOPY( N, A( 1, 1 ), LDA, WORK( 1 ), 1 )
+         CALL AB_ZCOPY( N, A( 1, 1 ), LDA, WORK( 1 ), 1 )
 *
 *        J is the main loop index, increasing from 1 to N in steps of
-*        JB, where JB is the number of columns factorized by ZLASYF;
+*        JB, where JB is the number of columns factorized by AB_ZLASYF;
 *        JB is either NB, or N-J+1 for the last block
 *
          J = 0
@@ -252,7 +254,7 @@
 *
 *        Panel factorization
 *
-         CALL ZLASYF_AA( UPLO, 2-K1, N-J, JB,
+         CALL AB_AB_ZLASYF_AA( UPLO, 2-K1, N-J, JB,
      $                   A( MAX(1, J), J+1 ), LDA,
      $                   IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
 *
@@ -261,7 +263,7 @@
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL ZSWAP( J1-K1-2, A( 1, J2 ), 1,
+               CALL AB_ZSWAP( J1-K1-2, A( 1, J2 ), 1,
      $                              A( 1, IPIV(J2) ), 1 )
             END IF
          END DO
@@ -281,9 +283,9 @@
 *
                ALPHA = A( J, J+1 )
                A( J, J+1 ) = ONE
-               CALL ZCOPY( N-J, A( J-1, J+1 ), LDA,
+               CALL AB_ZCOPY( N-J, A( J-1, J+1 ), LDA,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
-               CALL ZSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
+               CALL AB_ZSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
 *
 *              K1 identifies if the previous column of the panel has been
 *               explicitly stored, e.g., K1=1 and K2= 0 for the first panel,
@@ -308,20 +310,20 @@
                DO J2 = J+1, N, NB
                   NJ = MIN( NB, N-J2+1 )
 *
-*                 Update (J2, J2) diagonal block with ZGEMV
+*                 Update (J2, J2) diagonal block with AB_ZGEMV
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL ZGEMV( 'No transpose', MJ, JB+1,
+                     CALL AB_ZGEMV( 'No transpose', MJ, JB+1,
      $                          -ONE, WORK( J3-J1+1+K1*N ), N,
      $                                A( J1-K2, J3 ), 1,
      $                           ONE, A( J3, J3 ), LDA )
                      J3 = J3 + 1
                   END DO
 *
-*                 Update off-diagonal block of J2-th block row with ZGEMM
+*                 Update off-diagonal block of J2-th block row with AB_ZGEMM
 *
-                  CALL ZGEMM( 'Transpose', 'Transpose',
+                  CALL AB_ZGEMM( 'Transpose', 'Transpose',
      $                        NJ, N-J3+1, JB+1,
      $                       -ONE, A( J1-K2, J2 ), LDA,
      $                             WORK( J3-J1+1+K1*N ), N,
@@ -335,7 +337,7 @@
 *
 *           WORK(J+1, 1) stores H(J+1, 1)
 *
-            CALL ZCOPY( N-J, A( J+1, J+1 ), LDA, WORK( 1 ), 1 )
+            CALL AB_ZCOPY( N-J, A( J+1, J+1 ), LDA, WORK( 1 ), 1 )
          END IF
          GO TO 10
       ELSE
@@ -347,10 +349,10 @@
 *        copy first column A(1:N, 1) into H(1:N, 1)
 *         (stored in WORK(1:N))
 *
-         CALL ZCOPY( N, A( 1, 1 ), 1, WORK( 1 ), 1 )
+         CALL AB_ZCOPY( N, A( 1, 1 ), 1, WORK( 1 ), 1 )
 *
 *        J is the main loop index, increasing from 1 to N in steps of
-*        JB, where JB is the number of columns factorized by ZLASYF;
+*        JB, where JB is the number of columns factorized by AB_ZLASYF;
 *        JB is either NB, or N-J+1 for the last block
 *
          J = 0
@@ -371,7 +373,7 @@
 *
 *        Panel factorization
 *
-         CALL ZLASYF_AA( UPLO, 2-K1, N-J, JB,
+         CALL AB_AB_ZLASYF_AA( UPLO, 2-K1, N-J, JB,
      $                   A( J+1, MAX(1, J) ), LDA,
      $                   IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
 *
@@ -380,7 +382,7 @@
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL ZSWAP( J1-K1-2, A( J2, 1 ), LDA,
+               CALL AB_ZSWAP( J1-K1-2, A( J2, 1 ), LDA,
      $                              A( IPIV(J2), 1 ), LDA )
             END IF
          END DO
@@ -400,9 +402,9 @@
 *
                ALPHA = A( J+1, J )
                A( J+1, J ) = ONE
-               CALL ZCOPY( N-J, A( J+1, J-1 ), 1,
+               CALL AB_ZCOPY( N-J, A( J+1, J-1 ), 1,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
-               CALL ZSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
+               CALL AB_ZSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
 *
 *              K1 identifies if the previous column of the panel has been
 *               explicitly stored, e.g., K1=1 and K2= 0 for the first panel,
@@ -427,20 +429,20 @@
                DO J2 = J+1, N, NB
                   NJ = MIN( NB, N-J2+1 )
 *
-*                 Update (J2, J2) diagonal block with ZGEMV
+*                 Update (J2, J2) diagonal block with AB_ZGEMV
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL ZGEMV( 'No transpose', MJ, JB+1,
+                     CALL AB_ZGEMV( 'No transpose', MJ, JB+1,
      $                          -ONE, WORK( J3-J1+1+K1*N ), N,
      $                                A( J3, J1-K2 ), LDA,
      $                           ONE, A( J3, J3 ), 1 )
                      J3 = J3 + 1
                   END DO
 *
-*                 Update off-diagonal block in J2-th block column with ZGEMM
+*                 Update off-diagonal block in J2-th block column with AB_ZGEMM
 *
-                  CALL ZGEMM( 'No transpose', 'Transpose',
+                  CALL AB_ZGEMM( 'No transpose', 'Transpose',
      $                        N-J3+1, NJ, JB+1,
      $                       -ONE, WORK( J3-J1+1+K1*N ), N,
      $                             A( J2, J1-K2 ), LDA,
@@ -454,7 +456,7 @@
 *
 *           WORK(J+1, 1) stores H(J+1, 1)
 *
-            CALL ZCOPY( N-J, A( J+1, J+1 ), 1, WORK( 1 ), 1 )
+            CALL AB_ZCOPY( N-J, A( J+1, J+1 ), 1, WORK( 1 ), 1 )
          END IF
          GO TO 11
       END IF
@@ -462,6 +464,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of ZSYTRF_AA
+*     End of AB_AB_ZSYTRF_AA
 *
       END

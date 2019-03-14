@@ -1,4 +1,4 @@
-*> \brief \b CGET23
+*> \brief \b AB_CGET23
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
+*       SUBROUTINE AB_CGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
 *                          NOUNIT, N, A, LDA, H, W, W1, VL, LDVL, VR,
 *                          LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
 *                          RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*>    CGET23  checks the nonsymmetric eigenvalue problem driver CGEEVX.
+*>    AB_CGET23  checks the nonsymmetric eigenvalue problem driver AB_AB_CGEEVX.
 *>    If COMP = .FALSE., the first 8 of the following tests will be
 *>    performed on the input matrix A, and also test 9 if LWORK is
 *>    sufficiently large.
@@ -99,7 +99,7 @@
 *>   (10)     |RCONDV - RCDVIN| / cond(RCONDV)
 *>
 *>      RCONDV is the reciprocal right eigenvector condition number
-*>      computed by CGEEVX and RCDVIN (the precomputed true value)
+*>      computed by AB_AB_CGEEVX and RCDVIN (the precomputed true value)
 *>      is supplied as input. cond(RCONDV) is the condition number of
 *>      RCONDV, and takes errors in computing RCONDV into account, so
 *>      that the resulting quantity should be O(ULP). cond(RCONDV) is
@@ -108,7 +108,7 @@
 *>   (11)     |RCONDE - RCDEIN| / cond(RCONDE)
 *>
 *>      RCONDE is the reciprocal eigenvalue condition number
-*>      computed by CGEEVX and RCDEIN (the precomputed true value)
+*>      computed by AB_AB_CGEEVX and RCDEIN (the precomputed true value)
 *>      is supplied as input.  cond(RCONDE) is the condition number
 *>      of RCONDE, and takes errors in computing RCONDE into account,
 *>      so that the resulting quantity should be O(ULP). cond(RCONDE)
@@ -205,7 +205,7 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX array, dimension (LDA,N)
-*>          Another copy of the test matrix A, modified by CGEEVX.
+*>          Another copy of the test matrix A, modified by AB_AB_CGEEVX.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -218,7 +218,7 @@
 *> \verbatim
 *>          W1 is COMPLEX array, dimension (N)
 *>          Like W, this array contains the eigenvalues of A,
-*>          but those computed when CGEEVX only computes a partial
+*>          but those computed when AB_AB_CGEEVX only computes a partial
 *>          eigendecomposition, i.e. not the eigenvalues and left
 *>          and right eigenvectors.
 *> \endverbatim
@@ -345,7 +345,7 @@
 *>          INFO is INTEGER
 *>          If 0,  successful exit.
 *>          If <0, input parameter -INFO had an incorrect value.
-*>          If >0, CGEEVX returned an error code, the absolute
+*>          If >0, AB_AB_CGEEVX returned an error code, the absolute
 *>                 value of which is returned.
 *> \endverbatim
 *
@@ -362,7 +362,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
+      SUBROUTINE AB_CGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
      $                   NOUNIT, N, A, LDA, H, W, W1, VL, LDVL, VR,
      $                   LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
      $                   RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
@@ -415,12 +415,12 @@
       COMPLEX            CDUM( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SCNRM2, SLAMCH
-      EXTERNAL           LSAME, SCNRM2, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_SCNRM2, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SCNRM2, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEEVX, CGET22, CLACPY, XERBLA
+      EXTERNAL           AB_AB_CGEEVX, AB_CGET22, AB_CLACPY, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -432,9 +432,9 @@
 *
 *     Check for errors
 *
-      NOBAL = LSAME( BALANC, 'N' )
-      BALOK = NOBAL .OR. LSAME( BALANC, 'P' ) .OR.
-     $        LSAME( BALANC, 'S' ) .OR. LSAME( BALANC, 'B' )
+      NOBAL = AB_LSAME( BALANC, 'N' )
+      BALOK = NOBAL .OR. AB_LSAME( BALANC, 'P' ) .OR.
+     $        AB_LSAME( BALANC, 'S' ) .OR. AB_LSAME( BALANC, 'B' )
       INFO = 0
       IF( ISRT.NE.0 .AND. ISRT.NE.1 ) THEN
          INFO = -2
@@ -454,12 +454,13 @@
          INFO = -17
       ELSE IF( LDLRE.LT.1 .OR. LDLRE.LT.N ) THEN
          INFO = -19
-      ELSE IF( LWORK.LT.2*N .OR. ( COMP .AND. LWORK.LT.2*N+N*N ) ) THEN
+      ELSE IF( LWORK.LT.2*N .OR. ( COMP .AND. LWORK.LT.2*N+N*N ) ) TH
+     $EN
          INFO = -30
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGET23', -INFO )
+         CALL AB_XERBLA( 'AB_CGET23', -INFO )
          RETURN
       END IF
 *
@@ -474,8 +475,8 @@
 *
 *     More Important constants
 *
-      ULP = SLAMCH( 'Precision' )
-      SMLNUM = SLAMCH( 'S' )
+      ULP = AB_SLAMCH( 'Precision' )
+      SMLNUM = AB_SLAMCH( 'S' )
       ULPINV = ONE / ULP
 *
 *     Compute eigenvalues and eigenvectors, and test them
@@ -487,17 +488,19 @@
          SENSE = 'E'
          ISENSM = 1
       END IF
-      CALL CLACPY( 'F', N, N, A, LDA, H, LDA )
-      CALL CGEEVX( BALANC, 'V', 'V', SENSE, N, H, LDA, W, VL, LDVL, VR,
+      CALL AB_CLACPY( 'F', N, N, A, LDA, H, LDA )
+      CALL AB_AB_CGEEVX( BALANC, 'V', 'V', SENSE, N, H, LDA, W, VL, LDVL
+     $, VR,
      $             LDVR, ILO, IHI, SCALE, ABNRM, RCONDE, RCONDV, WORK,
      $             LWORK, RWORK, IINFO )
       IF( IINFO.NE.0 ) THEN
          RESULT( 1 ) = ULPINV
          IF( JTYPE.NE.22 ) THEN
-            WRITE( NOUNIT, FMT = 9998 )'CGEEVX1', IINFO, N, JTYPE,
+            WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEEVX1', IINFO, N, JTYPE,
      $         BALANC, ISEED
          ELSE
-            WRITE( NOUNIT, FMT = 9999 )'CGEEVX1', IINFO, N, ISEED( 1 )
+            WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEEVX1', IINFO, N, ISEED(
+     $ 1 )
          END IF
          INFO = ABS( IINFO )
          RETURN
@@ -505,20 +508,22 @@
 *
 *     Do Test (1)
 *
-      CALL CGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, W, WORK, RWORK,
+      CALL AB_CGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, W, WORK, RWORK
+     $,
      $             RES )
       RESULT( 1 ) = RES( 1 )
 *
 *     Do Test (2)
 *
-      CALL CGET22( 'C', 'N', 'C', N, A, LDA, VL, LDVL, W, WORK, RWORK,
+      CALL AB_CGET22( 'C', 'N', 'C', N, A, LDA, VL, LDVL, W, WORK, RWORK
+     $,
      $             RES )
       RESULT( 2 ) = RES( 1 )
 *
 *     Do Test (3)
 *
       DO 30 J = 1, N
-         TNRM = SCNRM2( N, VR( 1, J ), 1 )
+         TNRM = AB_SCNRM2( N, VR( 1, J ), 1 )
          RESULT( 3 ) = MAX( RESULT( 3 ),
      $                 MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
          VMX = ZERO
@@ -538,7 +543,7 @@
 *     Do Test (4)
 *
       DO 50 J = 1, N
-         TNRM = SCNRM2( N, VL( 1, J ), 1 )
+         TNRM = AB_SCNRM2( N, VL( 1, J ), 1 )
          RESULT( 4 ) = MAX( RESULT( 4 ),
      $                 MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
          VMX = ZERO
@@ -563,17 +568,19 @@
 *
 *        Compute eigenvalues only, and test them
 *
-         CALL CLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL CGEEVX( BALANC, 'N', 'N', SENSE, N, H, LDA, W1, CDUM, 1,
+         CALL AB_CLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL AB_AB_CGEEVX( BALANC, 'N', 'N', SENSE, N, H, LDA, W1, CDUM
+     $, 1,
      $                CDUM, 1, ILO1, IHI1, SCALE1, ABNRM1, RCNDE1,
      $                RCNDV1, WORK, LWORK, RWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'CGEEVX2', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEEVX2', IINFO, N, JTY
+     $PE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'CGEEVX2', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEEVX2', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -613,17 +620,19 @@
 *
 *        Compute eigenvalues and right eigenvectors, and test them
 *
-         CALL CLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL CGEEVX( BALANC, 'N', 'V', SENSE, N, H, LDA, W1, CDUM, 1,
+         CALL AB_CLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL AB_AB_CGEEVX( BALANC, 'N', 'V', SENSE, N, H, LDA, W1, CDUM
+     $, 1,
      $                LRE, LDLRE, ILO1, IHI1, SCALE1, ABNRM1, RCNDE1,
      $                RCNDV1, WORK, LWORK, RWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'CGEEVX3', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEEVX3', IINFO, N, JTY
+     $PE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'CGEEVX3', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEEVX3', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -672,17 +681,18 @@
 *
 *        Compute eigenvalues and left eigenvectors, and test them
 *
-         CALL CLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL CGEEVX( BALANC, 'V', 'N', SENSE, N, H, LDA, W1, LRE,
+         CALL AB_CLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL AB_AB_CGEEVX( BALANC, 'V', 'N', SENSE, N, H, LDA, W1, LRE,
      $                LDLRE, CDUM, 1, ILO1, IHI1, SCALE1, ABNRM1,
      $                RCNDE1, RCNDV1, WORK, LWORK, RWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'CGEEVX4', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEEVX4', IINFO, N, JTY
+     $PE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'CGEEVX4', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEEVX4', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -736,13 +746,15 @@
 *     If COMP, compare condition numbers to precomputed ones
 *
       IF( COMP ) THEN
-         CALL CLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL CGEEVX( 'N', 'V', 'V', 'B', N, H, LDA, W, VL, LDVL, VR,
+         CALL AB_CLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL AB_AB_CGEEVX( 'N', 'V', 'V', 'B', N, H, LDA, W, VL, LDVL, 
+     $VR,
      $                LDVR, ILO, IHI, SCALE, ABNRM, RCONDE, RCONDV,
      $                WORK, LWORK, RWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
-            WRITE( NOUNIT, FMT = 9999 )'CGEEVX5', IINFO, N, ISEED( 1 )
+            WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEEVX5', IINFO, N, ISEED(
+     $ 1 )
             INFO = ABS( IINFO )
             GO TO 250
          END IF
@@ -804,7 +816,8 @@
                VMAX = ONE / EPS
             ELSE IF( RCDVIN( I )-TOLIN.GT.RCONDV( I )+TOL ) THEN
                VMAX = ( RCDVIN( I )-TOLIN ) / ( RCONDV( I )+TOL )
-            ELSE IF( RCDVIN( I )+TOLIN.LT.EPS*( RCONDV( I )-TOL ) ) THEN
+            ELSE IF( RCDVIN( I )+TOLIN.LT.EPS*( RCONDV( I )-TOL ) ) T
+     $HEN
                VMAX = ONE / EPS
             ELSE IF( RCDVIN( I )+TOLIN.LT.RCONDV( I )-TOL ) THEN
                VMAX = ( RCONDV( I )-TOL ) / ( RCDVIN( I )+TOLIN )
@@ -835,7 +848,8 @@
                VMAX = ONE / EPS
             ELSE IF( RCDEIN( I )-TOLIN.GT.RCONDE( I )+TOL ) THEN
                VMAX = ( RCDEIN( I )-TOLIN ) / ( RCONDE( I )+TOL )
-            ELSE IF( RCDEIN( I )+TOLIN.LT.EPS*( RCONDE( I )-TOL ) ) THEN
+            ELSE IF( RCDEIN( I )+TOLIN.LT.EPS*( RCONDE( I )-TOL ) ) T
+     $HEN
                VMAX = ONE / EPS
             ELSE IF( RCDEIN( I )+TOLIN.LT.RCONDE( I )-TOL ) THEN
                VMAX = ( RCONDE( I )-TOL ) / ( RCDEIN( I )+TOLIN )
@@ -848,14 +862,14 @@
 *
       END IF
 *
- 9999 FORMAT( ' CGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_CGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', INPUT EXAMPLE NUMBER = ', I4 )
- 9998 FORMAT( ' CGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' AB_CGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', BALANC = ', A, ', ISEED=(',
      $      3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of CGET23
+*     End of AB_CGET23
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZCHKST
+*> \brief \b AB_ZCHKST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE AB_ZCHKST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, AP, SD, SE, D1, D2, D3, D4, D5,
 *                          WA1, WA2, WA3, WR, U, LDU, V, VP, TAU, Z, WORK,
 *                          LWORK, RWORK, LRWORK, IWORK, LIWORK, RESULT,
@@ -35,169 +35,169 @@
 *>
 *> \verbatim
 *>
-*> ZCHKST  checks the Hermitian eigenvalue problem routines.
+*> AB_ZCHKST  checks the Hermitian eigenvalue problem routines.
 *>
-*>    ZHETRD factors A as  U S U* , where * means conjugate transpose,
+*>    AB_ZHETRD factors A as  U S U* , where * means conjugate transpose,
 *>    S is real symmetric tridiagonal, and U is unitary.
-*>    ZHETRD can use either just the lower or just the upper triangle
-*>    of A; ZCHKST checks both cases.
-*>    U is represented as a product of Householder
+*>    AB_ZHETRD can use either just the lower or just the upper triangle
+*>    of A; AB_ZCHKST checks both cases.
+*>    U is represented as a product of HousehoAB_LDEr
 *>    transformations, whose vectors are stored in the first
 *>    n-1 columns of V, and whose scale factors are in TAU.
 *>
-*>    ZHPTRD does the same as ZHETRD, except that A and V are stored
+*>    AB_ZHPTRD does the same as AB_ZHETRD, except that A and V are stored
 *>    in "packed" format.
 *>
-*>    ZUNGTR constructs the matrix U from the contents of V and TAU.
+*>    AB_ZUNGTR constructs the matrix U from the contents of V and TAU.
 *>
-*>    ZUPGTR constructs the matrix U from the contents of VP and TAU.
+*>    AB_ZUPGTR constructs the matrix U from the contents of VP and TAU.
 *>
-*>    ZSTEQR factors S as  Z D1 Z* , where Z is the unitary
+*>    AB_ZSTEQR factors S as  Z D1 Z* , where Z is the unitary
 *>    matrix of eigenvectors and D1 is a diagonal matrix with
 *>    the eigenvalues on the diagonal.  D2 is the matrix of
 *>    eigenvalues computed when Z is not computed.
 *>
-*>    DSTERF computes D3, the matrix of eigenvalues, by the
+*>    AB_DSTERF computes D3, the matrix of eigenvalues, by the
 *>    PWK method, which does not yield eigenvectors.
 *>
-*>    ZPTEQR factors S as  Z4 D4 Z4* , for a
+*>    AB_ZPTEQR factors S as  Z4 D4 Z4* , for a
 *>    Hermitian positive definite tridiagonal matrix.
 *>    D5 is the matrix of eigenvalues computed when Z is not
 *>    computed.
 *>
-*>    DSTEBZ computes selected eigenvalues.  WA1, WA2, and
+*>    AB_DSTEBZ computes selected eigenvalues.  WA1, WA2, and
 *>    WA3 will denote eigenvalues computed to high
 *>    absolute accuracy, with different range options.
 *>    WR will denote eigenvalues computed to high relative
 *>    accuracy.
 *>
-*>    ZSTEIN computes Y, the eigenvectors of S, given the
+*>    AB_ZSTEIN computes Y, the eigenvectors of S, given the
 *>    eigenvalues.
 *>
-*>    ZSTEDC factors S as Z D1 Z* , where Z is the unitary
+*>    AB_ZSTEDC factors S as Z D1 Z* , where Z is the unitary
 *>    matrix of eigenvectors and D1 is a diagonal matrix with
 *>    the eigenvalues on the diagonal ('I' option). It may also
 *>    update an input unitary matrix, usually the output
-*>    from ZHETRD/ZUNGTR or ZHPTRD/ZUPGTR ('V' option). It may
+*>    from AB_ZHETRD/AB_ZUNGTR or AB_ZHPTRD/AB_ZUPGTR ('V' option). It may
 *>    also just compute eigenvalues ('N' option).
 *>
-*>    ZSTEMR factors S as Z D1 Z* , where Z is the unitary
+*>    AB_ZSTEMR factors S as Z D1 Z* , where Z is the unitary
 *>    matrix of eigenvectors and D1 is a diagonal matrix with
-*>    the eigenvalues on the diagonal ('I' option).  ZSTEMR
+*>    the eigenvalues on the diagonal ('I' option).  AB_ZSTEMR
 *>    uses the Relatively Robust Representation whenever possible.
 *>
-*> When ZCHKST is called, a number of matrix "sizes" ("n's") and a
+*> When AB_ZCHKST is called, a number of matrix "sizes" ("n's") and a
 *> number of matrix "types" are specified.  For each size ("n")
 *> and each type of matrix, one matrix will be generated and used
 *> to test the Hermitian eigenroutines.  For each matrix, a number
 *> of tests will be performed:
 *>
-*> (1)     | A - V S V* | / ( |A| n ulp ) ZHETRD( UPLO='U', ... )
+*> (1)     | A - V S V* | / ( |A| n ulp ) AB_ZHETRD( UPLO='U', ... )
 *>
-*> (2)     | I - UV* | / ( n ulp )        ZUNGTR( UPLO='U', ... )
+*> (2)     | I - UV* | / ( n ulp )        AB_ZUNGTR( UPLO='U', ... )
 *>
-*> (3)     | A - V S V* | / ( |A| n ulp ) ZHETRD( UPLO='L', ... )
+*> (3)     | A - V S V* | / ( |A| n ulp ) AB_ZHETRD( UPLO='L', ... )
 *>
-*> (4)     | I - UV* | / ( n ulp )        ZUNGTR( UPLO='L', ... )
+*> (4)     | I - UV* | / ( n ulp )        AB_ZUNGTR( UPLO='L', ... )
 *>
-*> (5-8)   Same as 1-4, but for ZHPTRD and ZUPGTR.
+*> (5-8)   Same as 1-4, but for AB_ZHPTRD and AB_ZUPGTR.
 *>
-*> (9)     | S - Z D Z* | / ( |S| n ulp ) ZSTEQR('V',...)
+*> (9)     | S - Z D Z* | / ( |S| n ulp ) AB_ZSTEQR('V',...)
 *>
-*> (10)    | I - ZZ* | / ( n ulp )        ZSTEQR('V',...)
+*> (10)    | I - ZZ* | / ( n ulp )        AB_ZSTEQR('V',...)
 *>
-*> (11)    | D1 - D2 | / ( |D1| ulp )        ZSTEQR('N',...)
+*> (11)    | D1 - D2 | / ( |D1| ulp )        AB_ZSTEQR('N',...)
 *>
-*> (12)    | D1 - D3 | / ( |D1| ulp )        DSTERF
+*> (12)    | D1 - D3 | / ( |D1| ulp )        AB_DSTERF
 *>
 *> (13)    0 if the true eigenvalues (computed by sturm count)
 *>         of S are within THRESH of
 *>         those in D1.  2*THRESH if they are not.  (Tested using
-*>         DSTECH)
+*>         AB_DSTECH)
 *>
 *> For S positive definite,
 *>
-*> (14)    | S - Z4 D4 Z4* | / ( |S| n ulp ) ZPTEQR('V',...)
+*> (14)    | S - Z4 D4 Z4* | / ( |S| n ulp ) AB_ZPTEQR('V',...)
 *>
-*> (15)    | I - Z4 Z4* | / ( n ulp )        ZPTEQR('V',...)
+*> (15)    | I - Z4 Z4* | / ( n ulp )        AB_ZPTEQR('V',...)
 *>
-*> (16)    | D4 - D5 | / ( 100 |D4| ulp )       ZPTEQR('N',...)
+*> (16)    | D4 - D5 | / ( 100 |D4| ulp )       AB_ZPTEQR('N',...)
 *>
 *> When S is also diagonally dominant by the factor gamma < 1,
 *>
 *> (17)    max | D4(i) - WR(i) | / ( |D4(i)| omega ) ,
 *>          i
 *>         omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
-*>                                              DSTEBZ( 'A', 'E', ...)
+*>                                              AB_DSTEBZ( 'A', 'E', ...)
 *>
-*> (18)    | WA1 - D3 | / ( |D3| ulp )          DSTEBZ( 'A', 'E', ...)
+*> (18)    | WA1 - D3 | / ( |D3| ulp )          AB_DSTEBZ( 'A', 'E', ...)
 *>
 *> (19)    ( max { min | WA2(i)-WA3(j) | } +
 *>            i     j
 *>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
 *>            i     j
-*>                                              DSTEBZ( 'I', 'E', ...)
+*>                                              AB_DSTEBZ( 'I', 'E', ...)
 *>
-*> (20)    | S - Y WA1 Y* | / ( |S| n ulp )  DSTEBZ, ZSTEIN
+*> (20)    | S - Y WA1 Y* | / ( |S| n ulp )  AB_DSTEBZ, AB_ZSTEIN
 *>
-*> (21)    | I - Y Y* | / ( n ulp )          DSTEBZ, ZSTEIN
+*> (21)    | I - Y Y* | / ( n ulp )          AB_DSTEBZ, AB_ZSTEIN
 *>
-*> (22)    | S - Z D Z* | / ( |S| n ulp )    ZSTEDC('I')
+*> (22)    | S - Z D Z* | / ( |S| n ulp )    AB_ZSTEDC('I')
 *>
-*> (23)    | I - ZZ* | / ( n ulp )           ZSTEDC('I')
+*> (23)    | I - ZZ* | / ( n ulp )           AB_ZSTEDC('I')
 *>
-*> (24)    | S - Z D Z* | / ( |S| n ulp )    ZSTEDC('V')
+*> (24)    | S - Z D Z* | / ( |S| n ulp )    AB_ZSTEDC('V')
 *>
-*> (25)    | I - ZZ* | / ( n ulp )           ZSTEDC('V')
+*> (25)    | I - ZZ* | / ( n ulp )           AB_ZSTEDC('V')
 *>
-*> (26)    | D1 - D2 | / ( |D1| ulp )           ZSTEDC('V') and
-*>                                              ZSTEDC('N')
+*> (26)    | D1 - D2 | / ( |D1| ulp )           AB_ZSTEDC('V') and
+*>                                              AB_ZSTEDC('N')
 *>
-*> Test 27 is disabled at the moment because ZSTEMR does not
+*> Test 27 is disabled at the moment because AB_ZSTEMR does not
 *> guarantee high relatvie accuracy.
 *>
 *> (27)    max | D6(i) - WR(i) | / ( |D6(i)| omega ) ,
 *>          i
 *>         omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
-*>                                              ZSTEMR('V', 'A')
+*>                                              AB_ZSTEMR('V', 'A')
 *>
 *> (28)    max | D6(i) - WR(i) | / ( |D6(i)| omega ) ,
 *>          i
 *>         omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
-*>                                              ZSTEMR('V', 'I')
+*>                                              AB_ZSTEMR('V', 'I')
 *>
-*> Tests 29 through 34 are disable at present because ZSTEMR
+*> Tests 29 through 34 are disable at present because AB_ZSTEMR
 *> does not handle partial specturm requests.
 *>
-*> (29)    | S - Z D Z* | / ( |S| n ulp )    ZSTEMR('V', 'I')
+*> (29)    | S - Z D Z* | / ( |S| n ulp )    AB_ZSTEMR('V', 'I')
 *>
-*> (30)    | I - ZZ* | / ( n ulp )           ZSTEMR('V', 'I')
+*> (30)    | I - ZZ* | / ( n ulp )           AB_ZSTEMR('V', 'I')
 *>
 *> (31)    ( max { min | WA2(i)-WA3(j) | } +
 *>            i     j
 *>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
 *>            i     j
-*>         ZSTEMR('N', 'I') vs. CSTEMR('V', 'I')
+*>         AB_ZSTEMR('N', 'I') vs. AB_CSTEMR('V', 'I')
 *>
-*> (32)    | S - Z D Z* | / ( |S| n ulp )    ZSTEMR('V', 'V')
+*> (32)    | S - Z D Z* | / ( |S| n ulp )    AB_ZSTEMR('V', 'V')
 *>
-*> (33)    | I - ZZ* | / ( n ulp )           ZSTEMR('V', 'V')
+*> (33)    | I - ZZ* | / ( n ulp )           AB_ZSTEMR('V', 'V')
 *>
 *> (34)    ( max { min | WA2(i)-WA3(j) | } +
 *>            i     j
 *>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
 *>            i     j
-*>         ZSTEMR('N', 'V') vs. CSTEMR('V', 'V')
+*>         AB_ZSTEMR('N', 'V') vs. AB_CSTEMR('V', 'V')
 *>
-*> (35)    | S - Z D Z* | / ( |S| n ulp )    ZSTEMR('V', 'A')
+*> (35)    | S - Z D Z* | / ( |S| n ulp )    AB_ZSTEMR('V', 'A')
 *>
-*> (36)    | I - ZZ* | / ( n ulp )           ZSTEMR('V', 'A')
+*> (36)    | I - ZZ* | / ( n ulp )           AB_ZSTEMR('V', 'A')
 *>
 *> (37)    ( max { min | WA2(i)-WA3(j) | } +
 *>            i     j
 *>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
 *>            i     j
-*>         ZSTEMR('N', 'A') vs. CSTEMR('V', 'A')
+*>         AB_ZSTEMR('N', 'A') vs. AB_CSTEMR('V', 'A')
 *>
 *> The "sizes" are specified by an array NN(1:NSIZES); the value of
 *> each element NN(j) specifies one size.
@@ -253,7 +253,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          ZCHKST does nothing.  It must be at least zero.
+*>          AB_ZCHKST does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -267,7 +267,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, ZCHKST
+*>          The number of elements in DOTYPE.   If it is zero, AB_ZCHKST
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -297,7 +297,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to ZCHKST to continue the same random number
+*>          next call to AB_ZCHKST to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -346,7 +346,7 @@
 *> \verbatim
 *>          SD is DOUBLE PRECISION array of
 *>                             dimension( max(NN) )
-*>          The diagonal of the tridiagonal matrix computed by ZHETRD.
+*>          The diagonal of the tridiagonal matrix computed by AB_ZHETRD.
 *>          On exit, SD and SE contain the tridiagonal form of the
 *>          matrix in A.
 *> \endverbatim
@@ -356,7 +356,7 @@
 *>          SE is DOUBLE PRECISION array of
 *>                             dimension( max(NN) )
 *>          The off-diagonal of the tridiagonal matrix computed by
-*>          ZHETRD.  On exit, SD and SE contain the tridiagonal form of
+*>          AB_ZHETRD.  On exit, SD and SE contain the tridiagonal form of
 *>          the matrix in A.
 *> \endverbatim
 *>
@@ -364,7 +364,7 @@
 *> \verbatim
 *>          D1 is DOUBLE PRECISION array of
 *>                             dimension( max(NN) )
-*>          The eigenvalues of A, as computed by ZSTEQR simlutaneously
+*>          The eigenvalues of A, as computed by AB_ZSTEQR simlutaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *> \endverbatim
@@ -373,7 +373,7 @@
 *> \verbatim
 *>          D2 is DOUBLE PRECISION array of
 *>                             dimension( max(NN) )
-*>          The eigenvalues of A, as computed by ZSTEQR if Z is not
+*>          The eigenvalues of A, as computed by AB_ZSTEQR if Z is not
 *>          computed.  On exit, the eigenvalues in D2 correspond with
 *>          the matrix in A.
 *> \endverbatim
@@ -382,7 +382,7 @@
 *> \verbatim
 *>          D3 is DOUBLE PRECISION array of
 *>                             dimension( max(NN) )
-*>          The eigenvalues of A, as computed by DSTERF.  On exit, the
+*>          The eigenvalues of A, as computed by AB_DSTERF.  On exit, the
 *>          eigenvalues in D3 correspond with the matrix in A.
 *> \endverbatim
 *>
@@ -390,8 +390,8 @@
 *> \verbatim
 *>          D4 is DOUBLE PRECISION array of
 *>                             dimension( max(NN) )
-*>          The eigenvalues of A, as computed by ZPTEQR(V).
-*>          ZPTEQR factors S as  Z4 D4 Z4*
+*>          The eigenvalues of A, as computed by AB_ZPTEQR(V).
+*>          AB_ZPTEQR factors S as  Z4 D4 Z4*
 *>          On exit, the eigenvalues in D4 correspond with the matrix in A.
 *> \endverbatim
 *>
@@ -399,7 +399,7 @@
 *> \verbatim
 *>          D5 is DOUBLE PRECISION array of
 *>                             dimension( max(NN) )
-*>          The eigenvalues of A, as computed by ZPTEQR(N)
+*>          The eigenvalues of A, as computed by AB_ZPTEQR(N)
 *>          when Z is not computed. On exit, the
 *>          eigenvalues in D4 correspond with the matrix in A.
 *> \endverbatim
@@ -410,7 +410,7 @@
 *>                             dimension( max(NN) )
 *>          All eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by DSTEBZ.
+*>          as computed by AB_DSTEBZ.
 *> \endverbatim
 *>
 *> \param[out] WA2
@@ -419,7 +419,7 @@
 *>                             dimension( max(NN) )
 *>          Selected eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by DSTEBZ.
+*>          as computed by AB_DSTEBZ.
 *>          Choose random values for IL and IU, and ask for the
 *>          IL-th through IU-th eigenvalues.
 *> \endverbatim
@@ -430,7 +430,7 @@
 *>                             dimension( max(NN) )
 *>          Selected eigenvalues of A, computed to high
 *>          absolute accuracy, with different range options.
-*>          as computed by DSTEBZ.
+*>          as computed by AB_DSTEBZ.
 *>          Determine the values VL and VU of the IL-th and IU-th
 *>          eigenvalues and ask for all eigenvalues in this range.
 *> \endverbatim
@@ -441,14 +441,14 @@
 *>                             dimension( max(NN) )
 *>          All eigenvalues of A, computed to high
 *>          absolute accuracy, with different options.
-*>          as computed by DSTEBZ.
+*>          as computed by AB_DSTEBZ.
 *> \endverbatim
 *>
 *> \param[out] U
 *> \verbatim
 *>          U is COMPLEX*16 array of
 *>                             dimension( LDU, max(NN) ).
-*>          The unitary matrix computed by ZHETRD + ZUNGTR.
+*>          The unitary matrix computed by AB_ZHETRD + AB_ZUNGTR.
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -462,13 +462,13 @@
 *> \verbatim
 *>          V is COMPLEX*16 array of
 *>                             dimension( LDU, max(NN) ).
-*>          The Housholder vectors computed by ZHETRD in reducing A to
+*>          The HoushoAB_LDEr vectors computed by AB_ZHETRD in reducing A to
 *>          tridiagonal form.  The vectors computed with UPLO='U' are
 *>          in the upper triangle, and the vectors computed with UPLO='L'
-*>          are in the lower triangle.  (As described in ZHETRD, the
+*>          are in the lower triangle.  (As described in AB_ZHETRD, the
 *>          sub- and superdiagonal are not set to 1, although the
-*>          true Householder vector has a 1 in that position.  The
-*>          routines that use V, such as ZUNGTR, set those entries to
+*>          true HousehoAB_LDEr vector has a 1 in that position.  The
+*>          routines that use V, such as AB_ZUNGTR, set those entries to
 *>          1 before using them, and then restore them later.)
 *> \endverbatim
 *>
@@ -483,7 +483,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array of
 *>                             dimension( max(NN) )
-*>          The Householder factors computed by ZHETRD in reducing A
+*>          The HousehoAB_LDEr factors computed by AB_ZHETRD in reducing A
 *>          to tridiagonal form.
 *> \endverbatim
 *>
@@ -491,8 +491,8 @@
 *> \verbatim
 *>          Z is COMPLEX*16 array of
 *>                             dimension( LDU, max(NN) ).
-*>          The unitary matrix of eigenvectors computed by ZSTEQR,
-*>          ZPTEQR, and ZSTEIN.
+*>          The unitary matrix of eigenvectors computed by AB_ZSTEQR,
+*>          AB_ZPTEQR, and AB_ZSTEIN.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -553,7 +553,7 @@
 *>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
 *>          -23: LDU < 1 or LDU < NMAX.
 *>          -29: LWORK too small.
-*>          If  ZLATMR, CLATMS, ZHETRD, ZUNGTR, ZSTEQR, DSTERF,
+*>          If  AB_ZLATMR, AB_CLATMS, AB_ZHETRD, AB_ZUNGTR, AB_ZSTEQR, AB_DSTERF,
 *>              or ZUNMC2 returns an error code, the
 *>              absolute value of it is returned.
 *>
@@ -598,7 +598,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZCHKST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE AB_ZCHKST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, AP, SD, SE, D1, D2, D3, D4, D5,
      $                   WA1, WA2, WA3, WR, U, LDU, V, VP, TAU, Z, WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, RESULT,
@@ -660,16 +660,20 @@
       DOUBLE PRECISION   DUMMA( 1 )
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLARND, DSXT1
-      EXTERNAL           ILAENV, DLAMCH, DLARND, DSXT1
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND, AB_DSXT1
+      EXTERNAL           AB_ILAENV, AB_DLAMCH, AB_DLARND, AB_DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLABAD, DLASUM, DSTEBZ, DSTECH, DSTERF,
-     $                   XERBLA, ZCOPY, ZHET21, ZHETRD, ZHPT21, ZHPTRD,
-     $                   ZLACPY, ZLASET, ZLATMR, ZLATMS, ZPTEQR, ZSTEDC,
-     $                   ZSTEMR, ZSTEIN, ZSTEQR, ZSTT21, ZSTT22, ZUNGTR,
-     $                   ZUPGTR
+      EXTERNAL           AB_DCOPY, AB_DLABAD, AB_DLASUM, AB_DSTEBZ, AB_D
+     $STECH, AB_DSTERF,
+     $                   AB_XERBLA, AB_ZCOPY, AB_ZHET21, AB_ZHETRD, AB_Z
+     $HPT21, AB_ZHPTRD,
+     $                   AB_ZLACPY, AB_ZLASET, AB_ZLATMR, AB_ZLATMS, AB_
+     $ZPTEQR, AB_ZSTEDC,
+     $                   AB_ZSTEMR, AB_ZSTEIN, AB_ZSTEQR, AB_ZSTT21, AB_
+     $ZSTT22, AB_ZUNGTR,
+     $                   AB_ZUPGTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, INT, LOG, MAX, MIN, SQRT
@@ -703,7 +707,7 @@
      $      BADNN = .TRUE.
    10 CONTINUE
 *
-      NBLOCK = ILAENV( 1, 'ZHETRD', 'L', NMAX, -1, -1, -1 )
+      NBLOCK = AB_ILAENV( 1, 'AB_ZHETRD', 'L', NMAX, -1, -1, -1 )
       NBLOCK = MIN( NMAX, MAX( 1, NBLOCK ) )
 *
 *     Check for errors
@@ -723,7 +727,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCHKST', -INFO )
+         CALL AB_XERBLA( 'AB_ZCHKST', -INFO )
          RETURN
       END IF
 *
@@ -734,10 +738,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      CALL AB_DLABAD( UNFL, OVFL )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
       RTUNFL = SQRT( UNFL )
@@ -826,7 +830,7 @@
 *
    70       CONTINUE
 *
-            CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             IF( JTYPE.LE.15 ) THEN
                COND = ULPINV
@@ -853,7 +857,8 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK, IINFO )
 *
 *
@@ -861,14 +866,16 @@
 *
 *              Hermitian, eigenvalues specified
 *
-               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
+               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
+     $,
      $                      ANORM, N, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.7 ) THEN
 *
 *              Diagonal, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -877,7 +884,8 @@
 *
 *              Hermitian, random eigenvalues
 *
-               CALL ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
+               CALL AB_ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
+     $,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -886,14 +894,16 @@
 *
 *              Positive definite, eigenvalues specified.
 *
-               CALL ZLATMS( N, N, 'S', ISEED, 'P', RWORK, IMODE, COND,
+               CALL AB_ZLATMS( N, N, 'S', ISEED, 'P', RWORK, IMODE, COND
+     $,
      $                      ANORM, N, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.10 ) THEN
 *
 *              Positive definite tridiagonal, eigenvalues specified.
 *
-               CALL ZLATMS( N, N, 'S', ISEED, 'P', RWORK, IMODE, COND,
+               CALL AB_ZLATMS( N, N, 'S', ISEED, 'P', RWORK, IMODE, COND
+     $,
      $                      ANORM, 1, 1, 'N', A, LDA, WORK, IINFO )
                DO 90 I = 2, N
                   TEMP1 = ABS( A( I-1, I ) )
@@ -919,17 +929,18 @@
 *
   100       CONTINUE
 *
-*           Call ZHETRD and ZUNGTR to compute S and U from
+*           Call AB_ZHETRD and AB_ZUNGTR to compute S and U from
 *           upper triangle.
 *
-            CALL ZLACPY( 'U', N, N, A, LDA, V, LDU )
+            CALL AB_ZLACPY( 'U', N, N, A, LDA, V, LDU )
 *
             NTEST = 1
-            CALL ZHETRD( 'U', N, V, LDU, SD, SE, TAU, WORK, LWORK,
+            CALL AB_ZHETRD( 'U', N, V, LDU, SD, SE, TAU, WORK, LWORK,
      $                   IINFO )
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHETRD(U)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHETRD(U)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -940,12 +951,13 @@
                END IF
             END IF
 *
-            CALL ZLACPY( 'U', N, N, V, LDU, U, LDU )
+            CALL AB_ZLACPY( 'U', N, N, V, LDU, U, LDU )
 *
             NTEST = 2
-            CALL ZUNGTR( 'U', N, U, LDU, TAU, WORK, LWORK, IINFO )
+            CALL AB_ZUNGTR( 'U', N, U, LDU, TAU, WORK, LWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZUNGTR(U)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZUNGTR(U)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -958,22 +970,23 @@
 *
 *           Do tests 1 and 2
 *
-            CALL ZHET21( 2, 'Upper', N, 1, A, LDA, SD, SE, U, LDU, V,
+            CALL AB_ZHET21( 2, 'Upper', N, 1, A, LDA, SD, SE, U, LDU, V,
      $                   LDU, TAU, WORK, RWORK, RESULT( 1 ) )
-            CALL ZHET21( 3, 'Upper', N, 1, A, LDA, SD, SE, U, LDU, V,
+            CALL AB_ZHET21( 3, 'Upper', N, 1, A, LDA, SD, SE, U, LDU, V,
      $                   LDU, TAU, WORK, RWORK, RESULT( 2 ) )
 *
-*           Call ZHETRD and ZUNGTR to compute S and U from
+*           Call AB_ZHETRD and AB_ZUNGTR to compute S and U from
 *           lower triangle, do tests.
 *
-            CALL ZLACPY( 'L', N, N, A, LDA, V, LDU )
+            CALL AB_ZLACPY( 'L', N, N, A, LDA, V, LDU )
 *
             NTEST = 3
-            CALL ZHETRD( 'L', N, V, LDU, SD, SE, TAU, WORK, LWORK,
+            CALL AB_ZHETRD( 'L', N, V, LDU, SD, SE, TAU, WORK, LWORK,
      $                   IINFO )
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHETRD(L)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHETRD(L)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -984,12 +997,13 @@
                END IF
             END IF
 *
-            CALL ZLACPY( 'L', N, N, V, LDU, U, LDU )
+            CALL AB_ZLACPY( 'L', N, N, V, LDU, U, LDU )
 *
             NTEST = 4
-            CALL ZUNGTR( 'L', N, U, LDU, TAU, WORK, LWORK, IINFO )
+            CALL AB_ZUNGTR( 'L', N, U, LDU, TAU, WORK, LWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZUNGTR(L)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZUNGTR(L)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1000,9 +1014,9 @@
                END IF
             END IF
 *
-            CALL ZHET21( 2, 'Lower', N, 1, A, LDA, SD, SE, U, LDU, V,
+            CALL AB_ZHET21( 2, 'Lower', N, 1, A, LDA, SD, SE, U, LDU, V,
      $                   LDU, TAU, WORK, RWORK, RESULT( 3 ) )
-            CALL ZHET21( 3, 'Lower', N, 1, A, LDA, SD, SE, U, LDU, V,
+            CALL AB_ZHET21( 3, 'Lower', N, 1, A, LDA, SD, SE, U, LDU, V,
      $                   LDU, TAU, WORK, RWORK, RESULT( 4 ) )
 *
 *           Store the upper triangle of A in AP
@@ -1015,15 +1029,16 @@
   110          CONTINUE
   120       CONTINUE
 *
-*           Call ZHPTRD and ZUPGTR to compute S and U from AP
+*           Call AB_ZHPTRD and AB_ZUPGTR to compute S and U from AP
 *
-            CALL ZCOPY( NAP, AP, 1, VP, 1 )
+            CALL AB_ZCOPY( NAP, AP, 1, VP, 1 )
 *
             NTEST = 5
-            CALL ZHPTRD( 'U', N, VP, SD, SE, TAU, IINFO )
+            CALL AB_ZHPTRD( 'U', N, VP, SD, SE, TAU, IINFO )
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHPTRD(U)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHPTRD(U)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1035,9 +1050,10 @@
             END IF
 *
             NTEST = 6
-            CALL ZUPGTR( 'U', N, VP, TAU, U, LDU, WORK, IINFO )
+            CALL AB_ZUPGTR( 'U', N, VP, TAU, U, LDU, WORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZUPGTR(U)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZUPGTR(U)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1050,9 +1066,11 @@
 *
 *           Do tests 5 and 6
 *
-            CALL ZHPT21( 2, 'Upper', N, 1, AP, SD, SE, U, LDU, VP, TAU,
+            CALL AB_ZHPT21( 2, 'Upper', N, 1, AP, SD, SE, U, LDU, VP, TA
+     $U,
      $                   WORK, RWORK, RESULT( 5 ) )
-            CALL ZHPT21( 3, 'Upper', N, 1, AP, SD, SE, U, LDU, VP, TAU,
+            CALL AB_ZHPT21( 3, 'Upper', N, 1, AP, SD, SE, U, LDU, VP, TA
+     $U,
      $                   WORK, RWORK, RESULT( 6 ) )
 *
 *           Store the lower triangle of A in AP
@@ -1065,15 +1083,16 @@
   130          CONTINUE
   140       CONTINUE
 *
-*           Call ZHPTRD and ZUPGTR to compute S and U from AP
+*           Call AB_ZHPTRD and AB_ZUPGTR to compute S and U from AP
 *
-            CALL ZCOPY( NAP, AP, 1, VP, 1 )
+            CALL AB_ZCOPY( NAP, AP, 1, VP, 1 )
 *
             NTEST = 7
-            CALL ZHPTRD( 'L', N, VP, SD, SE, TAU, IINFO )
+            CALL AB_ZHPTRD( 'L', N, VP, SD, SE, TAU, IINFO )
 *
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZHPTRD(L)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZHPTRD(L)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1085,9 +1104,10 @@
             END IF
 *
             NTEST = 8
-            CALL ZUPGTR( 'L', N, VP, TAU, U, LDU, WORK, IINFO )
+            CALL AB_ZUPGTR( 'L', N, VP, TAU, U, LDU, WORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZUPGTR(L)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZUPGTR(L)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1098,25 +1118,28 @@
                END IF
             END IF
 *
-            CALL ZHPT21( 2, 'Lower', N, 1, AP, SD, SE, U, LDU, VP, TAU,
+            CALL AB_ZHPT21( 2, 'Lower', N, 1, AP, SD, SE, U, LDU, VP, TA
+     $U,
      $                   WORK, RWORK, RESULT( 7 ) )
-            CALL ZHPT21( 3, 'Lower', N, 1, AP, SD, SE, U, LDU, VP, TAU,
+            CALL AB_ZHPT21( 3, 'Lower', N, 1, AP, SD, SE, U, LDU, VP, TA
+     $U,
      $                   WORK, RWORK, RESULT( 8 ) )
 *
-*           Call ZSTEQR to compute D1, D2, and Z, do tests.
+*           Call AB_ZSTEQR to compute D1, D2, and Z, do tests.
 *
 *           Compute D1 and Z
 *
-            CALL DCOPY( N, SD, 1, D1, 1 )
+            CALL AB_DCOPY( N, SD, 1, D1, 1 )
             IF( N.GT.0 )
-     $         CALL DCOPY( N-1, SE, 1, RWORK, 1 )
-            CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+     $         CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
+            CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
 *
             NTEST = 9
-            CALL ZSTEQR( 'V', N, D1, RWORK, Z, LDU, RWORK( N+1 ),
+            CALL AB_ZSTEQR( 'V', N, D1, RWORK, Z, LDU, RWORK( N+1 ),
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZSTEQR(V)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEQR(V)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1129,15 +1152,16 @@
 *
 *           Compute D2
 *
-            CALL DCOPY( N, SD, 1, D2, 1 )
+            CALL AB_DCOPY( N, SD, 1, D2, 1 )
             IF( N.GT.0 )
-     $         CALL DCOPY( N-1, SE, 1, RWORK, 1 )
+     $         CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
 *
             NTEST = 11
-            CALL ZSTEQR( 'N', N, D2, RWORK, WORK, LDU, RWORK( N+1 ),
+            CALL AB_ZSTEQR( 'N', N, D2, RWORK, WORK, LDU, RWORK( N+1 ),
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZSTEQR(N)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEQR(N)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1150,14 +1174,14 @@
 *
 *           Compute D3 (using PWK method)
 *
-            CALL DCOPY( N, SD, 1, D3, 1 )
+            CALL AB_DCOPY( N, SD, 1, D3, 1 )
             IF( N.GT.0 )
-     $         CALL DCOPY( N-1, SE, 1, RWORK, 1 )
+     $         CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
 *
             NTEST = 12
-            CALL DSTERF( N, D3, RWORK, IINFO )
+            CALL AB_DSTERF( N, D3, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DSTERF', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DSTERF', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1170,7 +1194,8 @@
 *
 *           Do Tests 9 and 10
 *
-            CALL ZSTT21( N, 0, SD, SE, D1, DUMMA, Z, LDU, WORK, RWORK,
+            CALL AB_ZSTT21( N, 0, SD, SE, D1, DUMMA, Z, LDU, WORK, RWORK
+     $,
      $                   RESULT( 9 ) )
 *
 *           Do Tests 11 and 12
@@ -1197,7 +1222,7 @@
             TEMP1 = THRESH*( HALF-ULP )
 *
             DO 160 J = 0, LOG2UI
-               CALL DSTECH( N, SD, SE, D1, TEMP1, RWORK, IINFO )
+               CALL AB_DSTECH( N, SD, SE, D1, TEMP1, RWORK, IINFO )
                IF( IINFO.EQ.0 )
      $            GO TO 170
                TEMP1 = TEMP1*TWO
@@ -1206,23 +1231,23 @@
   170       CONTINUE
             RESULT( 13 ) = TEMP1
 *
-*           For positive definite matrices ( JTYPE.GT.15 ) call ZPTEQR
+*           For positive definite matrices ( JTYPE.GT.15 ) call AB_ZPTEQR
 *           and do tests 14, 15, and 16 .
 *
             IF( JTYPE.GT.15 ) THEN
 *
 *              Compute D4 and Z4
 *
-               CALL DCOPY( N, SD, 1, D4, 1 )
+               CALL AB_DCOPY( N, SD, 1, D4, 1 )
                IF( N.GT.0 )
-     $            CALL DCOPY( N-1, SE, 1, RWORK, 1 )
-               CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+     $            CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
+               CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
 *
                NTEST = 14
-               CALL ZPTEQR( 'V', N, D4, RWORK, Z, LDU, RWORK( N+1 ),
+               CALL AB_ZPTEQR( 'V', N, D4, RWORK, Z, LDU, RWORK( N+1 ),
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'ZPTEQR(V)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_ZPTEQR(V)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1235,20 +1260,20 @@
 *
 *              Do Tests 14 and 15
 *
-               CALL ZSTT21( N, 0, SD, SE, D4, DUMMA, Z, LDU, WORK,
+               CALL AB_ZSTT21( N, 0, SD, SE, D4, DUMMA, Z, LDU, WORK,
      $                      RWORK, RESULT( 14 ) )
 *
 *              Compute D5
 *
-               CALL DCOPY( N, SD, 1, D5, 1 )
+               CALL AB_DCOPY( N, SD, 1, D5, 1 )
                IF( N.GT.0 )
-     $            CALL DCOPY( N-1, SE, 1, RWORK, 1 )
+     $            CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
 *
                NTEST = 16
-               CALL ZPTEQR( 'N', N, D5, RWORK, Z, LDU, RWORK( N+1 ),
+               CALL AB_ZPTEQR( 'N', N, D5, RWORK, Z, LDU, RWORK( N+1 ),
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'ZPTEQR(N)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_ZPTEQR(N)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1276,7 +1301,7 @@
                RESULT( 16 ) = ZERO
             END IF
 *
-*           Call DSTEBZ with different options and do tests 17-18.
+*           Call AB_DSTEBZ with different options and do tests 17-18.
 *
 *              If S is positive definite and diagonally dominant,
 *              ask for all eigenvalues with high relative accuracy.
@@ -1288,11 +1313,13 @@
             IF( JTYPE.EQ.21 ) THEN
                NTEST = 17
                ABSTOL = UNFL + UNFL
-               CALL DSTEBZ( 'A', 'E', N, VL, VU, IL, IU, ABSTOL, SD, SE,
+               CALL AB_DSTEBZ( 'A', 'E', N, VL, VU, IL, IU, ABSTOL, SD, 
+     $SE,
      $                      M, NSPLIT, WR, IWORK( 1 ), IWORK( N+1 ),
      $                      RWORK, IWORK( 2*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'DSTEBZ(A,rel)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_DSTEBZ(A,rel)', IINFO, 
+     $N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1323,11 +1350,13 @@
 *
             NTEST = 18
             ABSTOL = UNFL + UNFL
-            CALL DSTEBZ( 'A', 'E', N, VL, VU, IL, IU, ABSTOL, SD, SE, M,
+            CALL AB_DSTEBZ( 'A', 'E', N, VL, VU, IL, IU, ABSTOL, SD, SE,
+     $ M,
      $                   NSPLIT, WA1, IWORK( 1 ), IWORK( N+1 ), RWORK,
      $                   IWORK( 2*N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DSTEBZ(A)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DSTEBZ(A)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1357,8 +1386,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-               IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+               IL = 1 + ( N-1 )*INT( AB_DLARND( 1, ISEED2 ) )
+               IU = 1 + ( N-1 )*INT( AB_DLARND( 1, ISEED2 ) )
                IF( IU.LT.IL ) THEN
                   ITEMP = IU
                   IU = IL
@@ -1366,11 +1395,12 @@
                END IF
             END IF
 *
-            CALL DSTEBZ( 'I', 'E', N, VL, VU, IL, IU, ABSTOL, SD, SE,
+            CALL AB_DSTEBZ( 'I', 'E', N, VL, VU, IL, IU, ABSTOL, SD, SE,
      $                   M2, NSPLIT, WA2, IWORK( 1 ), IWORK( N+1 ),
      $                   RWORK, IWORK( 2*N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DSTEBZ(I)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DSTEBZ(I)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1404,11 +1434,12 @@
                VU = ONE
             END IF
 *
-            CALL DSTEBZ( 'V', 'E', N, VL, VU, IL, IU, ABSTOL, SD, SE,
+            CALL AB_DSTEBZ( 'V', 'E', N, VL, VU, IL, IU, ABSTOL, SD, SE,
      $                   M3, NSPLIT, WA3, IWORK( 1 ), IWORK( N+1 ),
      $                   RWORK, IWORK( 2*N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DSTEBZ(V)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DSTEBZ(V)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1426,8 +1457,8 @@
 *
 *           Do test 19
 *
-            TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
-            TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
+            TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+            TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
             IF( N.GT.0 ) THEN
                TEMP3 = MAX( ABS( WA1( N ) ), ABS( WA1( 1 ) ) )
             ELSE
@@ -1436,16 +1467,17 @@
 *
             RESULT( 19 ) = ( TEMP1+TEMP2 ) / MAX( UNFL, TEMP3*ULP )
 *
-*           Call ZSTEIN to compute eigenvectors corresponding to
-*           eigenvalues in WA1.  (First call DSTEBZ again, to make sure
+*           Call AB_ZSTEIN to compute eigenvectors corresponding to
+*           eigenvalues in WA1.  (First call AB_DSTEBZ again, to make sure
 *           it returns these eigenvalues in the correct order.)
 *
             NTEST = 21
-            CALL DSTEBZ( 'A', 'B', N, VL, VU, IL, IU, ABSTOL, SD, SE, M,
+            CALL AB_DSTEBZ( 'A', 'B', N, VL, VU, IL, IU, ABSTOL, SD, SE,
+     $ M,
      $                   NSPLIT, WA1, IWORK( 1 ), IWORK( N+1 ), RWORK,
      $                   IWORK( 2*N+1 ), IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DSTEBZ(A,B)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'AB_DSTEBZ(A,B)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1457,11 +1489,12 @@
                END IF
             END IF
 *
-            CALL ZSTEIN( N, SD, SE, M, WA1, IWORK( 1 ), IWORK( N+1 ), Z,
+            CALL AB_ZSTEIN( N, SD, SE, M, WA1, IWORK( 1 ), IWORK( N+1 ),
+     $ Z,
      $                   LDU, RWORK, IWORK( 2*N+1 ), IWORK( 3*N+1 ),
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZSTEIN', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEIN', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1475,25 +1508,28 @@
 *
 *           Do tests 20 and 21
 *
-            CALL ZSTT21( N, 0, SD, SE, WA1, DUMMA, Z, LDU, WORK, RWORK,
+            CALL AB_ZSTT21( N, 0, SD, SE, WA1, DUMMA, Z, LDU, WORK, RWOR
+     $K,
      $                   RESULT( 20 ) )
 *
-*           Call ZSTEDC(I) to compute D1 and Z, do tests.
+*           Call AB_ZSTEDC(I) to compute D1 and Z, do tests.
 *
 *           Compute D1 and Z
 *
             INDE = 1
             INDRWK = INDE + N
-            CALL DCOPY( N, SD, 1, D1, 1 )
+            CALL AB_DCOPY( N, SD, 1, D1, 1 )
             IF( N.GT.0 )
-     $         CALL DCOPY( N-1, SE, 1, RWORK( INDE ), 1 )
-            CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+     $         CALL AB_DCOPY( N-1, SE, 1, RWORK( INDE ), 1 )
+            CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
 *
             NTEST = 22
-            CALL ZSTEDC( 'I', N, D1, RWORK( INDE ), Z, LDU, WORK, LWEDC,
+            CALL AB_ZSTEDC( 'I', N, D1, RWORK( INDE ), Z, LDU, WORK, LWE
+     $DC,
      $                   RWORK( INDRWK ), LRWEDC, IWORK, LIWEDC, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZSTEDC(I)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEDC(I)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1506,23 +1542,26 @@
 *
 *           Do Tests 22 and 23
 *
-            CALL ZSTT21( N, 0, SD, SE, D1, DUMMA, Z, LDU, WORK, RWORK,
+            CALL AB_ZSTT21( N, 0, SD, SE, D1, DUMMA, Z, LDU, WORK, RWORK
+     $,
      $                   RESULT( 22 ) )
 *
-*           Call ZSTEDC(V) to compute D1 and Z, do tests.
+*           Call AB_ZSTEDC(V) to compute D1 and Z, do tests.
 *
 *           Compute D1 and Z
 *
-            CALL DCOPY( N, SD, 1, D1, 1 )
+            CALL AB_DCOPY( N, SD, 1, D1, 1 )
             IF( N.GT.0 )
-     $         CALL DCOPY( N-1, SE, 1, RWORK( INDE ), 1 )
-            CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+     $         CALL AB_DCOPY( N-1, SE, 1, RWORK( INDE ), 1 )
+            CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
 *
             NTEST = 24
-            CALL ZSTEDC( 'V', N, D1, RWORK( INDE ), Z, LDU, WORK, LWEDC,
+            CALL AB_ZSTEDC( 'V', N, D1, RWORK( INDE ), Z, LDU, WORK, LWE
+     $DC,
      $                   RWORK( INDRWK ), LRWEDC, IWORK, LIWEDC, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZSTEDC(V)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEDC(V)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1535,23 +1574,26 @@
 *
 *           Do Tests 24 and 25
 *
-            CALL ZSTT21( N, 0, SD, SE, D1, DUMMA, Z, LDU, WORK, RWORK,
+            CALL AB_ZSTT21( N, 0, SD, SE, D1, DUMMA, Z, LDU, WORK, RWORK
+     $,
      $                   RESULT( 24 ) )
 *
-*           Call ZSTEDC(N) to compute D2, do tests.
+*           Call AB_ZSTEDC(N) to compute D2, do tests.
 *
 *           Compute D2
 *
-            CALL DCOPY( N, SD, 1, D2, 1 )
+            CALL AB_DCOPY( N, SD, 1, D2, 1 )
             IF( N.GT.0 )
-     $         CALL DCOPY( N-1, SE, 1, RWORK( INDE ), 1 )
-            CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+     $         CALL AB_DCOPY( N-1, SE, 1, RWORK( INDE ), 1 )
+            CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
 *
             NTEST = 26
-            CALL ZSTEDC( 'N', N, D2, RWORK( INDE ), Z, LDU, WORK, LWEDC,
+            CALL AB_ZSTEDC( 'N', N, D2, RWORK( INDE ), Z, LDU, WORK, LWE
+     $DC,
      $                   RWORK( INDRWK ), LRWEDC, IWORK, LIWEDC, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'ZSTEDC(N)', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEDC(N)', IINFO, N, JTYP
+     $E,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 ) THEN
@@ -1574,12 +1616,14 @@
 *
             RESULT( 26 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
 *
-*           Only test ZSTEMR if IEEE compliant
+*           Only test AB_ZSTEMR if IEEE compliant
 *
-            IF( ILAENV( 10, 'ZSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 .AND.
-     $          ILAENV( 11, 'ZSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 ) THEN
+            IF( AB_ILAENV( 10, 'AB_ZSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 .AND
+     $.
+     $          AB_ILAENV( 11, 'AB_ZSTEMR', 'VA', 1, 0, 0, 0 ).EQ.1 ) TH
+     $EN
 *
-*           Call ZSTEMR, do test 27 (relative eigenvalue accuracy)
+*           Call AB_ZSTEMR, do test 27 (relative eigenvalue accuracy)
 *
 *              If S is positive definite and diagonally dominant,
 *              ask for all eigenvalues with high relative accuracy.
@@ -1591,12 +1635,12 @@
                IF( JTYPE.EQ.21 .AND. CREL ) THEN
                   NTEST = 27
                   ABSTOL = UNFL + UNFL
-                  CALL ZSTEMR( 'V', 'A', N, SD, SE, VL, VU, IL, IU,
+                  CALL AB_ZSTEMR( 'V', 'A', N, SD, SE, VL, VU, IL, IU,
      $                         M, WR, Z, LDU, N, IWORK( 1 ), TRYRAC,
      $                         RWORK, LRWORK, IWORK( 2*N+1 ), LWORK-2*N,
      $                         IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'ZSTEMR(V,A,rel)',
+                     WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEMR(V,A,rel)',
      $                  IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1620,8 +1664,8 @@
 *
                   RESULT( 27 ) = TEMP1 / TEMP2
 *
-                  IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+                  IL = 1 + ( N-1 )*INT( AB_DLARND( 1, ISEED2 ) )
+                  IU = 1 + ( N-1 )*INT( AB_DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL
@@ -1631,13 +1675,14 @@
                   IF( CRANGE ) THEN
                      NTEST = 28
                      ABSTOL = UNFL + UNFL
-                     CALL ZSTEMR( 'V', 'I', N, SD, SE, VL, VU, IL, IU,
+                     CALL AB_ZSTEMR( 'V', 'I', N, SD, SE, VL, VU, IL, IU
+     $,
      $                            M, WR, Z, LDU, N, IWORK( 1 ), TRYRAC,
      $                            RWORK, LRWORK, IWORK( 2*N+1 ),
      $                            LWORK-2*N, IINFO )
 *
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'ZSTEMR(V,I,rel)',
+                        WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEMR(V,I,rel)',
      $                     IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1669,30 +1714,31 @@
                   RESULT( 28 ) = ZERO
                END IF
 *
-*           Call ZSTEMR(V,I) to compute D1 and Z, do tests.
+*           Call AB_ZSTEMR(V,I) to compute D1 and Z, do tests.
 *
 *           Compute D1 and Z
 *
-               CALL DCOPY( N, SD, 1, D5, 1 )
+               CALL AB_DCOPY( N, SD, 1, D5, 1 )
                IF( N.GT.0 )
-     $            CALL DCOPY( N-1, SE, 1, RWORK, 1 )
-               CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+     $            CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
+               CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
 *
                IF( CRANGE ) THEN
                   NTEST = 29
-                  IL = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
-                  IU = 1 + ( N-1 )*INT( DLARND( 1, ISEED2 ) )
+                  IL = 1 + ( N-1 )*INT( AB_DLARND( 1, ISEED2 ) )
+                  IU = 1 + ( N-1 )*INT( AB_DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL
                      IL = ITEMP
                   END IF
-                  CALL ZSTEMR( 'V', 'I', N, D5, RWORK, VL, VU, IL, IU,
+                  CALL AB_ZSTEMR( 'V', 'I', N, D5, RWORK, VL, VU, IL, IU
+     $,
      $                         M, D1, Z, LDU, N, IWORK( 1 ), TRYRAC,
      $                         RWORK( N+1 ), LRWORK-N, IWORK( 2*N+1 ),
      $                         LIWORK-2*N, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'ZSTEMR(V,I)', IINFO,
+                     WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEMR(V,I)', IINFO,
      $                  N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1706,21 +1752,22 @@
 *           Do Tests 29 and 30
 *
 *
-*           Call ZSTEMR to compute D2, do tests.
+*           Call AB_ZSTEMR to compute D2, do tests.
 *
 *           Compute D2
 *
-                  CALL DCOPY( N, SD, 1, D5, 1 )
+                  CALL AB_DCOPY( N, SD, 1, D5, 1 )
                   IF( N.GT.0 )
-     $               CALL DCOPY( N-1, SE, 1, RWORK, 1 )
+     $               CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
 *
                   NTEST = 31
-                  CALL ZSTEMR( 'N', 'I', N, D5, RWORK, VL, VU, IL, IU,
+                  CALL AB_ZSTEMR( 'N', 'I', N, D5, RWORK, VL, VU, IL, IU
+     $,
      $                         M, D2, Z, LDU, N, IWORK( 1 ), TRYRAC,
      $                         RWORK( N+1 ), LRWORK-N, IWORK( 2*N+1 ),
      $                         LIWORK-2*N, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'ZSTEMR(N,I)', IINFO,
+                     WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEMR(N,I)', IINFO,
      $                  N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1746,14 +1793,14 @@
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
 *
-*           Call ZSTEMR(V,V) to compute D1 and Z, do tests.
+*           Call AB_ZSTEMR(V,V) to compute D1 and Z, do tests.
 *
 *           Compute D1 and Z
 *
-                  CALL DCOPY( N, SD, 1, D5, 1 )
+                  CALL AB_DCOPY( N, SD, 1, D5, 1 )
                   IF( N.GT.0 )
-     $               CALL DCOPY( N-1, SE, 1, RWORK, 1 )
-                  CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
+     $               CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
+                  CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDU )
 *
                   NTEST = 32
 *
@@ -1779,12 +1826,13 @@
                      VU = ONE
                   END IF
 *
-                  CALL ZSTEMR( 'V', 'V', N, D5, RWORK, VL, VU, IL, IU,
+                  CALL AB_ZSTEMR( 'V', 'V', N, D5, RWORK, VL, VU, IL, IU
+     $,
      $                         M, D1, Z, LDU, M, IWORK( 1 ), TRYRAC,
      $                         RWORK( N+1 ), LRWORK-N, IWORK( 2*N+1 ),
      $                         LIWORK-2*N, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'ZSTEMR(V,V)', IINFO,
+                     WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEMR(V,V)', IINFO,
      $                  N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1797,24 +1845,26 @@
 *
 *           Do Tests 32 and 33
 *
-                  CALL ZSTT22( N, M, 0, SD, SE, D1, DUMMA, Z, LDU, WORK,
+                  CALL AB_ZSTT22( N, M, 0, SD, SE, D1, DUMMA, Z, LDU, WO
+     $RK,
      $                         M, RWORK, RESULT( 32 ) )
 *
-*           Call ZSTEMR to compute D2, do tests.
+*           Call AB_ZSTEMR to compute D2, do tests.
 *
 *           Compute D2
 *
-                  CALL DCOPY( N, SD, 1, D5, 1 )
+                  CALL AB_DCOPY( N, SD, 1, D5, 1 )
                   IF( N.GT.0 )
-     $               CALL DCOPY( N-1, SE, 1, RWORK, 1 )
+     $               CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
 *
                   NTEST = 34
-                  CALL ZSTEMR( 'N', 'V', N, D5, RWORK, VL, VU, IL, IU,
+                  CALL AB_ZSTEMR( 'N', 'V', N, D5, RWORK, VL, VU, IL, IU
+     $,
      $                         M, D2, Z, LDU, N, IWORK( 1 ), TRYRAC,
      $                         RWORK( N+1 ), LRWORK-N, IWORK( 2*N+1 ),
      $                         LIWORK-2*N, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'ZSTEMR(N,V)', IINFO,
+                     WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEMR(N,V)', IINFO,
      $                  N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1848,22 +1898,22 @@
                END IF
 *
 *
-*           Call ZSTEMR(V,A) to compute D1 and Z, do tests.
+*           Call AB_ZSTEMR(V,A) to compute D1 and Z, do tests.
 *
 *           Compute D1 and Z
 *
-               CALL DCOPY( N, SD, 1, D5, 1 )
+               CALL AB_DCOPY( N, SD, 1, D5, 1 )
                IF( N.GT.0 )
-     $            CALL DCOPY( N-1, SE, 1, RWORK, 1 )
+     $            CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
 *
                NTEST = 35
 *
-               CALL ZSTEMR( 'V', 'A', N, D5, RWORK, VL, VU, IL, IU,
+               CALL AB_ZSTEMR( 'V', 'A', N, D5, RWORK, VL, VU, IL, IU,
      $                      M, D1, Z, LDU, N, IWORK( 1 ), TRYRAC,
      $                      RWORK( N+1 ), LRWORK-N, IWORK( 2*N+1 ),
      $                      LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'ZSTEMR(V,A)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEMR(V,A)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1876,24 +1926,25 @@
 *
 *           Do Tests 35 and 36
 *
-               CALL ZSTT22( N, M, 0, SD, SE, D1, DUMMA, Z, LDU, WORK, M,
+               CALL AB_ZSTT22( N, M, 0, SD, SE, D1, DUMMA, Z, LDU, WORK,
+     $ M,
      $                      RWORK, RESULT( 35 ) )
 *
-*           Call ZSTEMR to compute D2, do tests.
+*           Call AB_ZSTEMR to compute D2, do tests.
 *
 *           Compute D2
 *
-               CALL DCOPY( N, SD, 1, D5, 1 )
+               CALL AB_DCOPY( N, SD, 1, D5, 1 )
                IF( N.GT.0 )
-     $            CALL DCOPY( N-1, SE, 1, RWORK, 1 )
+     $            CALL AB_DCOPY( N-1, SE, 1, RWORK, 1 )
 *
                NTEST = 37
-               CALL ZSTEMR( 'N', 'A', N, D5, RWORK, VL, VU, IL, IU,
+               CALL AB_ZSTEMR( 'N', 'A', N, D5, RWORK, VL, VU, IL, IU,
      $                      M, D2, Z, LDU, N, IWORK( 1 ), TRYRAC,
      $                      RWORK( N+1 ), LRWORK-N, IWORK( 2*N+1 ),
      $                      LIWORK-2*N, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'ZSTEMR(N,A)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_ZSTEMR(N,A)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1930,7 +1981,7 @@
                IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                 If this is the first test to fail,
-*                 print a header to the data file.
+*                 print a AB_HEADER to the data file.
 *
                   IF( NERRS.EQ.0 ) THEN
                      WRITE( NOUNIT, FMT = 9998 )'ZST'
@@ -1958,14 +2009,14 @@
 *
 *     Summary
 *
-      CALL DLASUM( 'ZST', NOUNIT, NERRS, NTESTT )
+      CALL AB_DLASUM( 'ZST', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' ZCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' AB_ZCHKST: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
  9998 FORMAT( / 1X, A3, ' -- Complex Hermitian eigenvalue problem' )
- 9997 FORMAT( ' Matrix types (see ZCHKST for details): ' )
+ 9997 FORMAT( ' Matrix types (see AB_ZCHKST for details): ' )
 *
  9996 FORMAT( / ' Special Matrices:',
      $      / '  1=Zero matrix.                        ',
@@ -1997,7 +2048,7 @@
  9988 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I3, ' is', 1P, D10.3 )
 *
- 9987 FORMAT( / 'Test performed:  see ZCHKST for details.', / )
-*     End of ZCHKST
+ 9987 FORMAT( / 'Test performed:  see AB_ZCHKST for details.', / )
+*     End of AB_ZCHKST
 *
       END

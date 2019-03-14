@@ -1,4 +1,4 @@
-*> \brief <b> DGGLSE solves overdetermined or underdetermined systems for OTHER matrices</b>
+*> \brief <b> AB_DGGAB_LSE solves overdetermined or underdetermined systems for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGGLSE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgglse.f">
+*> Download AB_DGGAB_LSE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGGAB_LSE.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgglse.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGGAB_LSE.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgglse.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGGAB_LSE.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
+*       SUBROUTINE AB_DGGAB_LSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGGLSE solves the linear equality-constrained least squares (LSE)
+*> AB_DGGAB_LSE solves the linear equality-constrained least squares (AB_LSE)
 *> problem:
 *>
 *>         minimize || c - A*x ||_2   subject to   B*x = d
@@ -47,7 +47,7 @@
 *>          rank(B) = P and  rank( (A) ) = N.
 *>                               ( (B) )
 *>
-*> These conditions ensure that the LSE problem has a unique solution,
+*> These conditions ensure that the AB_LSE problem has a unique solution,
 *> which is obtained using a generalized RQ factorization of the
 *> matrices (B, A) given by
 *>
@@ -107,7 +107,7 @@
 *> \verbatim
 *>          C is DOUBLE PRECISION array, dimension (M)
 *>          On entry, C contains the right hand side vector for the
-*>          least squares part of the LSE problem.
+*>          least squares part of the AB_LSE problem.
 *>          On exit, the residual sum of squares for the solution
 *>          is given by the sum of squares of elements N-P+1 to M of
 *>          vector C.
@@ -124,7 +124,7 @@
 *> \param[out] X
 *> \verbatim
 *>          X is DOUBLE PRECISION array, dimension (N)
-*>          On exit, X is the solution of the LSE problem.
+*>          On exit, X is the solution of the AB_LSE problem.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -139,12 +139,12 @@
 *>          The dimension of the array WORK. LWORK >= max(1,M+N+P).
 *>          For optimum performance LWORK >= P+min(M,N)+max(M,N)*NB,
 *>          where NB is an upper bound for the optimal blocksizes for
-*>          DGEQRF, SGERQF, DORMQR and SORMRQ.
+*>          AB_AB_DGEQRF, AB_AB_SGERQF, AB_DORMQR and AB_SORMRQ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -177,7 +177,8 @@
 *> \ingroup doubleOTHERsolve
 *
 *  =====================================================================
-      SUBROUTINE DGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
+      SUBROUTINE AB_DGGAB_LSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, L
+     $WORK,
      $                   INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -205,12 +206,13 @@
      $                   NB4, NR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGEMV, DGGRQF, DORMQR, DORMRQ,
-     $                   DTRMV, DTRTRS, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGEMV, AB_DGGRQF, AB_DOR
+     $MQR, AB_DORMRQ,
+     $                   AB_DTRMV, AB_DTRTRS, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -241,10 +243,10 @@
             LWKMIN = 1
             LWKOPT = 1
          ELSE
-            NB1 = ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-            NB2 = ILAENV( 1, 'DGERQF', ' ', M, N, -1, -1 )
-            NB3 = ILAENV( 1, 'DORMQR', ' ', M, N, P, -1 )
-            NB4 = ILAENV( 1, 'DORMRQ', ' ', M, N, P, -1 )
+            NB1 = AB_ILAENV( 1, 'AB_AB_DGEQRF', ' ', M, N, -1, -1 )
+            NB2 = AB_ILAENV( 1, 'AB_AB_DGERQF', ' ', M, N, -1, -1 )
+            NB3 = AB_ILAENV( 1, 'AB_DORMQR', ' ', M, N, P, -1 )
+            NB4 = AB_ILAENV( 1, 'AB_DORMRQ', ' ', M, N, P, -1 )
             NB = MAX( NB1, NB2, NB3, NB4 )
             LWKMIN = M + N + P
             LWKOPT = P + MN + MAX( M, N )*NB
@@ -257,7 +259,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGGLSE', -INFO )
+         CALL AB_XERBLA( 'AB_DGGAB_LSE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -277,21 +279,22 @@
 *     where T12 and R11 are upper triangular, and Q and Z are
 *     orthogonal.
 *
-      CALL DGGRQF( P, M, N, B, LDB, WORK, A, LDA, WORK( P+1 ),
+      CALL AB_DGGRQF( P, M, N, B, LDB, WORK, A, LDA, WORK( P+1 ),
      $             WORK( P+MN+1 ), LWORK-P-MN, INFO )
       LOPT = WORK( P+MN+1 )
 *
 *     Update c = Z**T *c = ( c1 ) N-P
 *                          ( c2 ) M+P-N
 *
-      CALL DORMQR( 'Left', 'Transpose', M, 1, MN, A, LDA, WORK( P+1 ),
+      CALL AB_DORMQR( 'Left', 'Transpose', M, 1, MN, A, LDA, WORK( P+1 )
+     $,
      $             C, MAX( 1, M ), WORK( P+MN+1 ), LWORK-P-MN, INFO )
       LOPT = MAX( LOPT, INT( WORK( P+MN+1 ) ) )
 *
 *     Solve T12*x2 = d for x2
 *
       IF( P.GT.0 ) THEN
-         CALL DTRTRS( 'Upper', 'No transpose', 'Non-unit', P, 1,
+         CALL AB_DTRTRS( 'Upper', 'No transpose', 'Non-unit', P, 1,
      $                B( 1, N-P+1 ), LDB, D, P, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -301,18 +304,19 @@
 *
 *        Put the solution in X
 *
-         CALL DCOPY( P, D, 1, X( N-P+1 ), 1 )
+         CALL AB_DCOPY( P, D, 1, X( N-P+1 ), 1 )
 *
 *        Update c1
 *
-         CALL DGEMV( 'No transpose', N-P, P, -ONE, A( 1, N-P+1 ), LDA,
+         CALL AB_DGEMV( 'No transpose', N-P, P, -ONE, A( 1, N-P+1 ), LDA
+     $,
      $               D, 1, ONE, C, 1 )
       END IF
 *
 *     Solve R11*x1 = c1 for x1
 *
       IF( N.GT.P ) THEN
-         CALL DTRTRS( 'Upper', 'No transpose', 'Non-unit', N-P, 1,
+         CALL AB_DTRTRS( 'Upper', 'No transpose', 'Non-unit', N-P, 1,
      $                A, LDA, C, N-P, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -322,7 +326,7 @@
 *
 *        Put the solutions in X
 *
-         CALL DCOPY( N-P, C, 1, X, 1 )
+         CALL AB_DCOPY( N-P, C, 1, X, 1 )
       END IF
 *
 *     Compute the residual vector:
@@ -330,25 +334,27 @@
       IF( M.LT.N ) THEN
          NR = M + P - N
          IF( NR.GT.0 )
-     $      CALL DGEMV( 'No transpose', NR, N-M, -ONE, A( N-P+1, M+1 ),
+     $      CALL AB_DGEMV( 'No transpose', NR, N-M, -ONE, A( N-P+1, M+1 
+     $),
      $                  LDA, D( NR+1 ), 1, ONE, C( N-P+1 ), 1 )
       ELSE
          NR = P
       END IF
       IF( NR.GT.0 ) THEN
-         CALL DTRMV( 'Upper', 'No transpose', 'Non unit', NR,
+         CALL AB_DTRMV( 'Upper', 'No transpose', 'Non unit', NR,
      $               A( N-P+1, N-P+1 ), LDA, D, 1 )
-         CALL DAXPY( NR, -ONE, D, 1, C( N-P+1 ), 1 )
+         CALL AB_DAXPY( NR, -ONE, D, 1, C( N-P+1 ), 1 )
       END IF
 *
 *     Backward transformation x = Q**T*x
 *
-      CALL DORMRQ( 'Left', 'Transpose', N, 1, P, B, LDB, WORK( 1 ), X,
+      CALL AB_DORMRQ( 'Left', 'Transpose', N, 1, P, B, LDB, WORK( 1 ), X
+     $,
      $             N, WORK( P+MN+1 ), LWORK-P-MN, INFO )
       WORK( 1 ) = P + MN + MAX( LOPT, INT( WORK( P+MN+1 ) ) )
 *
       RETURN
 *
-*     End of DGGLSE
+*     End of AB_DGGAB_LSE
 *
       END

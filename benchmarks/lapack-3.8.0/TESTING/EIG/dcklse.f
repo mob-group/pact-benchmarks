@@ -1,4 +1,4 @@
-*> \brief \b DCKLSE
+*> \brief \b AB_DCKAB_LSE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCKLSE( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+*       SUBROUTINE AB_DCKAB_LSE( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
 *                          NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
 *                          INFO )
 *
@@ -28,8 +28,8 @@
 *>
 *> \verbatim
 *>
-*> DCKLSE tests DGGLSE - a subroutine for solving linear equality
-*> constrained least square problem (LSE).
+*> AB_DCKAB_LSE tests AB_DGGAB_LSE - a subroutine for solving linear equality
+*> constrained least square problem (AB_LSE).
 *> \endverbatim
 *
 *  Arguments:
@@ -146,7 +146,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If DLATMS returns an error code, the absolute value
+*>          > 0 :  If AB_DLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -163,7 +163,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DCKLSE( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+      SUBROUTINE AB_DCKAB_LSE( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRES
+     $H,
      $                   NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
      $                   INFO )
 *
@@ -204,8 +205,9 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DLARHS, DLATB9, DLATMS,
-     $                   DLSETS
+      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_DLARHS, 
+     $AB_DLATB9, AB_DLATMS,
+     $                   AB_DAB_LSETS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -214,12 +216,12 @@
 *
 *     Initialize constants and the random number seed.
 *
-      PATH( 1: 3 ) = 'LSE'
+      PATH( 1: 3 ) = 'AB_LSE'
       INFO = 0
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDA = NMAX
       LDB = NMAX
       LWORK = NMAX*NMAX
@@ -256,14 +258,16 @@
             IF( .NOT.DOTYPE( IMAT ) )
      $         GO TO 30
 *
-*           Set up parameters with DLATB9 and generate test
-*           matrices A and B with DLATMS.
+*           Set up parameters with AB_DLATB9 and generate test
+*           matrices A and B with AB_DLATMS.
 *
-            CALL DLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KUB,
+            CALL AB_DLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KU
+     $B,
      $                   ANORM, BNORM, MODEA, MODEB, CNDNMA, CNDNMB,
      $                   DISTA, DISTB )
 *
-            CALL DLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA, CNDNMA,
+            CALL AB_DLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA, CNDN
+     $MA,
      $                   ANORM, KLA, KUA, 'No packing', A, LDA, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -272,7 +276,8 @@
                GO TO 30
             END IF
 *
-            CALL DLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB, CNDNMB,
+            CALL AB_DLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB, CNDN
+     $MB,
      $                   BNORM, KLB, KUB, 'No packing', B, LDB, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -281,21 +286,21 @@
                GO TO 30
             END IF
 *
-*           Generate the right-hand sides C and D for the LSE.
+*           Generate the right-hand sides C and D for the AB_LSE.
 *
-            CALL DLARHS( 'DGE', 'New solution', 'Upper', 'N', M, N,
+            CALL AB_DLARHS( 'DGE', 'New solution', 'Upper', 'N', M, N,
      $                   MAX( M-1, 0 ), MAX( N-1, 0 ), 1, A, LDA,
      $                   X( 4*NMAX+1 ), MAX( N, 1 ), X, MAX( M, 1 ),
      $                   ISEED, IINFO )
 *
-            CALL DLARHS( 'DGE', 'Computed', 'Upper', 'N', P, N,
+            CALL AB_DLARHS( 'DGE', 'Computed', 'Upper', 'N', P, N,
      $                   MAX( P-1, 0 ), MAX( N-1, 0 ), 1, B, LDB,
      $                   X( 4*NMAX+1 ), MAX( N, 1 ), X( 2*NMAX+1 ),
      $                   MAX( P, 1 ), ISEED, IINFO )
 *
             NT = 2
 *
-            CALL DLSETS( M, P, N, A, AF, LDA, B, BF, LDB, X,
+            CALL AB_DAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, X,
      $                   X( NMAX+1 ), X( 2*NMAX+1 ), X( 3*NMAX+1 ),
      $                   X( 4*NMAX+1 ), WORK, LWORK, RWORK,
      $                   RESULT( 1 ) )
@@ -307,7 +312,7 @@
                IF( RESULT( I ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                      FIRSTT = .FALSE.
-                     CALL ALAHDG( NOUT, PATH )
+                     CALL AB_AB_ALAHDG( NOUT, PATH )
                   END IF
                   WRITE( NOUT, FMT = 9998 )M, P, N, IMAT, I,
      $               RESULT( I )
@@ -321,16 +326,16 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' DLATMS in DCKLSE   INFO = ', I5 )
+ 9999 FORMAT( ' AB_DLATMS in AB_DCKAB_LSE   INFO = ', I5 )
  9998 FORMAT( ' M=', I4, ' P=', I4, ', N=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
- 9997 FORMAT( ' *** Invalid input  for LSE:  M = ', I6, ', P = ', I6,
+ 9997 FORMAT( ' *** Invalid input  for AB_LSE:  M = ', I6, ', P = ', I6,
      $      ', N = ', I6, ';', / '     must satisfy P <= N <= P+M  ',
      $      '(this set of values will be skipped)' )
       RETURN
 *
-*     End of DCKLSE
+*     End of AB_DCKAB_LSE
 *
       END

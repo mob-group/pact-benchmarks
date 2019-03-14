@@ -1,4 +1,4 @@
-*> \brief \b ZLA_GERFSX_EXTENDED
+*> \brief \b AB_ZLA_GERFSX_EXTENDED
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLA_GERFSX_EXTENDED + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gerfsx_extended.f">
+*> Download AB_ZLA_GERFSX_EXTENDED + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLA_GERFSX_EXTENDED.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gerfsx_extended.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLA_GERFSX_EXTENDED.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gerfsx_extended.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLA_GERFSX_EXTENDED.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
+*       SUBROUTINE AB_ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
 *                                       LDA, AF, LDAF, IPIV, COLEQU, C, B,
 *                                       LDB, Y, LDY, BERR_OUT, N_NORMS,
 *                                       ERRS_N, ERRS_C, RES, AYB, DY,
@@ -46,14 +46,14 @@
 *>
 *> \verbatim
 *>
-*> ZLA_GERFSX_EXTENDED improves the computed solution to a system of
+*> AB_ZLA_GERFSX_EXTENDED improves the computed solution to a system of
 *> linear equations by performing extra-precise iterative refinement
 *> and provides error bounds and backward error estimates for the solution.
-*> This subroutine is called by ZGERFSX to perform iterative refinement.
+*> This subroutine is called by AB_AB_ZGERFSX to perform iterative refinement.
 *> In addition to normwise error bound, the code provides maximum
 *> componentwise error bound if possible. See comments for ERRS_N
 *> and ERRS_C for details of the error bounds. Note that this
-*> subroutine is only resonsible for setting the second fields of
+*> subroutine is only resonsible for setting the AB_SECOND fields of
 *> ERRS_N and ERRS_C.
 *> \endverbatim
 *
@@ -64,7 +64,7 @@
 *> \verbatim
 *>          PREC_TYPE is INTEGER
 *>     Specifies the intermediate precision to be used in refinement.
-*>     The value is defined by ILAPREC(P) where P is a CHARACTER and
+*>     The value is defined by AB_ILAPREC(P) where P is a CHARACTER and
 *>     P    = 'S':  Single
 *>          = 'D':  Double
 *>          = 'I':  Indigenous
@@ -75,7 +75,7 @@
 *> \verbatim
 *>          TRANS_TYPE is INTEGER
 *>     Specifies the transposition operation on A.
-*>     The value is defined by ILATRANS(T) where T is a CHARACTER and
+*>     The value is defined by AB_ILATRANS(T) where T is a CHARACTER and
 *>     T    = 'N':  No transpose
 *>          = 'T':  Transpose
 *>          = 'C':  Conjugate transpose
@@ -111,7 +111,7 @@
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDAF,N)
 *>     The factors L and U from the factorization
-*>     A = P*L*U as computed by ZGETRF.
+*>     A = P*L*U as computed by AB_ZGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -124,7 +124,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     The pivot indices from the factorization A = P*L*U
-*>     as computed by ZGETRF; row i of the matrix was interchanged
+*>     as computed by AB_ZGETRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *> \endverbatim
 *>
@@ -164,7 +164,7 @@
 *> \param[in,out] Y
 *> \verbatim
 *>          Y is COMPLEX*16 array, dimension (LDY,NRHS)
-*>     On entry, the solution matrix X, as computed by ZGETRS.
+*>     On entry, the solution matrix X, as computed by AB_ZGETRS.
 *>     On exit, the improved solution matrix Y.
 *> \endverbatim
 *>
@@ -181,7 +181,7 @@
 *>     error for right-hand-side j from the formula
 *>         max(i) ( abs(RES(i)) / ( abs(op(A_s))*abs(Y) + abs(B_s) )(i) )
 *>     where abs(Z) is the componentwise absolute value of the matrix
-*>     or vector Z. This is computed by ZLA_LIN_BERR.
+*>     or vector Z. This is computed by AB_ZLA_LIN_BERR.
 *> \endverbatim
 *>
 *> \param[in] N_NORMS
@@ -212,28 +212,28 @@
 *>     The first index in ERRS_N(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The second index in ERRS_N(:,err) contains the following
+*>     The AB_SECOND index in ERRS_N(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * slamch('Epsilon').
+*>              sqrt(n) * AB_SLAMCH('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * slamch('Epsilon'). This error bound should only
+*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * slamch('Epsilon') to determine if the error
+*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
 *>              Let Z = S*A, where S scales each row by a power of the
 *>              radix so all absolute row sums of Z are approximately 1.
 *>
-*>     This subroutine is only responsible for setting the second field
+*>     This subroutine is only responsible for setting the AB_SECOND field
 *>     above.
 *>     See Lapack Working Note 165 for further details and extra
 *>     cautions.
@@ -262,21 +262,21 @@
 *>     The first index in ERRS_C(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The second index in ERRS_C(:,err) contains the following
+*>     The AB_SECOND index in ERRS_C(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * slamch('Epsilon').
+*>              sqrt(n) * AB_SLAMCH('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * slamch('Epsilon'). This error bound should only
+*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * slamch('Epsilon') to determine if the error
+*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -285,7 +285,7 @@
 *>              A*diag(x) by a power of the radix so all absolute row
 *>              sums of Z are approximately 1.
 *>
-*>     This subroutine is only responsible for setting the second field
+*>     This subroutine is only responsible for setting the AB_SECOND field
 *>     above.
 *>     See Lapack Working Note 165 for further details and extra
 *>     cautions.
@@ -372,7 +372,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>       = 0:  Successful exit.
-*>       < 0:  if INFO = -i, the ith argument to ZGETRS had an illegal
+*>       < 0:  if INFO = -i, the ith argument to AB_ZGETRS had an illegal
 *>             value
 *> \endverbatim
 *
@@ -389,7 +389,8 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
+      SUBROUTINE AB_ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS,
+     $ A,
      $                                LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $                                LDB, Y, LDY, BERR_OUT, N_NORMS,
      $                                ERRS_N, ERRS_C, RES, AYB, DY,
@@ -456,11 +457,13 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZGETRS, ZGEMV, BLAS_ZGEMV_X,
-     $                   BLAS_ZGEMV2_X, ZLA_GEAMV, ZLA_WWADDW, DLAMCH,
-     $                   CHLA_TRANSTYPE, ZLA_LIN_BERR
-      DOUBLE PRECISION   DLAMCH
-      CHARACTER          CHLA_TRANSTYPE
+      EXTERNAL           AB_ZAXPY, AB_ZCOPY, AB_ZGETRS, AB_ZGEMV, BLAS_A
+     $B_ZGEMV_X,
+     $                   BLAS_AB_ZGEMV2_X, AB_ZLA_GEAMV, AB_ZLA_WWADDW, 
+     $AB_DLAMCH,
+     $                   AB_CHLA_TRANSTYPE, AB_ZLA_LIN_BERR
+      DOUBLE PRECISION   AB_DLAMCH
+      CHARACTER          AB_CHLA_TRANSTYPE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -474,9 +477,9 @@
 *     .. Executable Statements ..
 *
       IF ( INFO.NE.0 ) RETURN
-      TRANS = CHLA_TRANSTYPE(TRANS_TYPE)
-      EPS = DLAMCH( 'Epsilon' )
-      HUGEVAL = DLAMCH( 'Overflow' )
+      TRANS = AB_CHLA_TRANSTYPE(TRANS_TYPE)
+      EPS = AB_DLAMCH( 'Epsilon' )
+      HUGEVAL = AB_DLAMCH( 'Overflow' )
 *     Force HUGEVAL to Inf
       HUGEVAL = HUGEVAL * HUGEVAL
 *     Using HUGEVAL may lead to spurious underflows.
@@ -510,23 +513,25 @@
 *         Compute residual RES = B_s - op(A_s) * Y,
 *             op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
-            CALL ZCOPY( N, B( 1, J ), 1, RES, 1 )
+            CALL AB_ZCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL ZGEMV( TRANS, N, N, (-1.0D+0,0.0D+0), A, LDA,
+               CALL AB_ZGEMV( TRANS, N, N, (-1.0D+0,0.0D+0), A, LDA,
      $              Y( 1, J ), 1, (1.0D+0,0.0D+0), RES, 1)
             ELSE IF (Y_PREC_STATE .EQ. EXTRA_RESIDUAL) THEN
-               CALL BLAS_ZGEMV_X( TRANS_TYPE, N, N, (-1.0D+0,0.0D+0), A,
+               CALL BLAS_AB_ZGEMV_X( TRANS_TYPE, N, N, (-1.0D+0,0.0D+0),
+     $ A,
      $              LDA, Y( 1, J ), 1, (1.0D+0,0.0D+0),
      $              RES, 1, PREC_TYPE )
             ELSE
-               CALL BLAS_ZGEMV2_X( TRANS_TYPE, N, N, (-1.0D+0,0.0D+0),
+               CALL BLAS_AB_ZGEMV2_X( TRANS_TYPE, N, N, (-1.0D+0,0.0D+0)
+     $,
      $              A, LDA, Y(1, J), Y_TAIL, 1, (1.0D+0,0.0D+0), RES, 1,
      $              PREC_TYPE)
             END IF
 
 !         XXX: RES is no longer needed.
-            CALL ZCOPY( N, RES, 1, DY, 1 )
-            CALL ZGETRS( TRANS, N, 1, AF, LDAF, IPIV, DY, N, INFO )
+            CALL AB_ZCOPY( N, RES, 1, DY, 1 )
+            CALL AB_ZGETRS( TRANS, N, 1, AF, LDAF, IPIV, DY, N, INFO )
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.
 *
@@ -642,9 +647,9 @@
 *           Update soluton.
 *
             IF ( Y_PREC_STATE .LT. EXTRA_Y ) THEN
-               CALL ZAXPY( N, (1.0D+0,0.0D+0), DY, 1, Y(1,J), 1 )
+               CALL AB_ZAXPY( N, (1.0D+0,0.0D+0), DY, 1, Y(1,J), 1 )
             ELSE
-               CALL ZLA_WWADDW( N, Y( 1, J ), Y_TAIL, DY )
+               CALL AB_ZLA_WWADDW( N, Y( 1, J ), Y_TAIL, DY )
             END IF
 
          END DO
@@ -674,8 +679,9 @@
 *        Compute residual RES = B_s - op(A_s) * Y,
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
-         CALL ZCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL ZGEMV( TRANS, N, N, (-1.0D+0,0.0D+0), A, LDA, Y(1,J), 1,
+         CALL AB_ZCOPY( N, B( 1, J ), 1, RES, 1 )
+         CALL AB_ZGEMV( TRANS, N, N, (-1.0D+0,0.0D+0), A, LDA, Y(1,J), 1
+     $,
      $        (1.0D+0,0.0D+0), RES, 1 )
 
          DO I = 1, N
@@ -684,10 +690,10 @@
 *
 *     Compute abs(op(A_s))*abs(Y) + abs(B_s).
 *
-         CALL ZLA_GEAMV ( TRANS_TYPE, N, N, 1.0D+0,
+         CALL AB_ZLA_GEAMV ( TRANS_TYPE, N, N, 1.0D+0,
      $        A, LDA, Y(1, J), 1, 1.0D+0, AYB, 1 )
 
-         CALL ZLA_LIN_BERR ( N, N, 1, RES, AYB, BERR_OUT( J ) )
+         CALL AB_ZLA_LIN_BERR ( N, N, 1, RES, AYB, BERR_OUT( J ) )
 *
 *     End of loop for each RHS.
 *

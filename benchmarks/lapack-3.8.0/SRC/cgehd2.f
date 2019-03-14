@@ -1,4 +1,4 @@
-*> \brief \b CGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked algorithm.
+*> \brief \b AB_CGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGEHD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgehd2.f">
+*> Download AB_CGEHD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEHD2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgehd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEHD2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgehd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEHD2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_CGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IHI, ILO, INFO, LDA, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CGEHD2 reduces a complex general matrix A to upper Hessenberg form H
+*> AB_CGEHD2 reduces a complex general matrix A to upper Hessenberg form H
 *> by a unitary similarity transformation:  Q**H * A * Q = H .
 *> \endverbatim
 *
@@ -57,7 +57,7 @@
 *>
 *>          It is assumed that A is already upper triangular in rows
 *>          and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
-*>          set by a previous call to CGEBAL; otherwise they should be
+*>          set by a previous call to AB_CGEBAL; otherwise they should be
 *>          set to 1 and N respectively. See Further Details.
 *>          1 <= ILO <= IHI <= max(1,N).
 *> \endverbatim
@@ -147,7 +147,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_CGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +172,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFG, XERBLA
+      EXTERNAL           AB_CLARF, AB_AB_CLARFG, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, MIN
@@ -192,7 +192,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGEHD2', -INFO )
+         CALL AB_XERBLA( 'AB_CGEHD2', -INFO )
          RETURN
       END IF
 *
@@ -201,17 +201,18 @@
 *        Compute elementary reflector H(i) to annihilate A(i+2:ihi,i)
 *
          ALPHA = A( I+1, I )
-         CALL CLARFG( IHI-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAU( I ) )
+         CALL AB_AB_CLARFG( IHI-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAU(
+     $ I ) )
          A( I+1, I ) = ONE
 *
 *        Apply H(i) to A(1:ihi,i+1:ihi) from the right
 *
-         CALL CLARF( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
+         CALL AB_CLARF( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
      $               A( 1, I+1 ), LDA, WORK )
 *
 *        Apply H(i)**H to A(i+1:ihi,i+1:n) from the left
 *
-         CALL CLARF( 'Left', IHI-I, N-I, A( I+1, I ), 1,
+         CALL AB_CLARF( 'Left', IHI-I, N-I, A( I+1, I ), 1,
      $               CONJG( TAU( I ) ), A( I+1, I+1 ), LDA, WORK )
 *
          A( I+1, I ) = ALPHA
@@ -219,6 +220,6 @@
 *
       RETURN
 *
-*     End of CGEHD2
+*     End of AB_CGEHD2
 *
       END

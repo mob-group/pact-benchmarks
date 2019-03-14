@@ -1,4 +1,4 @@
-*> \brief \b SLAE2 computes the eigenvalues of a 2-by-2 symmetric matrix.
+*> \brief \b AB_SLAE2 computes the eigenvalues of a 2-by-2 symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAE2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slae2.f">
+*> Download AB_SLAE2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAE2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slae2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAE2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slae2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAE2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAE2( A, B, C, RT1, RT2 )
+*       SUBROUTINE AB_SLAE2( A, B, C, RT1, RT2 )
 *
 *       .. Scalar Arguments ..
 *       REAL               A, B, C, RT1, RT2
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SLAE2  computes the eigenvalues of a 2-by-2 symmetric matrix
+*> AB_SLAE2  computes the eigenvalues of a 2-by-2 symmetric matrix
 *>    [  A   B  ]
 *>    [  B   C  ].
 *> On return, RT1 is the eigenvalue of larger absolute value, and RT2
@@ -100,7 +100,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLAE2( A, B, C, RT1, RT2 )
+      SUBROUTINE AB_SLAE2( A, B, C, RT1, RT2 )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -180,6 +180,6 @@
       END IF
       RETURN
 *
-*     End of SLAE2
+*     End of AB_SLAE2
 *
       END

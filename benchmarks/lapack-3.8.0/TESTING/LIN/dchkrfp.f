@@ -98,25 +98,26 @@
       DOUBLE PRECISION   WORKARF( (NMAX*(NMAX+1))/2 )
       DOUBLE PRECISION   WORKAP( (NMAX*(NMAX+1))/2 )
       DOUBLE PRECISION   WORKARFINV( (NMAX*(NMAX+1))/2 )
-      DOUBLE PRECISION   D_WORK_DLATMS( 3 * NMAX )
-      DOUBLE PRECISION   D_WORK_DPOT01( NMAX )
-      DOUBLE PRECISION   D_TEMP_DPOT02( NMAX, MAXRHS )
-      DOUBLE PRECISION   D_TEMP_DPOT03( NMAX, NMAX )
-      DOUBLE PRECISION   D_WORK_DLANSY( NMAX )
-      DOUBLE PRECISION   D_WORK_DPOT02( NMAX )
-      DOUBLE PRECISION   D_WORK_DPOT03( NMAX )
+      DOUBLE PRECISION   D_WORK_AB_DLATMS( 3 * NMAX )
+      DOUBLE PRECISION   D_WORK_AB_DPOT01( NMAX )
+      DOUBLE PRECISION   D_TEMP_AB_DPOT02( NMAX, MAXRHS )
+      DOUBLE PRECISION   D_TEMP_AB_DPOT03( NMAX, NMAX )
+      DOUBLE PRECISION   D_WORK_AB_DLANSY( NMAX )
+      DOUBLE PRECISION   D_WORK_AB_DPOT02( NMAX )
+      DOUBLE PRECISION   D_WORK_AB_DPOT03( NMAX )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DSECND
-      EXTERNAL           DLAMCH, DSECND
+      DOUBLE PRECISION   AB_DLAMCH, AB_DSECND
+      EXTERNAL           AB_DLAMCH, AB_DSECND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ILAVER, DDRVRFP, DDRVRF1, DDRVRF2, DDRVRF3,
-     +                   DDRVRF4
+      EXTERNAL           AB_ILAVER, AB_DDRVRFP, AB_DDRVRF1, AB_DDRVRF2, 
+     $AB_DDRVRF3,
+     +                   AB_DDRVRF4
 *     ..
 *     .. Executable Statements ..
 *
-      S1 = DSECND( )
+      S1 = AB_DSECND( )
       FATAL = .FALSE.
 *
 *     Read a dummy line.
@@ -125,7 +126,7 @@
 *
 *     Report LAPACK version tag (e.g. LAPACK-3.2.0)
 *
-      CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      CALL AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
       WRITE( NOUT, FMT = 9994 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read the values of N
@@ -219,60 +220,62 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      EPS = DLAMCH( 'Underflow threshold' )
+      EPS = AB_DLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'underflow', EPS
-      EPS = DLAMCH( 'Overflow threshold' )
+      EPS = AB_DLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'overflow ', EPS
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'precision', EPS
       WRITE( NOUT, FMT = * )
 *
 *     Test the error exit of:
 *
       IF( TSTERR )
-     $   CALL DERRRFP( NOUT )
+     $   CALL AB_DERRRFP( NOUT )
 *
-*     Test the routines: dpftrf, dpftri, dpftrs (as in DDRVPO).
-*     This also tests the routines: dtfsm, dtftri, dtfttr, dtrttf.
+*     Test the routines: AB_DPFTRF, AB_DPFTRI, AB_DPFTRS (as in AB_DDRVPO).
+*     This also tests the routines: AB_DTFSM, AB_DTFTRI, AB_DTFTTR, AB_DTRTTF.
 *
-      CALL DDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
+      CALL AB_DDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
      $              WORKA, WORKASAV, WORKAFAC, WORKAINV, WORKB,
      $              WORKBSAV, WORKXACT, WORKX, WORKARF, WORKARFINV,
-     $              D_WORK_DLATMS, D_WORK_DPOT01, D_TEMP_DPOT02,
-     $              D_TEMP_DPOT03, D_WORK_DLANSY, D_WORK_DPOT02,
-     $              D_WORK_DPOT03 )
+     $              D_WORK_AB_DLATMS, D_WORK_AB_DPOT01, D_TEMP_AB_DPOT02
+     $,
+     $              D_TEMP_AB_DPOT03, D_WORK_AB_DLANSY, D_WORK_AB_DPOT02
+     $,
+     $              D_WORK_AB_DPOT03 )
 *
-*     Test the routine: dlansf
+*     Test the routine: AB_DLANSF
 *
-      CALL DDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
-     +              D_WORK_DLANSY )
+      CALL AB_DDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
+     +              D_WORK_AB_DLANSY )
 *
 *     Test the conversion routines:
-*       dtfttp, dtpttf, dtfttr, dtrttf, dtrttp and dtpttr.
+*       AB_DTFTTP, AB_DTPTTF, AB_DTFTTR, AB_DTRTTF, AB_DTRTTP and AB_DTPTTR.
 *
-      CALL DDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
+      CALL AB_DDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
      +              WORKAP, WORKASAV )
 *
-*     Test the routine: dtfsm
+*     Test the routine: AB_DTFSM
 *
-      CALL DDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
-     +              WORKAINV, WORKAFAC, D_WORK_DLANSY,
-     +              D_WORK_DPOT03, D_WORK_DPOT01 )
+      CALL AB_DDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
+     +              WORKAINV, WORKAFAC, D_WORK_AB_DLANSY,
+     +              D_WORK_AB_DPOT03, D_WORK_AB_DPOT01 )
 *
 *
-*     Test the routine: dsfrk
+*     Test the routine: AB_DSFRK
 *
-      CALL DDRVRF4( NOUT, NN, NVAL, THRESH, WORKA, WORKAFAC, NMAX,
-     +              WORKARF, WORKAINV, NMAX, D_WORK_DLANSY)
+      CALL AB_DDRVRF4( NOUT, NN, NVAL, THRESH, WORKA, WORKAFAC, NMAX,
+     +              WORKARF, WORKAINV, NMAX, D_WORK_AB_DLANSY)
 *
       CLOSE ( NIN )
-      S2 = DSECND( )
+      S2 = AB_DSECND( )
       WRITE( NOUT, FMT = 9998 )
       WRITE( NOUT, FMT = 9997 )S2 - S1
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )
- 9997 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9997 FORMAT( ' Total time used = ', F12.2, ' AB_SECONDs', / )
  9996 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be >=',
      $      I6 )
  9995 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be <=',

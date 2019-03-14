@@ -1,4 +1,4 @@
-*> \brief \b DCHKEE
+*> \brief \b AB_DCHKEE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       PROGRAM DCHKEE
+*       PROGRAM AB_DCHKEE
 *
 *
 *> \par Purpose:
@@ -16,88 +16,88 @@
 *>
 *> \verbatim
 *>
-*> DCHKEE tests the DOUBLE PRECISION LAPACK subroutines for the matrix
+*> AB_DCHKEE tests the DOUBLE PRECISION LAPACK subroutines for the matrix
 *> eigenvalue problem.  The test paths in this version are
 *>
 *> NEP (Nonsymmetric Eigenvalue Problem):
-*>     Test DGEHRD, DORGHR, DHSEQR, DTREVC, DHSEIN, and DORMHR
+*>     Test AB_DGEHRD, AB_DORGHR, AB_DHSEQR, AB_DTREVC, AB_DHSEIN, and AB_DORMHR
 *>
 *> SEP (Symmetric Eigenvalue Problem):
-*>     Test DSYTRD, DORGTR, DSTEQR, DSTERF, DSTEIN, DSTEDC,
-*>     and drivers DSYEV(X), DSBEV(X), DSPEV(X), DSTEV(X),
-*>                 DSYEVD,   DSBEVD,   DSPEVD,   DSTEVD
+*>     Test AB_DSYTRD, AB_DORGTR, AB_DSTEQR, AB_DSTERF, AB_DSTEIN, AB_DSTEDC,
+*>     and drivers AB_DSYEV(X), AB_DSBEV(X), AB_DSPEV(X), AB_DSTEV(X),
+*>                 AB_AB_DSYEVD,   AB_AB_DSBEVD,   AB_AB_DSPEVD,   AB_AB_DSTEVD
 *>
 *> SVD (Singular Value Decomposition):
-*>     Test DGEBRD, DORGBR, DBDSQR, DBDSDC
-*>     and the drivers DGESVD, DGESDD
+*>     Test AB_DGEBRD, AB_DORGBR, AB_DBDSQR, AB_DBDSDC
+*>     and the drivers AB_AB_DGESVD, AB_DGESDD
 *>
 *> DEV (Nonsymmetric Eigenvalue/eigenvector Driver):
-*>     Test DGEEV
+*>     Test AB_DGEEV
 *>
 *> DES (Nonsymmetric Schur form Driver):
-*>     Test DGEES
+*>     Test AB_DGEES
 *>
 *> DVX (Nonsymmetric Eigenvalue/eigenvector Expert Driver):
-*>     Test DGEEVX
+*>     Test AB_AB_DGEEVX
 *>
 *> DSX (Nonsymmetric Schur form Expert Driver):
-*>     Test DGEESX
+*>     Test AB_AB_DGEESX
 *>
 *> DGG (Generalized Nonsymmetric Eigenvalue Problem):
-*>     Test DGGHD3, DGGBAL, DGGBAK, DHGEQZ, and DTGEVC
+*>     Test AB_DGGHD3, AB_DGGBAL, AB_DGGBAK, AB_DHGEQZ, and AB_DTGEVC
 *>
 *> DGS (Generalized Nonsymmetric Schur form Driver):
-*>     Test DGGES
+*>     Test AB_DGGES
 *>
 *> DGV (Generalized Nonsymmetric Eigenvalue/eigenvector Driver):
-*>     Test DGGEV
+*>     Test AB_DGGEV
 *>
 *> DGX (Generalized Nonsymmetric Schur form Expert Driver):
-*>     Test DGGESX
+*>     Test AB_AB_DGGESX
 *>
 *> DXV (Generalized Nonsymmetric Eigenvalue/eigenvector Expert Driver):
-*>     Test DGGEVX
+*>     Test AB_AB_DGGEVX
 *>
 *> DSG (Symmetric Generalized Eigenvalue Problem):
-*>     Test DSYGST, DSYGV, DSYGVD, DSYGVX, DSPGST, DSPGV, DSPGVD,
-*>     DSPGVX, DSBGST, DSBGV, DSBGVD, and DSBGVX
+*>     Test AB_DSYGST, AB_DSYGV, AB_AB_DSYGVD, AB_AB_DSYGVX, AB_DSPGST, AB_DSPGV, AB_AB_DSPGVD,
+*>     AB_AB_DSPGVX, AB_DSBGST, AB_DSBGV, AB_AB_DSBGVD, and AB_AB_DSBGVX
 *>
 *> DSB (Symmetric Band Eigenvalue Problem):
-*>     Test DSBTRD
+*>     Test AB_DSBTRD
 *>
 *> DBB (Band Singular Value Decomposition):
-*>     Test DGBBRD
+*>     Test AB_DGBBRD
 *>
 *> DEC (Eigencondition estimation):
-*>     Test DLALN2, DLASY2, DLAEQU, DLAEXC, DTRSYL, DTREXC, DTRSNA,
-*>     DTRSEN, and DLAQTR
+*>     Test AB_DLALN2, AB_DLASY2, DLAEQU, AB_DLAEXC, AB_DTRSYL, AB_DTREXC, AB_DTRSNA,
+*>     AB_DTRSEN, and AB_DLAQTR
 *>
 *> DBL (Balancing a general matrix)
-*>     Test DGEBAL
+*>     Test AB_DGEBAL
 *>
 *> DBK (Back transformation on a balanced matrix)
-*>     Test DGEBAK
+*>     Test AB_DGEBAK
 *>
 *> DGL (Balancing a matrix pair)
-*>     Test DGGBAL
+*>     Test AB_DGGBAL
 *>
 *> DGK (Back transformation on a matrix pair)
-*>     Test DGGBAK
+*>     Test AB_DGGBAK
 *>
 *> GLM (Generalized Linear Regression Model):
-*>     Tests DGGGLM
+*>     Tests AB_DGGGLM
 *>
 *> GQR (Generalized QR and RQ factorizations):
-*>     Tests DGGQRF and DGGRQF
+*>     Tests AB_DGGQRF and AB_DGGRQF
 *>
 *> GSV (Generalized Singular Value Decomposition):
-*>     Tests DGGSVD, DGGSVP, DTGSJA, DLAGS2, DLAPLL, and DLAPMT
+*>     Tests AB_DGGSVD, AB_DGGSVP, AB_DTGSJA, AB_DLAGS2, AB_DLAPLL, and AB_DLAPMT
 *>
 *> CSD (CS decomposition):
 *>     Tests DORCSD
 *>
-*> LSE (Constrained Linear Least Squares):
-*>     Tests DGGLSE
+*> AB_LSE (Constrained Linear Least Squares):
+*>     Tests AB_DGGAB_LSE
 *>
 *> Each test path has a different set of inputs, but the data sets for
 *> the driver routines xEV, xES, xVX, and xSX can be concatenated in a
@@ -111,33 +111,33 @@
 *>
 *> Path name(s)  Types    Test routine
 *>
-*> DHS or NEP      21     DCHKHS
-*> DST or SEP      21     DCHKST (routines)
-*>                 18     DDRVST (drivers)
-*> DBD or SVD      16     DCHKBD (routines)
-*>                  5     DDRVBD (drivers)
-*> DEV             21     DDRVEV
-*> DES             21     DDRVES
-*> DVX             21     DDRVVX
-*> DSX             21     DDRVSX
-*> DGG             26     DCHKGG (routines)
-*> DGS             26     DDRGES
-*> DGX              5     DDRGSX
-*> DGV             26     DDRGEV
-*> DXV              2     DDRGVX
-*> DSG             21     DDRVSG
-*> DSB             15     DCHKSB
-*> DBB             15     DCHKBB
-*> DEC              -     DCHKEC
-*> DBL              -     DCHKBL
-*> DBK              -     DCHKBK
-*> DGL              -     DCHKGL
-*> DGK              -     DCHKGK
-*> GLM              8     DCKGLM
-*> GQR              8     DCKGQR
-*> GSV              8     DCKGSV
-*> CSD              3     DCKCSD
-*> LSE              8     DCKLSE
+*> DHS or NEP      21     AB_DCHKHS
+*> DST or SEP      21     AB_DCHKST (routines)
+*>                 18     AB_DDRVST (drivers)
+*> DBD or SVD      16     AB_DCHKBD (routines)
+*>                  5     AB_DDRVBD (drivers)
+*> DEV             21     AB_DDRVEV
+*> DES             21     AB_DDRVES
+*> DVX             21     AB_DDRVVX
+*> DSX             21     AB_DDRVSX
+*> DGG             26     AB_DCHKGG (routines)
+*> DGS             26     AB_DDRGES
+*> DGX              5     AB_DDRGSX
+*> DGV             26     AB_DDRGEV
+*> DXV              2     AB_DDRGVX
+*> DSG             21     AB_DDRVSG
+*> DSB             15     AB_DCHKSB
+*> DBB             15     AB_DCHKBB
+*> DEC              -     AB_AB_DCHKEC
+*> DBL              -     AB_DCHKBL
+*> DBK              -     AB_DCHKBK
+*> DGL              -     AB_DCHKGL
+*> DGK              -     AB_DCHKGK
+*> GLM              8     AB_DCKGLM
+*> GQR              8     AB_DCKGQR
+*> GSV              8     AB_DCKGSV
+*> CSD              3     AB_DCKCSD
+*> AB_LSE              8     AB_DCKAB_LSE
 *>
 *>-----------------------------------------------------------------------
 *>
@@ -200,7 +200,7 @@
 *>          a 3-character path name in columns 1-3, and the number
 *>          of matrix types must be the first nonblank item in columns
 *>          4-80.  If the number of matrix types is at least 1 but is
-*>          less than the maximum number of possible types, a second
+*>          less than the maximum number of possible types, a AB_SECOND
 *>          line will be read to get the numbers of the matrix types to
 *>          be used.  For example,
 *> NEP 21
@@ -343,7 +343,7 @@
 *>
 *> line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
 *>          These integer parameters determine how blocking is done
-*>          (see ILAENV for details)
+*>          (see AB_ILAENV for details)
 *>          NB     : block size
 *>          NBMIN  : minimum block size
 *>          NX     : minimum dimension for blocking
@@ -371,13 +371,13 @@
 *>          Four integer values for the random number seed.
 *>
 *> lines 9 and following:  Lines specifying matrix types, as for NEP.
-*>          The 3-character path name is 'DEV' to test SGEEV, or
-*>          'DES' to test SGEES.
+*>          The 3-character path name is 'DEV' to test AB_SGEEV, or
+*>          'DES' to test AB_SGEES.
 *>
 *>-----------------------------------------------------------------------
 *>
 *> The DVX data has two parts. The first part is identical to DEV,
-*> and the second part consists of test matrices with precomputed
+*> and the AB_SECOND part consists of test matrices with precomputed
 *> solutions.
 *>
 *> line 1:  'DVX' in columns 1-3.
@@ -402,7 +402,7 @@
 *>
 *> lines 9 and following: The first line contains 'DVX' in columns 1-3
 *>          followed by the number of matrix types, possibly with
-*>          a second line to specify certain matrix types.
+*>          a AB_SECOND line to specify certain matrix types.
 *>          If the number of matrix types = 0, no testing of randomly
 *>          generated examples is done, but any precomputed examples
 *>          are tested.
@@ -422,7 +422,7 @@
 *>-----------------------------------------------------------------------
 *>
 *> The DSX data is like DVX. The first part is identical to DEV, and the
-*> second part consists of test matrices with precomputed solutions.
+*> AB_SECOND part consists of test matrices with precomputed solutions.
 *>
 *> line 1:  'DSX' in columns 1-3.
 *>
@@ -446,14 +446,14 @@
 *>
 *> lines 9 and following: The first line contains 'DSX' in columns 1-3
 *>          followed by the number of matrix types, possibly with
-*>          a second line to specify certain matrix types.
+*>          a AB_SECOND line to specify certain matrix types.
 *>          If the number of matrix types = 0, no testing of randomly
 *>          generated examples is done, but any precomputed examples
 *>          are tested.
 *>
 *> remaining lines : Each matrix is stored on 3+N lines, where N is its
 *>          dimension. The first line contains the dimension N and the
-*>          dimension M of an invariant subspace. The second line
+*>          dimension M of an invariant subspace. The AB_SECOND line
 *>          contains M integers, identifying the eigenvalues in the
 *>          invariant subspace (by their position in a list of
 *>          eigenvalues ordered by increasing real part). The next N
@@ -543,7 +543,7 @@
 *>
 *> line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
 *>          These integer parameters determine how blocking is done
-*>          (see ILAENV for details)
+*>          (see AB_ILAENV for details)
 *>          NB     : block size
 *>          NBMIN  : minimum block size
 *>          NX     : minimum dimension for blocking
@@ -585,7 +585,7 @@
 *>
 *> line 3:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
 *>          These integer parameters determine how blocking is done
-*>          (see ILAENV for details)
+*>          (see AB_ILAENV for details)
 *>          NB     : block size
 *>          NBMIN  : minimum block size
 *>          NX     : minimum dimension for blocking
@@ -639,7 +639,7 @@
 *>
 *> line 3:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
 *>          These integer parameters determine how blocking is done
-*>          (see ILAENV for details)
+*>          (see AB_ILAENV for details)
 *>          NB     : block size
 *>          NBMIN  : minimum block size
 *>          NX     : minimum dimension for blocking
@@ -785,8 +785,8 @@
 *>
 *> DBL and DBK input files:
 *>
-*> line 1:  'DBL' in columns 1-3 to test SGEBAL, or 'DBK' in
-*>          columns 1-3 to test SGEBAK.
+*> line 1:  'DBL' in columns 1-3 to test AB_SGEBAL, or 'DBK' in
+*>          columns 1-3 to test AB_SGEBAK.
 *>
 *> The remaining lines consist of specially constructed test cases.
 *>
@@ -794,8 +794,8 @@
 *>
 *> DGL and DGK input files:
 *>
-*> line 1:  'DGL' in columns 1-3 to test DGGBAL, or 'DGK' in
-*>          columns 1-3 to test DGGBAK.
+*> line 1:  'DGL' in columns 1-3 to test AB_DGGBAL, or 'DGK' in
+*>          columns 1-3 to test AB_DGGBAK.
 *>
 *> The remaining lines consist of specially constructed test cases.
 *>
@@ -972,9 +972,9 @@
 *>
 *>-----------------------------------------------------------------------
 *>
-*> LSE data file:
+*> AB_LSE data file:
 *>
-*> line 1:  'LSE' in columns 1 to 3.
+*> line 1:  'AB_LSE' in columns 1 to 3.
 *>
 *> line 2:  NN, INTEGER
 *>          Number of values of M, P, and N.
@@ -1038,7 +1038,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      PROGRAM DCHKEE
+      PROGRAM AB_DCHKEE
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -1066,7 +1066,8 @@
       PARAMETER          ( NIN = 5, NOUT = 6 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            CSD, DBB, DGG, DSB, FATAL, GLM, GQR, GSV, LSE,
+      LOGICAL            CSD, DBB, DGG, DSB, FATAL, GLM, GQR, GSV, AB_LS
+     $E,
      $                   NEP, DBK, DBL, SEP, DES, DEV, DGK, DGL, DGS,
      $                   DGV, DGX, DSX, SVD, DVX, DXV, TSTCHK, TSTDIF,
      $                   TSTDRV, TSTERR
@@ -1095,19 +1096,26 @@
      $                   WORK( LWORK ), X( 5*NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      DOUBLE PRECISION   DLAMCH, DSECND
-      EXTERNAL           LSAMEN, DLAMCH, DSECND
+      LOGICAL            AB_AB_LSAMEN
+      DOUBLE PRECISION   AB_DLAMCH, AB_DSECND
+      EXTERNAL           AB_AB_LSAMEN, AB_DLAMCH, AB_DSECND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, DCHKBB, DCHKBD, DCHKBK, DCHKBL, DCHKEC,
-     $                   DCHKGG, DCHKGK, DCHKGL, DCHKHS, DCHKSB, DCHKST,
-     $                   DCKCSD, DCKGLM, DCKGQR, DCKGSV, DCKLSE, DDRGES,
-     $                   DDRGEV, DDRGSX, DDRGVX, DDRVBD, DDRVES, DDRVEV,
-     $                   DDRVSG, DDRVST, DDRVSX, DDRVVX, DERRBD,
-     $                   DERRED, DERRGG, DERRHS, DERRST, ILAVER, XLAENV,
-     $                   DDRGES3, DDRGEV3, 
-     $                   DCHKST2STG, DDRVST2STG, DCHKSB2STG, DDRVSG2STG
+      EXTERNAL           AB_ALAREQ, AB_DCHKBB, AB_DCHKBD, AB_DCHKBK, AB_
+     $DCHKBL, AB_AB_DCHKEC,
+     $                   AB_DCHKGG, AB_DCHKGK, AB_DCHKGL, AB_DCHKHS, AB_
+     $DCHKSB, AB_DCHKST,
+     $                   AB_DCKCSD, AB_DCKGLM, AB_DCKGQR, AB_DCKGSV, AB_
+     $DCKAB_LSE, AB_DDRGES,
+     $                   AB_DDRGEV, AB_DDRGSX, AB_DDRGVX, AB_DDRVBD, AB_
+     $DDRVES, AB_DDRVEV,
+     $                   AB_DDRVSG, AB_DDRVST, AB_DDRVSX, AB_DDRVVX, AB_
+     $DERRBD,
+     $                   AB_DERRED, AB_DERRGG, AB_DERRHS, AB_DERRST, AB_
+     $ILAVER, AB_XLAENV,
+     $                   AB_AB_DDRGES3, AB_AB_DDRGEV3, 
+     $                   AB_AB_DCHKST2STG, AB_AB_DDRVST2STG, AB_AB_DCHKS
+     $B2STG, AB_AB_DDRVSG2STG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN, MIN
@@ -1140,7 +1148,7 @@
       B = 0.0
       C = 0.0
       D = 0.0
-      S1 = DSECND( )
+      S1 = AB_DSECND( )
       FATAL = .FALSE.
       NUNIT = NOUT
 *
@@ -1152,30 +1160,35 @@
 *
       READ( NIN, FMT = '(A80)', END = 380 )LINE
       PATH = LINE( 1: 3 )
-      NEP = LSAMEN( 3, PATH, 'NEP' ) .OR. LSAMEN( 3, PATH, 'DHS' )
-      SEP = LSAMEN( 3, PATH, 'SEP' ) .OR. LSAMEN( 3, PATH, 'DST' ) .OR.
-     $      LSAMEN( 3, PATH, 'DSG' ) .OR. LSAMEN( 3, PATH, 'SE2' )
-      SVD = LSAMEN( 3, PATH, 'SVD' ) .OR. LSAMEN( 3, PATH, 'DBD' )
-      DEV = LSAMEN( 3, PATH, 'DEV' )
-      DES = LSAMEN( 3, PATH, 'DES' )
-      DVX = LSAMEN( 3, PATH, 'DVX' )
-      DSX = LSAMEN( 3, PATH, 'DSX' )
-      DGG = LSAMEN( 3, PATH, 'DGG' )
-      DGS = LSAMEN( 3, PATH, 'DGS' )
-      DGX = LSAMEN( 3, PATH, 'DGX' )
-      DGV = LSAMEN( 3, PATH, 'DGV' )
-      DXV = LSAMEN( 3, PATH, 'DXV' )
-      DSB = LSAMEN( 3, PATH, 'DSB' )
-      DBB = LSAMEN( 3, PATH, 'DBB' )
-      GLM = LSAMEN( 3, PATH, 'GLM' )
-      GQR = LSAMEN( 3, PATH, 'GQR' ) .OR. LSAMEN( 3, PATH, 'GRQ' )
-      GSV = LSAMEN( 3, PATH, 'GSV' )
-      CSD = LSAMEN( 3, PATH, 'CSD' )
-      LSE = LSAMEN( 3, PATH, 'LSE' )
-      DBL = LSAMEN( 3, PATH, 'DBL' )
-      DBK = LSAMEN( 3, PATH, 'DBK' )
-      DGL = LSAMEN( 3, PATH, 'DGL' )
-      DGK = LSAMEN( 3, PATH, 'DGK' )
+      NEP = AB_AB_LSAMEN( 3, PATH, 'NEP' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $DHS' )
+      SEP = AB_AB_LSAMEN( 3, PATH, 'SEP' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $DST' ) .OR.
+     $      AB_AB_LSAMEN( 3, PATH, 'DSG' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $SE2' )
+      SVD = AB_AB_LSAMEN( 3, PATH, 'SVD' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $DBD' )
+      DEV = AB_AB_LSAMEN( 3, PATH, 'DEV' )
+      DES = AB_AB_LSAMEN( 3, PATH, 'DES' )
+      DVX = AB_AB_LSAMEN( 3, PATH, 'DVX' )
+      DSX = AB_AB_LSAMEN( 3, PATH, 'DSX' )
+      DGG = AB_AB_LSAMEN( 3, PATH, 'DGG' )
+      DGS = AB_AB_LSAMEN( 3, PATH, 'DGS' )
+      DGX = AB_AB_LSAMEN( 3, PATH, 'DGX' )
+      DGV = AB_AB_LSAMEN( 3, PATH, 'DGV' )
+      DXV = AB_AB_LSAMEN( 3, PATH, 'DXV' )
+      DSB = AB_AB_LSAMEN( 3, PATH, 'DSB' )
+      DBB = AB_AB_LSAMEN( 3, PATH, 'DBB' )
+      GLM = AB_AB_LSAMEN( 3, PATH, 'GLM' )
+      GQR = AB_AB_LSAMEN( 3, PATH, 'GQR' ) .OR. AB_AB_LSAMEN( 3, PATH, '
+     $GRQ' )
+      GSV = AB_AB_LSAMEN( 3, PATH, 'GSV' )
+      CSD = AB_AB_LSAMEN( 3, PATH, 'CSD' )
+      AB_LSE = AB_AB_LSAMEN( 3, PATH, 'AB_LSE' )
+      DBL = AB_AB_LSAMEN( 3, PATH, 'DBL' )
+      DBK = AB_AB_LSAMEN( 3, PATH, 'DBK' )
+      DGL = AB_AB_LSAMEN( 3, PATH, 'DGL' )
+      DGK = AB_AB_LSAMEN( 3, PATH, 'DGK' )
 *
 *     Report values of parameters.
 *
@@ -1217,51 +1230,51 @@
          WRITE( NOUT, FMT = 9969 )
       ELSE IF( CSD ) THEN
          WRITE( NOUT, FMT = 9960 )
-      ELSE IF( LSE ) THEN
+      ELSE IF( AB_LSE ) THEN
          WRITE( NOUT, FMT = 9968 )
       ELSE IF( DBL ) THEN
 *
-*        DGEBAL:  Balancing
+*        AB_DGEBAL:  Balancing
 *
-         CALL DCHKBL( NIN, NOUT )
+         CALL AB_DCHKBL( NIN, NOUT )
          GO TO 10
       ELSE IF( DBK ) THEN
 *
-*        DGEBAK:  Back transformation
+*        AB_DGEBAK:  Back transformation
 *
-         CALL DCHKBK( NIN, NOUT )
+         CALL AB_DCHKBK( NIN, NOUT )
          GO TO 10
       ELSE IF( DGL ) THEN
 *
-*        DGGBAL:  Balancing
+*        AB_DGGBAL:  Balancing
 *
-         CALL DCHKGL( NIN, NOUT )
+         CALL AB_DCHKGL( NIN, NOUT )
          GO TO 10
       ELSE IF( DGK ) THEN
 *
-*        DGGBAK:  Back transformation
+*        AB_DGGBAK:  Back transformation
 *
-         CALL DCHKGK( NIN, NOUT )
+         CALL AB_DCHKGK( NIN, NOUT )
          GO TO 10
-      ELSE IF( LSAMEN( 3, PATH, 'DEC' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'DEC' ) ) THEN
 *
 *        DEC:  Eigencondition estimation
 *
          READ( NIN, FMT = * )THRESH
-         CALL XLAENV( 1, 1 )
-         CALL XLAENV( 12, 11 )
-         CALL XLAENV( 13, 2 )
-         CALL XLAENV( 14, 0 )
-         CALL XLAENV( 15, 2 )
-         CALL XLAENV( 16, 2 )
+         CALL AB_XLAENV( 1, 1 )
+         CALL AB_XLAENV( 12, 11 )
+         CALL AB_XLAENV( 13, 2 )
+         CALL AB_XLAENV( 14, 0 )
+         CALL AB_XLAENV( 15, 2 )
+         CALL AB_XLAENV( 16, 2 )
          TSTERR = .TRUE.
-         CALL DCHKEC( THRESH, TSTERR, NIN, NOUT )
+         CALL AB_AB_DCHKEC( THRESH, TSTERR, NIN, NOUT )
          GO TO 10
       ELSE
          WRITE( NOUT, FMT = 9992 )PATH
          GO TO 10
       END IF
-      CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      CALL AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
       WRITE( NOUT, FMT = 9972 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
       WRITE( NOUT, FMT = 9984 )
 *
@@ -1301,7 +1314,7 @@
 *
 *     Read the values of P
 *
-      IF( GLM .OR. GQR .OR. GSV .OR. CSD .OR. LSE ) THEN
+      IF( GLM .OR. GQR .OR. GSV .OR. CSD .OR. AB_LSE ) THEN
          READ( NIN, FMT = * )( PVAL( I ), I = 1, NN )
          DO 30 I = 1, NN
             IF( PVAL( I ).LT.0 ) THEN
@@ -1318,7 +1331,7 @@
 *     Read the values of N
 *
       IF( SVD .OR. DBB .OR. GLM .OR. GQR .OR. GSV .OR. CSD .OR.
-     $    LSE ) THEN
+     $    AB_LSE ) THEN
          READ( NIN, FMT = * )( NVAL( I ), I = 1, NN )
          DO 40 I = 1, NN
             IF( NVAL( I ).LT.0 ) THEN
@@ -1389,14 +1402,14 @@
             WRITE( NOUT, FMT = 9989 )'   IACC22 ', IACC22( 1 ), 0
             FATAL = .TRUE.
          END IF
-         CALL XLAENV( 1, NBVAL( 1 ) )
-         CALL XLAENV( 2, NBMIN( 1 ) )
-         CALL XLAENV( 3, NXVAL( 1 ) )
-         CALL XLAENV(12, MAX( 11, INMIN( 1 ) ) )
-         CALL XLAENV(13, INWIN( 1 ) )
-         CALL XLAENV(14, INIBL( 1 ) )
-         CALL XLAENV(15, ISHFTS( 1 ) )
-         CALL XLAENV(16, IACC22( 1 ) )
+         CALL AB_XLAENV( 1, NBVAL( 1 ) )
+         CALL AB_XLAENV( 2, NBMIN( 1 ) )
+         CALL AB_XLAENV( 3, NXVAL( 1 ) )
+         CALL AB_XLAENV(12, MAX( 11, INMIN( 1 ) ) )
+         CALL AB_XLAENV(13, INWIN( 1 ) )
+         CALL AB_XLAENV(14, INIBL( 1 ) )
+         CALL AB_XLAENV(15, ISHFTS( 1 ) )
+         CALL AB_XLAENV(16, IACC22( 1 ) )
          WRITE( NOUT, FMT = 9983 )'NB:   ', NBVAL( 1 )
          WRITE( NOUT, FMT = 9983 )'NBMIN:', NBMIN( 1 )
          WRITE( NOUT, FMT = 9983 )'NX:   ', NXVAL( 1 )
@@ -1429,11 +1442,11 @@
             WRITE( NOUT, FMT = 9989 )' MAXB ', MXBVAL( 1 ), 1
             FATAL = .TRUE.
          END IF
-         CALL XLAENV( 1, NBVAL( 1 ) )
-         CALL XLAENV( 2, NBMIN( 1 ) )
-         CALL XLAENV( 3, NXVAL( 1 ) )
-         CALL XLAENV( 4, NSVAL( 1 ) )
-         CALL XLAENV( 8, MXBVAL( 1 ) )
+         CALL AB_XLAENV( 1, NBVAL( 1 ) )
+         CALL AB_XLAENV( 2, NBMIN( 1 ) )
+         CALL AB_XLAENV( 3, NXVAL( 1 ) )
+         CALL AB_XLAENV( 4, NSVAL( 1 ) )
+         CALL AB_XLAENV( 8, MXBVAL( 1 ) )
          WRITE( NOUT, FMT = 9983 )'NB:   ', NBVAL( 1 )
          WRITE( NOUT, FMT = 9983 )'NBMIN:', NBMIN( 1 )
          WRITE( NOUT, FMT = 9983 )'NX:   ', NXVAL( 1 )
@@ -1441,7 +1454,7 @@
          WRITE( NOUT, FMT = 9983 )'MAXB: ', MXBVAL( 1 )
 *
       ELSE IF( .NOT.DSB .AND. .NOT.GLM .AND. .NOT.GQR .AND. .NOT.
-     $         GSV .AND. .NOT.CSD .AND. .NOT.LSE ) THEN
+     $         GSV .AND. .NOT.CSD .AND. .NOT.AB_LSE ) THEN
 *
 *        For the other paths, the number of parameters can be varied
 *        from the input file.  Read the number of parameter values.
@@ -1674,11 +1687,11 @@
 *     Calculate and print the machine dependent constants.
 *
       WRITE( NOUT, FMT = * )
-      EPS = DLAMCH( 'Underflow threshold' )
+      EPS = AB_DLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9981 )'underflow', EPS
-      EPS = DLAMCH( 'Overflow threshold' )
+      EPS = AB_DLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9981 )'overflow ', EPS
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9981 )'precision', EPS
 *
 *     Read the threshold value for the test ratios.
@@ -1792,7 +1805,8 @@
   250    CONTINUE
       END IF
 *
-      IF( LSAMEN( 3, C3, 'DHS' ) .OR. LSAMEN( 3, C3, 'NEP' ) ) THEN
+      IF( AB_AB_LSAMEN( 3, C3, 'DHS' ) .OR. AB_AB_LSAMEN( 3, C3, 'NEP' )
+     $ ) THEN
 *
 *        -------------------------------------
 *        NEP:  Nonsymmetric Eigenvalue Problem
@@ -1806,19 +1820,19 @@
 *
          MAXTYP = 21
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV( 1, 1 )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR )
-     $      CALL DERRHS( 'DHSEQR', NOUT )
+     $      CALL AB_DERRHS( 'AB_DHSEQR', NOUT )
          DO 270 I = 1, NPARMS
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 3, NXVAL( I ) )
-            CALL XLAENV(12, MAX( 11, INMIN( I ) ) )
-            CALL XLAENV(13, INWIN( I ) )
-            CALL XLAENV(14, INIBL( I ) )
-            CALL XLAENV(15, ISHFTS( I ) )
-            CALL XLAENV(16, IACC22( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 3, NXVAL( I ) )
+            CALL AB_XLAENV(12, MAX( 11, INMIN( I ) ) )
+            CALL AB_XLAENV(13, INWIN( I ) )
+            CALL AB_XLAENV(14, INIBL( I ) )
+            CALL AB_XLAENV(15, ISHFTS( I ) )
+            CALL AB_XLAENV(16, IACC22( I ) )
 *
             IF( NEWSD.EQ.0 ) THEN
                DO 260 K = 1, 4
@@ -1828,7 +1842,8 @@
             WRITE( NOUT, FMT = 9961 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I ), MAX( 11, INMIN(I)),
      $         INWIN( I ), INIBL( I ), ISHFTS( I ), IACC22( I )
-            CALL DCHKHS( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+            CALL AB_DCHKHS( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   A( 1, 4 ), A( 1, 5 ), NMAX, A( 1, 6 ),
      $                   A( 1, 7 ), D( 1, 1 ), D( 1, 2 ), D( 1, 3 ),
@@ -1837,11 +1852,13 @@
      $                   D( 1, 7 ), WORK, LWORK, IWORK, LOGWRK, RESULT,
      $                   INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DCHKHS', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_DCHKHS', INFO
   270    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'DST' ) .OR. LSAMEN( 3, C3, 'SEP' ) 
-     $                                .OR. LSAMEN( 3, C3, 'SE2' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DST' ) .OR. AB_AB_LSAMEN( 3, C3,
+     $ 'SEP' ) 
+     $                                .OR. AB_AB_LSAMEN( 3, C3, 'SE2' ) 
+     $) THEN
 *
 *        ----------------------------------
 *        SEP:  Symmetric Eigenvalue Problem
@@ -1853,15 +1870,15 @@
 *
          MAXTYP = 21
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV( 1, 1 )
-         CALL XLAENV( 9, 25 )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV( 1, 1 )
+         CALL AB_XLAENV( 9, 25 )
          IF( TSTERR )
-     $      CALL DERRST( 'DST', NOUT )
+     $      CALL AB_DERRST( 'DST', NOUT )
          DO 290 I = 1, NPARMS
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 3, NXVAL( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 3, NXVAL( I ) )
 *
             IF( NEWSD.EQ.0 ) THEN
                DO 280 K = 1, 4
@@ -1871,8 +1888,9 @@
             WRITE( NOUT, FMT = 9997 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I )
             IF( TSTCHK ) THEN
-               IF( LSAMEN( 3, C3, 'SE2' ) ) THEN
-               CALL DCHKST2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+               IF( AB_AB_LSAMEN( 3, C3, 'SE2' ) ) THEN
+               CALL AB_AB_DCHKST2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, T
+     $HRESH,
      $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), D( 1, 1 ),
      $                      D( 1, 2 ), D( 1, 3 ), D( 1, 4 ), D( 1, 5 ),
      $                      D( 1, 6 ), D( 1, 7 ), D( 1, 8 ), D( 1, 9 ),
@@ -1880,7 +1898,7 @@
      $                      A( 1, 4 ), A( 1, 5 ), D( 1, 12 ), A( 1, 6 ),
      $                      WORK, LWORK, IWORK, LIWORK, RESULT, INFO )
                ELSE
-               CALL DCHKST( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+               CALL AB_DCHKST( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
      $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), D( 1, 1 ),
      $                      D( 1, 2 ), D( 1, 3 ), D( 1, 4 ), D( 1, 5 ),
      $                      D( 1, 6 ), D( 1, 7 ), D( 1, 8 ), D( 1, 9 ),
@@ -1889,18 +1907,20 @@
      $                      WORK, LWORK, IWORK, LIWORK, RESULT, INFO )
                ENDIF
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'DCHKST', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_DCHKST', INFO
             END IF
             IF( TSTDRV ) THEN
-               IF( LSAMEN( 3, C3, 'SE2' ) ) THEN
-               CALL DDRVST2STG( NN, NVAL, 18, DOTYPE, ISEED, THRESH,
+               IF( AB_AB_LSAMEN( 3, C3, 'SE2' ) ) THEN
+               CALL AB_AB_DDRVST2STG( NN, NVAL, 18, DOTYPE, ISEED, THRES
+     $H,
      $                      NOUT, A( 1, 1 ), NMAX, D( 1, 3 ), D( 1, 4 ),
      $                      D( 1, 5 ), D( 1, 6 ), D( 1, 8 ), D( 1, 9 ),
      $                      D( 1, 10 ), D( 1, 11 ), A( 1, 2 ), NMAX,
      $                      A( 1, 3 ), D( 1, 12 ), A( 1, 4 ), WORK,
      $                      LWORK, IWORK, LIWORK, RESULT, INFO )
                ELSE
-               CALL DDRVST( NN, NVAL, 18, DOTYPE, ISEED, THRESH, NOUT,
+               CALL AB_DDRVST( NN, NVAL, 18, DOTYPE, ISEED, THRESH, NOUT
+     $,
      $                      A( 1, 1 ), NMAX, D( 1, 3 ), D( 1, 4 ),
      $                      D( 1, 5 ), D( 1, 6 ), D( 1, 8 ), D( 1, 9 ),
      $                      D( 1, 10 ), D( 1, 11 ), A( 1, 2 ), NMAX,
@@ -1908,11 +1928,11 @@
      $                      LWORK, IWORK, LIWORK, RESULT, INFO )
                ENDIF
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'DDRVST', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_DDRVST', INFO
             END IF
   290    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'DSG' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DSG' ) ) THEN
 *
 *        ----------------------------------------------
 *        DSG:  Symmetric Generalized Eigenvalue Problem
@@ -1924,12 +1944,12 @@
 *
          MAXTYP = 21
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV( 9, 25 )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV( 9, 25 )
          DO 310 I = 1, NPARMS
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 3, NXVAL( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 3, NXVAL( I ) )
 *
             IF( NEWSD.EQ.0 ) THEN
                DO 300 K = 1, 4
@@ -1939,23 +1959,25 @@
             WRITE( NOUT, FMT = 9997 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I )
             IF( TSTCHK ) THEN
-*               CALL DDRVSG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+*               CALL AB_DDRVSG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
 *     $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
 *     $                      D( 1, 3 ), A( 1, 3 ), NMAX, A( 1, 4 ),
 *     $                      A( 1, 5 ), A( 1, 6 ), A( 1, 7 ), WORK,
 *     $                      LWORK, IWORK, LIWORK, RESULT, INFO )
-               CALL DDRVSG2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+               CALL AB_AB_DDRVSG2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, T
+     $HRESH,
      $                          NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
      $                          D( 1, 3 ), D( 1, 3 ), A( 1, 3 ), NMAX,
      $                          A( 1, 4 ), A( 1, 5 ), A( 1, 6 ),
      $                          A( 1, 7 ), WORK, LWORK, IWORK, LIWORK,
      $                          RESULT, INFO )
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'DDRVSG', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_DDRVSG', INFO
             END IF
   310    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'DBD' ) .OR. LSAMEN( 3, C3, 'SVD' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DBD' ) .OR. AB_AB_LSAMEN( 3, C3,
+     $ 'SVD' ) ) THEN
 *
 *        ----------------------------------
 *        SVD:  Singular Value Decomposition
@@ -1968,22 +1990,22 @@
 *
          MAXTYP = 16
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV( 1, 1 )
-         CALL XLAENV( 9, 25 )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV( 1, 1 )
+         CALL AB_XLAENV( 9, 25 )
 *
 *        Test the error exits
 *
          IF( TSTERR .AND. TSTCHK )
-     $      CALL DERRBD( 'DBD', NOUT )
+     $      CALL AB_DERRBD( 'DBD', NOUT )
          IF( TSTERR .AND. TSTDRV )
-     $      CALL DERRED( 'DBD', NOUT )
+     $      CALL AB_DERRED( 'DBD', NOUT )
 *
          DO 330 I = 1, NPARMS
             NRHS = NSVAL( I )
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 3, NXVAL( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 3, NXVAL( I ) )
             IF( NEWSD.EQ.0 ) THEN
                DO 320 K = 1, 4
                   ISEED( K ) = IOLDSD( K )
@@ -1992,28 +2014,29 @@
             WRITE( NOUT, FMT = 9995 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I ), NRHS
             IF( TSTCHK ) THEN
-               CALL DCHKBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, NRHS, ISEED,
+               CALL AB_DCHKBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, NRHS, ISE
+     $ED,
      $                      THRESH, A( 1, 1 ), NMAX, D( 1, 1 ),
      $                      D( 1, 2 ), D( 1, 3 ), D( 1, 4 ), A( 1, 2 ),
      $                      NMAX, A( 1, 3 ), A( 1, 4 ), A( 1, 5 ), NMAX,
      $                      A( 1, 6 ), NMAX, A( 1, 7 ), A( 1, 8 ), WORK,
      $                      LWORK, IWORK, NOUT, INFO )
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'DCHKBD', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_DCHKBD', INFO
             END IF
             IF( TSTDRV )
-     $         CALL DDRVBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, ISEED,
+     $         CALL AB_DDRVBD( NN, MVAL, NVAL, MAXTYP, DOTYPE, ISEED,
      $                      THRESH, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
      $                      A( 1, 3 ), NMAX, A( 1, 4 ), A( 1, 5 ),
      $                      A( 1, 6 ), D( 1, 1 ), D( 1, 2 ), D( 1, 3 ),
      $                      WORK, LWORK, IWORK, NOUT, INFO )
   330    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'DEV' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DEV' ) ) THEN
 *
 *        --------------------------------------------
 *        DEV:  Nonsymmetric Eigenvalue Problem Driver
-*              DGEEV (eigenvalues and eigenvectors)
+*              AB_DGEEV (eigenvalues and eigenvectors)
 *        --------------------------------------------
 *
          MAXTYP = 21
@@ -2022,24 +2045,25 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL DERRED( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL DDRVEV( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NOUT,
+     $         CALL AB_DERRED( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_DDRVEV( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), D( 1, 1 ),
      $                   D( 1, 2 ), D( 1, 3 ), D( 1, 4 ), A( 1, 3 ),
      $                   NMAX, A( 1, 4 ), NMAX, A( 1, 5 ), NMAX, RESULT,
      $                   WORK, LWORK, IWORK, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DGEEV', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_DGEEV', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'DES' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DES' ) ) THEN
 *
 *        --------------------------------------------
 *        DES:  Nonsymmetric Eigenvalue Problem Driver
-*              DGEES (Schur form)
+*              AB_DGEES (Schur form)
 *        --------------------------------------------
 *
          MAXTYP = 21
@@ -2048,24 +2072,25 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL DERRED( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL DDRVES( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NOUT,
+     $         CALL AB_DERRED( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_DDRVES( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   D( 1, 1 ), D( 1, 2 ), D( 1, 3 ), D( 1, 4 ),
      $                   A( 1, 4 ), NMAX, RESULT, WORK, LWORK, IWORK,
      $                   LOGWRK, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DGEES', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_DGEES', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'DVX' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DVX' ) ) THEN
 *
 *        --------------------------------------------------------------
 *        DVX:  Nonsymmetric Eigenvalue Problem Expert Driver
-*              DGEEVX (eigenvalues, eigenvectors and condition numbers)
+*              AB_AB_DGEEVX (eigenvalues, eigenvectors and condition numbers)
 *        --------------------------------------------------------------
 *
          MAXTYP = 21
@@ -2074,9 +2099,10 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL DERRED( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL DDRVVX( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NIN,
+     $         CALL AB_DERRED( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_DDRVVX( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NIN
+     $,
      $                   NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), D( 1, 1 ),
      $                   D( 1, 2 ), D( 1, 3 ), D( 1, 4 ), A( 1, 3 ),
      $                   NMAX, A( 1, 4 ), NMAX, A( 1, 5 ), NMAX,
@@ -2084,16 +2110,16 @@
      $                   D( 1, 9 ), D( 1, 10 ), D( 1, 11 ), D( 1, 12 ),
      $                   RESULT, WORK, LWORK, IWORK, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DGEEVX', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_AB_DGEEVX', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'DSX' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DSX' ) ) THEN
 *
 *        ---------------------------------------------------
 *        DSX:  Nonsymmetric Eigenvalue Problem Expert Driver
-*              DGEESX (Schur form and condition numbers)
+*              AB_AB_DGEESX (Schur form and condition numbers)
 *        ---------------------------------------------------
 *
          MAXTYP = 21
@@ -2102,21 +2128,22 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL DERRED( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL DDRVSX( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NIN,
+     $         CALL AB_DERRED( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_DDRVSX( NN, NVAL, NTYPES, DOTYPE, ISEED, THRESH, NIN
+     $,
      $                   NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   D( 1, 1 ), D( 1, 2 ), D( 1, 3 ), D( 1, 4 ),
      $                   D( 1, 5 ), D( 1, 6 ), A( 1, 4 ), NMAX,
      $                   A( 1, 5 ), RESULT, WORK, LWORK, IWORK, LOGWRK,
      $                   INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DGEESX', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_AB_DGEESX', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'DGG' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DGG' ) ) THEN
 *
 *        -------------------------------------------------
 *        DGG:  Generalized Nonsymmetric Eigenvalue Problem
@@ -2131,17 +2158,17 @@
 *
          MAXTYP = 26
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-         CALL XLAENV(1,1)
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_XLAENV(1,1)
          IF( TSTCHK .AND. TSTERR )
-     $      CALL DERRGG( C3, NOUT )
+     $      CALL AB_DERRGG( C3, NOUT )
          DO 350 I = 1, NPARMS
-            CALL XLAENV( 1, NBVAL( I ) )
-            CALL XLAENV( 2, NBMIN( I ) )
-            CALL XLAENV( 4, NSVAL( I ) )
-            CALL XLAENV( 8, MXBVAL( I ) )
-            CALL XLAENV( 16, IACC22( I ) )
-            CALL XLAENV( 5, NBCOL( I ) )
+            CALL AB_XLAENV( 1, NBVAL( I ) )
+            CALL AB_XLAENV( 2, NBMIN( I ) )
+            CALL AB_XLAENV( 4, NSVAL( I ) )
+            CALL AB_XLAENV( 8, MXBVAL( I ) )
+            CALL AB_XLAENV( 16, IACC22( I ) )
+            CALL AB_XLAENV( 5, NBCOL( I ) )
 *
             IF( NEWSD.EQ.0 ) THEN
                DO 340 K = 1, 4
@@ -2153,7 +2180,7 @@
             TSTDIF = .FALSE.
             THRSHN = 10.D0
             IF( TSTCHK ) THEN
-               CALL DCHKGG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+               CALL AB_DCHKGG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
      $                      TSTDIF, THRSHN, NOUT, A( 1, 1 ), NMAX,
      $                      A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                      A( 1, 6 ), A( 1, 7 ), A( 1, 8 ), A( 1, 9 ),
@@ -2163,15 +2190,15 @@
      $                      A( 1, 14 ), WORK, LWORK, LOGWRK, RESULT,
      $                      INFO )
                IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'DCHKGG', INFO
+     $            WRITE( NOUT, FMT = 9980 )'AB_DCHKGG', INFO
             END IF
   350    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'DGS' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DGS' ) ) THEN
 *
 *        -------------------------------------------------
 *        DGS:  Generalized Nonsymmetric Eigenvalue Problem
-*              DGGES (Schur form)
+*              AB_DGGES (Schur form)
 *        -------------------------------------------------
 *
          MAXTYP = 26
@@ -2180,26 +2207,28 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL DERRGG( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL DDRGES( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+     $         CALL AB_DERRGG( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_DDRGES( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
      $                   D( 1, 1 ), D( 1, 2 ), D( 1, 3 ), WORK, LWORK,
      $                   RESULT, LOGWRK, INFO )
             IF( INFO.NE.0 )
-     $          WRITE( NOUT, FMT = 9980 )'DDRGES', INFO
+     $          WRITE( NOUT, FMT = 9980 )'AB_DDRGES', INFO
 *
 *     Blocked version
 *
-            CALL XLAENV(16, 2)
-            CALL DDRGES3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+            CALL AB_XLAENV(16, 2)
+            CALL AB_AB_DDRGES3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $ NOUT,
      $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
      $                    D( 1, 1 ), D( 1, 2 ), D( 1, 3 ), WORK, LWORK,
      $                    RESULT, LOGWRK, INFO )
             IF( INFO.NE.0 )
-     $          WRITE( NOUT, FMT = 9980 )'DDRGES3', INFO
+     $          WRITE( NOUT, FMT = 9980 )'AB_AB_DDRGES3', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
@@ -2208,7 +2237,7 @@
 *
 *        -------------------------------------------------
 *        DGX:  Generalized Nonsymmetric Eigenvalue Problem
-*              DGGESX (Schur form and condition numbers)
+*              AB_AB_DGGESX (Schur form and condition numbers)
 *        -------------------------------------------------
 *
          MAXTYP = 5
@@ -2217,25 +2246,26 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL DERRGG( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL XLAENV( 5, 2 )
-            CALL DDRGSX( NN, NCMAX, THRESH, NIN, NOUT, A( 1, 1 ), NMAX,
+     $         CALL AB_DERRGG( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_XLAENV( 5, 2 )
+            CALL AB_DDRGSX( NN, NCMAX, THRESH, NIN, NOUT, A( 1, 1 ), NMA
+     $X,
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   A( 1, 6 ), D( 1, 1 ), D( 1, 2 ), D( 1, 3 ),
      $                   C( 1, 1 ), NCMAX*NCMAX, A( 1, 12 ), WORK,
      $                   LWORK, IWORK, LIWORK, LOGWRK, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DDRGSX', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_DDRGSX', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'DGV' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DGV' ) ) THEN
 *
 *        -------------------------------------------------
 *        DGV:  Generalized Nonsymmetric Eigenvalue Problem
-*              DGGEV (Eigenvalue/vector form)
+*              AB_DGGEV (Eigenvalue/vector form)
 *        -------------------------------------------------
 *
          MAXTYP = 26
@@ -2244,27 +2274,29 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL DERRGG( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL DDRGEV( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+     $         CALL AB_DERRGG( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_DDRGEV( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOU
+     $T,
      $                   A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                   A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
      $                   A( 1, 9 ), NMAX, D( 1, 1 ), D( 1, 2 ),
      $                   D( 1, 3 ), D( 1, 4 ), D( 1, 5 ), D( 1, 6 ),
      $                   WORK, LWORK, RESULT, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DDRGEV', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_DDRGEV', INFO
 *
 *     Blocked version
 *
-            CALL DDRGEV3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
+            CALL AB_AB_DDRGEV3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $ NOUT,
      $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
      $                    A( 1, 9 ), NMAX, D( 1, 1 ), D( 1, 2 ),
      $                    D( 1, 3 ), D( 1, 4 ), D( 1, 5 ), D( 1, 6 ),
      $                    WORK, LWORK, RESULT, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DDRGEV3', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_AB_DDRGEV3', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
@@ -2273,7 +2305,7 @@
 *
 *        -------------------------------------------------
 *        DXV:  Generalized Nonsymmetric Eigenvalue Problem
-*              DGGEVX (eigenvalue/vector with condition numbers)
+*              AB_AB_DGGEVX (eigenvalue/vector with condition numbers)
 *        -------------------------------------------------
 *
          MAXTYP = 2
@@ -2282,9 +2314,9 @@
             WRITE( NOUT, FMT = 9990 )C3
          ELSE
             IF( TSTERR )
-     $         CALL DERRGG( C3, NOUT )
-            CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
-            CALL DDRGVX( NN, THRESH, NIN, NOUT, A( 1, 1 ), NMAX,
+     $         CALL AB_DERRGG( C3, NOUT )
+            CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+            CALL AB_DDRGVX( NN, THRESH, NIN, NOUT, A( 1, 1 ), NMAX,
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), D( 1, 1 ),
      $                   D( 1, 2 ), D( 1, 3 ), A( 1, 5 ), A( 1, 6 ),
      $                   IWORK( 1 ), IWORK( 2 ), D( 1, 4 ), D( 1, 5 ),
@@ -2293,12 +2325,12 @@
      $                   LOGWRK, INFO )
 *
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DDRGVX', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_DDRGVX', INFO
          END IF
          WRITE( NOUT, FMT = 9973 )
          GO TO 10
 *
-      ELSE IF( LSAMEN( 3, C3, 'DSB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DSB' ) ) THEN
 *
 *        ------------------------------
 *        DSB:  Symmetric Band Reduction
@@ -2306,20 +2338,21 @@
 *
          MAXTYP = 15
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
          IF( TSTERR )
-     $      CALL DERRST( 'DSB', NOUT )
-*         CALL DCHKSB( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $      CALL AB_DERRST( 'DSB', NOUT )
+*         CALL AB_DCHKSB( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED, THRESH,
 *     $                NOUT, A( 1, 1 ), NMAX, D( 1, 1 ), D( 1, 2 ),
 *     $                A( 1, 2 ), NMAX, WORK, LWORK, RESULT, INFO )
-         CALL DCHKSB2STG( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED,
+         CALL AB_AB_DCHKSB2STG( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEE
+     $D,
      $                 THRESH, NOUT, A( 1, 1 ), NMAX, D( 1, 1 ), 
      $                 D( 1, 2 ), D( 1, 3 ), D( 1, 4 ), D( 1, 5 ),
      $                 A( 1, 2 ), NMAX, WORK, LWORK, RESULT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'DCHKSB', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_DCHKSB', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'DBB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'DBB' ) ) THEN
 *
 *        ------------------------------
 *        DBB:  General Band Reduction
@@ -2327,7 +2360,7 @@
 *
          MAXTYP = 15
          NTYPES = MIN( MAXTYP, NTYPES )
-         CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL AB_ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
          DO 370 I = 1, NPARMS
             NRHS = NSVAL( I )
 *
@@ -2337,94 +2370,99 @@
   360          CONTINUE
             END IF
             WRITE( NOUT, FMT = 9966 )C3, NRHS
-            CALL DCHKBB( NN, MVAL, NVAL, NK, KVAL, MAXTYP, DOTYPE, NRHS,
+            CALL AB_DCHKBB( NN, MVAL, NVAL, NK, KVAL, MAXTYP, DOTYPE, NR
+     $HS,
      $                   ISEED, THRESH, NOUT, A( 1, 1 ), NMAX,
      $                   A( 1, 2 ), 2*NMAX, D( 1, 1 ), D( 1, 2 ),
      $                   A( 1, 4 ), NMAX, A( 1, 5 ), NMAX, A( 1, 6 ),
      $                   NMAX, A( 1, 7 ), WORK, LWORK, RESULT, INFO )
             IF( INFO.NE.0 )
-     $         WRITE( NOUT, FMT = 9980 )'DCHKBB', INFO
+     $         WRITE( NOUT, FMT = 9980 )'AB_DCHKBB', INFO
   370    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'GLM' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'GLM' ) ) THEN
 *
 *        -----------------------------------------
 *        GLM:  Generalized Linear Regression Model
 *        -----------------------------------------
 *
-         CALL XLAENV( 1, 1 )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR )
-     $      CALL DERRGG( 'GLM', NOUT )
-         CALL DCKGLM( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
+     $      CALL AB_DERRGG( 'GLM', NOUT )
+         CALL AB_DCKGLM( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NM
+     $AX,
      $                A( 1, 1 ), A( 1, 2 ), B( 1, 1 ), B( 1, 2 ), X,
      $                WORK, D( 1, 1 ), NIN, NOUT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'DCKGLM', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_DCKGLM', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'GQR' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'GQR' ) ) THEN
 *
 *        ------------------------------------------
 *        GQR:  Generalized QR and RQ factorizations
 *        ------------------------------------------
 *
-         CALL XLAENV( 1, 1 )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR )
-     $      CALL DERRGG( 'GQR', NOUT )
-         CALL DCKGQR( NN, MVAL, NN, PVAL, NN, NVAL, NTYPES, ISEED,
+     $      CALL AB_DERRGG( 'GQR', NOUT )
+         CALL AB_DCKGQR( NN, MVAL, NN, PVAL, NN, NVAL, NTYPES, ISEED,
      $                THRESH, NMAX, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                A( 1, 4 ), TAUA, B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
      $                B( 1, 4 ), B( 1, 5 ), TAUB, WORK, D( 1, 1 ), NIN,
      $                NOUT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'DCKGQR', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_DCKGQR', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'GSV' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'GSV' ) ) THEN
 *
 *        ----------------------------------------------
 *        GSV:  Generalized Singular Value Decomposition
 *        ----------------------------------------------
 *
-         CALL XLAENV(1,1)
+         CALL AB_XLAENV(1,1)
          IF( TSTERR )
-     $      CALL DERRGG( 'GSV', NOUT )
-         CALL DCKGSV( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
+     $      CALL AB_DERRGG( 'GSV', NOUT )
+         CALL AB_DCKGSV( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NM
+     $AX,
      $                A( 1, 1 ), A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
      $                A( 1, 3 ), B( 1, 3 ), A( 1, 4 ), TAUA, TAUB,
      $                B( 1, 4 ), IWORK, WORK, D( 1, 1 ), NIN, NOUT,
      $                INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'DCKGSV', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_DCKGSV', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'CSD' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'CSD' ) ) THEN
 *
 *        ----------------------------------------------
 *        CSD:  CS Decomposition
 *        ----------------------------------------------
 *
-         CALL XLAENV(1,1)
+         CALL AB_XLAENV(1,1)
          IF( TSTERR )
-     $      CALL DERRGG( 'CSD', NOUT )
-         CALL DCKCSD( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
+     $      CALL AB_DERRGG( 'CSD', NOUT )
+         CALL AB_DCKCSD( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NM
+     $AX,
      $                A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), A( 1, 4 ),
      $                A( 1, 5 ), A( 1, 6 ), A( 1, 7 ), IWORK, WORK,
      $                D( 1, 1 ), NIN, NOUT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'DCKCSD', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_DCKCSD', INFO
 *
-      ELSE IF( LSAMEN( 3, C3, 'LSE' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 3, C3, 'AB_LSE' ) ) THEN
 *
 *        --------------------------------------
-*        LSE:  Constrained Linear Least Squares
+*        AB_LSE:  Constrained Linear Least Squares
 *        --------------------------------------
 *
-         CALL XLAENV( 1, 1 )
+         CALL AB_XLAENV( 1, 1 )
          IF( TSTERR )
-     $      CALL DERRGG( 'LSE', NOUT )
-         CALL DCKLSE( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
+     $      CALL AB_DERRGG( 'AB_LSE', NOUT )
+         CALL AB_DCKAB_LSE( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH,
+     $ NMAX,
      $                A( 1, 1 ), A( 1, 2 ), B( 1, 1 ), B( 1, 2 ), X,
      $                WORK, D( 1, 1 ), NIN, NOUT, INFO )
          IF( INFO.NE.0 )
-     $      WRITE( NOUT, FMT = 9980 )'DCKLSE', INFO
+     $      WRITE( NOUT, FMT = 9980 )'AB_DCKAB_LSE', INFO
 *
       ELSE
          WRITE( NOUT, FMT = * )
@@ -2435,7 +2473,7 @@
      $   GO TO 190
   380 CONTINUE
       WRITE( NOUT, FMT = 9994 )
-      S2 = DSECND( )
+      S2 = AB_DSECND( )
       WRITE( NOUT, FMT = 9993 )S2 - S1
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
@@ -2445,7 +2483,7 @@
  9995 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NX =', I4,
      $      ', NRHS =', I4 )
  9994 FORMAT( / / ' End of tests' )
- 9993 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9993 FORMAT( ' Total time used = ', F12.2, ' AB_SECONDs', / )
  9992 FORMAT( 1X, A3, ':  Unrecognized path name' )
  9991 FORMAT( / / ' *** Invalid integer value in column ', I2,
      $      ' of input', ' line:', / A79 )
@@ -2464,18 +2502,20 @@
  9981 FORMAT( ' Relative machine ', A, ' is taken to be', D16.6 )
  9980 FORMAT( ' *** Error code from ', A, ' = ', I4 )
  9979 FORMAT( / ' Tests of the Nonsymmetric Eigenvalue Problem Driver',
-     $      / '    DGEEV (eigenvalues and eigevectors)' )
+     $      / '    AB_DGEEV (eigenvalues and eigevectors)' )
  9978 FORMAT( / ' Tests of the Nonsymmetric Eigenvalue Problem Driver',
-     $      / '    DGEES (Schur form)' )
+     $      / '    AB_DGEES (Schur form)' )
  9977 FORMAT( / ' Tests of the Nonsymmetric Eigenvalue Problem Expert',
-     $      ' Driver', / '    DGEEVX (eigenvalues, eigenvectors and',
+     $      ' Driver', / '    AB_AB_DGEEVX (eigenvalues, eigenvectors an
+     $d',
      $      ' condition numbers)' )
  9976 FORMAT( / ' Tests of the Nonsymmetric Eigenvalue Problem Expert',
-     $      ' Driver', / '    DGEESX (Schur form and condition',
+     $      ' Driver', / '    AB_AB_DGEESX (Schur form and condition',
      $      ' numbers)' )
  9975 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
      $      'Problem routines' )
- 9974 FORMAT( ' Tests of DSBTRD', / ' (reduction of a symmetric band ',
+ 9974 FORMAT( ' Tests of AB_DSBTRD', / ' (reduction of a symmetric band 
+     $',
      $      'matrix to tridiagonal form)' )
  9973 FORMAT( / 1X, 71( '-' ) )
  9972 FORMAT( / ' LAPACK VERSION ', I1, '.', I1, '.', I1 )
@@ -2485,23 +2525,23 @@
  9969 FORMAT( / ' Tests of the Generalized Singular Value',
      $      ' Decomposition routines' )
  9968 FORMAT( / ' Tests of the Linear Least Squares routines' )
- 9967 FORMAT( ' Tests of DGBBRD', / ' (reduction of a general band ',
+ 9967 FORMAT( ' Tests of AB_DGBBRD', / ' (reduction of a general band ',
      $      'matrix to real bidiagonal form)' )
  9966 FORMAT( / / 1X, A3, ':  NRHS =', I4 )
  9965 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
-     $      'Problem Expert Driver DGGESX' )
+     $      'Problem Expert Driver AB_AB_DGGESX' )
  9964 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
-     $      'Problem Driver DGGES' )
+     $      'Problem Driver AB_DGGES' )
  9963 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
-     $      'Problem Driver DGGEV' )
+     $      'Problem Driver AB_DGGEV' )
  9962 FORMAT( / ' Tests of the Generalized Nonsymmetric Eigenvalue ',
-     $      'Problem Expert Driver DGGEVX' )
+     $      'Problem Expert Driver AB_AB_DGGEVX' )
  9961 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NX =', I4,
      $      ', INMIN=', I4,
      $      ', INWIN =', I4, ', INIBL =', I4, ', ISHFTS =', I4,
      $      ', IACC22 =', I4)
  9960 FORMAT( / ' Tests of the CS Decomposition routines' )
 *
-*     End of DCHKEE
+*     End of AB_DCHKEE
 *
       END

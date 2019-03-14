@@ -1,4 +1,4 @@
-*> \brief \b DLAGTS solves the system of equations (T-λI)x = y or (T-λI)Tx = y,where T is a general tridiagonal matrix and λ a scalar, using the LU factorization computed by slagtf.
+*> \brief \b AB_DLAGTS solves the system of equations (T-λI)x = y or (T-λI)Tx = y,where T is a general tridiagonal matrix and λ a scalar, using the LU factorization computed by AB_SLAGTF.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAGTS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagts.f">
+*> Download AB_DLAGTS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAGTS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagts.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAGTS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagts.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAGTS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )
+*       SUBROUTINE AB_DLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, JOB, N
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DLAGTS may be used to solve one of the systems of equations
+*> AB_DLAGTS may be used to solve one of the systems of equations
 *>
 *>    (T - lambda*I)*x = y   or   (T - lambda*I)**T*x = y,
 *>
@@ -44,7 +44,7 @@
 *>
 *>    (T - lambda*I) = P*L*U ,
 *>
-*> by routine DLAGTF. The choice of equation to be solved is
+*> by routine AB_DLAGTF. The choice of equation to be solved is
 *> controlled by the argument JOB, and in each case there is an option
 *> to perturb zero or very small diagonal elements of U, this option
 *> being intended for use in applications such as inverse iteration.
@@ -56,7 +56,7 @@
 *> \param[in] JOB
 *> \verbatim
 *>          JOB is INTEGER
-*>          Specifies the job to be performed by DLAGTS as follows:
+*>          Specifies the job to be performed by AB_DLAGTS as follows:
 *>          =  1: The equations  (T - lambda*I)x = y  are to be solved,
 *>                but diagonal elements of U are not to be perturbed.
 *>          = -1: The equations  (T - lambda*I)x = y  are to be solved
@@ -81,35 +81,35 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (N)
 *>          On entry, A must contain the diagonal elements of U as
-*>          returned from DLAGTF.
+*>          returned from AB_DLAGTF.
 *> \endverbatim
 *>
 *> \param[in] B
 *> \verbatim
 *>          B is DOUBLE PRECISION array, dimension (N-1)
 *>          On entry, B must contain the first super-diagonal elements of
-*>          U as returned from DLAGTF.
+*>          U as returned from AB_DLAGTF.
 *> \endverbatim
 *>
 *> \param[in] C
 *> \verbatim
 *>          C is DOUBLE PRECISION array, dimension (N-1)
 *>          On entry, C must contain the sub-diagonal elements of L as
-*>          returned from DLAGTF.
+*>          returned from AB_DLAGTF.
 *> \endverbatim
 *>
 *> \param[in] D
 *> \verbatim
 *>          D is DOUBLE PRECISION array, dimension (N-2)
-*>          On entry, D must contain the second super-diagonal elements
-*>          of U as returned from DLAGTF.
+*>          On entry, D must contain the AB_SECOND super-diagonal elements
+*>          of U as returned from AB_DLAGTF.
 *> \endverbatim
 *>
 *> \param[in] IN
 *> \verbatim
 *>          IN is INTEGER array, dimension (N)
 *>          On entry, IN must contain details of the matrix P as returned
-*>          from DLAGTF.
+*>          from AB_DLAGTF.
 *> \endverbatim
 *>
 *> \param[in,out] Y
@@ -159,7 +159,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )
+      SUBROUTINE AB_DLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -189,11 +189,11 @@
       INTRINSIC          ABS, MAX, SIGN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -204,15 +204,15 @@
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAGTS', -INFO )
+         CALL AB_XERBLA( 'AB_DLAGTS', -INFO )
          RETURN
       END IF
 *
       IF( N.EQ.0 )
      $   RETURN
 *
-      EPS = DLAMCH( 'Epsilon' )
-      SFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SFMIN = AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SFMIN
 *
       IF( JOB.LT.0 ) THEN
@@ -378,6 +378,6 @@
    90    CONTINUE
       END IF
 *
-*     End of DLAGTS
+*     End of AB_DLAGTS
 *
       END

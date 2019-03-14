@@ -1,4 +1,4 @@
-*> \brief \b CSTEDC
+*> \brief \b AB_CSTEDC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CSTEDC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cstedc.f">
+*> Download AB_CSTEDC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSTEDC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cstedc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSTEDC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cstedc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSTEDC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
+*       SUBROUTINE AB_CSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
 *                          LRWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,10 +37,10 @@
 *>
 *> \verbatim
 *>
-*> CSTEDC computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_CSTEDC computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric tridiagonal matrix using the divide and conquer method.
 *> The eigenvectors of a full or band complex Hermitian matrix can also
-*> be found if CHETRD or CHPTRD or CHBTRD has been used to reduce this
+*> be found if AB_CHETRD or AB_CHPTRD or AB_CHBTRD has been used to reduce this
 *> matrix to tridiagonal form.
 *>
 *> This code makes very mild assumptions about floating point
@@ -48,7 +48,7 @@
 *> add/subtract, or on those binary machines without guard digits
 *> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
 *> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.  See SLAED3 for details.
+*> without guard digits, but we know of none.  See AB_SLAED3 for details.
 *> \endverbatim
 *
 *  Arguments:
@@ -123,7 +123,7 @@
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -151,7 +151,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -177,7 +177,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -209,7 +209,7 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE CSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
+      SUBROUTINE AB_CSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
      $                   LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -240,14 +240,16 @@
       REAL               EPS, ORGNRM, P, TINY
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      REAL               SLAMCH, SLANST
-      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANST
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      REAL               AB_SLAMCH, AB_SLANST
+      EXTERNAL           AB_ILAENV, AB_LSAME, AB_SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CLACPY, CLACRM, CLAED0, CSTEQR, CSWAP,
-     $                   SLASCL, SLASET, SSTEDC, SSTEQR, SSTERF
+      EXTERNAL           AB_XERBLA, AB_CLACPY, AB_CLACRM, AB_CLAED0, AB_
+     $CSTEQR, AB_CSWAP,
+     $                   AB_SLASCL, AB_SLASET, AB_SSTEDC, AB_SSTEQR, AB_
+     $SSTERF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MOD, REAL, SQRT
@@ -259,11 +261,11 @@
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 .OR. LRWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
-      IF( LSAME( COMPZ, 'N' ) ) THEN
+      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
          ICOMPZ = 0
-      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
          ICOMPZ = 1
-      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
          ICOMPZ = 2
       ELSE
          ICOMPZ = -1
@@ -281,7 +283,7 @@
 *
 *        Compute the workspace requirements
 *
-         SMLSIZ = ILAENV( 9, 'CSTEDC', ' ', 0, 0, 0, 0 )
+         SMLSIZ = AB_ILAENV( 9, 'AB_CSTEDC', ' ', 0, 0, 0, 0 )
          IF( N.LE.1 .OR. ICOMPZ.EQ.0 ) THEN
             LWMIN = 1
             LIWMIN = 1
@@ -318,7 +320,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CSTEDC', -INFO )
+         CALL AB_XERBLA( 'AB_CSTEDC', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -338,15 +340,15 @@
 *     will use the Divide and Conquer routine to compute only the
 *     eigenvalues, which requires (3N + 3N**2) real workspace and
 *     (2 + 5N + 2N lg(N)) integer workspace.
-*     Since on many architectures SSTERF is much faster than any other
+*     Since on many architectures AB_SSTERF is much faster than any other
 *     algorithm for finding eigenvalues only, it is used here
 *     as the default. If the conditional clause is removed, then
 *     information on the size of workspace needs to be changed.
 *
-*     If COMPZ = 'N', use SSTERF to compute the eigenvalues.
+*     If COMPZ = 'N', use AB_SSTERF to compute the eigenvalues.
 *
       IF( ICOMPZ.EQ.0 ) THEN
-         CALL SSTERF( N, D, E, INFO )
+         CALL AB_SSTERF( N, D, E, INFO )
          GO TO 70
       END IF
 *
@@ -355,16 +357,16 @@
 *
       IF( N.LE.SMLSIZ ) THEN
 *
-         CALL CSTEQR( COMPZ, N, D, E, Z, LDZ, RWORK, INFO )
+         CALL AB_CSTEQR( COMPZ, N, D, E, Z, LDZ, RWORK, INFO )
 *
       ELSE
 *
-*        If COMPZ = 'I', we simply call SSTEDC instead.
+*        If COMPZ = 'I', we simply call AB_SSTEDC instead.
 *
          IF( ICOMPZ.EQ.2 ) THEN
-            CALL SLASET( 'Full', N, N, ZERO, ONE, RWORK, N )
+            CALL AB_SLASET( 'Full', N, N, ZERO, ONE, RWORK, N )
             LL = N*N + 1
-            CALL SSTEDC( 'I', N, D, E, RWORK, N,
+            CALL AB_SSTEDC( 'I', N, D, E, RWORK, N,
      $                   RWORK( LL ), LRWORK-LL+1, IWORK, LIWORK, INFO )
             DO 20 J = 1, N
                DO 10 I = 1, N
@@ -379,11 +381,11 @@
 *
 *        Scale.
 *
-         ORGNRM = SLANST( 'M', N, D, E )
+         ORGNRM = AB_SLANST( 'M', N, D, E )
          IF( ORGNRM.EQ.ZERO )
      $      GO TO 70
 *
-         EPS = SLAMCH( 'Epsilon' )
+         EPS = AB_SLAMCH( 'Epsilon' )
 *
          START = 1
 *
@@ -416,13 +418,16 @@
 *
 *              Scale.
 *
-               ORGNRM = SLANST( 'M', M, D( START ), E( START ) )
-               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
+               ORGNRM = AB_SLANST( 'M', M, D( START ), E( START ) )
+               CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
+     $ M,
      $                      INFO )
-               CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
+               CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START 
+     $),
      $                      M-1, INFO )
 *
-               CALL CLAED0( N, M, D( START ), E( START ), Z( 1, START ),
+               CALL AB_CLAED0( N, M, D( START ), E( START ), Z( 1, START
+     $ ),
      $                      LDZ, WORK, N, RWORK, IWORK, INFO )
                IF( INFO.GT.0 ) THEN
                   INFO = ( INFO / ( M+1 )+START-1 )*( N+1 ) +
@@ -432,15 +437,17 @@
 *
 *              Scale back.
 *
-               CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
+               CALL AB_SLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
+     $ M,
      $                      INFO )
 *
             ELSE
-               CALL SSTEQR( 'I', M, D( START ), E( START ), RWORK, M,
+               CALL AB_SSTEQR( 'I', M, D( START ), E( START ), RWORK, M,
      $                      RWORK( M*M+1 ), INFO )
-               CALL CLACRM( N, M, Z( 1, START ), LDZ, RWORK, M, WORK, N,
+               CALL AB_CLACRM( N, M, Z( 1, START ), LDZ, RWORK, M, WORK,
+     $ N,
      $                      RWORK( M*M+1 ) )
-               CALL CLACPY( 'A', N, M, WORK, N, Z( 1, START ), LDZ )
+               CALL AB_CLACPY( 'A', N, M, WORK, N, Z( 1, START ), LDZ )
                IF( INFO.GT.0 ) THEN
                   INFO = START*( N+1 ) + FINISH
                   GO TO 70
@@ -469,7 +476,7 @@
            IF( K.NE.I ) THEN
               D( K ) = D( I )
               D( I ) = P
-              CALL CSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
+              CALL AB_CSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
            END IF
    60    CONTINUE
       END IF
@@ -481,6 +488,6 @@
 *
       RETURN
 *
-*     End of CSTEDC
+*     End of AB_CSTEDC
 *
       END

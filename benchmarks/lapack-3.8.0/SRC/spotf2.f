@@ -1,4 +1,4 @@
-*> \brief \b SPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
+*> \brief \b AB_SPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPOTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spotf2.f">
+*> Download AB_SPOTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPOTF2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spotf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPOTF2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPOTF2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPOTF2( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_SPOTF2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SPOTF2 computes the Cholesky factorization of a real symmetric
+*> AB_SPOTF2 computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -107,7 +107,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPOTF2( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_SPOTF2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,12 +134,12 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      REAL               SDOT
-      EXTERNAL           LSAME, SDOT, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      REAL               AB_SDOT
+      EXTERNAL           AB_LSAME, AB_SDOT, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SSCAL, XERBLA
+      EXTERNAL           AB_SGEMV, AB_SSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -149,8 +149,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -158,7 +158,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPOTF2', -INFO )
+         CALL AB_XERBLA( 'AB_SPOTF2', -INFO )
          RETURN
       END IF
 *
@@ -175,8 +175,8 @@
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = A( J, J ) - SDOT( J-1, A( 1, J ), 1, A( 1, J ), 1 )
-            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
+            AJJ = A( J, J ) - AB_SDOT( J-1, A( 1, J ), 1, A( 1, J ), 1 )
+            IF( AJJ.LE.ZERO.OR.AB_SISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF
@@ -186,9 +186,9 @@
 *           Compute elements J+1:N of row J.
 *
             IF( J.LT.N ) THEN
-               CALL SGEMV( 'Transpose', J-1, N-J, -ONE, A( 1, J+1 ),
+               CALL AB_SGEMV( 'Transpose', J-1, N-J, -ONE, A( 1, J+1 ),
      $                     LDA, A( 1, J ), 1, ONE, A( J, J+1 ), LDA )
-               CALL SSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
+               CALL AB_SSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
             END IF
    10    CONTINUE
       ELSE
@@ -199,9 +199,9 @@
 *
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
-            AJJ = A( J, J ) - SDOT( J-1, A( J, 1 ), LDA, A( J, 1 ),
+            AJJ = A( J, J ) - AB_SDOT( J-1, A( J, 1 ), LDA, A( J, 1 ),
      $            LDA )
-            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
+            IF( AJJ.LE.ZERO.OR.AB_SISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF
@@ -211,9 +211,10 @@
 *           Compute elements J+1:N of column J.
 *
             IF( J.LT.N ) THEN
-               CALL SGEMV( 'No transpose', N-J, J-1, -ONE, A( J+1, 1 ),
+               CALL AB_SGEMV( 'No transpose', N-J, J-1, -ONE, A( J+1, 1 
+     $),
      $                     LDA, A( J, 1 ), LDA, ONE, A( J+1, J ), 1 )
-               CALL SSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
+               CALL AB_SSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
             END IF
    20    CONTINUE
       END IF
@@ -225,6 +226,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of SPOTF2
+*     End of AB_SPOTF2
 *
       END

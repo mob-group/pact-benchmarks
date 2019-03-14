@@ -1,4 +1,4 @@
-*> \brief \b SSPGV
+*> \brief \b AB_SSPGV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSPGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspgv.f">
+*> Download AB_SSPGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSPGV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sspgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSPGV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSPGV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+*       SUBROUTINE AB_SSPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SSPGV computes all the eigenvalues and, optionally, the eigenvectors
+*> AB_SSPGV computes all the eigenvalues and, optionally, the eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.
 *> Here A and B are assumed to be symmetric, stored in packed format,
@@ -134,8 +134,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  SPPTRF or SSPEV returned an error code:
-*>             <= N:  if INFO = i, SSPEV failed to converge;
+*>          > 0:  AB_SPPTRF or AB_SSPEV returned an error code:
+*>             <= N:  if INFO = i, AB_SSPEV failed to converge;
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero.
 *>             > N:   if INFO = n + i, for 1 <= i <= n, then the leading
@@ -157,7 +157,8 @@
 *> \ingroup realOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE SSPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+      SUBROUTINE AB_SSPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK
+     $,
      $                  INFO )
 *
 *  -- LAPACK driver routine (version 3.7.1) --
@@ -182,25 +183,26 @@
       INTEGER            J, NEIG
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPPTRF, SSPEV, SSPGST, STPMV, STPSV, XERBLA
+      EXTERNAL           AB_SPPTRF, AB_SSPEV, AB_SSPGST, AB_STPMV, AB_ST
+     $PSV, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      UPPER = AB_LSAME( UPLO, 'U' )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -208,7 +210,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSPGV ', -INFO )
+         CALL AB_XERBLA( 'AB_SSPGV ', -INFO )
          RETURN
       END IF
 *
@@ -219,7 +221,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL SPPTRF( UPLO, N, BP, INFO )
+      CALL AB_SPPTRF( UPLO, N, BP, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -227,8 +229,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL SSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
+      CALL AB_SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      CALL AB_SSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
 *
       IF( WANTZ ) THEN
 *
@@ -249,7 +251,7 @@
             END IF
 *
             DO 10 J = 1, NEIG
-               CALL STPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL AB_STPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    10       CONTINUE
 *
@@ -265,13 +267,13 @@
             END IF
 *
             DO 20 J = 1, NEIG
-               CALL STPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL AB_STPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    20       CONTINUE
          END IF
       END IF
       RETURN
 *
-*     End of SSPGV
+*     End of AB_SSPGV
 *
       END

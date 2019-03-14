@@ -1,4 +1,4 @@
-*> \brief \b ZCKGSV
+*> \brief \b AB_ZCKGSV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+*       SUBROUTINE AB_ZCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
 *                          NMAX, A, AF, B, BF, U, V, Q, ALPHA, BETA, R,
 *                          IWORK, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> ZCKGSV tests ZGGSVD:
+*> AB_ZCKGSV tests AB_ZGGSVD:
 *>        the GSVD for M-by-N matrix A and P-by-N matrix B.
 *> \endverbatim
 *
@@ -177,7 +177,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If ZLATMS returns an error code, the absolute value
+*>          > 0 :  If AB_ZLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -194,7 +194,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+      SUBROUTINE AB_ZCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
      $                   NMAX, A, AF, B, BF, U, V, Q, ALPHA, BETA, R,
      $                   IWORK, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -237,7 +237,8 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DLATB9, ZGSVTS3, ZLATMS
+      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_DLATB9, 
+     $AB_ZGSVTS3, AB_ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -251,7 +252,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDA = NMAX
       LDB = NMAX
       LDU = NMAX
@@ -274,16 +275,18 @@
             IF( .NOT.DOTYPE( IMAT ) )
      $         GO TO 20
 *
-*           Set up parameters with DLATB9 and generate test
-*           matrices A and B with ZLATMS.
+*           Set up parameters with AB_DLATB9 and generate test
+*           matrices A and B with AB_ZLATMS.
 *
-            CALL DLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KUB,
+            CALL AB_DLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KU
+     $B,
      $                   ANORM, BNORM, MODEA, MODEB, CNDNMA, CNDNMB,
      $                   DISTA, DISTB )
 *
 *           Generate M by N matrix A
 *
-            CALL ZLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA, CNDNMA,
+            CALL AB_ZLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA, CNDN
+     $MA,
      $                   ANORM, KLA, KUA, 'No packing', A, LDA, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -294,7 +297,8 @@
 *
 *           Generate P by N matrix B
 *
-            CALL ZLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB, CNDNMB,
+            CALL AB_ZLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB, CNDN
+     $MB,
      $                   BNORM, KLB, KUB, 'No packing', B, LDB, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -305,7 +309,7 @@
 *
             NT = 6
 *
-            CALL ZGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
+            CALL AB_ZGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
      $                    LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
      $                    LWORK, RWORK, RESULT )
 *
@@ -316,7 +320,7 @@
                IF( RESULT( I ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                      FIRSTT = .FALSE.
-                     CALL ALAHDG( NOUT, PATH )
+                     CALL AB_AB_ALAHDG( NOUT, PATH )
                   END IF
                   WRITE( NOUT, FMT = 9998 )M, P, N, IMAT, I,
      $               RESULT( I )
@@ -330,13 +334,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' ZLATMS in ZCKGSV   INFO = ', I5 )
+ 9999 FORMAT( ' AB_ZLATMS in AB_ZCKGSV   INFO = ', I5 )
  9998 FORMAT( ' M=', I4, ' P=', I4, ', N=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
       RETURN
 *
-*     End of ZCKGSV
+*     End of AB_ZCKGSV
 *
       END

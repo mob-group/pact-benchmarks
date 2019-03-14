@@ -1,4 +1,4 @@
-*> \brief \b SGBEQU
+*> \brief \b AB_SGBEQU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGBEQU + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgbequ.f">
+*> Download AB_SGBEQU + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGBEQU.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgbequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGBEQU.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGBEQU.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+*       SUBROUTINE AB_SGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                          AMAX, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SGBEQU computes row and column scalings intended to equilibrate an
+*> AB_SGBEQU computes row and column scalings intended to equilibrate an
 *> M-by-N band matrix A and reduce its condition number.  R returns the
 *> row scale factors and C the column scale factors, chosen to try to
 *> make the largest element in each row and column of the matrix B with
@@ -150,7 +150,8 @@
 *> \ingroup realGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE SGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+      SUBROUTINE AB_SGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND
+     $,
      $                   AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -177,11 +178,11 @@
       REAL               BIGNUM, RCMAX, RCMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -203,7 +204,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGBEQU', -INFO )
+         CALL AB_XERBLA( 'AB_SGBEQU', -INFO )
          RETURN
       END IF
 *
@@ -218,7 +219,7 @@
 *
 *     Get machine constants.
 *
-      SMLNUM = SLAMCH( 'S' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
 *
 *     Compute row scale factors.
@@ -319,6 +320,6 @@
 *
       RETURN
 *
-*     End of SGBEQU
+*     End of AB_SGBEQU
 *
       END

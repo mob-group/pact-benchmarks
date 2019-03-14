@@ -98,26 +98,27 @@
       COMPLEX*16         WORKARF( (NMAX*(NMAX+1))/2 )
       COMPLEX*16         WORKAP( (NMAX*(NMAX+1))/2 )
       COMPLEX*16         WORKARFINV( (NMAX*(NMAX+1))/2 )
-      COMPLEX*16         Z_WORK_ZLATMS( 3 * NMAX )
-      COMPLEX*16         Z_WORK_ZPOT02( NMAX, MAXRHS )
-      COMPLEX*16         Z_WORK_ZPOT03( NMAX, NMAX )
-      DOUBLE PRECISION   D_WORK_ZLATMS( NMAX )
-      DOUBLE PRECISION   D_WORK_ZLANHE( NMAX )
-      DOUBLE PRECISION   D_WORK_ZPOT01( NMAX )
-      DOUBLE PRECISION   D_WORK_ZPOT02( NMAX )
-      DOUBLE PRECISION   D_WORK_ZPOT03( NMAX )
+      COMPLEX*16         Z_WORK_AB_ZLATMS( 3 * NMAX )
+      COMPLEX*16         Z_WORK_AB_ZPOT02( NMAX, MAXRHS )
+      COMPLEX*16         Z_WORK_AB_ZPOT03( NMAX, NMAX )
+      DOUBLE PRECISION   D_WORK_AB_ZLATMS( NMAX )
+      DOUBLE PRECISION   D_WORK_AB_ZLANHE( NMAX )
+      DOUBLE PRECISION   D_WORK_AB_ZPOT01( NMAX )
+      DOUBLE PRECISION   D_WORK_AB_ZPOT02( NMAX )
+      DOUBLE PRECISION   D_WORK_AB_ZPOT03( NMAX )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DSECND
-      EXTERNAL           DLAMCH, DSECND
+      DOUBLE PRECISION   AB_DLAMCH, AB_DSECND
+      EXTERNAL           AB_DLAMCH, AB_DSECND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ILAVER, ZDRVRFP, ZDRVRF1, ZDRVRF2, ZDRVRF3,
-     +                   ZDRVRF4
+      EXTERNAL           AB_ILAVER, AB_ZDRVRFP, AB_ZDRVRF1, AB_ZDRVRF2, 
+     $AB_ZDRVRF3,
+     +                   AB_ZDRVRF4
 *     ..
 *     .. Executable Statements ..
 *
-      S1 = DSECND( )
+      S1 = AB_DSECND( )
       FATAL = .FALSE.
 *
 *     Read a dummy line.
@@ -126,7 +127,7 @@
 *
 *     Report LAPACK version tag (e.g. LAPACK-3.2.0)
 *
-      CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      CALL AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
       WRITE( NOUT, FMT = 9994 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read the values of N
@@ -220,60 +221,62 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      EPS = DLAMCH( 'Underflow threshold' )
+      EPS = AB_DLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'underflow', EPS
-      EPS = DLAMCH( 'Overflow threshold' )
+      EPS = AB_DLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'overflow ', EPS
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'precision', EPS
       WRITE( NOUT, FMT = * )
 *
 *     Test the error exit of:
 *
       IF( TSTERR )
-     $   CALL ZERRRFP( NOUT )
+     $   CALL AB_ZERRRFP( NOUT )
 *
-*    Test the routines: zpftrf, zpftri, zpftrs (as in ZDRVPO).
-*    This also tests the routines: ztfsm, ztftri, ztfttr, ztrttf.
+*    Test the routines: AB_ZPFTRF, AB_ZPFTRI, AB_ZPFTRS (as in AB_ZDRVPO).
+*    This also tests the routines: AB_ZTFSM, AB_ZTFTRI, AB_ZTFTTR, AB_ZTRTTF.
 *
-      CALL ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
+      CALL AB_ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
      $              WORKA, WORKASAV, WORKAFAC, WORKAINV, WORKB,
      $              WORKBSAV, WORKXACT, WORKX, WORKARF, WORKARFINV,
-     $              Z_WORK_ZLATMS, Z_WORK_ZPOT02,
-     $              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
-     $              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
+     $              Z_WORK_AB_ZLATMS, Z_WORK_AB_ZPOT02,
+     $              Z_WORK_AB_ZPOT03, D_WORK_AB_ZLATMS, D_WORK_AB_ZLANHE
+     $,
+     $              D_WORK_AB_ZPOT01, D_WORK_AB_ZPOT02, D_WORK_AB_ZPOT03
+     $ )
 *
-*    Test the routine: zlanhf
+*    Test the routine: AB_ZLANHF
 *
-      CALL ZDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
-     +              D_WORK_ZLANHE )
+      CALL AB_ZDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
+     +              D_WORK_AB_ZLANHE )
 *
 *    Test the conversion routines:
-*       zhfttp, ztpthf, ztfttr, ztrttf, ztrttp and ztpttr.
+*       zhfttp, ztpthf, AB_ZTFTTR, AB_ZTRTTF, AB_ZTRTTP and AB_ZTPTTR.
 *
-      CALL ZDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
+      CALL AB_ZDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
      +              WORKAP, WORKASAV )
 *
-*    Test the routine: ztfsm
+*    Test the routine: AB_ZTFSM
 *
-      CALL ZDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
-     +              WORKAINV, WORKAFAC, D_WORK_ZLANHE,
-     +              Z_WORK_ZPOT03, Z_WORK_ZPOT02 )
+      CALL AB_ZDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
+     +              WORKAINV, WORKAFAC, D_WORK_AB_ZLANHE,
+     +              Z_WORK_AB_ZPOT03, Z_WORK_AB_ZPOT02 )
 
 *
-*    Test the routine: zhfrk
+*    Test the routine: AB_ZHFRK
 *
-      CALL ZDRVRF4( NOUT, NN, NVAL, THRESH, WORKA, WORKAFAC, NMAX,
-     +              WORKARF, WORKAINV, NMAX,D_WORK_ZLANHE)
+      CALL AB_ZDRVRF4( NOUT, NN, NVAL, THRESH, WORKA, WORKAFAC, NMAX,
+     +              WORKARF, WORKAINV, NMAX,D_WORK_AB_ZLANHE)
 *
       CLOSE ( NIN )
-      S2 = DSECND( )
+      S2 = AB_DSECND( )
       WRITE( NOUT, FMT = 9998 )
       WRITE( NOUT, FMT = 9997 )S2 - S1
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )
- 9997 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
+ 9997 FORMAT( ' Total time used = ', F12.2, ' AB_SECONDs', / )
  9996 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be >=',
      $      I6 )
  9995 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be <=',

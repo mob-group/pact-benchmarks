@@ -1,4 +1,4 @@
-*> \brief \b DCHKPO
+*> \brief \b AB_DCHKPO
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKPO( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*       SUBROUTINE AB_DCHKPO( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
 *                          THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
 *                          XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DCHKPO tests DPOTRF, -TRI, -TRS, -RFS, and -CON
+*> AB_DCHKPO tests AB_DPOTRF, -TRI, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -168,7 +168,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DCHKPO( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+      SUBROUTINE AB_DCHKPO( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                   THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
      $                   XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -214,14 +214,17 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, DLANSY
-      EXTERNAL           DGET06, DLANSY
+      DOUBLE PRECISION   AB_DGET06, AB_DLANSY
+      EXTERNAL           AB_DGET06, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRPO, DGET04, DLACPY,
-     $                   DLARHS, DLATB4, DLATMS, DPOCON, DPORFS, DPOT01,
-     $                   DPOT02, DPOT03, DPOT05, DPOTRF, DPOTRI, DPOTRS,
-     $                   XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_DERRPO, AB_D
+     $GET04, AB_DLACPY,
+     $                   AB_DLARHS, AB_DLATB4, AB_DLATMS, AB_DPOCON, AB_
+     $DPORFS, AB_DPOT01,
+     $                   AB_DPOT02, AB_DPOT03, AB_DPOT05, AB_DPOTRF, AB_
+     $DPOTRI, AB_DPOTRS,
+     $                   AB_XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -255,9 +258,9 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL DERRPO( PATH, NOUT )
+     $   CALL AB_DERRPO( PATH, NOUT )
       INFOT = 0
-      CALL XLAENV( 2, 2 )
+      CALL AB_XLAENV( 2, 2 )
 *
 *     Do for each value of N in NVAL
 *
@@ -288,21 +291,23 @@
             DO 100 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with DLATB4 and generate a test matrix
-*              with DLATMS.
+*              Set up parameters with AB_DLATB4 and generate a test matrix
+*              with AB_DLATMS.
 *
-               CALL DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+               CALL AB_DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
+     $DE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'DLATMS'
-               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_DLATMS'
+               CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from DLATMS.
+*              Check error code from AB_DLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 100
                END IF
@@ -350,18 +355,19 @@
 *
                DO 90 INB = 1, NNB
                   NB = NBVAL( INB )
-                  CALL XLAENV( 1, NB )
+                  CALL AB_XLAENV( 1, NB )
 *
 *                 Compute the L*L' or U'*U factorization of the matrix.
 *
-                  CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                  SRNAMT = 'DPOTRF'
-                  CALL DPOTRF( UPLO, N, AFAC, LDA, INFO )
+                  CALL AB_DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                  SRNAMT = 'AB_DPOTRF'
+                  CALL AB_DPOTRF( UPLO, N, AFAC, LDA, INFO )
 *
-*                 Check error code from DPOTRF.
+*                 Check error code from AB_DPOTRF.
 *
                   IF( INFO.NE.IZERO ) THEN
-                     CALL ALAERH( PATH, 'DPOTRF', INFO, IZERO, UPLO, N,
+                     CALL AB_ALAERH( PATH, 'AB_DPOTRF', INFO, IZERO, UPL
+     $O, N,
      $                            N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
                      GO TO 90
@@ -375,24 +381,25 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                  CALL DPOT01( UPLO, N, A, LDA, AINV, LDA, RWORK,
+                  CALL AB_DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                  CALL AB_DPOT01( UPLO, N, A, LDA, AINV, LDA, RWORK,
      $                         RESULT( 1 ) )
 *
 *+    TEST 2
 *                 Form the inverse and compute the residual.
 *
-                  CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                  SRNAMT = 'DPOTRI'
-                  CALL DPOTRI( UPLO, N, AINV, LDA, INFO )
+                  CALL AB_DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                  SRNAMT = 'AB_DPOTRI'
+                  CALL AB_DPOTRI( UPLO, N, AINV, LDA, INFO )
 *
-*                 Check error code from DPOTRI.
+*                 Check error code from AB_DPOTRI.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'DPOTRI', INFO, 0, UPLO, N, N,
+     $               CALL AB_ALAERH( PATH, 'AB_DPOTRI', INFO, 0, UPLO, N
+     $, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL DPOT03( UPLO, N, A, LDA, AINV, LDA, WORK, LDA,
+                  CALL AB_DPOT03( UPLO, N, A, LDA, AINV, LDA, WORK, LDA,
      $                         RWORK, RCONDC, RESULT( 2 ) )
 *
 *                 Print information about the tests that did not pass
@@ -401,7 +408,7 @@
                   DO 60 K = 1, 2
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -421,51 +428,58 @@
 *+    TEST 3
 *                 Solve and compute residual for A * X = B .
 *
-                     SRNAMT = 'DLARHS'
-                     CALL DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                     SRNAMT = 'AB_DLARHS'
+                     CALL AB_DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, K
+     $U,
      $                            NRHS, A, LDA, XACT, LDA, B, LDA,
      $                            ISEED, INFO )
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'DPOTRS'
-                     CALL DPOTRS( UPLO, N, NRHS, AFAC, LDA, X, LDA,
+                     SRNAMT = 'AB_DPOTRS'
+                     CALL AB_DPOTRS( UPLO, N, NRHS, AFAC, LDA, X, LDA,
      $                            INFO )
 *
-*                 Check error code from DPOTRS.
+*                 Check error code from AB_DPOTRS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'DPOTRS', INFO, 0, UPLO, N,
+     $                  CALL AB_ALAERH( PATH, 'AB_DPOTRS', INFO, 0, UPLO
+     $, N,
      $                               N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
 *
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
+     $,
      $                            LDA, RWORK, RESULT( 3 ) )
 *
 *+    TEST 4
 *                 Check solution from generated exact solution.
 *
-                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 4 ) )
 *
 *+    TESTS 5, 6, and 7
 *                 Use iterative refinement to improve the solution.
 *
-                     SRNAMT = 'DPORFS'
-                     CALL DPORFS( UPLO, N, NRHS, A, LDA, AFAC, LDA, B,
+                     SRNAMT = 'AB_DPORFS'
+                     CALL AB_DPORFS( UPLO, N, NRHS, A, LDA, AFAC, LDA, B
+     $,
      $                            LDA, X, LDA, RWORK, RWORK( NRHS+1 ),
      $                            WORK, IWORK, INFO )
 *
-*                 Check error code from DPORFS.
+*                 Check error code from AB_DPORFS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'DPORFS', INFO, 0, UPLO, N,
+     $                  CALL AB_ALAERH( PATH, 'AB_DPORFS', INFO, 0, UPLO
+     $, N,
      $                               N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
 *
-                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 5 ) )
-                     CALL DPOT05( UPLO, N, NRHS, A, LDA, B, LDA, X, LDA,
+                     CALL AB_DPOT05( UPLO, N, NRHS, A, LDA, B, LDA, X, L
+     $DA,
      $                            XACT, LDA, RWORK, RWORK( NRHS+1 ),
      $                            RESULT( 6 ) )
 *
@@ -475,7 +489,7 @@
                      DO 70 K = 3, 7
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
+     $                        CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9998 )UPLO, N, NRHS,
      $                        IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -487,24 +501,26 @@
 *+    TEST 8
 *                 Get an estimate of RCOND = 1/CNDNUM.
 *
-                  ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
-                  SRNAMT = 'DPOCON'
-                  CALL DPOCON( UPLO, N, AFAC, LDA, ANORM, RCOND, WORK,
+                  ANORM = AB_DLANSY( '1', UPLO, N, A, LDA, RWORK )
+                  SRNAMT = 'AB_DPOCON'
+                  CALL AB_DPOCON( UPLO, N, AFAC, LDA, ANORM, RCOND, WORK
+     $,
      $                         IWORK, INFO )
 *
-*                 Check error code from DPOCON.
+*                 Check error code from AB_DPOCON.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'DPOCON', INFO, 0, UPLO, N, N,
+     $               CALL AB_ALAERH( PATH, 'AB_DPOCON', INFO, 0, UPLO, N
+     $, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  RESULT( 8 ) = DGET06( RCOND, RCONDC )
+                  RESULT( 8 ) = AB_DGET06( RCOND, RCONDC )
 *
 *                 Print the test ratio if it is .GE. THRESH.
 *
                   IF( RESULT( 8 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL ALAHD( NOUT, PATH )
+     $                  CALL AB_ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9997 )UPLO, N, IMAT, 8,
      $                  RESULT( 8 )
                      NFAIL = NFAIL + 1
@@ -517,7 +533,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
@@ -527,6 +543,6 @@
      $      ', test(', I2, ') =', G12.5 )
       RETURN
 *
-*     End of DCHKPO
+*     End of AB_DCHKPO
 *
       END

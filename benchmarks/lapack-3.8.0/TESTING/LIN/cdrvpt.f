@@ -1,4 +1,4 @@
-*> \brief \b CDRVPT
+*> \brief \b AB_CDRVPT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D,
+*       SUBROUTINE AB_CDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D,
 *                          E, B, X, XACT, WORK, RWORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> CDRVPT tests CPTSV and -SVX.
+*> AB_CDRVPT tests AB_CPTSV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -137,7 +137,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D,
+      SUBROUTINE AB_CDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D
+     $,
      $                   E, B, X, XACT, WORK, RWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -182,15 +183,19 @@
       REAL               RESULT( NTESTS ), Z( 3 )
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               CLANHT, SCASUM, SGET06
-      EXTERNAL           ISAMAX, CLANHT, SCASUM, SGET06
+      INTEGER            AB_ISAMAX
+      REAL               AB_CLANHT, AB_SCASUM, AB_SGET06
+      EXTERNAL           AB_ISAMAX, AB_CLANHT, AB_SCASUM, AB_SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, CCOPY, CERRVX, CGET04,
-     $                   CLACPY, CLAPTM, CLARNV, CLASET, CLATB4, CLATMS,
-     $                   CPTSV, CPTSVX, CPTT01, CPTT02, CPTT05, CPTTRF,
-     $                   CPTTRS, CSSCAL, SCOPY, SLARNV, SSCAL
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_CCOPY, AB_C
+     $ERRVX, AB_CGET04,
+     $                   AB_CLACPY, AB_CLAPTM, AB_CLARNV, AB_CLASET, AB_
+     $CLATB4, AB_CLATMS,
+     $                   AB_CPTSV, AB_AB_CPTSVX, AB_CPTT01, AB_CPTT02, A
+     $B_CPTT05, AB_CPTTRF,
+     $                   AB_CPTTRS, AB_CAB_SSCAL, AB_SCOPY, AB_SLARNV, A
+     $B_SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX
@@ -221,7 +226,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRVX( PATH, NOUT )
+     $   CALL AB_CERRVX( PATH, NOUT )
       INFOT = 0
 *
       DO 120 IN = 1, NN
@@ -241,9 +246,9 @@
             IF( N.GT.0 .AND. .NOT.DOTYPE( IMAT ) )
      $         GO TO 110
 *
-*           Set up parameters with CLATB4.
+*           Set up parameters with AB_CLATB4.
 *
-            CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+            CALL AB_CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                   COND, DIST )
 *
             ZEROT = IMAT.GE.8 .AND. IMAT.LE.10
@@ -252,14 +257,16 @@
 *              Type 1-6:  generate a symmetric tridiagonal matrix of
 *              known condition number in lower triangular band storage.
 *
-               SRNAMT = 'CLATMS'
-               CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, COND,
+               SRNAMT = 'AB_CLATMS'
+               CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CON
+     $D,
      $                      ANORM, KL, KU, 'B', A, 2, WORK, INFO )
 *
-*              Check the error code from CLATMS.
+*              Check the error code from AB_CLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, ' ', N, N, KL,
+                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, ' ', N, N,
+     $ KL,
      $                         KU, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 110
                END IF
@@ -284,8 +291,8 @@
 *
 *                 Let D and E have values from [-1,1].
 *
-                  CALL SLARNV( 2, ISEED, N, D )
-                  CALL CLARNV( 2, ISEED, N-1, E )
+                  CALL AB_SLARNV( 2, ISEED, N, D )
+                  CALL AB_CLARNV( 2, ISEED, N-1, E )
 *
 *                 Make the tridiagonal matrix diagonally dominant.
 *
@@ -302,11 +309,11 @@
 *
 *                 Scale D and E so the maximum element is ANORM.
 *
-                  IX = ISAMAX( N, D, 1 )
+                  IX = AB_ISAMAX( N, D, 1 )
                   DMAX = D( IX )
-                  CALL SSCAL( N, ANORM / DMAX, D, 1 )
+                  CALL AB_SSCAL( N, ANORM / DMAX, D, 1 )
                   IF( N.GT.1 )
-     $               CALL CSSCAL( N-1, ANORM / DMAX, E, 1 )
+     $               CALL AB_CAB_SSCAL( N-1, ANORM / DMAX, E, 1 )
 *
                ELSE IF( IZERO.GT.0 ) THEN
 *
@@ -364,13 +371,14 @@
 *
             IX = 1
             DO 40 J = 1, NRHS
-               CALL CLARNV( 2, ISEED, N, XACT( IX ) )
+               CALL AB_CLARNV( 2, ISEED, N, XACT( IX ) )
                IX = IX + LDA
    40       CONTINUE
 *
 *           Set the right hand side.
 *
-            CALL CLAPTM( 'Lower', N, NRHS, ONE, D, E, XACT, LDA, ZERO,
+            CALL AB_CLAPTM( 'Lower', N, NRHS, ONE, D, E, XACT, LDA, ZERO
+     $,
      $                   B, LDA )
 *
             DO 100 IFACT = 1, 2
@@ -381,7 +389,7 @@
                END IF
 *
 *              Compute the condition number for comparison with
-*              the value returned by CPTSVX.
+*              the value returned by AB_AB_CPTSVX.
 *
                IF( ZEROT ) THEN
                   IF( IFACT.EQ.1 )
@@ -392,17 +400,17 @@
 *
 *                 Compute the 1-norm of A.
 *
-                  ANORM = CLANHT( '1', N, D, E )
+                  ANORM = AB_CLANHT( '1', N, D, E )
 *
-                  CALL SCOPY( N, D, 1, D( N+1 ), 1 )
+                  CALL AB_SCOPY( N, D, 1, D( N+1 ), 1 )
                   IF( N.GT.1 )
-     $               CALL CCOPY( N-1, E, 1, E( N+1 ), 1 )
+     $               CALL AB_CCOPY( N-1, E, 1, E( N+1 ), 1 )
 *
 *                 Factor the matrix A.
 *
-                  CALL CPTTRF( N, D( N+1 ), E( N+1 ), INFO )
+                  CALL AB_CPTTRF( N, D( N+1 ), E( N+1 ), INFO )
 *
-*                 Use CPTTRS to solve for one column at a time of
+*                 Use AB_CPTTRS to solve for one column at a time of
 *                 inv(A), computing the maximum column sum as we go.
 *
                   AINVNM = ZERO
@@ -411,9 +419,10 @@
                         X( J ) = ZERO
    50                CONTINUE
                      X( I ) = ONE
-                     CALL CPTTRS( 'Lower', N, 1, D( N+1 ), E( N+1 ), X,
+                     CALL AB_CPTTRS( 'Lower', N, 1, D( N+1 ), E( N+1 ), 
+     $X,
      $                            LDA, INFO )
-                     AINVNM = MAX( AINVNM, SCASUM( N, X, 1 ) )
+                     AINVNM = MAX( AINVNM, AB_SCASUM( N, X, 1 ) )
    60             CONTINUE
 *
 *                 Compute the 1-norm condition number of A.
@@ -427,23 +436,24 @@
 *
                IF( IFACT.EQ.2 ) THEN
 *
-*                 --- Test CPTSV --
+*                 --- Test AB_CPTSV --
 *
-                  CALL SCOPY( N, D, 1, D( N+1 ), 1 )
+                  CALL AB_SCOPY( N, D, 1, D( N+1 ), 1 )
                   IF( N.GT.1 )
-     $               CALL CCOPY( N-1, E, 1, E( N+1 ), 1 )
-                  CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+     $               CALL AB_CCOPY( N-1, E, 1, E( N+1 ), 1 )
+                  CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
 *                 Factor A as L*D*L' and solve the system A*X = B.
 *
-                  SRNAMT = 'CPTSV '
-                  CALL CPTSV( N, NRHS, D( N+1 ), E( N+1 ), X, LDA,
+                  SRNAMT = 'AB_CPTSV '
+                  CALL AB_CPTSV( N, NRHS, D( N+1 ), E( N+1 ), X, LDA,
      $                        INFO )
 *
-*                 Check error code from CPTSV .
+*                 Check error code from AB_CPTSV .
 *
                   IF( INFO.NE.IZERO )
-     $               CALL ALAERH( PATH, 'CPTSV ', INFO, IZERO, ' ', N,
+     $               CALL AB_ALAERH( PATH, 'AB_CPTSV ', INFO, IZERO, ' '
+     $, N,
      $                            N, 1, 1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
                   NT = 0
@@ -452,18 +462,20 @@
 *                    Check the factorization by computing the ratio
 *                       norm(L*D*L' - A) / (n * norm(A) * EPS )
 *
-                     CALL CPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
+                     CALL AB_CPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
      $                            RESULT( 1 ) )
 *
 *                    Compute the residual in the solution.
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL CPTT02( 'Lower', N, NRHS, D, E, X, LDA, WORK,
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_CPTT02( 'Lower', N, NRHS, D, E, X, LDA, WOR
+     $K,
      $                            LDA, RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
                   END IF
@@ -474,8 +486,9 @@
                   DO 70 K = 1, NT
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALADHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9999 )'CPTSV ', N, IMAT, K,
+     $                     CALL AB_ALADHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9999 )'AB_CPTSV ', N, IMAT, K
+     $,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -483,7 +496,7 @@
                   NRUN = NRUN + NT
                END IF
 *
-*              --- Test CPTSVX ---
+*              --- Test AB_AB_CPTSVX ---
 *
                IF( IFACT.GT.1 ) THEN
 *
@@ -497,21 +510,23 @@
      $               D( N+N ) = ZERO
                END IF
 *
-               CALL CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
+               CALL AB_CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
      $                      CMPLX( ZERO ), X, LDA )
 *
 *              Solve the system and compute the condition number and
-*              error bounds using CPTSVX.
+*              error bounds using AB_AB_CPTSVX.
 *
-               SRNAMT = 'CPTSVX'
-               CALL CPTSVX( FACT, N, NRHS, D, E, D( N+1 ), E( N+1 ), B,
+               SRNAMT = 'AB_AB_CPTSVX'
+               CALL AB_AB_CPTSVX( FACT, N, NRHS, D, E, D( N+1 ), E( N+1 
+     $), B,
      $                      LDA, X, LDA, RCOND, RWORK, RWORK( NRHS+1 ),
      $                      WORK, RWORK( 2*NRHS+1 ), INFO )
 *
-*              Check the error code from CPTSVX.
+*              Check the error code from AB_AB_CPTSVX.
 *
                IF( INFO.NE.IZERO )
-     $            CALL ALAERH( PATH, 'CPTSVX', INFO, IZERO, FACT, N, N,
+     $            CALL AB_ALAERH( PATH, 'AB_AB_CPTSVX', INFO, IZERO, FAC
+     $T, N, N,
      $                         1, 1, NRHS, IMAT, NFAIL, NERRS, NOUT )
                IF( IZERO.EQ.0 ) THEN
                   IF( IFACT.EQ.2 ) THEN
@@ -520,7 +535,7 @@
 *                       norm(L*D*L' - A) / (n * norm(A) * EPS )
 *
                      K1 = 1
-                     CALL CPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
+                     CALL AB_CPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
      $                            RESULT( 1 ) )
                   ELSE
                      K1 = 2
@@ -528,18 +543,19 @@
 *
 *                 Compute the residual in the solution.
 *
-                  CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                  CALL CPTT02( 'Lower', N, NRHS, D, E, X, LDA, WORK,
+                  CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                  CALL AB_CPTT02( 'Lower', N, NRHS, D, E, X, LDA, WORK,
      $                         LDA, RESULT( 2 ) )
 *
 *                 Check solution from generated exact solution.
 *
-                  CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 3 ) )
 *
 *                 Check error bounds from iterative refinement.
 *
-                  CALL CPTT05( N, NRHS, D, E, B, LDA, X, LDA, XACT, LDA,
+                  CALL AB_CPTT05( N, NRHS, D, E, B, LDA, X, LDA, XACT, L
+     $DA,
      $                         RWORK, RWORK( NRHS+1 ), RESULT( 4 ) )
                ELSE
                   K1 = 6
@@ -547,7 +563,7 @@
 *
 *              Check the reciprocal of the condition number.
 *
-               RESULT( 6 ) = SGET06( RCOND, RCONDC )
+               RESULT( 6 ) = AB_SGET06( RCOND, RCONDC )
 *
 *              Print information about the tests that did not pass
 *              the threshold.
@@ -555,8 +571,9 @@
                DO 90 K = K1, 6
                   IF( RESULT( K ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL ALADHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9998 )'CPTSVX', FACT, N, IMAT,
+     $                  CALL AB_ALADHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9998 )'AB_AB_CPTSVX', FACT, N, I
+     $MAT,
      $                  K, RESULT( K )
                      NFAIL = NFAIL + 1
                   END IF
@@ -568,7 +585,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', N =', I5, ', type ', I2, ', test ', I2,
      $      ', ratio = ', G12.5 )
@@ -576,6 +593,6 @@
      $      ', test ', I2, ', ratio = ', G12.5 )
       RETURN
 *
-*     End of CDRVPT
+*     End of AB_CDRVPT
 *
       END

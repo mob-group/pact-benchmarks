@@ -1,4 +1,4 @@
-*> \brief \b CBDT05
+*> \brief \b AB_CBDT05
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -7,7 +7,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CBDT05( M, N, A, LDA, S, NS, U, LDU,
+*       SUBROUTINE AB_CBDT05( M, N, A, LDA, S, NS, U, LDU,
 *                          VT, LDVT, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CBDT05 reconstructs a bidiagonal matrix B from its (partial) SVD:
+*> AB_CBDT05 reconstructs a bidiagonal matrix B from its (partial) SVD:
 *>    S = U' * B * V
 *> where U and V are orthogonal matrices and S is diagonal.
 *>
@@ -121,7 +121,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE CBDT05( M, N, A, LDA, S, NS, U, LDU,
+      SUBROUTINE AB_CBDT05( M, N, A, LDA, S, NS, U, LDU,
      $                    VT, LDVT, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -155,14 +155,15 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      REAL               SASUM, SLAMCH, CLANGE
-      EXTERNAL           LSAME, ISAMAX, SASUM, SLAMCH, CLANGE
-      REAL               SCASUM
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX
+      REAL               AB_SASUM, AB_SLAMCH, AB_CLANGE
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SASUM, AB_SLAMCH, AB_CL
+     $ANGE
+      REAL               AB_SCASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM
+      EXTERNAL           AB_CGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN
@@ -175,14 +176,15 @@
       IF( MIN( M, N ).LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = SLAMCH( 'Precision' )
-      ANORM = CLANGE( 'M', M, N, A, LDA, DUM )
+      EPS = AB_SLAMCH( 'Precision' )
+      ANORM = AB_CLANGE( 'M', M, N, A, LDA, DUM )
 *
 *     Compute U' * A * V.
 *
-      CALL CGEMM( 'N', 'C', M, NS, N, CONE, A, LDA, VT,
+      CALL AB_CGEMM( 'N', 'C', M, NS, N, CONE, A, LDA, VT,
      $            LDVT, CZERO, WORK( 1+NS*NS ), M )
-      CALL CGEMM( 'C', 'N', NS, NS, M, -CONE, U, LDU, WORK( 1+NS*NS ),
+      CALL AB_CGEMM( 'C', 'N', NS, NS, M, -CONE, U, LDU, WORK( 1+NS*NS )
+     $,
      $            M, CZERO, WORK, NS )
 *
 *     norm(S - U' * B * V)
@@ -190,7 +192,7 @@
       J = 0
       DO 10 I = 1, NS
          WORK( J+I ) =  WORK( J+I ) + CMPLX( S( I ), ZERO )
-         RESID = MAX( RESID, SCASUM( NS, WORK( J+1 ), 1 ) )
+         RESID = MAX( RESID, AB_SCASUM( NS, WORK( J+1 ), 1 ) )
          J = J + NS
    10 CONTINUE
 *
@@ -213,6 +215,6 @@
 *
       RETURN
 *
-*     End of CBDT05
+*     End of AB_CBDT05
 *
       END

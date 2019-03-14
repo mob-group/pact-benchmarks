@@ -1,4 +1,4 @@
-*> \brief \b DQRT14
+*> \brief \b AB_DQRT14
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DQRT14( TRANS, M, N, NRHS, A, LDA, X,
+*       DOUBLE PRECISION FUNCTION AB_DQRT14( TRANS, M, N, NRHS, A, LDA, X,
 *                        LDX, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DQRT14 checks whether X is in the row space of A or A'.  It does so
+*> AB_DQRT14 checks whether X is in the row space of A or A'.  It does so
 *> by scaling both X and A such that their norms are in the range
 *> [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
 *> (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
@@ -113,7 +113,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DQRT14( TRANS, M, N, NRHS, A, LDA, X,
+      DOUBLE PRECISION FUNCTION AB_DQRT14( TRANS, M, N, NRHS, A, LDA, X,
      $                 LDX, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -144,48 +144,50 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, DLAMCH, DLANGE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGELQ2, DGEQR2, DLACPY, DLASCL, XERBLA
+      EXTERNAL           AB_AB_DGELQ2, AB_AB_DGEQR2, AB_DLACPY, AB_DLASC
+     $L, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      DQRT14 = ZERO
-      IF( LSAME( TRANS, 'N' ) ) THEN
+      AB_DQRT14 = ZERO
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
          LDWORK = M + NRHS
          TPSD = .FALSE.
          IF( LWORK.LT.( M+NRHS )*( N+2 ) ) THEN
-            CALL XERBLA( 'DQRT14', 10 )
+            CALL AB_XERBLA( 'AB_DQRT14', 10 )
             RETURN
          ELSE IF( N.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
-      ELSE IF( LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
          LDWORK = M
          TPSD = .TRUE.
          IF( LWORK.LT.( N+NRHS )*( M+2 ) ) THEN
-            CALL XERBLA( 'DQRT14', 10 )
+            CALL AB_XERBLA( 'AB_DQRT14', 10 )
             RETURN
          ELSE IF( M.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
       ELSE
-         CALL XERBLA( 'DQRT14', 1 )
+         CALL AB_XERBLA( 'AB_DQRT14', 1 )
          RETURN
       END IF
 *
 *     Copy and scale A
 *
-      CALL DLACPY( 'All', M, N, A, LDA, WORK, LDWORK )
-      ANRM = DLANGE( 'M', M, N, WORK, LDWORK, RWORK )
+      CALL AB_DLACPY( 'All', M, N, A, LDA, WORK, LDWORK )
+      ANRM = AB_DLANGE( 'M', M, N, WORK, LDWORK, RWORK )
       IF( ANRM.NE.ZERO )
-     $   CALL DLASCL( 'G', 0, 0, ANRM, ONE, M, N, WORK, LDWORK, INFO )
+     $   CALL AB_DLASCL( 'G', 0, 0, ANRM, ONE, M, N, WORK, LDWORK, INFO 
+     $)
 *
 *     Copy X or X' into the right place and scale it
 *
@@ -193,18 +195,18 @@
 *
 *        Copy X into columns n+1:n+nrhs of work
 *
-         CALL DLACPY( 'All', M, NRHS, X, LDX, WORK( N*LDWORK+1 ),
+         CALL AB_DLACPY( 'All', M, NRHS, X, LDX, WORK( N*LDWORK+1 ),
      $                LDWORK )
-         XNRM = DLANGE( 'M', M, NRHS, WORK( N*LDWORK+1 ), LDWORK,
+         XNRM = AB_DLANGE( 'M', M, NRHS, WORK( N*LDWORK+1 ), LDWORK,
      $          RWORK )
          IF( XNRM.NE.ZERO )
-     $      CALL DLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
+     $      CALL AB_DLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
      $                   WORK( N*LDWORK+1 ), LDWORK, INFO )
-         ANRM = DLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
+         ANRM = AB_DLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
 *
 *        Compute QR factorization of X
 *
-         CALL DGEQR2( M, N+NRHS, WORK, LDWORK,
+         CALL AB_AB_DGEQR2( M, N+NRHS, WORK, LDWORK,
      $                WORK( LDWORK*( N+NRHS )+1 ),
      $                WORK( LDWORK*( N+NRHS )+MIN( M, N+NRHS )+1 ),
      $                INFO )
@@ -229,14 +231,14 @@
    30       CONTINUE
    40    CONTINUE
 *
-         XNRM = DLANGE( 'M', NRHS, N, WORK( M+1 ), LDWORK, RWORK )
+         XNRM = AB_DLANGE( 'M', NRHS, N, WORK( M+1 ), LDWORK, RWORK )
          IF( XNRM.NE.ZERO )
-     $      CALL DLASCL( 'G', 0, 0, XNRM, ONE, NRHS, N, WORK( M+1 ),
+     $      CALL AB_DLASCL( 'G', 0, 0, XNRM, ONE, NRHS, N, WORK( M+1 ),
      $                   LDWORK, INFO )
 *
 *        Compute LQ factorization of work
 *
-         CALL DGELQ2( LDWORK, N, WORK, LDWORK, WORK( LDWORK*N+1 ),
+         CALL AB_AB_DGELQ2( LDWORK, N, WORK, LDWORK, WORK( LDWORK*N+1 ),
      $                WORK( LDWORK*( N+1 )+1 ), INFO )
 *
 *        Compute largest entry in lower triangle in
@@ -251,10 +253,11 @@
 *
       END IF
 *
-      DQRT14 = ERR / ( DBLE( MAX( M, N, NRHS ) )*DLAMCH( 'Epsilon' ) )
+      AB_DQRT14 = ERR / ( DBLE( MAX( M, N, NRHS ) )*AB_DLAMCH( 'Epsilon'
+     $ ) )
 *
       RETURN
 *
-*     End of DQRT14
+*     End of AB_DQRT14
 *
       END

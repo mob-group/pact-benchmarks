@@ -1,4 +1,4 @@
-*> \brief \b CGBT05
+*> \brief \b AB_CGBT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
+*       SUBROUTINE AB_CGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
 *                          LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CGBT05 tests the error bounds from iterative refinement for the
+*> AB_CGBT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations op(A)*X = B, where A is a
 *> general band matrix of order n with kl subdiagonals and ku
 *> superdiagonals and op(A) = A or A**T, depending on TRANS.
@@ -173,7 +173,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
+      SUBROUTINE AB_CGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
      $                   LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -204,10 +204,10 @@
       COMPLEX            ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ICAMAX, SLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ICAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -228,10 +228,10 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      NOTRAN = LSAME( TRANS, 'N' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       NZ = MIN( KL+KU+2, N+1 )
 *
 *     Test 1:  Compute the maximum of
@@ -240,7 +240,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = ICAMAX( N, X( 1, J ), 1 )
+         IMAX = AB_ICAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -298,6 +298,6 @@
 *
       RETURN
 *
-*     End of CGBT05
+*     End of AB_CGBT05
 *
       END

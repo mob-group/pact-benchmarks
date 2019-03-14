@@ -1,4 +1,4 @@
-*> \brief \b ZHETRF_RK computes the factorization of a complex Hermitian indefinite matrix using the bounded Bunch-Kaufman (rook) diagonal pivoting method (BLAS3 blocked algorithm).
+*> \brief \b AB_AB_ZHETRF_RK computes the factorization of a complex Hermitian indefinite matrix using the bounded Bunch-Kaufman (rook) diagonal pivoting method (BLAS3 blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHETRF_RK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrf_rk.f">
+*> Download AB_AB_ZHETRF_RK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZHETRF_RK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrf_rk.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZHETRF_RK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrf_rk.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZHETRF_RK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
+*       SUBROUTINE AB_AB_ZHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
 *                             INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *  =============
 *>
 *> \verbatim
-*> ZHETRF_RK computes the factorization of a complex Hermitian matrix A
+*> AB_AB_ZHETRF_RK computes the factorization of a complex Hermitian matrix A
 *> using the bounded Bunch-Kaufman (rook) diagonal pivoting method:
 *>
 *>    A = P*U*D*(U**H)*(P**T) or A = P*L*D*(L**H)*(P**T),
@@ -186,13 +186,13 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >=1.  For best performance
 *>          LWORK >= N*NB, where NB is the block size returned
-*>          by ILAENV.
+*>          by AB_ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed;
 *>          the routine only calculates the optimal size of the WORK
 *>          array, returns this value as the first entry of the WORK
 *>          array, and no error message related to LWORK is issued
-*>          by XERBLA.
+*>          by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -256,7 +256,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
+      SUBROUTINE AB_AB_ZHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
      $                      INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -281,12 +281,13 @@
      $                   NB, NBMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLAHEF_RK, ZHETF2_RK, ZSWAP, XERBLA
+      EXTERNAL           AB_AB_ZLAHEF_RK, AB_AB_ZHETF2_RK, AB_ZSWAP, AB_
+     $XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -296,9 +297,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -312,13 +313,13 @@
 *
 *        Determine the block size
 *
-         NB = ILAENV( 1, 'ZHETRF_RK', UPLO, N, -1, -1, -1 )
+         NB = AB_ILAENV( 1, 'AB_AB_ZHETRF_RK', UPLO, N, -1, -1, -1 )
          LWKOPT = N*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHETRF_RK', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZHETRF_RK', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -330,7 +331,7 @@
          IWS = LDWORK*NB
          IF( LWORK.LT.IWS ) THEN
             NB = MAX( LWORK / LDWORK, 1 )
-            NBMIN = MAX( 2, ILAENV( 2, 'ZHETRF_RK',
+            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_AB_ZHETRF_RK',
      $                              UPLO, N, -1, -1, -1 ) )
          END IF
       ELSE
@@ -344,7 +345,7 @@
 *        Factorize A as U*D*U**T using the upper triangle of A
 *
 *        K is the main loop index, decreasing from N to 1 in steps of
-*        KB, where KB is the number of columns factorized by ZLAHEF_RK;
+*        KB, where KB is the number of columns factorized by AB_AB_ZLAHEF_RK;
 *        KB is either NB or NB-1, or K for the last block
 *
          K = N
@@ -360,13 +361,13 @@
 *           Factorize columns k-kb+1:k of A and use blocked code to
 *           update columns 1:k-kb
 *
-            CALL ZLAHEF_RK( UPLO, K, NB, KB, A, LDA, E,
+            CALL AB_AB_ZLAHEF_RK( UPLO, K, NB, KB, A, LDA, E,
      $                      IPIV, WORK, LDWORK, IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns 1:k of A
 *
-            CALL ZHETF2_RK( UPLO, K, A, LDA, E, IPIV, IINFO )
+            CALL AB_AB_ZHETF2_RK( UPLO, K, A, LDA, E, IPIV, IINFO )
             KB = K
          END IF
 *
@@ -391,7 +392,7 @@
             DO I = K, ( K - KB + 1 ), -1
                IP = ABS( IPIV( I ) )
                IF( IP.NE.I ) THEN
-                  CALL ZSWAP( N-K, A( I, K+1 ), LDA,
+                  CALL AB_ZSWAP( N-K, A( I, K+1 ), LDA,
      $                        A( IP, K+1 ), LDA )
                END IF
             END DO
@@ -412,7 +413,7 @@
 *        Factorize A as L*D*L**T using the lower triangle of A
 *
 *        K is the main loop index, increasing from 1 to N in steps of
-*        KB, where KB is the number of columns factorized by ZLAHEF_RK;
+*        KB, where KB is the number of columns factorized by AB_AB_ZLAHEF_RK;
 *        KB is either NB or NB-1, or N-K+1 for the last block
 *
          K = 1
@@ -428,7 +429,8 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL ZLAHEF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA, E( K ),
+            CALL AB_AB_ZLAHEF_RK( UPLO, N-K+1, NB, KB, A( K, K ), LDA, E
+     $( K ),
      $                        IPIV( K ), WORK, LDWORK, IINFO )
 
 
@@ -436,7 +438,7 @@
 *
 *           Use unblocked code to factorize columns k:n of A
 *
-            CALL ZHETF2_RK( UPLO, N-K+1, A( K, K ), LDA, E( K ),
+            CALL AB_AB_ZHETF2_RK( UPLO, N-K+1, A( K, K ), LDA, E( K ),
      $                      IPIV( K ), IINFO )
             KB = N - K + 1
 *
@@ -470,7 +472,7 @@
             DO I = K, ( K + KB - 1 ), 1
                IP = ABS( IPIV( I ) )
                IF( IP.NE.I ) THEN
-                  CALL ZSWAP( K-1, A( I, 1 ), LDA,
+                  CALL AB_ZSWAP( K-1, A( I, 1 ), LDA,
      $                        A( IP, 1 ), LDA )
                END IF
             END DO
@@ -493,6 +495,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of ZHETRF_RK
+*     End of AB_AB_ZHETRF_RK
 *
       END

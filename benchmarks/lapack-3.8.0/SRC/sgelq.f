@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
+*       SUBROUTINE AB_SGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -17,7 +17,7 @@
 *  =============
 *>
 *> \verbatim
-*> SGELQ computes a LQ factorization of an M-by-N matrix A.
+*> AB_SGELQ computes a LQ factorization of an M-by-N matrix A.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          If TSIZE = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
-*>          message related to T or WORK is issued by XERBLA.
+*>          message related to T or WORK is issued by AB_XERBLA.
 *>          If TSIZE = -1, the routine calculates optimal size of T for the 
 *>          optimum performance and returns this value in T(1).
 *>          If TSIZE = -2, the routine calculates minimal size of T and 
@@ -91,7 +91,7 @@
 *>          If LWORK = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
-*>          message related to T or WORK is issued by XERBLA.
+*>          message related to T or WORK is issued by AB_XERBLA.
 *>          If LWORK = -1, the routine calculates optimal size of WORK for the
 *>          optimal performance and returns this value in WORK(1).
 *>          If LWORK = -2, the routine calculates minimal size of WORK and 
@@ -147,16 +147,16 @@
 *>          T(2): row block size (MB)
 *>          T(3): column block size (NB)
 *>          T(6:TSIZE): data structure needed for Q, computed by
-*>                           SLASWLQ or SGELQT
+*>                           AB_SLASWLQ or AB_AB_SGELQT
 *>
 *>  Depending on the matrix dimensions M and N, and row and column
-*>  block sizes MB and NB returned by ILAENV, SGELQ will use either
-*>  SLASWLQ (if the matrix is short-and-wide) or SGELQT to compute
+*>  block sizes MB and NB returned by AB_ILAENV, AB_SGELQ will use either
+*>  AB_SLASWLQ (if the matrix is short-and-wide) or AB_AB_SGELQT to compute
 *>  the LQ factorization.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
+      SUBROUTINE AB_SGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -179,18 +179,18 @@
       INTEGER            MB, NB, MINTSZ, NBLCKS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGELQT, SLASWLQ, XERBLA
+      EXTERNAL           AB_AB_SGELQT, AB_SLASWLQ, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Executable statements ..
 *
@@ -211,8 +211,8 @@
 *     Determine the block size
 *
       IF( MIN( M, N ).GT.0 ) THEN
-        MB = ILAENV( 1, 'SGELQ ', ' ', M, N, 1, -1 )
-        NB = ILAENV( 1, 'SGELQ ', ' ', M, N, 2, -1 )
+        MB = AB_ILAENV( 1, 'AB_SGELQ ', ' ', M, N, 1, -1 )
+        NB = AB_ILAENV( 1, 'AB_SGELQ ', ' ', M, N, 2, -1 )
       ELSE
         MB = 1
         NB = N
@@ -276,7 +276,7 @@
         END IF
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'SGELQ', -INFO )
+        CALL AB_XERBLA( 'AB_SGELQ', -INFO )
         RETURN
       ELSE IF( LQUERY ) THEN
         RETURN
@@ -291,15 +291,15 @@
 *     The LQ Decomposition
 *
       IF( ( N.LE.M ) .OR. ( NB.LE.M ) .OR. ( NB.GE.N ) ) THEN
-        CALL SGELQT( M, N, MB, A, LDA, T( 6 ), MB, WORK, INFO )
+        CALL AB_AB_SGELQT( M, N, MB, A, LDA, T( 6 ), MB, WORK, INFO )
       ELSE
-        CALL SLASWLQ( M, N, MB, NB, A, LDA, T( 6 ), MB, WORK,
+        CALL AB_SLASWLQ( M, N, MB, NB, A, LDA, T( 6 ), MB, WORK,
      $                LWORK, INFO )
       END IF
 *
       WORK( 1 ) = MAX( 1, MB*M )
       RETURN
 *
-*     End of SGELQ
+*     End of AB_SGELQ
 *
       END

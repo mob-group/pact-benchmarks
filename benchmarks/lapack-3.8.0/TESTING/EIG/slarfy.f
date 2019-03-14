@@ -1,4 +1,4 @@
-*> \brief \b SLARFY
+*> \brief \b AB_AB_SLARFY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE AB_AB_SLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> SLARFY applies an elementary reflector, or Householder matrix, H,
+*> AB_AB_SLARFY applies an elementary reflector, or HousehoAB_LDEr matrix, H,
 *> to an n x n symmetric matrix C, from both the left and the right.
 *>
 *> H is represented in the form
@@ -106,7 +106,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE SLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE AB_AB_SLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -132,11 +132,11 @@
       REAL               ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SSYMV, SSYR2
+      EXTERNAL           AB_SAXPY, AB_SSYMV, AB_AB_SSYR2
 *     ..
 *     .. External Functions ..
-      REAL               SDOT
-      EXTERNAL           SDOT
+      REAL               AB_SDOT
+      EXTERNAL           AB_SDOT
 *     ..
 *     .. Executable Statements ..
 *
@@ -145,17 +145,17 @@
 *
 *     Form  w:= C * v
 *
-      CALL SSYMV( UPLO, N, ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
+      CALL AB_SSYMV( UPLO, N, ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
 *
-      ALPHA = -HALF*TAU*SDOT( N, WORK, 1, V, INCV )
-      CALL SAXPY( N, ALPHA, V, INCV, WORK, 1 )
+      ALPHA = -HALF*TAU*AB_SDOT( N, WORK, 1, V, INCV )
+      CALL AB_SAXPY( N, ALPHA, V, INCV, WORK, 1 )
 *
 *     C := C - v * w' - w * v'
 *
-      CALL SSYR2( UPLO, N, -TAU, V, INCV, WORK, 1, C, LDC )
+      CALL AB_AB_SSYR2( UPLO, N, -TAU, V, INCV, WORK, 1, C, LDC )
 *
       RETURN
 *
-*     End of SLARFY
+*     End of AB_AB_SLARFY
 *
       END

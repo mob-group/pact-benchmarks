@@ -1,4 +1,4 @@
-*> \brief \b CGLMTS
+*> \brief \b AB_CGLMTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
+*       SUBROUTINE AB_CGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
 *                          X, U, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CGLMTS tests CGGGLM - a subroutine for solving the generalized
+*> AB_CGLMTS tests AB_CGGGLM - a subroutine for solving the generalized
 *> linear model problem.
 *> \endverbatim
 *
@@ -147,7 +147,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
+      SUBROUTINE AB_CGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
      $                   X, U, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -178,49 +178,49 @@
       REAL               ANORM, BNORM, EPS, XNORM, YNORM, DNORM, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               SCASUM, SLAMCH, CLANGE
-      EXTERNAL           SCASUM, SLAMCH, CLANGE
+      REAL               AB_SCASUM, AB_SLAMCH, AB_CLANGE
+      EXTERNAL           AB_SCASUM, AB_SLAMCH, AB_CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY
+      EXTERNAL           AB_CLACPY
 *
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
-      ANORM = MAX( CLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( CLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ANORM = MAX( AB_CLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( AB_CLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *
 *     Copy the matrices A and B to the arrays AF and BF,
 *     and the vector D the array DF.
 *
-      CALL CLACPY( 'Full', N, M, A, LDA, AF, LDA )
-      CALL CLACPY( 'Full', N, P, B, LDB, BF, LDB )
-      CALL CCOPY( N, D, 1, DF, 1 )
+      CALL AB_CLACPY( 'Full', N, M, A, LDA, AF, LDA )
+      CALL AB_CLACPY( 'Full', N, P, B, LDB, BF, LDB )
+      CALL AB_CCOPY( N, D, 1, DF, 1 )
 *
 *     Solve GLM problem
 *
-      CALL CGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
+      CALL AB_CGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
      $             INFO )
 *
-*     Test the residual for the solution of LSE
+*     Test the residual for the solution of AB_LSE
 *
 *                       norm( d - A*x - B*u )
 *       RESULT = -----------------------------------------
 *                (norm(A)+norm(B))*(norm(x)+norm(u))*EPS
 *
-      CALL CCOPY( N, D, 1, DF, 1 )
-      CALL CGEMV( 'No transpose', N, M, -CONE, A, LDA, X, 1, CONE,
+      CALL AB_CCOPY( N, D, 1, DF, 1 )
+      CALL AB_CGEMV( 'No transpose', N, M, -CONE, A, LDA, X, 1, CONE,
      $            DF, 1 )
 *
-      CALL CGEMV( 'No transpose', N, P, -CONE, B, LDB, U, 1, CONE,
+      CALL AB_CGEMV( 'No transpose', N, P, -CONE, B, LDB, U, 1, CONE,
      $            DF, 1 )
 *
-      DNORM = SCASUM( N, DF, 1 )
-      XNORM = SCASUM( M, X, 1 ) + SCASUM( P, U, 1 )
+      DNORM = AB_SCASUM( N, DF, 1 )
+      XNORM = AB_SCASUM( M, X, 1 ) + AB_SCASUM( P, U, 1 )
       YNORM = ANORM + BNORM
 *
       IF( XNORM.LE.ZERO ) THEN
@@ -231,6 +231,6 @@
 *
       RETURN
 *
-*     End of CGLMTS
+*     End of AB_CGLMTS
 *
       END

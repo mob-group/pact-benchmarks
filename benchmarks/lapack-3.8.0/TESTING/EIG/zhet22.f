@@ -1,4 +1,4 @@
-*> \brief \b ZHET22
+*> \brief \b AB_ZHET22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHET22( ITYPE, UPLO, N, M, KBAND, A, LDA, D, E, U, LDU,
+*       SUBROUTINE AB_ZHET22( ITYPE, UPLO, N, M, KBAND, A, LDA, D, E, U, LDU,
 *                          V, LDV, TAU, WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,17 +27,17 @@
 *>
 *> \verbatim
 *>
-*>      ZHET22  generally checks a decomposition of the form
+*>      AB_ZHET22  generally checks a decomposition of the form
 *>
 *>              A U = U S
 *>
 *>      where A is complex Hermitian, the columns of U are orthonormal,
 *>      and S is diagonal (if KBAND=0) or symmetric tridiagonal (if
 *>      KBAND=1).  If ITYPE=1, then U is represented as a dense matrix,
-*>      otherwise the U is expressed as a product of Householder
+*>      otherwise the U is expressed as a product of HousehoAB_LDEr
 *>      transformations, whose vectors are stored in the array "V" and
 *>      whose scaling constants are in "TAU"; we shall use the letter
-*>      "V" to refer to the product of Householder transformations
+*>      "V" to refer to the product of HousehoAB_LDEr transformations
 *>      (which should be equal to U).
 *>
 *>      Specifically, if ITYPE=1, then:
@@ -62,12 +62,12 @@
 *>          Not modified.
 *>
 *>  N       INTEGER
-*>          The size of the matrix.  If it is zero, ZHET22 does nothing.
+*>          The size of the matrix.  If it is zero, AB_ZHET22 does nothing.
 *>          It must be at least zero.
 *>          Not modified.
 *>
 *>  M       INTEGER
-*>          The number of columns of U.  If it is zero, ZHET22 does
+*>          The number of columns of U.  If it is zero, AB_ZHET22 does
 *>          nothing.  It must be at least zero.
 *>          Not modified.
 *>
@@ -110,7 +110,7 @@
 *>
 *>  V       COMPLEX*16 array, dimension (LDV, N)
 *>          If ITYPE=2 or 3, the lower triangle of this array contains
-*>          the Householder vectors used to describe the orthogonal
+*>          the HousehoAB_LDEr vectors used to describe the orthogonal
 *>          matrix in the decomposition.  If ITYPE=1, then it is not
 *>          referenced.
 *>          Not modified.
@@ -122,7 +122,7 @@
 *>
 *>  TAU     COMPLEX*16 array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)' in the Householder transformation H(j) of
+*>          v(j) v(j)' in the HousehoAB_LDEr transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *>          Not modified.
@@ -156,7 +156,8 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZHET22( ITYPE, UPLO, N, M, KBAND, A, LDA, D, E, U, LDU,
+      SUBROUTINE AB_ZHET22( ITYPE, UPLO, N, M, KBAND, A, LDA, D, E, U, L
+     $DU,
      $                   V, LDV, TAU, WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -188,11 +189,11 @@
       DOUBLE PRECISION   ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANHE
-      EXTERNAL           DLAMCH, ZLANHE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE
+      EXTERNAL           AB_DLAMCH, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZHEMM, ZUNT01
+      EXTERNAL           AB_ZGEMM, AB_ZHEMM, AB_ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -204,24 +205,24 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
 *
 *     Do Test 1
 *
 *     Norm of A:
 *
-      ANORM = MAX( ZLANHE( '1', UPLO, N, A, LDA, RWORK ), UNFL )
+      ANORM = MAX( AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK ), UNFL )
 *
 *     Compute error matrix:
 *
 *     ITYPE=1: error = U' A U - S
 *
-      CALL ZHEMM( 'L', UPLO, N, M, CONE, A, LDA, U, LDU, CZERO, WORK,
+      CALL AB_ZHEMM( 'L', UPLO, N, M, CONE, A, LDA, U, LDU, CZERO, WORK,
      $            N )
       NN = N*N
       NNP1 = NN + 1
-      CALL ZGEMM( 'C', 'N', M, M, N, CONE, U, LDU, WORK, N, CZERO,
+      CALL AB_ZGEMM( 'C', 'N', M, M, N, CONE, U, LDU, WORK, N, CZERO,
      $            WORK( NNP1 ), N )
       DO 10 J = 1, M
          JJ = NN + ( J-1 )*N + J
@@ -235,7 +236,7 @@
             WORK( JJ2 ) = WORK( JJ2 ) - E( J-1 )
    20    CONTINUE
       END IF
-      WNORM = ZLANHE( '1', UPLO, M, WORK( NNP1 ), N, RWORK )
+      WNORM = AB_ZLANHE( '1', UPLO, M, WORK( NNP1 ), N, RWORK )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( M*ULP )
@@ -252,11 +253,11 @@
 *     Compute  U'U - I
 *
       IF( ITYPE.EQ.1 )
-     $   CALL ZUNT01( 'Columns', N, M, U, LDU, WORK, 2*N*N, RWORK,
+     $   CALL AB_ZUNT01( 'Columns', N, M, U, LDU, WORK, 2*N*N, RWORK,
      $                RESULT( 2 ) )
 *
       RETURN
 *
-*     End of ZHET22
+*     End of AB_ZHET22
 *
       END

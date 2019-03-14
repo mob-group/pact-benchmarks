@@ -1,4 +1,4 @@
-*> \brief <b> DSYEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
+*> \brief <b> AB_AB_AB_DSYEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
 *
 *  @precisions fortran d -> s
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYEVX_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsyevx_2stage.f">
+*> Download AB_AB_AB_DSYEVX_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_DSYEVX_2STAGE.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsyevx_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_DSYEVX_2STAGE.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyevx_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_DSYEVX_2STAGE.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYEVX_2STAGE( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU,
+*       SUBROUTINE AB_AB_AB_DSYEVX_2STAGE( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU,
 *                                 IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
 *                                 LWORK, IWORK, IFAIL, INFO )
 *
@@ -42,7 +42,7 @@
 *>
 *> \verbatim
 *>
-*> DSYEVX_2STAGE computes selected eigenvalues and, optionally, eigenvectors
+*> AB_AB_AB_DSYEVX_2STAGE computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric matrix A using the 2stage technique for
 *> the reduction to tridiagonal.  Eigenvalues and eigenvectors can be
 *> selected by specifying either a range of values or a range of indices
@@ -151,10 +151,10 @@
 *>          by reducing A to tridiagonal form.
 *>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
-*>          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
+*>          set to twice the underflow threshold 2*AB_DLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
 *>          eigenvectors did not converge, try setting ABSTOL to
-*>          2*DLAMCH('S').
+*>          2*AB_DLAMCH('S').
 *>
 *>          See "Computing Small Singular Values of Bidiagonal Matrices
 *>          with Guaranteed High Relative Accuracy," by Demmel and
@@ -225,7 +225,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -296,7 +296,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DSYEVX_2STAGE( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU,
+      SUBROUTINE AB_AB_AB_DSYEVX_2STAGE( JOBZ, RANGE, UPLO, N, A, LDA, V
+     $L, VU,
      $                          IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
      $                          LWORK, IWORK, IFAIL, INFO )
 *
@@ -335,15 +336,18 @@
      $                   SIGMA, SMLNUM, TMP1, VLL, VUU
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
-      DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           LSAME, DLAMCH, DLANSY, ILAENV2STAGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_AB_ILAENV2STAGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSY
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANSY, AB_AB_ILAENV2ST
+     $AGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DORGTR, DORMTR, DSCAL, DSTEBZ,
-     $                   DSTEIN, DSTEQR, DSTERF, DSWAP, XERBLA,
-     $                   DSYTRD_2STAGE
+      EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DORGTR, AB_DORMTR, AB_D
+     $SCAL, AB_DSTEBZ,
+     $                   AB_DSTEIN, AB_DSTEQR, AB_DSTERF, AB_DSWAP, AB_X
+     $ERBLA,
+     $                   AB_AB_DSYTRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -352,19 +356,19 @@
 *
 *     Test the input parameters.
 *
-      LOWER = LSAME( UPLO, 'L' )
-      WANTZ = LSAME( JOBZ, 'V' )
-      ALLEIG = LSAME( RANGE, 'A' )
-      VALEIG = LSAME( RANGE, 'V' )
-      INDEIG = LSAME( RANGE, 'I' )
+      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      ALLEIG = AB_LSAME( RANGE, 'A' )
+      VALEIG = AB_LSAME( RANGE, 'V' )
+      INDEIG = AB_LSAME( RANGE, 'I' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -393,13 +397,13 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            KD    = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ,
+            KD    = AB_AB_ILAENV2STAGE( 1, 'AB_AB_DSYTRD_2STAGE', JOBZ,
      $                            N, -1, -1, -1 )
-            IB    = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ,
+            IB    = AB_AB_ILAENV2STAGE( 2, 'AB_AB_DSYTRD_2STAGE', JOBZ,
      $                            N, KD, -1, -1 )
-            LHTRD = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ,
+            LHTRD = AB_AB_ILAENV2STAGE( 3, 'AB_AB_DSYTRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
-            LWTRD = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ,
+            LWTRD = AB_AB_ILAENV2STAGE( 4, 'AB_AB_DSYTRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = MAX( 8*N, 3*N + LHTRD + LWTRD )
             WORK( 1 )  = LWMIN
@@ -410,7 +414,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYEVX_2STAGE', -INFO )
+         CALL AB_XERBLA( 'AB_AB_AB_DSYEVX_2STAGE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -440,8 +444,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      EPS    = DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS    = AB_DLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN   = SQRT( SMLNUM )
@@ -455,7 +459,7 @@
          VLL = VL
          VUU = VU
       END IF
-      ANRM = DLANSY( 'M', UPLO, N, A, LDA, WORK )
+      ANRM = AB_DLANSY( 'M', UPLO, N, A, LDA, WORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / ANRM
@@ -466,11 +470,11 @@
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
             DO 10 J = 1, N
-               CALL DSCAL( N-J+1, SIGMA, A( J, J ), 1 )
+               CALL AB_DSCAL( N-J+1, SIGMA, A( J, J ), 1 )
    10       CONTINUE
          ELSE
             DO 20 J = 1, N
-               CALL DSCAL( J, SIGMA, A( 1, J ), 1 )
+               CALL AB_DSCAL( J, SIGMA, A( 1, J ), 1 )
    20       CONTINUE
          END IF
          IF( ABSTOL.GT.0 )
@@ -481,7 +485,7 @@
          END IF
       END IF
 *
-*     Call DSYTRD_2STAGE to reduce symmetric matrix to tridiagonal form.
+*     Call AB_AB_DSYTRD_2STAGE to reduce symmetric matrix to tridiagonal form.
 *
       INDTAU  = 1
       INDE    = INDTAU + N
@@ -490,13 +494,13 @@
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL DSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, WORK( INDD ), 
+      CALL AB_AB_DSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, WORK( INDD ), 
      $                    WORK( INDE ), WORK( INDTAU ), WORK( INDHOUS ),
      $                    LHTRD, WORK( INDWRK ), LLWORK, IINFO )
 *
 *     If all eigenvalues are desired and ABSTOL is less than or equal to
-*     zero, then call DSTERF or DORGTR and SSTEQR.  If this fails for
-*     some eigenvalue, then try DSTEBZ.
+*     zero, then call AB_DSTERF or AB_DORGTR and AB_SSTEQR.  If this fails for
+*     some eigenvalue, then try AB_DSTEBZ.
 *
       TEST = .FALSE.
       IF( INDEIG ) THEN
@@ -505,17 +509,17 @@
          END IF
       END IF
       IF( ( ALLEIG .OR. TEST ) .AND. ( ABSTOL.LE.ZERO ) ) THEN
-         CALL DCOPY( N, WORK( INDD ), 1, W, 1 )
+         CALL AB_DCOPY( N, WORK( INDD ), 1, W, 1 )
          INDEE = INDWRK + 2*N
          IF( .NOT.WANTZ ) THEN
-            CALL DCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
-            CALL DSTERF( N, W, WORK( INDEE ), INFO )
+            CALL AB_DCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
+            CALL AB_DSTERF( N, W, WORK( INDEE ), INFO )
          ELSE
-            CALL DLACPY( 'A', N, N, A, LDA, Z, LDZ )
-            CALL DORGTR( UPLO, N, Z, LDZ, WORK( INDTAU ),
+            CALL AB_DLACPY( 'A', N, N, A, LDA, Z, LDZ )
+            CALL AB_DORGTR( UPLO, N, Z, LDZ, WORK( INDTAU ),
      $                   WORK( INDWRK ), LLWORK, IINFO )
-            CALL DCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
-            CALL DSTEQR( JOBZ, N, W, WORK( INDEE ), Z, LDZ,
+            CALL AB_DCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
+            CALL AB_DSTEQR( JOBZ, N, W, WORK( INDEE ), Z, LDZ,
      $                   WORK( INDWRK ), INFO )
             IF( INFO.EQ.0 ) THEN
                DO 30 I = 1, N
@@ -530,7 +534,7 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call DSTEBZ and, if eigenvectors are desired, SSTEIN.
+*     Otherwise, call AB_DSTEBZ and, if eigenvectors are desired, AB_SSTEIN.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -540,22 +544,23 @@
       INDIBL = 1
       INDISP = INDIBL + N
       INDIWO = INDISP + N
-      CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
+      CALL AB_DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), WORK( INDWRK ),
      $             IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL DSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
+         CALL AB_DSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
      $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
 *
 *        Apply orthogonal matrix used in reduction to tridiagonal
-*        form to eigenvectors returned by DSTEIN.
+*        form to eigenvectors returned by AB_DSTEIN.
 *
          INDWKN = INDE
          LLWRKN = LWORK - INDWKN + 1
-         CALL DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z,
+         CALL AB_DORMTR( 'L', UPLO, 'N', N, M, A, LDA, WORK( INDTAU ), Z
+     $,
      $                LDZ, WORK( INDWKN ), LLWRKN, IINFO )
       END IF
 *
@@ -568,7 +573,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -591,7 +596,7 @@
                IWORK( INDIBL+I-1 ) = IWORK( INDIBL+J-1 )
                W( J ) = TMP1
                IWORK( INDIBL+J-1 ) = ITMP1
-               CALL DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL AB_DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
                IF( INFO.NE.0 ) THEN
                   ITMP1 = IFAIL( I )
                   IFAIL( I ) = IFAIL( J )
@@ -607,6 +612,6 @@
 *
       RETURN
 *
-*     End of DSYEVX_2STAGE
+*     End of AB_AB_AB_DSYEVX_2STAGE
 *
       END

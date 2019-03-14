@@ -1,4 +1,4 @@
-*> \brief \b CSYTRI
+*> \brief \b AB_CSYTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CSYTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytri.f">
+*> Download AB_CSYTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSYTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSYTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSYTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+*       SUBROUTINE AB_CSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> CSYTRI computes the inverse of a complex symmetric indefinite matrix
+*> AB_CSYTRI computes the inverse of a complex symmetric indefinite matrix
 *> A using the factorization A = U*D*U**T or A = L*D*L**T computed by
-*> CSYTRF.
+*> AB_CSYTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the block diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by CSYTRF.
+*>          used to obtain the factor U or L as computed by AB_CSYTRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by CSYTRF.
+*>          as determined by AB_CSYTRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -112,7 +112,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE CSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      SUBROUTINE AB_CSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,12 +141,12 @@
       COMPLEX            AK, AKKP1, AKP1, D, T, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX            CDOTU
-      EXTERNAL           LSAME, CDOTU
+      LOGICAL            AB_LSAME
+      COMPLEX            AB_CDOTU
+      EXTERNAL           AB_LSAME, AB_CDOTU
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CSWAP, CSYMV, XERBLA
+      EXTERNAL           AB_CCOPY, AB_CSWAP, AB_CSYMV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -156,8 +156,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -165,7 +165,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CSYTRI', -INFO )
+         CALL AB_XERBLA( 'AB_CSYTRI', -INFO )
          RETURN
       END IF
 *
@@ -221,10 +221,11 @@
 *           Compute column K of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
+               CALL AB_CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL AB_CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - AB_CDOTU( K-1, WORK, 1, A( 1, K )
+     $,
      $                     1 )
             END IF
             KSTEP = 1
@@ -246,18 +247,20 @@
 *           Compute columns K and K+1 of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
+               CALL AB_CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL AB_CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - AB_CDOTU( K-1, WORK, 1, A( 1, K )
+     $,
      $                     1 )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       CDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
-               CALL CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
+     $                       AB_CDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ), 1
+     $ )
+               CALL AB_CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
+               CALL AB_CSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
                A( K+1, K+1 ) = A( K+1, K+1 ) -
-     $                         CDOTU( K-1, WORK, 1, A( 1, K+1 ), 1 )
+     $                         AB_CDOTU( K-1, WORK, 1, A( 1, K+1 ), 1 )
             END IF
             KSTEP = 2
          END IF
@@ -268,8 +271,8 @@
 *           Interchange rows and columns K and KP in the leading
 *           submatrix A(1:k+1,1:k+1)
 *
-            CALL CSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-            CALL CSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
+            CALL AB_CSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+            CALL AB_CSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
             TEMP = A( K, K )
             A( K, K ) = A( KP, KP )
             A( KP, KP ) = TEMP
@@ -310,10 +313,12 @@
 *           Compute column K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL AB_CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL AB_CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $ 1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - AB_CDOTU( N-K, WORK, 1, A( K+1, K
+     $ ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -335,19 +340,24 @@
 *           Compute columns K-1 and K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL AB_CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL AB_CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $ 1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - CDOTU( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - AB_CDOTU( N-K, WORK, 1, A( K+1, K
+     $ ),
      $                     1 )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       CDOTU( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       AB_CDOTU( N-K, A( K+1, K ), 1, A( K+1, K-1 
+     $),
      $                       1 )
-               CALL CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL AB_CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
+               CALL AB_CSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $ 1,
      $                     ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         CDOTU( N-K, WORK, 1, A( K+1, K-1 ), 1 )
+     $                         AB_CDOTU( N-K, WORK, 1, A( K+1, K-1 ), 1 
+     $)
             END IF
             KSTEP = 2
          END IF
@@ -359,8 +369,8 @@
 *           submatrix A(k-1:n,k-1:n)
 *
             IF( KP.LT.N )
-     $         CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
-            CALL CSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
+     $         CALL AB_CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+            CALL AB_CSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
             TEMP = A( K, K )
             A( K, K ) = A( KP, KP )
             A( KP, KP ) = TEMP
@@ -378,6 +388,6 @@
 *
       RETURN
 *
-*     End of CSYTRI
+*     End of AB_CSYTRI
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DCHKBB
+*> \brief \b AB_DCHKBB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
+*       SUBROUTINE AB_DCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
 *                          NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
 *                          BD, BE, Q, LDQ, P, LDP, C, LDC, CC, WORK,
 *                          LWORK, RESULT, INFO )
@@ -32,12 +32,12 @@
 *>
 *> \verbatim
 *>
-*> DCHKBB tests the reduction of a general real rectangular band
+*> AB_DCHKBB tests the reduction of a general real rectangular band
 *> matrix to bidiagonal form.
 *>
-*> DGBBRD factors a general band matrix A as  Q B P* , where * means
+*> AB_DGBBRD factors a general band matrix A as  Q B P* , where * means
 *> transpose, B is upper bidiagonal, and Q and P are orthogonal;
-*> DGBBRD can also overwrite a given matrix C with Q* C .
+*> AB_DGBBRD can also overwrite a given matrix C with Q* C .
 *>
 *> For each pair of matrix dimensions (M,N) and each selected matrix
 *> type, an M by N matrix A and an M by NRHS matrix C are generated.
@@ -106,7 +106,7 @@
 *>          NSIZES is INTEGER
 *>          The number of values of M and N contained in the vectors
 *>          MVAL and NVAL.  The matrix sizes are used in pairs (M,N).
-*>          If NSIZES is zero, DCHKBB does nothing.  NSIZES must be at
+*>          If NSIZES is zero, AB_DCHKBB does nothing.  NSIZES must be at
 *>          least zero.
 *> \endverbatim
 *>
@@ -126,7 +126,7 @@
 *> \verbatim
 *>          NWDTHS is INTEGER
 *>          The number of bandwidths to use.  If it is zero,
-*>          DCHKBB does nothing.  It must be at least zero.
+*>          AB_DCHKBB does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] KK
@@ -139,7 +139,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, DCHKBB
+*>          The number of elements in DOTYPE.   If it is zero, AB_DCHKBB
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -177,7 +177,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to DCHKBB to continue the same random number
+*>          next call to AB_DCHKBB to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -230,20 +230,20 @@
 *> \verbatim
 *>          BD is DOUBLE PRECISION array, dimension (max(NN))
 *>          Used to hold the diagonal of the bidiagonal matrix computed
-*>          by DGBBRD.
+*>          by AB_DGBBRD.
 *> \endverbatim
 *>
 *> \param[out] BE
 *> \verbatim
 *>          BE is DOUBLE PRECISION array, dimension (max(NN))
 *>          Used to hold the off-diagonal of the bidiagonal matrix
-*>          computed by DGBBRD.
+*>          computed by AB_DGBBRD.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is DOUBLE PRECISION array, dimension (LDQ, max(NN))
-*>          Used to hold the orthogonal matrix Q computed by DGBBRD.
+*>          Used to hold the orthogonal matrix Q computed by AB_DGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -256,7 +256,7 @@
 *> \param[out] P
 *> \verbatim
 *>          P is DOUBLE PRECISION array, dimension (LDP, max(NN))
-*>          Used to hold the orthogonal matrix P computed by DGBBRD.
+*>          Used to hold the orthogonal matrix P computed by AB_DGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDP
@@ -269,7 +269,7 @@
 *> \param[out] C
 *> \verbatim
 *>          C is DOUBLE PRECISION array, dimension (LDC, max(NN))
-*>          Used to hold the matrix C updated by DGBBRD.
+*>          Used to hold the matrix C updated by AB_DGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDC
@@ -350,7 +350,8 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
+      SUBROUTINE AB_DCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTY
+     $PE,
      $                   NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
      $                   BD, BE, Q, LDQ, P, LDP, C, LDC, CC, WORK,
      $                   LWORK, RESULT, INFO )
@@ -395,12 +396,14 @@
      $                   KMODE( MAXTYP ), KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DBDT01, DBDT02, DGBBRD, DLACPY, DLAHD2, DLASET,
-     $                   DLASUM, DLATMR, DLATMS, DORT01, XERBLA
+      EXTERNAL           AB_DBDT01, AB_DBDT02, AB_DGBBRD, AB_DLACPY, AB_
+     $DLAHD2, AB_DLASET,
+     $                   AB_DLASUM, AB_DLATMR, AB_DLATMS, AB_DORT01, AB_
+     $XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -474,7 +477,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DCHKBB', -INFO )
+         CALL AB_XERBLA( 'AB_DCHKBB', -INFO )
          RETURN
       END IF
 *
@@ -485,9 +488,9 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -565,8 +568,8 @@
 *
    70          CONTINUE
 *
-               CALL DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
-               CALL DLASET( 'Full', LDAB, N, ZERO, ZERO, AB, LDAB )
+               CALL AB_DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+               CALL AB_DLASET( 'Full', LDAB, N, ZERO, ZERO, AB, LDAB )
                IINFO = 0
                COND = ULPINV
 *
@@ -589,7 +592,8 @@
 *
 *                 Diagonal Matrix, singular values specified
 *
-                  CALL DLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, COND,
+                  CALL AB_DLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, CO
+     $ND,
      $                         ANORM, 0, 0, 'N', A, LDA, WORK( M+1 ),
      $                         IINFO )
 *
@@ -597,7 +601,8 @@
 *
 *                 Nonhermitian, singular values specified
 *
-                  CALL DLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, COND,
+                  CALL AB_DLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, CO
+     $ND,
      $                         ANORM, KL, KU, 'N', A, LDA, WORK( M+1 ),
      $                         IINFO )
 *
@@ -605,7 +610,8 @@
 *
 *                 Nonhermitian, random entries
 *
-                  CALL DLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
+                  CALL AB_DLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE, O
+     $NE,
      $                         'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, KL,
      $                         KU, ZERO, ANORM, 'N', A, LDA, IDUMMA,
@@ -618,7 +624,8 @@
 *
 *              Generate Right-Hand Side
 *
-               CALL DLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
+               CALL AB_DLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE, O
+     $NE,
      $                      'T', 'N', WORK( M+1 ), 1, ONE,
      $                      WORK( 2*M+1 ), 1, ONE, 'N', IDUMMA, M, NRHS,
      $                      ZERO, ONE, 'NO', C, LDC, IDUMMA, IINFO )
@@ -642,15 +649,17 @@
 *
 *              Copy C
 *
-               CALL DLACPY( 'Full', M, NRHS, C, LDC, CC, LDC )
+               CALL AB_DLACPY( 'Full', M, NRHS, C, LDC, CC, LDC )
 *
-*              Call DGBBRD to compute B, Q and P, and to update C.
+*              Call AB_DGBBRD to compute B, Q and P, and to update C.
 *
-               CALL DGBBRD( 'B', M, N, NRHS, KL, KU, AB, LDAB, BD, BE,
+               CALL AB_DGBBRD( 'B', M, N, NRHS, KL, KU, AB, LDAB, BD, BE
+     $,
      $                      Q, LDQ, P, LDP, CC, LDC, WORK, IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'DGBBRD', IINFO, N, JTYPE,
+                  WRITE( NOUNIT, FMT = 9999 )'AB_DGBBRD', IINFO, N, JTYP
+     $E,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -666,13 +675,13 @@
 *                   3:  Check the orthogonality of P
 *                   4:  Check the computation of Q' * C
 *
-               CALL DBDT01( M, N, -1, A, LDA, Q, LDQ, BD, BE, P, LDP,
+               CALL AB_DBDT01( M, N, -1, A, LDA, Q, LDQ, BD, BE, P, LDP,
      $                      WORK, RESULT( 1 ) )
-               CALL DORT01( 'Columns', M, M, Q, LDQ, WORK, LWORK,
+               CALL AB_DORT01( 'Columns', M, M, Q, LDQ, WORK, LWORK,
      $                      RESULT( 2 ) )
-               CALL DORT01( 'Rows', N, N, P, LDP, WORK, LWORK,
+               CALL AB_DORT01( 'Rows', N, N, P, LDP, WORK, LWORK,
      $                      RESULT( 3 ) )
-               CALL DBDT02( M, NRHS, C, LDC, CC, LDC, Q, LDQ, WORK,
+               CALL AB_DBDT02( M, NRHS, C, LDC, CC, LDC, Q, LDQ, WORK,
      $                      RESULT( 4 ) )
 *
 *              End of Loop -- Check for RESULT(j) > THRESH
@@ -686,7 +695,7 @@
                DO 130 JR = 1, NTEST
                   IF( RESULT( JR ).GE.THRESH ) THEN
                      IF( NERRS.EQ.0 )
-     $                  CALL DLAHD2( NOUNIT, 'DBB' )
+     $                  CALL AB_DLAHD2( NOUNIT, 'DBB' )
                      NERRS = NERRS + 1
                      WRITE( NOUNIT, FMT = 9998 )M, N, K, IOLDSD, JTYPE,
      $                  JR, RESULT( JR )
@@ -699,15 +708,15 @@
 *
 *     Summary
 *
-      CALL DLASUM( 'DBB', NOUNIT, NERRS, NTESTT )
+      CALL AB_DLASUM( 'DBB', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' DCHKBB: ', A, ' returned INFO=', I5, '.', / 9X, 'M=',
+ 9999 FORMAT( ' AB_DCHKBB: ', A, ' returned INFO=', I5, '.', / 9X, 'M=',
      $      I5, ' N=', I5, ' K=', I5, ', JTYPE=', I5, ', ISEED=(',
      $      3( I5, ',' ), I5, ')' )
  9998 FORMAT( ' M =', I4, ' N=', I4, ', K=', I3, ', seed=',
      $      4( I4, ',' ), ' type ', I2, ', test(', I2, ')=', G10.3 )
 *
-*     End of DCHKBB
+*     End of AB_DCHKBB
 *
       END

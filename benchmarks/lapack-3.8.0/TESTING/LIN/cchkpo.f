@@ -1,4 +1,4 @@
-*> \brief \b CCHKPO
+*> \brief \b AB_CCHKPO
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKPO( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*       SUBROUTINE AB_CCHKPO( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
 *                          THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
 *                          XACT, WORK, RWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKPO tests CPOTRF, -TRI, -TRS, -RFS, and -CON
+*> AB_CCHKPO tests AB_CPOTRF, -TRI, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -164,7 +164,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKPO( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+      SUBROUTINE AB_CCHKPO( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                   THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
      $                   XACT, WORK, RWORK, NOUT )
 *
@@ -211,14 +211,17 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CLANHE, SGET06
-      EXTERNAL           CLANHE, SGET06
+      REAL               AB_CLANHE, AB_SGET06
+      EXTERNAL           AB_CLANHE, AB_SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRPO, CGET04, CLACPY,
-     $                   CLAIPD, CLARHS, CLATB4, CLATMS, CPOCON, CPORFS,
-     $                   CPOT01, CPOT02, CPOT03, CPOT05, CPOTRF, CPOTRI,
-     $                   CPOTRS, XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CERRPO, AB_C
+     $GET04, AB_CLACPY,
+     $                   AB_CLAIPD, AB_CLARHS, AB_CLATB4, AB_CLATMS, AB_
+     $CPOCON, AB_CPORFS,
+     $                   AB_CPOT01, AB_CPOT02, AB_CPOT03, AB_CPOT05, AB_
+     $CPOTRF, AB_CPOTRI,
+     $                   AB_CPOTRS, AB_XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -252,7 +255,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRPO( PATH, NOUT )
+     $   CALL AB_CERRPO( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of N in NVAL
@@ -284,21 +287,23 @@
             DO 100 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with CLATB4 and generate a test matrix
-*              with CLATMS.
+*              Set up parameters with AB_CLATB4 and generate a test matrix
+*              with AB_CLATMS.
 *
-               CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+               CALL AB_CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
+     $DE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'CLATMS'
-               CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_CLATMS'
+               CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from CLATMS.
+*              Check error code from AB_CLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 100
                END IF
@@ -344,24 +349,25 @@
 *
 *              Set the imaginary part of the diagonals.
 *
-               CALL CLAIPD( N, A, LDA+1, 0 )
+               CALL AB_CLAIPD( N, A, LDA+1, 0 )
 *
 *              Do for each value of NB in NBVAL
 *
                DO 90 INB = 1, NNB
                   NB = NBVAL( INB )
-                  CALL XLAENV( 1, NB )
+                  CALL AB_XLAENV( 1, NB )
 *
 *                 Compute the L*L' or U'*U factorization of the matrix.
 *
-                  CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                  SRNAMT = 'CPOTRF'
-                  CALL CPOTRF( UPLO, N, AFAC, LDA, INFO )
+                  CALL AB_CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                  SRNAMT = 'AB_CPOTRF'
+                  CALL AB_CPOTRF( UPLO, N, AFAC, LDA, INFO )
 *
-*                 Check error code from CPOTRF.
+*                 Check error code from AB_CPOTRF.
 *
                   IF( INFO.NE.IZERO ) THEN
-                     CALL ALAERH( PATH, 'CPOTRF', INFO, IZERO, UPLO, N,
+                     CALL AB_ALAERH( PATH, 'AB_CPOTRF', INFO, IZERO, UPL
+     $O, N,
      $                            N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
                      GO TO 90
@@ -375,24 +381,25 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                  CALL CPOT01( UPLO, N, A, LDA, AINV, LDA, RWORK,
+                  CALL AB_CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                  CALL AB_CPOT01( UPLO, N, A, LDA, AINV, LDA, RWORK,
      $                         RESULT( 1 ) )
 *
 *+    TEST 2
 *                 Form the inverse and compute the residual.
 *
-                  CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                  SRNAMT = 'CPOTRI'
-                  CALL CPOTRI( UPLO, N, AINV, LDA, INFO )
+                  CALL AB_CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                  SRNAMT = 'AB_CPOTRI'
+                  CALL AB_CPOTRI( UPLO, N, AINV, LDA, INFO )
 *
-*                 Check error code from CPOTRI.
+*                 Check error code from AB_CPOTRI.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'CPOTRI', INFO, 0, UPLO, N, N,
+     $               CALL AB_ALAERH( PATH, 'AB_CPOTRI', INFO, 0, UPLO, N
+     $, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL CPOT03( UPLO, N, A, LDA, AINV, LDA, WORK, LDA,
+                  CALL AB_CPOT03( UPLO, N, A, LDA, AINV, LDA, WORK, LDA,
      $                         RWORK, RCONDC, RESULT( 2 ) )
 *
 *                 Print information about the tests that did not pass
@@ -401,7 +408,7 @@
                   DO 60 K = 1, 2
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -421,51 +428,58 @@
 *+    TEST 3
 *                 Solve and compute residual for A * X = B .
 *
-                     SRNAMT = 'CLARHS'
-                     CALL CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                     SRNAMT = 'AB_CLARHS'
+                     CALL AB_CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, K
+     $U,
      $                            NRHS, A, LDA, XACT, LDA, B, LDA,
      $                            ISEED, INFO )
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'CPOTRS'
-                     CALL CPOTRS( UPLO, N, NRHS, AFAC, LDA, X, LDA,
+                     SRNAMT = 'AB_CPOTRS'
+                     CALL AB_CPOTRS( UPLO, N, NRHS, AFAC, LDA, X, LDA,
      $                            INFO )
 *
-*                 Check error code from CPOTRS.
+*                 Check error code from AB_CPOTRS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'CPOTRS', INFO, 0, UPLO, N,
+     $                  CALL AB_ALAERH( PATH, 'AB_CPOTRS', INFO, 0, UPLO
+     $, N,
      $                               N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_CPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
+     $,
      $                            LDA, RWORK, RESULT( 3 ) )
 *
 *+    TEST 4
 *                 Check solution from generated exact solution.
 *
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 4 ) )
 *
 *+    TESTS 5, 6, and 7
 *                 Use iterative refinement to improve the solution.
 *
-                     SRNAMT = 'CPORFS'
-                     CALL CPORFS( UPLO, N, NRHS, A, LDA, AFAC, LDA, B,
+                     SRNAMT = 'AB_CPORFS'
+                     CALL AB_CPORFS( UPLO, N, NRHS, A, LDA, AFAC, LDA, B
+     $,
      $                            LDA, X, LDA, RWORK, RWORK( NRHS+1 ),
      $                            WORK, RWORK( 2*NRHS+1 ), INFO )
 *
-*                 Check error code from CPORFS.
+*                 Check error code from AB_CPORFS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'CPORFS', INFO, 0, UPLO, N,
+     $                  CALL AB_ALAERH( PATH, 'AB_CPORFS', INFO, 0, UPLO
+     $, N,
      $                               N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
 *
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 5 ) )
-                     CALL CPOT05( UPLO, N, NRHS, A, LDA, B, LDA, X, LDA,
+                     CALL AB_CPOT05( UPLO, N, NRHS, A, LDA, B, LDA, X, L
+     $DA,
      $                            XACT, LDA, RWORK, RWORK( NRHS+1 ),
      $                            RESULT( 6 ) )
 *
@@ -475,7 +489,7 @@
                      DO 70 K = 3, 7
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
+     $                        CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9998 )UPLO, N, NRHS,
      $                        IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -487,24 +501,26 @@
 *+    TEST 8
 *                 Get an estimate of RCOND = 1/CNDNUM.
 *
-                  ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
-                  SRNAMT = 'CPOCON'
-                  CALL CPOCON( UPLO, N, AFAC, LDA, ANORM, RCOND, WORK,
+                  ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
+                  SRNAMT = 'AB_CPOCON'
+                  CALL AB_CPOCON( UPLO, N, AFAC, LDA, ANORM, RCOND, WORK
+     $,
      $                         RWORK, INFO )
 *
-*                 Check error code from CPOCON.
+*                 Check error code from AB_CPOCON.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'CPOCON', INFO, 0, UPLO, N, N,
+     $               CALL AB_ALAERH( PATH, 'AB_CPOCON', INFO, 0, UPLO, N
+     $, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  RESULT( 8 ) = SGET06( RCOND, RCONDC )
+                  RESULT( 8 ) = AB_SGET06( RCOND, RCONDC )
 *
 *                 Print the test ratio if it is .GE. THRESH.
 *
                   IF( RESULT( 8 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL ALAHD( NOUT, PATH )
+     $                  CALL AB_ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9997 )UPLO, N, IMAT, 8,
      $                  RESULT( 8 )
                      NFAIL = NFAIL + 1
@@ -517,7 +533,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
@@ -527,6 +543,6 @@
      $      ', test(', I2, ') =', G12.5 )
       RETURN
 *
-*     End of CCHKPO
+*     End of AB_CCHKPO
 *
       END

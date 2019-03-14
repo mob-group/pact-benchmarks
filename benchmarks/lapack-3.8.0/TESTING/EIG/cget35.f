@@ -1,4 +1,4 @@
-*> \brief \b CGET35
+*> \brief \b AB_CGET35
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGET35( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_CGET35( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NIN, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CGET35 tests CTRSYL, a routine for solving the Sylvester matrix
+*> AB_CGET35 tests AB_CTRSYL, a routine for solving the Sylvester matrix
 *> equation
 *>
 *>    op(A)*X + ISGN*X*op(B) = scale*C,
@@ -82,7 +82,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CGET35( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_CGET35( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -121,11 +121,11 @@
      $                   CSAV( LDT, LDT ), CTMP( LDT, LDT )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CTRSYL
+      EXTERNAL           AB_CGEMM, AB_CTRSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL, SQRT
@@ -134,10 +134,10 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -207,12 +207,12 @@
    90                         CONTINUE
   100                      CONTINUE
                            KNT = KNT + 1
-                           CALL CTRSYL( TRANA, TRANB, ISGN, M, N, A,
+                           CALL AB_CTRSYL( TRANA, TRANB, ISGN, M, N, A,
      $                                  LDT, B, LDT, C, LDT, SCALE,
      $                                  INFO )
                            IF( INFO.NE.0 )
      $                        NINFO = NINFO + 1
-                           XNRM = CLANGE( 'M', M, N, C, LDT, DUM )
+                           XNRM = AB_CLANGE( 'M', M, N, C, LDT, DUM )
                            RMUL = CONE
                            IF( XNRM.GT.ONE .AND. TNRM.GT.ONE ) THEN
                               IF( XNRM.GT.BIGNUM / TNRM ) THEN
@@ -220,13 +220,13 @@
                                  RMUL = CONE / RMUL
                               END IF
                            END IF
-                           CALL CGEMM( TRANA, 'N', M, N, M, RMUL, A,
+                           CALL AB_CGEMM( TRANA, 'N', M, N, M, RMUL, A,
      $                                 LDT, C, LDT, -SCALE*RMUL, CSAV,
      $                                 LDT )
-                           CALL CGEMM( 'N', TRANB, M, N, N,
+                           CALL AB_CGEMM( 'N', TRANB, M, N, N,
      $                                 REAL( ISGN )*RMUL, C, LDT, B,
      $                                 LDT, CONE, CSAV, LDT )
-                           RES1 = CLANGE( 'M', M, N, CSAV, LDT, DUM )
+                           RES1 = AB_CLANGE( 'M', M, N, CSAV, LDT, DUM )
                            RES = RES1 / MAX( SMLNUM, SMLNUM*XNRM,
      $                           ( ( ABS( RMUL )*TNRM )*EPS )*XNRM )
                            IF( RES.GT.RMAX ) THEN
@@ -242,6 +242,6 @@
   170 CONTINUE
       GO TO 10
 *
-*     End of CGET35
+*     End of AB_CGET35
 *
       END

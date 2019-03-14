@@ -1,4 +1,4 @@
-*> \brief \b DLATB4
+*> \brief \b AB_DLATB4
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
+*       SUBROUTINE AB_DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
 *                          CNDNUM, DIST )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DLATB4 sets parameters for the matrix generator based on the type of
+*> AB_DLATB4 sets parameters for the matrix generator based on the type of
 *> matrix to be generated.
 *> \endverbatim
 *
@@ -117,7 +117,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
+      SUBROUTINE AB_DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
      $                   CNDNUM, DIST )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -149,15 +149,15 @@
       DOUBLE PRECISION   BADC1, BADC2, EPS, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAMEN, DLAMCH
+      LOGICAL            AB_AB_LSAMEN
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_AB_LSAMEN, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD
+      EXTERNAL           AB_DLABAD
 *     ..
 *     .. Save statement ..
       SAVE               EPS, SMALL, LARGE, BADC1, BADC2, FIRST
@@ -171,16 +171,16 @@
 *
       IF( FIRST ) THEN
          FIRST = .FALSE.
-         EPS = DLAMCH( 'Precision' )
+         EPS = AB_DLAMCH( 'Precision' )
          BADC2 = TENTH / EPS
          BADC1 = SQRT( BADC2 )
-         SMALL = DLAMCH( 'Safe minimum' )
+         SMALL = AB_DLAMCH( 'Safe minimum' )
          LARGE = ONE / SMALL
 *
 *        If it looks like we're on a Cray, take the square root of
 *        SMALL and LARGE to avoid overflow and underflow problems.
 *
-         CALL DLABAD( SMALL, LARGE )
+         CALL AB_DLABAD( SMALL, LARGE )
          SMALL = SHRINK*( SMALL / EPS )
          LARGE = ONE / SMALL
       END IF
@@ -192,8 +192,10 @@
       DIST = 'S'
       MODE = 3
 *
-      IF( LSAMEN( 2, C2, 'QR' ) .OR. LSAMEN( 2, C2, 'LQ' ) .OR.
-     $    LSAMEN( 2, C2, 'QL' ) .OR. LSAMEN( 2, C2, 'RQ' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'QR' ) .OR. AB_AB_LSAMEN( 2, C2, 'LQ' ) .
+     $OR.
+     $    AB_AB_LSAMEN( 2, C2, 'QL' ) .OR. AB_AB_LSAMEN( 2, C2, 'RQ' ) )
+     $ THEN
 *
 *        xQR, xLQ, xQL, xRQ:  Set parameters to generate a general
 *                             M x N matrix.
@@ -236,7 +238,7 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'GE' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GE' ) ) THEN
 *
 *        xGE:  Set parameters to generate a general M x N matrix.
 *
@@ -278,7 +280,7 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'GB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GB' ) ) THEN
 *
 *        xGB:  Set parameters to generate a general banded matrix.
 *
@@ -304,7 +306,7 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'GT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GT' ) ) THEN
 *
 *        xGT:  Set parameters to generate a general tridiagonal matrix.
 *
@@ -339,7 +341,8 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'PO' ) .OR. LSAMEN( 2, C2, 'PP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PO' ) .OR. AB_AB_LSAMEN( 2, C2, 
+     $'PP' ) ) THEN
 *
 *        xPO, xPP: Set parameters to generate a
 *        symmetric positive definite matrix.
@@ -376,7 +379,8 @@
          END IF
 *
 *
-      ELSE IF( LSAMEN( 2, C2, 'SY' ) .OR. LSAMEN( 2, C2, 'SP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SY' ) .OR. AB_AB_LSAMEN( 2, C2, 
+     $'SP' ) ) THEN
 *
 *        xSY, xSP: Set parameters to generate a
 *        symmetric matrix.
@@ -412,7 +416,7 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'PB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PB' ) ) THEN
 *
 *        xPB:  Set parameters to generate a symmetric band matrix.
 *
@@ -438,7 +442,7 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'PT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PT' ) ) THEN
 *
 *        xPT:  Set parameters to generate a symmetric positive definite
 *        tridiagonal matrix.
@@ -469,7 +473,8 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'TR' ) .OR. LSAMEN( 2, C2, 'TP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'TR' ) .OR. AB_AB_LSAMEN( 2, C2, 
+     $'TP' ) ) THEN
 *
 *        xTR, xTP:  Set parameters to generate a triangular matrix
 *
@@ -511,7 +516,7 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'TB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'TB' ) ) THEN
 *
 *        xTB:  Set parameters to generate a triangular band matrix.
 *
@@ -542,6 +547,6 @@
 *
       RETURN
 *
-*     End of DLATB4
+*     End of AB_DLATB4
 *
       END

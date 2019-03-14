@@ -1,4 +1,4 @@
-*> \brief \b DGET34
+*> \brief \b AB_DGET34
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET34( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE AB_DGET34( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX
@@ -24,9 +24,9 @@
 *>
 *> \verbatim
 *>
-*> DGET34 tests DLAEXC, a routine for swapping adjacent blocks (either
+*> AB_DGET34 tests AB_DLAEXC, a routine for swapping adjacent blocks (either
 *> 1 by 1 or 2 by 2) on the diagonal of a matrix in real Schur form.
-*> Thus, DLAEXC computes an orthogonal matrix Q such that
+*> Thus, AB_DLAEXC computes an orthogonal matrix Q such that
 *>
 *>     Q' * [ A B ] * Q  = [ C1 B1 ]
 *>          [ 0 C ]        [ 0  A1 ]
@@ -80,7 +80,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET34( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE AB_DGET34( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,11 +115,11 @@
      $                   VAL( 9 ), VM( 2 ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DHST01, DLABAD, DLAEXC
+      EXTERNAL           AB_DCOPY, AB_DHST01, AB_DLABAD, AB_DLAEXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SIGN, SQRT
@@ -128,10 +128,10 @@
 *
 *     Get machine parameters
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -146,7 +146,7 @@
       VAL( 9 ) = -SQRT( BIGNUM )
       VM( 1 ) = ONE
       VM( 2 ) = ONE + TWO*EPS
-      CALL DCOPY( 16, VAL( 4 ), 0, T( 1, 1 ), 1 )
+      CALL AB_DCOPY( 16, VAL( 4 ), 0, T( 1, 1 ), 1 )
 *
       NINFO( 1 ) = 0
       NINFO( 2 ) = 0
@@ -166,14 +166,15 @@
                   T( 2, 1 ) = ZERO
                   TNRM = MAX( ABS( T( 1, 1 ) ), ABS( T( 2, 2 ) ),
      $                   ABS( T( 1, 2 ) ) )
-                  CALL DCOPY( 16, T, 1, T1, 1 )
-                  CALL DCOPY( 16, VAL( 1 ), 0, Q, 1 )
-                  CALL DCOPY( 4, VAL( 3 ), 0, Q, 5 )
-                  CALL DLAEXC( .TRUE., 2, T, 4, Q, 4, 1, 1, 1, WORK,
+                  CALL AB_DCOPY( 16, T, 1, T1, 1 )
+                  CALL AB_DCOPY( 16, VAL( 1 ), 0, Q, 1 )
+                  CALL AB_DCOPY( 4, VAL( 3 ), 0, Q, 5 )
+                  CALL AB_DLAEXC( .TRUE., 2, T, 4, Q, 4, 1, 1, 1, WORK,
      $                         INFO )
                   IF( INFO.NE.0 )
      $               NINFO( INFO ) = NINFO( INFO ) + 1
-                  CALL DHST01( 2, 1, 2, T1, 4, T, 4, Q, 4, WORK, LWORK,
+                  CALL AB_DHST01( 2, 1, 2, T1, 4, T, 4, Q, 4, WORK, LWOR
+     $K,
      $                         RESULT )
                   RES = RESULT( 1 ) + RESULT( 2 )
                   IF( INFO.NE.0 )
@@ -214,14 +215,15 @@
      $                            ABS( T( 1, 2 ) ), ABS( T( 1, 3 ) ),
      $                            ABS( T( 2, 2 ) ), ABS( T( 2, 3 ) ),
      $                            ABS( T( 3, 2 ) ), ABS( T( 3, 3 ) ) )
-                           CALL DCOPY( 16, T, 1, T1, 1 )
-                           CALL DCOPY( 16, VAL( 1 ), 0, Q, 1 )
-                           CALL DCOPY( 4, VAL( 3 ), 0, Q, 5 )
-                           CALL DLAEXC( .TRUE., 3, T, 4, Q, 4, 1, 1, 2,
+                           CALL AB_DCOPY( 16, T, 1, T1, 1 )
+                           CALL AB_DCOPY( 16, VAL( 1 ), 0, Q, 1 )
+                           CALL AB_DCOPY( 4, VAL( 3 ), 0, Q, 5 )
+                           CALL AB_DLAEXC( .TRUE., 3, T, 4, Q, 4, 1, 1, 
+     $2,
      $                                  WORK, INFO )
                            IF( INFO.NE.0 )
      $                        NINFO( INFO ) = NINFO( INFO ) + 1
-                           CALL DHST01( 3, 1, 3, T1, 4, T, 4, Q, 4,
+                           CALL AB_DHST01( 3, 1, 3, T1, 4, T, 4, Q, 4,
      $                                  WORK, LWORK, RESULT )
                            RES = RESULT( 1 ) + RESULT( 2 )
                            IF( INFO.EQ.0 ) THEN
@@ -270,14 +272,15 @@
      $                            ABS( T( 1, 2 ) ), ABS( T( 1, 3 ) ),
      $                            ABS( T( 2, 2 ) ), ABS( T( 2, 3 ) ),
      $                            ABS( T( 3, 2 ) ), ABS( T( 3, 3 ) ) )
-                           CALL DCOPY( 16, T, 1, T1, 1 )
-                           CALL DCOPY( 16, VAL( 1 ), 0, Q, 1 )
-                           CALL DCOPY( 4, VAL( 3 ), 0, Q, 5 )
-                           CALL DLAEXC( .TRUE., 3, T, 4, Q, 4, 1, 2, 1,
+                           CALL AB_DCOPY( 16, T, 1, T1, 1 )
+                           CALL AB_DCOPY( 16, VAL( 1 ), 0, Q, 1 )
+                           CALL AB_DCOPY( 4, VAL( 3 ), 0, Q, 5 )
+                           CALL AB_DLAEXC( .TRUE., 3, T, 4, Q, 4, 1, 2, 
+     $1,
      $                                  WORK, INFO )
                            IF( INFO.NE.0 )
      $                        NINFO( INFO ) = NINFO( INFO ) + 1
-                           CALL DHST01( 3, 1, 3, T1, 4, T, 4, Q, 4,
+                           CALL AB_DHST01( 3, 1, 3, T1, 4, T, 4, Q, 4,
      $                                  WORK, LWORK, RESULT )
                            RES = RESULT( 1 ) + RESULT( 2 )
                            IF( INFO.EQ.0 ) THEN
@@ -346,14 +349,18 @@
      $                                           ABS( T( I, J ) ) )
   190                                  CONTINUE
   200                               CONTINUE
-                                    CALL DCOPY( 16, T, 1, T1, 1 )
-                                    CALL DCOPY( 16, VAL( 1 ), 0, Q, 1 )
-                                    CALL DCOPY( 4, VAL( 3 ), 0, Q, 5 )
-                                    CALL DLAEXC( .TRUE., 4, T, 4, Q, 4,
+                                    CALL AB_DCOPY( 16, T, 1, T1, 1 )
+                                    CALL AB_DCOPY( 16, VAL( 1 ), 0, Q, 1
+     $ )
+                                    CALL AB_DCOPY( 4, VAL( 3 ), 0, Q, 5 
+     $)
+                                    CALL AB_DLAEXC( .TRUE., 4, T, 4, Q, 
+     $4,
      $                                           1, 2, 2, WORK, INFO )
                                     IF( INFO.NE.0 )
      $                                 NINFO( INFO ) = NINFO( INFO ) + 1
-                                    CALL DHST01( 4, 1, 4, T1, 4, T, 4,
+                                    CALL AB_DHST01( 4, 1, 4, T1, 4, T, 4
+     $,
      $                                           Q, 4, WORK, LWORK,
      $                                           RESULT )
                                     RES = RESULT( 1 ) + RESULT( 2 )
@@ -397,6 +404,6 @@
 *
       RETURN
 *
-*     End of DGET34
+*     End of AB_DGET34
 *
       END

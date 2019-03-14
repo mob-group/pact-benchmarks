@@ -1,4 +1,4 @@
-*> \brief \b ZGET51
+*> \brief \b AB_ZGET51
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
+*       SUBROUTINE AB_ZGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*>      ZGET51  generally checks a decomposition of the form
+*>      AB_ZGET51  generally checks a decomposition of the form
 *>
 *>              A = U B VC>
 *>      where * means conjugate transpose and U and V are unitary.
@@ -60,7 +60,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, ZGET51 does nothing.
+*>          The size of the matrix.  If it is zero, AB_ZGET51 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -151,7 +151,8 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
+      SUBROUTINE AB_ZGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WO
+     $RK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -183,11 +184,11 @@
       DOUBLE PRECISION   ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZLACPY
+      EXTERNAL           AB_ZGEMM, AB_ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -200,8 +201,8 @@
 *
 *     Constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -214,24 +215,26 @@
 *
 *        Tests scaled by the norm(A)
 *
-         ANORM = MAX( ZLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
+         ANORM = MAX( AB_ZLANGE( '1', N, N, A, LDA, RWORK ), UNFL )
 *
          IF( ITYPE.EQ.1 ) THEN
 *
 *           ITYPE=1: Compute W = A - UBV'
 *
-            CALL ZLACPY( ' ', N, N, A, LDA, WORK, N )
-            CALL ZGEMM( 'N', 'N', N, N, N, CONE, U, LDU, B, LDB, CZERO,
+            CALL AB_ZLACPY( ' ', N, N, A, LDA, WORK, N )
+            CALL AB_ZGEMM( 'N', 'N', N, N, N, CONE, U, LDU, B, LDB, CZER
+     $O,
      $                  WORK( N**2+1 ), N )
 *
-            CALL ZGEMM( 'N', 'C', N, N, N, -CONE, WORK( N**2+1 ), N, V,
+            CALL AB_ZGEMM( 'N', 'C', N, N, N, -CONE, WORK( N**2+1 ), N, 
+     $V,
      $                  LDV, CONE, WORK, N )
 *
          ELSE
 *
 *           ITYPE=2: Compute W = A - B
 *
-            CALL ZLACPY( ' ', N, N, B, LDB, WORK, N )
+            CALL AB_ZLACPY( ' ', N, N, B, LDB, WORK, N )
 *
             DO 20 JCOL = 1, N
                DO 10 JROW = 1, N
@@ -243,7 +246,7 @@
 *
 *        Compute norm(W)/ ( ulp*norm(A) )
 *
-         WNORM = ZLANGE( '1', N, N, WORK, N, RWORK )
+         WNORM = AB_ZLANGE( '1', N, N, WORK, N, RWORK )
 *
          IF( ANORM.GT.WNORM ) THEN
             RESULT = ( WNORM / ANORM ) / ( N*ULP )
@@ -261,7 +264,7 @@
 *
 *        ITYPE=3: Compute  UU' - I
 *
-         CALL ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
+         CALL AB_ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
      $               WORK, N )
 *
          DO 30 JDIAG = 1, N
@@ -269,12 +272,12 @@
      $         1 ) - CONE
    30    CONTINUE
 *
-         RESULT = MIN( ZLANGE( '1', N, N, WORK, N, RWORK ),
+         RESULT = MIN( AB_ZLANGE( '1', N, N, WORK, N, RWORK ),
      $            DBLE( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of ZGET51
+*     End of AB_ZGET51
 *
       END

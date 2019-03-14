@@ -1,4 +1,4 @@
-*> \brief \b CLATM4
+*> \brief \b AB_CLATM4
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
+*       SUBROUTINE AB_CLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
 *                          TRIANG, IDIST, ISEED, A, LDA )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CLATM4 generates basic square matrices, which may later be
+*> AB_CLATM4 generates basic square matrices, which may later be
 *> multiplied by others in order to produce test matrices.  It is
 *> intended mainly to be used to test the generalized eigenvalue
 *> routines.
@@ -67,7 +67,7 @@
 *>          = 7:  1, a, a^2, ..., a^(k-1)=RCOND
 *>          = 8:  1, 1-d, 1-2*d, ..., 1-(k-1)*d=RCOND
 *>          = 9:  random numbers chosen from (RCOND,1)
-*>          = 10: random numbers with distribution IDIST (see CLARND.)
+*>          = 10: random numbers with distribution IDIST (see AB_CLARND.)
 *> \endverbatim
 *>
 *> \param[in] N
@@ -137,7 +137,7 @@
 *>          ISEED is INTEGER array, dimension (4)
 *>          On entry ISEED specifies the seed of the random number
 *>          generator.  The values of ISEED are changed on exit, and can
-*>          be used in the next call to CLATM4 to continue the same
+*>          be used in the next call to AB_CLATM4 to continue the same
 *>          random number sequence.
 *>          Note: ISEED(4) should be odd, for the random number generator
 *>          used at present.
@@ -168,7 +168,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
+      SUBROUTINE AB_CLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
      $                   TRIANG, IDIST, ISEED, A, LDA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -201,12 +201,12 @@
       COMPLEX            CTEMP
 *     ..
 *     .. External Functions ..
-      REAL               SLARAN
-      COMPLEX            CLARND
-      EXTERNAL           SLARAN, CLARND
+      REAL               AB_SLARAN
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_SLARAN, AB_CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET
+      EXTERNAL           AB_CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, EXP, LOG, MAX, MIN, MOD, REAL
@@ -215,7 +215,7 @@
 *
       IF( N.LE.0 )
      $   RETURN
-      CALL CLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
+      CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
 *
 *     Insure a correct ISEED
 *
@@ -328,7 +328,7 @@
   180    CONTINUE
          ALPHA = LOG( RCOND )
          DO 190 JD = KBEG, KEND
-            A( JD, JD ) = EXP( ALPHA*SLARAN( ISEED ) )
+            A( JD, JD ) = EXP( ALPHA*AB_SLARAN( ISEED ) )
   190    CONTINUE
          GO TO 220
 *
@@ -336,7 +336,7 @@
 *
   200    CONTINUE
          DO 210 JD = KBEG, KEND
-            A( JD, JD ) = CLARND( IDIST, ISEED )
+            A( JD, JD ) = AB_CLARND( IDIST, ISEED )
   210    CONTINUE
 *
   220    CONTINUE
@@ -356,14 +356,14 @@
          IF( RSIGN ) THEN
             DO 250 JD = KBEG, KEND
                IF( REAL( A( JD, JD ) ).NE.ZERO ) THEN
-                  CTEMP = CLARND( 3, ISEED )
+                  CTEMP = AB_CLARND( 3, ISEED )
                   CTEMP = CTEMP / ABS( CTEMP )
                   A( JD, JD ) = CTEMP*REAL( A( JD, JD ) )
                END IF
   250       CONTINUE
             DO 260 JD = ISDB, ISDE
                IF( REAL( A( JD+1, JD ) ).NE.ZERO ) THEN
-                  CTEMP = CLARND( 3, ISEED )
+                  CTEMP = AB_CLARND( 3, ISEED )
                   CTEMP = CTEMP / ABS( CTEMP )
                   A( JD+1, JD ) = CTEMP*REAL( A( JD+1, JD ) )
                END IF
@@ -392,13 +392,13 @@
       IF( TRIANG.NE.ZERO ) THEN
          DO 300 JC = 2, N
             DO 290 JR = 1, JC - 1
-               A( JR, JC ) = TRIANG*CLARND( IDIST, ISEED )
+               A( JR, JC ) = TRIANG*AB_CLARND( IDIST, ISEED )
   290       CONTINUE
   300    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of CLATM4
+*     End of AB_CLATM4
 *
       END

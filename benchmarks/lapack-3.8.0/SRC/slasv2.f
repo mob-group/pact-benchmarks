@@ -1,4 +1,4 @@
-*> \brief \b SLASV2 computes the singular value decomposition of a 2-by-2 triangular matrix.
+*> \brief \b AB_SLASV2 computes the singular value decomposition of a 2-by-2 triangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASV2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasv2.f">
+*> Download AB_SLASV2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASV2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasv2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASV2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasv2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASV2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASV2( F, G, H, SSMIN, SSMAX, SNR, CSR, SNL, CSL )
+*       SUBROUTINE AB_SLASV2( F, G, H, SSMIN, SSMAX, SNR, CSR, SNL, CSL )
 *
 *       .. Scalar Arguments ..
 *       REAL               CSL, CSR, F, G, H, SNL, SNR, SSMAX, SSMIN
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SLASV2 computes the singular value decomposition of a 2-by-2
+*> AB_SLASV2 computes the singular value decomposition of a 2-by-2
 *> triangular matrix
 *>    [  F   G  ]
 *>    [  0   H  ].
@@ -136,7 +136,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLASV2( F, G, H, SSMIN, SSMAX, SNR, CSR, SNL, CSL )
+      SUBROUTINE AB_SLASV2( F, G, H, SSMIN, SSMAX, SNR, CSR, SNL, CSL )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -171,8 +171,8 @@
       INTRINSIC          ABS, SIGN, SQRT
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -216,7 +216,7 @@
          GASMAL = .TRUE.
          IF( GA.GT.FA ) THEN
             PMAX = 2
-            IF( ( FA / GA ).LT.SLAMCH( 'EPS' ) ) THEN
+            IF( ( FA / GA ).LT.AB_SLAMCH( 'EPS' ) ) THEN
 *
 *              Case of very large GA
 *
@@ -320,6 +320,6 @@
       SSMIN = SIGN( SSMIN, TSIGN*SIGN( ONE, F )*SIGN( ONE, H ) )
       RETURN
 *
-*     End of SLASV2
+*     End of AB_SLASV2
 *
       END

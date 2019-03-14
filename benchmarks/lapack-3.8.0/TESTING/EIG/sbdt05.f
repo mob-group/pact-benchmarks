@@ -6,7 +6,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SBDT05( M, N, A, LDA, S, NS, U, LDU,
+*       SUBROUTINE AB_SBDT05( M, N, A, LDA, S, NS, U, LDU,
 *                          VT, LDVT, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SBDT05 reconstructs a bidiagonal matrix B from its (partial) SVD:
+*> AB_SBDT05 reconstructs a bidiagonal matrix B from its (partial) SVD:
 *>    S = U' * B * V
 *> where U and V are orthogonal matrices and S is diagonal.
 *>
@@ -121,7 +121,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE SBDT05( M, N, A, LDA, S, NS, U, LDU,
+      SUBROUTINE AB_SBDT05( M, N, A, LDA, S, NS, U, LDU,
      $                    VT, LDVT, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -149,13 +149,14 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           LSAME, ISAMAX, SASUM, SLAMCH, SLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX
+      REAL               AB_SASUM, AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SASUM, AB_SLAMCH, AB_SL
+     $ANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM
+      EXTERNAL           AB_SGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN
@@ -168,14 +169,14 @@
       IF( MIN( M, N ).LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = SLAMCH( 'Precision' )
-      ANORM = SLANGE( 'M', M, N, A, LDA, WORK )
+      EPS = AB_SLAMCH( 'Precision' )
+      ANORM = AB_SLANGE( 'M', M, N, A, LDA, WORK )
 *
 *     Compute U' * A * V.
 *
-      CALL SGEMM( 'N', 'T', M, NS, N, ONE, A, LDA, VT,
+      CALL AB_SGEMM( 'N', 'T', M, NS, N, ONE, A, LDA, VT,
      $            LDVT, ZERO, WORK( 1+NS*NS ), M )
-      CALL SGEMM( 'T', 'N', NS, NS, M, -ONE, U, LDU, WORK( 1+NS*NS ),
+      CALL AB_SGEMM( 'T', 'N', NS, NS, M, -ONE, U, LDU, WORK( 1+NS*NS ),
      $            M, ZERO, WORK, NS )
 *
 *     norm(S - U' * B * V)
@@ -183,7 +184,7 @@
       J = 0
       DO 10 I = 1, NS
          WORK( J+I ) =  WORK( J+I ) + S( I )
-         RESID = MAX( RESID, SASUM( NS, WORK( J+1 ), 1 ) )
+         RESID = MAX( RESID, AB_SASUM( NS, WORK( J+1 ), 1 ) )
          J = J + NS
    10 CONTINUE
 *
@@ -206,6 +207,6 @@
 *
       RETURN
 *
-*     End of SBDT05
+*     End of AB_SBDT05
 *
       END

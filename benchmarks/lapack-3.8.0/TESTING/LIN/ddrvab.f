@@ -1,4 +1,4 @@
-*> \brief \b DDRVAB
+*> \brief \b AB_DDRVAB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DDRVAB( DOTYPE, NM, MVAL, NNS,
+*       SUBROUTINE AB_DDRVAB( DOTYPE, NM, MVAL, NNS,
 *                          NSVAL, THRESH, NMAX, A, AFAC, B,
 *                          X, WORK, RWORK, SWORK, IWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DDRVAB tests DSGESV
+*> AB_DDRVAB tests AB_DAB_SGESV
 *> \endverbatim
 *
 *  Arguments:
@@ -147,7 +147,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DDRVAB( DOTYPE, NM, MVAL, NNS,
+      SUBROUTINE AB_DDRVAB( DOTYPE, NM, MVAL, NNS,
      $                   NSVAL, THRESH, NMAX, A, AFAC, B,
      $                   X, WORK, RWORK, SWORK, IWORK, NOUT )
 *
@@ -195,8 +195,9 @@
       INTEGER            ITER, KASE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, DGET08, DLACPY, DLARHS, DLASET,
-     $                   DLATB4, DLATMS
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_DGET08, AB_DLACPY, AB_D
+     $LARHS, AB_DLASET,
+     $                   AB_DLATB4, AB_DLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN, SQRT
@@ -253,21 +254,22 @@
             IF( ZEROT .AND. N.LT.IMAT-4 )
      $         GO TO 100
 *
-*           Set up parameters with DLATB4 and generate a test matrix
-*           with DLATMS.
+*           Set up parameters with AB_DLATB4 and generate a test matrix
+*           with AB_DLATMS.
 *
-            CALL DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
+            CALL AB_DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
      $                   CNDNUM, DIST )
 *
-            SRNAMT = 'DLATMS'
-            CALL DLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
+            SRNAMT = 'AB_DLATMS'
+            CALL AB_DLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                   CNDNUM, ANORM, KL, KU, 'No packing', A, LDA,
      $                   WORK, INFO )
 *
-*           Check error code from DLATMS.
+*           Check error code from AB_DLATMS.
 *
             IF( INFO.NE.0 ) THEN
-               CALL ALAERH( PATH, 'DLATMS', INFO, 0, ' ', M, N, -1,
+               CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, ' ', M, N, -1
+     $,
      $                      -1, -1, IMAT, NFAIL, NERRS, NOUT )
                GO TO 100
             END IF
@@ -289,7 +291,7 @@
                      A( IOFF+I ) = ZERO
    20             CONTINUE
                ELSE
-                  CALL DLASET( 'Full', M, N-IZERO+1, ZERO, ZERO,
+                  CALL AB_DLASET( 'Full', M, N-IZERO+1, ZERO, ZERO,
      $                         A( IOFF+1 ), LDA )
                END IF
             ELSE
@@ -301,38 +303,39 @@
                XTYPE = 'N'
                TRANS = 'N'
 *
-               SRNAMT = 'DLARHS'
-               CALL DLARHS( PATH, XTYPE, ' ', TRANS, N, N, KL,
+               SRNAMT = 'AB_DLARHS'
+               CALL AB_DLARHS( PATH, XTYPE, ' ', TRANS, N, N, KL,
      $                      KU, NRHS, A, LDA, X, LDA, B,
      $                      LDA, ISEED, INFO )
 *
-               SRNAMT = 'DSGESV'
+               SRNAMT = 'AB_DAB_SGESV'
 *
                KASE = KASE + 1
 *
-               CALL DLACPY( 'Full', M, N, A, LDA, AFAC, LDA )
+               CALL AB_DLACPY( 'Full', M, N, A, LDA, AFAC, LDA )
 *
-               CALL DSGESV( N, NRHS, A, LDA, IWORK, B, LDA, X, LDA,
+               CALL AB_DAB_SGESV( N, NRHS, A, LDA, IWORK, B, LDA, X, LDA
+     $,
      $                      WORK, SWORK, ITER, INFO)
 *
                IF (ITER.LT.0) THEN
-                   CALL DLACPY( 'Full', M, N, AFAC, LDA, A, LDA )
+                   CALL AB_DLACPY( 'Full', M, N, AFAC, LDA, A, LDA )
                ENDIF
 *
-*              Check error code from DSGESV. This should be the same as
-*              the one of DGETRF.
+*              Check error code from AB_DAB_SGESV. This should be the same as
+*              the one of AB_DGETRF.
 *
                IF( INFO.NE.IZERO ) THEN
 *
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL ALAHD( NOUT, PATH )
+     $               CALL AB_ALAHD( NOUT, PATH )
                   NERRS = NERRS + 1
 *
                   IF( INFO.NE.IZERO .AND. IZERO.NE.0 ) THEN
-                     WRITE( NOUT, FMT = 9988 )'DSGESV',INFO,
+                     WRITE( NOUT, FMT = 9988 )'AB_DAB_SGESV',INFO,
      $                         IZERO,M,IMAT
                   ELSE
-                     WRITE( NOUT, FMT = 9975 )'DSGESV',INFO,
+                     WRITE( NOUT, FMT = 9975 )'AB_DAB_SGESV',INFO,
      $                         M, IMAT
                   END IF
                END IF
@@ -344,9 +347,9 @@
 *
 *              Check the quality of the solution
 *
-               CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+               CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
 *
-               CALL DGET08( TRANS, N, N, NRHS, A, LDA, X, LDA, WORK,
+               CALL AB_DGET08( TRANS, N, N, NRHS, A, LDA, X, LDA, WORK,
      $                      LDA, RWORK, RESULT( 1 ) )
 *
 *              Check if the test passes the tesing.
@@ -387,9 +390,9 @@
 *     Print a summary of the results.
 *
       IF( NFAIL.GT.0 ) THEN
-         WRITE( NOUT, FMT = 9996 )'DSGESV', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9996 )'AB_DAB_SGESV', NFAIL, NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 )'DSGESV', NRUN
+         WRITE( NOUT, FMT = 9995 )'AB_DAB_SGESV', NRUN
       END IF
       IF( NERRS.GT.0 ) THEN
          WRITE( NOUT, FMT = 9994 )NERRS
@@ -425,9 +428,9 @@
  8960 FORMAT( 3X, I2, ': norm_1( B - A * X )  / ',
      $      '( norm_1(A) * norm_1(X) * EPS * SQRT(N) ) > 1 if ITERREF',
      $      / 4x, 'or norm_1( B - A * X )  / ',
-     $      '( norm_1(A) * norm_1(X) * EPS ) > THRES if DGETRF' )
+     $      '( norm_1(A) * norm_1(X) * EPS ) > THRES if AB_DGETRF' )
       RETURN
 *
-*     End of DDRVAB
+*     End of AB_DDRVAB
 *
       END

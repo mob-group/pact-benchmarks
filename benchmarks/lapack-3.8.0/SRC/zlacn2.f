@@ -1,4 +1,4 @@
-*> \brief \b ZLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
+*> \brief \b AB_ZLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLACN2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlacn2.f">
+*> Download AB_ZLACN2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLACN2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlacn2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLACN2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlacn2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLACN2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLACN2( N, V, X, EST, KASE, ISAVE )
+*       SUBROUTINE AB_ZLACN2( N, V, X, EST, KASE, ISAVE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KASE, N
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZLACN2 estimates the 1-norm of a square, complex matrix A.
+*> AB_ZLACN2 estimates the 1-norm of a square, complex matrix A.
 *> Reverse communication is used for evaluating matrix-vector products.
 *> \endverbatim
 *
@@ -61,7 +61,7 @@
 *>         On an intermediate return, X should be overwritten by
 *>               A * X,   if KASE=1,
 *>               A**H * X,  if KASE=2,
-*>         where A**H is the conjugate transpose of A, and ZLACN2 must be
+*>         where A**H is the conjugate transpose of A, and AB_ZLACN2 must be
 *>         re-called with all the other parameters unchanged.
 *> \endverbatim
 *>
@@ -69,23 +69,23 @@
 *> \verbatim
 *>          EST is DOUBLE PRECISION
 *>         On entry with KASE = 1 or 2 and ISAVE(1) = 3, EST should be
-*>         unchanged from the previous call to ZLACN2.
+*>         unchanged from the previous call to AB_ZLACN2.
 *>         On exit, EST is an estimate (a lower bound) for norm(A).
 *> \endverbatim
 *>
 *> \param[in,out] KASE
 *> \verbatim
 *>          KASE is INTEGER
-*>         On the initial call to ZLACN2, KASE should be 0.
+*>         On the initial call to AB_ZLACN2, KASE should be 0.
 *>         On an intermediate return, KASE will be 1 or 2, indicating
 *>         whether X should be overwritten by A * X  or A**H * X.
-*>         On the final return from ZLACN2, KASE will again be 0.
+*>         On the final return from AB_ZLACN2, KASE will again be 0.
 *> \endverbatim
 *>
 *> \param[in,out] ISAVE
 *> \verbatim
 *>          ISAVE is INTEGER array, dimension (3)
-*>         ISAVE is used to save variables between calls to ZLACN2
+*>         ISAVE is used to save variables between calls to AB_ZLACN2
 *> \endverbatim
 *
 *  Authors:
@@ -109,10 +109,10 @@
 *>
 *>  Last modified:  April, 1999
 *>
-*>  This is a thread safe version of ZLACON, which uses the array ISAVE
+*>  This is a thread safe version of AB_ZLACON, which uses the array ISAVE
 *>  in place of a SAVE statement, as follows:
 *>
-*>     ZLACON     ZLACN2
+*>     AB_ZLACON     AB_ZLACN2
 *>      JUMP     ISAVE(1)
 *>      J        ISAVE(2)
 *>      ITER     ISAVE(3)
@@ -131,7 +131,7 @@
 *>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
 *>
 *  =====================================================================
-      SUBROUTINE ZLACN2( N, V, X, EST, KASE, ISAVE )
+      SUBROUTINE AB_ZLACN2( N, V, X, EST, KASE, ISAVE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,19 +163,19 @@
       DOUBLE PRECISION   ABSXI, ALTSGN, ESTOLD, SAFMIN, TEMP
 *     ..
 *     .. External Functions ..
-      INTEGER            IZMAX1
-      DOUBLE PRECISION   DLAMCH, DZSUM1
-      EXTERNAL           IZMAX1, DLAMCH, DZSUM1
+      INTEGER            AB_IZMAX1
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZSUM1
+      EXTERNAL           AB_IZMAX1, AB_DLAMCH, AB_DZSUM1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY
+      EXTERNAL           AB_ZCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       IF( KASE.EQ.0 ) THEN
          DO 10 I = 1, N
             X( I ) = DCMPLX( ONE / DBLE( N ) )
@@ -197,7 +197,7 @@
 *        ... QUIT
          GO TO 130
       END IF
-      EST = DZSUM1( N, X, 1 )
+      EST = AB_DZSUM1( N, X, 1 )
 *
       DO 30 I = 1, N
          ABSXI = ABS( X( I ) )
@@ -216,7 +216,7 @@
 *     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY CTRANS(A)*X.
 *
    40 CONTINUE
-      ISAVE( 2 ) = IZMAX1( N, X, 1 )
+      ISAVE( 2 ) = AB_IZMAX1( N, X, 1 )
       ISAVE( 3 ) = 2
 *
 *     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
@@ -234,9 +234,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
    70 CONTINUE
-      CALL ZCOPY( N, X, 1, V, 1 )
+      CALL AB_ZCOPY( N, X, 1, V, 1 )
       ESTOLD = EST
-      EST = DZSUM1( N, V, 1 )
+      EST = AB_DZSUM1( N, V, 1 )
 *
 *     TEST FOR CYCLING.
       IF( EST.LE.ESTOLD )
@@ -260,7 +260,7 @@
 *
    90 CONTINUE
       JLAST = ISAVE( 2 )
-      ISAVE( 2 ) = IZMAX1( N, X, 1 )
+      ISAVE( 2 ) = AB_IZMAX1( N, X, 1 )
       IF( ( ABS( X( JLAST ) ).NE.ABS( X( ISAVE( 2 ) ) ) ) .AND.
      $    ( ISAVE( 3 ).LT.ITMAX ) ) THEN
          ISAVE( 3 ) = ISAVE( 3 ) + 1
@@ -283,9 +283,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
   120 CONTINUE
-      TEMP = TWO*( DZSUM1( N, X, 1 ) / DBLE( 3*N ) )
+      TEMP = TWO*( AB_DZSUM1( N, X, 1 ) / DBLE( 3*N ) )
       IF( TEMP.GT.EST ) THEN
-         CALL ZCOPY( N, X, 1, V, 1 )
+         CALL AB_ZCOPY( N, X, 1, V, 1 )
          EST = TEMP
       END IF
 *
@@ -293,6 +293,6 @@
       KASE = 0
       RETURN
 *
-*     End of ZLACN2
+*     End of AB_ZLACN2
 *
       END

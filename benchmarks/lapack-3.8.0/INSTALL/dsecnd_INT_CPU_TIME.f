@@ -1,4 +1,4 @@
-*> \brief \b DSECND Using INTERNAL function CPU_TIME.
+*> \brief \b AB_DSECND Using INTERNAL function CPU_TIME.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      DOUBLE PRECISION FUNCTION DSECND( )
+*      DOUBLE PRECISION FUNCTION AB_DSECND( )
 *
 *
 *> \par Purpose:
@@ -16,7 +16,7 @@
 *>
 *> \verbatim
 *>
-*>  DSECND returns the user time for a process in seconds.
+*>  AB_DSECND returns the user time for a process in AB_SECONDs.
 *>  This version gets the time from the INTERNAL function CPU_TIME.
 *> \endverbatim
 *
@@ -33,7 +33,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DSECND( )
+      DOUBLE PRECISION FUNCTION AB_DSECND( )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -53,9 +53,9 @@
 * .. Executable Statements .. *
 *
       CALL CPU_TIME( T )
-      DSECND = T
+      AB_DSECND = T
       RETURN
 *
-*     End of DSECND
+*     End of AB_DSECND
 *
       END

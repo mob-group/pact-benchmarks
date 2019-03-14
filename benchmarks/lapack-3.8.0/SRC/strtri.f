@@ -1,4 +1,4 @@
-*> \brief \b STRTRI
+*> \brief \b AB_STRTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download STRTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strtri.f">
+*> Download AB_STRTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STRTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/strtri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STRTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strtri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STRTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STRTRI( UPLO, DIAG, N, A, LDA, INFO )
+*       SUBROUTINE AB_STRTRI( UPLO, DIAG, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> STRTRI computes the inverse of a real upper or lower triangular
+*> AB_STRTRI computes the inverse of a real upper or lower triangular
 *> matrix A.
 *>
 *> This is the Level 3 BLAS version of the algorithm.
@@ -107,7 +107,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE STRTRI( UPLO, DIAG, N, A, LDA, INFO )
+      SUBROUTINE AB_STRTRI( UPLO, DIAG, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,12 +133,12 @@
       INTEGER            J, JB, NB, NN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           STRMM, STRSM, STRTI2, XERBLA
+      EXTERNAL           AB_STRMM, AB_STRSM, AB_STRTI2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -148,11 +148,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      NOUNIT = LSAME( DIAG, 'N' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      NOUNIT = AB_LSAME( DIAG, 'N' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -160,7 +160,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STRTRI', -INFO )
+         CALL AB_XERBLA( 'AB_STRTRI', -INFO )
          RETURN
       END IF
 *
@@ -181,12 +181,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = ILAENV( 1, 'STRTRI', UPLO // DIAG, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_STRTRI', UPLO // DIAG, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL STRTI2( UPLO, DIAG, N, A, LDA, INFO )
+         CALL AB_STRTI2( UPLO, DIAG, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code
@@ -200,14 +200,16 @@
 *
 *              Compute rows 1:j-1 of current block column
 *
-               CALL STRMM( 'Left', 'Upper', 'No transpose', DIAG, J-1,
+               CALL AB_STRMM( 'Left', 'Upper', 'No transpose', DIAG, J-1
+     $,
      $                     JB, ONE, A, LDA, A( 1, J ), LDA )
-               CALL STRSM( 'Right', 'Upper', 'No transpose', DIAG, J-1,
+               CALL AB_STRSM( 'Right', 'Upper', 'No transpose', DIAG, J-
+     $1,
      $                     JB, -ONE, A( J, J ), LDA, A( 1, J ), LDA )
 *
 *              Compute inverse of current diagonal block
 *
-               CALL STRTI2( 'Upper', DIAG, JB, A( J, J ), LDA, INFO )
+               CALL AB_STRTI2( 'Upper', DIAG, JB, A( J, J ), LDA, INFO )
    20       CONTINUE
          ELSE
 *
@@ -220,23 +222,23 @@
 *
 *                 Compute rows j+jb:n of current block column
 *
-                  CALL STRMM( 'Left', 'Lower', 'No transpose', DIAG,
+                  CALL AB_STRMM( 'Left', 'Lower', 'No transpose', DIAG,
      $                        N-J-JB+1, JB, ONE, A( J+JB, J+JB ), LDA,
      $                        A( J+JB, J ), LDA )
-                  CALL STRSM( 'Right', 'Lower', 'No transpose', DIAG,
+                  CALL AB_STRSM( 'Right', 'Lower', 'No transpose', DIAG,
      $                        N-J-JB+1, JB, -ONE, A( J, J ), LDA,
      $                        A( J+JB, J ), LDA )
                END IF
 *
 *              Compute inverse of current diagonal block
 *
-               CALL STRTI2( 'Lower', DIAG, JB, A( J, J ), LDA, INFO )
+               CALL AB_STRTI2( 'Lower', DIAG, JB, A( J, J ), LDA, INFO )
    30       CONTINUE
          END IF
       END IF
 *
       RETURN
 *
-*     End of STRTRI
+*     End of AB_STRTRI
 *
       END

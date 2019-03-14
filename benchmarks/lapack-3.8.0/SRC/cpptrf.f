@@ -1,4 +1,4 @@
-*> \brief \b CPPTRF
+*> \brief \b AB_CPPTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPPTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpptrf.f">
+*> Download AB_CPPTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPPTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpptrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPPTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPPTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPPTRF( UPLO, N, AP, INFO )
+*       SUBROUTINE AB_CPPTRF( UPLO, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CPPTRF computes the Cholesky factorization of a complex Hermitian
+*> AB_CPPTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A stored in packed format.
 *>
 *> The factorization has the form
@@ -117,7 +117,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CPPTRF( UPLO, N, AP, INFO )
+      SUBROUTINE AB_CPPTRF( UPLO, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,12 +144,12 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CDOTC
+      LOGICAL            AB_LSAME
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPR, CSSCAL, CTPSV, XERBLA
+      EXTERNAL           AB_CHPR, AB_CAB_SSCAL, AB_CTPSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, SQRT
@@ -159,14 +159,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPPTRF', -INFO )
+         CALL AB_XERBLA( 'AB_CPPTRF', -INFO )
          RETURN
       END IF
 *
@@ -187,12 +187,14 @@
 *           Compute elements 1:J-1 of column J.
 *
             IF( J.GT.1 )
-     $         CALL CTPSV( 'Upper', 'Conjugate transpose', 'Non-unit',
+     $         CALL AB_CTPSV( 'Upper', 'Conjugate transpose', 'Non-unit'
+     $,
      $                     J-1, AP, AP( JC ), 1 )
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = REAL( AP( JJ ) ) - CDOTC( J-1, AP( JC ), 1, AP( JC ),
+            AJJ = REAL( AP( JJ ) ) - AB_CDOTC( J-1, AP( JC ), 1, AP( JC 
+     $),
      $            1 )
             IF( AJJ.LE.ZERO ) THEN
                AP( JJ ) = AJJ
@@ -221,8 +223,8 @@
 *           submatrix.
 *
             IF( J.LT.N ) THEN
-               CALL CSSCAL( N-J, ONE / AJJ, AP( JJ+1 ), 1 )
-               CALL CHPR( 'Lower', N-J, -ONE, AP( JJ+1 ), 1,
+               CALL AB_CAB_SSCAL( N-J, ONE / AJJ, AP( JJ+1 ), 1 )
+               CALL AB_CHPR( 'Lower', N-J, -ONE, AP( JJ+1 ), 1,
      $                    AP( JJ+N-J+1 ) )
                JJ = JJ + N - J + 1
             END IF
@@ -236,6 +238,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of CPPTRF
+*     End of AB_CPPTRF
 *
       END

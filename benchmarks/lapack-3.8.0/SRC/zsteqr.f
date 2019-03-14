@@ -1,4 +1,4 @@
-*> \brief \b ZSTEQR
+*> \brief \b AB_ZSTEQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZSTEQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsteqr.f">
+*> Download AB_ZSTEQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSTEQR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsteqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSTEQR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsteqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSTEQR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+*       SUBROUTINE AB_ZSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          COMPZ
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> ZSTEQR computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_ZSTEQR computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric tridiagonal matrix using the implicit QL or QR method.
 *> The eigenvectors of a full or band complex Hermitian matrix can also
-*> be found if ZHETRD or ZHPTRD or ZHBTRD has been used to reduce this
+*> be found if AB_ZHETRD or AB_ZHPTRD or AB_ZHBTRD has been used to reduce this
 *> matrix to tridiagonal form.
 *> \endverbatim
 *
@@ -130,7 +130,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+      SUBROUTINE AB_ZSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -166,13 +166,14 @@
      $                   S, SAFMAX, SAFMIN, SSFMAX, SSFMIN, TST
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANST, DLAPY2
-      EXTERNAL           LSAME, DLAMCH, DLANST, DLAPY2
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST, AB_DLAPY2
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANST, AB_DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAE2, DLAEV2, DLARTG, DLASCL, DLASRT, XERBLA,
-     $                   ZLASET, ZLASR, ZSWAP
+      EXTERNAL           AB_DLAE2, AB_DLAEV2, AB_DLARTG, AB_DLASCL, AB_A
+     $B_DLASRT, AB_XERBLA,
+     $                   AB_ZLASET, AB_ZLASR, AB_ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -183,11 +184,11 @@
 *
       INFO = 0
 *
-      IF( LSAME( COMPZ, 'N' ) ) THEN
+      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
          ICOMPZ = 0
-      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
          ICOMPZ = 1
-      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
          ICOMPZ = 2
       ELSE
          ICOMPZ = -1
@@ -201,7 +202,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZSTEQR', -INFO )
+         CALL AB_XERBLA( 'AB_ZSTEQR', -INFO )
          RETURN
       END IF
 *
@@ -218,9 +219,9 @@
 *
 *     Determine the unit roundoff and over/underflow thresholds.
 *
-      EPS = DLAMCH( 'E' )
+      EPS = AB_DLAMCH( 'E' )
       EPS2 = EPS**2
-      SAFMIN = DLAMCH( 'S' )
+      SAFMIN = AB_DLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       SSFMAX = SQRT( SAFMAX ) / THREE
       SSFMIN = SQRT( SAFMIN ) / EPS2
@@ -229,7 +230,7 @@
 *     matrix.
 *
       IF( ICOMPZ.EQ.2 )
-     $   CALL ZLASET( 'Full', N, N, CZERO, CONE, Z, LDZ )
+     $   CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Z, LDZ )
 *
       NMAXIT = N*MAXIT
       JTOT = 0
@@ -271,21 +272,23 @@
 *
 *     Scale submatrix in rows and columns L to LEND
 *
-      ANORM = DLANST( 'I', LEND-L+1, D( L ), E( L ) )
+      ANORM = AB_DLANST( 'I', LEND-L+1, D( L ), E( L ) )
       ISCALE = 0
       IF( ANORM.EQ.ZERO )
      $   GO TO 10
       IF( ANORM.GT.SSFMAX ) THEN
          ISCALE = 1
-         CALL DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), N,
+         CALL AB_DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), 
+     $N,
      $                INFO )
-         CALL DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
+         CALL AB_DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
      $                INFO )
       ELSE IF( ANORM.LT.SSFMIN ) THEN
          ISCALE = 2
-         CALL DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), N,
+         CALL AB_DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), 
+     $N,
      $                INFO )
-         CALL DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
+         CALL AB_DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
      $                INFO )
       END IF
 *
@@ -321,18 +324,19 @@
          IF( M.EQ.L )
      $      GO TO 80
 *
-*        If remaining matrix is 2-by-2, use DLAE2 or SLAEV2
+*        If remaining matrix is 2-by-2, use AB_DLAE2 or AB_SLAEV2
 *        to compute its eigensystem.
 *
          IF( M.EQ.L+1 ) THEN
             IF( ICOMPZ.GT.0 ) THEN
-               CALL DLAEV2( D( L ), E( L ), D( L+1 ), RT1, RT2, C, S )
+               CALL AB_DLAEV2( D( L ), E( L ), D( L+1 ), RT1, RT2, C, S 
+     $)
                WORK( L ) = C
                WORK( N-1+L ) = S
-               CALL ZLASR( 'R', 'V', 'B', N, 2, WORK( L ),
+               CALL AB_ZLASR( 'R', 'V', 'B', N, 2, WORK( L ),
      $                     WORK( N-1+L ), Z( 1, L ), LDZ )
             ELSE
-               CALL DLAE2( D( L ), E( L ), D( L+1 ), RT1, RT2 )
+               CALL AB_DLAE2( D( L ), E( L ), D( L+1 ), RT1, RT2 )
             END IF
             D( L ) = RT1
             D( L+1 ) = RT2
@@ -350,7 +354,7 @@
 *        Form shift.
 *
          G = ( D( L+1 )-P ) / ( TWO*E( L ) )
-         R = DLAPY2( G, ONE )
+         R = AB_DLAPY2( G, ONE )
          G = D( M ) - P + ( E( L ) / ( G+SIGN( R, G ) ) )
 *
          S = ONE
@@ -363,7 +367,7 @@
          DO 70 I = MM1, L, -1
             F = S*E( I )
             B = C*E( I )
-            CALL DLARTG( G, F, C, S, R )
+            CALL AB_DLARTG( G, F, C, S, R )
             IF( I.NE.M-1 )
      $         E( I+1 ) = R
             G = D( I+1 ) - P
@@ -385,7 +389,8 @@
 *
          IF( ICOMPZ.GT.0 ) THEN
             MM = M - L + 1
-            CALL ZLASR( 'R', 'V', 'B', N, MM, WORK( L ), WORK( N-1+L ),
+            CALL AB_ZLASR( 'R', 'V', 'B', N, MM, WORK( L ), WORK( N-1+L 
+     $),
      $                  Z( 1, L ), LDZ )
          END IF
 *
@@ -428,18 +433,19 @@
          IF( M.EQ.L )
      $      GO TO 130
 *
-*        If remaining matrix is 2-by-2, use DLAE2 or SLAEV2
+*        If remaining matrix is 2-by-2, use AB_DLAE2 or AB_SLAEV2
 *        to compute its eigensystem.
 *
          IF( M.EQ.L-1 ) THEN
             IF( ICOMPZ.GT.0 ) THEN
-               CALL DLAEV2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2, C, S )
+               CALL AB_DLAEV2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2, C, 
+     $S )
                WORK( M ) = C
                WORK( N-1+M ) = S
-               CALL ZLASR( 'R', 'V', 'F', N, 2, WORK( M ),
+               CALL AB_ZLASR( 'R', 'V', 'F', N, 2, WORK( M ),
      $                     WORK( N-1+M ), Z( 1, L-1 ), LDZ )
             ELSE
-               CALL DLAE2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2 )
+               CALL AB_DLAE2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2 )
             END IF
             D( L-1 ) = RT1
             D( L ) = RT2
@@ -457,7 +463,7 @@
 *        Form shift.
 *
          G = ( D( L-1 )-P ) / ( TWO*E( L-1 ) )
-         R = DLAPY2( G, ONE )
+         R = AB_DLAPY2( G, ONE )
          G = D( M ) - P + ( E( L-1 ) / ( G+SIGN( R, G ) ) )
 *
          S = ONE
@@ -470,7 +476,7 @@
          DO 120 I = M, LM1
             F = S*E( I )
             B = C*E( I )
-            CALL DLARTG( G, F, C, S, R )
+            CALL AB_DLARTG( G, F, C, S, R )
             IF( I.NE.M )
      $         E( I-1 ) = R
             G = D( I ) - P
@@ -492,7 +498,8 @@
 *
          IF( ICOMPZ.GT.0 ) THEN
             MM = L - M + 1
-            CALL ZLASR( 'R', 'V', 'F', N, MM, WORK( M ), WORK( N-1+M ),
+            CALL AB_ZLASR( 'R', 'V', 'F', N, MM, WORK( M ), WORK( N-1+M 
+     $),
      $                  Z( 1, M ), LDZ )
          END IF
 *
@@ -516,14 +523,16 @@
 *
   140 CONTINUE
       IF( ISCALE.EQ.1 ) THEN
-         CALL DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
+         CALL AB_DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
-         CALL DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1, E( LSV ),
+         CALL AB_DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1, E( LSV
+     $ ),
      $                N, INFO )
       ELSE IF( ISCALE.EQ.2 ) THEN
-         CALL DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
+         CALL AB_DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
-         CALL DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1, E( LSV ),
+         CALL AB_DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1, E( LSV
+     $ ),
      $                N, INFO )
       END IF
 *
@@ -546,7 +555,7 @@
 *
 *        Use Quick Sort
 *
-         CALL DLASRT( 'I', N, D, INFO )
+         CALL AB_AB_DLASRT( 'I', N, D, INFO )
 *
       ELSE
 *
@@ -565,12 +574,12 @@
             IF( K.NE.I ) THEN
                D( K ) = D( I )
                D( I ) = P
-               CALL ZSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
+               CALL AB_ZSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
             END IF
   180    CONTINUE
       END IF
       RETURN
 *
-*     End of ZSTEQR
+*     End of AB_ZSTEQR
 *
       END

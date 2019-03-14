@@ -1,4 +1,4 @@
-*> \brief \b DLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
+*> \brief \b AB_DLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLADIV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dladiv.f">
+*> Download AB_DLADIV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLADIV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dladiv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLADIV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dladiv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLADIV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLADIV( A, B, C, D, P, Q )
+*       SUBROUTINE AB_DLADIV( A, B, C, D, P, Q )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   A, B, C, D, P, Q
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DLADIV performs complex division in  real arithmetic
+*> AB_DLADIV performs complex division in  real arithmetic
 *>
 *>                       a + i*b
 *>            p + i*q = ---------
@@ -89,7 +89,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLADIV( A, B, C, D, P, Q )
+      SUBROUTINE AB_DLADIV( A, B, C, D, P, Q )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -114,11 +114,11 @@
       DOUBLE PRECISION   AA, BB, CC, DD, AB, CD, S, OV, UN, BE, EPS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLADIV1
+      EXTERNAL           AB_AB_DLADIV1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -133,9 +133,9 @@
       CD = MAX( ABS(C), ABS(D) )
       S = 1.0D0
 
-      OV = DLAMCH( 'Overflow threshold' )
-      UN = DLAMCH( 'Safe minimum' )
-      EPS = DLAMCH( 'Epsilon' )
+      OV = AB_DLAMCH( 'Overflow threshold' )
+      UN = AB_DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       BE = BS / (EPS*EPS)
 
       IF( AB >= HALF*OV ) THEN
@@ -159,9 +159,9 @@
          S  = S * BE
       END IF
       IF( ABS( D ).LE.ABS( C ) ) THEN
-         CALL DLADIV1(AA, BB, CC, DD, P, Q)
+         CALL AB_AB_DLADIV1(AA, BB, CC, DD, P, Q)
       ELSE
-         CALL DLADIV1(BB, AA, DD, CC, P, Q)
+         CALL AB_AB_DLADIV1(BB, AA, DD, CC, P, Q)
          Q = -Q
       END IF
       P = P * S
@@ -169,14 +169,14 @@
 *
       RETURN
 *
-*     End of DLADIV
+*     End of AB_DLADIV
 *
       END
 
 *> \ingroup doubleOTHERauxiliary
 
 
-      SUBROUTINE DLADIV1( A, B, C, D, P, Q )
+      SUBROUTINE AB_AB_DLADIV1( A, B, C, D, P, Q )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -197,26 +197,26 @@
       DOUBLE PRECISION   R, T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLADIV2
-      EXTERNAL           DLADIV2
+      DOUBLE PRECISION   AB_AB_DLADIV2
+      EXTERNAL           AB_AB_DLADIV2
 *     ..
 *     .. Executable Statements ..
 *
       R = D / C
       T = ONE / (C + D * R)
-      P = DLADIV2(A, B, C, D, R, T)
+      P = AB_AB_DLADIV2(A, B, C, D, R, T)
       A = -A
-      Q = DLADIV2(B, A, C, D, R, T)
+      Q = AB_AB_DLADIV2(B, A, C, D, R, T)
 *
       RETURN
 *
-*     End of DLADIV1
+*     End of AB_AB_DLADIV1
 *
       END
 
 *> \ingroup doubleOTHERauxiliary
 
-      DOUBLE PRECISION FUNCTION DLADIV2( A, B, C, D, R, T )
+      DOUBLE PRECISION FUNCTION AB_AB_DLADIV2( A, B, C, D, R, T )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -241,16 +241,16 @@
       IF( R.NE.ZERO ) THEN
          BR = B * R
          IF( BR.NE.ZERO ) THEN
-            DLADIV2 = (A + BR) * T
+            AB_AB_DLADIV2 = (A + BR) * T
          ELSE
-            DLADIV2 = A * T + (B * T) * R
+            AB_AB_DLADIV2 = A * T + (B * T) * R
          END IF
       ELSE
-         DLADIV2 = (A + D * (B / C)) * T
+         AB_AB_DLADIV2 = (A + D * (B / C)) * T
       END IF
 *
       RETURN
 *
-*     End of DLADIV12
+*     End of AB_AB_DLADIV12
 *
       END

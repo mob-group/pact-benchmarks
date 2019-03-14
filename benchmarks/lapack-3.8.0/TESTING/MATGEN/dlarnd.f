@@ -1,4 +1,4 @@
-*> \brief \b DLARND
+*> \brief \b AB_DLARND
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DLARND( IDIST, ISEED )
+*       DOUBLE PRECISION FUNCTION AB_DLARND( IDIST, ISEED )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> DLARND returns a random real number from a uniform or normal
+*> AB_DLARND returns a random real number from a uniform or normal
 *> distribution.
 *> \endverbatim
 *
@@ -65,13 +65,13 @@
 *>
 *> \verbatim
 *>
-*>  This routine calls the auxiliary routine DLARAN to generate a random
+*>  This routine calls the auxiliary routine AB_DLARAN to generate a random
 *>  real number from a uniform (0,1) distribution. The Box-Muller method
 *>  is used to transform numbers from a uniform to a normal distribution.
 *> \endverbatim
 *>
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLARND( IDIST, ISEED )
+      DOUBLE PRECISION FUNCTION AB_DLARND( IDIST, ISEED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -97,8 +97,8 @@
       DOUBLE PRECISION   T1, T2
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLARAN
-      EXTERNAL           DLARAN
+      DOUBLE PRECISION   AB_DLARAN
+      EXTERNAL           AB_DLARAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          COS, LOG, SQRT
@@ -107,27 +107,27 @@
 *
 *     Generate a real random number from a uniform (0,1) distribution
 *
-      T1 = DLARAN( ISEED )
+      T1 = AB_DLARAN( ISEED )
 *
       IF( IDIST.EQ.1 ) THEN
 *
 *        uniform (0,1)
 *
-         DLARND = T1
+         AB_DLARND = T1
       ELSE IF( IDIST.EQ.2 ) THEN
 *
 *        uniform (-1,1)
 *
-         DLARND = TWO*T1 - ONE
+         AB_DLARND = TWO*T1 - ONE
       ELSE IF( IDIST.EQ.3 ) THEN
 *
 *        normal (0,1)
 *
-         T2 = DLARAN( ISEED )
-         DLARND = SQRT( -TWO*LOG( T1 ) )*COS( TWOPI*T2 )
+         T2 = AB_DLARAN( ISEED )
+         AB_DLARND = SQRT( -TWO*LOG( T1 ) )*COS( TWOPI*T2 )
       END IF
       RETURN
 *
-*     End of DLARND
+*     End of AB_DLARND
 *
       END

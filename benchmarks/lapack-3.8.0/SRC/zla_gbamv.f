@@ -1,4 +1,4 @@
-*> \brief \b ZLA_GBAMV performs a matrix-vector operation to calculate error bounds.
+*> \brief \b AB_ZLA_GBAMV performs a matrix-vector operation to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLA_GBAMV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gbamv.f">
+*> Download AB_ZLA_GBAMV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLA_GBAMV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gbamv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLA_GBAMV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gbamv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLA_GBAMV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
+*       SUBROUTINE AB_ZLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
 *                             INCX, BETA, Y, INCY )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZLA_GBAMV  performs one of the matrix-vector operations
+*> AB_ZLA_GBAMV  performs one of the matrix-vector operations
 *>
 *>         y := alpha*abs(A)*abs(x) + beta*abs(y),
 *>    or   y := alpha*abs(A)**T*abs(x) + beta*abs(y),
@@ -183,7 +183,7 @@
 *> \ingroup complex16GBcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
+      SUBROUTINE AB_ZLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
      $                      INCX, BETA, Y, INCY )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -213,12 +213,12 @@
       COMPLEX*16         CDUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DLAMCH
-      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           AB_XERBLA, AB_DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
 *     ..
 *     .. External Functions ..
-      EXTERNAL           ILATRANS
-      INTEGER            ILATRANS
+      EXTERNAL           AB_ILATRANS
+      INTEGER            AB_ILATRANS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, ABS, REAL, DIMAG, SIGN
@@ -234,9 +234,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF     ( .NOT.( ( TRANS.EQ.ILATRANS( 'N' ) )
-     $           .OR. ( TRANS.EQ.ILATRANS( 'T' ) )
-     $           .OR. ( TRANS.EQ.ILATRANS( 'C' ) ) ) ) THEN
+      IF     ( .NOT.( ( TRANS.EQ.AB_ILATRANS( 'N' ) )
+     $           .OR. ( TRANS.EQ.AB_ILATRANS( 'T' ) )
+     $           .OR. ( TRANS.EQ.AB_ILATRANS( 'C' ) ) ) ) THEN
          INFO = 1
       ELSE IF( M.LT.0 )THEN
          INFO = 2
@@ -254,7 +254,7 @@
          INFO = 11
       END IF
       IF( INFO.NE.0 )THEN
-         CALL XERBLA( 'ZLA_GBAMV ', INFO )
+         CALL AB_XERBLA( 'AB_ZLA_GBAMV ', INFO )
          RETURN
       END IF
 *
@@ -267,7 +267,7 @@
 *     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 *     up the start points in  X  and  Y.
 *
-      IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
+      IF( TRANS.EQ.AB_ILATRANS( 'N' ) )THEN
          LENX = N
          LENY = M
       ELSE
@@ -288,7 +288,7 @@
 *     Set SAFE1 essentially to be the underflow threshold times the
 *     number of additions in each row.
 *
-      SAFE1 = DLAMCH( 'Safe minimum' )
+      SAFE1 = AB_DLAMCH( 'Safe minimum' )
       SAFE1 = (N+1)*SAFE1
 *
 *     Form  y := alpha*abs(A)*abs(x) + beta*abs(y).
@@ -301,7 +301,7 @@
       KE = KL + 1
       IY = KY
       IF ( INCX.EQ.1 ) THEN
-         IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
+         IF( TRANS.EQ.AB_ILATRANS( 'N' ) )THEN
             DO I = 1, LENY
                IF ( BETA .EQ. 0.0D+0 ) THEN
                   SYMB_ZERO = .TRUE.
@@ -355,7 +355,7 @@
             END DO
          END IF
       ELSE
-         IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
+         IF( TRANS.EQ.AB_ILATRANS( 'N' ) )THEN
             DO I = 1, LENY
                IF ( BETA .EQ. 0.0D+0 ) THEN
                   SYMB_ZERO = .TRUE.
@@ -417,6 +417,6 @@
 *
       RETURN
 *
-*     End of ZLA_GBAMV
+*     End of AB_ZLA_GBAMV
 *
       END

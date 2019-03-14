@@ -1,4 +1,4 @@
-*> \brief \b SPTT05
+*> \brief \b AB_SPTT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
+*       SUBROUTINE AB_SPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
 *                          FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SPTT05 tests the error bounds from iterative refinement for the
+*> AB_SPTT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> symmetric tridiagonal matrix of order n.
 *>
@@ -147,7 +147,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
+      SUBROUTINE AB_SPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
      $                   FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -175,9 +175,9 @@
       REAL               AXBI, DIFF, EPS, ERRBND, OVFL, TMP, UNFL, XNORM
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           ISAMAX, SLAMCH
+      INTEGER            AB_ISAMAX
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -192,8 +192,8 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       NZ = 4
 *
@@ -203,7 +203,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = ISAMAX( N, X( 1, J ), 1 )
+         IMAX = AB_ISAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( ABS( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -256,6 +256,6 @@
 *
       RETURN
 *
-*     End of SPTT05
+*     End of AB_SPTT05
 *
       END

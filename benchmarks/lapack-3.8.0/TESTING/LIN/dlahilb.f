@@ -1,4 +1,4 @@
-*> \brief \b DLAHILB
+*> \brief \b AB_DLAHILB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
+*       SUBROUTINE AB_DLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
 *
 *       .. Scalar Arguments ..
 *       INTEGER N, NRHS, LDA, LDX, LDB, INFO
@@ -22,7 +22,7 @@
 *>
 *> \verbatim
 *>
-*> DLAHILB generates an N by N scaled Hilbert matrix in A along with
+*> AB_DLAHILB generates an N by N scaled Hilbert matrix in A along with
 *> NRHS right-hand sides in B and solutions in X such that A*X=B.
 *>
 *> The Hilbert matrix is scaled by M = LCM(1, 2, ..., 2*N-1) so that all
@@ -122,7 +122,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
+      SUBROUTINE AB_DLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO
+     $)
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,7 +152,7 @@
 
 *     ..
 *     .. External Functions
-      EXTERNAL DLASET
+      EXTERNAL AB_DLASET
       INTRINSIC DBLE
 *     ..
 *     .. Executable Statements ..
@@ -171,7 +172,7 @@
          INFO = -8
       END IF
       IF (INFO .LT. 0) THEN
-         CALL XERBLA('DLAHILB', -INFO)
+         CALL AB_XERBLA('AB_DLAHILB', -INFO)
          RETURN
       END IF
       IF (N .GT. NMAX_EXACT) THEN
@@ -202,7 +203,7 @@
 *
 *     Generate matrix B as simply the first NRHS columns of M * the
 *     identity.
-      CALL DLASET('Full', N, NRHS, 0.0D+0, DBLE(M), B, LDB)
+      CALL AB_DLASET('Full', N, NRHS, 0.0D+0, DBLE(M), B, LDB)
 
 *     Generate the true solutions in X.  Because B = the first NRHS
 *     columns of M*I, the true solutions are just the first NRHS columns

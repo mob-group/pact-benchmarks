@@ -1,4 +1,4 @@
-*> \brief \b ZERRLQ
+*> \brief \b AB_ZERRLQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZERRLQ( PATH, NUNIT )
+*       SUBROUTINE AB_ZERRLQ( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> ZERRLQ tests the error exits for the COMPLEX*16 routines
+*> AB_ZERRLQ tests the error exits for the COMPLEX*16 routines
 *> that use the LQ decomposition of a general matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZERRLQ( PATH, NUNIT )
+      SUBROUTINE AB_ZERRLQ( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -79,8 +79,9 @@
      $                   W( NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, ZGELQ2, ZGELQF, ZGELQS, ZUNGL2,
-     $                   ZUNGLQ, ZUNML2, ZUNMLQ
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_ZGELQ2, AB_AB_ZGELQ
+     $F, AB_AB_ZGELQS, AB_ZUNGL2,
+     $                   AB_ZUNGLQ, AB_ZUNML2, AB_ZUNMLQ
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -116,187 +117,187 @@
 *
 *     Error exits for LQ factorization
 *
-*     ZGELQF
+*     AB_AB_ZGELQF
 *
-      SRNAMT = 'ZGELQF'
+      SRNAMT = 'AB_AB_ZGELQF'
       INFOT = 1
-      CALL ZGELQF( -1, 0, A, 1, B, W, 1, INFO )
-      CALL CHKXER( 'ZGELQF', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQF( -1, 0, A, 1, B, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZGELQF( 0, -1, A, 1, B, W, 1, INFO )
-      CALL CHKXER( 'ZGELQF', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQF( 0, -1, A, 1, B, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGELQF( 2, 1, A, 1, B, W, 2, INFO )
-      CALL CHKXER( 'ZGELQF', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQF( 2, 1, A, 1, B, W, 2, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQF', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZGELQF( 2, 1, A, 2, B, W, 1, INFO )
-      CALL CHKXER( 'ZGELQF', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQF( 2, 1, A, 2, B, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQF', INFOT, NOUT, LERR, OK )
 *
-*     ZGELQ2
+*     AB_AB_ZGELQ2
 *
-      SRNAMT = 'ZGELQ2'
+      SRNAMT = 'AB_AB_ZGELQ2'
       INFOT = 1
-      CALL ZGELQ2( -1, 0, A, 1, B, W, INFO )
-      CALL CHKXER( 'ZGELQ2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQ2( -1, 0, A, 1, B, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQ2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZGELQ2( 0, -1, A, 1, B, W, INFO )
-      CALL CHKXER( 'ZGELQ2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQ2( 0, -1, A, 1, B, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQ2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZGELQ2( 2, 1, A, 1, B, W, INFO )
-      CALL CHKXER( 'ZGELQ2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQ2( 2, 1, A, 1, B, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQ2', INFOT, NOUT, LERR, OK )
 *
-*     ZGELQS
+*     AB_AB_ZGELQS
 *
-      SRNAMT = 'ZGELQS'
+      SRNAMT = 'AB_AB_ZGELQS'
       INFOT = 1
-      CALL ZGELQS( -1, 0, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'ZGELQS', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQS( -1, 0, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZGELQS( 0, -1, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'ZGELQS', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQS( 0, -1, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZGELQS( 2, 1, 0, A, 2, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'ZGELQS', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQS( 2, 1, 0, A, 2, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZGELQS( 0, 0, -1, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'ZGELQS', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQS( 0, 0, -1, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZGELQS( 2, 2, 0, A, 1, X, B, 2, W, 1, INFO )
-      CALL CHKXER( 'ZGELQS', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQS( 2, 2, 0, A, 1, X, B, 2, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL ZGELQS( 1, 2, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'ZGELQS', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQS( 1, 2, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL ZGELQS( 1, 1, 2, A, 1, X, B, 1, W, 1, INFO )
-      CALL CHKXER( 'ZGELQS', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_ZGELQS( 1, 1, 2, A, 1, X, B, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_ZGELQS', INFOT, NOUT, LERR, OK )
 *
-*     ZUNGLQ
+*     AB_ZUNGLQ
 *
-      SRNAMT = 'ZUNGLQ'
+      SRNAMT = 'AB_ZUNGLQ'
       INFOT = 1
-      CALL ZUNGLQ( -1, 0, 0, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'ZUNGLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGLQ( -1, 0, 0, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZUNGLQ( 0, -1, 0, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'ZUNGLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGLQ( 0, -1, 0, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZUNGLQ( 2, 1, 0, A, 2, X, W, 2, INFO )
-      CALL CHKXER( 'ZUNGLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGLQ( 2, 1, 0, A, 2, X, W, 2, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZUNGLQ( 0, 0, -1, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'ZUNGLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGLQ( 0, 0, -1, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZUNGLQ( 1, 1, 2, A, 1, X, W, 1, INFO )
-      CALL CHKXER( 'ZUNGLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGLQ( 1, 1, 2, A, 1, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZUNGLQ( 2, 2, 0, A, 1, X, W, 2, INFO )
-      CALL CHKXER( 'ZUNGLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGLQ( 2, 2, 0, A, 1, X, W, 2, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL ZUNGLQ( 2, 2, 0, A, 2, X, W, 1, INFO )
-      CALL CHKXER( 'ZUNGLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGLQ( 2, 2, 0, A, 2, X, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGLQ', INFOT, NOUT, LERR, OK )
 *
-*     ZUNGL2
+*     AB_ZUNGL2
 *
-      SRNAMT = 'ZUNGL2'
+      SRNAMT = 'AB_ZUNGL2'
       INFOT = 1
-      CALL ZUNGL2( -1, 0, 0, A, 1, X, W, INFO )
-      CALL CHKXER( 'ZUNGL2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGL2( -1, 0, 0, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGL2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZUNGL2( 0, -1, 0, A, 1, X, W, INFO )
-      CALL CHKXER( 'ZUNGL2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGL2( 0, -1, 0, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGL2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZUNGL2( 2, 1, 0, A, 2, X, W, INFO )
-      CALL CHKXER( 'ZUNGL2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGL2( 2, 1, 0, A, 2, X, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGL2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZUNGL2( 0, 0, -1, A, 1, X, W, INFO )
-      CALL CHKXER( 'ZUNGL2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGL2( 0, 0, -1, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGL2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZUNGL2( 1, 1, 2, A, 1, X, W, INFO )
-      CALL CHKXER( 'ZUNGL2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGL2( 1, 1, 2, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGL2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZUNGL2( 2, 2, 0, A, 1, X, W, INFO )
-      CALL CHKXER( 'ZUNGL2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNGL2( 2, 2, 0, A, 1, X, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNGL2', INFOT, NOUT, LERR, OK )
 *
-*     ZUNMLQ
+*     AB_ZUNMLQ
 *
-      SRNAMT = 'ZUNMLQ'
+      SRNAMT = 'AB_ZUNMLQ'
       INFOT = 1
-      CALL ZUNMLQ( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZUNMLQ( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZUNMLQ( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZUNMLQ( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZUNMLQ( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZUNMLQ( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZUNMLQ( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZUNMLQ( 'L', 'N', 2, 0, 2, A, 1, X, AF, 2, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'L', 'N', 2, 0, 2, A, 1, X, AF, 2, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZUNMLQ( 'R', 'N', 0, 2, 2, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'R', 'N', 0, 2, 2, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL ZUNMLQ( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL ZUNMLQ( 'L', 'N', 1, 2, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'L', 'N', 1, 2, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL ZUNMLQ( 'R', 'N', 2, 1, 0, A, 1, X, AF, 2, W, 1, INFO )
-      CALL CHKXER( 'ZUNMLQ', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNMLQ( 'R', 'N', 2, 1, 0, A, 1, X, AF, 2, W, 1, INFO )
+      CALL AB_CHKXER( 'AB_ZUNMLQ', INFOT, NOUT, LERR, OK )
 *
-*     ZUNML2
+*     AB_ZUNML2
 *
-      SRNAMT = 'ZUNML2'
+      SRNAMT = 'AB_ZUNML2'
       INFOT = 1
-      CALL ZUNML2( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZUNML2( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZUNML2( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZUNML2( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZUNML2( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZUNML2( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZUNML2( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZUNML2( 'L', 'N', 2, 1, 2, A, 1, X, AF, 2, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'L', 'N', 2, 1, 2, A, 1, X, AF, 2, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZUNML2( 'R', 'N', 1, 2, 2, A, 1, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'R', 'N', 1, 2, 2, A, 1, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL ZUNML2( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, INFO )
-      CALL CHKXER( 'ZUNML2', INFOT, NOUT, LERR, OK )
+      CALL AB_ZUNML2( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_ZUNML2', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of ZERRLQ
+*     End of AB_ZERRLQ
 *
       END

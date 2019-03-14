@@ -1,4 +1,4 @@
-*> \brief <b> CGGES3 computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices (blocked algorithm)</b>
+*> \brief <b> AB_AB_CGGES3 computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices (blocked algorithm)</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGGES3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgges3.f">
+*> Download AB_AB_CGGES3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CGGES3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgges3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CGGES3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgges3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CGGES3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGGES3( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B,
+*       SUBROUTINE AB_AB_CGGES3( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B,
 *      $                   LDB, SDIM, ALPHA, BETA, VSL, LDVSL, VSR, LDVSR,
 *      $                   WORK, LWORK, RWORK, BWORK, INFO )
 *
@@ -44,7 +44,7 @@
 *>
 *> \verbatim
 *>
-*> CGGES3 computes for a pair of N-by-N complex nonsymmetric matrices
+*> AB_AB_CGGES3 computes for a pair of N-by-N complex nonsymmetric matrices
 *> (A,B), the generalized eigenvalues, the generalized complex Schur
 *> form (S, T), and optionally left and/or right Schur vectors (VSL
 *> and VSR). This gives the generalized Schur factorization
@@ -60,7 +60,7 @@
 *> corresponding left and right eigenspaces (deflating subspaces).
 *>
 *> (If only the generalized eigenvalues are needed, use the driver
-*> CGGEV instead, which is faster.)
+*> AB_CGGEV instead, which is faster.)
 *>
 *> A generalized eigenvalue for a pair of matrices (A,B) is a scalar w
 *> or a ratio alpha/beta = w, such that  A - w*B is singular.  It is
@@ -138,7 +138,7 @@
 *> \param[in,out] B
 *> \verbatim
 *>          B is COMPLEX array, dimension (LDB, N)
-*>          On entry, the second of the pair of matrices.
+*>          On entry, the AB_SECOND of the pair of matrices.
 *>          On exit, B has been overwritten by its generalized Schur
 *>          form T.
 *> \endverbatim
@@ -168,7 +168,7 @@
 *>          On exit,  ALPHA(j)/BETA(j), j=1,...,N, will be the
 *>          generalized eigenvalues.  ALPHA(j), j=1,...,N  and  BETA(j),
 *>          j=1,...,N  are the diagonals of the complex Schur form (A,B)
-*>          output by CGGES3. The  BETA(j) will be non-negative real.
+*>          output by AB_AB_CGGES3. The  BETA(j) will be non-negative real.
 *>
 *>          Note: the quotients ALPHA(j)/BETA(j) may easily over- or
 *>          underflow, and BETA(j) may even be zero.  Thus, the user
@@ -220,7 +220,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -243,13 +243,13 @@
 *>                The QZ iteration failed.  (A,B) are not in Schur
 *>                form, but ALPHA(j) and BETA(j) should be correct for
 *>                j=INFO+1,...,N.
-*>          > N:  =N+1: other than QZ iteration failed in CHGEQZ
+*>          > N:  =N+1: other than QZ iteration failed in AB_CHGEQZ
 *>                =N+2: after reordering, roundoff changed values of
 *>                      some complex eigenvalues so that leading
 *>                      eigenvalues in the Generalized Schur form no
 *>                      longer satisfy SELCTG=.TRUE.  This could also
 *>                      be caused due to scaling.
-*>                =N+3: reordering failed in CTGSEN.
+*>                =N+3: reordering failed in AB_CTGSEN.
 *> \endverbatim
 *
 *  Authors:
@@ -265,7 +265,8 @@
 *> \ingroup complexGEeigen
 *
 *  =====================================================================
-      SUBROUTINE CGGES3( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B,
+      SUBROUTINE AB_AB_CGGES3( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, 
+     $B,
      $                   LDB, SDIM, ALPHA, BETA, VSL, LDVSL, VSR, LDVSR,
      $                   WORK, LWORK, RWORK, BWORK, INFO )
 *
@@ -312,14 +313,16 @@
       REAL               DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CHGEQZ, CLACPY,
-     $                   CLASCL, CLASET, CTGSEN, CUNGQR, CUNMQR, SLABAD,
-     $                   XERBLA
+      EXTERNAL           AB_AB_CGEQRF, AB_CGGBAK, AB_CGGBAL, AB_CGGHD3, 
+     $AB_CHGEQZ, AB_CLACPY,
+     $                   AB_CLASCL, AB_CLASET, AB_CTGSEN, AB_CUNGQR, AB_
+     $CUNMQR, AB_SLABAD,
+     $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -328,10 +331,10 @@
 *
 *     Decode the input arguments
 *
-      IF( LSAME( JOBVSL, 'N' ) ) THEN
+      IF( AB_LSAME( JOBVSL, 'N' ) ) THEN
          IJOBVL = 1
          ILVSL = .FALSE.
-      ELSE IF( LSAME( JOBVSL, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( JOBVSL, 'V' ) ) THEN
          IJOBVL = 2
          ILVSL = .TRUE.
       ELSE
@@ -339,10 +342,10 @@
          ILVSL = .FALSE.
       END IF
 *
-      IF( LSAME( JOBVSR, 'N' ) ) THEN
+      IF( AB_LSAME( JOBVSR, 'N' ) ) THEN
          IJOBVR = 1
          ILVSR = .FALSE.
-      ELSE IF( LSAME( JOBVSR, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( JOBVSR, 'V' ) ) THEN
          IJOBVR = 2
          ILVSR = .TRUE.
       ELSE
@@ -350,7 +353,7 @@
          ILVSR = .FALSE.
       END IF
 *
-      WANTST = LSAME( SORT, 'S' )
+      WANTST = AB_LSAME( SORT, 'S' )
 *
 *     Test the input arguments
 *
@@ -360,7 +363,8 @@
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
+      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.AB_LSAME( SORT, 'N' ) ) )
+     $ THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -379,25 +383,25 @@
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
-         CALL CGEQRF( N, N, B, LDB, WORK, WORK, -1, IERR )
+         CALL AB_AB_CGEQRF( N, N, B, LDB, WORK, WORK, -1, IERR )
          LWKOPT = MAX( 1,  N + INT ( WORK( 1 ) ) )
-         CALL CUNMQR( 'L', 'C', N, N, N, B, LDB, WORK, A, LDA, WORK,
+         CALL AB_CUNMQR( 'L', 'C', N, N, N, B, LDB, WORK, A, LDA, WORK,
      $                -1, IERR )
          LWKOPT = MAX( LWKOPT, N + INT ( WORK( 1 ) ) )
          IF( ILVSL ) THEN
-            CALL CUNGQR( N, N, N, VSL, LDVSL, WORK, WORK, -1,
+            CALL AB_CUNGQR( N, N, N, VSL, LDVSL, WORK, WORK, -1,
      $                   IERR )
             LWKOPT = MAX( LWKOPT, N + INT ( WORK( 1 ) ) )
          END IF
-         CALL CGGHD3( JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB, VSL,
+         CALL AB_CGGHD3( JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB, VSL,
      $                LDVSL, VSR, LDVSR, WORK, -1, IERR )
          LWKOPT = MAX( LWKOPT, N + INT ( WORK( 1 ) ) )
-         CALL CHGEQZ( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
+         CALL AB_CHGEQZ( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
      $                ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK, -1,
      $                RWORK, IERR )
          LWKOPT = MAX( LWKOPT, INT ( WORK( 1 ) ) )
          IF( WANTST ) THEN
-            CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
+            CALL AB_CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
      $                   ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, SDIM,
      $                   PVSL, PVSR, DIF, WORK, -1, IDUM, 1, IERR )
             LWKOPT = MAX( LWKOPT, INT ( WORK( 1 ) ) )
@@ -407,7 +411,7 @@
 
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGGES3 ', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CGGES3 ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -422,16 +426,16 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = CLANGE( 'M', N, N, A, LDA, RWORK )
+      ANRM = AB_CLANGE( 'M', N, N, A, LDA, RWORK )
       ILASCL = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ANRMTO = SMLNUM
@@ -442,11 +446,11 @@
       END IF
 *
       IF( ILASCL )
-     $   CALL CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, N, A, LDA, IERR )
+     $   CALL AB_CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, N, A, LDA, IERR )
 *
 *     Scale B if max element outside range [SMLNUM,BIGNUM]
 *
-      BNRM = CLANGE( 'M', N, N, B, LDB, RWORK )
+      BNRM = AB_CLANGE( 'M', N, N, B, LDB, RWORK )
       ILBSCL = .FALSE.
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
          BNRMTO = SMLNUM
@@ -457,14 +461,14 @@
       END IF
 *
       IF( ILBSCL )
-     $   CALL CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, N, B, LDB, IERR )
+     $   CALL AB_CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, N, B, LDB, IERR )
 *
 *     Permute the matrix to make it more nearly triangular
 *
       ILEFT = 1
       IRIGHT = N + 1
       IRWRK = IRIGHT + N
-      CALL CGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, RWORK( ILEFT ),
+      CALL AB_CGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, RWORK( ILEFT ),
      $             RWORK( IRIGHT ), RWORK( IRWRK ), IERR )
 *
 *     Reduce B to triangular form (QR decomposition of B)
@@ -473,35 +477,35 @@
       ICOLS = N + 1 - ILO
       ITAU = 1
       IWRK = ITAU + IROWS
-      CALL CGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
+      CALL AB_AB_CGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
      $             WORK( IWRK ), LWORK+1-IWRK, IERR )
 *
 *     Apply the orthogonal transformation to matrix A
 *
-      CALL CUNMQR( 'L', 'C', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
+      CALL AB_CUNMQR( 'L', 'C', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
      $             WORK( ITAU ), A( ILO, ILO ), LDA, WORK( IWRK ),
      $             LWORK+1-IWRK, IERR )
 *
 *     Initialize VSL
 *
       IF( ILVSL ) THEN
-         CALL CLASET( 'Full', N, N, CZERO, CONE, VSL, LDVSL )
+         CALL AB_CLASET( 'Full', N, N, CZERO, CONE, VSL, LDVSL )
          IF( IROWS.GT.1 ) THEN
-            CALL CLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
+            CALL AB_CLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
      $                   VSL( ILO+1, ILO ), LDVSL )
          END IF
-         CALL CUNGQR( IROWS, IROWS, IROWS, VSL( ILO, ILO ), LDVSL,
+         CALL AB_CUNGQR( IROWS, IROWS, IROWS, VSL( ILO, ILO ), LDVSL,
      $                WORK( ITAU ), WORK( IWRK ), LWORK+1-IWRK, IERR )
       END IF
 *
 *     Initialize VSR
 *
       IF( ILVSR )
-     $   CALL CLASET( 'Full', N, N, CZERO, CONE, VSR, LDVSR )
+     $   CALL AB_CLASET( 'Full', N, N, CZERO, CONE, VSR, LDVSR )
 *
 *     Reduce to generalized Hessenberg form
 *
-      CALL CGGHD3( JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB, VSL,
+      CALL AB_CGGHD3( JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB, VSL,
      $             LDVSL, VSR, LDVSR, WORK( IWRK ), LWORK+1-IWRK, IERR )
 *
       SDIM = 0
@@ -509,7 +513,7 @@
 *     Perform QZ algorithm, computing Schur vectors if desired
 *
       IWRK = ITAU
-      CALL CHGEQZ( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL AB_CHGEQZ( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK( IWRK ),
      $             LWORK+1-IWRK, RWORK( IRWRK ), IERR )
       IF( IERR.NE.0 ) THEN
@@ -530,9 +534,11 @@
 *        Undo scaling on eigenvalues before selecting
 *
          IF( ILASCL )
-     $      CALL CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N, IERR )
+     $      CALL AB_CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N, IER
+     $R )
          IF( ILBSCL )
-     $      CALL CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N, IERR )
+     $      CALL AB_CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N, IERR
+     $ )
 *
 *        Select eigenvalues
 *
@@ -540,7 +546,8 @@
             BWORK( I ) = SELCTG( ALPHA( I ), BETA( I ) )
    10    CONTINUE
 *
-         CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB, ALPHA,
+         CALL AB_CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB, ALPH
+     $A,
      $                BETA, VSL, LDVSL, VSR, LDVSR, SDIM, PVSL, PVSR,
      $                DIF, WORK( IWRK ), LWORK-IWRK+1, IDUM, 1, IERR )
          IF( IERR.EQ.1 )
@@ -551,22 +558,22 @@
 *     Apply back-permutation to VSL and VSR
 *
       IF( ILVSL )
-     $   CALL CGGBAK( 'P', 'L', N, ILO, IHI, RWORK( ILEFT ),
+     $   CALL AB_CGGBAK( 'P', 'L', N, ILO, IHI, RWORK( ILEFT ),
      $                RWORK( IRIGHT ), N, VSL, LDVSL, IERR )
       IF( ILVSR )
-     $   CALL CGGBAK( 'P', 'R', N, ILO, IHI, RWORK( ILEFT ),
+     $   CALL AB_CGGBAK( 'P', 'R', N, ILO, IHI, RWORK( ILEFT ),
      $                RWORK( IRIGHT ), N, VSR, LDVSR, IERR )
 *
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL CLASCL( 'U', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
-         CALL CLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR )
+         CALL AB_CLASCL( 'U', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
+         CALL AB_CLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR )
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL CLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB, IERR )
-         CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+         CALL AB_CLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB, IERR )
+         CALL AB_CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
       END IF
 *
       IF( WANTST ) THEN
@@ -592,6 +599,6 @@
 *
       RETURN
 *
-*     End of CGGES3
+*     End of AB_AB_CGGES3
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DDRVPP
+*> \brief \b AB_DDRVPP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE AB_DDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
 *                          RWORK, IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> DDRVPP tests the driver routines DPPSV and -SVX.
+*> AB_DDRVPP tests the driver routines AB_DPPSV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -163,7 +163,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+      SUBROUTINE AB_DDRVPP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX
+     $,
      $                   A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
@@ -211,15 +212,18 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DGET06, DLANSP
-      EXTERNAL           LSAME, DGET06, DLANSP
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DGET06, AB_DLANSP
+      EXTERNAL           AB_LSAME, AB_DGET06, AB_DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, DCOPY, DERRVX, DGET04,
-     $                   DLACPY, DLAQSP, DLARHS, DLASET, DLATB4, DLATMS,
-     $                   DPPEQU, DPPSV, DPPSVX, DPPT01, DPPT02, DPPT05,
-     $                   DPPTRF, DPPTRI
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_DCOPY, AB_D
+     $ERRVX, AB_DGET04,
+     $                   AB_DLACPY, AB_DLAQSP, AB_DLARHS, AB_DLASET, AB_
+     $DLATB4, AB_DLATMS,
+     $                   AB_DPPEQU, AB_DPPSV, AB_AB_DPPSVX, AB_DPPT01, A
+     $B_DPPT02, AB_DPPT05,
+     $                   AB_DPPTRF, AB_DPPTRI
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -254,7 +258,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL DERRVX( PATH, NOUT )
+     $   CALL AB_DERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of N in NVAL
@@ -287,22 +291,24 @@
                UPLO = UPLOS( IUPLO )
                PACKIT = PACKS( IUPLO )
 *
-*              Set up parameters with DLATB4 and generate a test matrix
-*              with DLATMS.
+*              Set up parameters with AB_DLATB4 and generate a test matrix
+*              with AB_DLATMS.
 *
-               CALL DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+               CALL AB_DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
+     $DE,
      $                      CNDNUM, DIST )
                RCONDC = ONE / CNDNUM
 *
-               SRNAMT = 'DLATMS'
-               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_DLATMS'
+               CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, PACKIT, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from DLATMS.
+*              Check error code from AB_DLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 120
                END IF
@@ -348,7 +354,7 @@
 *
 *              Save a copy of the matrix A in ASAV.
 *
-               CALL DCOPY( NPP, A, 1, ASAV, 1 )
+               CALL AB_DCOPY( NPP, A, 1, ASAV, 1 )
 *
                DO 110 IEQUED = 1, 2
                   EQUED = EQUEDS( IEQUED )
@@ -360,29 +366,30 @@
 *
                   DO 100 IFACT = 1, NFACT
                      FACT = FACTS( IFACT )
-                     PREFAC = LSAME( FACT, 'F' )
-                     NOFACT = LSAME( FACT, 'N' )
-                     EQUIL = LSAME( FACT, 'E' )
+                     PREFAC = AB_LSAME( FACT, 'F' )
+                     NOFACT = AB_LSAME( FACT, 'N' )
+                     EQUIL = AB_LSAME( FACT, 'E' )
 *
                      IF( ZEROT ) THEN
                         IF( PREFAC )
      $                     GO TO 100
                         RCONDC = ZERO
 *
-                     ELSE IF( .NOT.LSAME( FACT, 'N' ) ) THEN
+                     ELSE IF( .NOT.AB_LSAME( FACT, 'N' ) ) THEN
 *
 *                       Compute the condition number for comparison with
-*                       the value returned by DPPSVX (FACT = 'N' reuses
+*                       the value returned by AB_AB_DPPSVX (FACT = 'N' reuses
 *                       the condition number from the previous iteration
 *                       with FACT = 'F').
 *
-                        CALL DCOPY( NPP, ASAV, 1, AFAC, 1 )
+                        CALL AB_DCOPY( NPP, ASAV, 1, AFAC, 1 )
                         IF( EQUIL .OR. IEQUED.GT.1 ) THEN
 *
 *                          Compute row and column scale factors to
 *                          equilibrate the matrix A.
 *
-                           CALL DPPEQU( UPLO, N, AFAC, S, SCOND, AMAX,
+                           CALL AB_DPPEQU( UPLO, N, AFAC, S, SCOND, AMAX
+     $,
      $                                  INFO )
                            IF( INFO.EQ.0 .AND. N.GT.0 ) THEN
                               IF( IEQUED.GT.1 )
@@ -390,33 +397,33 @@
 *
 *                             Equilibrate the matrix.
 *
-                              CALL DLAQSP( UPLO, N, AFAC, S, SCOND,
+                              CALL AB_DLAQSP( UPLO, N, AFAC, S, SCOND,
      $                                     AMAX, EQUED )
                            END IF
                         END IF
 *
 *                       Save the condition number of the
-*                       non-equilibrated system for use in DGET04.
+*                       non-equilibrated system for use in AB_DGET04.
 *
                         IF( EQUIL )
      $                     ROLDC = RCONDC
 *
 *                       Compute the 1-norm of A.
 *
-                        ANORM = DLANSP( '1', UPLO, N, AFAC, RWORK )
+                        ANORM = AB_DLANSP( '1', UPLO, N, AFAC, RWORK )
 *
 *                       Factor the matrix A.
 *
-                        CALL DPPTRF( UPLO, N, AFAC, INFO )
+                        CALL AB_DPPTRF( UPLO, N, AFAC, INFO )
 *
 *                       Form the inverse of A.
 *
-                        CALL DCOPY( NPP, AFAC, 1, A, 1 )
-                        CALL DPPTRI( UPLO, N, A, INFO )
+                        CALL AB_DCOPY( NPP, AFAC, 1, A, 1 )
+                        CALL AB_DPPTRI( UPLO, N, A, INFO )
 *
 *                       Compute the 1-norm condition number of A.
 *
-                        AINVNM = DLANSP( '1', UPLO, N, A, RWORK )
+                        AINVNM = AB_DLANSP( '1', UPLO, N, A, RWORK )
                         IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                            RCONDC = ONE
                         ELSE
@@ -426,34 +433,39 @@
 *
 *                    Restore the matrix A.
 *
-                     CALL DCOPY( NPP, ASAV, 1, A, 1 )
+                     CALL AB_DCOPY( NPP, ASAV, 1, A, 1 )
 *
 *                    Form an exact solution and set the right hand side.
 *
-                     SRNAMT = 'DLARHS'
-                     CALL DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                     SRNAMT = 'AB_DLARHS'
+                     CALL AB_DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, K
+     $U,
      $                            NRHS, A, LDA, XACT, LDA, B, LDA,
      $                            ISEED, INFO )
                      XTYPE = 'C'
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA )
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA 
+     $)
 *
                      IF( NOFACT ) THEN
 *
-*                       --- Test DPPSV  ---
+*                       --- Test AB_DPPSV  ---
 *
 *                       Compute the L*L' or U'*U factorization of the
 *                       matrix and solve the system.
 *
-                        CALL DCOPY( NPP, A, 1, AFAC, 1 )
-                        CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                        CALL AB_DCOPY( NPP, A, 1, AFAC, 1 )
+                        CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA 
+     $)
 *
-                        SRNAMT = 'DPPSV '
-                        CALL DPPSV( UPLO, N, NRHS, AFAC, X, LDA, INFO )
+                        SRNAMT = 'AB_DPPSV '
+                        CALL AB_DPPSV( UPLO, N, NRHS, AFAC, X, LDA, INFO
+     $ )
 *
-*                       Check error code from DPPSV .
+*                       Check error code from AB_DPPSV .
 *
                         IF( INFO.NE.IZERO ) THEN
-                           CALL ALAERH( PATH, 'DPPSV ', INFO, IZERO,
+                           CALL AB_ALAERH( PATH, 'AB_DPPSV ', INFO, IZER
+     $O,
      $                                  UPLO, N, N, -1, -1, NRHS, IMAT,
      $                                  NFAIL, NERRS, NOUT )
                            GO TO 70
@@ -464,19 +476,20 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL DPPT01( UPLO, N, A, AFAC, RWORK,
+                        CALL AB_DPPT01( UPLO, N, A, AFAC, RWORK,
      $                               RESULT( 1 ) )
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK,
+                        CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK,
      $                               LDA )
-                        CALL DPPT02( UPLO, N, NRHS, A, X, LDA, WORK,
+                        CALL AB_DPPT02( UPLO, N, NRHS, A, X, LDA, WORK,
      $                               LDA, RWORK, RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                        CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCON
+     $DC,
      $                               RESULT( 3 ) )
                         NT = 3
 *
@@ -486,8 +499,9 @@
                         DO 60 K = 1, NT
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL ALADHD( NOUT, PATH )
-                              WRITE( NOUT, FMT = 9999 )'DPPSV ', UPLO,
+     $                           CALL AB_ALADHD( NOUT, PATH )
+                              WRITE( NOUT, FMT = 9999 )'AB_DPPSV ', UPLO
+     $,
      $                           N, IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
                            END IF
@@ -496,32 +510,37 @@
    70                   CONTINUE
                      END IF
 *
-*                    --- Test DPPSVX ---
+*                    --- Test AB_AB_DPPSVX ---
 *
                      IF( .NOT.PREFAC .AND. NPP.GT.0 )
-     $                  CALL DLASET( 'Full', NPP, 1, ZERO, ZERO, AFAC,
+     $                  CALL AB_DLASET( 'Full', NPP, 1, ZERO, ZERO, AFAC
+     $,
      $                               NPP )
-                     CALL DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
+                     CALL AB_DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA
+     $ )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT='F' and
 *                       EQUED='Y'.
 *
-                        CALL DLAQSP( UPLO, N, A, S, SCOND, AMAX, EQUED )
+                        CALL AB_DLAQSP( UPLO, N, A, S, SCOND, AMAX, EQUE
+     $D )
                      END IF
 *
 *                    Solve the system and compute the condition number
-*                    and error bounds using DPPSVX.
+*                    and error bounds using AB_AB_DPPSVX.
 *
-                     SRNAMT = 'DPPSVX'
-                     CALL DPPSVX( FACT, UPLO, N, NRHS, A, AFAC, EQUED,
+                     SRNAMT = 'AB_AB_DPPSVX'
+                     CALL AB_AB_DPPSVX( FACT, UPLO, N, NRHS, A, AFAC, EQ
+     $UED,
      $                            S, B, LDA, X, LDA, RCOND, RWORK,
      $                            RWORK( NRHS+1 ), WORK, IWORK, INFO )
 *
-*                    Check the error code from DPPSVX.
+*                    Check the error code from AB_AB_DPPSVX.
 *
                      IF( INFO.NE.IZERO ) THEN
-                        CALL ALAERH( PATH, 'DPPSVX', INFO, IZERO,
+                        CALL AB_ALAERH( PATH, 'AB_AB_DPPSVX', INFO, IZER
+     $O,
      $                               FACT // UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 90
@@ -533,7 +552,7 @@
 *                          Reconstruct matrix from factors and compute
 *                          residual.
 *
-                           CALL DPPT01( UPLO, N, A, AFAC,
+                           CALL AB_DPPT01( UPLO, N, A, AFAC,
      $                                  RWORK( 2*NRHS+1 ), RESULT( 1 ) )
                            K1 = 1
                         ELSE
@@ -542,37 +561,39 @@
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL DLACPY( 'Full', N, NRHS, BSAV, LDA, WORK,
+                        CALL AB_DLACPY( 'Full', N, NRHS, BSAV, LDA, WORK
+     $,
      $                               LDA )
-                        CALL DPPT02( UPLO, N, NRHS, ASAV, X, LDA, WORK,
+                        CALL AB_DPPT02( UPLO, N, NRHS, ASAV, X, LDA, WOR
+     $K,
      $                               LDA, RWORK( 2*NRHS+1 ),
      $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        IF( NOFACT .OR. ( PREFAC .AND. LSAME( EQUED,
+                        IF( NOFACT .OR. ( PREFAC .AND. AB_LSAME( EQUED,
      $                      'N' ) ) ) THEN
-                           CALL DGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  RCONDC, RESULT( 3 ) )
                         ELSE
-                           CALL DGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  ROLDC, RESULT( 3 ) )
                         END IF
 *
 *                       Check the error bounds from iterative
 *                       refinement.
 *
-                        CALL DPPT05( UPLO, N, NRHS, ASAV, B, LDA, X,
+                        CALL AB_DPPT05( UPLO, N, NRHS, ASAV, B, LDA, X,
      $                               LDA, XACT, LDA, RWORK,
      $                               RWORK( NRHS+1 ), RESULT( 4 ) )
                      ELSE
                         K1 = 6
                      END IF
 *
-*                    Compare RCOND from DPPSVX with the computed value
+*                    Compare RCOND from AB_AB_DPPSVX with the computed value
 *                    in RCONDC.
 *
-                     RESULT( 6 ) = DGET06( RCOND, RCONDC )
+                     RESULT( 6 ) = AB_DGET06( RCOND, RCONDC )
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -580,12 +601,14 @@
                      DO 80 K = K1, 6
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALADHD( NOUT, PATH )
+     $                        CALL AB_ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'DPPSVX', FACT,
+                              WRITE( NOUT, FMT = 9997 )'AB_AB_DPPSVX', F
+     $ACT,
      $                           UPLO, N, EQUED, IMAT, K, RESULT( K )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'DPPSVX', FACT,
+                              WRITE( NOUT, FMT = 9998 )'AB_AB_DPPSVX', F
+     $ACT,
      $                           UPLO, N, IMAT, K, RESULT( K )
                            END IF
                            NFAIL = NFAIL + 1
@@ -601,7 +624,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I1,
      $      ', test(', I1, ')=', G12.5 )
@@ -612,6 +635,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of DDRVPP
+*     End of AB_DDRVPP
 *
       END

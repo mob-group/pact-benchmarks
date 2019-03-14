@@ -1,4 +1,4 @@
-*> \brief \b DLAIC1 applies one step of incremental condition estimation.
+*> \brief \b AB_DLAIC1 applies one step of incremental condition estimation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAIC1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaic1.f">
+*> Download AB_DLAIC1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAIC1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaic1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAIC1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaic1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAIC1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+*       SUBROUTINE AB_DLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            J, JOB
@@ -34,13 +34,13 @@
 *>
 *> \verbatim
 *>
-*> DLAIC1 applies one step of incremental condition estimation in
+*> AB_DLAIC1 applies one step of incremental condition estimation in
 *> its simplest version:
 *>
 *> Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j
 *> lower triangular matrix L, such that
 *>          twonorm(L*x) = sest
-*> Then DLAIC1 computes sestpr, s, c such that
+*> Then AB_DLAIC1 computes sestpr, s, c such that
 *> the vector
 *>                 [ s*x ]
 *>          xhat = [  c  ]
@@ -132,7 +132,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+      SUBROUTINE AB_DLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,13 +163,13 @@
       INTRINSIC          ABS, MAX, SIGN, SQRT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DDOT, DLAMCH
-      EXTERNAL           DDOT, DLAMCH
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH
+      EXTERNAL           AB_DDOT, AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ALPHA = DDOT( J, X, 1, W, 1 )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ALPHA = AB_DDOT( J, X, 1, W, 1 )
 *
       ABSALP = ABS( ALPHA )
       ABSGAM = ABS( GAMMA )
@@ -217,7 +217,8 @@
                SESTPR = S1
             END IF
             RETURN
-         ELSE IF( ABSEST.LE.EPS*ABSALP .OR. ABSEST.LE.EPS*ABSGAM ) THEN
+         ELSE IF( ABSEST.LE.EPS*ABSALP .OR. ABSEST.LE.EPS*ABSGAM ) TH
+     $EN
             S1 = ABSGAM
             S2 = ABSALP
             IF( S1.LE.S2 ) THEN
@@ -298,7 +299,8 @@
                SESTPR = S2
             END IF
             RETURN
-         ELSE IF( ABSEST.LE.EPS*ABSALP .OR. ABSEST.LE.EPS*ABSGAM ) THEN
+         ELSE IF( ABSEST.LE.EPS*ABSALP .OR. ABSEST.LE.EPS*ABSGAM ) TH
+     $EN
             S1 = ABSGAM
             S2 = ABSALP
             IF( S1.LE.S2 ) THEN
@@ -362,6 +364,6 @@
       END IF
       RETURN
 *
-*     End of DLAIC1
+*     End of AB_DLAIC1
 *
       END

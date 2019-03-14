@@ -1,4 +1,4 @@
-*> \brief <b> SSYCON_ROOK </b>
+*> \brief <b> AB_AB_SSYCON_ROOK </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYCON_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssycon_rook.f">
+*> Download AB_AB_SSYCON_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SSYCON_ROOK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssycon_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SSYCON_ROOK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssycon_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SSYCON_ROOK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYCON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND,
+*       SUBROUTINE AB_AB_SSYCON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND,
 *                               WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> SSYCON_ROOK estimates the reciprocal of the condition number (in the
+*> AB_AB_SSYCON_ROOK estimates the reciprocal of the condition number (in the
 *> 1-norm) of a real symmetric matrix A using the factorization
-*> A = U*D*U**T or A = L*D*L**T computed by SSYTRF_ROOK.
+*> A = U*D*U**T or A = L*D*L**T computed by AB_AB_SSYTRF_ROOK.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by SSYTRF_ROOK.
+*>          obtain the factor U or L as computed by AB_AB_SSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -80,7 +80,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by SSYTRF_ROOK.
+*>          as determined by AB_AB_SSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -141,7 +141,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSYCON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+      SUBROUTINE AB_AB_SSYCON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND,
+     $ WORK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -174,11 +175,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SSYTRS_ROOK, XERBLA
+      EXTERNAL           AB_SLACN2, AB_AB_SSYTRS_ROOK, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -188,8 +189,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -199,7 +200,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYCON_ROOK', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SSYCON_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -237,12 +238,13 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
 *
-         CALL SSYTRS_ROOK( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
+         CALL AB_AB_SSYTRS_ROOK( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO
+     $ )
          GO TO 30
       END IF
 *
@@ -253,6 +255,6 @@
 *
       RETURN
 *
-*     End of SSYCON_ROOK
+*     End of AB_AB_SSYCON_ROOK
 *
       END

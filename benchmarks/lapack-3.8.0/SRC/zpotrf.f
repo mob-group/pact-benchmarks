@@ -1,4 +1,4 @@
-*> \brief \b ZPOTRF
+*> \brief \b AB_ZPOTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPOTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpotrf.f">
+*> Download AB_ZPOTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPOTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpotrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPOTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpotrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPOTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPOTRF( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_ZPOTRF( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZPOTRF computes the Cholesky factorization of a complex Hermitian
+*> AB_ZPOTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -105,7 +105,7 @@
 *> \ingroup complex16POcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZPOTRF( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_ZPOTRF( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -132,12 +132,13 @@
       INTEGER            J, JB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZHERK, ZPOTRF2, ZTRSM
+      EXTERNAL           AB_XERBLA, AB_ZGEMM, AB_AB_ZHERK, AB_ZPOTRF2, A
+     $B_ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -147,8 +148,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -156,7 +157,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPOTRF', -INFO )
+         CALL AB_XERBLA( 'AB_ZPOTRF', -INFO )
          RETURN
       END IF
 *
@@ -167,12 +168,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = ILAENV( 1, 'ZPOTRF', UPLO, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_ZPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code.
 *
-         CALL ZPOTRF2( UPLO, N, A, LDA, INFO )
+         CALL AB_ZPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -187,20 +188,22 @@
 *              for non-positive-definiteness.
 *
                JB = MIN( NB, N-J+1 )
-               CALL ZHERK( 'Upper', 'Conjugate transpose', JB, J-1,
+               CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', JB, J-1
+     $,
      $                     -ONE, A( 1, J ), LDA, ONE, A( J, J ), LDA )
-               CALL ZPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL AB_ZPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
 *
 *                 Compute the current block row.
 *
-                  CALL ZGEMM( 'Conjugate transpose', 'No transpose', JB,
+                  CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', 
+     $JB,
      $                        N-J-JB+1, J-1, -CONE, A( 1, J ), LDA,
      $                        A( 1, J+JB ), LDA, CONE, A( J, J+JB ),
      $                        LDA )
-                  CALL ZTRSM( 'Left', 'Upper', 'Conjugate transpose',
+                  CALL AB_ZTRSM( 'Left', 'Upper', 'Conjugate transpose',
      $                        'Non-unit', JB, N-J-JB+1, CONE, A( J, J ),
      $                        LDA, A( J, J+JB ), LDA )
                END IF
@@ -216,20 +219,21 @@
 *              for non-positive-definiteness.
 *
                JB = MIN( NB, N-J+1 )
-               CALL ZHERK( 'Lower', 'No transpose', JB, J-1, -ONE,
+               CALL AB_AB_ZHERK( 'Lower', 'No transpose', JB, J-1, -ONE,
      $                     A( J, 1 ), LDA, ONE, A( J, J ), LDA )
-               CALL ZPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL AB_ZPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
 *
 *                 Compute the current block column.
 *
-                  CALL ZGEMM( 'No transpose', 'Conjugate transpose',
+                  CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose',
      $                        N-J-JB+1, JB, J-1, -CONE, A( J+JB, 1 ),
      $                        LDA, A( J, 1 ), LDA, CONE, A( J+JB, J ),
      $                        LDA )
-                  CALL ZTRSM( 'Right', 'Lower', 'Conjugate transpose',
+                  CALL AB_ZTRSM( 'Right', 'Lower', 'Conjugate transpose'
+     $,
      $                        'Non-unit', N-J-JB+1, JB, CONE, A( J, J ),
      $                        LDA, A( J+JB, J ), LDA )
                END IF
@@ -244,6 +248,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of ZPOTRF
+*     End of AB_ZPOTRF
 *
       END

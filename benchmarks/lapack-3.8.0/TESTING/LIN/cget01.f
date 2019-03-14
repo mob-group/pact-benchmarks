@@ -1,4 +1,4 @@
-*> \brief \b CGET01
+*> \brief \b AB_CGET01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+*       SUBROUTINE AB_CGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CGET01 reconstructs a matrix A from its L*U factorization and
+*> AB_CGET01 reconstructs a matrix A from its L*U factorization and
 *> computes the residual
 *>    norm(L*U - A) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -64,7 +64,7 @@
 *> \verbatim
 *>          AFAC is COMPLEX array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the factors
-*>          L and U from the L*U factorization as computed by CGETRF.
+*>          L and U from the L*U factorization as computed by AB_CGETRF.
 *>          Overwritten with the reconstructed matrix, and then with the
 *>          difference L*U - A.
 *> \endverbatim
@@ -78,7 +78,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from CGETRF.
+*>          The pivot indices from AB_CGETRF.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -105,7 +105,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+      SUBROUTINE AB_CGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -137,12 +137,12 @@
       COMPLEX            T
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      COMPLEX            CDOTU
-      EXTERNAL           CLANGE, SLAMCH, CDOTU
+      REAL               AB_CLANGE, AB_SLAMCH
+      COMPLEX            AB_CDOTU
+      EXTERNAL           AB_CLANGE, AB_SLAMCH, AB_CDOTU
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CLASWP, CSCAL, CTRMV
+      EXTERNAL           AB_CGEMV, AB_CLASWP, AB_CSCAL, AB_CTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, REAL
@@ -158,8 +158,8 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_CLANGE( '1', M, N, A, LDA, RWORK )
 *
 *     Compute the product L*U and overwrite AFAC with the result.
 *     A column at a time of the product is obtained, starting with
@@ -167,7 +167,7 @@
 *
       DO 10 K = N, 1, -1
          IF( K.GT.M ) THEN
-            CALL CTRMV( 'Lower', 'No transpose', 'Unit', M, AFAC,
+            CALL AB_CTRMV( 'Lower', 'No transpose', 'Unit', M, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
          ELSE
 *
@@ -175,24 +175,24 @@
 *
             T = AFAC( K, K )
             IF( K+1.LE.M ) THEN
-               CALL CSCAL( M-K, T, AFAC( K+1, K ), 1 )
-               CALL CGEMV( 'No transpose', M-K, K-1, CONE,
+               CALL AB_CSCAL( M-K, T, AFAC( K+1, K ), 1 )
+               CALL AB_CGEMV( 'No transpose', M-K, K-1, CONE,
      $                     AFAC( K+1, 1 ), LDAFAC, AFAC( 1, K ), 1,
      $                     CONE, AFAC( K+1, K ), 1 )
             END IF
 *
 *           Compute the (K,K) element
 *
-            AFAC( K, K ) = T + CDOTU( K-1, AFAC( K, 1 ), LDAFAC,
+            AFAC( K, K ) = T + AB_CDOTU( K-1, AFAC( K, 1 ), LDAFAC,
      $                     AFAC( 1, K ), 1 )
 *
 *           Compute elements (1:K-1,K)
 *
-            CALL CTRMV( 'Lower', 'No transpose', 'Unit', K-1, AFAC,
+            CALL AB_CTRMV( 'Lower', 'No transpose', 'Unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
          END IF
    10 CONTINUE
-      CALL CLASWP( N, AFAC, LDAFAC, 1, MIN( M, N ), IPIV, -1 )
+      CALL AB_CLASWP( N, AFAC, LDAFAC, 1, MIN( M, N ), IPIV, -1 )
 *
 *     Compute the difference  L*U - A  and store in AFAC.
 *
@@ -204,7 +204,7 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = CLANGE( '1', M, N, AFAC, LDAFAC, RWORK )
+      RESID = AB_CLANGE( '1', M, N, AFAC, LDAFAC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -215,6 +215,6 @@
 *
       RETURN
 *
-*     End of CGET01
+*     End of AB_CGET01
 *
       END

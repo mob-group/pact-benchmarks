@@ -1,4 +1,4 @@
-*> \brief \b CERRGE
+*> \brief \b AB_CERRGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CERRGE( PATH, NUNIT )
+*       SUBROUTINE AB_CERRGE( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CERRGE tests the error exits for the COMPLEX routines
+*> AB_CERRGE tests the error exits for the COMPLEX routines
 *> for general matrices.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CERRGE( PATH, NUNIT )
+      SUBROUTINE AB_CERRGE( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,13 +83,15 @@
      $                   W( 2*NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAMEN
-      EXTERNAL           LSAMEN
+      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           AB_AB_LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CGBCON, CGBEQU, CGBRFS, CGBTF2, CGBTRF,
-     $                   CGBTRS, CGECON, CGEEQU, CGERFS, CGETF2, CGETRF,
-     $                   CGETRI, CGETRS, CHKXER
+      EXTERNAL           AB_ALAESM, AB_CGBCON, AB_CGBEQU, AB_CGBRFS, AB_
+     $CGBTF2, AB_CGBTRF,
+     $                   AB_CGBTRS, AB_CGECON, AB_CGEEQU, AB_CGERFS, AB_
+     $CGETF2, AB_CGETRF,
+     $                   AB_CGETRI, AB_CGETRS, AB_CHKXER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -128,282 +130,303 @@
 *     Test error exits of the routines that use the LU decomposition
 *     of a general matrix.
 *
-      IF( LSAMEN( 2, C2, 'GE' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, C2, 'GE' ) ) THEN
 *
-*        CGETRF
+*        AB_CGETRF
 *
-         SRNAMT = 'CGETRF'
+         SRNAMT = 'AB_CGETRF'
          INFOT = 1
-         CALL CGETRF( -1, 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CGETRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRF( -1, 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGETRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGETRF( 0, -1, A, 1, IP, INFO )
-         CALL CHKXER( 'CGETRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRF( 0, -1, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGETRF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGETRF( 2, 1, A, 1, IP, INFO )
-         CALL CHKXER( 'CGETRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRF( 2, 1, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGETRF', INFOT, NOUT, LERR, OK )
 *
-*        CGETF2
+*        AB_CGETF2
 *
-         SRNAMT = 'CGETF2'
+         SRNAMT = 'AB_CGETF2'
          INFOT = 1
-         CALL CGETF2( -1, 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CGETF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETF2( -1, 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGETF2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGETF2( 0, -1, A, 1, IP, INFO )
-         CALL CHKXER( 'CGETF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETF2( 0, -1, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGETF2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGETF2( 2, 1, A, 1, IP, INFO )
-         CALL CHKXER( 'CGETF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETF2( 2, 1, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGETF2', INFOT, NOUT, LERR, OK )
 *
-*        CGETRI
+*        AB_CGETRI
 *
-         SRNAMT = 'CGETRI'
+         SRNAMT = 'AB_CGETRI'
          INFOT = 1
-         CALL CGETRI( -1, A, 1, IP, W, 1, INFO )
-         CALL CHKXER( 'CGETRI', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRI( -1, A, 1, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGETRI', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGETRI( 2, A, 1, IP, W, 2, INFO )
-         CALL CHKXER( 'CGETRI', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRI( 2, A, 1, IP, W, 2, INFO )
+         CALL AB_CHKXER( 'AB_CGETRI', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CGETRI( 2, A, 2, IP, W, 1, INFO )
-         CALL CHKXER( 'CGETRI', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRI( 2, A, 2, IP, W, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGETRI', INFOT, NOUT, LERR, OK )
 *
-*        CGETRS
+*        AB_CGETRS
 *
-         SRNAMT = 'CGETRS'
+         SRNAMT = 'AB_CGETRS'
          INFOT = 1
-         CALL CGETRS( '/', 0, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRS( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGETRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGETRS( 'N', -1, 0, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRS( 'N', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGETRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGETRS( 'N', 0, -1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRS( 'N', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGETRS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CGETRS( 'N', 2, 1, A, 1, IP, B, 2, INFO )
-         CALL CHKXER( 'CGETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRS( 'N', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL AB_CHKXER( 'AB_CGETRS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL CGETRS( 'N', 2, 1, A, 2, IP, B, 1, INFO )
-         CALL CHKXER( 'CGETRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGETRS( 'N', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGETRS', INFOT, NOUT, LERR, OK )
 *
-*        CGERFS
+*        AB_CGERFS
 *
-         SRNAMT = 'CGERFS'
+         SRNAMT = 'AB_CGERFS'
          INFOT = 1
-         CALL CGERFS( '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2, W,
+         CALL AB_CGERFS( '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
+     $ W,
      $                R, INFO )
-         CALL CHKXER( 'CGERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGERFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGERFS( 'N', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
+         CALL AB_CGERFS( 'N', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2
+     $,
      $                W, R, INFO )
-         CALL CHKXER( 'CGERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGERFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGERFS( 'N', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
+         CALL AB_CGERFS( 'N', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2
+     $,
      $                W, R, INFO )
-         CALL CHKXER( 'CGERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGERFS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CGERFS( 'N', 2, 1, A, 1, AF, 2, IP, B, 2, X, 2, R1, R2, W,
+         CALL AB_CGERFS( 'N', 2, 1, A, 1, AF, 2, IP, B, 2, X, 2, R1, R2,
+     $ W,
      $                R, INFO )
-         CALL CHKXER( 'CGERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGERFS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CGERFS( 'N', 2, 1, A, 2, AF, 1, IP, B, 2, X, 2, R1, R2, W,
+         CALL AB_CGERFS( 'N', 2, 1, A, 2, AF, 1, IP, B, 2, X, 2, R1, R2,
+     $ W,
      $                R, INFO )
-         CALL CHKXER( 'CGERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGERFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CGERFS( 'N', 2, 1, A, 2, AF, 2, IP, B, 1, X, 2, R1, R2, W,
+         CALL AB_CGERFS( 'N', 2, 1, A, 2, AF, 2, IP, B, 1, X, 2, R1, R2,
+     $ W,
      $                R, INFO )
-         CALL CHKXER( 'CGERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGERFS', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL CGERFS( 'N', 2, 1, A, 2, AF, 2, IP, B, 2, X, 1, R1, R2, W,
+         CALL AB_CGERFS( 'N', 2, 1, A, 2, AF, 2, IP, B, 2, X, 1, R1, R2,
+     $ W,
      $                R, INFO )
-         CALL CHKXER( 'CGERFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGERFS', INFOT, NOUT, LERR, OK )
 *
-*        CGECON
+*        AB_CGECON
 *
-         SRNAMT = 'CGECON'
+         SRNAMT = 'AB_CGECON'
          INFOT = 1
-         CALL CGECON( '/', 0, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL CHKXER( 'CGECON', INFOT, NOUT, LERR, OK )
+         CALL AB_CGECON( '/', 0, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL AB_CHKXER( 'AB_CGECON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGECON( '1', -1, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL CHKXER( 'CGECON', INFOT, NOUT, LERR, OK )
+         CALL AB_CGECON( '1', -1, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL AB_CHKXER( 'AB_CGECON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGECON( '1', 2, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL CHKXER( 'CGECON', INFOT, NOUT, LERR, OK )
+         CALL AB_CGECON( '1', 2, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL AB_CHKXER( 'AB_CGECON', INFOT, NOUT, LERR, OK )
 *
-*        CGEEQU
+*        AB_CGEEQU
 *
-         SRNAMT = 'CGEEQU'
+         SRNAMT = 'AB_CGEEQU'
          INFOT = 1
-         CALL CGEEQU( -1, 0, A, 1, R1, R2, RCOND, CCOND, ANRM, INFO )
-         CALL CHKXER( 'CGEEQU', INFOT, NOUT, LERR, OK )
+         CALL AB_CGEEQU( -1, 0, A, 1, R1, R2, RCOND, CCOND, ANRM, INFO )
+         CALL AB_CHKXER( 'AB_CGEEQU', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGEEQU( 0, -1, A, 1, R1, R2, RCOND, CCOND, ANRM, INFO )
-         CALL CHKXER( 'CGEEQU', INFOT, NOUT, LERR, OK )
+         CALL AB_CGEEQU( 0, -1, A, 1, R1, R2, RCOND, CCOND, ANRM, INFO )
+         CALL AB_CHKXER( 'AB_CGEEQU', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGEEQU( 2, 2, A, 1, R1, R2, RCOND, CCOND, ANRM, INFO )
-         CALL CHKXER( 'CGEEQU', INFOT, NOUT, LERR, OK )
+         CALL AB_CGEEQU( 2, 2, A, 1, R1, R2, RCOND, CCOND, ANRM, INFO )
+         CALL AB_CHKXER( 'AB_CGEEQU', INFOT, NOUT, LERR, OK )
 *
 *     Test error exits of the routines that use the LU decomposition
 *     of a general band matrix.
 *
-      ELSE IF( LSAMEN( 2, C2, 'GB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GB' ) ) THEN
 *
-*        CGBTRF
+*        AB_CGBTRF
 *
-         SRNAMT = 'CGBTRF'
+         SRNAMT = 'AB_CGBTRF'
          INFOT = 1
-         CALL CGBTRF( -1, 0, 0, 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CGBTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRF( -1, 0, 0, 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGBTRF( 0, -1, 0, 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CGBTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRF( 0, -1, 0, 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRF', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGBTRF( 1, 1, -1, 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CGBTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRF( 1, 1, -1, 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGBTRF( 1, 1, 0, -1, A, 1, IP, INFO )
-         CALL CHKXER( 'CGBTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRF( 1, 1, 0, -1, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRF', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CGBTRF( 2, 2, 1, 1, A, 3, IP, INFO )
-         CALL CHKXER( 'CGBTRF', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRF( 2, 2, 1, 1, A, 3, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRF', INFOT, NOUT, LERR, OK )
 *
-*        CGBTF2
+*        AB_CGBTF2
 *
-         SRNAMT = 'CGBTF2'
+         SRNAMT = 'AB_CGBTF2'
          INFOT = 1
-         CALL CGBTF2( -1, 0, 0, 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CGBTF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTF2( -1, 0, 0, 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTF2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGBTF2( 0, -1, 0, 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CGBTF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTF2( 0, -1, 0, 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTF2', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGBTF2( 1, 1, -1, 0, A, 1, IP, INFO )
-         CALL CHKXER( 'CGBTF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTF2( 1, 1, -1, 0, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTF2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGBTF2( 1, 1, 0, -1, A, 1, IP, INFO )
-         CALL CHKXER( 'CGBTF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTF2( 1, 1, 0, -1, A, 1, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTF2', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CGBTF2( 2, 2, 1, 1, A, 3, IP, INFO )
-         CALL CHKXER( 'CGBTF2', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTF2( 2, 2, 1, 1, A, 3, IP, INFO )
+         CALL AB_CHKXER( 'AB_CGBTF2', INFOT, NOUT, LERR, OK )
 *
-*        CGBTRS
+*        AB_CGBTRS
 *
-         SRNAMT = 'CGBTRS'
+         SRNAMT = 'AB_CGBTRS'
          INFOT = 1
-         CALL CGBTRS( '/', 0, 0, 0, 1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRS( '/', 0, 0, 0, 1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGBTRS( 'N', -1, 0, 0, 1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRS( 'N', -1, 0, 0, 1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGBTRS( 'N', 1, -1, 0, 1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRS( 'N', 1, -1, 0, 1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGBTRS( 'N', 1, 0, -1, 1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRS( 'N', 1, 0, -1, 1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CGBTRS( 'N', 1, 0, 0, -1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRS( 'N', 1, 0, 0, -1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CGBTRS( 'N', 2, 1, 1, 1, A, 3, IP, B, 2, INFO )
-         CALL CHKXER( 'CGBTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRS( 'N', 2, 1, 1, 1, A, 3, IP, B, 2, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL CGBTRS( 'N', 2, 0, 0, 1, A, 1, IP, B, 1, INFO )
-         CALL CHKXER( 'CGBTRS', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBTRS( 'N', 2, 0, 0, 1, A, 1, IP, B, 1, INFO )
+         CALL AB_CHKXER( 'AB_CGBTRS', INFOT, NOUT, LERR, OK )
 *
-*        CGBRFS
+*        AB_CGBRFS
 *
-         SRNAMT = 'CGBRFS'
+         SRNAMT = 'AB_CGBRFS'
          INFOT = 1
-         CALL CGBRFS( '/', 0, 0, 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1,
+         CALL AB_CGBRFS( '/', 0, 0, 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R
+     $1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGBRFS( 'N', -1, 0, 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1,
+         CALL AB_CGBRFS( 'N', -1, 0, 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, 
+     $R1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGBRFS( 'N', 1, -1, 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1,
+         CALL AB_CGBRFS( 'N', 1, -1, 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, 
+     $R1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGBRFS( 'N', 1, 0, -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1,
+         CALL AB_CGBRFS( 'N', 1, 0, -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, 
+     $R1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CGBRFS( 'N', 1, 0, 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1,
+         CALL AB_CGBRFS( 'N', 1, 0, 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, 
+     $R1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CGBRFS( 'N', 2, 1, 1, 1, A, 2, AF, 4, IP, B, 2, X, 2, R1,
+         CALL AB_CGBRFS( 'N', 2, 1, 1, 1, A, 2, AF, 4, IP, B, 2, X, 2, R
+     $1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL CGBRFS( 'N', 2, 1, 1, 1, A, 3, AF, 3, IP, B, 2, X, 2, R1,
+         CALL AB_CGBRFS( 'N', 2, 1, 1, 1, A, 3, AF, 3, IP, B, 2, X, 2, R
+     $1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL CGBRFS( 'N', 2, 0, 0, 1, A, 1, AF, 1, IP, B, 1, X, 2, R1,
+         CALL AB_CGBRFS( 'N', 2, 0, 0, 1, A, 1, AF, 1, IP, B, 1, X, 2, R
+     $1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL CGBRFS( 'N', 2, 0, 0, 1, A, 1, AF, 1, IP, B, 2, X, 1, R1,
+         CALL AB_CGBRFS( 'N', 2, 0, 0, 1, A, 1, AF, 1, IP, B, 2, X, 1, R
+     $1,
      $                R2, W, R, INFO )
-         CALL CHKXER( 'CGBRFS', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBRFS', INFOT, NOUT, LERR, OK )
 *
-*        CGBCON
+*        AB_CGBCON
 *
-         SRNAMT = 'CGBCON'
+         SRNAMT = 'AB_CGBCON'
          INFOT = 1
-         CALL CGBCON( '/', 0, 0, 0, A, 1, IP, ANRM, RCOND, W, R, INFO )
-         CALL CHKXER( 'CGBCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBCON( '/', 0, 0, 0, A, 1, IP, ANRM, RCOND, W, R, INFO
+     $ )
+         CALL AB_CHKXER( 'AB_CGBCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGBCON( '1', -1, 0, 0, A, 1, IP, ANRM, RCOND, W, R, INFO )
-         CALL CHKXER( 'CGBCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBCON( '1', -1, 0, 0, A, 1, IP, ANRM, RCOND, W, R, INF
+     $O )
+         CALL AB_CHKXER( 'AB_CGBCON', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGBCON( '1', 1, -1, 0, A, 1, IP, ANRM, RCOND, W, R, INFO )
-         CALL CHKXER( 'CGBCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBCON( '1', 1, -1, 0, A, 1, IP, ANRM, RCOND, W, R, INF
+     $O )
+         CALL AB_CHKXER( 'AB_CGBCON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGBCON( '1', 1, 0, -1, A, 1, IP, ANRM, RCOND, W, R, INFO )
-         CALL CHKXER( 'CGBCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBCON( '1', 1, 0, -1, A, 1, IP, ANRM, RCOND, W, R, INF
+     $O )
+         CALL AB_CHKXER( 'AB_CGBCON', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CGBCON( '1', 2, 1, 1, A, 3, IP, ANRM, RCOND, W, R, INFO )
-         CALL CHKXER( 'CGBCON', INFOT, NOUT, LERR, OK )
+         CALL AB_CGBCON( '1', 2, 1, 1, A, 3, IP, ANRM, RCOND, W, R, INFO
+     $ )
+         CALL AB_CHKXER( 'AB_CGBCON', INFOT, NOUT, LERR, OK )
 *
-*        CGBEQU
+*        AB_CGBEQU
 *
-         SRNAMT = 'CGBEQU'
+         SRNAMT = 'AB_CGBEQU'
          INFOT = 1
-         CALL CGBEQU( -1, 0, 0, 0, A, 1, R1, R2, RCOND, CCOND, ANRM,
+         CALL AB_CGBEQU( -1, 0, 0, 0, A, 1, R1, R2, RCOND, CCOND, ANRM,
      $                INFO )
-         CALL CHKXER( 'CGBEQU', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBEQU', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CGBEQU( 0, -1, 0, 0, A, 1, R1, R2, RCOND, CCOND, ANRM,
+         CALL AB_CGBEQU( 0, -1, 0, 0, A, 1, R1, R2, RCOND, CCOND, ANRM,
      $                INFO )
-         CALL CHKXER( 'CGBEQU', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBEQU', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CGBEQU( 1, 1, -1, 0, A, 1, R1, R2, RCOND, CCOND, ANRM,
+         CALL AB_CGBEQU( 1, 1, -1, 0, A, 1, R1, R2, RCOND, CCOND, ANRM,
      $                INFO )
-         CALL CHKXER( 'CGBEQU', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBEQU', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CGBEQU( 1, 1, 0, -1, A, 1, R1, R2, RCOND, CCOND, ANRM,
+         CALL AB_CGBEQU( 1, 1, 0, -1, A, 1, R1, R2, RCOND, CCOND, ANRM,
      $                INFO )
-         CALL CHKXER( 'CGBEQU', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBEQU', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL CGBEQU( 2, 2, 1, 1, A, 2, R1, R2, RCOND, CCOND, ANRM,
+         CALL AB_CGBEQU( 2, 2, 1, 1, A, 2, R1, R2, RCOND, CCOND, ANRM,
      $                INFO )
-         CALL CHKXER( 'CGBEQU', INFOT, NOUT, LERR, OK )
+         CALL AB_CHKXER( 'AB_CGBEQU', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of CERRGE
+*     End of AB_CERRGE
 *
       END

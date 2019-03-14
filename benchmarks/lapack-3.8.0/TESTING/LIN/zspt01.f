@@ -1,4 +1,4 @@
-*> \brief \b ZSPT01
+*> \brief \b AB_ZSPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+*       SUBROUTINE AB_ZSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZSPT01 reconstructs a symmetric indefinite packed matrix A from its
+*> AB_ZSPT01 reconstructs a symmetric indefinite packed matrix A from its
 *> diagonal pivoting factorization A = U*D*U' or A = L*D*L' and computes
 *> the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
@@ -65,13 +65,13 @@
 *>          The factored form of the matrix A, stored as a packed
 *>          triangular matrix.  AFAC contains the block diagonal matrix D
 *>          and the multipliers used to obtain the factor L or U from the
-*>          L*D*L' or U*D*U' factorization as computed by ZSPTRF.
+*>          L*D*L' or U*D*U' factorization as computed by AB_ZSPTRF.
 *> \endverbatim
 *>
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from ZSPTRF.
+*>          The pivot indices from AB_ZSPTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -110,7 +110,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+      SUBROUTINE AB_ZSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID
+     $ )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,12 +143,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANSP, ZLANSY
-      EXTERNAL           LSAME, DLAMCH, ZLANSP, ZLANSY
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANSP, AB_ZLANSY
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANSP, AB_ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASET, ZLAVSP
+      EXTERNAL           AB_ZLASET, AB_ZLAVSP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -163,26 +164,27 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANSP( '1', UPLO, N, A, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANSP( '1', UPLO, N, A, RWORK )
 *
 *     Initialize C to the identity matrix.
 *
-      CALL ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     Call ZLAVSP to form the product D * U' (or D * L' ).
+*     Call AB_ZLAVSP to form the product D * U' (or D * L' ).
 *
-      CALL ZLAVSP( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, IPIV, C,
+      CALL AB_ZLAVSP( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, IPIV, C
+     $,
      $             LDC, INFO )
 *
-*     Call ZLAVSP again to multiply by U ( or L ).
+*     Call AB_ZLAVSP again to multiply by U ( or L ).
 *
-      CALL ZLAVSP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
+      CALL AB_ZLAVSP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
      $             LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          JC = 0
          DO 20 J = 1, N
             DO 10 I = 1, J
@@ -202,7 +204,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = ZLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = AB_ZLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -213,6 +215,6 @@
 *
       RETURN
 *
-*     End of ZSPT01
+*     End of AB_ZSPT01
 *
       END

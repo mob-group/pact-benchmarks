@@ -12,7 +12,8 @@
       DOUBLE PRECISION SFAC
       INTEGER          IC
 *     .. External Subroutines ..
-      EXTERNAL         CHECK0, CHECK1, CHECK2, CHECK3, HEADER
+      EXTERNAL         AB_CHECK0, AB_CHECK1, AB_CHECK2, AB_CHECK3, AB_HE
+     $ADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -21,7 +22,7 @@
       WRITE (NOUT,99999)
       DO 20 IC = 1, 10
          ICASE = IC
-         CALL HEADER
+         CALL AB_HEADER
 *
 *        .. Initialize  PASS,  INCX,  INCY, and MODE for a new case. ..
 *        .. the value 9999 for INCX, INCY or MODE will appear in the ..
@@ -33,15 +34,15 @@
          INCY = 9999
          MODE = 9999
          IF (ICASE.EQ.3) THEN
-            CALL CHECK0(SFAC)
+            CALL AB_CHECK0(SFAC)
          ELSE IF (ICASE.EQ.7 .OR. ICASE.EQ.8 .OR. ICASE.EQ.9 .OR.
      +            ICASE.EQ.10) THEN
-            CALL CHECK1(SFAC)
+            CALL AB_CHECK1(SFAC)
          ELSE IF (ICASE.EQ.1 .OR. ICASE.EQ.2 .OR. ICASE.EQ.5 .OR.
      +            ICASE.EQ.6) THEN
-            CALL CHECK2(SFAC)
+            CALL AB_CHECK2(SFAC)
          ELSE IF (ICASE.EQ.4) THEN
-            CALL CHECK3(SFAC)
+            CALL AB_CHECK3(SFAC)
          END IF
 *        -- Print
          IF (PASS) WRITE (NOUT,99998)
@@ -51,7 +52,7 @@
 99999 FORMAT (' Real CBLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
       END
-      SUBROUTINE HEADER
+      SUBROUTINE AB_HEADER
 *     .. Parameters ..
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
@@ -63,23 +64,23 @@
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
-      DATA             L(1)/'CBLAS_DDOT'/
-      DATA             L(2)/'CBLAS_DAXPY '/
-      DATA             L(3)/'CBLAS_DROTG '/
-      DATA             L(4)/'CBLAS_DROT '/
-      DATA             L(5)/'CBLAS_DCOPY '/
-      DATA             L(6)/'CBLAS_DSWAP '/
-      DATA             L(7)/'CBLAS_DNRM2 '/
-      DATA             L(8)/'CBLAS_DASUM '/
-      DATA             L(9)/'CBLAS_DSCAL '/
-      DATA             L(10)/'CBLAS_IDAMAX'/
+      DATA             L(1)/'CBLAS_AB_DDOT'/
+      DATA             L(2)/'CBLAS_AB_DAXPY '/
+      DATA             L(3)/'CBLAS_AB_AB_DROTG '/
+      DATA             L(4)/'CBLAS_AB_DROT '/
+      DATA             L(5)/'CBLAS_AB_DCOPY '/
+      DATA             L(6)/'CBLAS_AB_DSWAP '/
+      DATA             L(7)/'CBLAS_AB_DNRM2 '/
+      DATA             L(8)/'CBLAS_AB_DASUM '/
+      DATA             L(9)/'CBLAS_AB_DSCAL '/
+      DATA             L(10)/'CBLAS_AB_IDAMAX'/
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
 *
 99999 FORMAT (/' Test of subprogram number',I3,9X,A15)
       END
-      SUBROUTINE CHECK0(SFAC)
+      SUBROUTINE AB_CHECK0(SFAC)
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -95,7 +96,7 @@
       DOUBLE PRECISION  DA1(8), DATRUE(8), DB1(8), DBTRUE(8), DC1(8),
      +                  DS1(8)
 *     .. External Subroutines ..
-      EXTERNAL          DROTGTEST, STEST1
+      EXTERNAL          AB_AB_DROTGTEST, AB_AB_STEST1
 *     .. Common blocks ..
       COMMON            /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -124,23 +125,23 @@
 *        .. Set N=K for identification in output if any ..
          N = K
          IF (ICASE.EQ.3) THEN
-*           .. DROTGTEST ..
+*           .. AB_AB_DROTGTEST ..
             IF (K.GT.8) GO TO 40
             SA = DA1(K)
             SB = DB1(K)
-            CALL DROTGTEST(SA,SB,SC,SS)
-            CALL STEST1(SA,DATRUE(K),DATRUE(K),SFAC)
-            CALL STEST1(SB,DBTRUE(K),DBTRUE(K),SFAC)
-            CALL STEST1(SC,DC1(K),DC1(K),SFAC)
-            CALL STEST1(SS,DS1(K),DS1(K),SFAC)
+            CALL AB_AB_DROTGTEST(SA,SB,SC,SS)
+            CALL AB_AB_STEST1(SA,DATRUE(K),DATRUE(K),SFAC)
+            CALL AB_AB_STEST1(SB,DBTRUE(K),DBTRUE(K),SFAC)
+            CALL AB_AB_STEST1(SC,DC1(K),DC1(K),SFAC)
+            CALL AB_AB_STEST1(SS,DS1(K),DS1(K),SFAC)
          ELSE
-            WRITE (NOUT,*) ' Shouldn''t be here in CHECK0'
+            WRITE (NOUT,*) ' Shouldn''t be here in AB_CHECK0'
             STOP
          END IF
    20 CONTINUE
    40 RETURN
       END
-      SUBROUTINE CHECK1(SFAC)
+      SUBROUTINE AB_CHECK1(SFAC)
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -156,11 +157,11 @@
      +                  SA(10), STEMP(1), STRUE(8), SX(8)
       INTEGER           ITRUE2(5)
 *     .. External Functions ..
-      DOUBLE PRECISION  DASUMTEST, DNRM2TEST
-      INTEGER           IDAMAXTEST
-      EXTERNAL          DASUMTEST, DNRM2TEST, IDAMAXTEST
+      DOUBLE PRECISION  AB_DASUMTEST, AB_DNRM2TEST
+      INTEGER           AB_IDAMAXTEST
+      EXTERNAL          AB_DASUMTEST, AB_DNRM2TEST, AB_IDAMAXTEST
 *     .. External Subroutines ..
-      EXTERNAL          ITEST1, DSCALTEST, STEST, STEST1
+      EXTERNAL          AB_ITEST1, AB_DSCALTEST, AB_STEST, AB_AB_STEST1
 *     .. Intrinsic Functions ..
       INTRINSIC         MAX
 *     .. Common blocks ..
@@ -209,32 +210,34 @@
    20       CONTINUE
 *
             IF (ICASE.EQ.7) THEN
-*              .. DNRM2TEST ..
+*              .. AB_DNRM2TEST ..
                STEMP(1) = DTRUE1(NP1)
-               CALL STEST1(DNRM2TEST(N,SX,INCX),STEMP(1),STEMP,SFAC)
+               CALL AB_AB_STEST1(AB_DNRM2TEST(N,SX,INCX),STEMP(1),STEMP,
+     $SFAC)
             ELSE IF (ICASE.EQ.8) THEN
-*              .. DASUMTEST ..
+*              .. AB_DASUMTEST ..
                STEMP(1) = DTRUE3(NP1)
-               CALL STEST1(DASUMTEST(N,SX,INCX),STEMP(1),STEMP,SFAC)
+               CALL AB_AB_STEST1(AB_DASUMTEST(N,SX,INCX),STEMP(1),STEMP,
+     $SFAC)
             ELSE IF (ICASE.EQ.9) THEN
-*              .. DSCALTEST ..
-               CALL DSCALTEST(N,SA((INCX-1)*5+NP1),SX,INCX)
+*              .. AB_DSCALTEST ..
+               CALL AB_DSCALTEST(N,SA((INCX-1)*5+NP1),SX,INCX)
                DO 40 I = 1, LEN
                   STRUE(I) = DTRUE5(I,NP1,INCX)
    40          CONTINUE
-               CALL STEST(LEN,SX,STRUE,STRUE,SFAC)
+               CALL AB_STEST(LEN,SX,STRUE,STRUE,SFAC)
             ELSE IF (ICASE.EQ.10) THEN
-*              .. IDAMAXTEST ..
-               CALL ITEST1(IDAMAXTEST(N,SX,INCX),ITRUE2(NP1))
+*              .. AB_IDAMAXTEST ..
+               CALL AB_ITEST1(AB_IDAMAXTEST(N,SX,INCX),ITRUE2(NP1))
             ELSE
-               WRITE (NOUT,*) ' Shouldn''t be here in CHECK1'
+               WRITE (NOUT,*) ' Shouldn''t be here in AB_CHECK1'
                STOP
             END IF
    60    CONTINUE
    80 CONTINUE
       RETURN
       END
-      SUBROUTINE CHECK2(SFAC)
+      SUBROUTINE AB_CHECK2(SFAC)
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -253,10 +256,11 @@
      +                  SX(7), SY(7)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
-      EXTERNAL          DDOTTEST
-      DOUBLE PRECISION  DDOTTEST
+      EXTERNAL          AB_DDOTTEST
+      DOUBLE PRECISION  AB_DDOTTEST
 *     .. External Subroutines ..
-      EXTERNAL          DAXPYTEST, DCOPYTEST, DSWAPTEST, STEST, STEST1
+      EXTERNAL          AB_DAXPYTEST, AB_DCOPYTEST, AB_DSWAPTEST, AB_STE
+     $ST, AB_AB_STEST1
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
@@ -355,41 +359,42 @@
    20       CONTINUE
 *
             IF (ICASE.EQ.1) THEN
-*              .. DDOTTEST ..
-               CALL STEST1(DDOTTEST(N,SX,INCX,SY,INCY),DT7(KN,KI),
+*              .. AB_DDOTTEST ..
+               CALL AB_AB_STEST1(AB_DDOTTEST(N,SX,INCX,SY,INCY),DT7(KN,K
+     $I),
      +                     SSIZE1(KN),SFAC)
             ELSE IF (ICASE.EQ.2) THEN
-*              .. DAXPYTEST ..
-               CALL DAXPYTEST(N,SA,SX,INCX,SY,INCY)
+*              .. AB_DAXPYTEST ..
+               CALL AB_DAXPYTEST(N,SA,SX,INCX,SY,INCY)
                DO 40 J = 1, LENY
                   STY(J) = DT8(J,KN,KI)
    40          CONTINUE
-               CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+               CALL AB_STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
             ELSE IF (ICASE.EQ.5) THEN
-*              .. DCOPYTEST ..
+*              .. AB_DCOPYTEST ..
                DO 60 I = 1, 7
                   STY(I) = DT10Y(I,KN,KI)
    60          CONTINUE
-               CALL DCOPYTEST(N,SX,INCX,SY,INCY)
-               CALL STEST(LENY,SY,STY,SSIZE2(1,1),1.0D0)
+               CALL AB_DCOPYTEST(N,SX,INCX,SY,INCY)
+               CALL AB_STEST(LENY,SY,STY,SSIZE2(1,1),1.0D0)
             ELSE IF (ICASE.EQ.6) THEN
-*              .. DSWAPTEST ..
-               CALL DSWAPTEST(N,SX,INCX,SY,INCY)
+*              .. AB_DSWAPTEST ..
+               CALL AB_DSWAPTEST(N,SX,INCX,SY,INCY)
                DO 80 I = 1, 7
                   STX(I) = DT10X(I,KN,KI)
                   STY(I) = DT10Y(I,KN,KI)
    80          CONTINUE
-               CALL STEST(LENX,SX,STX,SSIZE2(1,1),1.0D0)
-               CALL STEST(LENY,SY,STY,SSIZE2(1,1),1.0D0)
+               CALL AB_STEST(LENX,SX,STX,SSIZE2(1,1),1.0D0)
+               CALL AB_STEST(LENY,SY,STY,SSIZE2(1,1),1.0D0)
             ELSE
-               WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
+               WRITE (NOUT,*) ' Shouldn''t be here in AB_CHECK2'
                STOP
             END IF
   100    CONTINUE
   120 CONTINUE
       RETURN
       END
-      SUBROUTINE CHECK3(SFAC)
+      SUBROUTINE AB_CHECK3(SFAC)
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -410,7 +415,7 @@
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), MWPINX(11),
      +                  MWPINY(11), MWPN(11), NS(4)
 *     .. External Subroutines ..
-      EXTERNAL          STEST,DROTTEST
+      EXTERNAL          AB_STEST,AB_DROTTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
@@ -483,18 +488,18 @@
             LENY = LENS(KN,MY)
 *
             IF (ICASE.EQ.4) THEN
-*              .. DROTTEST ..
+*              .. AB_DROTTEST ..
                DO 20 I = 1, 7
                   SX(I) = DX1(I)
                   SY(I) = DY1(I)
                   STX(I) = DT9X(I,KN,KI)
                   STY(I) = DT9Y(I,KN,KI)
    20          CONTINUE
-               CALL DROTTEST(N,SX,INCX,SY,INCY,SC,SS)
-               CALL STEST(LENX,SX,STX,SSIZE2(1,KSIZE),SFAC)
-               CALL STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
+               CALL AB_DROTTEST(N,SX,INCX,SY,INCY,SC,SS)
+               CALL AB_STEST(LENX,SX,STX,SSIZE2(1,KSIZE),SFAC)
+               CALL AB_STEST(LENY,SY,STY,SSIZE2(1,KSIZE),SFAC)
             ELSE
-               WRITE (NOUT,*) ' Shouldn''t be here in CHECK3'
+               WRITE (NOUT,*) ' Shouldn''t be here in AB_CHECK3'
                STOP
             END IF
    40    CONTINUE
@@ -589,14 +594,14 @@
             MWPSTX(K) = MWPTX(I,K)
             MWPSTY(K) = MWPTY(I,K)
   180    CONTINUE
-         CALL DROTTEST(MWPN(I),COPYX,INCX,COPYY,INCY,MWPC(I),MWPS(I))
-         CALL STEST(5,COPYX,MWPSTX,MWPSTX,SFAC)
-         CALL STEST(5,COPYY,MWPSTY,MWPSTY,SFAC)
+         CALL AB_DROTTEST(MWPN(I),COPYX,INCX,COPYY,INCY,MWPC(I),MWPS(I))
+         CALL AB_STEST(5,COPYX,MWPSTX,MWPSTX,SFAC)
+         CALL AB_STEST(5,COPYY,MWPSTY,MWPSTY,SFAC)
   200 CONTINUE
       RETURN
       END
-      SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
-*     ********************************* STEST **************************
+      SUBROUTINE AB_STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
+*     ********************************* AB_STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
 *     SEE IF THE TERM BY TERM DIFFERENCES, MULTIPLIED BY SFAC, ARE
@@ -619,8 +624,8 @@
       DOUBLE PRECISION SD
       INTEGER          I
 *     .. External Functions ..
-      DOUBLE PRECISION SDIFF
-      EXTERNAL         SDIFF
+      DOUBLE PRECISION AB_SDIFF
+      EXTERNAL         AB_SDIFF
 *     .. Intrinsic Functions ..
       INTRINSIC        ABS
 *     .. Common blocks ..
@@ -629,13 +634,14 @@
 *
       DO 40 I = 1, LEN
          SD = SCOMP(I) - STRUE(I)
-         IF (SDIFF(ABS(SSIZE(I))+ABS(SFAC*SD),ABS(SSIZE(I))).EQ.0.0D0)
+         IF (AB_SDIFF(ABS(SSIZE(I))+ABS(SFAC*SD),ABS(SSIZE(I))).EQ.0.0D0
+     $)
      +       GO TO 40
 *
 *                             HERE    SCOMP(I) IS NOT CLOSE TO STRUE(I).
 *
          IF ( .NOT. PASS) GO TO 20
-*                             PRINT FAIL MESSAGE AND HEADER.
+*                             PRINT FAIL MESSAGE AND AB_HEADER.
          PASS = .FALSE.
          WRITE (NOUT,99999)
          WRITE (NOUT,99998)
@@ -650,8 +656,8 @@
      +       '     SIZE(I)',/1X)
 99997 FORMAT (1X,I4,I3,3I5,I3,2D36.8,2D12.4)
       END
-      SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
-*     ************************* STEST1 *****************************
+      SUBROUTINE AB_AB_STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
+*     ************************* AB_AB_STEST1 *****************************
 *
 *     THIS IS AN INTERFACE SUBROUTINE TO ACCOMODATE THE FORTRAN
 *     REQUIREMENT THAT WHEN A DUMMY ARGUMENT IS AN ARRAY, THE
@@ -666,27 +672,27 @@
 *     .. Local Arrays ..
       DOUBLE PRECISION  SCOMP(1), STRUE(1)
 *     .. External Subroutines ..
-      EXTERNAL          STEST
+      EXTERNAL          AB_STEST
 *     .. Executable Statements ..
 *
       SCOMP(1) = SCOMP1
       STRUE(1) = STRUE1
-      CALL STEST(1,SCOMP,STRUE,SSIZE,SFAC)
+      CALL AB_STEST(1,SCOMP,STRUE,SSIZE,SFAC)
 *
       RETURN
       END
-      DOUBLE PRECISION FUNCTION SDIFF(SA,SB)
-*     ********************************* SDIFF **************************
+      DOUBLE PRECISION FUNCTION AB_SDIFF(SA,SB)
+*     ********************************* AB_SDIFF **************************
 *     COMPUTES DIFFERENCE OF TWO NUMBERS.  C. L. LAWSON, JPL 1974 FEB 15
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION                SA, SB
 *     .. Executable Statements ..
-      SDIFF = SA - SB
+      AB_SDIFF = SA - SB
       RETURN
       END
-      SUBROUTINE ITEST1(ICOMP,ITRUE)
-*     ********************************* ITEST1 *************************
+      SUBROUTINE AB_ITEST1(ICOMP,ITRUE)
+*     ********************************* AB_ITEST1 *************************
 *
 *     THIS SUBROUTINE COMPARES THE VARIABLES ICOMP AND ITRUE FOR
 *     EQUALITY.
@@ -711,7 +717,7 @@
 *                            HERE ICOMP IS NOT EQUAL TO ITRUE.
 *
       IF ( .NOT. PASS) GO TO 20
-*                             PRINT FAIL MESSAGE AND HEADER.
+*                             PRINT FAIL MESSAGE AND AB_HEADER.
       PASS = .FALSE.
       WRITE (NOUT,99999)
       WRITE (NOUT,99998)

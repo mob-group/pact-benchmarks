@@ -1,4 +1,4 @@
-*> \brief \b DGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm.
+*> \brief \b AB_DGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEBD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgebd2.f">
+*> Download AB_DGEBD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEBD2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgebd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEBD2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgebd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEBD2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+*       SUBROUTINE AB_DGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DGEBD2 reduces a real general m by n matrix A to upper or lower
+*> AB_DGEBD2 reduces a real general m by n matrix A to upper or lower
 *> bidiagonal form B by an orthogonal transformation: Q**T * A * P = B.
 *>
 *> If m >= n, B is upper bidiagonal; if m < n, B is lower bidiagonal.
@@ -187,7 +187,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+      SUBROUTINE AB_DGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -212,7 +212,7 @@
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFG, XERBLA
+      EXTERNAL           AB_DLARF, AB_AB_DLARFG, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -230,7 +230,7 @@
          INFO = -4
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL XERBLA( 'DGEBD2', -INFO )
+         CALL AB_XERBLA( 'AB_DGEBD2', -INFO )
          RETURN
       END IF
 *
@@ -242,7 +242,8 @@
 *
 *           Generate elementary reflector H(i) to annihilate A(i+1:m,i)
 *
-            CALL DLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
+            CALL AB_AB_DLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 
+     $1,
      $                   TAUQ( I ) )
             D( I ) = A( I, I )
             A( I, I ) = ONE
@@ -250,7 +251,8 @@
 *           Apply H(i) to A(i:m,i+1:n) from the left
 *
             IF( I.LT.N )
-     $         CALL DLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAUQ( I ),
+     $         CALL AB_DLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAUQ( I 
+     $),
      $                     A( I, I+1 ), LDA, WORK )
             A( I, I ) = D( I )
 *
@@ -259,14 +261,15 @@
 *              Generate elementary reflector G(i) to annihilate
 *              A(i,i+2:n)
 *
-               CALL DLARFG( N-I, A( I, I+1 ), A( I, MIN( I+2, N ) ),
+               CALL AB_AB_DLARFG( N-I, A( I, I+1 ), A( I, MIN( I+2, N ) 
+     $),
      $                      LDA, TAUP( I ) )
                E( I ) = A( I, I+1 )
                A( I, I+1 ) = ONE
 *
 *              Apply G(i) to A(i+1:m,i+1:n) from the right
 *
-               CALL DLARF( 'Right', M-I, N-I, A( I, I+1 ), LDA,
+               CALL AB_DLARF( 'Right', M-I, N-I, A( I, I+1 ), LDA,
      $                     TAUP( I ), A( I+1, I+1 ), LDA, WORK )
                A( I, I+1 ) = E( I )
             ELSE
@@ -281,7 +284,8 @@
 *
 *           Generate elementary reflector G(i) to annihilate A(i,i+1:n)
 *
-            CALL DLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ), LDA,
+            CALL AB_AB_DLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ), 
+     $LDA,
      $                   TAUP( I ) )
             D( I ) = A( I, I )
             A( I, I ) = ONE
@@ -289,7 +293,7 @@
 *           Apply G(i) to A(i+1:m,i:n) from the right
 *
             IF( I.LT.M )
-     $         CALL DLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $         CALL AB_DLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
      $                     TAUP( I ), A( I+1, I ), LDA, WORK )
             A( I, I ) = D( I )
 *
@@ -298,14 +302,16 @@
 *              Generate elementary reflector H(i) to annihilate
 *              A(i+2:m,i)
 *
-               CALL DLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I ), 1,
+               CALL AB_AB_DLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I 
+     $), 1,
      $                      TAUQ( I ) )
                E( I ) = A( I+1, I )
                A( I+1, I ) = ONE
 *
 *              Apply H(i) to A(i+1:m,i+1:n) from the left
 *
-               CALL DLARF( 'Left', M-I, N-I, A( I+1, I ), 1, TAUQ( I ),
+               CALL AB_DLARF( 'Left', M-I, N-I, A( I+1, I ), 1, TAUQ( I 
+     $),
      $                     A( I+1, I+1 ), LDA, WORK )
                A( I+1, I ) = E( I )
             ELSE
@@ -315,6 +321,6 @@
       END IF
       RETURN
 *
-*     End of DGEBD2
+*     End of AB_DGEBD2
 *
       END

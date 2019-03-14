@@ -1,4 +1,4 @@
-*> \brief \b SGBT01
+*> \brief \b AB_SGBT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
+*       SUBROUTINE AB_SGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SGBT01 reconstructs a band matrix  A  from its L*U factorization and
+*> AB_SGBT01 reconstructs a band matrix  A  from its L*U factorization and
 *> computes the residual:
 *>    norm(L*U - A) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -80,10 +80,10 @@
 *>          AFAC is REAL array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the banded
 *>          factors L and U from the L*U factorization, as computed by
-*>          SGBTRF.  U is stored as an upper triangular band matrix with
+*>          AB_SGBTRF.  U is stored as an upper triangular band matrix with
 *>          KL+KU superdiagonals in rows 1 to KL+KU+1, and the
 *>          multipliers used during the factorization are stored in rows
-*>          KL+KU+2 to 2*KL+KU+1.  See SGBTRF for further details.
+*>          KL+KU+2 to 2*KL+KU+1.  See AB_SGBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -96,7 +96,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (min(M,N))
-*>          The pivot indices from SGBTRF.
+*>          The pivot indices from AB_SGBTRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -123,7 +123,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
+      SUBROUTINE AB_SGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WO
+     $RK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,11 +152,11 @@
       REAL               ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH
-      EXTERNAL           SASUM, SLAMCH
+      REAL               AB_SASUM, AB_SLAMCH
+      EXTERNAL           AB_SASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY
+      EXTERNAL           AB_SAXPY, AB_SCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -170,14 +171,14 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N
          I1 = MAX( KD+1-J, 1 )
          I2 = MIN( KD+M-J, KL+KD )
          IF( I2.GE.I1 )
-     $      ANORM = MAX( ANORM, SASUM( I2-I1+1, A( I1, J ), 1 ) )
+     $      ANORM = MAX( ANORM, AB_SASUM( I2-I1+1, A( I1, J ), 1 ) )
    10 CONTINUE
 *
 *     Compute one column at a time of L*U - A.
@@ -191,7 +192,7 @@
          JL = MIN( KL, M-J )
          LENJ = MIN( M, J ) - J + JU + 1
          IF( LENJ.GT.0 ) THEN
-            CALL SCOPY( LENJ, AFAC( KD-JU, J ), 1, WORK, 1 )
+            CALL AB_SCOPY( LENJ, AFAC( KD-JU, J ), 1, WORK, 1 )
             DO 20 I = LENJ + 1, JU + JL + 1
                WORK( I ) = ZERO
    20       CONTINUE
@@ -204,7 +205,8 @@
                IF( IL.GT.0 ) THEN
                   IW = I - J + JU + 1
                   T = WORK( IW )
-                  CALL SAXPY( IL, T, AFAC( KD+1, I ), 1, WORK( IW+1 ),
+                  CALL AB_SAXPY( IL, T, AFAC( KD+1, I ), 1, WORK( IW+1 )
+     $,
      $                        1 )
                   IP = IPIV( I )
                   IF( I.NE.IP ) THEN
@@ -219,12 +221,12 @@
 *
             JUA = MIN( JU, KU )
             IF( JUA+JL+1.GT.0 )
-     $         CALL SAXPY( JUA+JL+1, -ONE, A( KU+1-JUA, J ), 1,
+     $         CALL AB_SAXPY( JUA+JL+1, -ONE, A( KU+1-JUA, J ), 1,
      $                     WORK( JU+1-JUA ), 1 )
 *
 *           Compute the 1-norm of the column.
 *
-            RESID = MAX( RESID, SASUM( JU+JL+1, WORK, 1 ) )
+            RESID = MAX( RESID, AB_SASUM( JU+JL+1, WORK, 1 ) )
          END IF
    40 CONTINUE
 *
@@ -239,6 +241,6 @@
 *
       RETURN
 *
-*     End of SGBT01
+*     End of AB_SGBT01
 *
       END

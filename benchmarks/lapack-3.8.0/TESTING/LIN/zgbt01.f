@@ -1,4 +1,4 @@
-*> \brief \b ZGBT01
+*> \brief \b AB_ZGBT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
+*       SUBROUTINE AB_ZGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> ZGBT01 reconstructs a band matrix  A  from its L*U factorization and
+*> AB_ZGBT01 reconstructs a band matrix  A  from its L*U factorization and
 *> computes the residual:
 *>    norm(L*U - A) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -80,10 +80,10 @@
 *>          AFAC is COMPLEX*16 array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the banded
 *>          factors L and U from the L*U factorization, as computed by
-*>          ZGBTRF.  U is stored as an upper triangular band matrix with
+*>          AB_ZGBTRF.  U is stored as an upper triangular band matrix with
 *>          KL+KU superdiagonals in rows 1 to KL+KU+1, and the
 *>          multipliers used during the factorization are stored in rows
-*>          KL+KU+2 to 2*KL+KU+1.  See ZGBTRF for further details.
+*>          KL+KU+2 to 2*KL+KU+1.  See AB_ZGBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -96,7 +96,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (min(M,N))
-*>          The pivot indices from ZGBTRF.
+*>          The pivot indices from AB_ZGBTRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -123,7 +123,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
+      SUBROUTINE AB_ZGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WO
+     $RK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -152,11 +153,11 @@
       COMPLEX*16         T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZASUM
-      EXTERNAL           DLAMCH, DZASUM
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM
+      EXTERNAL           AB_DLAMCH, AB_DZASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY
+      EXTERNAL           AB_ZAXPY, AB_ZCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -171,14 +172,14 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N
          I1 = MAX( KD+1-J, 1 )
          I2 = MIN( KD+M-J, KL+KD )
          IF( I2.GE.I1 )
-     $      ANORM = MAX( ANORM, DZASUM( I2-I1+1, A( I1, J ), 1 ) )
+     $      ANORM = MAX( ANORM, AB_DZASUM( I2-I1+1, A( I1, J ), 1 ) )
    10 CONTINUE
 *
 *     Compute one column at a time of L*U - A.
@@ -192,7 +193,7 @@
          JL = MIN( KL, M-J )
          LENJ = MIN( M, J ) - J + JU + 1
          IF( LENJ.GT.0 ) THEN
-            CALL ZCOPY( LENJ, AFAC( KD-JU, J ), 1, WORK, 1 )
+            CALL AB_ZCOPY( LENJ, AFAC( KD-JU, J ), 1, WORK, 1 )
             DO 20 I = LENJ + 1, JU + JL + 1
                WORK( I ) = ZERO
    20       CONTINUE
@@ -205,7 +206,8 @@
                IF( IL.GT.0 ) THEN
                   IW = I - J + JU + 1
                   T = WORK( IW )
-                  CALL ZAXPY( IL, T, AFAC( KD+1, I ), 1, WORK( IW+1 ),
+                  CALL AB_ZAXPY( IL, T, AFAC( KD+1, I ), 1, WORK( IW+1 )
+     $,
      $                        1 )
                   IP = IPIV( I )
                   IF( I.NE.IP ) THEN
@@ -220,12 +222,13 @@
 *
             JUA = MIN( JU, KU )
             IF( JUA+JL+1.GT.0 )
-     $         CALL ZAXPY( JUA+JL+1, -DCMPLX( ONE ), A( KU+1-JUA, J ),
+     $         CALL AB_ZAXPY( JUA+JL+1, -DCMPLX( ONE ), A( KU+1-JUA, J )
+     $,
      $                     1, WORK( JU+1-JUA ), 1 )
 *
 *           Compute the 1-norm of the column.
 *
-            RESID = MAX( RESID, DZASUM( JU+JL+1, WORK, 1 ) )
+            RESID = MAX( RESID, AB_DZASUM( JU+JL+1, WORK, 1 ) )
          END IF
    40 CONTINUE
 *
@@ -240,6 +243,6 @@
 *
       RETURN
 *
-*     End of ZGBT01
+*     End of AB_ZGBT01
 *
       END

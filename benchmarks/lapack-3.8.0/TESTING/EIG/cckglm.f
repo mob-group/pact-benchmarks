@@ -1,4 +1,4 @@
-*> \brief \b CCKGLM
+*> \brief \b AB_CCKGLM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCKGLM( NN, NVAL, MVAL, PVAL, NMATS, ISEED, THRESH,
+*       SUBROUTINE AB_CCKGLM( NN, NVAL, MVAL, PVAL, NMATS, ISEED, THRESH,
 *                          NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
 *                          INFO )
 *
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> CCKGLM tests CGGGLM - subroutine for solving generalized linear
+*> AB_CCKGLM tests AB_CGGGLM - subroutine for solving generalized linear
 *>                       model problem.
 *> \endverbatim
 *
@@ -147,7 +147,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If CLATMS returns an error code, the absolute value
+*>          > 0 :  If AB_CLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -164,7 +164,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE CCKGLM( NN, NVAL, MVAL, PVAL, NMATS, ISEED, THRESH,
+      SUBROUTINE AB_CCKGLM( NN, NVAL, MVAL, PVAL, NMATS, ISEED, THRESH,
      $                   NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
      $                   INFO )
 *
@@ -202,11 +202,12 @@
       LOGICAL            DOTYPE( NTYPES )
 *     ..
 *     .. External Functions ..
-      COMPLEX            CLARND
-      EXTERNAL           CLARND
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, CGLMTS, CLATMS, SLATB9
+      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_CGLMTS, 
+     $AB_CLATMS, AB_SLATB9
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -220,7 +221,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDA = NMAX
       LDB = NMAX
       LWORK = NMAX*NMAX
@@ -257,14 +258,16 @@
             IF( .NOT.DOTYPE( IMAT ) )
      $         GO TO 30
 *
-*           Set up parameters with SLATB9 and generate test
-*           matrices A and B with CLATMS.
+*           Set up parameters with AB_SLATB9 and generate test
+*           matrices A and B with AB_CLATMS.
 *
-            CALL SLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KUB,
+            CALL AB_SLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KU
+     $B,
      $                   ANORM, BNORM, MODEA, MODEB, CNDNMA, CNDNMB,
      $                   DISTA, DISTB )
 *
-            CALL CLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA, CNDNMA,
+            CALL AB_CLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA, CNDN
+     $MA,
      $                   ANORM, KLA, KUA, 'No packing', A, LDA, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -273,7 +276,8 @@
                GO TO 30
             END IF
 *
-            CALL CLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEB, CNDNMB,
+            CALL AB_CLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEB, CNDN
+     $MB,
      $                   BNORM, KLB, KUB, 'No packing', B, LDB, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -285,10 +289,10 @@
 *           Generate random left hand side vector of GLM
 *
             DO 20 I = 1, N
-               X( I ) = CLARND( 2, ISEED )
+               X( I ) = AB_CLARND( 2, ISEED )
    20       CONTINUE
 *
-            CALL CGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, X,
+            CALL AB_CGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, X,
      $                   X( NMAX+1 ), X( 2*NMAX+1 ), X( 3*NMAX+1 ),
      $                   WORK, LWORK, RWORK, RESID )
 *
@@ -298,7 +302,7 @@
             IF( RESID.GE.THRESH ) THEN
                IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                   FIRSTT = .FALSE.
-                  CALL ALAHDG( NOUT, PATH )
+                  CALL AB_AB_ALAHDG( NOUT, PATH )
                END IF
                WRITE( NOUT, FMT = 9998 )N, M, P, IMAT, 1, RESID
                NFAIL = NFAIL + 1
@@ -310,9 +314,9 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' CLATMS in CCKGLM INFO = ', I5 )
+ 9999 FORMAT( ' AB_CLATMS in AB_CCKGLM INFO = ', I5 )
  9998 FORMAT( ' N=', I4, ' M=', I4, ', P=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
  9997 FORMAT( ' *** Invalid input  for GLM:  M = ', I6, ', P = ', I6,
@@ -320,6 +324,6 @@
      $      '(this set of values will be skipped)' )
       RETURN
 *
-*     End of CCKGLM
+*     End of AB_CCKGLM
 *
       END

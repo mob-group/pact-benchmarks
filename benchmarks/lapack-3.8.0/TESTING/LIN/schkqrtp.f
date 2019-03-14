@@ -1,4 +1,4 @@
-*> \brief \b SCHKQRTP
+*> \brief \b AB_AB_AB_SCHKQRTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+*       SUBROUTINE AB_AB_AB_SCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
 *                            NBVAL, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> SCHKQRTP tests STPQRT and STPMQRT.
+*> AB_AB_AB_SCHKQRTP tests AB_STPQRT and AB_STPMQRT.
 *> \endverbatim
 *
 *  Arguments:
@@ -99,7 +99,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+      SUBROUTINE AB_AB_AB_SCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, 
+     $NNB,
      $                     NBVAL, NOUT )
       IMPLICIT NONE
 *
@@ -132,7 +133,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, SERRQRTP, SQRT05
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_AB_AB_SERRQR
+     $TP, AB_SQRT05
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -155,7 +157,7 @@
 *
 *     Test the error exits
 *
-      IF( TSTERR ) CALL SERRQRTP( PATH, NOUT )
+      IF( TSTERR ) CALL AB_AB_AB_SERRQRTP( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of M
@@ -178,10 +180,10 @@
                DO K = 1, NNB
                   NB = NBVAL( K )
 *
-*                    Test STPQRT and STPMQRT
+*                    Test AB_STPQRT and AB_STPMQRT
 *
                   IF( (NB.LE.N).AND.(NB.GT.0) ) THEN
-                     CALL SQRT05( M, N, L, NB, RESULT )
+                     CALL AB_SQRT05( M, N, L, NB, RESULT )
 *
 *                    Print information about the tests that did not
 *                    pass the threshold.
@@ -189,7 +191,7 @@
                      DO T = 1, NTESTS
                         IF( RESULT( T ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                         CALL ALAHD( NOUT, PATH )
+     $                         CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9999 )M, N, NB, L,
      $                            T, RESULT( T )
                            NFAIL = NFAIL + 1
@@ -204,12 +206,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M=', I5, ', N=', I5, ', NB=', I4, ', L=', I4,
      $      ' test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of SCHKQRTP
+*     End of AB_AB_AB_SCHKQRTP
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZGET38
+*> \brief \b AB_ZGET38
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGET38( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE AB_ZGET38( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, NIN
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> ZGET38 tests ZTRSEN, a routine for estimating condition numbers of a
+*> AB_ZGET38 tests AB_ZTRSEN, a routine for estimating condition numbers of a
 *> cluster of eigenvalues and/or its associated right invariant subspace
 *>
 *> The test matrices are read from a file with logical unit number NIN.
@@ -37,8 +37,8 @@
 *> \verbatim
 *>          RMAX is DOUBLE PRECISION array, dimension (3)
 *>          Values of the largest test ratios.
-*>          RMAX(1) = largest residuals from ZHST01 or comparing
-*>                    different calls to ZTRSEN
+*>          RMAX(1) = largest residuals from AB_ZHST01 or comparing
+*>                    different calls to AB_ZTRSEN
 *>          RMAX(2) = largest error in reciprocal condition
 *>                    numbers taking their conditioning into account
 *>          RMAX(3) = largest error in reciprocal condition
@@ -51,17 +51,17 @@
 *>          LMAX is INTEGER array, dimension (3)
 *>          LMAX(i) is example number where largest test ratio
 *>          RMAX(i) is achieved. Also:
-*>          If ZGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*>          If ZHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*>          If ZTRSEN returns INFO nonzero on example i, LMAX(3)=i
+*>          If AB_ZGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If AB_ZHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If AB_ZTRSEN returns INFO nonzero on example i, LMAX(3)=i
 *> \endverbatim
 *>
 *> \param[out] NINFO
 *> \verbatim
 *>          NINFO is INTEGER array, dimension (3)
-*>          NINFO(1) = No. of times ZGEHRD returned INFO nonzero
-*>          NINFO(2) = No. of times ZHSEQR returned INFO nonzero
-*>          NINFO(3) = No. of times ZTRSEN returned INFO nonzero
+*>          NINFO(1) = No. of times AB_ZGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times AB_ZHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times AB_ZTRSEN returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -89,7 +89,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZGET38( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE AB_ZGET38( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,22 +134,23 @@
      $                   WORK( LWORK ), WTMP( LDT )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZDSCAL, ZGEHRD, ZHSEQR, ZHST01, ZLACPY,
-     $                   ZTRSEN, ZUNGHR
+      EXTERNAL           AB_DLABAD, ZAB_DSCAL, AB_ZGEHRD, AB_ZHSEQR, AB_
+     $ZHST01, AB_ZLACPY,
+     $                   AB_ZTRSEN, AB_ZUNGHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DIMAG, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *
@@ -182,24 +183,25 @@
    20 CONTINUE
       READ( NIN, FMT = * )SIN, SEPIN
 *
-      TNRM = ZLANGE( 'M', N, N, TMP, LDT, RWORK )
+      TNRM = AB_ZLANGE( 'M', N, N, TMP, LDT, RWORK )
       DO 200 ISCL = 1, 3
 *
 *        Scale input matrix
 *
          KNT = KNT + 1
-         CALL ZLACPY( 'F', N, N, TMP, LDT, T, LDT )
+         CALL AB_ZLACPY( 'F', N, N, TMP, LDT, T, LDT )
          VMUL = VAL( ISCL )
          DO 30 I = 1, N
-            CALL ZDSCAL( N, VMUL, T( 1, I ), 1 )
+            CALL ZAB_DSCAL( N, VMUL, T( 1, I ), 1 )
    30    CONTINUE
          IF( TNRM.EQ.ZERO )
      $      VMUL = ONE
-         CALL ZLACPY( 'F', N, N, T, LDT, TSAV, LDT )
+         CALL AB_ZLACPY( 'F', N, N, T, LDT, TSAV, LDT )
 *
 *        Compute Schur form
 *
-         CALL ZGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
+         CALL AB_ZGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
+     $N,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 1 ) = KNT
@@ -209,8 +211,9 @@
 *
 *        Generate unitary matrix
 *
-         CALL ZLACPY( 'L', N, N, T, LDT, Q, LDT )
-         CALL ZUNGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
+         CALL AB_ZLACPY( 'L', N, N, T, LDT, Q, LDT )
+         CALL AB_ZUNGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
+     $N,
      $                INFO )
 *
 *        Compute Schur form
@@ -220,7 +223,8 @@
                T( I, J ) = CZERO
    40       CONTINUE
    50    CONTINUE
-         CALL ZHSEQR( 'S', 'V', N, 1, N, T, LDT, W, Q, LDT, WORK, LWORK,
+         CALL AB_ZHSEQR( 'S', 'V', N, 1, N, T, LDT, W, Q, LDT, WORK, LWO
+     $RK,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 2 ) = KNT
@@ -264,9 +268,10 @@
 *
 *        Compute condition numbers
 *
-         CALL ZLACPY( 'F', N, N, Q, LDT, QSAV, LDT )
-         CALL ZLACPY( 'F', N, N, T, LDT, TSAV1, LDT )
-         CALL ZTRSEN( 'B', 'V', SELECT, N, T, LDT, Q, LDT, WTMP, M, S,
+         CALL AB_ZLACPY( 'F', N, N, Q, LDT, QSAV, LDT )
+         CALL AB_ZLACPY( 'F', N, N, T, LDT, TSAV1, LDT )
+         CALL AB_ZTRSEN( 'B', 'V', SELECT, N, T, LDT, Q, LDT, WTMP, M, S
+     $,
      $                SEP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -278,7 +283,8 @@
 *
 *        Compute residuals
 *
-         CALL ZHST01( N, 1, N, TSAV, LDT, T, LDT, Q, LDT, WORK, LWORK,
+         CALL AB_ZHST01( N, 1, N, TSAV, LDT, T, LDT, Q, LDT, WORK, LWORK
+     $,
      $                RWORK, RESULT )
          VMAX = MAX( RESULT( 1 ), RESULT( 2 ) )
          IF( VMAX.GT.RMAX( 1 ) ) THEN
@@ -402,11 +408,12 @@
 *        Update Q
 *
          VMAX = ZERO
-         CALL ZLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL ZLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL AB_ZLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL AB_ZLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL ZTRSEN( 'E', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP,
+         CALL AB_ZTRSEN( 'E', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP
+     $,
      $                M, STMP, SEPTMP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -429,11 +436,12 @@
 *        Compute invariant subspace condition number only and compare
 *        Update Q
 *
-         CALL ZLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL ZLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL AB_ZLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL AB_ZLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL ZTRSEN( 'V', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP,
+         CALL AB_ZTRSEN( 'V', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP
+     $,
      $                M, STMP, SEPTMP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -456,11 +464,12 @@
 *        Compute eigenvalue condition number only and compare
 *        Do not update Q
 *
-         CALL ZLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL ZLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL AB_ZLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL AB_ZLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL ZTRSEN( 'E', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP,
+         CALL AB_ZTRSEN( 'E', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP
+     $,
      $                M, STMP, SEPTMP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -483,11 +492,12 @@
 *        Compute invariant subspace condition number only and compare
 *        Do not update Q
 *
-         CALL ZLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL ZLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL AB_ZLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL AB_ZLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL ZTRSEN( 'V', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP,
+         CALL AB_ZTRSEN( 'V', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP
+     $,
      $                M, STMP, SEPTMP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -514,6 +524,6 @@
   200 CONTINUE
       GO TO 10
 *
-*     End of ZGET38
+*     End of AB_ZGET38
 *
       END

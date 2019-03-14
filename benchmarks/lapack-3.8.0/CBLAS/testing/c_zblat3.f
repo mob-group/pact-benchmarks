@@ -20,15 +20,15 @@
 *  (0.0,0.0) (1.0,0.0) (0.7,-0.9)       VALUES OF ALPHA
 *  3                 NUMBER OF VALUES OF BETA
 *  (0.0,0.0) (1.0,0.0) (1.3,-1.1)       VALUES OF BETA
-*  ZGEMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  ZHEMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  ZSYMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  ZTRMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  ZTRSM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  ZHERK  T PUT F FOR NO TEST. SAME COLUMNS.
-*  ZSYRK  T PUT F FOR NO TEST. SAME COLUMNS.
-*  ZHER2K T PUT F FOR NO TEST. SAME COLUMNS.
-*  ZSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_ZGEMM  T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_ZHEMM  T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_ZSYMM  T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_ZTRMM  T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_ZTRSM  T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_AB_ZHERK  T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_AB_ZSYRK  T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_AB_AB_ZHER2K T PUT F FOR NO TEST. SAME COLUMNS.
+*  AB_AB_ZSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
 *
 *  See:
 *
@@ -80,11 +80,12 @@
       LOGICAL            LTEST( NSUBS )
       CHARACTER*12       SNAMES( NSUBS )
 *     .. External Functions ..
-      DOUBLE PRECISION   DDIFF
-      LOGICAL            LZE
-      EXTERNAL           DDIFF, LZE
+      DOUBLE PRECISION   AB_DDIFF
+      LOGICAL            AB_LZE
+      EXTERNAL           AB_DDIFF, AB_LZE
 *     .. External Subroutines ..
-      EXTERNAL           ZCHK1, ZCHK2, ZCHK3, ZCHK4, ZCHK5,ZMMCH
+      EXTERNAL           AB_ZCHK1, AB_ZCHK2, AB_ZCHK3, AB_ZCHK4, AB_ZCHK
+     $5,AB_ZMMCH
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
@@ -95,10 +96,12 @@
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
       COMMON             /SRNAMC/SRNAMT
 *     .. Data statements ..
-      DATA               SNAMES/'cblas_zgemm ', 'cblas_zhemm ',
-     $                   'cblas_zsymm ', 'cblas_ztrmm ', 'cblas_ztrsm ',
-     $                   'cblas_zherk ', 'cblas_zsyrk ', 'cblas_zher2k',
-     $                   'cblas_zsyr2k'/
+      DATA               SNAMES/'cblas_AB_ZGEMM ', 'cblas_AB_ZHEMM ',
+     $                   'cblas_AB_ZSYMM ', 'cblas_AB_ZTRMM ', 'cblas_AB
+     $_ZTRSM ',
+     $                   'cblas_AB_AB_ZHERK ', 'cblas_AB_AB_ZSYRK ', 'cb
+     $las_AB_AB_AB_ZHER2K',
+     $                   'cblas_AB_AB_ZSYR2K'/
 *     .. Executable Statements ..
 *
       NOUTC = NOUT
@@ -206,7 +209,7 @@
 *
       EPS = RONE
    70 CONTINUE
-      IF( DDIFF( RONE + EPS, RONE ).EQ.RZERO )
+      IF( AB_DDIFF( RONE + EPS, RONE ).EQ.RZERO )
      $   GO TO 80
       EPS = RHALF*EPS
       GO TO 70
@@ -214,7 +217,7 @@
       EPS = EPS + EPS
       WRITE( NOUT, FMT = 9998 )EPS
 *
-*     Check the reliability of ZMMCH using exact data.
+*     Check the reliability of AB_ZMMCH using exact data.
 *
       N = MIN( 32, NMAX )
       DO 100 J = 1, N
@@ -228,23 +231,23 @@
       DO 110 J = 1, N
          CC( J ) = J*( ( J + 1 )*J )/2 - ( ( J + 1 )*J*( J - 1 ) )/3
   110 CONTINUE
-*     CC holds the exact result. On exit from ZMMCH CT holds
-*     the result computed by ZMMCH.
+*     CC holds the exact result. On exit from AB_ZMMCH CT holds
+*     the result computed by AB_ZMMCH.
       TRANSA = 'N'
       TRANSB = 'N'
-      CALL ZMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
+      CALL AB_ZMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
      $            AB( 1, NMAX + 1 ), NMAX, ZERO, C, NMAX, CT, G, CC,
      $            NMAX, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = LZE( CC, CT, N )
+      SAME = AB_LZE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
          STOP
       END IF
       TRANSB = 'C'
-      CALL ZMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
+      CALL AB_ZMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
      $            AB( 1, NMAX + 1 ), NMAX, ZERO, C, NMAX, CT, G, CC,
      $            NMAX, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = LZE( CC, CT, N )
+      SAME = AB_LZE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
          STOP
@@ -259,19 +262,19 @@
   130 CONTINUE
       TRANSA = 'C'
       TRANSB = 'N'
-      CALL ZMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
+      CALL AB_ZMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
      $            AB( 1, NMAX + 1 ), NMAX, ZERO, C, NMAX, CT, G, CC,
      $            NMAX, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = LZE( CC, CT, N )
+      SAME = AB_LZE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
          STOP
       END IF
       TRANSB = 'C'
-      CALL ZMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
+      CALL AB_ZMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
      $            AB( 1, NMAX + 1 ), NMAX, ZERO, C, NMAX, CT, G, CC,
      $            NMAX, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = LZE( CC, CT, N )
+      SAME = AB_LZE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
          STOP
@@ -297,71 +300,81 @@
             FATAL = .FALSE.
             GO TO ( 140, 150, 150, 160, 160, 170, 170,
      $              180, 180 )ISNUM
-*           Test ZGEMM, 01.
+*           Test AB_ZGEMM, 01.
   140       IF (CORDER) THEN
-            CALL ZCHK1(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK1(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                 CC, CS, CT, G, 0 )
             END IF
             IF (RORDER) THEN
-            CALL ZCHK1(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK1(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                 CC, CS, CT, G, 1 )
             END IF
             GO TO 190
-*           Test ZHEMM, 02, ZSYMM, 03.
+*           Test AB_ZHEMM, 02, AB_ZSYMM, 03.
   150       IF (CORDER) THEN
-            CALL ZCHK2(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK2(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                 CC, CS, CT, G, 0 )
             END IF
             IF (RORDER) THEN
-            CALL ZCHK2(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK2(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                 CC, CS, CT, G, 1 )
             END IF
             GO TO 190
-*           Test ZTRMM, 04, ZTRSM, 05.
+*           Test AB_ZTRMM, 04, AB_ZTRSM, 05.
   160       IF (CORDER) THEN
-            CALL ZCHK3(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK3(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NMAX, AB,
      $                 AA, AS, AB( 1, NMAX + 1 ), BB, BS, CT, G, C,
      $		       0 )
             END IF
             IF (RORDER) THEN
-            CALL ZCHK3(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK3(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NMAX, AB,
      $                 AA, AS, AB( 1, NMAX + 1 ), BB, BS, CT, G, C,
      $		       1 )
             END IF
             GO TO 190
-*           Test ZHERK, 06, ZSYRK, 07.
+*           Test AB_AB_ZHERK, 06, AB_AB_ZSYRK, 07.
   170       IF (CORDER) THEN
-            CALL ZCHK4(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK4(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                 CC, CS, CT, G, 0 )
             END IF
             IF (RORDER) THEN
-            CALL ZCHK4(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK4(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                 CC, CS, CT, G, 1 )
             END IF
             GO TO 190
-*           Test ZHER2K, 08, ZSYR2K, 09.
+*           Test AB_AB_AB_ZHER2K, 08, AB_AB_ZSYR2K, 09.
   180       IF (CORDER) THEN
-            CALL ZCHK5(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK5(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
      $		       0 )
             END IF
             IF (RORDER) THEN
-            CALL ZCHK5(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
+            CALL AB_ZCHK5(SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
+     $E,
      $                 REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                 NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
      $		       1 )
@@ -408,8 +421,9 @@
      $      /' ******* TESTS ABANDONED *******' )
  9990 FORMAT(' SUBPROGRAM NAME ', A12,' NOT RECOGNIZED', /' ******* T',
      $      'ESTS ABANDONED *******' )
- 9989 FORMAT(' ERROR IN ZMMCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU',
-     $      'ATED WRONGLY.', /' ZMMCH WAS CALLED WITH TRANSA = ', A1,
+ 9989 FORMAT(' ERROR IN AB_ZMMCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU
+     $',
+     $      'ATED WRONGLY.', /' AB_ZMMCH WAS CALLED WITH TRANSA = ', A1,
      $      'AND TRANSB = ', A1, /' AND RETURNED SAME = ', L1, ' AND ',
      $    ' ERR = ', F12.3, '.', /' THIS MAY BE DUE TO FAULTS IN THE ',
      $     'ARITHMETIC OR THE COMPILER.', /' ******* TESTS ABANDONED ',
@@ -423,12 +437,12 @@
 *     End of ZBLAT3.
 *
       END
-      SUBROUTINE ZCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE AB_ZCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G,
      $                  IORDER )
 *
-*  Tests ZGEMM.
+*  Tests AB_ZGEMM.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -468,10 +482,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            LZE, LZERES
-      EXTERNAL           LZE, LZERES
+      LOGICAL            AB_LZE, AB_AB_LZERES
+      EXTERNAL           AB_LZE, AB_AB_LZERES
 *     .. External Subroutines ..
-      EXTERNAL           CZGEMM, ZMAKE, ZMMCH
+      EXTERNAL           CAB_ZGEMM, AB_ZMAKE, AB_ZMMCH
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -528,7 +542,8 @@
 *
 *                 Generate the matrix A.
 *
-                  CALL ZMAKE( 'ge', ' ', ' ', MA, NA, A, NMAX, AA, LDA,
+                  CALL AB_ZMAKE( 'ge', ' ', ' ', MA, NA, A, NMAX, AA, LD
+     $A,
      $                        RESET, ZERO )
 *
                   DO 70 ICB = 1, 3
@@ -553,7 +568,7 @@
 *
 *                    Generate the matrix B.
 *
-                     CALL ZMAKE( 'ge', ' ', ' ', MB, NB, B, NMAX, BB,
+                     CALL AB_ZMAKE( 'ge', ' ', ' ', MB, NB, B, NMAX, BB,
      $                           LDB, RESET, ZERO )
 *
                      DO 60 IA = 1, NALF
@@ -564,7 +579,7 @@
 *
 *                          Generate the matrix C.
 *
-                           CALL ZMAKE( 'ge', ' ', ' ', M, N, C, NMAX,
+                           CALL AB_ZMAKE( 'ge', ' ', ' ', M, N, C, NMAX,
      $                                 CC, LDC, RESET, ZERO )
 *
                            NC = NC + 1
@@ -595,12 +610,12 @@
 *                          Call the subroutine.
 *
                            IF( TRACE )
-     $                        CALL ZPRCN1(NTRA, NC, SNAME, IORDER,
+     $                        CALL AB_ZPRCN1(NTRA, NC, SNAME, IORDER,
      $                        TRANSA, TRANSB, M, N, K, ALPHA, LDA,
      $                        LDB, BETA, LDC)
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL CZGEMM( IORDER, TRANSA, TRANSB, M, N,
+                           CALL CAB_ZGEMM( IORDER, TRANSA, TRANSB, M, N,
      $                                 K, ALPHA, AA, LDA, BB, LDB,
      $                                 BETA, CC, LDC )
 *
@@ -620,15 +635,16 @@
                            ISAME( 4 ) = NS.EQ.N
                            ISAME( 5 ) = KS.EQ.K
                            ISAME( 6 ) = ALS.EQ.ALPHA
-                           ISAME( 7 ) = LZE( AS, AA, LAA )
+                           ISAME( 7 ) = AB_LZE( AS, AA, LAA )
                            ISAME( 8 ) = LDAS.EQ.LDA
-                           ISAME( 9 ) = LZE( BS, BB, LBB )
+                           ISAME( 9 ) = AB_LZE( BS, BB, LBB )
                            ISAME( 10 ) = LDBS.EQ.LDB
                            ISAME( 11 ) = BLS.EQ.BETA
                            IF( NULL )THEN
-                              ISAME( 12 ) = LZE( CS, CC, LCC )
+                              ISAME( 12 ) = AB_LZE( CS, CC, LCC )
                            ELSE
-                             ISAME( 12 ) = LZERES( 'ge', ' ', M, N, CS,
+                             ISAME( 12 ) = AB_AB_LZERES( 'ge', ' ', M, N
+     $, CS,
      $                                      CC, LDC )
                            END IF
                            ISAME( 13 ) = LDCS.EQ.LDC
@@ -651,7 +667,7 @@
 *
 *                             Check the result.
 *
-                             CALL ZMMCH( TRANSA, TRANSB, M, N, K,
+                             CALL AB_ZMMCH( TRANSA, TRANSB, M, N, K,
      $                                   ALPHA, A, NMAX, B, NMAX, BETA,
      $                                   C, NMAX, CT, G, CC, LDC, EPS,
      $                                   ERR, FATAL, NOUT, .TRUE. )
@@ -689,7 +705,7 @@
 *
   120 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
-      CALL ZPRCN1(NOUT, NC, SNAME, IORDER, TRANSA, TRANSB,
+      CALL AB_ZPRCN1(NOUT, NC, SNAME, IORDER, TRANSA, TRANSB,
      $           M, N, K, ALPHA, LDA, LDB, BETA, LDC)
 *
   130 CONTINUE
@@ -714,11 +730,12 @@
  9994 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK1.
+*     End of AB_ZCHK1.
 *
       END
 *
-      SUBROUTINE ZPRCN1(NOUT, NC, SNAME, IORDER, TRANSA, TRANSB, M, N,
+      SUBROUTINE AB_ZPRCN1(NOUT, NC, SNAME, IORDER, TRANSA, TRANSB, M, N
+     $,
      $                 K, ALPHA, LDA, LDB, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, M, N, K, LDA, LDB, LDC
       DOUBLE COMPLEX   ALPHA, BETA
@@ -753,12 +770,12 @@
      $ I3, ', B,', I3, ', (', F4.1,',',F4.1,') , C,', I3, ').' )
       END
 *
-      SUBROUTINE ZCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE AB_ZCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G,
      $                  IORDER )
 *
-*  Tests ZHEMM and ZSYMM.
+*  Tests AB_ZHEMM and AB_ZSYMM.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -798,10 +815,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            LZE, LZERES
-      EXTERNAL           LZE, LZERES
+      LOGICAL            AB_LZE, AB_AB_LZERES
+      EXTERNAL           AB_LZE, AB_AB_LZERES
 *     .. External Subroutines ..
-      EXTERNAL           CZHEMM, ZMAKE, ZMMCH, CZSYMM
+      EXTERNAL           CAB_ZHEMM, AB_ZMAKE, AB_ZMMCH, CAB_ZSYMM
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -844,7 +861,8 @@
 *
 *           Generate the matrix B.
 *
-            CALL ZMAKE( 'ge', ' ', ' ', M, N, B, NMAX, BB, LDB, RESET,
+            CALL AB_ZMAKE( 'ge', ' ', ' ', M, N, B, NMAX, BB, LDB, RESET
+     $,
      $                  ZERO )
 *
             DO 80 ICS = 1, 2
@@ -870,7 +888,8 @@
 *
 *                 Generate the hermitian or symmetric matrix A.
 *
-                  CALL ZMAKE(SNAME( 8: 9 ), UPLO, ' ', NA, NA, A, NMAX,
+                  CALL AB_ZMAKE(SNAME( 8: 9 ), UPLO, ' ', NA, NA, A, NMA
+     $X,
      $                        AA, LDA, RESET, ZERO )
 *
                   DO 60 IA = 1, NALF
@@ -881,7 +900,8 @@
 *
 *                       Generate the matrix C.
 *
-                        CALL ZMAKE( 'ge', ' ', ' ', M, N, C, NMAX, CC,
+                        CALL AB_ZMAKE( 'ge', ' ', ' ', M, N, C, NMAX, CC
+     $,
      $                              LDC, RESET, ZERO )
 *
                         NC = NC + 1
@@ -911,17 +931,17 @@
 *                       Call the subroutine.
 *
                         IF( TRACE )
-     $                      CALL ZPRCN2(NTRA, NC, SNAME, IORDER,
+     $                      CALL AB_ZPRCN2(NTRA, NC, SNAME, IORDER,
      $                      SIDE, UPLO, M, N, ALPHA, LDA, LDB,
      $                      BETA, LDC)
                         IF( REWI )
      $                     REWIND NTRA
                         IF( CONJ )THEN
-                           CALL CZHEMM( IORDER, SIDE, UPLO, M, N,
+                           CALL CAB_ZHEMM( IORDER, SIDE, UPLO, M, N,
      $                                 ALPHA, AA, LDA, BB, LDB, BETA,
      $                                 CC, LDC )
                         ELSE
-                           CALL CZSYMM( IORDER, SIDE, UPLO, M, N,
+                           CALL CAB_ZSYMM( IORDER, SIDE, UPLO, M, N,
      $                                 ALPHA, AA, LDA, BB, LDB, BETA,
      $                                 CC, LDC )
                         END IF
@@ -941,15 +961,16 @@
                         ISAME( 3 ) = MS.EQ.M
                         ISAME( 4 ) = NS.EQ.N
                         ISAME( 5 ) = ALS.EQ.ALPHA
-                        ISAME( 6 ) = LZE( AS, AA, LAA )
+                        ISAME( 6 ) = AB_LZE( AS, AA, LAA )
                         ISAME( 7 ) = LDAS.EQ.LDA
-                        ISAME( 8 ) = LZE( BS, BB, LBB )
+                        ISAME( 8 ) = AB_LZE( BS, BB, LBB )
                         ISAME( 9 ) = LDBS.EQ.LDB
                         ISAME( 10 ) = BLS.EQ.BETA
                         IF( NULL )THEN
-                           ISAME( 11 ) = LZE( CS, CC, LCC )
+                           ISAME( 11 ) = AB_LZE( CS, CC, LCC )
                         ELSE
-                           ISAME( 11 ) = LZERES( 'ge', ' ', M, N, CS,
+                           ISAME( 11 ) = AB_AB_LZERES( 'ge', ' ', M, N, 
+     $CS,
      $                                   CC, LDC )
                         END IF
                         ISAME( 12 ) = LDCS.EQ.LDC
@@ -973,12 +994,14 @@
 *                          Check the result.
 *
                            IF( LEFT )THEN
-                              CALL ZMMCH( 'N', 'N', M, N, M, ALPHA, A,
+                              CALL AB_ZMMCH( 'N', 'N', M, N, M, ALPHA, A
+     $,
      $                                    NMAX, B, NMAX, BETA, C, NMAX,
      $                                    CT, G, CC, LDC, EPS, ERR,
      $                                    FATAL, NOUT, .TRUE. )
                            ELSE
-                              CALL ZMMCH( 'N', 'N', M, N, N, ALPHA, B,
+                              CALL AB_ZMMCH( 'N', 'N', M, N, N, ALPHA, B
+     $,
      $                                    NMAX, A, NMAX, BETA, C, NMAX,
      $                                    CT, G, CC, LDC, EPS, ERR,
      $                                    FATAL, NOUT, .TRUE. )
@@ -1015,7 +1038,8 @@
 *
   110 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
-      CALL ZPRCN2(NOUT, NC, SNAME, IORDER, SIDE, UPLO, M, N, ALPHA, LDA,
+      CALL AB_ZPRCN2(NOUT, NC, SNAME, IORDER, SIDE, UPLO, M, N, ALPHA, L
+     $DA,
      $           LDB, BETA, LDC)
 *
   120 CONTINUE
@@ -1040,11 +1064,11 @@
  9994 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK2.
+*     End of AB_ZCHK2.
 *
       END
 *
-      SUBROUTINE ZPRCN2(NOUT, NC, SNAME, IORDER, SIDE, UPLO, M, N,
+      SUBROUTINE AB_ZPRCN2(NOUT, NC, SNAME, IORDER, SIDE, UPLO, M, N,
      $                 ALPHA, LDA, LDB, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, M, N, LDA, LDB, LDC
       DOUBLE COMPLEX   ALPHA, BETA
@@ -1075,11 +1099,11 @@
      $ ', B,', I3, ', (',F4.1,',',F4.1, '), ', 'C,', I3, ').' )
       END
 *
-      SUBROUTINE ZCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE AB_ZCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NMAX, A, AA, AS,
      $                  B, BB, BS, CT, G, C, IORDER )
 *
-*  Tests ZTRMM and ZTRSM.
+*  Tests AB_ZTRMM and AB_ZTRSM.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -1120,10 +1144,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            LZE, LZERES
-      EXTERNAL           LZE, LZERES
+      LOGICAL            AB_LZE, AB_AB_LZERES
+      EXTERNAL           AB_LZE, AB_AB_LZERES
 *     .. External Subroutines ..
-      EXTERNAL           ZMAKE, ZMMCH, CZTRMM, CZTRSM
+      EXTERNAL           AB_ZMAKE, AB_ZMMCH, CAB_ZTRMM, CAB_ZTRSM
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -1139,7 +1163,7 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
-*     Set up zero matrix for ZMMCH.
+*     Set up zero matrix for AB_ZMMCH.
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
             C( I, J ) = ZERO
@@ -1192,12 +1216,12 @@
 *
 *                          Generate the matrix A.
 *
-                           CALL ZMAKE( 'tr', UPLO, DIAG, NA, NA, A,
+                           CALL AB_ZMAKE( 'tr', UPLO, DIAG, NA, NA, A,
      $                                 NMAX, AA, LDA, RESET, ZERO )
 *
 *                          Generate the matrix B.
 *
-                           CALL ZMAKE( 'ge', ' ', ' ', M, N, B, NMAX,
+                           CALL AB_ZMAKE( 'ge', ' ', ' ', M, N, B, NMAX,
      $                                 BB, LDB, RESET, ZERO )
 *
                            NC = NC + 1
@@ -1225,22 +1249,24 @@
 *
                            IF( SNAME( 10: 11 ).EQ.'mm' )THEN
                               IF( TRACE )
-     $                           CALL ZPRCN3( NTRA, NC, SNAME, IORDER,
+     $                           CALL AB_ZPRCN3( NTRA, NC, SNAME, IORDER
+     $,
      $                           SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA,
      $                           LDA, LDB)
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CZTRMM(IORDER, SIDE, UPLO, TRANSA,
+                              CALL CAB_ZTRMM(IORDER, SIDE, UPLO, TRANSA,
      $                                    DIAG, M, N, ALPHA, AA, LDA,
      $                                    BB, LDB )
                            ELSE IF( SNAME( 10: 11 ).EQ.'sm' )THEN
                               IF( TRACE )
-     $                           CALL ZPRCN3( NTRA, NC, SNAME, IORDER,
+     $                           CALL AB_ZPRCN3( NTRA, NC, SNAME, IORDER
+     $,
      $                           SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA,
      $                           LDA, LDB)
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CZTRSM(IORDER, SIDE, UPLO, TRANSA,
+                              CALL CAB_ZTRSM(IORDER, SIDE, UPLO, TRANSA,
      $                                   DIAG, M, N, ALPHA, AA, LDA,
      $                                   BB, LDB )
                            END IF
@@ -1262,12 +1288,13 @@
                            ISAME( 5 ) = MS.EQ.M
                            ISAME( 6 ) = NS.EQ.N
                            ISAME( 7 ) = ALS.EQ.ALPHA
-                           ISAME( 8 ) = LZE( AS, AA, LAA )
+                           ISAME( 8 ) = AB_LZE( AS, AA, LAA )
                            ISAME( 9 ) = LDAS.EQ.LDA
                            IF( NULL )THEN
-                              ISAME( 10 ) = LZE( BS, BB, LBB )
+                              ISAME( 10 ) = AB_LZE( BS, BB, LBB )
                            ELSE
-                             ISAME( 10 ) = LZERES( 'ge', ' ', M, N, BS,
+                             ISAME( 10 ) = AB_AB_LZERES( 'ge', ' ', M, N
+     $, BS,
      $                                      BB, LDB )
                            END IF
                            ISAME( 11 ) = LDBS.EQ.LDB
@@ -1292,13 +1319,13 @@
 *                                Check the result.
 *
                                  IF( LEFT )THEN
-                                   CALL ZMMCH( TRANSA, 'N', M, N, M,
+                                   CALL AB_ZMMCH( TRANSA, 'N', M, N, M,
      $                                         ALPHA, A, NMAX, B, NMAX,
      $                                         ZERO, C, NMAX, CT, G,
      $                                         BB, LDB, EPS, ERR,
      $                                         FATAL, NOUT, .TRUE. )
                                  ELSE
-                                   CALL ZMMCH( 'N', TRANSA, M, N, N,
+                                   CALL AB_ZMMCH( 'N', TRANSA, M, N, N,
      $                                         ALPHA, B, NMAX, A, NMAX,
      $                                         ZERO, C, NMAX, CT, G,
      $                                         BB, LDB, EPS, ERR,
@@ -1319,17 +1346,19 @@
    70                            CONTINUE
 *
                                  IF( LEFT )THEN
-                                    CALL ZMMCH( TRANSA, 'N', M, N, M,
+                                    CALL AB_ZMMCH( TRANSA, 'N', M, N, M,
      $                                          ONE, A, NMAX, C, NMAX,
      $                                          ZERO, B, NMAX, CT, G,
      $                                          BB, LDB, EPS, ERR,
-     $                                          FATAL, NOUT, .FALSE. )
+     $                                          FATAL, NOUT, .FALSE. 
+     $)
                                  ELSE
-                                    CALL ZMMCH( 'N', TRANSA, M, N, N,
+                                    CALL AB_ZMMCH( 'N', TRANSA, M, N, N,
      $                                          ONE, C, NMAX, A, NMAX,
      $                                          ZERO, B, NMAX, CT, G,
      $                                          BB, LDB, EPS, ERR,
-     $                                          FATAL, NOUT, .FALSE. )
+     $                                          FATAL, NOUT, .FALSE. 
+     $)
                                  END IF
                               END IF
                               ERRMAX = MAX( ERRMAX, ERR )
@@ -1367,7 +1396,8 @@
   150 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
       IF( TRACE )
-     $   CALL ZPRCN3( NTRA, NC, SNAME, IORDER, SIDE, UPLO, TRANSA, DIAG,
+     $   CALL AB_ZPRCN3( NTRA, NC, SNAME, IORDER, SIDE, UPLO, TRANSA, DI
+     $AG,
      $         M, N, ALPHA, LDA, LDB)
 *
   160 CONTINUE
@@ -1392,11 +1422,11 @@
  9994 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK3.
+*     End of AB_ZCHK3.
 *
       END
 *
-      SUBROUTINE ZPRCN3(NOUT, NC, SNAME, IORDER, SIDE, UPLO, TRANSA,
+      SUBROUTINE AB_ZPRCN3(NOUT, NC, SNAME, IORDER, SIDE, UPLO, TRANSA,
      $                 DIAG, M, N, ALPHA, LDA, LDB)
       INTEGER          NOUT, NC, IORDER, M, N, LDA, LDB
       DOUBLE COMPLEX   ALPHA
@@ -1439,12 +1469,12 @@
      $    F4.1, '), A,', I3, ', B,', I3, ').' )
       END
 *
-      SUBROUTINE ZCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE AB_ZCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G,
      $                  IORDER )
 *
-*  Tests ZHERK and ZSYRK.
+*  Tests AB_AB_ZHERK and AB_AB_ZSYRK.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -1484,10 +1514,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            LZE, LZERES
-      EXTERNAL           LZE, LZERES
+      LOGICAL            AB_LZE, AB_AB_LZERES
+      EXTERNAL           AB_LZE, AB_AB_LZERES
 *     .. External Subroutines ..
-      EXTERNAL           CZHERK, ZMAKE, ZMMCH, CZSYRK
+      EXTERNAL           CAB_AB_ZHERK, AB_ZMAKE, AB_ZMMCH, CAB_AB_ZSYRK
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, MAX, DBLE
 *     .. Scalars in Common ..
@@ -1542,7 +1572,7 @@
 *
 *              Generate the matrix A.
 *
-               CALL ZMAKE( 'ge', ' ', ' ', MA, NA, A, NMAX, AA, LDA,
+               CALL AB_ZMAKE( 'ge', ' ', ' ', MA, NA, A, NMAX, AA, LDA,
      $                     RESET, ZERO )
 *
                DO 70 ICU = 1, 2
@@ -1569,7 +1599,8 @@
 *
 *                       Generate the matrix C.
 *
-                        CALL ZMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, C,
+                        CALL AB_ZMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, C
+     $,
      $                              NMAX, CC, LDC, RESET, ZERO )
 *
                         NC = NC + 1
@@ -1603,21 +1634,21 @@
 *
                         IF( CONJ )THEN
                            IF( TRACE )
-     $                        CALL ZPRCN6( NTRA, NC, SNAME, IORDER,
+     $                        CALL AB_ZPRCN6( NTRA, NC, SNAME, IORDER,
      $                        UPLO, TRANS, N, K, RALPHA, LDA, RBETA,
      $                        LDC)
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL CZHERK( IORDER, UPLO, TRANS, N, K,
+                           CALL CAB_AB_ZHERK( IORDER, UPLO, TRANS, N, K,
      $                                 RALPHA, AA, LDA, RBETA, CC,
      $                                 LDC )
                         ELSE
                            IF( TRACE )
-     $                        CALL ZPRCN4( NTRA, NC, SNAME, IORDER,
+     $                        CALL AB_ZPRCN4( NTRA, NC, SNAME, IORDER,
      $                        UPLO, TRANS, N, K, ALPHA, LDA, BETA, LDC)
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL CZSYRK( IORDER, UPLO, TRANS, N, K,
+                           CALL CAB_AB_ZSYRK( IORDER, UPLO, TRANS, N, K,
      $                                 ALPHA, AA, LDA, BETA, CC, LDC )
                         END IF
 *
@@ -1640,7 +1671,7 @@
                         ELSE
                            ISAME( 5 ) = ALS.EQ.ALPHA
                         END IF
-                        ISAME( 6 ) = LZE( AS, AA, LAA )
+                        ISAME( 6 ) = AB_LZE( AS, AA, LAA )
                         ISAME( 7 ) = LDAS.EQ.LDA
                         IF( CONJ )THEN
                            ISAME( 8 ) = RBETS.EQ.RBETA
@@ -1648,9 +1679,10 @@
                            ISAME( 8 ) = BETS.EQ.BETA
                         END IF
                         IF( NULL )THEN
-                           ISAME( 9 ) = LZE( CS, CC, LCC )
+                           ISAME( 9 ) = AB_LZE( CS, CC, LCC )
                         ELSE
-                           ISAME( 9 ) = LZERES( SNAME( 8: 9 ), UPLO, N,
+                           ISAME( 9 ) = AB_AB_LZERES( SNAME( 8: 9 ), UPL
+     $O, N,
      $                                  N, CS, CC, LDC )
                         END IF
                         ISAME( 10 ) = LDCS.EQ.LDC
@@ -1688,14 +1720,14 @@
                                  LJ = N - J + 1
                               END IF
                               IF( TRAN )THEN
-                                 CALL ZMMCH( TRANST, 'N', LJ, 1, K,
+                                 CALL AB_ZMMCH( TRANST, 'N', LJ, 1, K,
      $                                       ALPHA, A( 1, JJ ), NMAX,
      $                                       A( 1, J ), NMAX, BETA,
      $                                       C( JJ, J ), NMAX, CT, G,
      $                                       CC( JC ), LDC, EPS, ERR,
      $                                       FATAL, NOUT, .TRUE. )
                               ELSE
-                                 CALL ZMMCH( 'N', TRANST, LJ, 1, K,
+                                 CALL AB_ZMMCH( 'N', TRANST, LJ, 1, K,
      $                                       ALPHA, A( JJ, 1 ), NMAX,
      $                                       A( J, 1 ), NMAX, BETA,
      $                                       C( JJ, J ), NMAX, CT, G,
@@ -1745,10 +1777,11 @@
   120 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
       IF( CONJ )THEN
-      CALL ZPRCN6( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K, RALPHA,
+      CALL AB_ZPRCN6( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K, RALPHA
+     $,
      $   LDA, rBETA, LDC)
       ELSE
-      CALL ZPRCN4( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K, ALPHA,
+      CALL AB_ZPRCN4( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K, ALPHA,
      $   LDA, BETA, LDC)
       END IF
 *
@@ -1778,11 +1811,11 @@
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of CCHK4.
+*     End of AB_CCHK4.
 *
       END
 *
-      SUBROUTINE ZPRCN4(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
+      SUBROUTINE AB_ZPRCN4(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
      $                 N, K, ALPHA, LDA, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDC
       DOUBLE COMPLEX   ALPHA, BETA
@@ -1816,7 +1849,7 @@
       END
 *
 *
-      SUBROUTINE ZPRCN6(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
+      SUBROUTINE AB_ZPRCN6(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
      $                 N, K, ALPHA, LDA, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDC
       DOUBLE PRECISION ALPHA, BETA
@@ -1849,12 +1882,12 @@
      $      F4.1, ', A,', I3, ',', F4.1, ', C,', I3, ').' )
       END
 *
-      SUBROUTINE ZCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE AB_ZCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
      $                  IORDER )
 *
-*  Tests ZHER2K and ZSYR2K.
+*  Tests AB_AB_AB_ZHER2K and AB_AB_ZSYR2K.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -1894,10 +1927,11 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            LZE, LZERES
-      EXTERNAL           LZE, LZERES
+      LOGICAL            AB_LZE, AB_AB_LZERES
+      EXTERNAL           AB_LZE, AB_AB_LZERES
 *     .. External Subroutines ..
-      EXTERNAL           CZHER2K, ZMAKE, ZMMCH, CZSYR2K
+      EXTERNAL           CAB_AB_AB_ZHER2K, AB_ZMAKE, AB_ZMMCH, CAB_AB_ZS
+     $YR2K
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, DCONJG, MAX, DBLE
 *     .. Scalars in Common ..
@@ -1953,10 +1987,11 @@
 *              Generate the matrix A.
 *
                IF( TRAN )THEN
-                  CALL ZMAKE( 'ge', ' ', ' ', MA, NA, AB, 2*NMAX, AA,
+                  CALL AB_ZMAKE( 'ge', ' ', ' ', MA, NA, AB, 2*NMAX, AA,
      $                        LDA, RESET, ZERO )
                ELSE
-                 CALL ZMAKE( 'ge', ' ', ' ', MA, NA, AB, NMAX, AA, LDA,
+                 CALL AB_ZMAKE( 'ge', ' ', ' ', MA, NA, AB, NMAX, AA, LD
+     $A,
      $                        RESET, ZERO )
                END IF
 *
@@ -1965,10 +2000,11 @@
                LDB = LDA
                LBB = LAA
                IF( TRAN )THEN
-                  CALL ZMAKE( 'ge', ' ', ' ', MA, NA, AB( K + 1 ),
+                  CALL AB_ZMAKE( 'ge', ' ', ' ', MA, NA, AB( K + 1 ),
      $                        2*NMAX, BB, LDB, RESET, ZERO )
                ELSE
-                  CALL ZMAKE( 'ge', ' ', ' ', MA, NA, AB( K*NMAX + 1 ),
+                  CALL AB_ZMAKE( 'ge', ' ', ' ', MA, NA, AB( K*NMAX + 1 
+     $),
      $                        NMAX, BB, LDB, RESET, ZERO )
                END IF
 *
@@ -1992,7 +2028,8 @@
 *
 *                       Generate the matrix C.
 *
-                        CALL ZMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, C,
+                        CALL AB_ZMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, C
+     $,
      $                              NMAX, CC, LDC, RESET, ZERO )
 *
                         NC = NC + 1
@@ -2026,22 +2063,24 @@
 *
                         IF( CONJ )THEN
                            IF( TRACE )
-     $                        CALL ZPRCN7( NTRA, NC, SNAME, IORDER,
+     $                        CALL AB_ZPRCN7( NTRA, NC, SNAME, IORDER,
      $                        UPLO, TRANS, N, K, ALPHA, LDA, LDB,
      $                        RBETA, LDC)
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL CZHER2K( IORDER, UPLO, TRANS, N, K,
+                           CALL CAB_AB_AB_ZHER2K( IORDER, UPLO, TRANS, N
+     $, K,
      $                                  ALPHA, AA, LDA, BB, LDB, RBETA,
      $                                  CC, LDC )
                         ELSE
                            IF( TRACE )
-     $                        CALL ZPRCN5( NTRA, NC, SNAME, IORDER,
+     $                        CALL AB_ZPRCN5( NTRA, NC, SNAME, IORDER,
      $                        UPLO, TRANS, N, K, ALPHA, LDA, LDB,
      $                        BETA, LDC)
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL CZSYR2K( IORDER, UPLO, TRANS, N, K,
+                           CALL CAB_AB_ZSYR2K( IORDER, UPLO, TRANS, N, K
+     $,
      $                                  ALPHA, AA, LDA, BB, LDB, BETA,
      $                                  CC, LDC )
                         END IF
@@ -2061,9 +2100,9 @@
                         ISAME( 3 ) = NS.EQ.N
                         ISAME( 4 ) = KS.EQ.K
                         ISAME( 5 ) = ALS.EQ.ALPHA
-                        ISAME( 6 ) = LZE( AS, AA, LAA )
+                        ISAME( 6 ) = AB_LZE( AS, AA, LAA )
                         ISAME( 7 ) = LDAS.EQ.LDA
-                        ISAME( 8 ) = LZE( BS, BB, LBB )
+                        ISAME( 8 ) = AB_LZE( BS, BB, LBB )
                         ISAME( 9 ) = LDBS.EQ.LDB
                         IF( CONJ )THEN
                            ISAME( 10 ) = RBETS.EQ.RBETA
@@ -2071,9 +2110,10 @@
                            ISAME( 10 ) = BETS.EQ.BETA
                         END IF
                         IF( NULL )THEN
-                           ISAME( 11 ) = LZE( CS, CC, LCC )
+                           ISAME( 11 ) = AB_LZE( CS, CC, LCC )
                         ELSE
-                           ISAME( 11 ) = LZERES( 'he', UPLO, N, N, CS,
+                           ISAME( 11 ) = AB_AB_LZERES( 'he', UPLO, N, N,
+     $ CS,
      $                                   CC, LDC )
                         END IF
                         ISAME( 12 ) = LDCS.EQ.LDC
@@ -2125,7 +2165,7 @@
      $                                              NMAX + I )
                                     END IF
    50                            CONTINUE
-                                 CALL ZMMCH( TRANST, 'N', LJ, 1, 2*K,
+                                 CALL AB_ZMMCH( TRANST, 'N', LJ, 1, 2*K,
      $                                      ONE, AB( JJAB ), 2*NMAX, W,
      $                                       2*NMAX, BETA, C( JJ, J ),
      $                                      NMAX, CT, G, CC( JC ), LDC,
@@ -2147,7 +2187,8 @@
      $                                              J )
                                     END IF
    60                            CONTINUE
-                                 CALL ZMMCH( 'N', 'N', LJ, 1, 2*K, ONE,
+                                 CALL AB_ZMMCH( 'N', 'N', LJ, 1, 2*K, ON
+     $E,
      $                                       AB( JJ ), NMAX, W, 2*NMAX,
      $                                      BETA, C( JJ, J ), NMAX, CT,
      $                                      G, CC( JC ), LDC, EPS, ERR,
@@ -2198,10 +2239,10 @@
   150 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
       IF( CONJ )THEN
-         CALL ZPRCN7( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K,
+         CALL AB_ZPRCN7( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K,
      $      ALPHA, LDA, LDB, RBETA, LDC)
       ELSE
-         CALL ZPRCN5( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K,
+         CALL AB_ZPRCN5( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K,
      $      ALPHA, LDA, LDB, BETA, LDC)
       END IF
 *
@@ -2231,11 +2272,11 @@
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of ZCHK5.
+*     End of AB_ZCHK5.
 *
       END
 *
-      SUBROUTINE ZPRCN5(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
+      SUBROUTINE AB_ZPRCN5(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
      $                 N, K, ALPHA, LDA, LDB, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDB, LDC
       DOUBLE COMPLEX   ALPHA, BETA
@@ -2269,7 +2310,7 @@
       END
 *
 *
-      SUBROUTINE ZPRCN7(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
+      SUBROUTINE AB_ZPRCN7(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
      $                 N, K, ALPHA, LDA, LDB, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDB, LDC
       DOUBLE COMPLEX   ALPHA
@@ -2303,7 +2344,8 @@
      $      I3, ', B', I3, ',', F4.1, ', C,', I3, ').' )
       END
 *
-      SUBROUTINE ZMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, RESET,
+      SUBROUTINE AB_ZMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, RES
+     $ET,
      $                  TRANSL )
 *
 *  Generates values for an M by N matrix A.
@@ -2342,8 +2384,8 @@
       INTEGER            I, IBEG, IEND, J, JJ
       LOGICAL            GEN, HER, LOWER, SYM, TRI, UNIT, UPPER
 *     .. External Functions ..
-      COMPLEX*16         ZBEG
-      EXTERNAL           ZBEG
+      COMPLEX*16         AB_ZBEG
+      EXTERNAL           AB_ZBEG
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, DCONJG, DBLE
 *     .. Executable Statements ..
@@ -2361,7 +2403,7 @@
          DO 10 I = 1, M
             IF( GEN.OR.( UPPER.AND.I.LE.J ).OR.( LOWER.AND.I.GE.J ) )
      $          THEN
-               A( I, J ) = ZBEG( RESET ) + TRANSL
+               A( I, J ) = AB_ZBEG( RESET ) + TRANSL
                IF( I.NE.J )THEN
 *                 Set some elements to zero
                   IF( N.GT.3.AND.J.EQ.N/2 )
@@ -2429,10 +2471,11 @@
       END IF
       RETURN
 *
-*     End of ZMAKE.
+*     End of AB_ZMAKE.
 *
       END
-      SUBROUTINE ZMMCH( TRANSA, TRANSB, M, N, KK, ALPHA, A, LDA, B, LDB,
+      SUBROUTINE AB_ZMMCH( TRANSA, TRANSB, M, N, KK, ALPHA, A, LDA, B, L
+     $DB,
      $                  BETA, C, LDC, CT, G, CC, LDCC, EPS, ERR, FATAL,
      $                  NOUT, MV )
 *
@@ -2619,10 +2662,10 @@
  9998 FORMAT( 1X, I7, 2( '  (', G15.6, ',', G15.6, ')' ) )
  9997 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
 *
-*     End of ZMMCH.
+*     End of AB_ZMMCH.
 *
       END
-      LOGICAL FUNCTION LZE( RI, RJ, LR )
+      LOGICAL FUNCTION AB_LZE( RI, RJ, LR )
 *
 *  Tests if two arrays are identical.
 *
@@ -2645,16 +2688,16 @@
          IF( RI( I ).NE.RJ( I ) )
      $      GO TO 20
    10 CONTINUE
-      LZE = .TRUE.
+      AB_LZE = .TRUE.
       GO TO 30
    20 CONTINUE
-      LZE = .FALSE.
+      AB_LZE = .FALSE.
    30 RETURN
 *
-*     End of LZE.
+*     End of AB_LZE.
 *
       END
-      LOGICAL FUNCTION LZERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      LOGICAL FUNCTION AB_AB_LZERES( TYPE, UPLO, M, N, AA, AS, LDA )
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -2707,16 +2750,16 @@
       END IF
 *
    60 CONTINUE
-      LZERES = .TRUE.
+      AB_AB_LZERES = .TRUE.
       GO TO 80
    70 CONTINUE
-      LZERES = .FALSE.
+      AB_AB_LZERES = .FALSE.
    80 RETURN
 *
-*     End of LZERES.
+*     End of AB_AB_LZERES.
 *
       END
-      COMPLEX*16     FUNCTION ZBEG( RESET )
+      COMPLEX*16     FUNCTION AB_ZBEG( RESET )
 *
 *  Generates complex numbers as pairs of random numbers uniformly
 *  distributed between -0.5 and 0.5.
@@ -2764,13 +2807,13 @@
          IC = 0
          GO TO 10
       END IF
-      ZBEG = DCMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0 )
+      AB_ZBEG = DCMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0 )
       RETURN
 *
-*     End of ZBEG.
+*     End of AB_ZBEG.
 *
       END
-      DOUBLE PRECISION FUNCTION DDIFF( X, Y )
+      DOUBLE PRECISION FUNCTION AB_DDIFF( X, Y )
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2783,10 +2826,10 @@
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   X, Y
 *     .. Executable Statements ..
-      DDIFF = X - Y
+      AB_DDIFF = X - Y
       RETURN
 *
-*     End of DDIFF.
+*     End of AB_DDIFF.
 *
       END
 

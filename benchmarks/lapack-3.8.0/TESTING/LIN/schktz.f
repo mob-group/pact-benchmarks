@@ -1,4 +1,4 @@
-*> \brief \b SCHKTZ
+*> \brief \b AB_SCHKTZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
+*       SUBROUTINE AB_SCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
 *                          COPYA, S, TAU, WORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> SCHKTZ tests STZRZF.
+*> AB_SCHKTZ tests AB_STZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -129,7 +129,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
+      SUBROUTINE AB_SCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, 
+     $A,
      $                   COPYA, S, TAU, WORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -170,12 +171,13 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SQRT12, SRZT01, SRZT02
-      EXTERNAL           SLAMCH, SQRT12, SRZT01, SRZT02
+      REAL               AB_SLAMCH, AB_SQRT12, AB_SRZT01, AB_SRZT02
+      EXTERNAL           AB_SLAMCH, AB_SQRT12, AB_SRZT01, AB_SRZT02
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHD, ALASUM, SERRTZ, SGEQR2, SLACPY, SLAORD,
-     $                   SLASET, SLATMS, STZRZF
+      EXTERNAL           AB_ALAHD, AB_ALASUM, AB_SERRTZ, AB_AB_SGEQR2, A
+     $B_SLACPY, AB_SLAORD,
+     $                   AB_SLASET, AB_SLATMS, AB_STZRZF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -204,12 +206,12 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL SERRTZ( PATH, NOUT )
+     $   CALL AB_SERRTZ( PATH, NOUT )
       INFOT = 0
 *
       DO 70 IM = 1, NM
@@ -239,51 +241,55 @@
 *
                   MODE = IMODE - 1
 *
-*                 Test STZRQF
+*                 Test AB_STZRQF
 *
 *                 Generate test matrix of size m by n using
 *                 singular value distribution indicated by `mode'.
 *
                   IF( MODE.EQ.0 ) THEN
-                     CALL SLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
+                     CALL AB_SLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
                      DO 30 I = 1, MNMIN
                         S( I ) = ZERO
    30                CONTINUE
                   ELSE
-                     CALL SLATMS( M, N, 'Uniform', ISEED,
+                     CALL AB_SLATMS( M, N, 'Uniform', ISEED,
      $                            'Nonsymmetric', S, IMODE,
      $                            ONE / EPS, ONE, M, N, 'No packing', A,
      $                            LDA, WORK, INFO )
-                     CALL SGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+1 ),
+                     CALL AB_AB_SGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+
+     $1 ),
      $                            INFO )
-                     CALL SLASET( 'Lower', M-1, N, ZERO, ZERO, A( 2 ),
+                     CALL AB_SLASET( 'Lower', M-1, N, ZERO, ZERO, A( 2 )
+     $,
      $                            LDA )
-                     CALL SLAORD( 'Decreasing', MNMIN, S, 1 )
+                     CALL AB_SLAORD( 'Decreasing', MNMIN, S, 1 )
                   END IF
 *
 *                 Save A and its singular values
 *
-                  CALL SLACPY( 'All', M, N, A, LDA, COPYA, LDA )
+                  CALL AB_SLACPY( 'All', M, N, A, LDA, COPYA, LDA )
 *
-*                 Call STZRZF to reduce the upper trapezoidal matrix to
+*                 Call AB_STZRZF to reduce the upper trapezoidal matrix to
 *                 upper triangular form.
 *
-                  SRNAMT = 'STZRZF'
-                  CALL STZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+                  SRNAMT = 'AB_STZRZF'
+                  CALL AB_STZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = SQRT12( M, M, A, LDA, S, WORK,
+                  RESULT( 1 ) = AB_SQRT12( M, M, A, LDA, S, WORK,
      $                          LWORK )
 *
 *                 Compute norm( A - R*Q )
 *
-                  RESULT( 2 ) = SRZT01( M, N, COPYA, A, LDA, TAU, WORK,
+                  RESULT( 2 ) = AB_SRZT01( M, N, COPYA, A, LDA, TAU, WOR
+     $K,
      $                          LWORK )
 *
 *                 Compute norm(Q'*Q - I).
 *
-                  RESULT( 3 ) = SRZT02( M, N, A, LDA, TAU, WORK, LWORK )
+                  RESULT( 3 ) = AB_SRZT02( M, N, A, LDA, TAU, WORK, LWOR
+     $K )
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
@@ -291,7 +297,7 @@
                   DO 40 K = 1, NTESTS
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )M, N, IMODE, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -305,11 +311,11 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M =', I5, ', N =', I5, ', type ', I2, ', test ', I2,
      $      ', ratio =', G12.5 )
 *
-*     End if SCHKTZ
+*     End if AB_SCHKTZ
 *
       END

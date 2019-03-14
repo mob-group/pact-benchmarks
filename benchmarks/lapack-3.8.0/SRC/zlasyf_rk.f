@@ -1,4 +1,4 @@
-*> \brief \b ZLASYF_RK computes a partial factorization of a complex symmetric indefinite matrix using bounded Bunch-Kaufman (rook) diagonal pivoting method.
+*> \brief \b AB_AB_ZLASYF_RK computes a partial factorization of a complex symmetric indefinite matrix using bounded Bunch-Kaufman (rook) diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLASYF_RK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlasyf_rk.f">
+*> Download AB_AB_ZLASYF_RK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZLASYF_RK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlasyf_rk.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZLASYF_RK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlasyf_rk.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZLASYF_RK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLASYF_RK( UPLO, N, NB, KB, A, LDA, E, IPIV, W, LDW,
+*       SUBROUTINE AB_AB_ZLASYF_RK( UPLO, N, NB, KB, A, LDA, E, IPIV, W, LDW,
 *                             INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *  =============
 *>
 *> \verbatim
-*> ZLASYF_RK computes a partial factorization of a complex symmetric
+*> AB_AB_ZLASYF_RK computes a partial factorization of a complex symmetric
 *> matrix A using the bounded Bunch-Kaufman (rook) diagonal
 *> pivoting method. The partial factorization has the form:
 *>
@@ -48,7 +48,7 @@
 *> where the order of D is at most NB. The actual order is returned in
 *> the argument KB, and is either NB or NB-1, or N if N <= NB.
 *>
-*> ZLASYF_RK is an auxiliary routine called by ZSYTRF_RK. It uses
+*> AB_AB_ZLASYF_RK is an auxiliary routine called by AB_AB_ZSYTRF_RK. It uses
 *> blocked code (calling Level 3 BLAS) to update the submatrix
 *> A11 (if UPLO = 'U') or A22 (if UPLO = 'L').
 *> \endverbatim
@@ -259,7 +259,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZLASYF_RK( UPLO, N, NB, KB, A, LDA, E, IPIV, W, LDW,
+      SUBROUTINE AB_AB_ZLASYF_RK( UPLO, N, NB, KB, A, LDA, E, IPIV, W, L
+     $DW,
      $                      INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -295,13 +296,14 @@
       COMPLEX*16         D11, D12, D21, D22, R1, T, Z
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IZAMAX, DLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IZAMAX
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY, ZGEMM, ZGEMV, ZSCAL, ZSWAP
+      EXTERNAL           AB_ZCOPY, AB_ZGEMM, AB_ZGEMV, AB_ZSCAL, AB_ZSWA
+     $P
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN, SQRT
@@ -322,9 +324,9 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = DLAMCH( 'S' )
+      SFMIN = AB_DLAMCH( 'S' )
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *        Factorize the trailing columns of A using the upper triangle
 *        of A and working backwards, and compute the matrix W = U12*D
@@ -354,9 +356,9 @@
 *
 *        Copy column K of A to column KW of W and update it
 *
-         CALL ZCOPY( K, A( 1, K ), 1, W( 1, KW ), 1 )
+         CALL AB_ZCOPY( K, A( 1, K ), 1, W( 1, KW ), 1 )
          IF( K.LT.N )
-     $      CALL ZGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ),
+     $      CALL AB_ZGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ),
      $                  LDA, W( K, KW+1 ), LDW, CONE, W( 1, KW ), 1 )
 *
 *        Determine rows and columns to be interchanged and whether
@@ -369,7 +371,7 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.GT.1 ) THEN
-            IMAX = IZAMAX( K-1, W( 1, KW ), 1 )
+            IMAX = AB_IZAMAX( K-1, W( 1, KW ), 1 )
             COLMAX = CABS1( W( IMAX, KW ) )
          ELSE
             COLMAX = ZERO
@@ -382,7 +384,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
-            CALL ZCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
+            CALL AB_ZCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
 *
 *           Set E( K ) to zero
 *
@@ -417,12 +419,13 @@
 *
 *                 Copy column IMAX to column KW-1 of W and update it
 *
-                  CALL ZCOPY( IMAX, A( 1, IMAX ), 1, W( 1, KW-1 ), 1 )
-                  CALL ZCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
+                  CALL AB_ZCOPY( IMAX, A( 1, IMAX ), 1, W( 1, KW-1 ), 1 
+     $)
+                  CALL AB_ZCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
      $                        W( IMAX+1, KW-1 ), 1 )
 *
                   IF( K.LT.N )
-     $               CALL ZGEMV( 'No transpose', K, N-K, -CONE,
+     $               CALL AB_ZGEMV( 'No transpose', K, N-K, -CONE,
      $                           A( 1, K+1 ), LDA, W( IMAX, KW+1 ), LDW,
      $                           CONE, W( 1, KW-1 ), 1 )
 *
@@ -431,7 +434,7 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = IMAX + IZAMAX( K-IMAX, W( IMAX+1, KW-1 ),
+                     JMAX = IMAX + AB_IZAMAX( K-IMAX, W( IMAX+1, KW-1 ),
      $                                     1 )
                      ROWMAX = CABS1( W( JMAX, KW-1 ) )
                   ELSE
@@ -439,7 +442,7 @@
                   END IF
 *
                   IF( IMAX.GT.1 ) THEN
-                     ITEMP = IZAMAX( IMAX-1, W( 1, KW-1 ), 1 )
+                     ITEMP = AB_IZAMAX( IMAX-1, W( 1, KW-1 ), 1 )
                      DTEMP = CABS1( W( ITEMP, KW-1 ) )
                      IF( DTEMP.GT.ROWMAX ) THEN
                         ROWMAX = DTEMP
@@ -461,7 +464,7 @@
 *
 *                    copy column KW-1 of W to column KW of W
 *
-                     CALL ZCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
+                     CALL AB_ZCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
 *
                      DONE = .TRUE.
 *
@@ -487,7 +490,7 @@
 *
 *                    Copy updated JMAXth (next IMAXth) column to Kth of W
 *
-                     CALL ZCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
+                     CALL AB_ZCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
 *
                   END IF
 *
@@ -509,14 +512,15 @@
 *
 *              Copy non-updated column K to column P
 *
-               CALL ZCOPY( K-P, A( P+1, K ), 1, A( P, P+1 ), LDA )
-               CALL ZCOPY( P, A( 1, K ), 1, A( 1, P ), 1 )
+               CALL AB_ZCOPY( K-P, A( P+1, K ), 1, A( P, P+1 ), LDA )
+               CALL AB_ZCOPY( P, A( 1, K ), 1, A( 1, P ), 1 )
 *
 *              Interchange rows K and P in last N-K+1 columns of A
 *              and last N-K+2 columns of W
 *
-               CALL ZSWAP( N-K+1, A( K, K ), LDA, A( P, K ), LDA )
-               CALL ZSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ), LDW )
+               CALL AB_ZSWAP( N-K+1, A( K, K ), LDA, A( P, K ), LDA )
+               CALL AB_ZSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ), LDW
+     $ )
             END IF
 *
 *           Updated column KP is already stored in column KKW of W
@@ -526,15 +530,16 @@
 *              Copy non-updated column KK to column KP
 *
                A( KP, K ) = A( KK, K )
-               CALL ZCOPY( K-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
+               CALL AB_ZCOPY( K-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
      $                     LDA )
-               CALL ZCOPY( KP, A( 1, KK ), 1, A( 1, KP ), 1 )
+               CALL AB_ZCOPY( KP, A( 1, KK ), 1, A( 1, KP ), 1 )
 *
 *              Interchange rows KK and KP in last N-KK+1 columns
 *              of A and W
 *
-               CALL ZSWAP( N-KK+1, A( KK, KK ), LDA, A( KP, KK ), LDA )
-               CALL ZSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
+               CALL AB_ZSWAP( N-KK+1, A( KK, KK ), LDA, A( KP, KK ), LDA
+     $ )
+               CALL AB_ZSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
      $                     LDW )
             END IF
 *
@@ -548,11 +553,11 @@
 *
 *              Store U(k) in column k of A
 *
-               CALL ZCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
+               CALL AB_ZCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
                IF( K.GT.1 ) THEN
                   IF( CABS1( A( K, K ) ).GE.SFMIN ) THEN
                      R1 = CONE / A( K, K )
-                     CALL ZSCAL( K-1, R1, A( 1, K ), 1 )
+                     CALL AB_ZSCAL( K-1, R1, A( 1, K ), 1 )
                   ELSE IF( A( K, K ).NE.CZERO ) THEN
                      DO 14 II = 1, K - 1
                         A( II, K ) = A( II, K ) / A( K, K )
@@ -635,7 +640,7 @@
 *           Update the upper triangle of the diagonal block
 *
             DO 40 JJ = J, J + JB - 1
-               CALL ZGEMV( 'No transpose', JJ-J+1, N-K, -CONE,
+               CALL AB_ZGEMV( 'No transpose', JJ-J+1, N-K, -CONE,
      $                     A( J, K+1 ), LDA, W( JJ, KW+1 ), LDW, CONE,
      $                     A( J, JJ ), 1 )
    40       CONTINUE
@@ -643,7 +648,7 @@
 *           Update the rectangular superdiagonal block
 *
             IF( J.GE.2 )
-     $         CALL ZGEMM( 'No transpose', 'Transpose', J-1, JB,
+     $         CALL AB_ZGEMM( 'No transpose', 'Transpose', J-1, JB,
      $                     N-K, -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ),
      $                     LDW, CONE, A( 1, J ), LDA )
    50    CONTINUE
@@ -677,9 +682,9 @@
 *
 *        Copy column K of A to column K of W and update it
 *
-         CALL ZCOPY( N-K+1, A( K, K ), 1, W( K, K ), 1 )
+         CALL AB_ZCOPY( N-K+1, A( K, K ), 1, W( K, K ), 1 )
          IF( K.GT.1 )
-     $      CALL ZGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
+     $      CALL AB_ZGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
      $                  LDA, W( K, 1 ), LDW, CONE, W( K, K ), 1 )
 *
 *        Determine rows and columns to be interchanged and whether
@@ -692,7 +697,7 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.LT.N ) THEN
-            IMAX = K + IZAMAX( N-K, W( K+1, K ), 1 )
+            IMAX = K + AB_IZAMAX( N-K, W( K+1, K ), 1 )
             COLMAX = CABS1( W( IMAX, K ) )
          ELSE
             COLMAX = ZERO
@@ -705,7 +710,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
-            CALL ZCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
+            CALL AB_ZCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
 *
 *           Set E( K ) to zero
 *
@@ -740,11 +745,12 @@
 *
 *                 Copy column IMAX to column K+1 of W and update it
 *
-                  CALL ZCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1)
-                  CALL ZCOPY( N-IMAX+1, A( IMAX, IMAX ), 1,
+                  CALL AB_ZCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ),
+     $ 1)
+                  CALL AB_ZCOPY( N-IMAX+1, A( IMAX, IMAX ), 1,
      $                        W( IMAX, K+1 ), 1 )
                   IF( K.GT.1 )
-     $               CALL ZGEMV( 'No transpose', N-K+1, K-1, -CONE,
+     $               CALL AB_ZGEMV( 'No transpose', N-K+1, K-1, -CONE,
      $                           A( K, 1 ), LDA, W( IMAX, 1 ), LDW,
      $                           CONE, W( K, K+1 ), 1 )
 *
@@ -753,14 +759,15 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = K - 1 + IZAMAX( IMAX-K, W( K, K+1 ), 1 )
+                     JMAX = K - 1 + AB_IZAMAX( IMAX-K, W( K, K+1 ), 1 )
                      ROWMAX = CABS1( W( JMAX, K+1 ) )
                   ELSE
                      ROWMAX = ZERO
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + IZAMAX( N-IMAX, W( IMAX+1, K+1 ), 1)
+                     ITEMP = IMAX + AB_IZAMAX( N-IMAX, W( IMAX+1, K+1 ),
+     $ 1)
                      DTEMP = CABS1( W( ITEMP, K+1 ) )
                      IF( DTEMP.GT.ROWMAX ) THEN
                         ROWMAX = DTEMP
@@ -782,7 +789,8 @@
 *
 *                    copy column K+1 of W to column K of W
 *
-                     CALL ZCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+                     CALL AB_ZCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 
+     $)
 *
                      DONE = .TRUE.
 *
@@ -808,7 +816,8 @@
 *
 *                    Copy updated JMAXth (next IMAXth) column to Kth of W
 *
-                     CALL ZCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+                     CALL AB_ZCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 
+     $)
 *
                   END IF
 *
@@ -826,14 +835,14 @@
 *
 *              Copy non-updated column K to column P
 *
-               CALL ZCOPY( P-K, A( K, K ), 1, A( P, K ), LDA )
-               CALL ZCOPY( N-P+1, A( P, K ), 1, A( P, P ), 1 )
+               CALL AB_ZCOPY( P-K, A( K, K ), 1, A( P, K ), LDA )
+               CALL AB_ZCOPY( N-P+1, A( P, K ), 1, A( P, P ), 1 )
 *
 *              Interchange rows K and P in first K columns of A
 *              and first K+1 columns of W
 *
-               CALL ZSWAP( K, A( K, 1 ), LDA, A( P, 1 ), LDA )
-               CALL ZSWAP( KK, W( K, 1 ), LDW, W( P, 1 ), LDW )
+               CALL AB_ZSWAP( K, A( K, 1 ), LDA, A( P, 1 ), LDA )
+               CALL AB_ZSWAP( KK, W( K, 1 ), LDW, W( P, 1 ), LDW )
             END IF
 *
 *           Updated column KP is already stored in column KK of W
@@ -843,13 +852,14 @@
 *              Copy non-updated column KK to column KP
 *
                A( KP, K ) = A( KK, K )
-               CALL ZCOPY( KP-K-1, A( K+1, KK ), 1, A( KP, K+1 ), LDA )
-               CALL ZCOPY( N-KP+1, A( KP, KK ), 1, A( KP, KP ), 1 )
+               CALL AB_ZCOPY( KP-K-1, A( K+1, KK ), 1, A( KP, K+1 ), LDA
+     $ )
+               CALL AB_ZCOPY( N-KP+1, A( KP, KK ), 1, A( KP, KP ), 1 )
 *
 *              Interchange rows KK and KP in first KK columns of A and W
 *
-               CALL ZSWAP( KK, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
-               CALL ZSWAP( KK, W( KK, 1 ), LDW, W( KP, 1 ), LDW )
+               CALL AB_ZSWAP( KK, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
+               CALL AB_ZSWAP( KK, W( KK, 1 ), LDW, W( KP, 1 ), LDW )
             END IF
 *
             IF( KSTEP.EQ.1 ) THEN
@@ -862,11 +872,11 @@
 *
 *              Store L(k) in column k of A
 *
-               CALL ZCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
+               CALL AB_ZCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
                IF( K.LT.N ) THEN
                   IF( CABS1( A( K, K ) ).GE.SFMIN ) THEN
                      R1 = CONE / A( K, K )
-                     CALL ZSCAL( N-K, R1, A( K+1, K ), 1 )
+                     CALL AB_ZSCAL( N-K, R1, A( K+1, K ), 1 )
                   ELSE IF( A( K, K ).NE.CZERO ) THEN
                      DO 74 II = K + 1, N
                         A( II, K ) = A( II, K ) / A( K, K )
@@ -948,7 +958,7 @@
 *           Update the lower triangle of the diagonal block
 *
             DO 100 JJ = J, J + JB - 1
-               CALL ZGEMV( 'No transpose', J+JB-JJ, K-1, -CONE,
+               CALL AB_ZGEMV( 'No transpose', J+JB-JJ, K-1, -CONE,
      $                     A( JJ, 1 ), LDA, W( JJ, 1 ), LDW, CONE,
      $                     A( JJ, JJ ), 1 )
   100       CONTINUE
@@ -956,7 +966,7 @@
 *           Update the rectangular subdiagonal block
 *
             IF( J+JB.LE.N )
-     $         CALL ZGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
+     $         CALL AB_ZGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
      $                     K-1, -CONE, A( J+JB, 1 ), LDA, W( J, 1 ),
      $                     LDW, CONE, A( J+JB, J ), LDA )
   110    CONTINUE
@@ -969,6 +979,6 @@
 *
       RETURN
 *
-*     End of ZLASYF_RK
+*     End of AB_AB_ZLASYF_RK
 *
       END

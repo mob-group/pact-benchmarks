@@ -1,4 +1,4 @@
-*> \brief \b CGEQLS
+*> \brief \b AB_CGEQLS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE AB_CGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the QL factorization
 *>     A = Q*L
-*> computed by CGEQLF.
+*> computed by AB_CGEQLF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          Details of the QL factorization of the original matrix A as
-*>          returned by CGEQLF.
+*>          returned by AB_CGEQLF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,7 +119,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+      SUBROUTINE AB_CGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK
+     $,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -142,7 +143,7 @@
       PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTRSM, CUNMQL, XERBLA
+      EXTERNAL           AB_CTRSM, AB_CUNMQL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -162,12 +163,13 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, M ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
+     $0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGEQLS', -INFO )
+         CALL AB_XERBLA( 'AB_CGEQLS', -INFO )
          RETURN
       END IF
 *
@@ -178,16 +180,17 @@
 *
 *     B := Q' * B
 *
-      CALL CUNMQL( 'Left', 'Conjugate transpose', M, NRHS, N, A, LDA,
+      CALL AB_CUNMQL( 'Left', 'Conjugate transpose', M, NRHS, N, A, LDA,
      $             TAU, B, LDB, WORK, LWORK, INFO )
 *
 *     Solve L*X = B(m-n+1:m,:)
 *
-      CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRHS,
+      CALL AB_CTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRH
+     $S,
      $            ONE, A( M-N+1, 1 ), LDA, B( M-N+1, 1 ), LDB )
 *
       RETURN
 *
-*     End of CGEQLS
+*     End of AB_CGEQLS
 *
       END

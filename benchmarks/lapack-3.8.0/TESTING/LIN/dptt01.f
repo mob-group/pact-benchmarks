@@ -1,4 +1,4 @@
-*> \brief \b DPTT01
+*> \brief \b AB_DPTT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPTT01( N, D, E, DF, EF, WORK, RESID )
+*       SUBROUTINE AB_DPTT01( N, D, E, DF, EF, WORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
+*> AB_DPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
 *> factorization and computes the residual
 *>    norm(L*D*L' - A) / ( n * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -89,7 +89,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DPTT01( N, D, E, DF, EF, WORK, RESID )
+      SUBROUTINE AB_DPTT01( N, D, E, DF, EF, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,8 +115,8 @@
       DOUBLE PRECISION   ANORM, DE, EPS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX
@@ -130,7 +130,7 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Construct the difference L*D*L' - A.
 *
@@ -168,6 +168,6 @@
 *
       RETURN
 *
-*     End of DPTT01
+*     End of AB_DPTT01
 *
       END

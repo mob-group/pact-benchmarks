@@ -1,4 +1,4 @@
-*> \brief \b CPBTRF
+*> \brief \b AB_CPBTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPBTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbtrf.f">
+*> Download AB_CPBTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPBTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbtrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPBTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbtrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPBTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPBTRF( UPLO, N, KD, AB, LDAB, INFO )
+*       SUBROUTINE AB_CPBTRF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CPBTRF computes the Cholesky factorization of a complex Hermitian
+*> AB_CPBTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite band matrix A.
 *>
 *> The factorization has the form
@@ -140,7 +140,7 @@
 *>  Peter Mayes and Giuseppe Radicati, IBM ECSEC, Rome, March 23, 1989
 *
 *  =====================================================================
-      SUBROUTINE CPBTRF( UPLO, N, KD, AB, LDAB, INFO )
+      SUBROUTINE AB_CPBTRF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,12 +172,13 @@
       COMPLEX            WORK( LDWORK, NBMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHERK, CPBTF2, CPOTF2, CTRSM, XERBLA
+      EXTERNAL           AB_CGEMM, AB_AB_CHERK, AB_CPBTF2, AB_CPOTF2, AB
+     $_CTRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -187,8 +188,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( ( .NOT.LSAME( UPLO, 'U' ) ) .AND.
-     $    ( .NOT.LSAME( UPLO, 'L' ) ) ) THEN
+      IF( ( .NOT.AB_LSAME( UPLO, 'U' ) ) .AND.
+     $    ( .NOT.AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -198,7 +199,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPBTRF', -INFO )
+         CALL AB_XERBLA( 'AB_CPBTRF', -INFO )
          RETURN
       END IF
 *
@@ -209,7 +210,7 @@
 *
 *     Determine the block size for this environment
 *
-      NB = ILAENV( 1, 'CPBTRF', UPLO, N, KD, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_CPBTRF', UPLO, N, KD, -1, -1 )
 *
 *     The block size must not exceed the semi-bandwidth KD, and must not
 *     exceed the limit set by the size of the local array WORK.
@@ -220,12 +221,12 @@
 *
 *        Use unblocked code
 *
-         CALL CPBTF2( UPLO, N, KD, AB, LDAB, INFO )
+         CALL AB_CPBTF2( UPLO, N, KD, AB, LDAB, INFO )
       ELSE
 *
 *        Use blocked code
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Compute the Cholesky factorization of a Hermitian band
 *           matrix, given the upper triangle of the matrix in band
@@ -246,7 +247,7 @@
 *
 *              Factorize the diagonal block
 *
-               CALL CPOTF2( UPLO, IB, AB( KD+1, I ), LDAB-1, II )
+               CALL AB_CPOTF2( UPLO, IB, AB( KD+1, I ), LDAB-1, II )
                IF( II.NE.0 ) THEN
                   INFO = I + II - 1
                   GO TO 150
@@ -274,14 +275,16 @@
 *
 *                    Update A12
 *
-                     CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose',
+                     CALL AB_CTRSM( 'Left', 'Upper', 'Conjugate transpos
+     $e',
      $                           'Non-unit', IB, I2, CONE,
      $                           AB( KD+1, I ), LDAB-1,
      $                           AB( KD+1-IB, I+IB ), LDAB-1 )
 *
 *                    Update A22
 *
-                     CALL CHERK( 'Upper', 'Conjugate transpose', I2, IB,
+                     CALL AB_AB_CHERK( 'Upper', 'Conjugate transpose', I
+     $2, IB,
      $                           -ONE, AB( KD+1-IB, I+IB ), LDAB-1, ONE,
      $                           AB( KD+1, I+IB ), LDAB-1 )
                   END IF
@@ -298,14 +301,15 @@
 *
 *                    Update A13 (in the work array).
 *
-                     CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose',
+                     CALL AB_CTRSM( 'Left', 'Upper', 'Conjugate transpos
+     $e',
      $                           'Non-unit', IB, I3, CONE,
      $                           AB( KD+1, I ), LDAB-1, WORK, LDWORK )
 *
 *                    Update A23
 *
                      IF( I2.GT.0 )
-     $                  CALL CGEMM( 'Conjugate transpose',
+     $                  CALL AB_CGEMM( 'Conjugate transpose',
      $                              'No transpose', I2, I3, IB, -CONE,
      $                              AB( KD+1-IB, I+IB ), LDAB-1, WORK,
      $                              LDWORK, CONE, AB( 1+IB, I+KD ),
@@ -313,7 +317,8 @@
 *
 *                    Update A33
 *
-                     CALL CHERK( 'Upper', 'Conjugate transpose', I3, IB,
+                     CALL AB_AB_CHERK( 'Upper', 'Conjugate transpose', I
+     $3, IB,
      $                           -ONE, WORK, LDWORK, ONE,
      $                           AB( KD+1, I+KD ), LDAB-1 )
 *
@@ -348,7 +353,7 @@
 *
 *              Factorize the diagonal block
 *
-               CALL CPOTF2( UPLO, IB, AB( 1, I ), LDAB-1, II )
+               CALL AB_CPOTF2( UPLO, IB, AB( 1, I ), LDAB-1, II )
                IF( II.NE.0 ) THEN
                   INFO = I + II - 1
                   GO TO 150
@@ -376,14 +381,15 @@
 *
 *                    Update A21
 *
-                     CALL CTRSM( 'Right', 'Lower',
+                     CALL AB_CTRSM( 'Right', 'Lower',
      $                           'Conjugate transpose', 'Non-unit', I2,
      $                           IB, CONE, AB( 1, I ), LDAB-1,
      $                           AB( 1+IB, I ), LDAB-1 )
 *
 *                    Update A22
 *
-                     CALL CHERK( 'Lower', 'No transpose', I2, IB, -ONE,
+                     CALL AB_AB_CHERK( 'Lower', 'No transpose', I2, IB, 
+     $-ONE,
      $                           AB( 1+IB, I ), LDAB-1, ONE,
      $                           AB( 1, I+IB ), LDAB-1 )
                   END IF
@@ -400,7 +406,7 @@
 *
 *                    Update A31 (in the work array).
 *
-                     CALL CTRSM( 'Right', 'Lower',
+                     CALL AB_CTRSM( 'Right', 'Lower',
      $                           'Conjugate transpose', 'Non-unit', I3,
      $                           IB, CONE, AB( 1, I ), LDAB-1, WORK,
      $                           LDWORK )
@@ -408,7 +414,7 @@
 *                    Update A32
 *
                      IF( I2.GT.0 )
-     $                  CALL CGEMM( 'No transpose',
+     $                  CALL AB_CGEMM( 'No transpose',
      $                              'Conjugate transpose', I3, I2, IB,
      $                              -CONE, WORK, LDWORK, AB( 1+IB, I ),
      $                              LDAB-1, CONE, AB( 1+KD-IB, I+IB ),
@@ -416,7 +422,8 @@
 *
 *                    Update A33
 *
-                     CALL CHERK( 'Lower', 'No transpose', I3, IB, -ONE,
+                     CALL AB_AB_CHERK( 'Lower', 'No transpose', I3, IB, 
+     $-ONE,
      $                           WORK, LDWORK, ONE, AB( 1, I+KD ),
      $                           LDAB-1 )
 *
@@ -437,6 +444,6 @@
   150 CONTINUE
       RETURN
 *
-*     End of CPBTRF
+*     End of AB_CPBTRF
 *
       END

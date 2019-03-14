@@ -1,4 +1,4 @@
-*> \brief \b DGET52
+*> \brief \b AB_DGET52
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,16 +8,16 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHAR,
+*       SUBROUTINE AB_DGET52( LEFT, N, A, LDA, B, LDB, E, AB_LDE, ALPHAR,
 *                          ALPHAI, BETA, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            LEFT
-*       INTEGER            LDA, LDB, LDE, N
+*       INTEGER            LDA, LDB, AB_LDE, N
 *       ..
 *       .. Array Arguments ..
 *       DOUBLE PRECISION   A( LDA, * ), ALPHAI( * ), ALPHAR( * ),
-*      $                   B( LDB, * ), BETA( * ), E( LDE, * ),
+*      $                   B( LDB, * ), BETA( * ), E( AB_LDE, * ),
 *      $                   RESULT( 2 ), WORK( * )
 *       ..
 *
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> DGET52  does an eigenvector check for the generalized eigenvalue
+*> AB_DGET52  does an eigenvector check for the generalized eigenvalue
 *> problem.
 *>
 *> The basic test for right eigenvectors is:
@@ -58,7 +58,7 @@
 *>                         T   T  _
 *> For left eigenvectors, A , B , a, and b  are used.
 *>
-*> DGET52 also tests the normalization of E.  Each eigenvector is
+*> AB_DGET52 also tests the normalization of E.  Each eigenvector is
 *> supposed to be normalized so that the maximum "absolute value"
 *> of its elements is 1, where in this case, "absolute value"
 *> of a complex value x is  |Re(x)| + |Im(x)| ; let us call this
@@ -85,7 +85,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrices.  If it is zero, DGET52 does
+*>          The size of the matrices.  If it is zero, AB_DGET52 does
 *>          nothing.  It must be at least zero.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is DOUBLE PRECISION array, dimension (LDE, N)
+*>          E is DOUBLE PRECISION array, dimension (AB_LDE, N)
 *>          The matrix of eigenvectors.  It must be O( 1 ).  Complex
 *>          eigenvalues and eigenvectors always come in pairs, the
 *>          eigenvalue and its conjugate being stored in adjacent
@@ -129,9 +129,9 @@
 *>          complex one is specified by whether ALPHAI(j) is zero or not.
 *> \endverbatim
 *>
-*> \param[in] LDE
+*> \param[in] AB_LDE
 *> \verbatim
-*>          LDE is INTEGER
+*>          AB_LDE is INTEGER
 *>          The leading dimension of E.  It must be at least 1 and at
 *>          least N.
 *> \endverbatim
@@ -196,7 +196,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHAR,
+      SUBROUTINE AB_DGET52( LEFT, N, A, LDA, B, LDB, E, AB_LDE, ALPHAR,
      $                   ALPHAI, BETA, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -206,11 +206,11 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            LEFT
-      INTEGER            LDA, LDB, LDE, N
+      INTEGER            LDA, LDB, AB_LDE, N
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( LDA, * ), ALPHAI( * ), ALPHAR( * ),
-     $                   B( LDB, * ), BETA( * ), E( LDE, * ),
+     $                   B( LDB, * ), BETA( * ), E( AB_LDE, * ),
      $                   RESULT( 2 ), WORK( * )
 *     ..
 *
@@ -229,11 +229,11 @@
      $                   SAFMIN, SALFI, SALFR, SBETA, SCALE, TEMP1, ULP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV
+      EXTERNAL           AB_DGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX
@@ -245,9 +245,9 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SAFMAX = ONE / SAFMIN
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
       IF( LEFT ) THEN
          TRANS = 'T'
@@ -259,9 +259,9 @@
 *
 *     Norm of A, B, and E:
 *
-      ANORM = MAX( DLANGE( NORMAB, N, N, A, LDA, WORK ), SAFMIN )
-      BNORM = MAX( DLANGE( NORMAB, N, N, B, LDB, WORK ), SAFMIN )
-      ENORM = MAX( DLANGE( 'O', N, N, E, LDE, WORK ), ULP )
+      ANORM = MAX( AB_DLANGE( NORMAB, N, N, A, LDA, WORK ), SAFMIN )
+      BNORM = MAX( AB_DLANGE( NORMAB, N, N, B, LDB, WORK ), SAFMIN )
+      ENORM = MAX( AB_DLANGE( 'O', N, N, E, AB_LDE, WORK ), ULP )
       ALFMAX = SAFMAX / MAX( ONE, BNORM )
       BETMAX = SAFMAX / MAX( ONE, ANORM )
 *
@@ -294,9 +294,11 @@
      $                 ABS( SBETA )*ANORM, SAFMIN )
                ACOEF = SCALE*SBETA
                BCOEFR = SCALE*SALFR
-               CALL DGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 1,
+               CALL AB_DGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 
+     $1,
      $                     ZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL DGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC ),
+               CALL AB_DGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC )
+     $,
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
             ELSE
 *
@@ -324,24 +326,30 @@
                   BCOEFI = -BCOEFI
                END IF
 *
-               CALL DGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 1,
+               CALL AB_DGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC ), 
+     $1,
      $                     ZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL DGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC ),
+               CALL AB_DGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC )
+     $,
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
-               CALL DGEMV( TRANS, N, N, BCOEFI, B, LDA, E( 1, JVEC+1 ),
+               CALL AB_DGEMV( TRANS, N, N, BCOEFI, B, LDA, E( 1, JVEC+1 
+     $),
      $                     1, ONE, WORK( N*( JVEC-1 )+1 ), 1 )
 *
-               CALL DGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC+1 ),
+               CALL AB_DGEMV( TRANS, N, N, ACOEF, A, LDA, E( 1, JVEC+1 )
+     $,
      $                     1, ZERO, WORK( N*JVEC+1 ), 1 )
-               CALL DGEMV( TRANS, N, N, -BCOEFI, B, LDA, E( 1, JVEC ),
+               CALL AB_DGEMV( TRANS, N, N, -BCOEFI, B, LDA, E( 1, JVEC )
+     $,
      $                     1, ONE, WORK( N*JVEC+1 ), 1 )
-               CALL DGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC+1 ),
+               CALL AB_DGEMV( TRANS, N, N, -BCOEFR, B, LDA, E( 1, JVEC+1
+     $ ),
      $                     1, ONE, WORK( N*JVEC+1 ), 1 )
             END IF
          END IF
    10 CONTINUE
 *
-      ERRNRM = DLANGE( 'One', N, N, WORK, N, WORK( N**2+1 ) ) / ENORM
+      ERRNRM = AB_DLANGE( 'One', N, N, WORK, N, WORK( N**2+1 ) ) / ENORM
 *
 *     Compute RESULT(1)
 *
@@ -378,6 +386,6 @@
 *
       RETURN
 *
-*     End of DGET52
+*     End of AB_DGET52
 *
       END

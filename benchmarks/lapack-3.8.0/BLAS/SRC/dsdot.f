@@ -1,4 +1,4 @@
-*> \brief \b DSDOT
+*> \brief \b AB_DAB_SDOT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DSDOT(N,SX,INCX,SY,INCY)
+*       DOUBLE PRECISION FUNCTION AB_DAB_SDOT(N,SX,INCX,SY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -32,8 +32,8 @@
 *> precision accumulation and result.
 *>
 *> Returns D.P. dot product accumulated in D.P., for S.P. SX and SY
-*> DSDOT = sum for I = 0 to N-1 of  SX(LX+I*INCX) * SY(LY+I*INCY),
-*> where LX = 1 if INCX .GE. 0, else LX = 1+(1-N)*INCX, and LY is
+*> AB_DAB_SDOT = sum for I = 0 to N-1 of  SX(LX+I*INCX) * SY(LY+I*INCY),
+*> where LX = 1 if INCX .GE. 0, ELSE LX = 1+(1-N)*INCX, and LY is
 *> defined in a similar way using INCY.
 *> \endverbatim
 *
@@ -70,10 +70,10 @@
 *>         storage spacing between elements of SY
 *> \endverbatim
 *>
-*> \result DSDOT
+*> \result AB_DAB_SDOT
 *> \verbatim
-*>          DSDOT is DOUBLE PRECISION
-*>         DSDOT  double precision dot product (zero if N.LE.0)
+*>          AB_DAB_SDOT is DOUBLE PRECISION
+*>         AB_DAB_SDOT  double precision dot product (zero if N.LE.0)
 *> \endverbatim
 *
 *  Authors:
@@ -117,7 +117,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DSDOT(N,SX,INCX,SY,INCY)
+      DOUBLE PRECISION FUNCTION AB_DAB_SDOT(N,SX,INCX,SY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -144,7 +144,7 @@
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE
 *     ..
-      DSDOT = 0.0D0
+      AB_DAB_SDOT = 0.0D0
       IF (N.LE.0) RETURN
       IF (INCX.EQ.INCY .AND. INCX.GT.0) THEN
 *
@@ -152,7 +152,7 @@
 *
          NS = N*INCX
          DO I = 1,NS,INCX
-            DSDOT = DSDOT + DBLE(SX(I))*DBLE(SY(I))
+            AB_DAB_SDOT = AB_DAB_SDOT + DBLE(SX(I))*DBLE(SY(I))
          END DO
       ELSE
 *
@@ -163,7 +163,7 @@
          IF (INCX.LT.0) KX = 1 + (1-N)*INCX
          IF (INCY.LT.0) KY = 1 + (1-N)*INCY
          DO I = 1,N
-            DSDOT = DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
+            AB_DAB_SDOT = AB_DAB_SDOT + DBLE(SX(KX))*DBLE(SY(KY))
             KX = KX + INCX
             KY = KY + INCY
          END DO

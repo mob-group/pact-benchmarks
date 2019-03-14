@@ -1,4 +1,4 @@
-*> \brief <b> CPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b>
+*> \brief <b> AB_AB_AB_CPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPOSVXX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cposvxx.f">
+*> Download AB_AB_AB_CPOSVXX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_CPOSVXX.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cposvxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_CPOSVXX.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cposvxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_CPOSVXX.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+*       SUBROUTINE AB_AB_AB_CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
 *                           S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
 *                           N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
 *                           NPARAMS, PARAMS, WORK, RWORK, INFO )
@@ -43,25 +43,25 @@
 *>
 *> \verbatim
 *>
-*>    CPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
+*>    AB_AB_AB_CPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
 *>    to compute the solution to a complex system of linear equations
 *>    A * X = B, where A is an N-by-N symmetric positive definite matrix
 *>    and X and B are N-by-NRHS matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
-*>    are returned. CPOSVXX will return a solution with a tiny
+*>    are returned. AB_AB_AB_CPOSVXX will return a solution with a tiny
 *>    guaranteed error (O(eps) where eps is the working machine
 *>    precision) unless the matrix is very ill-conditioned, in which
 *>    case a warning is returned. Relevant condition numbers also are
 *>    calculated and returned.
 *>
-*>    CPOSVXX accepts user-provided factorizations and equilibration
+*>    AB_AB_AB_CPOSVXX accepts user-provided factorizations and equilibration
 *>    factors; see the definitions of the FACT and EQUED options.
 *>    Solving with refinement and using a factorization from a previous
-*>    CPOSVXX call will also produce a solution with either O(eps)
+*>    AB_AB_AB_CPOSVXX call will also produce a solution with either O(eps)
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
-*>    differ from what CPOSVXX would itself produce.
+*>    differ from what AB_AB_AB_CPOSVXX would itself produce.
 *> \endverbatim
 *
 *> \par Description:
@@ -323,21 +323,21 @@
 *>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The second index in ERR_BNDS_NORM(:,err) contains the following
+*>     The AB_SECOND index in ERR_BNDS_NORM(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * slamch('Epsilon').
+*>              sqrt(n) * AB_SLAMCH('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * slamch('Epsilon'). This error bound should only
+*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * slamch('Epsilon') to determine if the error
+*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -371,21 +371,21 @@
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The second index in ERR_BNDS_COMP(:,err) contains the following
+*>     The AB_SECOND index in ERR_BNDS_COMP(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * slamch('Epsilon').
+*>              sqrt(n) * AB_SLAMCH('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * slamch('Epsilon'). This error bound should only
+*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * slamch('Epsilon') to determine if the error
+*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -437,7 +437,7 @@
 *>       PARAMS(LA_LINRX_CWISE_I = 3) : Flag determining if the code
 *>            will attempt to find a solution with small componentwise
 *>            relative error in the double-precision algorithm.  Positive
-*>            is true, 0.0 is false.
+*>            is true, 0.0 is FALSE.
 *>         Default: 1.0 (attempt componentwise convergence)
 *> \endverbatim
 *>
@@ -491,7 +491,8 @@
 *> \ingroup complexPOsolve
 *
 *  =====================================================================
-      SUBROUTINE CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE AB_AB_AB_CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF
+     $, EQUED,
      $                    S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, RWORK, INFO )
@@ -535,13 +536,14 @@
       REAL               AMAX, BIGNUM, SMIN, SMAX, SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, SLAMCH, CLA_PORPVGRW
-      LOGICAL            LSAME
-      REAL               SLAMCH, CLA_PORPVGRW
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_CLA_PORPVGRW
+      LOGICAL            AB_LSAME
+      REAL               AB_SLAMCH, AB_CLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CPOEQUB, CPOTRF, CPOTRS, CLACPY,
-     $                   CLAQHE, XERBLA, CLASCL2, CPORFSX
+      EXTERNAL           AB_AB_CPOEQUB, AB_CPOTRF, AB_CPOTRS, AB_CLACPY,
+     $                   AB_CLAQHE, AB_XERBLA, AB_AB_CLASCL2, AB_AB_CPOR
+     $FSX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -549,30 +551,30 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      EQUIL = LSAME( FACT, 'E' )
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      NOFACT = AB_LSAME( FACT, 'N' )
+      EQUIL = AB_LSAME( FACT, 'E' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = LSAME( EQUED, 'Y' )
+         RCEQU = AB_LSAME( EQUED, 'Y' )
       ENDIF
 *
 *     Default is failure.  If an input parameter is wrong or
 *     factorization fails, make everything look horrible.  Only the
-*     pivot growth is set here, the rest is initialized in CPORFSX.
+*     pivot growth is set here, the rest is initialized in AB_AB_CPORFSX.
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until CPORFSX.
+*     Test the input parameters.  PARAMS is not tested until AB_AB_CPORFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
-     $     LSAME( FACT, 'F' ) ) THEN
+     $     AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
-     $         .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -582,8 +584,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
-     $        ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
+     $        ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -9
       ELSE
          IF ( RCEQU ) THEN
@@ -611,7 +613,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPOSVXX', -INFO )
+         CALL AB_XERBLA( 'AB_AB_AB_CPOSVXX', -INFO )
          RETURN
       END IF
 *
@@ -619,26 +621,26 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL CPOEQUB( N, A, LDA, S, SCOND, AMAX, INFEQU )
+         CALL AB_AB_CPOEQUB( N, A, LDA, S, SCOND, AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
 *
-            CALL CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
-            RCEQU = LSAME( EQUED, 'Y' )
+            CALL AB_CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+            RCEQU = AB_LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
 *     Scale the right-hand side.
 *
-      IF( RCEQU ) CALL CLASCL2( N, NRHS, S, B, LDB )
+      IF( RCEQU ) CALL AB_AB_CLASCL2( N, NRHS, S, B, LDB )
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
 *        Compute the Cholesky factorization of A.
 *
-         CALL CLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL CPOTRF( UPLO, N, AF, LDAF, INFO )
+         CALL AB_CLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL AB_CPOTRF( UPLO, N, AF, LDAF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -648,24 +650,24 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = CLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, RWORK )
+            RPVGRW = AB_CLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, RWORK )
             RETURN
          END IF
       END IF
 *
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
-      RPVGRW = CLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, RWORK )
+      RPVGRW = AB_CLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, RWORK )
 *
 *     Compute the solution matrix X.
 *
-      CALL CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL CPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
+      CALL AB_CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_CPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL CPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
+      CALL AB_AB_CPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
      $     S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $     ERR_BNDS_COMP,  NPARAMS, PARAMS, WORK, RWORK, INFO )
 
@@ -673,11 +675,11 @@
 *     Scale solutions.
 *
       IF ( RCEQU ) THEN
-         CALL CLASCL2( N, NRHS, S, X, LDX )
+         CALL AB_AB_CLASCL2( N, NRHS, S, X, LDX )
       END IF
 *
       RETURN
 *
-*     End of CPOSVXX
+*     End of AB_AB_AB_CPOSVXX
 *
       END

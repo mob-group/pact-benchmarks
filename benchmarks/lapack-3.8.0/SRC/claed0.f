@@ -1,4 +1,4 @@
-*> \brief \b CLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
+*> \brief \b AB_CLAED0 used by AB_SSTEDC. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAED0 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed0.f">
+*> Download AB_CLAED0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAED0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAED0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAED0.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAED0( QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS, RWORK,
+*       SUBROUTINE AB_CLAED0( QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS, RWORK,
 *                          IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> Using the divide and conquer method, CLAED0 computes all eigenvalues
+*> Using the divide and conquer method, AB_CLAED0 computes all eigenvalues
 *> of a symmetric tridiagonal matrix which is one diagonal block of
 *> those from reducing a dense or band Hermitian matrix and
 *> corresponding eigenvectors of the dense or band matrix.
@@ -142,7 +142,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CLAED0( QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS, RWORK,
+      SUBROUTINE AB_CLAED0( QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS, RWORK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -175,11 +175,12 @@
       REAL               TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACRM, CLAED7, SCOPY, SSTEQR, XERBLA
+      EXTERNAL           AB_CCOPY, AB_CLACRM, AB_CLAED7, AB_SCOPY, AB_SS
+     $TEQR, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, REAL
@@ -204,7 +205,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAED0', -INFO )
+         CALL AB_XERBLA( 'AB_CLAED0', -INFO )
          RETURN
       END IF
 *
@@ -213,7 +214,7 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      SMLSIZ = ILAENV( 9, 'CLAED0', ' ', 0, 0, 0, 0 )
+      SMLSIZ = AB_ILAENV( 9, 'AB_CLAED0', ' ', 0, 0, 0, 0 )
 *
 *     Determine the size and placement of the submatrices, and save in
 *     the leading elements of IWORK.
@@ -286,9 +287,9 @@
             MATSIZ = IWORK( I+1 ) - IWORK( I )
          END IF
          LL = IQ - 1 + IWORK( IQPTR+CURR )
-         CALL SSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
+         CALL AB_SSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
      $                RWORK( LL ), MATSIZ, RWORK, INFO )
-         CALL CLACRM( QSIZ, MATSIZ, Q( 1, SUBMAT ), LDQ, RWORK( LL ),
+         CALL AB_CLACRM( QSIZ, MATSIZ, Q( 1, SUBMAT ), LDQ, RWORK( LL ),
      $                MATSIZ, QSTORE( 1, SUBMAT ), LDQS,
      $                RWORK( IWREM ) )
          IWORK( IQPTR+CURR+1 ) = IWORK( IQPTR+CURR ) + MATSIZ**2
@@ -327,13 +328,13 @@
             END IF
 *
 *     Merge lower order eigensystems (of size MSD2 and MATSIZ - MSD2)
-*     into an eigensystem of size MATSIZ.  CLAED7 handles the case
+*     into an eigensystem of size MATSIZ.  AB_CLAED7 handles the case
 *     when the eigenvectors of a full or band Hermitian matrix (which
 *     was reduced to tridiagonal form) are desired.
 *
 *     I am free to use Q as a valuable working space until Loop 150.
 *
-            CALL CLAED7( MATSIZ, MSD2, QSIZ, TLVLS, CURLVL, CURPRB,
+            CALL AB_CLAED7( MATSIZ, MSD2, QSIZ, TLVLS, CURLVL, CURPRB,
      $                   D( SUBMAT ), QSTORE( 1, SUBMAT ), LDQS,
      $                   E( SUBMAT+MSD2-1 ), IWORK( INDXQ+SUBMAT ),
      $                   RWORK( IQ ), IWORK( IQPTR ), IWORK( IPRMPT ),
@@ -360,12 +361,12 @@
       DO 100 I = 1, N
          J = IWORK( INDXQ+I )
          RWORK( I ) = D( J )
-         CALL CCOPY( QSIZ, QSTORE( 1, J ), 1, Q( 1, I ), 1 )
+         CALL AB_CCOPY( QSIZ, QSTORE( 1, J ), 1, Q( 1, I ), 1 )
   100 CONTINUE
-      CALL SCOPY( N, RWORK, 1, D, 1 )
+      CALL AB_SCOPY( N, RWORK, 1, D, 1 )
 *
       RETURN
 *
-*     End of CLAED0
+*     End of AB_CLAED0
 *
       END

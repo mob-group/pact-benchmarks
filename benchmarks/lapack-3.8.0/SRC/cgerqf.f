@@ -1,4 +1,4 @@
-*> \brief \b CGERQF
+*> \brief \b AB_CGERQF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGERQF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgerqf.f">
+*> Download AB_CGERQF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGERQF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgerqf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGERQF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgerqf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGERQF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGERQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE AB_CGERQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LWORK, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CGERQF computes an RQ factorization of a complex M-by-N matrix A:
+*> AB_CGERQF computes an RQ factorization of a complex M-by-N matrix A:
 *> A = R * Q.
 *> \endverbatim
 *
@@ -95,7 +95,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -136,7 +136,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGERQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE AB_CGERQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -158,14 +158,15 @@
      $                   MU, NB, NBMIN, NU, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGERQ2, CLARFB, CLARFT, XERBLA
+      EXTERNAL           AB_CGERQ2, AB_AB_CLARFB, AB_AB_CLARFT, AB_XERBL
+     $A
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -186,7 +187,7 @@
          IF( K.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = ILAENV( 1, 'CGERQF', ' ', M, N, -1, -1 )
+            NB = AB_ILAENV( 1, 'AB_CGERQF', ' ', M, N, -1, -1 )
             LWKOPT = M*NB
          END IF
          WORK( 1 ) = LWKOPT
@@ -197,7 +198,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGERQF', -INFO )
+         CALL AB_XERBLA( 'AB_CGERQF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -216,7 +217,7 @@
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, ILAENV( 3, 'CGERQF', ' ', M, N, -1, -1 ) )
+         NX = MAX( 0, AB_ILAENV( 3, 'AB_CGERQF', ' ', M, N, -1, -1 ) )
          IF( NX.LT.K ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -229,7 +230,7 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'CGERQF', ' ', M, N, -1,
+               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_CGERQF', ' ', M, N, -1,
      $                 -1 ) )
             END IF
          END IF
@@ -249,19 +250,20 @@
 *           Compute the RQ factorization of the current block
 *           A(m-k+i:m-k+i+ib-1,1:n-k+i+ib-1)
 *
-            CALL CGERQ2( IB, N-K+I+IB-1, A( M-K+I, 1 ), LDA, TAU( I ),
+            CALL AB_CGERQ2( IB, N-K+I+IB-1, A( M-K+I, 1 ), LDA, TAU( I )
+     $,
      $                   WORK, IINFO )
             IF( M-K+I.GT.1 ) THEN
 *
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL CLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
+               CALL AB_AB_CLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
      $                      A( M-K+I, 1 ), LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-               CALL CLARFB( 'Right', 'No transpose', 'Backward',
+               CALL AB_AB_CLARFB( 'Right', 'No transpose', 'Backward',
      $                      'Rowwise', M-K+I-1, N-K+I+IB-1, IB,
      $                      A( M-K+I, 1 ), LDA, WORK, LDWORK, A, LDA,
      $                      WORK( IB+1 ), LDWORK )
@@ -277,11 +279,11 @@
 *     Use unblocked code to factor the last or only block
 *
       IF( MU.GT.0 .AND. NU.GT.0 )
-     $   CALL CGERQ2( MU, NU, A, LDA, TAU, WORK, IINFO )
+     $   CALL AB_CGERQ2( MU, NU, A, LDA, TAU, WORK, IINFO )
 *
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of CGERQF
+*     End of AB_CGERQF
 *
       END

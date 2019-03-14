@@ -1,4 +1,4 @@
-*> \brief \b CLA_GBRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for general banded matrices.
+*> \brief \b AB_CLA_GBRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for general banded matrices.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLA_GBRCOND_C + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gbrcond_c.f">
+*> Download AB_CLA_GBRCOND_C + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLA_GBRCOND_C.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_gbrcond_c.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLA_GBRCOND_C.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gbrcond_c.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLA_GBRCOND_C.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB, AFB,
+*       REAL FUNCTION AB_CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB, AFB,
 *                                    LDAFB, IPIV, C, CAPPLY, INFO, WORK,
 *                                    RWORK )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*>    CLA_GBRCOND_C Computes the infinity norm condition number of
+*>    AB_CLA_GBRCOND_C Computes the infinity norm condition number of
 *>    op(A) * inv(diag(C)) where C is a REAL vector.
 *> \endverbatim
 *
@@ -93,7 +93,7 @@
 *> \verbatim
 *>          AFB is COMPLEX array, dimension (LDAFB,N)
 *>     Details of the LU factorization of the band matrix A, as
-*>     computed by CGBTRF.  U is stored as an upper triangular
+*>     computed by AB_CGBTRF.  U is stored as an upper triangular
 *>     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
 *>     and the multipliers used during the factorization are stored
 *>     in rows KL+KU+2 to 2*KL+KU+1.
@@ -109,7 +109,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     The pivot indices from the factorization A = P*L*U
-*>     as computed by CGBTRF; row i of the matrix was interchanged
+*>     as computed by AB_CGBTRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *> \endverbatim
 *>
@@ -157,7 +157,7 @@
 *> \ingroup complexGBcomputational
 *
 *  =====================================================================
-      REAL FUNCTION CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB, AFB,
+      REAL FUNCTION AB_CLA_GBRCOND_C( TRANS, N, KL, KU, AB, LDAB, AFB,
      $                             LDAFB, IPIV, C, CAPPLY, INFO, WORK,
      $                             RWORK )
 *
@@ -189,11 +189,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACN2, CGBTRS, XERBLA
+      EXTERNAL           AB_CLACN2, AB_CGBTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -205,12 +205,12 @@
       CABS1( ZDUM ) = ABS( REAL( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
 *     ..
 *     .. Executable Statements ..
-      CLA_GBRCOND_C = 0.0E+0
+      AB_CLA_GBRCOND_C = 0.0E+0
 *
       INFO = 0
-      NOTRANS = LSAME( TRANS, 'N' )
-      IF ( .NOT. NOTRANS .AND. .NOT. LSAME( TRANS, 'T' ) .AND. .NOT.
-     $     LSAME( TRANS, 'C' ) ) THEN
+      NOTRANS = AB_LSAME( TRANS, 'N' )
+      IF ( .NOT. NOTRANS .AND. .NOT. AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $     AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -224,7 +224,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLA_GBRCOND_C', -INFO )
+         CALL AB_XERBLA( 'AB_CLA_GBRCOND_C', -INFO )
          RETURN
       END IF
 *
@@ -268,7 +268,7 @@
 *     Quick return if possible.
 *
       IF( N.EQ.0 ) THEN
-         CLA_GBRCOND_C = 1.0E+0
+         AB_CLA_GBRCOND_C = 1.0E+0
          RETURN
       ELSE IF( ANORM .EQ. 0.0E+0 ) THEN
          RETURN
@@ -280,7 +280,7 @@
 *
       KASE = 0
    10 CONTINUE
-      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -291,10 +291,10 @@
             END DO
 *
             IF ( NOTRANS ) THEN
-               CALL CGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
+               CALL AB_CGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             ELSE
-               CALL CGBTRS( 'Conjugate transpose', N, KL, KU, 1, AFB,
+               CALL AB_CGBTRS( 'Conjugate transpose', N, KL, KU, 1, AFB,
      $              LDAFB, IPIV, WORK, N, INFO )
             ENDIF
 *
@@ -316,10 +316,10 @@
             END IF
 *
             IF ( NOTRANS ) THEN
-               CALL CGBTRS( 'Conjugate transpose', N, KL, KU, 1, AFB,
+               CALL AB_CGBTRS( 'Conjugate transpose', N, KL, KU, 1, AFB,
      $              LDAFB, IPIV,  WORK, N, INFO )
             ELSE
-               CALL CGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
+               CALL AB_CGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             END IF
 *
@@ -335,7 +335,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0E+0 )
-     $   CLA_GBRCOND_C = 1.0E+0 / AINVNM
+     $   AB_CLA_GBRCOND_C = 1.0E+0 / AINVNM
 *
       RETURN
 *

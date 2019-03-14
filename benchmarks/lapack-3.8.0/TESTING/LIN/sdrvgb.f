@@ -1,4 +1,4 @@
-*> \brief \b SDRVGB
+*> \brief \b AB_SDRVGB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, LA,
+*       SUBROUTINE AB_SDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, LA,
 *                          AFB, LAFB, ASAV, B, BSAV, X, XACT, S, WORK,
 *                          RWORK, IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> SDRVGB tests the driver routines SGBSV and -SVX.
+*> AB_SDRVGB tests the driver routines AB_SGBSV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -168,7 +168,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, LA,
+      SUBROUTINE AB_SDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, L
+     $A,
      $                   AFB, LAFB, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
@@ -220,15 +221,20 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SGET06, SLAMCH, SLANGB, SLANGE, SLANTB
-      EXTERNAL           LSAME, SGET06, SLAMCH, SLANGB, SLANGE, SLANTB
+      LOGICAL            AB_LSAME
+      REAL               AB_SGET06, AB_SLAMCH, AB_SLANGB, AB_SLANGE, AB_
+     $SLANTB
+      EXTERNAL           AB_LSAME, AB_SGET06, AB_SLAMCH, AB_SLANGB, AB_S
+     $LANGE, AB_SLANTB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, SERRVX, SGBEQU, SGBSV,
-     $                   SGBSVX, SGBT01, SGBT02, SGBT05, SGBTRF, SGBTRS,
-     $                   SGET04, SLACPY, SLAQGB, SLARHS, SLASET, SLATB4,
-     $                   SLATMS, XLAENV
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_SERRVX, AB_
+     $SGBEQU, AB_SGBSV,
+     $                   AB_AB_SGBSVX, AB_SGBT01, AB_SGBT02, AB_SGBT05, 
+     $AB_SGBTRF, AB_SGBTRS,
+     $                   AB_SGET04, AB_SLACPY, AB_SLAQGB, AB_SLARHS, AB_
+     $SLASET, AB_SLATB4,
+     $                   AB_SLATMS, AB_XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -264,15 +270,15 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL SERRVX( PATH, NOUT )
+     $   CALL AB_SERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
 *
       NB = 1
       NBMIN = 2
-      CALL XLAENV( 1, NB )
-      CALL XLAENV( 2, NBMIN )
+      CALL AB_XLAENV( 1, NB )
+      CALL AB_XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -328,7 +334,7 @@
                LDAFB = 2*KL + KU + 1
                IF( LDA*N.GT.LA .OR. LDAFB*N.GT.LAFB ) THEN
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL ALADHD( NOUT, PATH )
+     $               CALL AB_ALADHD( NOUT, PATH )
                   IF( LDA*N.GT.LA ) THEN
                      WRITE( NOUT, FMT = 9999 )LA, N, KL, KU,
      $                  N*( KL+KU+1 )
@@ -355,22 +361,23 @@
                   IF( ZEROT .AND. N.LT.IMAT-1 )
      $               GO TO 120
 *
-*                 Set up parameters with SLATB4 and generate a
-*                 test matrix with SLATMS.
+*                 Set up parameters with AB_SLATB4 and generate a
+*                 test matrix with AB_SLATMS.
 *
-                  CALL SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+                  CALL AB_SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
                   RCONDC = ONE / CNDNUM
 *
-                  SRNAMT = 'SLATMS'
-                  CALL SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'AB_SLATMS'
+                  CALL AB_SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, KL, KU, 'Z', A, LDA, WORK,
      $                         INFO )
 *
-*                 Check the error code from SLATMS.
+*                 Check the error code from AB_SLATMS.
 *
                   IF( INFO.NE.0 ) THEN
-                     CALL ALAERH( PATH, 'SLATMS', INFO, 0, ' ', N, N,
+                     CALL AB_ALAERH( PATH, 'AB_SLATMS', INFO, 0, ' ', N,
+     $ N,
      $                            KL, KU, -1, IMAT, NFAIL, NERRS, NOUT )
                      GO TO 120
                   END IF
@@ -407,7 +414,8 @@
 *
 *                 Save a copy of the matrix A in ASAV.
 *
-                  CALL SLACPY( 'Full', KL+KU+1, N, A, LDA, ASAV, LDA )
+                  CALL AB_SLACPY( 'Full', KL+KU+1, N, A, LDA, ASAV, LDA 
+     $)
 *
                   DO 110 IEQUED = 1, 4
                      EQUED = EQUEDS( IEQUED )
@@ -419,9 +427,9 @@
 *
                      DO 100 IFACT = 1, NFACT
                         FACT = FACTS( IFACT )
-                        PREFAC = LSAME( FACT, 'F' )
-                        NOFACT = LSAME( FACT, 'N' )
-                        EQUIL = LSAME( FACT, 'E' )
+                        PREFAC = AB_LSAME( FACT, 'F' )
+                        NOFACT = AB_LSAME( FACT, 'N' )
+                        EQUIL = AB_LSAME( FACT, 'E' )
 *
                         IF( ZEROT ) THEN
                            IF( PREFAC )
@@ -432,35 +440,39 @@
                         ELSE IF( .NOT.NOFACT ) THEN
 *
 *                          Compute the condition number for comparison
-*                          with the value returned by SGESVX (FACT =
+*                          with the value returned by AB_AB_SGESVX (FACT =
 *                          'N' reuses the condition number from the
 *                          previous iteration with FACT = 'F').
 *
-                           CALL SLACPY( 'Full', KL+KU+1, N, ASAV, LDA,
+                           CALL AB_SLACPY( 'Full', KL+KU+1, N, ASAV, LDA
+     $,
      $                                  AFB( KL+1 ), LDAFB )
                            IF( EQUIL .OR. IEQUED.GT.1 ) THEN
 *
 *                             Compute row and column scale factors to
 *                             equilibrate the matrix A.
 *
-                              CALL SGBEQU( N, N, KL, KU, AFB( KL+1 ),
+                              CALL AB_SGBEQU( N, N, KL, KU, AFB( KL+1 ),
      $                                     LDAFB, S, S( N+1 ), ROWCND,
      $                                     COLCND, AMAX, INFO )
                               IF( INFO.EQ.0 .AND. N.GT.0 ) THEN
-                                 IF( LSAME( EQUED, 'R' ) ) THEN
+                                 IF( AB_LSAME( EQUED, 'R' ) ) THEN
                                     ROWCND = ZERO
                                     COLCND = ONE
-                                 ELSE IF( LSAME( EQUED, 'C' ) ) THEN
+                                 ELSE IF( AB_LSAME( EQUED, 'C' ) ) TH
+     $EN
                                     ROWCND = ONE
                                     COLCND = ZERO
-                                 ELSE IF( LSAME( EQUED, 'B' ) ) THEN
+                                 ELSE IF( AB_LSAME( EQUED, 'B' ) ) TH
+     $EN
                                     ROWCND = ZERO
                                     COLCND = ZERO
                                  END IF
 *
 *                                Equilibrate the matrix.
 *
-                                 CALL SLAQGB( N, N, KL, KU, AFB( KL+1 ),
+                                 CALL AB_SLAQGB( N, N, KL, KU, AFB( KL+1
+     $ ),
      $                                        LDAFB, S, S( N+1 ),
      $                                        ROWCND, COLCND, AMAX,
      $                                        EQUED )
@@ -468,7 +480,7 @@
                            END IF
 *
 *                          Save the condition number of the
-*                          non-equilibrated system for use in SGET04.
+*                          non-equilibrated system for use in AB_SGET04.
 *
                            IF( EQUIL ) THEN
                               ROLDO = RCONDO
@@ -477,28 +489,32 @@
 *
 *                          Compute the 1-norm and infinity-norm of A.
 *
-                           ANORMO = SLANGB( '1', N, KL, KU, AFB( KL+1 ),
+                           ANORMO = AB_SLANGB( '1', N, KL, KU, AFB( KL+1
+     $ ),
      $                              LDAFB, RWORK )
-                           ANORMI = SLANGB( 'I', N, KL, KU, AFB( KL+1 ),
+                           ANORMI = AB_SLANGB( 'I', N, KL, KU, AFB( KL+1
+     $ ),
      $                              LDAFB, RWORK )
 *
 *                          Factor the matrix A.
 *
-                           CALL SGBTRF( N, N, KL, KU, AFB, LDAFB, IWORK,
+                           CALL AB_SGBTRF( N, N, KL, KU, AFB, LDAFB, IWO
+     $RK,
      $                                  INFO )
 *
 *                          Form the inverse of A.
 *
-                           CALL SLASET( 'Full', N, N, ZERO, ONE, WORK,
+                           CALL AB_SLASET( 'Full', N, N, ZERO, ONE, WORK
+     $,
      $                                  LDB )
-                           SRNAMT = 'SGBTRS'
-                           CALL SGBTRS( 'No transpose', N, KL, KU, N,
+                           SRNAMT = 'AB_SGBTRS'
+                           CALL AB_SGBTRS( 'No transpose', N, KL, KU, N,
      $                                  AFB, LDAFB, IWORK, WORK, LDB,
      $                                  INFO )
 *
 *                          Compute the 1-norm condition number of A.
 *
-                           AINVNM = SLANGE( '1', N, N, WORK, LDB,
+                           AINVNM = AB_SLANGE( '1', N, N, WORK, LDB,
      $                              RWORK )
                            IF( ANORMO.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                               RCONDO = ONE
@@ -509,7 +525,7 @@
 *                          Compute the infinity-norm condition number
 *                          of A.
 *
-                           AINVNM = SLANGE( 'I', N, N, WORK, LDB,
+                           AINVNM = AB_SLANGE( 'I', N, N, WORK, LDB,
      $                              RWORK )
                            IF( ANORMI.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                               RCONDI = ONE
@@ -531,40 +547,47 @@
 *
 *                          Restore the matrix A.
 *
-                           CALL SLACPY( 'Full', KL+KU+1, N, ASAV, LDA,
+                           CALL AB_SLACPY( 'Full', KL+KU+1, N, ASAV, LDA
+     $,
      $                                  A, LDA )
 *
 *                          Form an exact solution and set the right hand
 *                          side.
 *
-                           SRNAMT = 'SLARHS'
-                           CALL SLARHS( PATH, XTYPE, 'Full', TRANS, N,
+                           SRNAMT = 'AB_SLARHS'
+                           CALL AB_SLARHS( PATH, XTYPE, 'Full', TRANS, N
+     $,
      $                                  N, KL, KU, NRHS, A, LDA, XACT,
      $                                  LDB, B, LDB, ISEED, INFO )
                            XTYPE = 'C'
-                           CALL SLACPY( 'Full', N, NRHS, B, LDB, BSAV,
+                           CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, BSAV
+     $,
      $                                  LDB )
 *
                            IF( NOFACT .AND. ITRAN.EQ.1 ) THEN
 *
-*                             --- Test SGBSV  ---
+*                             --- Test AB_SGBSV  ---
 *
 *                             Compute the LU factorization of the matrix
 *                             and solve the system.
 *
-                              CALL SLACPY( 'Full', KL+KU+1, N, A, LDA,
+                              CALL AB_SLACPY( 'Full', KL+KU+1, N, A, LDA
+     $,
      $                                     AFB( KL+1 ), LDAFB )
-                              CALL SLACPY( 'Full', N, NRHS, B, LDB, X,
+                              CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, X
+     $,
      $                                     LDB )
 *
-                              SRNAMT = 'SGBSV '
-                              CALL SGBSV( N, KL, KU, NRHS, AFB, LDAFB,
+                              SRNAMT = 'AB_SGBSV '
+                              CALL AB_SGBSV( N, KL, KU, NRHS, AFB, LDAFB
+     $,
      $                                    IWORK, X, LDB, INFO )
 *
-*                             Check error code from SGBSV .
+*                             Check error code from AB_SGBSV .
 *
                               IF( INFO.NE.IZERO )
-     $                           CALL ALAERH( PATH, 'SGBSV ', INFO,
+     $                           CALL AB_ALAERH( PATH, 'AB_SGBSV ', INFO
+     $,
      $                                        IZERO, ' ', N, N, KL, KU,
      $                                        NRHS, IMAT, NFAIL, NERRS,
      $                                        NOUT )
@@ -572,7 +595,7 @@
 *                             Reconstruct matrix from factors and
 *                             compute residual.
 *
-                              CALL SGBT01( N, N, KL, KU, A, LDA, AFB,
+                              CALL AB_SGBT01( N, N, KL, KU, A, LDA, AFB,
      $                                     LDAFB, IWORK, WORK,
      $                                     RESULT( 1 ) )
                               NT = 1
@@ -581,16 +604,18 @@
 *                                Compute residual of the computed
 *                                solution.
 *
-                                 CALL SLACPY( 'Full', N, NRHS, B, LDB,
+                                 CALL AB_SLACPY( 'Full', N, NRHS, B, LDB
+     $,
      $                                        WORK, LDB )
-                                 CALL SGBT02( 'No transpose', N, N, KL,
+                                 CALL AB_SGBT02( 'No transpose', N, N, K
+     $L,
      $                                        KU, NRHS, A, LDA, X, LDB,
      $                                        WORK, LDB, RESULT( 2 ) )
 *
 *                                Check solution from generated exact
 *                                solution.
 *
-                                 CALL SGET04( N, NRHS, X, LDB, XACT,
+                                 CALL AB_SGET04( N, NRHS, X, LDB, XACT,
      $                                        LDB, RCONDC, RESULT( 3 ) )
                                  NT = 3
                               END IF
@@ -601,8 +626,9 @@
                               DO 50 K = 1, NT
                                  IF( RESULT( K ).GE.THRESH ) THEN
                                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                                 CALL ALADHD( NOUT, PATH )
-                                    WRITE( NOUT, FMT = 9997 )'SGBSV ',
+     $                                 CALL AB_ALADHD( NOUT, PATH )
+                                    WRITE( NOUT, FMT = 9997 )'AB_SGBSV '
+     $,
      $                                 N, KL, KU, IMAT, K, RESULT( K )
                                     NFAIL = NFAIL + 1
                                  END IF
@@ -610,42 +636,46 @@
                               NRUN = NRUN + NT
                            END IF
 *
-*                          --- Test SGBSVX ---
+*                          --- Test AB_AB_SGBSVX ---
 *
                            IF( .NOT.PREFAC )
-     $                        CALL SLASET( 'Full', 2*KL+KU+1, N, ZERO,
+     $                        CALL AB_SLASET( 'Full', 2*KL+KU+1, N, ZERO
+     $,
      $                                     ZERO, AFB, LDAFB )
-                           CALL SLASET( 'Full', N, NRHS, ZERO, ZERO, X,
+                           CALL AB_SLASET( 'Full', N, NRHS, ZERO, ZERO, 
+     $X,
      $                                  LDB )
                            IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                             Equilibrate the matrix if FACT = 'F' and
 *                             EQUED = 'R', 'C', or 'B'.
 *
-                              CALL SLAQGB( N, N, KL, KU, A, LDA, S,
+                              CALL AB_SLAQGB( N, N, KL, KU, A, LDA, S,
      $                                     S( N+1 ), ROWCND, COLCND,
      $                                     AMAX, EQUED )
                            END IF
 *
 *                          Solve the system and compute the condition
-*                          number and error bounds using SGBSVX.
+*                          number and error bounds using AB_AB_SGBSVX.
 *
-                           SRNAMT = 'SGBSVX'
-                           CALL SGBSVX( FACT, TRANS, N, KL, KU, NRHS, A,
+                           SRNAMT = 'AB_AB_SGBSVX'
+                           CALL AB_AB_SGBSVX( FACT, TRANS, N, KL, KU, NR
+     $HS, A,
      $                                  LDA, AFB, LDAFB, IWORK, EQUED,
      $                                  S, S( N+1 ), B, LDB, X, LDB,
      $                                  RCOND, RWORK, RWORK( NRHS+1 ),
      $                                  WORK, IWORK( N+1 ), INFO )
 *
-*                          Check the error code from SGBSVX.
+*                          Check the error code from AB_AB_SGBSVX.
 *
                            IF( INFO.NE.IZERO )
-     $                        CALL ALAERH( PATH, 'SGBSVX', INFO, IZERO,
+     $                        CALL AB_ALAERH( PATH, 'AB_AB_SGBSVX', INFO
+     $, IZERO,
      $                                     FACT // TRANS, N, N, KL, KU,
      $                                     NRHS, IMAT, NFAIL, NERRS,
      $                                     NOUT )
 *
-*                          Compare WORK(1) from SGBSVX with the computed
+*                          Compare WORK(1) from AB_AB_SGBSVX with the computed
 *                          reciprocal pivot growth factor RPVGRW
 *
                            IF( INFO.NE.0 .AND. INFO.LE.N) THEN
@@ -657,7 +687,7 @@
      $                                       ABS( A( I+( J-1 )*LDA ) ) )
    60                            CONTINUE
    70                         CONTINUE
-                              RPVGRW = SLANTB( 'M', 'U', 'N', INFO,
+                              RPVGRW = AB_SLANTB( 'M', 'U', 'N', INFO,
      $                                 MIN( INFO-1, KL+KU ),
      $                                 AFB( MAX( 1, KL+KU+2-INFO ) ),
      $                                 LDAFB, WORK )
@@ -667,25 +697,26 @@
                                  RPVGRW = ANRMPV / RPVGRW
                               END IF
                            ELSE
-                              RPVGRW = SLANTB( 'M', 'U', 'N', N, KL+KU,
+                              RPVGRW = AB_SLANTB( 'M', 'U', 'N', N, KL+K
+     $U,
      $                                 AFB, LDAFB, WORK )
                               IF( RPVGRW.EQ.ZERO ) THEN
                                  RPVGRW = ONE
                               ELSE
-                                 RPVGRW = SLANGB( 'M', N, KL, KU, A,
+                                 RPVGRW = AB_SLANGB( 'M', N, KL, KU, A,
      $                                    LDA, WORK ) / RPVGRW
                               END IF
                            END IF
                            RESULT( 7 ) = ABS( RPVGRW-WORK( 1 ) ) /
      $                                   MAX( WORK( 1 ), RPVGRW ) /
-     $                                   SLAMCH( 'E' )
+     $                                   AB_SLAMCH( 'E' )
 *
                            IF( .NOT.PREFAC ) THEN
 *
 *                             Reconstruct matrix from factors and
 *                             compute residual.
 *
-                              CALL SGBT01( N, N, KL, KU, A, LDA, AFB,
+                              CALL AB_SGBT01( N, N, KL, KU, A, LDA, AFB,
      $                                     LDAFB, IWORK, WORK,
      $                                     RESULT( 1 ) )
                               K1 = 1
@@ -698,9 +729,10 @@
 *
 *                             Compute residual of the computed solution.
 *
-                              CALL SLACPY( 'Full', N, NRHS, BSAV, LDB,
+                              CALL AB_SLACPY( 'Full', N, NRHS, BSAV, LDB
+     $,
      $                                     WORK, LDB )
-                              CALL SGBT02( TRANS, N, N, KL, KU, NRHS,
+                              CALL AB_SGBT02( TRANS, N, N, KL, KU, NRHS,
      $                                     ASAV, LDA, X, LDB, WORK, LDB,
      $                                     RESULT( 2 ) )
 *
@@ -708,8 +740,8 @@
 *                             solution.
 *
                               IF( NOFACT .OR. ( PREFAC .AND.
-     $                            LSAME( EQUED, 'N' ) ) ) THEN
-                                 CALL SGET04( N, NRHS, X, LDB, XACT,
+     $                            AB_LSAME( EQUED, 'N' ) ) ) THEN
+                                 CALL AB_SGET04( N, NRHS, X, LDB, XACT,
      $                                        LDB, RCONDC, RESULT( 3 ) )
                               ELSE
                                  IF( ITRAN.EQ.1 ) THEN
@@ -717,14 +749,15 @@
                                  ELSE
                                     ROLDC = ROLDI
                                  END IF
-                                 CALL SGET04( N, NRHS, X, LDB, XACT,
+                                 CALL AB_SGET04( N, NRHS, X, LDB, XACT,
      $                                        LDB, ROLDC, RESULT( 3 ) )
                               END IF
 *
 *                             Check the error bounds from iterative
 *                             refinement.
 *
-                              CALL SGBT05( TRANS, N, KL, KU, NRHS, ASAV,
+                              CALL AB_SGBT05( TRANS, N, KL, KU, NRHS, AS
+     $AV,
      $                                     LDA, B, LDB, X, LDB, XACT,
      $                                     LDB, RWORK, RWORK( NRHS+1 ),
      $                                     RESULT( 4 ) )
@@ -732,10 +765,10 @@
                               TRFCON = .TRUE.
                            END IF
 *
-*                          Compare RCOND from SGBSVX with the computed
+*                          Compare RCOND from AB_AB_SGBSVX with the computed
 *                          value in RCONDC.
 *
-                           RESULT( 6 ) = SGET06( RCOND, RCONDC )
+                           RESULT( 6 ) = AB_SGET06( RCOND, RCONDC )
 *
 *                          Print information about the tests that did
 *                          not pass the threshold.
@@ -744,15 +777,17 @@
                               DO 80 K = K1, NTESTS
                                  IF( RESULT( K ).GE.THRESH ) THEN
                                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                                 CALL ALADHD( NOUT, PATH )
+     $                                 CALL AB_ALADHD( NOUT, PATH )
                                     IF( PREFAC ) THEN
                                        WRITE( NOUT, FMT = 9995 )
-     $                                    'SGBSVX', FACT, TRANS, N, KL,
+     $                                    'AB_AB_SGBSVX', FACT, TRANS, N
+     $, KL,
      $                                    KU, EQUED, IMAT, K,
      $                                    RESULT( K )
                                     ELSE
                                        WRITE( NOUT, FMT = 9996 )
-     $                                    'SGBSVX', FACT, TRANS, N, KL,
+     $                                    'AB_AB_SGBSVX', FACT, TRANS, N
+     $, KL,
      $                                    KU, IMAT, K, RESULT( K )
                                     END IF
                                     NFAIL = NFAIL + 1
@@ -763,13 +798,15 @@
                               IF( RESULT( 1 ).GE.THRESH .AND. .NOT.
      $                            PREFAC ) THEN
                                  IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                              CALL ALADHD( NOUT, PATH )
+     $                              CALL AB_ALADHD( NOUT, PATH )
                                  IF( PREFAC ) THEN
-                                    WRITE( NOUT, FMT = 9995 )'SGBSVX',
+                                    WRITE( NOUT, FMT = 9995 )'AB_AB_SGBS
+     $VX',
      $                                 FACT, TRANS, N, KL, KU, EQUED,
      $                                 IMAT, 1, RESULT( 1 )
                                  ELSE
-                                    WRITE( NOUT, FMT = 9996 )'SGBSVX',
+                                    WRITE( NOUT, FMT = 9996 )'AB_AB_SGBS
+     $VX',
      $                                 FACT, TRANS, N, KL, KU, IMAT, 1,
      $                                 RESULT( 1 )
                                  END IF
@@ -778,13 +815,15 @@
                               END IF
                               IF( RESULT( 6 ).GE.THRESH ) THEN
                                  IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                              CALL ALADHD( NOUT, PATH )
+     $                              CALL AB_ALADHD( NOUT, PATH )
                                  IF( PREFAC ) THEN
-                                    WRITE( NOUT, FMT = 9995 )'SGBSVX',
+                                    WRITE( NOUT, FMT = 9995 )'AB_AB_SGBS
+     $VX',
      $                                 FACT, TRANS, N, KL, KU, EQUED,
      $                                 IMAT, 6, RESULT( 6 )
                                  ELSE
-                                    WRITE( NOUT, FMT = 9996 )'SGBSVX',
+                                    WRITE( NOUT, FMT = 9996 )'AB_AB_SGBS
+     $VX',
      $                                 FACT, TRANS, N, KL, KU, IMAT, 6,
      $                                 RESULT( 6 )
                                  END IF
@@ -793,13 +832,15 @@
                               END IF
                               IF( RESULT( 7 ).GE.THRESH ) THEN
                                  IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                              CALL ALADHD( NOUT, PATH )
+     $                              CALL AB_ALADHD( NOUT, PATH )
                                  IF( PREFAC ) THEN
-                                    WRITE( NOUT, FMT = 9995 )'SGBSVX',
+                                    WRITE( NOUT, FMT = 9995 )'AB_AB_SGBS
+     $VX',
      $                                 FACT, TRANS, N, KL, KU, EQUED,
      $                                 IMAT, 7, RESULT( 7 )
                                  ELSE
-                                    WRITE( NOUT, FMT = 9996 )'SGBSVX',
+                                    WRITE( NOUT, FMT = 9996 )'AB_AB_SGBS
+     $VX',
      $                                 FACT, TRANS, N, KL, KU, IMAT, 7,
      $                                 RESULT( 7 )
                                  END IF
@@ -818,12 +859,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
- 9999 FORMAT( ' *** In SDRVGB, LA=', I5, ' is too small for N=', I5,
+ 9999 FORMAT( ' *** In AB_SDRVGB, LA=', I5, ' is too small for N=', I5,
      $      ', KU=', I5, ', KL=', I5, / ' ==> Increase LA to at least ',
      $      I5 )
- 9998 FORMAT( ' *** In SDRVGB, LAFB=', I5, ' is too small for N=', I5,
+ 9998 FORMAT( ' *** In AB_SDRVGB, LAFB=', I5, ' is too small for N=', I5
+     $,
      $      ', KU=', I5, ', KL=', I5, /
      $      ' ==> Increase LAFB to at least ', I5 )
  9997 FORMAT( 1X, A, ', N=', I5, ', KL=', I5, ', KU=', I5, ', type ',
@@ -836,6 +878,6 @@
 *
       RETURN
 *
-*     End of SDRVGB
+*     End of AB_SDRVGB
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DTGSJA
+*> \brief \b AB_DTGSJA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTGSJA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgsja.f">
+*> Download AB_DTGSJA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTGSJA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgsja.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTGSJA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgsja.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTGSJA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
+*       SUBROUTINE AB_DTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
 *                          LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
 *                          Q, LDQ, WORK, NCYCLE, INFO )
 *
@@ -40,11 +40,11 @@
 *>
 *> \verbatim
 *>
-*> DTGSJA computes the generalized singular value decomposition (GSVD)
+*> AB_DTGSJA computes the generalized singular value decomposition (GSVD)
 *> of two real upper triangular (or trapezoidal) matrices A and B.
 *>
 *> On entry, it is assumed that matrices A and B have the following
-*> forms, which may be obtained by the preprocessing subroutine DGGSVP
+*> forms, which may be obtained by the preprocessing subroutine AB_DGGSVP
 *> from a general M-by-N matrix A and P-by-N matrix B:
 *>
 *>              N-K-L  K    L
@@ -187,7 +187,7 @@
 *>
 *>          K and L specify the subblocks in the input matrices A and B:
 *>          A23 = A(K+1:MIN(K+L,M),N-L+1:N) and B13 = B(1:L,N-L+1:N)
-*>          of A and B, whose GSVD is going to be computed by DTGSJA.
+*>          of A and B, whose GSVD is going to be computed by AB_DTGSJA.
 *>          See Further Details.
 *> \endverbatim
 *>
@@ -263,7 +263,7 @@
 *> \verbatim
 *>          U is DOUBLE PRECISION array, dimension (LDU,M)
 *>          On entry, if JOBU = 'U', U must contain a matrix U1 (usually
-*>          the orthogonal matrix returned by DGGSVP).
+*>          the orthogonal matrix returned by AB_DGGSVP).
 *>          On exit,
 *>          if JOBU = 'I', U contains the orthogonal matrix U;
 *>          if JOBU = 'U', U contains the product U1*U.
@@ -281,7 +281,7 @@
 *> \verbatim
 *>          V is DOUBLE PRECISION array, dimension (LDV,P)
 *>          On entry, if JOBV = 'V', V must contain a matrix V1 (usually
-*>          the orthogonal matrix returned by DGGSVP).
+*>          the orthogonal matrix returned by AB_DGGSVP).
 *>          On exit,
 *>          if JOBV = 'I', V contains the orthogonal matrix V;
 *>          if JOBV = 'V', V contains the product V1*V.
@@ -299,7 +299,7 @@
 *> \verbatim
 *>          Q is DOUBLE PRECISION array, dimension (LDQ,N)
 *>          On entry, if JOBQ = 'Q', Q must contain a matrix Q1 (usually
-*>          the orthogonal matrix returned by DGGSVP).
+*>          the orthogonal matrix returned by AB_DGGSVP).
 *>          On exit,
 *>          if JOBQ = 'I', Q contains the orthogonal matrix Q;
 *>          if JOBQ = 'Q', Q contains the product Q1*Q.
@@ -359,7 +359,7 @@
 *>
 *> \verbatim
 *>
-*>  DTGSJA essentially uses a variant of Kogbetliantz algorithm to reduce
+*>  AB_DTGSJA essentially uses a variant of Kogbetliantz algorithm to reduce
 *>  min(L,M-K)-by-L triangular (or trapezoidal) matrix A23 and L-by-L
 *>  matrix B13 to the form:
 *>
@@ -374,7 +374,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
+      SUBROUTINE AB_DTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
      $                   LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
      $                   Q, LDQ, WORK, NCYCLE, INFO )
 *
@@ -411,12 +411,13 @@
      $                   GAMMA, RWK, SNQ, SNU, SNV, SSMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAGS2, DLAPLL, DLARTG, DLASET, DROT,
-     $                   DSCAL, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DLAGS2, AB_DLAPLL, AB_DLARTG, AB_D
+     $LASET, AB_DROT,
+     $                   AB_DSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -425,21 +426,23 @@
 *
 *     Decode and test the input parameters
 *
-      INITU = LSAME( JOBU, 'I' )
-      WANTU = INITU .OR. LSAME( JOBU, 'U' )
+      INITU = AB_LSAME( JOBU, 'I' )
+      WANTU = INITU .OR. AB_LSAME( JOBU, 'U' )
 *
-      INITV = LSAME( JOBV, 'I' )
-      WANTV = INITV .OR. LSAME( JOBV, 'V' )
+      INITV = AB_LSAME( JOBV, 'I' )
+      WANTV = INITV .OR. AB_LSAME( JOBV, 'V' )
 *
-      INITQ = LSAME( JOBQ, 'I' )
-      WANTQ = INITQ .OR. LSAME( JOBQ, 'Q' )
+      INITQ = AB_LSAME( JOBQ, 'I' )
+      WANTQ = INITQ .OR. AB_LSAME( JOBQ, 'Q' )
 *
       INFO = 0
-      IF( .NOT.( INITU .OR. WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
+      IF( .NOT.( INITU .OR. WANTU .OR. AB_LSAME( JOBU, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( INITV .OR. WANTV .OR. LSAME( JOBV, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( INITV .OR. WANTV .OR. AB_LSAME( JOBV, 'N' ) ) )
+     $ THEN
          INFO = -2
-      ELSE IF( .NOT.( INITQ .OR. WANTQ .OR. LSAME( JOBQ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( INITQ .OR. WANTQ .OR. AB_LSAME( JOBQ, 'N' ) ) )
+     $ THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -459,18 +462,18 @@
          INFO = -22
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DTGSJA', -INFO )
+         CALL AB_XERBLA( 'AB_DTGSJA', -INFO )
          RETURN
       END IF
 *
 *     Initialize U, V and Q, if necessary
 *
       IF( INITU )
-     $   CALL DLASET( 'Full', M, M, ZERO, ONE, U, LDU )
+     $   CALL AB_DLASET( 'Full', M, M, ZERO, ONE, U, LDU )
       IF( INITV )
-     $   CALL DLASET( 'Full', P, P, ZERO, ONE, V, LDV )
+     $   CALL AB_DLASET( 'Full', P, P, ZERO, ONE, V, LDV )
       IF( INITQ )
-     $   CALL DLASET( 'Full', N, N, ZERO, ONE, Q, LDQ )
+     $   CALL AB_DLASET( 'Full', N, N, ZERO, ONE, Q, LDQ )
 *
 *     Loop until convergence
 *
@@ -503,27 +506,28 @@
                   B2 = B( J, N-L+I )
                END IF
 *
-               CALL DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
+               CALL AB_DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
      $                      CSV, SNV, CSQ, SNQ )
 *
 *              Update (K+I)-th and (K+J)-th rows of matrix A: U**T *A
 *
                IF( K+J.LE.M )
-     $            CALL DROT( L, A( K+J, N-L+1 ), LDA, A( K+I, N-L+1 ),
+     $            CALL AB_DROT( L, A( K+J, N-L+1 ), LDA, A( K+I, N-L+1 )
+     $,
      $                       LDA, CSU, SNU )
 *
 *              Update I-th and J-th rows of matrix B: V**T *B
 *
-               CALL DROT( L, B( J, N-L+1 ), LDB, B( I, N-L+1 ), LDB,
+               CALL AB_DROT( L, B( J, N-L+1 ), LDB, B( I, N-L+1 ), LDB,
      $                    CSV, SNV )
 *
 *              Update (N-L+I)-th and (N-L+J)-th columns of matrices
 *              A and B: A*Q and B*Q
 *
-               CALL DROT( MIN( K+L, M ), A( 1, N-L+J ), 1,
+               CALL AB_DROT( MIN( K+L, M ), A( 1, N-L+J ), 1,
      $                    A( 1, N-L+I ), 1, CSQ, SNQ )
 *
-               CALL DROT( L, B( 1, N-L+J ), 1, B( 1, N-L+I ), 1, CSQ,
+               CALL AB_DROT( L, B( 1, N-L+J ), 1, B( 1, N-L+I ), 1, CSQ,
      $                    SNQ )
 *
                IF( UPPER ) THEN
@@ -539,14 +543,16 @@
 *              Update orthogonal matrices U, V, Q, if desired.
 *
                IF( WANTU .AND. K+J.LE.M )
-     $            CALL DROT( M, U( 1, K+J ), 1, U( 1, K+I ), 1, CSU,
+     $            CALL AB_DROT( M, U( 1, K+J ), 1, U( 1, K+I ), 1, CSU,
      $                       SNU )
 *
                IF( WANTV )
-     $            CALL DROT( P, V( 1, J ), 1, V( 1, I ), 1, CSV, SNV )
+     $            CALL AB_DROT( P, V( 1, J ), 1, V( 1, I ), 1, CSV, SNV 
+     $)
 *
                IF( WANTQ )
-     $            CALL DROT( N, Q( 1, N-L+J ), 1, Q( 1, N-L+I ), 1, CSQ,
+     $            CALL AB_DROT( N, Q( 1, N-L+J ), 1, Q( 1, N-L+I ), 1, C
+     $SQ,
      $                       SNQ )
 *
    10       CONTINUE
@@ -562,9 +568,10 @@
 *
             ERROR = ZERO
             DO 30 I = 1, MIN( L, M-K )
-               CALL DCOPY( L-I+1, A( K+I, N-L+I ), LDA, WORK, 1 )
-               CALL DCOPY( L-I+1, B( I, N-L+I ), LDB, WORK( L+1 ), 1 )
-               CALL DLAPLL( L-I+1, WORK, 1, WORK( L+1 ), 1, SSMIN )
+               CALL AB_DCOPY( L-I+1, A( K+I, N-L+I ), LDA, WORK, 1 )
+               CALL AB_DCOPY( L-I+1, B( I, N-L+I ), LDB, WORK( L+1 ), 1 
+     $)
+               CALL AB_DLAPLL( L-I+1, WORK, 1, WORK( L+1 ), 1, SSMIN )
                ERROR = MAX( ERROR, SSMIN )
    30       CONTINUE
 *
@@ -603,21 +610,24 @@
 *           change sign if necessary
 *
             IF( GAMMA.LT.ZERO ) THEN
-               CALL DSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
+               CALL AB_DSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
                IF( WANTV )
-     $            CALL DSCAL( P, -ONE, V( 1, I ), 1 )
+     $            CALL AB_DSCAL( P, -ONE, V( 1, I ), 1 )
             END IF
 *
-            CALL DLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
+            CALL AB_DLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I )
+     $,
      $                   RWK )
 *
             IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-               CALL DSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
+               CALL AB_DSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I )
+     $,
      $                     LDA )
             ELSE
-               CALL DSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
+               CALL AB_DSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
      $                     LDB )
-               CALL DCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
+               CALL AB_DCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I )
+     $,
      $                     LDA )
             END IF
 *
@@ -625,7 +635,7 @@
 *
             ALPHA( K+I ) = ZERO
             BETA( K+I ) = ONE
-            CALL DCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
+            CALL AB_DCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
      $                  LDA )
 *
          END IF
@@ -650,6 +660,6 @@
       NCYCLE = KCYCLE
       RETURN
 *
-*     End of DTGSJA
+*     End of AB_DTGSJA
 *
       END

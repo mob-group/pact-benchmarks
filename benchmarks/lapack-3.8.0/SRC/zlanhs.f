@@ -1,4 +1,4 @@
-*> \brief \b ZLANHS returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of an upper Hessenberg matrix.
+*> \brief \b AB_ZLANHS returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of an upper Hessenberg matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLANHS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlanhs.f">
+*> Download AB_ZLANHS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLANHS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlanhs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLANHS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlanhs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLANHS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION ZLANHS( NORM, N, A, LDA, WORK )
+*       DOUBLE PRECISION FUNCTION AB_ZLANHS( NORM, N, A, LDA, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM
@@ -35,15 +35,15 @@
 *>
 *> \verbatim
 *>
-*> ZLANHS  returns the value of the one norm,  or the Frobenius norm, or
+*> AB_ZLANHS  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> Hessenberg matrix A.
 *> \endverbatim
 *>
-*> \return ZLANHS
+*> \return AB_ZLANHS
 *> \verbatim
 *>
-*>    ZLANHS = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    AB_ZLANHS = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -63,14 +63,14 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in ZLANHS as described
+*>          Specifies the value to be returned in AB_ZLANHS as described
 *>          above.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, ZLANHS is
+*>          The order of the matrix A.  N >= 0.  When N = 0, AB_ZLANHS is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -107,7 +107,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION ZLANHS( NORM, N, A, LDA, WORK )
+      DOUBLE PRECISION FUNCTION AB_ZLANHS( NORM, N, A, LDA, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,11 +134,11 @@
       DOUBLE PRECISION   SCALE, SUM, VALUE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, DISNAN
-      EXTERNAL           LSAME, DISNAN
+      LOGICAL            AB_LSAME, AB_DISNAN
+      EXTERNAL           AB_LSAME, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASSQ
+      EXTERNAL           AB_ZLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN, SQRT
@@ -147,7 +147,7 @@
 *
       IF( N.EQ.0 ) THEN
          VALUE = ZERO
-      ELSE IF( LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
@@ -155,10 +155,10 @@
          DO 20 J = 1, N
             DO 10 I = 1, MIN( N, J+1 )
                SUM = ABS( A( I, J ) )
-               IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
    10       CONTINUE
    20    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
 *
 *        Find norm1(A).
 *
@@ -168,9 +168,9 @@
             DO 30 I = 1, MIN( N, J+1 )
                SUM = SUM + ABS( A( I, J ) )
    30       CONTINUE
-            IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
+            IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
    40    CONTINUE
-      ELSE IF( LSAME( NORM, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'I' ) ) THEN
 *
 *        Find normI(A).
 *
@@ -185,23 +185,24 @@
          VALUE = ZERO
          DO 80 I = 1, N
             SUM = WORK( I )
-            IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
+            IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
    80    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' )
+     $ ) ) THEN
 *
 *        Find normF(A).
 *
          SCALE = ZERO
          SUM = ONE
          DO 90 J = 1, N
-            CALL ZLASSQ( MIN( N, J+1 ), A( 1, J ), 1, SCALE, SUM )
+            CALL AB_ZLASSQ( MIN( N, J+1 ), A( 1, J ), 1, SCALE, SUM )
    90    CONTINUE
          VALUE = SCALE*SQRT( SUM )
       END IF
 *
-      ZLANHS = VALUE
+      AB_ZLANHS = VALUE
       RETURN
 *
-*     End of ZLANHS
+*     End of AB_ZLANHS
 *
       END

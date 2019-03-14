@@ -1,4 +1,4 @@
-*> \brief <b> CGELSS solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> AB_AB_CGELSS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGELSS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgelss.f">
+*> Download AB_AB_CGELSS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CGELSS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgelss.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CGELSS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgelss.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CGELSS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
+*       SUBROUTINE AB_AB_CGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
 *                          WORK, LWORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CGELSS computes the minimum norm solution to a complex linear
+*> AB_AB_CGELSS computes the minimum norm solution to a complex linear
 *> least squares problem:
 *>
 *> Minimize 2-norm(| b - A*x |).
@@ -144,7 +144,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -175,7 +175,8 @@
 *> \ingroup complexGEsolve
 *
 *  =====================================================================
-      SUBROUTINE CGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
+      SUBROUTINE AB_AB_CGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RAN
+     $K,
      $                   WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -206,24 +207,29 @@
       INTEGER            BL, CHUNK, I, IASCL, IBSCL, IE, IL, IRWORK,
      $                   ITAU, ITAUP, ITAUQ, IWORK, LDWORK, MAXMN,
      $                   MAXWRK, MINMN, MINWRK, MM, MNTHR
-      INTEGER            LWORK_CGEQRF, LWORK_CUNMQR, LWORK_CGEBRD,
-     $                   LWORK_CUNMBR, LWORK_CUNGBR, LWORK_CUNMLQ,
-     $                   LWORK_CGELQF
+      INTEGER            LWORK_AB_AB_CGEQRF, LWORK_AB_CUNMQR, LWORK_AB_C
+     $GEBRD,
+     $                   LWORK_AB_CUNMBR, LWORK_AB_CUNGBR, LWORK_AB_CUNM
+     $LQ,
+     $                   LWORK_AB_AB_CGELQF
       REAL               ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM, THR
 *     ..
 *     .. Local Arrays ..
       COMPLEX            DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CBDSQR, CCOPY, CGEBRD, CGELQF, CGEMM, CGEMV,
-     $                   CGEQRF, CLACPY, CLASCL, CLASET, CSRSCL, CUNGBR,
-     $                   CUNMBR, CUNMLQ, CUNMQR, SLABAD, SLASCL, SLASET,
-     $                   XERBLA
+      EXTERNAL           AB_CBDSQR, AB_CCOPY, AB_CGEBRD, AB_AB_CGELQF, A
+     $B_CGEMM, AB_CGEMV,
+     $                   AB_AB_CGEQRF, AB_CLACPY, AB_CLASCL, AB_CLASET, 
+     $AB_CAB_SRSCL, AB_CUNGBR,
+     $                   AB_CUNMBR, AB_CUNMLQ, AB_CUNMQR, AB_SLABAD, AB_
+     $SLASCL, AB_SLASET,
+     $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           ILAENV, CLANGE, SLAMCH
+      INTEGER            AB_ILAENV
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_ILAENV, AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -254,52 +260,57 @@
 *       as well as the preferred amount for good performance.
 *       CWorkspace refers to complex workspace, and RWorkspace refers
 *       to real workspace. NB refers to the optimal block size for the
-*       immediately following subroutine, as returned by ILAENV.)
+*       immediately following subroutine, as returned by AB_ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             MM = M
-            MNTHR = ILAENV( 6, 'CGELSS', ' ', M, N, NRHS, -1 )
+            MNTHR = AB_ILAENV( 6, 'AB_AB_CGELSS', ' ', M, N, NRHS, -1 )
             IF( M.GE.N .AND. M.GE.MNTHR ) THEN
 *
 *              Path 1a - overdetermined, with many more rows than
 *                        columns
 *
-*              Compute space needed for CGEQRF
-               CALL CGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO )
-               LWORK_CGEQRF=DUM(1)
-*              Compute space needed for CUNMQR
-               CALL CUNMQR( 'L', 'C', M, NRHS, N, A, LDA, DUM(1), B,
+*              Compute space needed for AB_AB_CGEQRF
+               CALL AB_AB_CGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO
+     $ )
+               LWORK_AB_AB_CGEQRF=DUM(1)
+*              Compute space needed for AB_CUNMQR
+               CALL AB_CUNMQR( 'L', 'C', M, NRHS, N, A, LDA, DUM(1), B,
      $                   LDB, DUM(1), -1, INFO )
-               LWORK_CUNMQR=DUM(1)
+               LWORK_AB_CUNMQR=DUM(1)
                MM = N
-               MAXWRK = MAX( MAXWRK, N + N*ILAENV( 1, 'CGEQRF', ' ', M,
+               MAXWRK = MAX( MAXWRK, N + N*AB_ILAENV( 1, 'AB_AB_CGEQRF',
+     $ ' ', M,
      $                       N, -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, N + NRHS*ILAENV( 1, 'CUNMQR', 'LC',
+               MAXWRK = MAX( MAXWRK, N + NRHS*AB_ILAENV( 1, 'AB_CUNMQR',
+     $ 'LC',
      $                       M, NRHS, N, -1 ) )
             END IF
             IF( M.GE.N ) THEN
 *
 *              Path 1 - overdetermined or exactly determined
 *
-*              Compute space needed for CGEBRD
-               CALL CGEBRD( MM, N, A, LDA, S, S, DUM(1), DUM(1), DUM(1),
+*              Compute space needed for AB_CGEBRD
+               CALL AB_CGEBRD( MM, N, A, LDA, S, S, DUM(1), DUM(1), DUM(
+     $1),
      $                      -1, INFO )
-               LWORK_CGEBRD=DUM(1)
-*              Compute space needed for CUNMBR
-               CALL CUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, DUM(1),
+               LWORK_AB_CGEBRD=DUM(1)
+*              Compute space needed for AB_CUNMBR
+               CALL AB_CUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, DUM(1
+     $),
      $                B, LDB, DUM(1), -1, INFO )
-               LWORK_CUNMBR=DUM(1)
-*              Compute space needed for CUNGBR
-               CALL CUNGBR( 'P', N, N, N, A, LDA, DUM(1),
+               LWORK_AB_CUNMBR=DUM(1)
+*              Compute space needed for AB_CUNGBR
+               CALL AB_CUNGBR( 'P', N, N, N, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
-               LWORK_CUNGBR=DUM(1)
+               LWORK_AB_CUNGBR=DUM(1)
 *              Compute total workspace needed
-               MAXWRK = MAX( MAXWRK, 2*N + LWORK_CGEBRD )
-               MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR )
-               MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNGBR )
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CGEBRD )
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNMBR )
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNGBR )
                MAXWRK = MAX( MAXWRK, N*NRHS )
                MINWRK = 2*N + MAX( NRHS, M )
             END IF
@@ -310,56 +321,56 @@
 *                 Path 2a - underdetermined, with many more columns
 *                 than rows
 *
-*                 Compute space needed for CGELQF
-                  CALL CGELQF( M, N, A, LDA, DUM(1), DUM(1),
+*                 Compute space needed for AB_AB_CGELQF
+                  CALL AB_AB_CGELQF( M, N, A, LDA, DUM(1), DUM(1),
      $                -1, INFO )
-                  LWORK_CGELQF=DUM(1)
-*                 Compute space needed for CGEBRD
-                  CALL CGEBRD( M, M, A, LDA, S, S, DUM(1), DUM(1),
+                  LWORK_AB_AB_CGELQF=DUM(1)
+*                 Compute space needed for AB_CGEBRD
+                  CALL AB_CGEBRD( M, M, A, LDA, S, S, DUM(1), DUM(1),
      $                         DUM(1), -1, INFO )
-                  LWORK_CGEBRD=DUM(1)
-*                 Compute space needed for CUNMBR
-                  CALL CUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA,
+                  LWORK_AB_CGEBRD=DUM(1)
+*                 Compute space needed for AB_CUNMBR
+                  CALL AB_CUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA,
      $                DUM(1), B, LDB, DUM(1), -1, INFO )
-                  LWORK_CUNMBR=DUM(1)
-*                 Compute space needed for CUNGBR
-                  CALL CUNGBR( 'P', M, M, M, A, LDA, DUM(1),
+                  LWORK_AB_CUNMBR=DUM(1)
+*                 Compute space needed for AB_CUNGBR
+                  CALL AB_CUNGBR( 'P', M, M, M, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
-                  LWORK_CUNGBR=DUM(1)
-*                 Compute space needed for CUNMLQ
-                  CALL CUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, DUM(1),
+                  LWORK_AB_CUNGBR=DUM(1)
+*                 Compute space needed for AB_CUNMLQ
+                  CALL AB_CUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, DUM(1),
      $                 B, LDB, DUM(1), -1, INFO )
-                  LWORK_CUNMLQ=DUM(1)
+                  LWORK_AB_CUNMLQ=DUM(1)
 *                 Compute total workspace needed
-                  MAXWRK = M + LWORK_CGELQF
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_CGEBRD )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_CUNMBR )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_CUNGBR )
+                  MAXWRK = M + LWORK_AB_AB_CGELQF
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_AB_CGEBRD )
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_AB_CUNMBR )
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_AB_CUNGBR )
                   IF( NRHS.GT.1 ) THEN
                      MAXWRK = MAX( MAXWRK, M*M + M + M*NRHS )
                   ELSE
                      MAXWRK = MAX( MAXWRK, M*M + 2*M )
                   END IF
-                  MAXWRK = MAX( MAXWRK, M + LWORK_CUNMLQ )
+                  MAXWRK = MAX( MAXWRK, M + LWORK_AB_CUNMLQ )
                ELSE
 *
 *                 Path 2 - underdetermined
 *
-*                 Compute space needed for CGEBRD
-                  CALL CGEBRD( M, N, A, LDA, S, S, DUM(1), DUM(1),
+*                 Compute space needed for AB_CGEBRD
+                  CALL AB_CGEBRD( M, N, A, LDA, S, S, DUM(1), DUM(1),
      $                         DUM(1), -1, INFO )
-                  LWORK_CGEBRD=DUM(1)
-*                 Compute space needed for CUNMBR
-                  CALL CUNMBR( 'Q', 'L', 'C', M, NRHS, M, A, LDA,
+                  LWORK_AB_CGEBRD=DUM(1)
+*                 Compute space needed for AB_CUNMBR
+                  CALL AB_CUNMBR( 'Q', 'L', 'C', M, NRHS, M, A, LDA,
      $                DUM(1), B, LDB, DUM(1), -1, INFO )
-                  LWORK_CUNMBR=DUM(1)
-*                 Compute space needed for CUNGBR
-                  CALL CUNGBR( 'P', M, N, M, A, LDA, DUM(1),
+                  LWORK_AB_CUNMBR=DUM(1)
+*                 Compute space needed for AB_CUNGBR
+                  CALL AB_CUNGBR( 'P', M, N, M, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
-                  LWORK_CUNGBR=DUM(1)
-                  MAXWRK = 2*M + LWORK_CGEBRD
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNMBR )
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNGBR )
+                  LWORK_AB_CUNGBR=DUM(1)
+                  MAXWRK = 2*M + LWORK_AB_CGEBRD
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNMBR )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNGBR )
                   MAXWRK = MAX( MAXWRK, N*NRHS )
                END IF
             END IF
@@ -372,7 +383,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGELSS', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CGELSS', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -387,53 +398,55 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      SFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SFMIN = AB_SLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = CLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = AB_CLANGE( 'M', M, N, A, LDA, RWORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL CLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL CLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL CLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
-         CALL SLASET( 'F', MINMN, 1, ZERO, ZERO, S, MINMN )
+         CALL AB_CLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL AB_SLASET( 'F', MINMN, 1, ZERO, ZERO, S, MINMN )
          RANK = 0
          GO TO 70
       END IF
 *
 *     Scale B if max element outside range [SMLNUM,BIGNUM]
 *
-      BNRM = CLANGE( 'M', M, NRHS, B, LDB, RWORK )
+      BNRM = AB_CLANGE( 'M', M, NRHS, B, LDB, RWORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL CLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO 
+     $)
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL CLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO 
+     $)
          IBSCL = 2
       END IF
 *
@@ -456,20 +469,22 @@
 *           (CWorkspace: need 2*N, prefer N+N*NB)
 *           (RWorkspace: none)
 *
-            CALL CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+            CALL AB_AB_CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK )
+     $,
      $                   LWORK-IWORK+1, INFO )
 *
 *           Multiply B by transpose(Q)
 *           (CWorkspace: need N+NRHS, prefer N+NRHS*NB)
 *           (RWorkspace: none)
 *
-            CALL CUNMQR( 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAU ), B,
+            CALL AB_CUNMQR( 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAU ), 
+     $B,
      $                   LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *           Zero out below R
 *
             IF( N.GT.1 )
-     $         CALL CLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
+     $         CALL AB_CLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
      $                      LDA )
          END IF
 *
@@ -482,7 +497,7 @@
 *        (CWorkspace: need 2*N+MM, prefer 2*N+(MM+N)*NB)
 *        (RWorkspace: need N)
 *
-         CALL CGEBRD( MM, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+         CALL AB_CGEBRD( MM, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                INFO )
 *
@@ -490,14 +505,15 @@
 *        (CWorkspace: need 2*N+NRHS, prefer 2*N+NRHS*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL AB_CUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, WORK( ITAUQ
+     $ ),
      $                B, LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors of R in A
 *        (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+         CALL AB_CUNGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IRWORK = IE + N
 *
@@ -507,7 +523,8 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL CBDSQR( 'U', N, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM,
+         CALL AB_CBDSQR( 'U', N, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM
+     $,
      $                1, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -520,10 +537,11 @@
          RANK = 0
          DO 10 I = 1, N
             IF( S( I ).GT.THR ) THEN
-               CALL CSRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL AB_CAB_SRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL CLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
+               CALL AB_CLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LD
+     $B )
             END IF
    10    CONTINUE
 *
@@ -532,23 +550,26 @@
 *        (RWorkspace: none)
 *
          IF( LWORK.GE.LDB*NRHS .AND. NRHS.GT.1 ) THEN
-            CALL CGEMM( 'C', 'N', N, NRHS, N, CONE, A, LDA, B, LDB,
+            CALL AB_CGEMM( 'C', 'N', N, NRHS, N, CONE, A, LDA, B, LDB,
      $                  CZERO, WORK, LDB )
-            CALL CLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
+            CALL AB_CLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = LWORK / N
             DO 20 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL CGEMM( 'C', 'N', N, BL, N, CONE, A, LDA, B( 1, I ),
+               CALL AB_CGEMM( 'C', 'N', N, BL, N, CONE, A, LDA, B( 1, I 
+     $),
      $                     LDB, CZERO, WORK, N )
-               CALL CLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
+               CALL AB_CLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
    20       CONTINUE
          ELSE
-            CALL CGEMV( 'C', N, N, CONE, A, LDA, B, 1, CZERO, WORK, 1 )
-            CALL CCOPY( N, WORK, 1, B, 1 )
+            CALL AB_CGEMV( 'C', N, N, CONE, A, LDA, B, 1, CZERO, WORK, 1
+     $ )
+            CALL AB_CCOPY( N, WORK, 1, B, 1 )
          END IF
 *
-      ELSE IF( N.GE.MNTHR .AND. LWORK.GE.3*M+M*M+MAX( M, NRHS, N-2*M ) )
+      ELSE IF( N.GE.MNTHR .AND. LWORK.GE.3*M+M*M+MAX( M, NRHS, N-2*M 
+     $) )
      $          THEN
 *
 *        Underdetermined case, M much less than N
@@ -566,14 +587,14 @@
 *        (CWorkspace: need 2*M, prefer M+M*NB)
 *        (RWorkspace: none)
 *
-         CALL CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+         CALL AB_AB_CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
          IL = IWORK
 *
 *        Copy L to WORK(IL), zeroing out above it
 *
-         CALL CLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWORK )
-         CALL CLASET( 'U', M-1, M-1, CZERO, CZERO, WORK( IL+LDWORK ),
+         CALL AB_CLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWORK )
+         CALL AB_CLASET( 'U', M-1, M-1, CZERO, CZERO, WORK( IL+LDWORK ),
      $                LDWORK )
          IE = 1
          ITAUQ = IL + LDWORK*M
@@ -584,7 +605,7 @@
 *        (CWorkspace: need M*M+4*M, prefer M*M+3*M+2*M*NB)
 *        (RWorkspace: need M)
 *
-         CALL CGEBRD( M, M, WORK( IL ), LDWORK, S, RWORK( IE ),
+         CALL AB_CGEBRD( M, M, WORK( IL ), LDWORK, S, RWORK( IE ),
      $                WORK( ITAUQ ), WORK( ITAUP ), WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
 *
@@ -592,7 +613,7 @@
 *        (CWorkspace: need M*M+3*M+NRHS, prefer M*M+3*M+NRHS*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNMBR( 'Q', 'L', 'C', M, NRHS, M, WORK( IL ), LDWORK,
+         CALL AB_CUNMBR( 'Q', 'L', 'C', M, NRHS, M, WORK( IL ), LDWORK,
      $                WORK( ITAUQ ), B, LDB, WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
 *
@@ -600,7 +621,8 @@
 *        (CWorkspace: need M*M+4*M-1, prefer M*M+3*M+(M-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNGBR( 'P', M, M, M, WORK( IL ), LDWORK, WORK( ITAUP ),
+         CALL AB_CUNGBR( 'P', M, M, M, WORK( IL ), LDWORK, WORK( ITAUP )
+     $,
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IRWORK = IE + M
 *
@@ -610,7 +632,7 @@
 *        (CWorkspace: need M*M)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL CBDSQR( 'U', M, M, 0, NRHS, S, RWORK( IE ), WORK( IL ),
+         CALL AB_CBDSQR( 'U', M, M, 0, NRHS, S, RWORK( IE ), WORK( IL ),
      $                LDWORK, A, LDA, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -623,10 +645,11 @@
          RANK = 0
          DO 30 I = 1, M
             IF( S( I ).GT.THR ) THEN
-               CALL CSRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL AB_CAB_SRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL CLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
+               CALL AB_CLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LD
+     $B )
             END IF
    30    CONTINUE
          IWORK = IL + M*LDWORK
@@ -636,34 +659,38 @@
 *        (RWorkspace: none)
 *
          IF( LWORK.GE.LDB*NRHS+IWORK-1 .AND. NRHS.GT.1 ) THEN
-            CALL CGEMM( 'C', 'N', M, NRHS, M, CONE, WORK( IL ), LDWORK,
+            CALL AB_CGEMM( 'C', 'N', M, NRHS, M, CONE, WORK( IL ), LDWOR
+     $K,
      $                  B, LDB, CZERO, WORK( IWORK ), LDB )
-            CALL CLACPY( 'G', M, NRHS, WORK( IWORK ), LDB, B, LDB )
+            CALL AB_CLACPY( 'G', M, NRHS, WORK( IWORK ), LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = ( LWORK-IWORK+1 ) / M
             DO 40 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL CGEMM( 'C', 'N', M, BL, M, CONE, WORK( IL ), LDWORK,
+               CALL AB_CGEMM( 'C', 'N', M, BL, M, CONE, WORK( IL ), LDWO
+     $RK,
      $                     B( 1, I ), LDB, CZERO, WORK( IWORK ), M )
-               CALL CLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
+               CALL AB_CLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
      $                      LDB )
    40       CONTINUE
          ELSE
-            CALL CGEMV( 'C', M, M, CONE, WORK( IL ), LDWORK, B( 1, 1 ),
+            CALL AB_CGEMV( 'C', M, M, CONE, WORK( IL ), LDWORK, B( 1, 1 
+     $),
      $                  1, CZERO, WORK( IWORK ), 1 )
-            CALL CCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
+            CALL AB_CCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
          END IF
 *
 *        Zero out below first M rows of B
 *
-         CALL CLASET( 'F', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ), LDB )
+         CALL AB_CLASET( 'F', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ), LDB 
+     $)
          IWORK = ITAU + M
 *
 *        Multiply transpose(Q) by B
 *        (CWorkspace: need M+NRHS, prefer M+NHRS*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, WORK( ITAU ), B,
+         CALL AB_CUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, WORK( ITAU ), B,
      $                LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
       ELSE
@@ -679,7 +706,7 @@
 *        (CWorkspace: need 3*M, prefer 2*M+(M+N)*NB)
 *        (RWorkspace: need N)
 *
-         CALL CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+         CALL AB_CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                INFO )
 *
@@ -687,14 +714,15 @@
 *        (CWorkspace: need 2*M+NRHS, prefer 2*M+NRHS*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAUQ ),
+         CALL AB_CUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAUQ 
+     $),
      $                B, LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors in A
 *        (CWorkspace: need 3*M, prefer 2*M+M*NB)
 *        (RWorkspace: none)
 *
-         CALL CUNGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
+         CALL AB_CUNGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IRWORK = IE + M
 *
@@ -704,7 +732,8 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL CBDSQR( 'L', M, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM,
+         CALL AB_CBDSQR( 'L', M, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM
+     $,
      $                1, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -717,10 +746,11 @@
          RANK = 0
          DO 50 I = 1, M
             IF( S( I ).GT.THR ) THEN
-               CALL CSRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL AB_CAB_SRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL CLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
+               CALL AB_CLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LD
+     $B )
             END IF
    50    CONTINUE
 *
@@ -729,43 +759,49 @@
 *        (RWorkspace: none)
 *
          IF( LWORK.GE.LDB*NRHS .AND. NRHS.GT.1 ) THEN
-            CALL CGEMM( 'C', 'N', N, NRHS, M, CONE, A, LDA, B, LDB,
+            CALL AB_CGEMM( 'C', 'N', N, NRHS, M, CONE, A, LDA, B, LDB,
      $                  CZERO, WORK, LDB )
-            CALL CLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
+            CALL AB_CLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = LWORK / N
             DO 60 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL CGEMM( 'C', 'N', N, BL, M, CONE, A, LDA, B( 1, I ),
+               CALL AB_CGEMM( 'C', 'N', N, BL, M, CONE, A, LDA, B( 1, I 
+     $),
      $                     LDB, CZERO, WORK, N )
-               CALL CLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
+               CALL AB_CLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
    60       CONTINUE
          ELSE
-            CALL CGEMV( 'C', M, N, CONE, A, LDA, B, 1, CZERO, WORK, 1 )
-            CALL CCOPY( N, WORK, 1, B, 1 )
+            CALL AB_CGEMV( 'C', M, N, CONE, A, LDA, B, 1, CZERO, WORK, 1
+     $ )
+            CALL AB_CCOPY( N, WORK, 1, B, 1 )
          END IF
       END IF
 *
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL CLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
-         CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
+         CALL AB_CLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO 
+     $)
+         CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL CLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
-         CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
+         CALL AB_CLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO 
+     $)
+         CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL CLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO 
+     $)
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL CLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO 
+     $)
       END IF
    70 CONTINUE
       WORK( 1 ) = MAXWRK
       RETURN
 *
-*     End of CGELSS
+*     End of AB_AB_CGELSS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CGEQR2 computes the QR factorization of a general rectangular matrix using an unblocked algorithm.
+*> \brief \b AB_AB_CGEQR2 computes the QR factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGEQR2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeqr2.f">
+*> Download AB_AB_CGEQR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CGEQR2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeqr2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CGEQR2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeqr2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CGEQR2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGEQR2( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_AB_CGEQR2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CGEQR2 computes a QR factorization of a complex m by n matrix A:
+*> AB_AB_CGEQR2 computes a QR factorization of a complex m by n matrix A:
 *> A = Q * R.
 *> \endverbatim
 *
@@ -119,7 +119,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEQR2( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_AB_CGEQR2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,7 +144,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFG, XERBLA
+      EXTERNAL           AB_CLARF, AB_AB_CLARFG, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, MIN
@@ -162,7 +162,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGEQR2', -INFO )
+         CALL AB_XERBLA( 'AB_AB_CGEQR2', -INFO )
          RETURN
       END IF
 *
@@ -172,7 +172,7 @@
 *
 *        Generate elementary reflector H(i) to annihilate A(i+1:m,i)
 *
-         CALL CLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
+         CALL AB_AB_CLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
      $                TAU( I ) )
          IF( I.LT.N ) THEN
 *
@@ -180,13 +180,13 @@
 *
             ALPHA = A( I, I )
             A( I, I ) = ONE
-            CALL CLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
+            CALL AB_CLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
      $                  CONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
             A( I, I ) = ALPHA
          END IF
    10 CONTINUE
       RETURN
 *
-*     End of CGEQR2
+*     End of AB_AB_CGEQR2
 *
       END

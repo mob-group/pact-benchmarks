@@ -1,4 +1,4 @@
-*> \brief \b CLCTES
+*> \brief \b AB_CLCTES
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION CLCTES( Z, D )
+*       LOGICAL          FUNCTION AB_CLCTES( Z, D )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX            D, Z
@@ -20,12 +20,12 @@
 *>
 *> \verbatim
 *>
-*> CLCTES returns .TRUE. if the eigenvalue Z/D is to be selected
+*> AB_CLCTES returns .TRUE. if the eigenvalue Z/D is to be selected
 *> (specifically, in this subroutine, if the real part of the
 *> eigenvalue is negative), and otherwise it returns .FALSE..
 *>
-*> It is used by the test routine CDRGES to test whether the driver
-*> routine CGGES successfully sorts eigenvalues.
+*> It is used by the test routine AB_CDRGES to test whether the driver
+*> routine AB_CGGES successfully sorts eigenvalues.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION CLCTES( Z, D )
+      LOGICAL          FUNCTION AB_CLCTES( Z, D )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,23 +85,23 @@
 *     .. Executable Statements ..
 *
       IF( D.EQ.CZERO ) THEN
-         CLCTES = ( REAL( Z ).LT.ZERO )
+         AB_CLCTES = ( REAL( Z ).LT.ZERO )
       ELSE
          IF( REAL( Z ).EQ.ZERO .OR. REAL( D ).EQ.ZERO ) THEN
-            CLCTES = ( SIGN( ONE, AIMAG( Z ) ).NE.
+            AB_CLCTES = ( SIGN( ONE, AIMAG( Z ) ).NE.
      $               SIGN( ONE, AIMAG( D ) ) )
          ELSE IF( AIMAG( Z ).EQ.ZERO .OR. AIMAG( D ).EQ.ZERO ) THEN
-            CLCTES = ( SIGN( ONE, REAL( Z ) ).NE.
+            AB_CLCTES = ( SIGN( ONE, REAL( Z ) ).NE.
      $               SIGN( ONE, REAL( D ) ) )
          ELSE
             ZMAX = MAX( ABS( REAL( Z ) ), ABS( AIMAG( Z ) ) )
-            CLCTES = ( ( REAL( Z ) / ZMAX )*REAL( D )+
+            AB_CLCTES = ( ( REAL( Z ) / ZMAX )*REAL( D )+
      $               ( AIMAG( Z ) / ZMAX )*AIMAG( D ).LT.ZERO )
          END IF
       END IF
 *
       RETURN
 *
-*     End of CLCTES
+*     End of AB_CLCTES
 *
       END

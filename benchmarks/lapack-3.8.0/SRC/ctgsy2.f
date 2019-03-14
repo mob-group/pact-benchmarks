@@ -1,4 +1,4 @@
-*> \brief \b CTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
+*> \brief \b AB_CTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,30 +6,30 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTGSY2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgsy2.f">
+*> Download AB_CTGSY2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTGSY2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgsy2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTGSY2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgsy2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTGSY2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
-*                          LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
+*       SUBROUTINE AB_CTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+*                          LDD, E, AB_LDE, F, LDF, SCALE, RDSUM, RAB_DSCAL,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
-*       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF, M, N
-*       REAL               RDSCAL, RDSUM, SCALE
+*       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, AB_LDE, LDF, M, N
+*       REAL               RAB_DSCAL, RDSUM, SCALE
 *       ..
 *       .. Array Arguments ..
 *       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * ),
-*      $                   D( LDD, * ), E( LDE, * ), F( LDF, * )
+*      $                   D( LDD, * ), E( AB_LDE, * ), F( LDF, * )
 *       ..
 *
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> CTGSY2 solves the generalized Sylvester equation
+*> AB_CTGSY2 solves the generalized Sylvester equation
 *>
 *>             A * R - L * B = scale *  C               (1)
 *>             D * R - L * E = scale * F
@@ -67,12 +67,12 @@
 *>             R  * B**H + L  * E**H  = scale * -F
 *>
 *> This case is used to compute an estimate of Dif[(A, D), (B, E)] =
-*> = sigma_min(Z) using reverse communicaton with CLACON.
+*> = sigma_min(Z) using reverse communicaton with AB_CLACON.
 *>
-*> CTGSY2 also (IJOB >= 1) contributes to the computation in CTGSYL
+*> AB_CTGSY2 also (IJOB >= 1) contributes to the computation in AB_CTGSYL
 *> of an upper bound on the separation between to matrix pairs. Then
 *> the input (A, D), (B, E) are sub-pencils of two matrix pairs in
-*> CTGSYL.
+*> AB_CTGSYL.
 *> \endverbatim
 *
 *  Arguments:
@@ -95,7 +95,7 @@
 *>              pairs is computed. (look ahead strategy is used).
 *>          =2: A contribution from this subsystem to a Frobenius
 *>              norm-based estimate of the separation between two matrix
-*>              pairs is computed. (SGECON on sub-systems is used.)
+*>              pairs is computed. (AB_SGECON on sub-systems is used.)
 *>          Not referenced if TRANS = 'T'.
 *> \endverbatim
 *>
@@ -166,20 +166,20 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is COMPLEX array, dimension (LDE, N)
+*>          E is COMPLEX array, dimension (AB_LDE, N)
 *>          On entry, E contains an upper triangular matrix.
 *> \endverbatim
 *>
-*> \param[in] LDE
+*> \param[in] AB_LDE
 *> \verbatim
-*>          LDE is INTEGER
-*>          The leading dimension of the matrix E. LDE >= max(1, N).
+*>          AB_LDE is INTEGER
+*>          The leading dimension of the matrix E. AB_LDE >= max(1, N).
 *> \endverbatim
 *>
 *> \param[in,out] F
 *> \verbatim
 *>          F is COMPLEX array, dimension (LDF, N)
-*>          On entry, F contains the right-hand-side of the second matrix
+*>          On entry, F contains the right-hand-side of the AB_SECOND matrix
 *>          equation in (1).
 *>          On exit, if IJOB = 0, F has been overwritten by the solution
 *>          L.
@@ -206,24 +206,24 @@
 *> \verbatim
 *>          RDSUM is REAL
 *>          On entry, the sum of squares of computed contributions to
-*>          the Dif-estimate under computation by CTGSYL, where the
-*>          scaling factor RDSCAL (see below) has been factored out.
+*>          the Dif-estimate under computation by AB_CTGSYL, where the
+*>          scaling factor RAB_DSCAL (see below) has been factored out.
 *>          On exit, the corresponding sum of squares updated with the
 *>          contributions from the current sub-system.
 *>          If TRANS = 'T' RDSUM is not touched.
-*>          NOTE: RDSUM only makes sense when CTGSY2 is called by
-*>          CTGSYL.
+*>          NOTE: RDSUM only makes sense when AB_CTGSY2 is called by
+*>          AB_CTGSYL.
 *> \endverbatim
 *>
-*> \param[in,out] RDSCAL
+*> \param[in,out] RAB_DSCAL
 *> \verbatim
-*>          RDSCAL is REAL
+*>          RAB_DSCAL is REAL
 *>          On entry, scaling factor used to prevent overflow in RDSUM.
-*>          On exit, RDSCAL is updated w.r.t. the current contributions
+*>          On exit, RAB_DSCAL is updated w.r.t. the current contributions
 *>          in RDSUM.
-*>          If TRANS = 'T', RDSCAL is not touched.
-*>          NOTE: RDSCAL only makes sense when CTGSY2 is called by
-*>          CTGSYL.
+*>          If TRANS = 'T', RAB_DSCAL is not touched.
+*>          NOTE: RAB_DSCAL only makes sense when AB_CTGSY2 is called by
+*>          AB_CTGSYL.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -255,8 +255,10 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE CTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
-     $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
+      SUBROUTINE AB_CTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D
+     $,
+     $                   LDD, E, AB_LDE, F, LDF, SCALE, RDSUM, RAB_DSCAL
+     $,
      $                   INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -266,12 +268,13 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
-      INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF, M, N
-      REAL               RDSCAL, RDSUM, SCALE
+      INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, AB_LDE, LDF, M,
+     $ N
+      REAL               RAB_DSCAL, RDSUM, SCALE
 *     ..
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * ),
-     $                   D( LDD, * ), E( LDE, * ), F( LDF, * )
+     $                   D( LDD, * ), E( AB_LDE, * ), F( LDF, * )
 *     ..
 *
 *  =====================================================================
@@ -292,11 +295,12 @@
       COMPLEX            RHS( LDZ ), Z( LDZ, LDZ )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CGESC2, CGETC2, CSCAL, CLATDF, XERBLA
+      EXTERNAL           AB_CAXPY, AB_CGESC2, AB_CGETC2, AB_CSCAL, AB_CL
+     $ATDF, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, CONJG, MAX
@@ -307,8 +311,8 @@
 *
       INFO = 0
       IERR = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( NOTRAN ) THEN
          IF( ( IJOB.LT.0 ) .OR. ( IJOB.GT.2 ) ) THEN
@@ -328,14 +332,14 @@
             INFO = -10
          ELSE IF( LDD.LT.MAX( 1, M ) ) THEN
             INFO = -12
-         ELSE IF( LDE.LT.MAX( 1, N ) ) THEN
+         ELSE IF( AB_LDE.LT.MAX( 1, N ) ) THEN
             INFO = -14
          ELSE IF( LDF.LT.MAX( 1, M ) ) THEN
             INFO = -16
          END IF
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTGSY2', -INFO )
+         CALL AB_XERBLA( 'AB_CTGSY2', -INFO )
          RETURN
       END IF
 *
@@ -365,22 +369,25 @@
 *
 *              Solve Z * x = RHS
 *
-               CALL CGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
+               CALL AB_CGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
                IF( IERR.GT.0 )
      $            INFO = IERR
                IF( IJOB.EQ.0 ) THEN
-                  CALL CGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL AB_CGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
                   IF( SCALOC.NE.ONE ) THEN
                      DO 10 K = 1, N
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                        CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K
+     $ ),
      $                              1 )
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                        CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K
+     $ ),
      $                              1 )
    10                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
                ELSE
-                  CALL CLATDF( IJOB, LDZ, Z, LDZ, RHS, RDSUM, RDSCAL,
+                  CALL AB_CLATDF( IJOB, LDZ, Z, LDZ, RHS, RDSUM, RAB_DSC
+     $AL,
      $                         IPIV, JPIV )
                END IF
 *
@@ -393,13 +400,15 @@
 *
                IF( I.GT.1 ) THEN
                   ALPHA = -RHS( 1 )
-                  CALL CAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ), 1 )
-                  CALL CAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ), 1 )
+                  CALL AB_CAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ), 1 
+     $)
+                  CALL AB_CAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ), 1 
+     $)
                END IF
                IF( J.LT.N ) THEN
-                  CALL CAXPY( N-J, RHS( 2 ), B( J, J+1 ), LDB,
+                  CALL AB_CAXPY( N-J, RHS( 2 ), B( J, J+1 ), LDB,
      $                        C( I, J+1 ), LDC )
-                  CALL CAXPY( N-J, RHS( 2 ), E( J, J+1 ), LDE,
+                  CALL AB_CAXPY( N-J, RHS( 2 ), E( J, J+1 ), AB_LDE,
      $                        F( I, J+1 ), LDF )
                END IF
 *
@@ -432,15 +441,15 @@
 *
 *              Solve Z**H * x = RHS
 *
-               CALL CGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
+               CALL AB_CGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
                IF( IERR.GT.0 )
      $            INFO = IERR
-               CALL CGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+               CALL AB_CGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
                IF( SCALOC.NE.ONE ) THEN
                   DO 40 K = 1, N
-                     CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
      $                           1 )
-                     CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
      $                           1 )
    40             CONTINUE
                   SCALE = SCALE*SCALOC
@@ -467,6 +476,6 @@
       END IF
       RETURN
 *
-*     End of CTGSY2
+*     End of AB_CTGSY2
 *
       END

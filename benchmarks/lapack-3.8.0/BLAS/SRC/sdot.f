@@ -1,4 +1,4 @@
-*> \brief \b SDOT
+*> \brief \b AB_SDOT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SDOT(N,SX,INCX,SY,INCY)
+*       REAL FUNCTION AB_SDOT(N,SX,INCX,SY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    SDOT forms the dot product of two vectors.
+*>    AB_SDOT forms the dot product of two vectors.
 *>    uses unrolled loops for increments equal to one.
 *> \endverbatim
 *
@@ -80,7 +80,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      REAL FUNCTION SDOT(N,SX,INCX,SY,INCY)
+      REAL FUNCTION AB_SDOT(N,SX,INCX,SY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -104,7 +104,7 @@
       INTRINSIC MOD
 *     ..
       STEMP = 0.0e0
-      SDOT = 0.0e0
+      AB_SDOT = 0.0e0
       IF (N.LE.0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
@@ -119,7 +119,7 @@
                STEMP = STEMP + SX(I)*SY(I)
             END DO
             IF (N.LT.5) THEN
-               SDOT=STEMP
+               AB_SDOT=STEMP
             RETURN
             END IF
          END IF
@@ -143,6 +143,6 @@
             IY = IY + INCY
          END DO
       END IF
-      SDOT = STEMP
+      AB_SDOT = STEMP
       RETURN
       END

@@ -1,4 +1,4 @@
-*> \brief \b SLARZT forms the triangular factor T of a block reflector H = I - vtvH.
+*> \brief \b AB_AB_SLARZT forms the triangular factor T of a block reflector H = I - vtvH.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLARZT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarzt.f">
+*> Download AB_AB_SLARZT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SLARZT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarzt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SLARZT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarzt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SLARZT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE AB_AB_SLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SLARZT forms the triangular factor T of a real block reflector
+*> AB_AB_SLARZT forms the triangular factor T of a real block reflector
 *> H of order > n, which is defined as a product of k elementary
 *> reflectors.
 *>
@@ -183,7 +183,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      SUBROUTINE AB_AB_SLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT
+     $ )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -208,24 +209,24 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, STRMV, XERBLA
+      EXTERNAL           AB_SGEMV, AB_STRMV, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
 *     Check for currently supported options
 *
       INFO = 0
-      IF( .NOT.LSAME( DIRECT, 'B' ) ) THEN
+      IF( .NOT.AB_LSAME( DIRECT, 'B' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( STOREV, 'R' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( STOREV, 'R' ) ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLARZT', -INFO )
+         CALL AB_XERBLA( 'AB_AB_SLARZT', -INFO )
          RETURN
       END IF
 *
@@ -245,13 +246,13 @@
 *
 *              T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**T
 *
-               CALL SGEMV( 'No transpose', K-I, N, -TAU( I ),
+               CALL AB_SGEMV( 'No transpose', K-I, N, -TAU( I ),
      $                     V( I+1, 1 ), LDV, V( I, 1 ), LDV, ZERO,
      $                     T( I+1, I ), 1 )
 *
 *              T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i)
 *
-               CALL STRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
+               CALL AB_STRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
      $                     T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
             END IF
             T( I, I ) = TAU( I )
@@ -259,6 +260,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of SLARZT
+*     End of AB_AB_SLARZT
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SDRVRFP
+*> \brief \b AB_SDRVRFP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,12 +8,12 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+*       SUBROUTINE AB_SDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
 *      +              THRESH, A, ASAV, AFAC, AINV, B,
 *      +              BSAV, XACT, X, ARF, ARFINV,
-*      +              S_WORK_SLATMS, S_WORK_SPOT01, S_TEMP_SPOT02,
-*      +              S_TEMP_SPOT03, S_WORK_SLANSY,
-*      +              S_WORK_SPOT02, S_WORK_SPOT03 )
+*      +              S_WORK_AB_SLATMS, S_WORK_AB_SPOT01, S_TEMP_AB_SPOT02,
+*      +              S_TEMP_AB_SPOT03, S_WORK_AB_SLANSY,
+*      +              S_WORK_AB_SPOT02, S_WORK_AB_SPOT03 )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NN, NNS, NNT, NOUT
@@ -31,13 +31,13 @@
 *       REAL               ARFINV( * )
 *       REAL               XACT( * )
 *       REAL               X( * )
-*       REAL               S_WORK_SLATMS( * )
-*       REAL               S_WORK_SPOT01( * )
-*       REAL               S_TEMP_SPOT02( * )
-*       REAL               S_TEMP_SPOT03( * )
-*       REAL               S_WORK_SLANSY( * )
-*       REAL               S_WORK_SPOT02( * )
-*       REAL               S_WORK_SPOT03( * )
+*       REAL               S_WORK_AB_SLATMS( * )
+*       REAL               S_WORK_AB_SPOT01( * )
+*       REAL               S_TEMP_AB_SPOT02( * )
+*       REAL               S_TEMP_AB_SPOT03( * )
+*       REAL               S_WORK_AB_SLANSY( * )
+*       REAL               S_WORK_AB_SPOT02( * )
+*       REAL               S_WORK_AB_SPOT03( * )
 *       ..
 *
 *
@@ -46,15 +46,15 @@
 *>
 *> \verbatim
 *>
-*> SDRVRFP tests the LAPACK RFP routines:
-*>     SPFTRF, SPFTRS, and SPFTRI.
+*> AB_SDRVRFP tests the LAPACK RFP routines:
+*>     AB_SPFTRF, AB_SPFTRS, and AB_SPFTRI.
 *>
-*> This testing routine follow the same tests as DDRVPO (test for the full
+*> This testing routine follow the same tests as AB_DDRVPO (test for the full
 *> format Symmetric Positive Definite solver).
 *>
 *> The tests are performed in Full Format, conversion back and forth from
-*> full format to RFP format are performed using the routines STRTTF and
-*> STFTTR.
+*> full format to RFP format are performed using the routines AB_STRTTF and
+*> AB_STFTTR.
 *>
 *> First, a specific matrix A of size N is created. There is nine types of
 *> different matrixes possible.
@@ -63,9 +63,9 @@
 *> *3. First row and column zero       8. Scaled near underflow
 *> *4. Last row and column zero        9. Scaled near overflow
 *> *5. Middle row and column zero
-*> (* - tests error exits from SPFTRF, no test ratios are computed)
+*> (* - tests error exits from AB_SPFTRF, no test ratios are computed)
 *> A solution XACT of size N-by-NRHS is created and the associated right
-*> hand side B as well. Then SPFTRF is called to compute L (or U), the
+*> hand side B as well. Then AB_SPFTRF is called to compute L (or U), the
 *> Cholesky factor of A. Then L (or U) is used to solve the linear system
 *> of equations AX = B. This gives X. Then L (or U) is used to compute the
 *> inverse of A, AINV. The following four tests are then performed:
@@ -183,44 +183,44 @@
 *>          ARFINV is REAL array, dimension ((NMAX*(NMAX+1))/2)
 *> \endverbatim
 *>
-*> \param[out] S_WORK_SLATMS
+*> \param[out] S_WORK_AB_SLATMS
 *> \verbatim
-*>          S_WORK_SLATMS is REAL array, dimension ( 3*NMAX )
+*>          S_WORK_AB_SLATMS is REAL array, dimension ( 3*NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_SPOT01
+*> \param[out] S_WORK_AB_SPOT01
 *> \verbatim
-*>          S_WORK_SPOT01 is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_SPOT01 is REAL array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_TEMP_SPOT02
+*> \param[out] S_TEMP_AB_SPOT02
 *> \verbatim
-*>          S_TEMP_SPOT02 is REAL array, dimension ( NMAX*MAXRHS )
+*>          S_TEMP_AB_SPOT02 is REAL array, dimension ( NMAX*MAXRHS )
 *> \endverbatim
 *>
-*> \param[out] S_TEMP_SPOT03
+*> \param[out] S_TEMP_AB_SPOT03
 *> \verbatim
-*>          S_TEMP_SPOT03 is REAL array, dimension ( NMAX*NMAX )
+*>          S_TEMP_AB_SPOT03 is REAL array, dimension ( NMAX*NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_SLATMS
+*> \param[out] S_WORK_AB_SLATMS
 *> \verbatim
-*>          S_WORK_SLATMS is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_SLATMS is REAL array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_SLANSY
+*> \param[out] S_WORK_AB_SLANSY
 *> \verbatim
-*>          S_WORK_SLANSY is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_SLANSY is REAL array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_SPOT02
+*> \param[out] S_WORK_AB_SPOT02
 *> \verbatim
-*>          S_WORK_SPOT02 is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_SPOT02 is REAL array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] S_WORK_SPOT03
+*> \param[out] S_WORK_AB_SPOT03
 *> \verbatim
-*>          S_WORK_SPOT03 is REAL array, dimension ( NMAX )
+*>          S_WORK_AB_SPOT03 is REAL array, dimension ( NMAX )
 *> \endverbatim
 *
 *  Authors:
@@ -236,12 +236,13 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+      SUBROUTINE AB_SDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
-     +              S_WORK_SLATMS, S_WORK_SPOT01, S_TEMP_SPOT02,
-     +              S_TEMP_SPOT03, S_WORK_SLANSY,
-     +              S_WORK_SPOT02, S_WORK_SPOT03 )
+     +              S_WORK_AB_SLATMS, S_WORK_AB_SPOT01, S_TEMP_AB_SPOT02
+     $,
+     +              S_TEMP_AB_SPOT03, S_WORK_AB_SLANSY,
+     +              S_WORK_AB_SPOT02, S_WORK_AB_SPOT03 )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -264,13 +265,13 @@
       REAL               ARFINV( * )
       REAL               XACT( * )
       REAL               X( * )
-      REAL               S_WORK_SLATMS( * )
-      REAL               S_WORK_SPOT01( * )
-      REAL               S_TEMP_SPOT02( * )
-      REAL               S_TEMP_SPOT03( * )
-      REAL               S_WORK_SLANSY( * )
-      REAL               S_WORK_SPOT02( * )
-      REAL               S_WORK_SPOT03( * )
+      REAL               S_WORK_AB_SLATMS( * )
+      REAL               S_WORK_AB_SPOT01( * )
+      REAL               S_TEMP_AB_SPOT02( * )
+      REAL               S_TEMP_AB_SPOT03( * )
+      REAL               S_WORK_AB_SLANSY( * )
+      REAL               S_WORK_AB_SPOT02( * )
+      REAL               S_WORK_AB_SPOT03( * )
 *     ..
 *
 *  =====================================================================
@@ -296,13 +297,16 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLANSY
-      EXTERNAL           SLANSY
+      REAL               AB_SLANSY
+      EXTERNAL           AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, SGET04, STFTTR, SLACPY,
-     +                   SLARHS, SLATB4, SLATMS, SPFTRI, SPFTRF, SPFTRS,
-     +                   SPOT01, SPOT02, SPOT03, SPOTRI, SPOTRF, STRTTF
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_SGET04, AB_
+     $STFTTR, AB_SLACPY,
+     +                   AB_SLARHS, AB_SLATB4, AB_SLATMS, AB_SPFTRI, AB_
+     $SPFTRF, AB_SPFTRS,
+     +                   AB_SPOT01, AB_SPOT02, AB_SPOT03, AB_SPOTRI, AB_
+     $SPOTRF, AB_STRTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -359,22 +363,23 @@
                   DO 100 IFORM = 1, 2
                      CFORM = FORMS( IFORM )
 *
-*                    Set up parameters with SLATB4 and generate a test
-*                    matrix with SLATMS.
+*                    Set up parameters with AB_SLATB4 and generate a test
+*                    matrix with AB_SLATMS.
 *
-                     CALL SLATB4( 'SPO', IMAT, N, N, CTYPE, KL, KU,
+                     CALL AB_SLATB4( 'SPO', IMAT, N, N, CTYPE, KL, KU,
      +                            ANORM, MODE, CNDNUM, DIST )
 *
-                     SRNAMT = 'SLATMS'
-                     CALL SLATMS( N, N, DIST, ISEED, CTYPE,
-     +                            S_WORK_SLATMS,
+                     SRNAMT = 'AB_SLATMS'
+                     CALL AB_SLATMS( N, N, DIST, ISEED, CTYPE,
+     +                            S_WORK_AB_SLATMS,
      +                            MODE, CNDNUM, ANORM, KL, KU, UPLO, A,
-     +                            LDA, S_WORK_SLATMS, INFO )
+     +                            LDA, S_WORK_AB_SLATMS, INFO )
 *
-*                    Check error code from SLATMS.
+*                    Check error code from AB_SLATMS.
 *
                      IF( INFO.NE.0 ) THEN
-                        CALL ALAERH( 'SPF', 'SLATMS', INFO, 0, UPLO, N,
+                        CALL AB_ALAERH( 'SPF', 'AB_SLATMS', INFO, 0, UPL
+     $O, N,
      +                               N, -1, -1, -1, IIT, NFAIL, NERRS,
      +                               NOUT )
                         GO TO 100
@@ -422,7 +427,7 @@
 *
 *                    Save a copy of the matrix A in ASAV.
 *
-                     CALL SLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
+                     CALL AB_SLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
 *
 *                    Compute the condition number of A (RCONDC).
 *
@@ -432,60 +437,64 @@
 *
 *                       Compute the 1-norm of A.
 *
-                        ANORM = SLANSY( '1', UPLO, N, A, LDA,
-     +                         S_WORK_SLANSY )
+                        ANORM = AB_SLANSY( '1', UPLO, N, A, LDA,
+     +                         S_WORK_AB_SLANSY )
 *
 *                       Factor the matrix A.
 *
-                        CALL SPOTRF( UPLO, N, A, LDA, INFO )
+                        CALL AB_SPOTRF( UPLO, N, A, LDA, INFO )
 *
 *                       Form the inverse of A.
 *
-                        CALL SPOTRI( UPLO, N, A, LDA, INFO )
+                        CALL AB_SPOTRI( UPLO, N, A, LDA, INFO )
 
       					IF ( N .NE. 0 ) THEN
 *
 *                          Compute the 1-norm condition number of A.
 *
-                           AINVNM = SLANSY( '1', UPLO, N, A, LDA,
-     +                           S_WORK_SLANSY )
+                           AINVNM = AB_SLANSY( '1', UPLO, N, A, LDA,
+     +                           S_WORK_AB_SLANSY )
                            RCONDC = ( ONE / ANORM ) / AINVNM
 *
 *                          Restore the matrix A.
 *
-                           CALL SLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
+                           CALL AB_SLACPY( UPLO, N, N, ASAV, LDA, A, LDA
+     $ )
                         END IF
 *
                      END IF
 *
 *                    Form an exact solution and set the right hand side.
 *
-                     SRNAMT = 'SLARHS'
-                     CALL SLARHS( 'SPO', 'N', UPLO, ' ', N, N, KL, KU,
+                     SRNAMT = 'AB_SLARHS'
+                     CALL AB_SLARHS( 'SPO', 'N', UPLO, ' ', N, N, KL, KU
+     $,
      +                            NRHS, A, LDA, XACT, LDA, B, LDA,
      +                            ISEED, INFO )
-                     CALL SLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA )
+                     CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA 
+     $)
 *
 *                    Compute the L*L' or U'*U factorization of the
 *                    matrix and solve the system.
 *
-                     CALL SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL SLACPY( 'Full', N, NRHS, B, LDB, X, LDB )
+                     CALL AB_SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, X, LDB )
 *
-                     SRNAMT = 'STRTTF'
-                     CALL STRTTF( CFORM, UPLO, N, AFAC, LDA, ARF, INFO )
-                     SRNAMT = 'SPFTRF'
-                     CALL SPFTRF( CFORM, UPLO, N, ARF, INFO )
+                     SRNAMT = 'AB_STRTTF'
+                     CALL AB_STRTTF( CFORM, UPLO, N, AFAC, LDA, ARF, INF
+     $O )
+                     SRNAMT = 'AB_SPFTRF'
+                     CALL AB_SPFTRF( CFORM, UPLO, N, ARF, INFO )
 *
-*                    Check error code from SPFTRF.
+*                    Check error code from AB_SPFTRF.
 *
                      IF( INFO.NE.IZERO ) THEN
 *
 *                       LANGOU: there is a small hick here: IZERO should
-*                       always be INFO however if INFO is ZERO, ALAERH does not
+*                       always be INFO however if INFO is ZERO, AB_ALAERH does not
 *                       complain.
 *
-                         CALL ALAERH( 'SPF', 'SPFSV ', INFO, IZERO,
+                         CALL AB_ALAERH( 'SPF', 'SPFSV ', INFO, IZERO,
      +                                UPLO, N, N, -1, -1, NRHS, IIT,
      +                                NFAIL, NERRS, NOUT )
                          GO TO 100
@@ -497,60 +506,64 @@
                         GO TO 100
                      END IF
 *
-                     SRNAMT = 'SPFTRS'
-                     CALL SPFTRS( CFORM, UPLO, N, NRHS, ARF, X, LDB,
+                     SRNAMT = 'AB_SPFTRS'
+                     CALL AB_SPFTRS( CFORM, UPLO, N, NRHS, ARF, X, LDB,
      +                            INFO )
 *
-                     SRNAMT = 'STFTTR'
-                     CALL STFTTR( CFORM, UPLO, N, ARF, AFAC, LDA, INFO )
+                     SRNAMT = 'AB_STFTTR'
+                     CALL AB_STFTTR( CFORM, UPLO, N, ARF, AFAC, LDA, INF
+     $O )
 *
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL SLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
-                     CALL SPOT01( UPLO, N, A, LDA, AFAC, LDA,
-     +                             S_WORK_SPOT01, RESULT( 1 ) )
-                     CALL SLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
+                     CALL AB_SLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
+                     CALL AB_SPOT01( UPLO, N, A, LDA, AFAC, LDA,
+     +                             S_WORK_AB_SPOT01, RESULT( 1 ) )
+                     CALL AB_SLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
 *
 *                    Form the inverse and compute the residual.
 *
                      IF(MOD(N,2).EQ.0)THEN
-                        CALL SLACPY( 'A', N+1, N/2, ARF, N+1, ARFINV,
+                        CALL AB_SLACPY( 'A', N+1, N/2, ARF, N+1, ARFINV,
      +                               N+1 )
                      ELSE
-                        CALL SLACPY( 'A', N, (N+1)/2, ARF, N, ARFINV,
+                        CALL AB_SLACPY( 'A', N, (N+1)/2, ARF, N, ARFINV,
      +                               N )
                      END IF
 *
-                     SRNAMT = 'SPFTRI'
-                     CALL SPFTRI( CFORM, UPLO, N, ARFINV , INFO )
+                     SRNAMT = 'AB_SPFTRI'
+                     CALL AB_SPFTRI( CFORM, UPLO, N, ARFINV , INFO )
 *
-                     SRNAMT = 'STFTTR'
-                     CALL STFTTR( CFORM, UPLO, N, ARFINV, AINV, LDA,
+                     SRNAMT = 'AB_STFTTR'
+                     CALL AB_STFTTR( CFORM, UPLO, N, ARFINV, AINV, LDA,
      +                            INFO )
 *
-*                    Check error code from SPFTRI.
+*                    Check error code from AB_SPFTRI.
 *
                      IF( INFO.NE.0 )
-     +                  CALL ALAERH( 'SPO', 'SPFTRI', INFO, 0, UPLO, N,
+     +                  CALL AB_ALAERH( 'SPO', 'AB_SPFTRI', INFO, 0, UPL
+     $O, N,
      +                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      +                               NOUT )
 *
-                     CALL SPOT03( UPLO, N, A, LDA, AINV, LDA,
-     +                            S_TEMP_SPOT03, LDA, S_WORK_SPOT03,
+                     CALL AB_SPOT03( UPLO, N, A, LDA, AINV, LDA,
+     +                            S_TEMP_AB_SPOT03, LDA, S_WORK_AB_SPOT0
+     $3,
      +                            RCONDC, RESULT( 2 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL SLACPY( 'Full', N, NRHS, B, LDA,
-     +                            S_TEMP_SPOT02, LDA )
-                     CALL SPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
-     +                            S_TEMP_SPOT02, LDA, S_WORK_SPOT02,
+                     CALL AB_SLACPY( 'Full', N, NRHS, B, LDA,
+     +                            S_TEMP_AB_SPOT02, LDA )
+                     CALL AB_SPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
+     +                            S_TEMP_AB_SPOT02, LDA, S_WORK_AB_SPOT0
+     $2,
      +                            RESULT( 3 ) )
 *
 *                    Check solution from generated exact solution.
 
-                     CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      +                         RESULT( 4 ) )
                      NT = 4
 *
@@ -560,7 +573,7 @@
                      DO 60 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     +                        CALL ALADHD( NOUT, 'SPF' )
+     +                        CALL AB_ALADHD( NOUT, 'SPF' )
                            WRITE( NOUT, FMT = 9999 )'SPFSV ', UPLO,
      +                            N, IIT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -575,13 +588,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( 'SPF', NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( 'SPF', NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A6, ', UPLO=''', A1, ''', N =', I5, ', type ', I1,
      +      ', test(', I1, ')=', G12.5 )
 *
       RETURN
 *
-*     End of SDRVRFP
+*     End of AB_SDRVRFP
 *
       END

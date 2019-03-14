@@ -1,4 +1,4 @@
-*> \brief \b DDRVRF4
+*> \brief \b AB_DDRVRF4
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
-*      +                    LDA, D_WORK_DLANGE )
+*       SUBROUTINE AB_DDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
+*      +                    LDA, D_WORK_AB_DLANGE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDC, NN, NOUT
@@ -18,7 +18,7 @@
 *       .. Array Arguments ..
 *       INTEGER            NVAL( NN )
 *       DOUBLE PRECISION   A( LDA, * ), C1( LDC, * ), C2( LDC, *),
-*      +                   CRF( * ), D_WORK_DLANGE( * )
+*      +                   CRF( * ), D_WORK_AB_DLANGE( * )
 *       ..
 *
 *
@@ -27,8 +27,8 @@
 *>
 *> \verbatim
 *>
-*> DDRVRF4 tests the LAPACK RFP routines:
-*>     DSFRK
+*> AB_DDRVRF4 tests the LAPACK RFP routines:
+*>     AB_DSFRK
 *> \endverbatim
 *
 *  Arguments:
@@ -97,9 +97,9 @@
 *>                The leading dimension of the array A.  LDA >= max(1,NMAX).
 *> \endverbatim
 *>
-*> \param[out] D_WORK_DLANGE
+*> \param[out] D_WORK_AB_DLANGE
 *> \verbatim
-*>          D_WORK_DLANGE is DOUBLE PRECISION array, dimension (NMAX)
+*>          D_WORK_AB_DLANGE is DOUBLE PRECISION array, dimension (NMAX)
 *> \endverbatim
 *
 *  Authors:
@@ -115,8 +115,9 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
-     +                    LDA, D_WORK_DLANGE )
+      SUBROUTINE AB_DDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A
+     $,
+     +                    LDA, D_WORK_AB_DLANGE )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,7 +131,7 @@
 *     .. Array Arguments ..
       INTEGER            NVAL( NN )
       DOUBLE PRECISION   A( LDA, * ), C1( LDC, * ), C2( LDC, *),
-     +                   CRF( * ), D_WORK_DLANGE( * )
+     +                   CRF( * ), D_WORK_AB_DLANGE( * )
 *     ..
 *
 *  =====================================================================
@@ -153,11 +154,11 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARND, DLANGE
-      EXTERNAL           DLAMCH, DLARND, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLARND, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYRK, DSFRK, DTFTTR, DTRTTF
+      EXTERNAL           AB_AB_DSYRK, AB_DSFRK, AB_DTFTTR, AB_DTRTTF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -184,7 +185,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
       DO 150 IIN = 1, NN
 *
@@ -218,8 +219,8 @@
                            ALPHA = ZERO
                            BETA = ONE
                         ELSE
-                           ALPHA = DLARND( 2, ISEED )
-                           BETA = DLARND( 2, ISEED )
+                           ALPHA = AB_DLARND( 2, ISEED )
+                           BETA = AB_DLARND( 2, ISEED )
                         END IF
 *
 *                       All the parameters are set:
@@ -235,12 +236,12 @@
 *
                            DO J = 1, K
                               DO I = 1, N
-                                 A( I, J) = DLARND( 2, ISEED )
+                                 A( I, J) = AB_DLARND( 2, ISEED )
                               END DO
                            END DO
 *
-                           NORMA = DLANGE( 'I', N, K, A, LDA,
-     +                                      D_WORK_DLANGE )
+                           NORMA = AB_DLANGE( 'I', N, K, A, LDA,
+     +                                      D_WORK_AB_DLANGE )
 *
 
                         ELSE
@@ -249,12 +250,12 @@
 *
                            DO J = 1,N
                               DO I = 1, K
-                                 A( I, J) = DLARND( 2, ISEED )
+                                 A( I, J) = AB_DLARND( 2, ISEED )
                               END DO
                            END DO
 *
-                           NORMA = DLANGE( 'I', K, N, A, LDA,
-     +                                      D_WORK_DLANGE )
+                           NORMA = AB_DLANGE( 'I', K, N, A, LDA,
+     +                                      D_WORK_AB_DLANGE )
 *
                         END IF
 *
@@ -265,37 +266,39 @@
 *
                         DO J = 1, N
                            DO I = 1, N
-                              C1( I, J) = DLARND( 2, ISEED )
+                              C1( I, J) = AB_DLARND( 2, ISEED )
                               C2(I,J) = C1(I,J)
                            END DO
                         END DO
 *
-*                       (See comment later on for why we use DLANGE and
-*                       not DLANSY for C1.)
+*                       (See comment later on for why we use AB_DLANGE and
+*                       not AB_DLANSY for C1.)
 *
-                        NORMC = DLANGE( 'I', N, N, C1, LDC,
-     +                                      D_WORK_DLANGE )
+                        NORMC = AB_DLANGE( 'I', N, N, C1, LDC,
+     +                                      D_WORK_AB_DLANGE )
 *
-                        SRNAMT = 'DTRTTF'
-                        CALL DTRTTF( CFORM, UPLO, N, C1, LDC, CRF,
+                        SRNAMT = 'AB_DTRTTF'
+                        CALL AB_DTRTTF( CFORM, UPLO, N, C1, LDC, CRF,
      +                               INFO )
 *
-*                       call dsyrk the BLAS routine -> gives C1
+*                       call AB_AB_DSYRK the BLAS routine -> gives C1
 *
-                        SRNAMT = 'DSYRK '
-                        CALL DSYRK( UPLO, TRANS, N, K, ALPHA, A, LDA,
+                        SRNAMT = 'AB_AB_DSYRK '
+                        CALL AB_AB_DSYRK( UPLO, TRANS, N, K, ALPHA, A, L
+     $DA,
      +                              BETA, C1, LDC )
 *
-*                       call dsfrk the RFP routine -> gives CRF
+*                       call AB_DSFRK the RFP routine -> gives CRF
 *
-                        SRNAMT = 'DSFRK '
-                        CALL DSFRK( CFORM, UPLO, TRANS, N, K, ALPHA, A,
+                        SRNAMT = 'AB_DSFRK '
+                        CALL AB_DSFRK( CFORM, UPLO, TRANS, N, K, ALPHA, 
+     $A,
      +                              LDA, BETA, CRF )
 *
 *                       convert CRF in full format -> gives C2
 *
-                        SRNAMT = 'DTFTTR'
-                        CALL DTFTTR( CFORM, UPLO, N, CRF, C2, LDC,
+                        SRNAMT = 'AB_DTFTTR'
+                        CALL AB_DTFTTR( CFORM, UPLO, N, CRF, C2, LDC,
      +                               INFO )
 *
 *                       compare C1 and C2
@@ -306,13 +309,13 @@
                            END DO
                         END DO
 *
-*                       Yes, C1 is symmetric so we could call DLANSY,
+*                       Yes, C1 is symmetric so we could call AB_DLANSY,
 *                       but we want to check the upper part that is
 *                       supposed to be unchanged and the diagonal that
-*                       is supposed to be real -> DLANGE
+*                       is supposed to be real -> AB_DLANGE
 *
-                        RESULT(1) = DLANGE( 'I', N, N, C1, LDC,
-     +                                      D_WORK_DLANGE )
+                        RESULT(1) = AB_DLANGE( 'I', N, N, C1, LDC,
+     +                                      D_WORK_AB_DLANGE )
                         RESULT(1) = RESULT(1)
      +                              / MAX( ABS( ALPHA ) * NORMA
      +                                   + ABS( BETA ) , ONE )
@@ -323,7 +326,7 @@
                               WRITE( NOUT, * )
                               WRITE( NOUT, FMT = 9999 )
                            END IF
-                           WRITE( NOUT, FMT = 9997 ) 'DSFRK',
+                           WRITE( NOUT, FMT = 9997 ) 'AB_DSFRK',
      +                        CFORM, UPLO, TRANS, N, K, RESULT(1)
                            NFAIL = NFAIL + 1
                         END IF
@@ -338,12 +341,12 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'DSFRK', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'AB_DSFRK', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'DSFRK', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'AB_DSFRK', NFAIL, NRUN
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing DSFRK
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_DSFRK
      +         ***')
  9997 FORMAT( 1X, '     Failure in ',A5,', CFORM=''',A1,''',',
      + ' UPLO=''',A1,''',',' TRANS=''',A1,''',', ' N=',I3,', K =', I3,
@@ -355,6 +358,6 @@
 *
       RETURN
 *
-*     End of DDRVRF4
+*     End of AB_DDRVRF4
 *
       END

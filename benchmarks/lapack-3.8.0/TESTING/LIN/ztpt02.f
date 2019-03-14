@@ -1,4 +1,4 @@
-*> \brief \b ZTPT02
+*> \brief \b AB_ZTPT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTPT02( UPLO, TRANS, DIAG, N, NRHS, AP, X, LDX, B, LDB,
+*       SUBROUTINE AB_ZTPT02( UPLO, TRANS, DIAG, N, NRHS, AP, X, LDX, B, LDB,
 *                          WORK, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZTPT02 computes the residual for the computed solution to a
+*> AB_ZTPT02 computes the residual for the computed solution to a
 *> triangular system of linear equations  A*x = b,  A**T *x = b,  or
 *> A**H *x = b, when the triangular matrix A is stored in packed format.
 *> Here A**T denotes the transpose of A, A**H denotes the conjugate
@@ -146,7 +146,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZTPT02( UPLO, TRANS, DIAG, N, NRHS, AP, X, LDX, B, LDB,
+      SUBROUTINE AB_ZTPT02( UPLO, TRANS, DIAG, N, NRHS, AP, X, LDX, B, L
+     $DB,
      $                   WORK, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -175,12 +176,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANTP
-      EXTERNAL           LSAME, DLAMCH, DZASUM, ZLANTP
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANTP
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DZASUM, AB_ZLANTP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZTPMV
+      EXTERNAL           AB_ZAXPY, AB_ZCOPY, AB_ZTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, MAX
@@ -196,15 +197,15 @@
 *
 *     Compute the 1-norm of A or A**H.
 *
-      IF( LSAME( TRANS, 'N' ) ) THEN
-         ANORM = ZLANTP( '1', UPLO, DIAG, N, AP, RWORK )
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+         ANORM = AB_ZLANTP( '1', UPLO, DIAG, N, AP, RWORK )
       ELSE
-         ANORM = ZLANTP( 'I', UPLO, DIAG, N, AP, RWORK )
+         ANORM = AB_ZLANTP( 'I', UPLO, DIAG, N, AP, RWORK )
       END IF
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -215,11 +216,11 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         CALL ZCOPY( N, X( 1, J ), 1, WORK, 1 )
-         CALL ZTPMV( UPLO, TRANS, DIAG, N, AP, WORK, 1 )
-         CALL ZAXPY( N, DCMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
-         BNORM = DZASUM( N, WORK, 1 )
-         XNORM = DZASUM( N, X( 1, J ), 1 )
+         CALL AB_ZCOPY( N, X( 1, J ), 1, WORK, 1 )
+         CALL AB_ZTPMV( UPLO, TRANS, DIAG, N, AP, WORK, 1 )
+         CALL AB_ZAXPY( N, DCMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
+         BNORM = AB_DZASUM( N, WORK, 1 )
+         XNORM = AB_DZASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -229,6 +230,6 @@
 *
       RETURN
 *
-*     End of ZTPT02
+*     End of AB_ZTPT02
 *
       END

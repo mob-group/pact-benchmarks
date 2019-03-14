@@ -1,4 +1,4 @@
-*> \brief \b CSPT02
+*> \brief \b AB_CSPT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE AB_CSPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CSPT02 computes the residual in the solution of a complex symmetric
+*> AB_CSPT02 computes the residual in the solution of a complex symmetric
 *> system of linear equations  A*x = b  when packed storage is used for
 *> the coefficient matrix.  The ratio computed is
 *>
@@ -120,7 +120,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CSPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+      SUBROUTINE AB_CSPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,11 +151,11 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANSP, SCASUM, SLAMCH
-      EXTERNAL           CLANSP, SCASUM, SLAMCH
+      REAL               AB_CLANSP, AB_SCASUM, AB_SLAMCH
+      EXTERNAL           AB_CLANSP, AB_SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSPMV
+      EXTERNAL           AB_CSPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -171,8 +171,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANSP( '1', UPLO, N, A, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_CLANSP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -181,7 +181,8 @@
 *     Compute  B - A*X  for the matrix of right hand sides B.
 *
       DO 10 J = 1, NRHS
-         CALL CSPMV( UPLO, N, -CONE, A, X( 1, J ), 1, CONE, B( 1, J ),
+         CALL AB_CSPMV( UPLO, N, -CONE, A, X( 1, J ), 1, CONE, B( 1, J )
+     $,
      $               1 )
    10 CONTINUE
 *
@@ -190,8 +191,8 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         BNORM = SCASUM( N, B( 1, J ), 1 )
-         XNORM = SCASUM( N, X( 1, J ), 1 )
+         BNORM = AB_SCASUM( N, B( 1, J ), 1 )
+         XNORM = AB_SCASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -201,6 +202,6 @@
 *
       RETURN
 *
-*     End of CSPT02
+*     End of AB_CSPT02
 *
       END

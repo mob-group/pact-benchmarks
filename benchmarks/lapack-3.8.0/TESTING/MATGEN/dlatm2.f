@@ -1,4 +1,4 @@
-*> \brief \b DLATM2
+*> \brief \b AB_DLATM2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DLATM2( M, N, I, J, KL, KU, IDIST,
+*       DOUBLE PRECISION FUNCTION AB_DLATM2( M, N, I, J, KL, KU, IDIST,
 *                        ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
 *
 *       .. Scalar Arguments ..
@@ -29,19 +29,19 @@
 *>
 *> \verbatim
 *>
-*>    DLATM2 returns the (I,J) entry of a random matrix of dimension
+*>    AB_DLATM2 returns the (I,J) entry of a random matrix of dimension
 *>    (M, N) described by the other parameters. It is called by the
-*>    DLATMR routine in order to build random test matrices. No error
+*>    AB_DLATMR routine in order to build random test matrices. No error
 *>    checking on parameters is done, because this routine is called in
-*>    a tight loop by DLATMR which has already checked the parameters.
+*>    a tight loop by AB_DLATMR which has already checked the parameters.
 *>
-*>    Use of DLATM2 differs from SLATM3 in the order in which the random
+*>    Use of AB_DLATM2 differs from AB_SLATM3 in the order in which the random
 *>    number generator is called to fill in random matrix entries.
-*>    With DLATM2, the generator is called to fill in the pivoted matrix
-*>    columnwise. With DLATM3, the generator is called to fill in the
-*>    matrix columnwise, after which it is pivoted. Thus, DLATM3 can
+*>    With AB_DLATM2, the generator is called to fill in the pivoted matrix
+*>    columnwise. With AB_DLATM3, the generator is called to fill in the
+*>    matrix columnwise, after which it is pivoted. Thus, AB_DLATM3 can
 *>    be used to construct random matrices which differ only in their
-*>    order of rows and/or columns. DLATM2 is used to construct band
+*>    order of rows and/or columns. AB_DLATM2 is used to construct band
 *>    matrices while avoiding calling the random number generator for
 *>    entries outside the band (and therefore generating random numbers
 *>
@@ -175,7 +175,7 @@
 *>           This array specifies the permutation used. The
 *>           row (or column) in position K was originally in
 *>           position IWORK( K ).
-*>           This differs from IWORK for DLATM3. Not modified.
+*>           This differs from IWORK for AB_DLATM3. Not modified.
 *> \endverbatim
 *>
 *> \param[in] SPARSE
@@ -205,7 +205,7 @@
 *> \ingroup double_matgen
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLATM2( M, N, I, J, KL, KU, IDIST,
+      DOUBLE PRECISION FUNCTION AB_DLATM2( M, N, I, J, KL, KU, IDIST,
      $                 ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -241,8 +241,8 @@
 *
 *     .. External Functions ..
 *
-      DOUBLE PRECISION   DLARAN, DLARND
-      EXTERNAL           DLARAN, DLARND
+      DOUBLE PRECISION   AB_DLARAN, AB_DLARND
+      EXTERNAL           AB_DLARAN, AB_DLARND
 *     ..
 *
 *-----------------------------------------------------------------------
@@ -253,22 +253,22 @@
 *     Check for I and J in range
 *
       IF( I.LT.1 .OR. I.GT.M .OR. J.LT.1 .OR. J.GT.N ) THEN
-         DLATM2 = ZERO
+         AB_DLATM2 = ZERO
          RETURN
       END IF
 *
 *     Check for banding
 *
       IF( J.GT.I+KU .OR. J.LT.I-KL ) THEN
-         DLATM2 = ZERO
+         AB_DLATM2 = ZERO
          RETURN
       END IF
 *
 *     Check for sparsity
 *
       IF( SPARSE.GT.ZERO ) THEN
-         IF( DLARAN( ISEED ).LT.SPARSE ) THEN
-            DLATM2 = ZERO
+         IF( AB_DLARAN( ISEED ).LT.SPARSE ) THEN
+            AB_DLATM2 = ZERO
             RETURN
          END IF
       END IF
@@ -294,7 +294,7 @@
       IF( ISUB.EQ.JSUB ) THEN
          TEMP = D( ISUB )
       ELSE
-         TEMP = DLARND( IDIST, ISEED )
+         TEMP = AB_DLARND( IDIST, ISEED )
       END IF
       IF( IGRADE.EQ.1 ) THEN
          TEMP = TEMP*DL( ISUB )
@@ -307,9 +307,9 @@
       ELSE IF( IGRADE.EQ.5 ) THEN
          TEMP = TEMP*DL( ISUB )*DL( JSUB )
       END IF
-      DLATM2 = TEMP
+      AB_DLATM2 = TEMP
       RETURN
 *
-*     End of DLATM2
+*     End of AB_DLATM2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SGET01
+*> \brief \b AB_SGET01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+*       SUBROUTINE AB_SGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> SGET01 reconstructs a matrix A from its L*U factorization and
+*> AB_SGET01 reconstructs a matrix A from its L*U factorization and
 *> computes the residual
 *>    norm(L*U - A) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -63,7 +63,7 @@
 *> \verbatim
 *>          AFAC is REAL array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the factors
-*>          L and U from the L*U factorization as computed by SGETRF.
+*>          L and U from the L*U factorization as computed by AB_SGETRF.
 *>          Overwritten with the reconstructed matrix, and then with the
 *>          difference L*U - A.
 *> \endverbatim
@@ -77,7 +77,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from SGETRF.
+*>          The pivot indices from AB_SGETRF.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -104,7 +104,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+      SUBROUTINE AB_SGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -133,11 +133,11 @@
       REAL               ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      REAL               SDOT, SLAMCH, SLANGE
-      EXTERNAL           SDOT, SLAMCH, SLANGE
+      REAL               AB_SDOT, AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SDOT, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SLASWP, SSCAL, STRMV
+      EXTERNAL           AB_SGEMV, AB_SLASWP, AB_SSCAL, AB_STRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, REAL
@@ -153,8 +153,8 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = SLANGE( '1', M, N, A, LDA, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_SLANGE( '1', M, N, A, LDA, RWORK )
 *
 *     Compute the product L*U and overwrite AFAC with the result.
 *     A column at a time of the product is obtained, starting with
@@ -162,7 +162,7 @@
 *
       DO 10 K = N, 1, -1
          IF( K.GT.M ) THEN
-            CALL STRMV( 'Lower', 'No transpose', 'Unit', M, AFAC,
+            CALL AB_STRMV( 'Lower', 'No transpose', 'Unit', M, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
          ELSE
 *
@@ -170,24 +170,24 @@
 *
             T = AFAC( K, K )
             IF( K+1.LE.M ) THEN
-               CALL SSCAL( M-K, T, AFAC( K+1, K ), 1 )
-               CALL SGEMV( 'No transpose', M-K, K-1, ONE,
+               CALL AB_SSCAL( M-K, T, AFAC( K+1, K ), 1 )
+               CALL AB_SGEMV( 'No transpose', M-K, K-1, ONE,
      $                     AFAC( K+1, 1 ), LDAFAC, AFAC( 1, K ), 1, ONE,
      $                     AFAC( K+1, K ), 1 )
             END IF
 *
 *           Compute the (K,K) element
 *
-            AFAC( K, K ) = T + SDOT( K-1, AFAC( K, 1 ), LDAFAC,
+            AFAC( K, K ) = T + AB_SDOT( K-1, AFAC( K, 1 ), LDAFAC,
      $                     AFAC( 1, K ), 1 )
 *
 *           Compute elements (1:K-1,K)
 *
-            CALL STRMV( 'Lower', 'No transpose', 'Unit', K-1, AFAC,
+            CALL AB_STRMV( 'Lower', 'No transpose', 'Unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
          END IF
    10 CONTINUE
-      CALL SLASWP( N, AFAC, LDAFAC, 1, MIN( M, N ), IPIV, -1 )
+      CALL AB_SLASWP( N, AFAC, LDAFAC, 1, MIN( M, N ), IPIV, -1 )
 *
 *     Compute the difference  L*U - A  and store in AFAC.
 *
@@ -199,7 +199,7 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = SLANGE( '1', M, N, AFAC, LDAFAC, RWORK )
+      RESID = AB_SLANGE( '1', M, N, AFAC, LDAFAC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -210,6 +210,6 @@
 *
       RETURN
 *
-*     End of SGET01
+*     End of AB_SGET01
 *
       END

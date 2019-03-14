@@ -1,4 +1,4 @@
-*> \brief \b DCKCSD
+*> \brief \b AB_DCKCSD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
+*       SUBROUTINE AB_DCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
 *                          MMAX, X, XF, U1, U2, V1T, V2T, THETA, IWORK,
 *                          WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DCKCSD tests DORCSD:
+*> AB_DCKCSD tests DORCSD:
 *>        the CSD for an M-by-M orthogonal matrix X partitioned as
 *>        [ X11 X12; X21 X22 ]. X11 is P-by-Q.
 *> \endverbatim
@@ -163,7 +163,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If DLAROR returns an error code, the absolute value
+*>          > 0 :  If AB_DLAROR returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -180,7 +180,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
+      SUBROUTINE AB_DCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
      $                   MMAX, X, XF, U1, U2, V1T, V2T, THETA, IWORK,
      $                   WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -225,15 +225,16 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DCSDTS, DLACSG, DLAROR,
-     $                   DLASET
+      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_DCSDTS, 
+     $AB_DLACSG, AB_DLAROR,
+     $                   AB_DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLARAN, DLARND
-      EXTERNAL           DLARAN, DLARND
+      DOUBLE PRECISION   AB_DLARAN, AB_DLARND
+      EXTERNAL           AB_DLARAN, AB_DLARND
 *     ..
 *     .. Executable Statements ..
 *
@@ -244,7 +245,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDX = MMAX
       LDU1 = MMAX
       LDU2 = MMAX
@@ -269,7 +270,8 @@
 *           Generate X
 *
             IF( IMAT.EQ.1 ) THEN
-               CALL DLAROR( 'L', 'I', M, M, X, LDX, ISEED, WORK, IINFO )
+               CALL AB_DLAROR( 'L', 'I', M, M, X, LDX, ISEED, WORK, IINF
+     $O )
                IF( M .NE. 0 .AND. IINFO .NE. 0 ) THEN
                   WRITE( NOUT, FMT = 9999 ) M, IINFO
                   INFO = ABS( IINFO )
@@ -278,19 +280,19 @@
             ELSE IF( IMAT.EQ.2 ) THEN
                R = MIN( P, M-P, Q, M-Q )
                DO I = 1, R
-                  THETA(I) = PIOVER2 * DLARND( 1, ISEED )
+                  THETA(I) = PIOVER2 * AB_DLARND( 1, ISEED )
                END DO
-               CALL DLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
+               CALL AB_DLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
                DO I = 1, M
                   DO J = 1, M
                      X(I+(J-1)*LDX) = X(I+(J-1)*LDX) +
-     $                                ORTH*DLARND(2,ISEED)
+     $                                ORTH*AB_DLARND(2,ISEED)
                   END DO
                END DO
             ELSE IF( IMAT.EQ.3 ) THEN
                R = MIN( P, M-P, Q, M-Q )
                DO I = 1, R+1
-                  THETA(I) = TEN**(-DLARND(1,ISEED)*GAPDIGIT)
+                  THETA(I) = TEN**(-AB_DLARND(1,ISEED)*GAPDIGIT)
                END DO
                DO I = 2, R+1
                   THETA(I) = THETA(I-1) + THETA(I)
@@ -298,13 +300,14 @@
                DO I = 1, R
                   THETA(I) = PIOVER2 * THETA(I) / THETA(R+1)
                END DO
-               CALL DLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
+               CALL AB_DLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
             ELSE
-               CALL DLASET( 'F', M, M, ZERO, ONE, X, LDX )
+               CALL AB_DLASET( 'F', M, M, ZERO, ONE, X, LDX )
                DO I = 1, M
-                  J = INT( DLARAN( ISEED ) * M ) + 1
+                  J = INT( AB_DLARAN( ISEED ) * M ) + 1
                   IF( J .NE. I ) THEN
-                     CALL DROT( M, X(1+(I-1)*LDX), 1, X(1+(J-1)*LDX), 1,
+                     CALL AB_DROT( M, X(1+(I-1)*LDX), 1, X(1+(J-1)*LDX),
+     $ 1,
      $                 ZERO, ONE )
                   END IF
                END DO
@@ -312,7 +315,8 @@
 *
             NT = 15
 *
-            CALL DCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
+            CALL AB_DCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T
+     $,
      $                   LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
      $                   RWORK, RESULT )
 *
@@ -323,7 +327,7 @@
                IF( RESULT( I ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                      FIRSTT = .FALSE.
-                     CALL ALAHDG( NOUT, PATH )
+                     CALL AB_AB_ALAHDG( NOUT, PATH )
                   END IF
                   WRITE( NOUT, FMT = 9998 )M, P, Q, IMAT, I,
      $               RESULT( I )
@@ -336,20 +340,20 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' DLAROR in DCKCSD: M = ', I5, ', INFO = ', I15 )
+ 9999 FORMAT( ' AB_DLAROR in AB_DCKCSD: M = ', I5, ', INFO = ', I15 )
  9998 FORMAT( ' M=', I4, ' P=', I4, ', Q=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
       RETURN
 *
-*     End of DCKCSD
+*     End of AB_DCKCSD
 *
       END
 *
 *
 *
-      SUBROUTINE DLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
+      SUBROUTINE AB_DLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
       IMPLICIT NONE
 *
       INTEGER            LDX, M, P, Q
@@ -364,7 +368,7 @@
 *
       R = MIN( P, M-P, Q, M-Q )
 *
-      CALL DLASET( 'Full', M, M, ZERO, ZERO, X, LDX )
+      CALL AB_DLASET( 'Full', M, M, ZERO, ZERO, X, LDX )
 *
       DO I = 1, MIN(P,Q)-R
          X(I,I) = ONE
@@ -393,12 +397,13 @@
          X(P+(MIN(M-P,M-Q)-R)+I,Q+(MIN(M-P,M-Q)-R)+I) =
      $      COS(THETA(I))
       END DO
-      CALL DLAROR( 'Left', 'No init', P, M, X, LDX, ISEED, WORK, INFO )
-      CALL DLAROR( 'Left', 'No init', M-P, M, X(P+1,1), LDX,
+      CALL AB_DLAROR( 'Left', 'No init', P, M, X, LDX, ISEED, WORK, INFO
+     $ )
+      CALL AB_DLAROR( 'Left', 'No init', M-P, M, X(P+1,1), LDX,
      $             ISEED, WORK, INFO )
-      CALL DLAROR( 'Right', 'No init', M, Q, X, LDX, ISEED,
+      CALL AB_DLAROR( 'Right', 'No init', M, Q, X, LDX, ISEED,
      $             WORK, INFO )
-      CALL DLAROR( 'Right', 'No init', M, M-Q,
+      CALL AB_DLAROR( 'Right', 'No init', M, M-Q,
      $             X(1,Q+1), LDX, ISEED, WORK, INFO )
 *
       END

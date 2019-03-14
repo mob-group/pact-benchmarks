@@ -1,4 +1,4 @@
-*> \brief \b ZDRVRF2
+*> \brief \b AB_ZDRVRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
+*       SUBROUTINE AB_ZDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> ZDRVRF2 tests the LAPACK RFP conversion routines.
+*> AB_ZDRVRF2 tests the LAPACK RFP conversion routines.
 *> \endverbatim
 *
 *  Arguments:
@@ -87,7 +87,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
+      SUBROUTINE AB_ZDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,11 +115,12 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         ZLARND
-      EXTERNAL           ZLARND
+      COMPLEX*16         AB_ZLARND
+      EXTERNAL           AB_ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZTFTTR, ZTFTTP, ZTRTTF, ZTRTTP, ZTPTTR, ZTPTTF
+      EXTERNAL           AB_ZTFTTR, AB_ZTFTTP, AB_ZTRTTF, AB_ZTRTTP, AB_
+     $ZTPTTR, AB_ZTPTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -165,18 +166,18 @@
 *
                DO J = 1, N
                   DO I = 1, N
-                     A( I, J) = ZLARND( 4, ISEED )
+                     A( I, J) = AB_ZLARND( 4, ISEED )
                   END DO
                END DO
 *
-               SRNAMT = 'ZTRTTF'
-               CALL ZTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
+               SRNAMT = 'AB_ZTRTTF'
+               CALL AB_ZTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
 *
-               SRNAMT = 'ZTFTTP'
-               CALL ZTFTTP( CFORM, UPLO, N, ARF, AP, INFO )
+               SRNAMT = 'AB_ZTFTTP'
+               CALL AB_ZTFTTP( CFORM, UPLO, N, ARF, AP, INFO )
 *
-               SRNAMT = 'ZTPTTR'
-               CALL ZTPTTR( UPLO, N, AP, ASAV, LDA, INFO )
+               SRNAMT = 'AB_ZTPTTR'
+               CALL AB_ZTPTTR( UPLO, N, AP, ASAV, LDA, INFO )
 *
                OK1 = .TRUE.
                IF ( LOWER ) THEN
@@ -199,14 +200,14 @@
 *
                NRUN = NRUN + 1
 *
-               SRNAMT = 'ZTRTTP'
-               CALL ZTRTTP( UPLO, N, A, LDA, AP, INFO )
+               SRNAMT = 'AB_ZTRTTP'
+               CALL AB_ZTRTTP( UPLO, N, A, LDA, AP, INFO )
 *
-               SRNAMT = 'ZTPTTF'
-               CALL ZTPTTF( CFORM, UPLO, N, AP, ARF, INFO )
+               SRNAMT = 'AB_ZTPTTF'
+               CALL AB_ZTPTTF( CFORM, UPLO, N, AP, ARF, INFO )
 *
-               SRNAMT = 'ZTFTTR'
-               CALL ZTFTTR( CFORM, UPLO, N, ARF, ASAV, LDA, INFO )
+               SRNAMT = 'AB_ZTFTTR'
+               CALL AB_ZTFTTR( CFORM, UPLO, N, ARF, ASAV, LDA, INFO )
 *
                OK2 = .TRUE.
                IF ( LOWER ) THEN
@@ -259,6 +260,6 @@
 *
       RETURN
 *
-*     End of ZDRVRF2
+*     End of AB_ZDRVRF2
 *
       END

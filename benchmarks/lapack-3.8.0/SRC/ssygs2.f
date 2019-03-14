@@ -1,4 +1,4 @@
-*> \brief \b SSYGS2 reduces a symmetric definite generalized eigenproblem to standard form, using the factorization results obtained from spotrf (unblocked algorithm).
+*> \brief \b AB_SSYGS2 reduces a symmetric definite generalized eigenproblem to standard form, using the factorization results obtained from AB_SPOTRF (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYGS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssygs2.f">
+*> Download AB_SSYGS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYGS2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssygs2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYGS2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssygs2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYGS2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+*       SUBROUTINE AB_SSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SSYGS2 reduces a real symmetric-definite generalized eigenproblem
+*> AB_SSYGS2 reduces a real symmetric-definite generalized eigenproblem
 *> to standard form.
 *>
 *> If ITYPE = 1, the problem is A*x = lambda*B*x,
@@ -43,7 +43,7 @@
 *> If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**T or L**T *A*L.
 *>
-*> B must have been previously factorized as U**T *U or L*L**T by SPOTRF.
+*> B must have been previously factorized as U**T *U or L*L**T by AB_SPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -96,7 +96,7 @@
 *> \verbatim
 *>          B is REAL array, dimension (LDB,N)
 *>          The triangular factor from the Cholesky factorization of B,
-*>          as returned by SPOTRF.
+*>          as returned by AB_SPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -125,7 +125,7 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE SSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      SUBROUTINE AB_SSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,24 +152,25 @@
       REAL               AKK, BKK, CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SSCAL, SSYR2, STRMV, STRSV, XERBLA
+      EXTERNAL           AB_SAXPY, AB_SSCAL, AB_AB_SSYR2, AB_STRMV, AB_S
+     $TRSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -179,7 +180,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYGS2', -INFO )
+         CALL AB_XERBLA( 'AB_SSYGS2', -INFO )
          RETURN
       END IF
 *
@@ -197,15 +198,15 @@
                AKK = AKK / BKK**2
                A( K, K ) = AKK
                IF( K.LT.N ) THEN
-                  CALL SSCAL( N-K, ONE / BKK, A( K, K+1 ), LDA )
+                  CALL AB_SSCAL( N-K, ONE / BKK, A( K, K+1 ), LDA )
                   CT = -HALF*AKK
-                  CALL SAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
+                  CALL AB_SAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
      $                        LDA )
-                  CALL SSYR2( UPLO, N-K, -ONE, A( K, K+1 ), LDA,
+                  CALL AB_AB_SSYR2( UPLO, N-K, -ONE, A( K, K+1 ), LDA,
      $                        B( K, K+1 ), LDB, A( K+1, K+1 ), LDA )
-                  CALL SAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
+                  CALL AB_SAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
      $                        LDA )
-                  CALL STRSV( UPLO, 'Transpose', 'Non-unit', N-K,
+                  CALL AB_STRSV( UPLO, 'Transpose', 'Non-unit', N-K,
      $                        B( K+1, K+1 ), LDB, A( K, K+1 ), LDA )
                END IF
    10       CONTINUE
@@ -222,13 +223,15 @@
                AKK = AKK / BKK**2
                A( K, K ) = AKK
                IF( K.LT.N ) THEN
-                  CALL SSCAL( N-K, ONE / BKK, A( K+1, K ), 1 )
+                  CALL AB_SSCAL( N-K, ONE / BKK, A( K+1, K ), 1 )
                   CT = -HALF*AKK
-                  CALL SAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
-                  CALL SSYR2( UPLO, N-K, -ONE, A( K+1, K ), 1,
+                  CALL AB_SAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1
+     $ )
+                  CALL AB_AB_SSYR2( UPLO, N-K, -ONE, A( K+1, K ), 1,
      $                        B( K+1, K ), 1, A( K+1, K+1 ), LDA )
-                  CALL SAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
-                  CALL STRSV( UPLO, 'No transpose', 'Non-unit', N-K,
+                  CALL AB_SAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1
+     $ )
+                  CALL AB_STRSV( UPLO, 'No transpose', 'Non-unit', N-K,
      $                        B( K+1, K+1 ), LDB, A( K+1, K ), 1 )
                END IF
    20       CONTINUE
@@ -244,14 +247,15 @@
 *
                AKK = A( K, K )
                BKK = B( K, K )
-               CALL STRMV( UPLO, 'No transpose', 'Non-unit', K-1, B,
+               CALL AB_STRMV( UPLO, 'No transpose', 'Non-unit', K-1, B,
      $                     LDB, A( 1, K ), 1 )
                CT = HALF*AKK
-               CALL SAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
-               CALL SSYR2( UPLO, K-1, ONE, A( 1, K ), 1, B( 1, K ), 1,
+               CALL AB_SAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
+               CALL AB_AB_SSYR2( UPLO, K-1, ONE, A( 1, K ), 1, B( 1, K )
+     $, 1,
      $                     A, LDA )
-               CALL SAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
-               CALL SSCAL( K-1, BKK, A( 1, K ), 1 )
+               CALL AB_SAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
+               CALL AB_SSCAL( K-1, BKK, A( 1, K ), 1 )
                A( K, K ) = AKK*BKK**2
    30       CONTINUE
          ELSE
@@ -264,20 +268,22 @@
 *
                AKK = A( K, K )
                BKK = B( K, K )
-               CALL STRMV( UPLO, 'Transpose', 'Non-unit', K-1, B, LDB,
+               CALL AB_STRMV( UPLO, 'Transpose', 'Non-unit', K-1, B, LDB
+     $,
      $                     A( K, 1 ), LDA )
                CT = HALF*AKK
-               CALL SAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
-               CALL SSYR2( UPLO, K-1, ONE, A( K, 1 ), LDA, B( K, 1 ),
+               CALL AB_SAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
+               CALL AB_AB_SSYR2( UPLO, K-1, ONE, A( K, 1 ), LDA, B( K, 1
+     $ ),
      $                     LDB, A, LDA )
-               CALL SAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
-               CALL SSCAL( K-1, BKK, A( K, 1 ), LDA )
+               CALL AB_SAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
+               CALL AB_SSCAL( K-1, BKK, A( K, 1 ), LDA )
                A( K, K ) = AKK*BKK**2
    40       CONTINUE
          END IF
       END IF
       RETURN
 *
-*     End of SSYGS2
+*     End of AB_SSYGS2
 *
       END

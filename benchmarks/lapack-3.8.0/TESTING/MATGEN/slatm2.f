@@ -1,4 +1,4 @@
-*> \brief \b SLATM2
+*> \brief \b AB_SLATM2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION SLATM2( M, N, I, J, KL, KU, IDIST,
+*       REAL             FUNCTION AB_SLATM2( M, N, I, J, KL, KU, IDIST,
 *                        ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
 *
 *       .. Scalar Arguments ..
@@ -29,19 +29,19 @@
 *>
 *> \verbatim
 *>
-*>    SLATM2 returns the (I,J) entry of a random matrix of dimension
+*>    AB_SLATM2 returns the (I,J) entry of a random matrix of dimension
 *>    (M, N) described by the other parameters. It is called by the
-*>    SLATMR routine in order to build random test matrices. No error
+*>    AB_SLATMR routine in order to build random test matrices. No error
 *>    checking on parameters is done, because this routine is called in
-*>    a tight loop by SLATMR which has already checked the parameters.
+*>    a tight loop by AB_SLATMR which has already checked the parameters.
 *>
-*>    Use of SLATM2 differs from SLATM3 in the order in which the random
+*>    Use of AB_SLATM2 differs from AB_SLATM3 in the order in which the random
 *>    number generator is called to fill in random matrix entries.
-*>    With SLATM2, the generator is called to fill in the pivoted matrix
-*>    columnwise. With SLATM3, the generator is called to fill in the
-*>    matrix columnwise, after which it is pivoted. Thus, SLATM3 can
+*>    With AB_SLATM2, the generator is called to fill in the pivoted matrix
+*>    columnwise. With AB_SLATM3, the generator is called to fill in the
+*>    matrix columnwise, after which it is pivoted. Thus, AB_SLATM3 can
 *>    be used to construct random matrices which differ only in their
-*>    order of rows and/or columns. SLATM2 is used to construct band
+*>    order of rows and/or columns. AB_SLATM2 is used to construct band
 *>    matrices while avoiding calling the random number generator for
 *>    entries outside the band (and therefore generating random numbers
 *>
@@ -175,7 +175,7 @@
 *>           This array specifies the permutation used. The
 *>           row (or column) in position K was originally in
 *>           position IWORK( K ).
-*>           This differs from IWORK for SLATM3. Not modified.
+*>           This differs from IWORK for AB_SLATM3. Not modified.
 *> \endverbatim
 *>
 *> \param[in] SPARSE
@@ -205,7 +205,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      REAL             FUNCTION SLATM2( M, N, I, J, KL, KU, IDIST,
+      REAL             FUNCTION AB_SLATM2( M, N, I, J, KL, KU, IDIST,
      $                 ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -241,8 +241,8 @@
 *
 *     .. External Functions ..
 *
-      REAL               SLARAN, SLARND
-      EXTERNAL           SLARAN, SLARND
+      REAL               AB_SLARAN, AB_SLARND
+      EXTERNAL           AB_SLARAN, AB_SLARND
 *     ..
 *
 *-----------------------------------------------------------------------
@@ -253,22 +253,22 @@
 *     Check for I and J in range
 *
       IF( I.LT.1 .OR. I.GT.M .OR. J.LT.1 .OR. J.GT.N ) THEN
-         SLATM2 = ZERO
+         AB_SLATM2 = ZERO
          RETURN
       END IF
 *
 *     Check for banding
 *
       IF( J.GT.I+KU .OR. J.LT.I-KL ) THEN
-         SLATM2 = ZERO
+         AB_SLATM2 = ZERO
          RETURN
       END IF
 *
 *     Check for sparsity
 *
       IF( SPARSE.GT.ZERO ) THEN
-         IF( SLARAN( ISEED ).LT.SPARSE ) THEN
-            SLATM2 = ZERO
+         IF( AB_SLARAN( ISEED ).LT.SPARSE ) THEN
+            AB_SLATM2 = ZERO
             RETURN
          END IF
       END IF
@@ -294,7 +294,7 @@
       IF( ISUB.EQ.JSUB ) THEN
          TEMP = D( ISUB )
       ELSE
-         TEMP = SLARND( IDIST, ISEED )
+         TEMP = AB_SLARND( IDIST, ISEED )
       END IF
       IF( IGRADE.EQ.1 ) THEN
          TEMP = TEMP*DL( ISUB )
@@ -307,9 +307,9 @@
       ELSE IF( IGRADE.EQ.5 ) THEN
          TEMP = TEMP*DL( ISUB )*DL( JSUB )
       END IF
-      SLATM2 = TEMP
+      AB_SLATM2 = TEMP
       RETURN
 *
-*     End of SLATM2
+*     End of AB_SLATM2
 *
       END

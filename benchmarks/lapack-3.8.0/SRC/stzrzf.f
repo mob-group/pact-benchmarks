@@ -1,4 +1,4 @@
-*> \brief \b STZRZF
+*> \brief \b AB_STZRZF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download STZRZF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stzrzf.f">
+*> Download AB_STZRZF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STZRZF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stzrzf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STZRZF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stzrzf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STZRZF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE AB_STZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LWORK, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> STZRZF reduces the M-by-N ( M<=N ) real upper trapezoidal matrix A
+*> AB_STZRZF reduces the M-by-N ( M<=N ) real upper trapezoidal matrix A
 *> to upper triangular form by means of orthogonal transformations.
 *>
 *> The upper trapezoidal matrix A is factored as
@@ -98,7 +98,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -143,13 +143,13 @@
 *>     V = ( I   A(:,M+1:N) )
 *>
 *>  I is the M-by-M identity matrix, A(:,M+1:N)
-*>  is the output stored in A on exit from DTZRZF,
+*>  is the output stored in A on exit from AB_DTZRZF,
 *>  and tau(k) is the kth element of the array TAU.
 *>
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE AB_STZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -175,14 +175,15 @@
      $                   M1, MU, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, SLARZB, SLARZT, SLATRZ
+      EXTERNAL           AB_XERBLA, AB_AB_SLARZB, AB_AB_SLARZT, AB_SLATR
+     $Z
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -206,7 +207,7 @@
 *
 *           Determine the block size.
 *
-            NB = ILAENV( 1, 'SGERQF', ' ', M, N, -1, -1 )
+            NB = AB_ILAENV( 1, 'AB_AB_SGERQF', ' ', M, N, -1, -1 )
             LWKOPT = M*NB
             LWKMIN = MAX( 1, M )
          END IF
@@ -218,7 +219,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STZRZF', -INFO )
+         CALL AB_XERBLA( 'AB_STZRZF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -242,7 +243,8 @@
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, ILAENV( 3, 'SGERQF', ' ', M, N, -1, -1 ) )
+         NX = MAX( 0, AB_ILAENV( 3, 'AB_AB_SGERQF', ' ', M, N, -1, -1 ) 
+     $)
          IF( NX.LT.M ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -255,7 +257,8 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'SGERQF', ' ', M, N, -1,
+               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_AB_SGERQF', ' ', M, N, 
+     $-1,
      $                 -1 ) )
             END IF
          END IF
@@ -276,19 +279,20 @@
 *           Compute the TZ factorization of the current block
 *           A(i:i+ib-1,i:n)
 *
-            CALL SLATRZ( IB, N-I+1, N-M, A( I, I ), LDA, TAU( I ),
+            CALL AB_SLATRZ( IB, N-I+1, N-M, A( I, I ), LDA, TAU( I ),
      $                   WORK )
             IF( I.GT.1 ) THEN
 *
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL SLARZT( 'Backward', 'Rowwise', N-M, IB, A( I, M1 ),
+               CALL AB_AB_SLARZT( 'Backward', 'Rowwise', N-M, IB, A( I, 
+     $M1 ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H to A(1:i-1,i:n) from the right
 *
-               CALL SLARZB( 'Right', 'No transpose', 'Backward',
+               CALL AB_AB_SLARZB( 'Right', 'No transpose', 'Backward',
      $                      'Rowwise', I-1, N-I+1, IB, N-M, A( I, M1 ),
      $                      LDA, WORK, LDWORK, A( 1, I ), LDA,
      $                      WORK( IB+1 ), LDWORK )
@@ -302,12 +306,12 @@
 *     Use unblocked code to factor the last or only block
 *
       IF( MU.GT.0 )
-     $   CALL SLATRZ( MU, N, N-M, A, LDA, TAU, WORK )
+     $   CALL AB_SLATRZ( MU, N, N-M, A, LDA, TAU, WORK )
 *
       WORK( 1 ) = LWKOPT
 *
       RETURN
 *
-*     End of STZRZF
+*     End of AB_STZRZF
 *
       END

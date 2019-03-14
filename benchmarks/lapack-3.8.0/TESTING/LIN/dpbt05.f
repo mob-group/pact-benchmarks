@@ -1,4 +1,4 @@
-*> \brief \b DPBT05
+*> \brief \b AB_DPBT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPBT05( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, X, LDX,
+*       SUBROUTINE AB_DPBT05( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, X, LDX,
 *                          XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> DPBT05 tests the error bounds from iterative refinement for the
+*> AB_DPBT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> symmetric band matrix.
 *>
@@ -168,7 +168,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DPBT05( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, X, LDX,
+      SUBROUTINE AB_DPBT05( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, X, LDX,
      $                   XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -198,10 +198,10 @@
       DOUBLE PRECISION   AXBI, DIFF, EPS, ERRBND, OVFL, TMP, UNFL, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IDAMAX, DLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -216,10 +216,10 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       NZ = 2*MAX( KD, N-1 ) + 1
 *
 *     Test 1:  Compute the maximum of
@@ -228,7 +228,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = IDAMAX( N, X( 1, J ), 1 )
+         IMAX = AB_IDAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( ABS( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -290,6 +290,6 @@
 *
       RETURN
 *
-*     End of DPBT05
+*     End of AB_DPBT05
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZTPT03
+*> \brief \b AB_ZTPT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTPT03( UPLO, TRANS, DIAG, N, NRHS, AP, SCALE, CNORM,
+*       SUBROUTINE AB_ZTPT03( UPLO, TRANS, DIAG, N, NRHS, AP, SCALE, CNORM,
 *                          TSCAL, X, LDX, B, LDB, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZTPT03 computes the residual for the solution to a scaled triangular
+*> AB_ZTPT03 computes the residual for the solution to a scaled triangular
 *> system of equations A*x = s*b,  A**T *x = s*b,  or  A**H *x = s*b,
 *> when the triangular matrix A is stored in packed format.  Here A**T
 *> denotes the transpose of A, A**H denotes the conjugate transpose of
@@ -159,7 +159,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZTPT03( UPLO, TRANS, DIAG, N, NRHS, AP, SCALE, CNORM,
+      SUBROUTINE AB_ZTPT03( UPLO, TRANS, DIAG, N, NRHS, AP, SCALE, CNORM
+     $,
      $                   TSCAL, X, LDX, B, LDB, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -188,13 +189,13 @@
       DOUBLE PRECISION   EPS, ERR, SMLNUM, TNORM, XNORM, XSCAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IZAMAX, DLAMCH
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IZAMAX
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZDSCAL, ZTPMV
+      EXTERNAL           AB_ZAXPY, AB_ZCOPY, ZAB_DSCAL, AB_ZTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, MAX
@@ -207,15 +208,15 @@
          RESID = ZERO
          RETURN
       END IF
-      EPS = DLAMCH( 'Epsilon' )
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
 *
 *     Compute the norm of the triangular matrix A using the column
-*     norms already computed by ZLATPS.
+*     norms already computed by AB_ZLATPS.
 *
       TNORM = 0.D0
-      IF( LSAME( DIAG, 'N' ) ) THEN
-         IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( DIAG, 'N' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
             JJ = 1
             DO 10 J = 1, N
                TNORM = MAX( TNORM, TSCAL*ABS( AP( JJ ) )+CNORM( J ) )
@@ -239,16 +240,17 @@
 *
       RESID = ZERO
       DO 40 J = 1, NRHS
-         CALL ZCOPY( N, X( 1, J ), 1, WORK, 1 )
-         IX = IZAMAX( N, WORK, 1 )
+         CALL AB_ZCOPY( N, X( 1, J ), 1, WORK, 1 )
+         IX = AB_IZAMAX( N, WORK, 1 )
          XNORM = MAX( ONE, ABS( X( IX, J ) ) )
          XSCAL = ( ONE / XNORM ) / DBLE( N )
-         CALL ZDSCAL( N, XSCAL, WORK, 1 )
-         CALL ZTPMV( UPLO, TRANS, DIAG, N, AP, WORK, 1 )
-         CALL ZAXPY( N, DCMPLX( -SCALE*XSCAL ), B( 1, J ), 1, WORK, 1 )
-         IX = IZAMAX( N, WORK, 1 )
+         CALL ZAB_DSCAL( N, XSCAL, WORK, 1 )
+         CALL AB_ZTPMV( UPLO, TRANS, DIAG, N, AP, WORK, 1 )
+         CALL AB_ZAXPY( N, DCMPLX( -SCALE*XSCAL ), B( 1, J ), 1, WORK, 1
+     $ )
+         IX = AB_IZAMAX( N, WORK, 1 )
          ERR = TSCAL*ABS( WORK( IX ) )
-         IX = IZAMAX( N, X( 1, J ), 1 )
+         IX = AB_IZAMAX( N, X( 1, J ), 1 )
          XNORM = ABS( X( IX, J ) )
          IF( ERR*SMLNUM.LE.XNORM ) THEN
             IF( XNORM.GT.ZERO )
@@ -269,6 +271,6 @@
 *
       RETURN
 *
-*     End of ZTPT03
+*     End of AB_ZTPT03
 *
       END

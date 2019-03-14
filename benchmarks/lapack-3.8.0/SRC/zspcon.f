@@ -1,4 +1,4 @@
-*> \brief \b ZSPCON
+*> \brief \b AB_ZSPCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZSPCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zspcon.f">
+*> Download AB_ZSPCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSPCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zspcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSPCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSPCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO )
+*       SUBROUTINE AB_ZSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> ZSPCON estimates the reciprocal of the condition number (in the
+*> AB_ZSPCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a complex symmetric packed matrix A using the
-*> factorization A = U*D*U**T or A = L*D*L**T computed by ZSPTRF.
+*> factorization A = U*D*U**T or A = L*D*L**T computed by AB_ZSPTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -66,7 +66,7 @@
 *> \verbatim
 *>          AP is COMPLEX*16 array, dimension (N*(N+1)/2)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by ZSPTRF, stored as a
+*>          obtain the factor U or L as computed by AB_ZSPTRF, stored as a
 *>          packed triangular matrix.
 *> \endverbatim
 *>
@@ -74,7 +74,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by ZSPTRF.
+*>          as determined by AB_ZSPTRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -116,7 +116,8 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO )
+      SUBROUTINE AB_ZSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO 
+     $)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,19 +149,19 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACN2, ZSPTRS
+      EXTERNAL           AB_XERBLA, AB_ZLACN2, AB_ZSPTRS
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -168,7 +169,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZSPCON', -INFO )
+         CALL AB_XERBLA( 'AB_ZSPCON', -INFO )
          RETURN
       END IF
 *
@@ -210,12 +211,12 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
 *
-         CALL ZSPTRS( UPLO, N, 1, AP, IPIV, WORK, N, INFO )
+         CALL AB_ZSPTRS( UPLO, N, 1, AP, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
@@ -226,6 +227,6 @@
 *
       RETURN
 *
-*     End of ZSPCON
+*     End of AB_ZSPCON
 *
       END

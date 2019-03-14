@@ -1,4 +1,4 @@
-*> \brief \b ZGELQS
+*> \brief \b AB_AB_ZGELQS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGELQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE AB_AB_ZGELQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the LQ factorization
 *>     A = L*Q
-*> computed by ZGELQF.
+*> computed by AB_AB_ZGELQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          Details of the LQ factorization of the original matrix A as
-*>          returned by ZGELQF.
+*>          returned by AB_AB_ZGELQF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -118,7 +118,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZGELQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+      SUBROUTINE AB_AB_ZGELQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LW
+     $ORK,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -142,7 +143,7 @@
      $                   CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLASET, ZTRSM, ZUNMLQ
+      EXTERNAL           AB_XERBLA, AB_ZLASET, AB_ZTRSM, AB_ZUNMLQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -162,12 +163,13 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
+     $0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGELQS', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZGELQS', -INFO )
          RETURN
       END IF
 *
@@ -178,22 +180,23 @@
 *
 *     Solve L*X = B(1:m,:)
 *
-      CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', M, NRHS,
+      CALL AB_ZTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', M, NRH
+     $S,
      $            CONE, A, LDA, B, LDB )
 *
 *     Set B(m+1:n,:) to zero
 *
       IF( M.LT.N )
-     $   CALL ZLASET( 'Full', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ),
+     $   CALL AB_ZLASET( 'Full', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ),
      $                LDB )
 *
 *     B := Q' * B
 *
-      CALL ZUNMLQ( 'Left', 'Conjugate transpose', N, NRHS, M, A, LDA,
+      CALL AB_ZUNMLQ( 'Left', 'Conjugate transpose', N, NRHS, M, A, LDA,
      $             TAU, B, LDB, WORK, LWORK, INFO )
 *
       RETURN
 *
-*     End of ZGELQS
+*     End of AB_AB_ZGELQS
 *
       END

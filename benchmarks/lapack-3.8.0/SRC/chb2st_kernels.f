@@ -1,6 +1,6 @@
-*> \brief \b CHB2ST_KERNELS
+*> \brief \b AB_CHB2ST_KERNELS
 *
-*  @generated from zhb2st_kernels.f, fortran z -> c, Wed Dec  7 08:22:40 2016
+*  @generated from AB_ZHB2ST_KERNELS.f, fortran z -> c, Wed Dec  7 08:22:40 2016
 *      
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download CHB2ST_KERNELS + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chb2st_kernels.f"> 
+*> Download AB_CHB2ST_KERNELS + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHB2ST_KERNELS.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chb2st_kernels.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHB2ST_KERNELS.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chb2st_kernels.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHB2ST_KERNELS.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE  CHB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
+*       SUBROUTINE  AB_CHB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
 *                                   ST, ED, SWEEP, N, NB, IB,
 *                                   A, LDA, V, TAU, LDVT, WORK)
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> CHB2ST_KERNELS is an internal routine used by the CHETRD_HB2ST
+*> AB_CHB2ST_KERNELS is an internal routine used by the AB_CHETRD_HB2ST
 *> subroutine.
 *> \endverbatim
 *
@@ -115,7 +115,7 @@
 *> \param[out] TAU
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (2*n).
-*>          The scalar factors of the Householder reflectors are stored
+*>          The scalar factors of the HousehoAB_LDEr reflectors are stored
 *>          in this array.
 *> \endverbatim
 *>
@@ -164,7 +164,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE  CHB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
+      SUBROUTINE  AB_CHB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
      $                            ST, ED, SWEEP, N, NB, IB,
      $                            A, LDA, V, TAU, LDVT, WORK)
 *
@@ -199,19 +199,19 @@
       COMPLEX            CTMP 
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARFG, CLARFX, CLARFY
+      EXTERNAL           AB_AB_CLARFG, AB_AB_CLARFX, AB_AB_CLARFY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MOD
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     ..
 *     .. Executable Statements ..
 *      
       AJETER = IB + LDVT
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
 
       IF( UPPER ) THEN
           DPOS    = 2 * NB + 1
@@ -243,12 +243,12 @@
                   A( OFDPOS-I, ST+I ) = ZERO  
    10         CONTINUE
               CTMP = CONJG( A( OFDPOS, ST ) )
-              CALL CLARFG( LM, CTMP, V( VPOS+1 ), 1, 
+              CALL AB_AB_CLARFG( LM, CTMP, V( VPOS+1 ), 1, 
      $                                       TAU( TAUPOS ) )
               A( OFDPOS, ST ) = CTMP
 *
               LM = ED - ST + 1
-              CALL CLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL AB_AB_CLARFY( UPLO, LM, V( VPOS ), 1,
      $                     CONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
           ENDIF
@@ -256,7 +256,7 @@
           IF( TTYPE.EQ.3 ) THEN
 *
               LM = ED - ST + 1
-              CALL CLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL AB_AB_CLARFY( UPLO, LM, V( VPOS ), 1,
      $                     CONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
           ENDIF
@@ -267,7 +267,7 @@
               LN = ED-ST+1
               LM = J2-J1+1
               IF( LM.GT.0) THEN
-                  CALL CLARFX( 'Left', LN, LM, V( VPOS ),
+                  CALL AB_AB_CLARFX( 'Left', LN, LM, V( VPOS ),
      $                         CONJG( TAU( TAUPOS ) ),
      $                         A( DPOS-NB, J1 ), LDA-1, WORK)
 *
@@ -286,10 +286,11 @@
                       A( DPOS-NB-I, J1+I ) = ZERO
    30             CONTINUE
                   CTMP = CONJG( A( DPOS-NB, J1 ) )
-                  CALL CLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUPOS ) )
+                  CALL AB_AB_CLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUP
+     $OS ) )
                   A( DPOS-NB, J1 ) = CTMP
 *                 
-                  CALL CLARFX( 'Right', LN-1, LM, V( VPOS ),
+                  CALL AB_AB_CLARFX( 'Right', LN-1, LM, V( VPOS ),
      $                         TAU( TAUPOS ),
      $                         A( DPOS-NB+1, J1 ), LDA-1, WORK)
               ENDIF
@@ -315,12 +316,12 @@
                   V( VPOS+I )         = A( OFDPOS+I, ST-1 )
                   A( OFDPOS+I, ST-1 ) = ZERO  
    20         CONTINUE
-              CALL CLARFG( LM, A( OFDPOS, ST-1 ), V( VPOS+1 ), 1, 
+              CALL AB_AB_CLARFG( LM, A( OFDPOS, ST-1 ), V( VPOS+1 ), 1, 
      $                                       TAU( TAUPOS ) )
 *
               LM = ED - ST + 1
 *
-              CALL CLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL AB_AB_CLARFY( UPLO, LM, V( VPOS ), 1,
      $                     CONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
 
@@ -329,7 +330,7 @@
           IF( TTYPE.EQ.3 ) THEN
               LM = ED - ST + 1
 *
-              CALL CLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL AB_AB_CLARFY( UPLO, LM, V( VPOS ), 1,
      $                     CONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
 
@@ -342,7 +343,7 @@
               LM = J2-J1+1
 *
               IF( LM.GT.0) THEN
-                  CALL CLARFX( 'Right', LM, LN, V( VPOS ), 
+                  CALL AB_AB_CLARFX( 'Right', LM, LN, V( VPOS ), 
      $                         TAU( TAUPOS ), A( DPOS+NB, ST ),
      $                         LDA-1, WORK)
 *
@@ -359,10 +360,11 @@
                       V( VPOS+I )        = A( DPOS+NB+I, ST )
                       A( DPOS+NB+I, ST ) = ZERO
    40             CONTINUE
-                  CALL CLARFG( LM, A( DPOS+NB, ST ), V( VPOS+1 ), 1, 
+                  CALL AB_AB_CLARFG( LM, A( DPOS+NB, ST ), V( VPOS+1 ), 
+     $1, 
      $                                        TAU( TAUPOS ) )
 *
-                  CALL CLARFX( 'Left', LM, LN-1, V( VPOS ), 
+                  CALL AB_AB_CLARFX( 'Left', LM, LN-1, V( VPOS ), 
      $                         CONJG( TAU( TAUPOS ) ),
      $                         A( DPOS+NB-1, ST+1 ), LDA-1, WORK)
              
@@ -372,6 +374,6 @@
 *
       RETURN
 *
-*     END OF CHB2ST_KERNELS
+*     END OF AB_CHB2ST_KERNELS
 *
       END      

@@ -1,4 +1,4 @@
-*> \brief \b DCHKSY_RK
+*> \brief \b AB_AB_DCHKSY_RK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKSY_RK( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*       SUBROUTINE AB_AB_DCHKSY_RK( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
 *                             THRESH, TSTERR, NMAX, A, AFAC, E, AINV, B,
 *                             X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -29,7 +29,7 @@
 *  =============
 *>
 *> \verbatim
-*> DCHKSY_RK tests DSYTRF_RK, -TRI_3, -TRS_3, and -CON_3.
+*> AB_AB_DCHKSY_RK tests AB_AB_DSYTRF_RK, -TRI_3, -TRS_3, and -CON_3.
 *> \endverbatim
 *
 *  Arguments:
@@ -172,7 +172,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DCHKSY_RK( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+      SUBROUTINE AB_AB_DCHKSY_RK( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSV
+     $AL,
      $                      THRESH, TSTERR, NMAX, A, AFAC, E, AINV, B,
      $                      X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -222,14 +223,17 @@
       DOUBLE PRECISION   BLOCK( 2, 2 ), DDUMMY( 1 ), RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, DLANGE, DLANSY
-      EXTERNAL           DGET06, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DGET06, AB_DLANGE, AB_DLANSY
+      EXTERNAL           AB_DGET06, AB_DLANGE, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DGESVD, DGET04,
-     $                   DLACPY, DLARHS, DLATB4, DLATMS, DPOT02, DPOT03,
-     $                   DSYCON_3, DSYT01_3, DSYTRF_RK, DSYTRI_3,
-     $                   DSYTRS_3, XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_DERRSY, AB_A
+     $B_DGESVD, AB_DGET04,
+     $                   AB_DLACPY, AB_DLARHS, AB_DLATB4, AB_DLATMS, AB_
+     $DPOT02, AB_DPOT03,
+     $                   AB_AB_DSYCON_3, AB_AB_DSYT01_3, AB_AB_DSYTRF_RK
+     $, AB_AB_DSYTRI_3,
+     $                   AB_AB_DSYTRS_3, AB_XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -273,13 +277,13 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL DERRSY( PATH, NOUT )
+     $   CALL AB_DERRSY( PATH, NOUT )
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
-*     be used, which will be later returned by ILAENV
+*     be used, which will be later returned by AB_ILAENV
 *
-      CALL XLAENV( 2, 2 )
+      CALL AB_XLAENV( 2, 2 )
 *
 *     Do for each value of N in NVAL
 *
@@ -315,23 +319,24 @@
 *
 *              Begin generate the test matrix A.
 *
-*              Set up parameters with DLATB4 for the matrix generator
+*              Set up parameters with AB_DLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-               CALL DLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+               CALL AB_DLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                      MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with DLATMS.
+*              Generate a matrix with AB_DLATMS.
 *
-               SRNAMT = 'DLATMS'
-               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_DLATMS'
+               CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from DLATMS and handle error.
+*              Check error code from AB_DLATMS and handle error.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
 *                 Skip all tests for this generated matrix
@@ -416,16 +421,16 @@
                DO 240 INB = 1, NNB
 *
 *                 Set the optimal blocksize, which will be later
-*                 returned by ILAENV.
+*                 returned by AB_ILAENV.
 *
                   NB = NBVAL( INB )
-                  CALL XLAENV( 1, NB )
+                  CALL AB_XLAENV( 1, NB )
 *
 *                 Copy the test matrix A into matrix AFAC which
 *                 will be factorized in place. This is needed to
 *                 preserve the test matrix A for subsequent tests.
 *
-                  CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                  CALL AB_DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
 *
 *                 Compute the L*D*L**T or U*D*U**T factorization of the
 *                 matrix. IWORK stores details of the interchanges and
@@ -433,8 +438,9 @@
 *                 block factorization, LWORK is the length of AINV.
 *
                   LWORK = MAX( 2, NB )*LDA
-                  SRNAMT = 'DSYTRF_RK'
-                  CALL DSYTRF_RK( UPLO, N, AFAC, LDA, E, IWORK, AINV,
+                  SRNAMT = 'AB_AB_DSYTRF_RK'
+                  CALL AB_AB_DSYTRF_RK( UPLO, N, AFAC, LDA, E, IWORK, AI
+     $NV,
      $                            LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -454,10 +460,10 @@
                      END IF
                   END IF
 *
-*                 Check error code from DSYTRF_RK and handle error.
+*                 Check error code from AB_AB_DSYTRF_RK and handle error.
 *
                   IF( INFO.NE.K)
-     $               CALL ALAERH( PATH, 'DSYTRF_RK', INFO, K,
+     $               CALL AB_ALAERH( PATH, 'AB_AB_DSYTRF_RK', INFO, K,
      $                            UPLO, N, N, -1, -1, NB, IMAT,
      $                            NFAIL, NERRS, NOUT )
 *
@@ -472,7 +478,8 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL DSYT01_3( UPLO, N, A, LDA, AFAC, LDA, E, IWORK,
+                  CALL AB_AB_DSYT01_3( UPLO, N, A, LDA, AFAC, LDA, E, IW
+     $ORK,
      $                           AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
@@ -483,28 +490,31 @@
 *                 Do it only for the first block size.
 *
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
-                     CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     SRNAMT = 'DSYTRI_3'
+                     CALL AB_DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                     SRNAMT = 'AB_AB_DSYTRI_3'
 *
 *                    Another reason that we need to compute the invesrse
-*                    is that DPOT03 produces RCONDC which is used later
+*                    is that AB_DPOT03 produces RCONDC which is used later
 *                    in TEST6 and TEST7.
 *
                      LWORK = (N+NB+1)*(NB+3)
-                     CALL DSYTRI_3( UPLO, N, AINV, LDA, E, IWORK, WORK,
+                     CALL AB_AB_DSYTRI_3( UPLO, N, AINV, LDA, E, IWORK, 
+     $WORK,
      $                              LWORK, INFO )
 *
-*                    Check error code from DSYTRI_3 and handle error.
+*                    Check error code from AB_AB_DSYTRI_3 and handle error.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'DSYTRI_3', INFO, -1,
+     $                  CALL AB_ALAERH( PATH, 'AB_AB_DSYTRI_3', INFO, -1
+     $,
      $                               UPLO, N, N, -1, -1, -1, IMAT,
      $                               NFAIL, NERRS, NOUT )
 *
 *                    Compute the residual for a symmetric matrix times
 *                    its inverse.
 *
-                     CALL DPOT03( UPLO, N, A, LDA, AINV, LDA, WORK, LDA,
+                     CALL AB_DPOT03( UPLO, N, A, LDA, AINV, LDA, WORK, L
+     $DA,
      $                            RWORK, RCONDC, RESULT( 2 ) )
                      NT = 2
                   END IF
@@ -515,7 +525,7 @@
                   DO 110 K = 1, NT
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -545,14 +555,14 @@
 *                       Get max absolute value from elements
 *                       in column k in in U
 *
-                        DTEMP = DLANGE( 'M', K-1, 1,
+                        DTEMP = AB_DLANGE( 'M', K-1, 1,
      $                          AFAC( ( K-1 )*LDA+1 ), LDA, RWORK )
                      ELSE
 *
 *                       Get max absolute value from elements
 *                       in columns k and k-1 in U
 *
-                        DTEMP = DLANGE( 'M', K-2, 2,
+                        DTEMP = AB_DLANGE( 'M', K-2, 2,
      $                          AFAC( ( K-2 )*LDA+1 ), LDA, RWORK )
                         K = K - 1
 *
@@ -583,14 +593,14 @@
 *                       Get max absolute value from elements
 *                       in column k in in L
 *
-                        DTEMP = DLANGE( 'M', N-K, 1,
+                        DTEMP = AB_DLANGE( 'M', N-K, 1,
      $                          AFAC( ( K-1 )*LDA+K+1 ), LDA, RWORK )
                      ELSE
 *
 *                       Get max absolute value from elements
 *                       in columns k and k+1 in L
 *
-                        DTEMP = DLANGE( 'M', N-K-1, 2,
+                        DTEMP = AB_DLANGE( 'M', N-K-1, 2,
      $                          AFAC( ( K-1 )*LDA+K+2 ), LDA, RWORK )
                         K = K + 1
 *
@@ -616,7 +626,7 @@
                   DTEMP = ZERO
 *
                   CONST = ( ONE+ALPHA ) / ( ONE-ALPHA )
-                  CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                  CALL AB_DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
 *
                   IF( IUPLO.EQ.1 ) THEN
 *
@@ -638,7 +648,8 @@
                         BLOCK( 2, 1 ) = BLOCK( 1, 2 )
                         BLOCK( 2, 2 ) = AFAC( (K-1)*LDA+K )
 *
-                        CALL DGESVD( 'N', 'N', 2, 2, BLOCK, 2, RWORK,
+                        CALL AB_AB_DGESVD( 'N', 'N', 2, 2, BLOCK, 2, RWO
+     $RK,
      $                               DDUMMY, 1, DDUMMY, 1,
      $                               WORK, 10, INFO )
 *
@@ -681,7 +692,8 @@
                         BLOCK( 1, 2 ) = BLOCK( 2, 1 )
                         BLOCK( 2, 2 ) = AFAC( K*LDA+K+1 )
 *
-                        CALL DGESVD( 'N', 'N', 2, 2, BLOCK, 2, RWORK,
+                        CALL AB_AB_DGESVD( 'N', 'N', 2, 2, BLOCK, 2, RWO
+     $RK,
      $                               DDUMMY, 1, DDUMMY, 1,
      $                               WORK, 10, INFO )
 *
@@ -712,7 +724,7 @@
                   DO 200 K = 3, 4
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -744,34 +756,37 @@
 *                    Choose a set of NRHS random solution vectors
 *                    stored in XACT and set up the right hand side B
 *
-                     SRNAMT = 'DLARHS'
-                     CALL DLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
+                     SRNAMT = 'AB_DLARHS'
+                     CALL AB_DLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
      $                            KL, KU, NRHS, A, LDA, XACT, LDA,
      $                            B, LDA, ISEED, INFO )
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'DSYTRS_3'
-                     CALL DSYTRS_3( UPLO, N, NRHS, AFAC, LDA, E, IWORK,
+                     SRNAMT = 'AB_AB_DSYTRS_3'
+                     CALL AB_AB_DSYTRS_3( UPLO, N, NRHS, AFAC, LDA, E, I
+     $WORK,
      $                              X, LDA, INFO )
 *
-*                    Check error code from DSYTRS_3 and handle error.
+*                    Check error code from AB_AB_DSYTRS_3 and handle error.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'DSYTRS_3', INFO, 0,
+     $                  CALL AB_ALAERH( PATH, 'AB_AB_DSYTRS_3', INFO, 0,
      $                               UPLO, N, N, -1, -1, NRHS, IMAT,
      $                               NFAIL, NERRS, NOUT )
 *
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
 *
 *                    Compute the residual for the solution
 *
-                     CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL AB_DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
+     $,
      $                            LDA, RWORK, RESULT( 5 ) )
 *
 *+    TEST 6
 *                    Check solution from generated exact solution.
 *
-                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 6 ) )
 *
 *                    Print information about the tests that did not pass
@@ -780,7 +795,7 @@
                      DO 210 K = 5, 6
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
+     $                        CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9998 )UPLO, N, NRHS,
      $                        IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -796,28 +811,29 @@
 *                 Get an estimate of RCOND = 1/CNDNUM.
 *
   230             CONTINUE
-                  ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
-                  SRNAMT = 'DSYCON_3'
-                  CALL DSYCON_3( UPLO, N, AFAC, LDA, E, IWORK, ANORM,
+                  ANORM = AB_DLANSY( '1', UPLO, N, A, LDA, RWORK )
+                  SRNAMT = 'AB_AB_DSYCON_3'
+                  CALL AB_AB_DSYCON_3( UPLO, N, AFAC, LDA, E, IWORK, ANO
+     $RM,
      $                           RCOND, WORK, IWORK( N+1 ), INFO )
 *
-*                 Check error code from DSYCON_3 and handle error.
+*                 Check error code from AB_AB_DSYCON_3 and handle error.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'DSYCON_3', INFO, 0,
+     $               CALL AB_ALAERH( PATH, 'AB_AB_DSYCON_3', INFO, 0,
      $                            UPLO, N, N, -1, -1, -1, IMAT,
      $                            NFAIL, NERRS, NOUT )
 *
 *                 Compute the test ratio to compare to values of RCOND
 *
-                  RESULT( 7 ) = DGET06( RCOND, RCONDC )
+                  RESULT( 7 ) = AB_DGET06( RCOND, RCONDC )
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
 *
                   IF( RESULT( 7 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL ALAHD( NOUT, PATH )
+     $                  CALL AB_ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9997 ) UPLO, N, IMAT, 7,
      $                  RESULT( 7 )
                      NFAIL = NFAIL + 1
@@ -831,7 +847,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
@@ -841,6 +857,6 @@
      $      ', test(', I2, ') =', G12.5 )
       RETURN
 *
-*     End of DCHKSY_RK
+*     End of AB_AB_DCHKSY_RK
 *
       END

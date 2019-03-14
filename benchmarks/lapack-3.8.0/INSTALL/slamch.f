@@ -1,4 +1,4 @@
-*> \brief \b SLAMCH
+*> \brief \b AB_SLAMCH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      REAL             FUNCTION SLAMCH( CMACH )
+*      REAL             FUNCTION AB_SLAMCH( CMACH )
 *
 *     .. Scalar Arguments ..
 *      CHARACTER          CMACH
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> SLAMCH determines single precision machine parameters.
+*> AB_SLAMCH determines single precision machine parameters.
 *> \endverbatim
 *
 *  Arguments:
@@ -28,17 +28,17 @@
 *
 *> \param[in] CMACH
 *> \verbatim
-*>          Specifies the value to be returned by SLAMCH:
-*>          = 'E' or 'e',   SLAMCH := eps
-*>          = 'S' or 's ,   SLAMCH := sfmin
-*>          = 'B' or 'b',   SLAMCH := base
-*>          = 'P' or 'p',   SLAMCH := eps*base
-*>          = 'N' or 'n',   SLAMCH := t
-*>          = 'R' or 'r',   SLAMCH := rnd
-*>          = 'M' or 'm',   SLAMCH := emin
-*>          = 'U' or 'u',   SLAMCH := rmin
-*>          = 'L' or 'l',   SLAMCH := emax
-*>          = 'O' or 'o',   SLAMCH := rmax
+*>          Specifies the value to be returned by AB_SLAMCH:
+*>          = 'E' or 'e',   AB_SLAMCH := eps
+*>          = 'S' or 's ,   AB_SLAMCH := sfmin
+*>          = 'B' or 'b',   AB_SLAMCH := base
+*>          = 'P' or 'p',   AB_SLAMCH := eps*base
+*>          = 'N' or 'n',   AB_SLAMCH := t
+*>          = 'R' or 'r',   AB_SLAMCH := rnd
+*>          = 'M' or 'm',   AB_SLAMCH := emin
+*>          = 'U' or 'u',   AB_SLAMCH := rmin
+*>          = 'L' or 'l',   AB_SLAMCH := emax
+*>          = 'O' or 'o',   AB_SLAMCH := rmax
 *>          where
 *>          eps   = relative machine precision
 *>          sfmin = safe minimum, such that 1/sfmin does not overflow
@@ -65,7 +65,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      REAL             FUNCTION SLAMCH( CMACH )
+      REAL             FUNCTION AB_SLAMCH( CMACH )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -86,8 +86,8 @@
       REAL               RND, EPS, SFMIN, SMALL, RMACH
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DIGITS, EPSILON, HUGE, MAXEXPONENT,
@@ -106,9 +106,9 @@
          EPS = EPSILON(ZERO)
       END IF
 *
-      IF( LSAME( CMACH, 'E' ) ) THEN
+      IF( AB_LSAME( CMACH, 'E' ) ) THEN
          RMACH = EPS
-      ELSE IF( LSAME( CMACH, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'S' ) ) THEN
          SFMIN = TINY(ZERO)
          SMALL = ONE / HUGE(ZERO)
          IF( SMALL.GE.SFMIN ) THEN
@@ -119,38 +119,38 @@
             SFMIN = SMALL*( ONE+EPS )
          END IF
          RMACH = SFMIN
-      ELSE IF( LSAME( CMACH, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'B' ) ) THEN
          RMACH = RADIX(ZERO)
-      ELSE IF( LSAME( CMACH, 'P' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'P' ) ) THEN
          RMACH = EPS * RADIX(ZERO)
-      ELSE IF( LSAME( CMACH, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'N' ) ) THEN
          RMACH = DIGITS(ZERO)
-      ELSE IF( LSAME( CMACH, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'R' ) ) THEN
          RMACH = RND
-      ELSE IF( LSAME( CMACH, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'M' ) ) THEN
          RMACH = MINEXPONENT(ZERO)
-      ELSE IF( LSAME( CMACH, 'U' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'U' ) ) THEN
          RMACH = tiny(zero)
-      ELSE IF( LSAME( CMACH, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'L' ) ) THEN
          RMACH = MAXEXPONENT(ZERO)
-      ELSE IF( LSAME( CMACH, 'O' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'O' ) ) THEN
          RMACH = HUGE(ZERO)
       ELSE
          RMACH = ZERO
       END IF
 *
-      SLAMCH = RMACH
+      AB_SLAMCH = RMACH
       RETURN
 *
-*     End of SLAMCH
+*     End of AB_SLAMCH
 *
       END
 ************************************************************************
-*> \brief \b SLAMC3
+*> \brief \b AB_SLAMC3
 *> \details
 *> \b Purpose:
 *> \verbatim
-*> SLAMC3  is intended to force  A  and  B  to be stored prior to doing
+*> AB_SLAMC3  is intended to force  A  and  B  to be stored prior to doing
 *> the addition of  A  and  B ,  for use in situations where optimizers
 *> might hold one of these in a register.
 *> \endverbatim
@@ -168,7 +168,7 @@
 *> \endverbatim
 *>
 *
-      REAL             FUNCTION SLAMC3( A, B )
+      REAL             FUNCTION AB_SLAMC3( A, B )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -181,11 +181,11 @@
 *
 *     .. Executable Statements ..
 *
-      SLAMC3 = A + B
+      AB_SLAMC3 = A + B
 *
       RETURN
 *
-*     End of SLAMC3
+*     End of AB_SLAMC3
 *
       END
 *

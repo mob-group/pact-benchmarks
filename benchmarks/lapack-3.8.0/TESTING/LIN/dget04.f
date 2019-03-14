@@ -1,4 +1,4 @@
-*> \brief \b DGET04
+*> \brief \b AB_DGET04
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
+*       SUBROUTINE AB_DGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDX, LDXACT, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> DGET04 computes the difference between a computed solution and the
+*> AB_DGET04 computes the difference between a computed solution and the
 *> true solution to a system of linear equations.
 *>
 *> RESID =  ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
@@ -100,7 +100,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
+      SUBROUTINE AB_DGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID 
+     $)
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,9 +127,9 @@
       DOUBLE PRECISION   DIFFNM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           IDAMAX, DLAMCH
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -144,7 +145,7 @@
 *
 *     Exit with RESID = 1/EPS if RCOND is invalid.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       IF( RCOND.LT.ZERO ) THEN
          RESID = 1.0D0 / EPS
          RETURN
@@ -156,7 +157,7 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         IX = IDAMAX( N, XACT( 1, J ), 1 )
+         IX = AB_IDAMAX( N, XACT( 1, J ), 1 )
          XNORM = ABS( XACT( IX, J ) )
          DIFFNM = ZERO
          DO 10 I = 1, N
@@ -174,6 +175,6 @@
 *
       RETURN
 *
-*     End of DGET04
+*     End of AB_DGET04
 *
       END

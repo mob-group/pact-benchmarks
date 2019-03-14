@@ -1,4 +1,4 @@
-*> \brief \b DCHKTP
+*> \brief \b AB_DCHKTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE AB_DCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          NMAX, AP, AINVP, B, X, XACT, WORK, RWORK,
 *                          IWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DCHKTP tests DTPTRI, -TRS, -RFS, and -CON, and DLATPS
+*> AB_DCHKTP tests AB_DTPTRI, -TRS, -RFS, and -CON, and AB_DLATPS
 *> \endverbatim
 *
 *  Arguments:
@@ -153,7 +153,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+      SUBROUTINE AB_DCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
+     $,
      $                   NMAX, AP, AINVP, B, X, XACT, WORK, RWORK,
      $                   IWORK, NOUT )
 *
@@ -200,15 +201,18 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLANTP
-      EXTERNAL           LSAME, DLANTP
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLANTP
+      EXTERNAL           AB_LSAME, AB_DLANTP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DCOPY, DERRTR, DGET04,
-     $                   DLACPY, DLARHS, DLATPS, DLATTP, DTPCON, DTPRFS,
-     $                   DTPT01, DTPT02, DTPT03, DTPT05, DTPT06, DTPTRI,
-     $                   DTPTRS
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_DCOPY, AB_DE
+     $RRTR, AB_DGET04,
+     $                   AB_DLACPY, AB_DLARHS, AB_DLATPS, AB_DLATTP, AB_
+     $DTPCON, AB_DTPRFS,
+     $                   AB_DTPT01, AB_DTPT02, AB_DTPT03, AB_DTPT05, AB_
+     $DTPT06, AB_DTPTRI,
+     $                   AB_DTPTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -242,7 +246,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL DERRTR( PATH, NOUT )
+     $   CALL AB_DERRTR( PATH, NOUT )
       INFOT = 0
 *
       DO 110 IN = 1, NN
@@ -267,15 +271,16 @@
 *
                UPLO = UPLOS( IUPLO )
 *
-*              Call DLATTP to generate a triangular test matrix.
+*              Call AB_DLATTP to generate a triangular test matrix.
 *
-               SRNAMT = 'DLATTP'
-               CALL DLATTP( IMAT, UPLO, 'No transpose', DIAG, ISEED, N,
+               SRNAMT = 'AB_DLATTP'
+               CALL AB_DLATTP( IMAT, UPLO, 'No transpose', DIAG, ISEED, 
+     $N,
      $                      AP, X, WORK, INFO )
 *
 *              Set IDIAG = 1 for non-unit matrices, 2 for unit.
 *
-               IF( LSAME( DIAG, 'N' ) ) THEN
+               IF( AB_LSAME( DIAG, 'N' ) ) THEN
                   IDIAG = 1
                ELSE
                   IDIAG = 2
@@ -285,20 +290,21 @@
 *              Form the inverse of A.
 *
                IF( N.GT.0 )
-     $            CALL DCOPY( LAP, AP, 1, AINVP, 1 )
-               SRNAMT = 'DTPTRI'
-               CALL DTPTRI( UPLO, DIAG, N, AINVP, INFO )
+     $            CALL AB_DCOPY( LAP, AP, 1, AINVP, 1 )
+               SRNAMT = 'AB_DTPTRI'
+               CALL AB_DTPTRI( UPLO, DIAG, N, AINVP, INFO )
 *
-*              Check error code from DTPTRI.
+*              Check error code from AB_DTPTRI.
 *
                IF( INFO.NE.0 )
-     $            CALL ALAERH( PATH, 'DTPTRI', INFO, 0, UPLO // DIAG, N,
+     $            CALL AB_ALAERH( PATH, 'AB_DTPTRI', INFO, 0, UPLO // DI
+     $AG, N,
      $                         N, -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
 *              Compute the infinity-norm condition number of A.
 *
-               ANORM = DLANTP( 'I', UPLO, DIAG, N, AP, RWORK )
-               AINVNM = DLANTP( 'I', UPLO, DIAG, N, AINVP, RWORK )
+               ANORM = AB_DLANTP( 'I', UPLO, DIAG, N, AP, RWORK )
+               AINVNM = AB_DLANTP( 'I', UPLO, DIAG, N, AINVP, RWORK )
                IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                   RCONDI = ONE
                ELSE
@@ -308,14 +314,14 @@
 *              Compute the residual for the triangular matrix times its
 *              inverse.  Also compute the 1-norm condition number of A.
 *
-               CALL DTPT01( UPLO, DIAG, N, AP, AINVP, RCONDO, RWORK,
+               CALL AB_DTPT01( UPLO, DIAG, N, AP, AINVP, RCONDO, RWORK,
      $                      RESULT( 1 ) )
 *
 *              Print the test ratio if it is .GE. THRESH.
 *
                IF( RESULT( 1 ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL ALAHD( NOUT, PATH )
+     $               CALL AB_ALAHD( NOUT, PATH )
                   WRITE( NOUT, FMT = 9999 )UPLO, DIAG, N, IMAT, 1,
      $               RESULT( 1 )
                   NFAIL = NFAIL + 1
@@ -342,53 +348,53 @@
 *+    TEST 2
 *                 Solve and compute residual for op(A)*x = b.
 *
-                     SRNAMT = 'DLARHS'
-                     CALL DLARHS( PATH, XTYPE, UPLO, TRANS, N, N, 0,
+                     SRNAMT = 'AB_DLARHS'
+                     CALL AB_DLARHS( PATH, XTYPE, UPLO, TRANS, N, N, 0,
      $                            IDIAG, NRHS, AP, LAP, XACT, LDA, B,
      $                            LDA, ISEED, INFO )
                      XTYPE = 'C'
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'DTPTRS'
-                     CALL DTPTRS( UPLO, TRANS, DIAG, N, NRHS, AP, X,
+                     SRNAMT = 'AB_DTPTRS'
+                     CALL AB_DTPTRS( UPLO, TRANS, DIAG, N, NRHS, AP, X,
      $                            LDA, INFO )
 *
-*                 Check error code from DTPTRS.
+*                 Check error code from AB_DTPTRS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'DTPTRS', INFO, 0,
+     $                  CALL AB_ALAERH( PATH, 'AB_DTPTRS', INFO, 0,
      $                               UPLO // TRANS // DIAG, N, N, -1,
      $                               -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                     CALL DTPT02( UPLO, TRANS, DIAG, N, NRHS, AP, X,
+                     CALL AB_DTPT02( UPLO, TRANS, DIAG, N, NRHS, AP, X,
      $                            LDA, B, LDA, WORK, RESULT( 2 ) )
 *
 *+    TEST 3
 *                 Check solution from generated exact solution.
 *
-                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
 *
 *+    TESTS 4, 5, and 6
 *                 Use iterative refinement to improve the solution and
 *                 compute error bounds.
 *
-                     SRNAMT = 'DTPRFS'
-                     CALL DTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B,
+                     SRNAMT = 'AB_DTPRFS'
+                     CALL AB_DTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B,
      $                            LDA, X, LDA, RWORK, RWORK( NRHS+1 ),
      $                            WORK, IWORK, INFO )
 *
-*                 Check error code from DTPRFS.
+*                 Check error code from AB_DTPRFS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'DTPRFS', INFO, 0,
+     $                  CALL AB_ALAERH( PATH, 'AB_DTPRFS', INFO, 0,
      $                               UPLO // TRANS // DIAG, N, N, -1,
      $                               -1, NRHS, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
-                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 4 ) )
-                     CALL DTPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B,
+                     CALL AB_DTPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B,
      $                            LDA, X, LDA, XACT, LDA, RWORK,
      $                            RWORK( NRHS+1 ), RESULT( 5 ) )
 *
@@ -398,7 +404,7 @@
                      DO 20 K = 2, 6
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
+     $                        CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9998 )UPLO, TRANS, DIAG,
      $                        N, NRHS, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -420,26 +426,27 @@
                      RCONDC = RCONDI
                   END IF
 *
-                  SRNAMT = 'DTPCON'
-                  CALL DTPCON( NORM, UPLO, DIAG, N, AP, RCOND, WORK,
+                  SRNAMT = 'AB_DTPCON'
+                  CALL AB_DTPCON( NORM, UPLO, DIAG, N, AP, RCOND, WORK,
      $                         IWORK, INFO )
 *
-*                 Check error code from DTPCON.
+*                 Check error code from AB_DTPCON.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'DTPCON', INFO, 0,
+     $               CALL AB_ALAERH( PATH, 'AB_DTPCON', INFO, 0,
      $                            NORM // UPLO // DIAG, N, N, -1, -1,
      $                            -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL DTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWORK,
+                  CALL AB_DTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWOR
+     $K,
      $                         RESULT( 7 ) )
 *
 *                 Print the test ratio if it is .GE. THRESH.
 *
                   IF( RESULT( 7 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL ALAHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9997 ) 'DTPCON', NORM, UPLO,
+     $                  CALL AB_ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9997 ) 'AB_DTPCON', NORM, UPLO,
      $                  DIAG, N, IMAT, 7, RESULT( 7 )
                      NFAIL = NFAIL + 1
                   END IF
@@ -448,7 +455,7 @@
    60       CONTINUE
    70    CONTINUE
 *
-*        Use pathological test matrices to test DLATPS.
+*        Use pathological test matrices to test AB_DLATPS.
 *
          DO 100 IMAT = NTYPE1 + 1, NTYPES
 *
@@ -468,46 +475,49 @@
 *
                   TRANS = TRANSS( ITRAN )
 *
-*                 Call DLATTP to generate a triangular test matrix.
+*                 Call AB_DLATTP to generate a triangular test matrix.
 *
-                  SRNAMT = 'DLATTP'
-                  CALL DLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP, X,
+                  SRNAMT = 'AB_DLATTP'
+                  CALL AB_DLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP,
+     $ X,
      $                         WORK, INFO )
 *
 *+    TEST 8
 *                 Solve the system op(A)*x = b.
 *
-                  SRNAMT = 'DLATPS'
-                  CALL DCOPY( N, X, 1, B, 1 )
-                  CALL DLATPS( UPLO, TRANS, DIAG, 'N', N, AP, B, SCALE,
+                  SRNAMT = 'AB_DLATPS'
+                  CALL AB_DCOPY( N, X, 1, B, 1 )
+                  CALL AB_DLATPS( UPLO, TRANS, DIAG, 'N', N, AP, B, SCAL
+     $E,
      $                         RWORK, INFO )
 *
-*                 Check error code from DLATPS.
+*                 Check error code from AB_DLATPS.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'DLATPS', INFO, 0,
+     $               CALL AB_ALAERH( PATH, 'AB_DLATPS', INFO, 0,
      $                            UPLO // TRANS // DIAG // 'N', N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL DTPT03( UPLO, TRANS, DIAG, N, 1, AP, SCALE,
+                  CALL AB_DTPT03( UPLO, TRANS, DIAG, N, 1, AP, SCALE,
      $                         RWORK, ONE, B, LDA, X, LDA, WORK,
      $                         RESULT( 8 ) )
 *
 *+    TEST 9
 *                 Solve op(A)*x = b again with NORMIN = 'Y'.
 *
-                  CALL DCOPY( N, X, 1, B( N+1 ), 1 )
-                  CALL DLATPS( UPLO, TRANS, DIAG, 'Y', N, AP, B( N+1 ),
+                  CALL AB_DCOPY( N, X, 1, B( N+1 ), 1 )
+                  CALL AB_DLATPS( UPLO, TRANS, DIAG, 'Y', N, AP, B( N+1 
+     $),
      $                         SCALE, RWORK, INFO )
 *
-*                 Check error code from DLATPS.
+*                 Check error code from AB_DLATPS.
 *
                   IF( INFO.NE.0 )
-     $               CALL ALAERH( PATH, 'DLATPS', INFO, 0,
+     $               CALL AB_ALAERH( PATH, 'AB_DLATPS', INFO, 0,
      $                            UPLO // TRANS // DIAG // 'Y', N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL DTPT03( UPLO, TRANS, DIAG, N, 1, AP, SCALE,
+                  CALL AB_DTPT03( UPLO, TRANS, DIAG, N, 1, AP, SCALE,
      $                         RWORK, ONE, B( N+1 ), LDA, X, LDA, WORK,
      $                         RESULT( 9 ) )
 *
@@ -516,15 +526,15 @@
 *
                   IF( RESULT( 8 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL ALAHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9996 )'DLATPS', UPLO, TRANS,
+     $                  CALL AB_ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9996 )'AB_DLATPS', UPLO, TRANS,
      $                  DIAG, 'N', N, IMAT, 8, RESULT( 8 )
                      NFAIL = NFAIL + 1
                   END IF
                   IF( RESULT( 9 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL ALAHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9996 )'DLATPS', UPLO, TRANS,
+     $                  CALL AB_ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9996 )'AB_DLATPS', UPLO, TRANS,
      $                  DIAG, 'Y', N, IMAT, 9, RESULT( 9 )
                      NFAIL = NFAIL + 1
                   END IF
@@ -536,7 +546,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO=''', A1, ''', DIAG=''', A1, ''', N=', I5,
      $      ', type ', I2, ', test(', I2, ')= ', G12.5 )
@@ -550,6 +560,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of DCHKTP
+*     End of AB_DCHKTP
 *
       END

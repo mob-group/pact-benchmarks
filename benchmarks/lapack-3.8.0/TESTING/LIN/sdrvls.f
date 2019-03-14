@@ -1,4 +1,4 @@
-*> \brief \b SDRVLS
+*> \brief \b AB_SDRVLS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
+*       SUBROUTINE AB_SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
 *                          NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
 *                          COPYB, C, S, COPYS, NOUT )
 *
@@ -31,8 +31,8 @@
 *>
 *> \verbatim
 *>
-*> SDRVLS tests the least squares driver routines SGELS, SGETSLS, SGELSS, SGELSY,
-*> and SGELSD.
+*> AB_SDRVLS tests the least squares driver routines AB_SGELS, AB_SGETSLS, AB_AB_SGELSS, AB_AB_SGELSY,
+*> and AB_AB_SGELSD.
 *> \endverbatim
 *
 *  Arguments:
@@ -188,7 +188,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
+      SUBROUTINE AB_SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
      $                   COPYB, C, S, COPYS, NOUT )
 *
@@ -228,8 +228,9 @@
      $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
      $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB,
      $                   MMAX, NMAX, NSMAX, LIWORK,
-     $                   LWORK_SGELS, LWORK_SGETSLS, LWORK_SGELSS,
-     $                   LWORK_SGELSY, LWORK_SGELSD
+     $                   LWORK_AB_SGELS, LWORK_AB_SGETSLS, LWORK_AB_AB_S
+     $GELSS,
+     $                   LWORK_AB_AB_SGELSY, LWORK_AB_AB_SGELSD
       REAL               EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
@@ -241,14 +242,19 @@
       INTEGER, ALLOCATABLE :: IWORK (:)
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SQRT12, SQRT14, SQRT17
-      EXTERNAL           SASUM, SLAMCH, SQRT12, SQRT14, SQRT17
+      REAL               AB_SASUM, AB_SLAMCH, AB_SQRT12, AB_SQRT14, AB_S
+     $QRT17
+      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SQRT12, AB_SQRT14, AB_S
+     $QRT17
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASVM, SAXPY, SERRLS, SGELS,
-     $                   SGELSD, SGELSS, SGELSY, SGEMM, SLACPY,
-     $                   SLARNV, SQRT13, SQRT15, SQRT16, SSCAL,
-     $                   XLAENV, SGETSLS
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASVM, AB_SAXPY, AB_SE
+     $RRLS, AB_SGELS,
+     $                   AB_AB_SGELSD, AB_AB_SGELSS, AB_AB_SGELSY, AB_SG
+     $EMM, AB_SLACPY,
+     $                   AB_SLARNV, AB_SQRT13, AB_SQRT15, AB_SQRT16, AB_
+     $SSCAL,
+     $                   AB_XLAENV, AB_SGETSLS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, LOG, MAX, MIN, REAL, SQRT
@@ -277,7 +283,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Threshold for rank estimation
 *
@@ -285,18 +291,18 @@
 *
 *     Test the error exits
 *
-      CALL XLAENV( 2, 2 )
-      CALL XLAENV( 9, SMLSIZ )
+      CALL AB_XLAENV( 2, 2 )
+      CALL AB_XLAENV( 9, SMLSIZ )
       IF( TSTERR )
-     $   CALL SERRLS( PATH, NOUT )
+     $   CALL AB_SERRLS( PATH, NOUT )
 *
-*     Print the header if NM = 0 or NN = 0 and THRESH = 0.
+*     Print the AB_HEADER if NM = 0 or NN = 0 and THRESH = 0.
 *
       IF( ( NM.EQ.0 .OR. NN.EQ.0 ) .AND. THRESH.EQ.ZERO )
-     $   CALL ALAHD( NOUT, PATH )
+     $   CALL AB_ALAHD( NOUT, PATH )
       INFOT = 0
-      CALL XLAENV( 2, 2 )
-      CALL XLAENV( 9, SMLSIZ )
+      CALL AB_XLAENV( 2, 2 )
+      CALL AB_XLAENV( 9, SMLSIZ )
 *
 *     Compute maximal workspace needed for all routines
 *
@@ -324,7 +330,7 @@
       MNMIN = MAX( MIN( M, N ), 1 )
 *
 *     Compute workspace needed for routines
-*     SQRT14, SQRT17 (two side cases), SQRT15 and SQRT12
+*     AB_SQRT14, AB_SQRT17 (two side cases), AB_SQRT15 and AB_SQRT12
 *
       LWORK = MAX( 1, ( M+N )*NRHS,
      $      ( N+NRHS )*( M+2 ), ( M+NRHS )*( N+2 ),
@@ -356,34 +362,40 @@
                                  TRANS = 'T'
                               END IF
 *
-*                             Compute workspace needed for SGELS
-                              CALL SGELS( TRANS, M, N, NRHS, A, LDA,
+*                             Compute workspace needed for AB_SGELS
+                              CALL AB_SGELS( TRANS, M, N, NRHS, A, LDA,
      $                                    B, LDB, WQ, -1, INFO )
-                              LWORK_SGELS = INT ( WQ )
-*                             Compute workspace needed for SGETSLS
-                              CALL SGETSLS( TRANS, M, N, NRHS, A, LDA,
+                              LWORK_AB_SGELS = INT ( WQ )
+*                             Compute workspace needed for AB_SGETSLS
+                              CALL AB_SGETSLS( TRANS, M, N, NRHS, A, LDA
+     $,
      $                                      B, LDB, WQ, -1, INFO )
-                              LWORK_SGETSLS = INT( WQ )
+                              LWORK_AB_SGETSLS = INT( WQ )
                            ENDDO
                         END IF
-*                       Compute workspace needed for SGELSY
-                        CALL SGELSY( M, N, NRHS, A, LDA, B, LDB, IWQ,
+*                       Compute workspace needed for AB_AB_SGELSY
+                        CALL AB_AB_SGELSY( M, N, NRHS, A, LDA, B, LDB, I
+     $WQ,
      $                               RCOND, CRANK, WQ, -1, INFO )
-                        LWORK_SGELSY = INT( WQ )
-*                       Compute workspace needed for SGELSS
-                        CALL SGELSS( M, N, NRHS, A, LDA, B, LDB, S,
+                        LWORK_AB_AB_SGELSY = INT( WQ )
+*                       Compute workspace needed for AB_AB_SGELSS
+                        CALL AB_AB_SGELSS( M, N, NRHS, A, LDA, B, LDB, S
+     $,
      $                               RCOND, CRANK, WQ, -1 , INFO )
-                        LWORK_SGELSS = INT( WQ )
-*                       Compute workspace needed for SGELSD
-                        CALL SGELSD( M, N, NRHS, A, LDA, B, LDB, S,
+                        LWORK_AB_AB_SGELSS = INT( WQ )
+*                       Compute workspace needed for AB_AB_SGELSD
+                        CALL AB_AB_SGELSD( M, N, NRHS, A, LDA, B, LDB, S
+     $,
      $                               RCOND, CRANK, WQ, -1, IWQ, INFO )
-                        LWORK_SGELSD = INT( WQ )
-*                       Compute LIWORK workspace needed for SGELSY and SGELSD
+                        LWORK_AB_AB_SGELSD = INT( WQ )
+*                       Compute LIWORK workspace needed for AB_AB_SGELSY and AB_AB_SGELSD
                         LIWORK = MAX( LIWORK, N, IWQ )
 *                       Compute LWORK workspace needed for all functions
-                        LWORK = MAX( LWORK, LWORK_SGELS, LWORK_SGETSLS,
-     $                               LWORK_SGELSY, LWORK_SGELSS,
-     $                               LWORK_SGELSD )
+                        LWORK = MAX( LWORK, LWORK_AB_SGELS, LWORK_AB_SGE
+     $TSLS,
+     $                               LWORK_AB_AB_SGELSY, LWORK_AB_AB_SGE
+     $LSS,
+     $                               LWORK_AB_AB_SGELSD )
                      END IF
                   ENDDO
                ENDDO
@@ -417,16 +429,16 @@
 *
                      IF( IRANK.EQ.1 ) THEN
 *
-*                       Test SGELS
+*                       Test AB_SGELS
 *
 *                       Generate a matrix of scaling type ISCALE
 *
-                        CALL SQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
+                        CALL AB_SQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
      $                               ISEED )
                         DO 40 INB = 1, NNB
                            NB = NBVAL( INB )
-                           CALL XLAENV( 1, NB )
-                           CALL XLAENV( 3, NXVAL( INB ) )
+                           CALL AB_XLAENV( 1, NB )
+                           CALL AB_XLAENV( 3, NXVAL( INB ) )
 *
                            DO 30 ITRAN = 1, 2
                               IF( ITRAN.EQ.1 ) THEN
@@ -443,31 +455,36 @@
 *                             Set up a consistent rhs
 *
                               IF( NCOLS.GT.0 ) THEN
-                                 CALL SLARNV( 2, ISEED, NCOLS*NRHS,
+                                 CALL AB_SLARNV( 2, ISEED, NCOLS*NRHS,
      $                                        WORK )
-                                 CALL SSCAL( NCOLS*NRHS,
+                                 CALL AB_SSCAL( NCOLS*NRHS,
      $                                       ONE / REAL( NCOLS ), WORK,
      $                                       1 )
                               END IF
-                              CALL SGEMM( TRANS, 'No transpose', NROWS,
+                              CALL AB_SGEMM( TRANS, 'No transpose', NROW
+     $S,
      $                                    NRHS, NCOLS, ONE, COPYA, LDA,
      $                                    WORK, LDWORK, ZERO, B, LDB )
-                              CALL SLACPY( 'Full', NROWS, NRHS, B, LDB,
+                              CALL AB_SLACPY( 'Full', NROWS, NRHS, B, LD
+     $B,
      $                                     COPYB, LDB )
 *
 *                             Solve LS or overdetermined system
 *
                               IF( M.GT.0 .AND. N.GT.0 ) THEN
-                                 CALL SLACPY( 'Full', M, N, COPYA, LDA,
+                                 CALL AB_SLACPY( 'Full', M, N, COPYA, LD
+     $A,
      $                                        A, LDA )
-                                 CALL SLACPY( 'Full', NROWS, NRHS,
+                                 CALL AB_SLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, B, LDB )
                               END IF
-                              SRNAMT = 'SGELS '
-                              CALL SGELS( TRANS, M, N, NRHS, A, LDA, B,
+                              SRNAMT = 'AB_SGELS '
+                              CALL AB_SGELS( TRANS, M, N, NRHS, A, LDA, 
+     $B,
      $                                    LDB, WORK, LWORK, INFO )
                               IF( INFO.NE.0 )
-     $                           CALL ALAERH( PATH, 'SGELS ', INFO, 0,
+     $                           CALL AB_ALAERH( PATH, 'AB_SGELS ', INFO
+     $, 0,
      $                                        TRANS, M, N, NRHS, -1, NB,
      $                                        ITYPE, NFAIL, NERRS,
      $                                        NOUT )
@@ -476,9 +493,9 @@
 *
                               LDWORK = MAX( 1, NROWS )
                               IF( NROWS.GT.0 .AND. NRHS.GT.0 )
-     $                           CALL SLACPY( 'Full', NROWS, NRHS,
+     $                           CALL AB_SLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, C, LDB )
-                              CALL SQRT16( TRANS, M, N, NRHS, COPYA,
+                              CALL AB_SQRT16( TRANS, M, N, NRHS, COPYA,
      $                                     LDA, B, LDB, C, LDB, WORK,
      $                                     RESULT( 1 ) )
 *
@@ -487,7 +504,8 @@
 *
 *                                Solving LS system
 *
-                                 RESULT( 2 ) = SQRT17( TRANS, 1, M, N,
+                                 RESULT( 2 ) = AB_SQRT17( TRANS, 1, M, N
+     $,
      $                                         NRHS, COPYA, LDA, B, LDB,
      $                                         COPYB, LDB, C, WORK,
      $                                         LWORK )
@@ -495,7 +513,7 @@
 *
 *                                Solving overdetermined system
 *
-                                 RESULT( 2 ) = SQRT14( TRANS, M, N,
+                                 RESULT( 2 ) = AB_SQRT14( TRANS, M, N,
      $                                         NRHS, COPYA, LDA, B, LDB,
      $                                         WORK, LWORK )
                               END IF
@@ -506,7 +524,7 @@
                               DO 20 K = 1, 2
                                  IF( RESULT( K ).GE.THRESH ) THEN
                                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                                 CALL ALAHD( NOUT, PATH )
+     $                                 CALL AB_ALAHD( NOUT, PATH )
                                     WRITE( NOUT, FMT = 9999 )TRANS, M,
      $                                 N, NRHS, NB, ITYPE, K,
      $                                 RESULT( K )
@@ -518,18 +536,18 @@
    40                   CONTINUE
 *
 *
-*                       Test SGETSLS
+*                       Test AB_SGETSLS
 *
 *                       Generate a matrix of scaling type ISCALE
 *
-                        CALL SQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
+                        CALL AB_SQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
      $                               ISEED )
                         DO 65 INB = 1, NNB
                              MB = NBVAL( INB )
-                             CALL XLAENV( 1, MB )
+                             CALL AB_XLAENV( 1, MB )
                              DO 62 IMB = 1, NNB
                                NB = NBVAL( IMB )
-                               CALL XLAENV( 2, NB )
+                               CALL AB_XLAENV( 2, NB )
 *
                            DO 60 ITRAN = 1, 2
                               IF( ITRAN.EQ.1 ) THEN
@@ -546,31 +564,35 @@
 *                             Set up a consistent rhs
 *
                               IF( NCOLS.GT.0 ) THEN
-                                 CALL SLARNV( 2, ISEED, NCOLS*NRHS,
+                                 CALL AB_SLARNV( 2, ISEED, NCOLS*NRHS,
      $                                        WORK )
-                                 CALL SSCAL( NCOLS*NRHS,
+                                 CALL AB_SSCAL( NCOLS*NRHS,
      $                                       ONE / REAL( NCOLS ), WORK,
      $                                       1 )
                               END IF
-                              CALL SGEMM( TRANS, 'No transpose', NROWS,
+                              CALL AB_SGEMM( TRANS, 'No transpose', NROW
+     $S,
      $                                    NRHS, NCOLS, ONE, COPYA, LDA,
      $                                    WORK, LDWORK, ZERO, B, LDB )
-                              CALL SLACPY( 'Full', NROWS, NRHS, B, LDB,
+                              CALL AB_SLACPY( 'Full', NROWS, NRHS, B, LD
+     $B,
      $                                     COPYB, LDB )
 *
 *                             Solve LS or overdetermined system
 *
                               IF( M.GT.0 .AND. N.GT.0 ) THEN
-                                 CALL SLACPY( 'Full', M, N, COPYA, LDA,
+                                 CALL AB_SLACPY( 'Full', M, N, COPYA, LD
+     $A,
      $                                        A, LDA )
-                                 CALL SLACPY( 'Full', NROWS, NRHS,
+                                 CALL AB_SLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, B, LDB )
                               END IF
-                              SRNAMT = 'SGETSLS '
-                              CALL SGETSLS( TRANS, M, N, NRHS, A,
+                              SRNAMT = 'AB_SGETSLS '
+                              CALL AB_SGETSLS( TRANS, M, N, NRHS, A,
      $                                 LDA, B, LDB, WORK, LWORK, INFO )
                               IF( INFO.NE.0 )
-     $                           CALL ALAERH( PATH, 'SGETSLS ', INFO, 0,
+     $                           CALL AB_ALAERH( PATH, 'AB_SGETSLS ', IN
+     $FO, 0,
      $                                        TRANS, M, N, NRHS, -1, NB,
      $                                        ITYPE, NFAIL, NERRS,
      $                                        NOUT )
@@ -579,9 +601,9 @@
 *
                               LDWORK = MAX( 1, NROWS )
                               IF( NROWS.GT.0 .AND. NRHS.GT.0 )
-     $                           CALL SLACPY( 'Full', NROWS, NRHS,
+     $                           CALL AB_SLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, C, LDB )
-                              CALL SQRT16( TRANS, M, N, NRHS, COPYA,
+                              CALL AB_SQRT16( TRANS, M, N, NRHS, COPYA,
      $                                     LDA, B, LDB, C, LDB, WORK,
      $                                     RESULT( 15 ) )
 *
@@ -590,7 +612,8 @@
 *
 *                                Solving LS system
 *
-                                 RESULT( 16 ) = SQRT17( TRANS, 1, M, N,
+                                 RESULT( 16 ) = AB_SQRT17( TRANS, 1, M, 
+     $N,
      $                                         NRHS, COPYA, LDA, B, LDB,
      $                                         COPYB, LDB, C, WORK,
      $                                         LWORK )
@@ -598,7 +621,7 @@
 *
 *                                Solving overdetermined system
 *
-                                 RESULT( 16 ) = SQRT14( TRANS, M, N,
+                                 RESULT( 16 ) = AB_SQRT14( TRANS, M, N,
      $                                         NRHS, COPYA, LDA, B, LDB,
      $                                         WORK, LWORK )
                               END IF
@@ -609,7 +632,7 @@
                               DO 50 K = 15, 16
                                  IF( RESULT( K ).GE.THRESH ) THEN
                                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                                 CALL ALAHD( NOUT, PATH )
+     $                                 CALL AB_ALAHD( NOUT, PATH )
                                     WRITE( NOUT, FMT = 9997 )TRANS, M,
      $                                 N, NRHS, MB, NB, ITYPE, K,
      $                                 RESULT( K )
@@ -625,7 +648,8 @@
 *                    Generate a matrix of scaling type ISCALE and rank
 *                    type IRANK.
 *
-                     CALL SQRT15( ISCALE, IRANK, M, N, NRHS, COPYA, LDA,
+                     CALL AB_SQRT15( ISCALE, IRANK, M, N, NRHS, COPYA, L
+     $DA,
      $                            COPYB, LDB, COPYS, RANK, NORMA, NORMB,
      $                            ISEED, WORK, LWORK )
 *
@@ -637,12 +661,12 @@
 *
                      DO 100 INB = 1, NNB
                         NB = NBVAL( INB )
-                        CALL XLAENV( 1, NB )
-                        CALL XLAENV( 3, NXVAL( INB ) )
+                        CALL AB_XLAENV( 1, NB )
+                        CALL AB_XLAENV( 3, NXVAL( INB ) )
 *
-*                       Test SGELSY
+*                       Test AB_AB_SGELSY
 *
-*                       SGELSY:  Compute the minimum-norm solution X
+*                       AB_AB_SGELSY:  Compute the minimum-norm solution X
 *                       to min( norm( A * X - B ) )
 *                       using the rank-revealing orthogonal
 *                       factorization.
@@ -653,30 +677,35 @@
                            IWORK( J ) = 0
    70                   CONTINUE
 *
-                        CALL SLACPY( 'Full', M, N, COPYA, LDA, A, LDA )
-                        CALL SLACPY( 'Full', M, NRHS, COPYB, LDB, B,
+                        CALL AB_SLACPY( 'Full', M, N, COPYA, LDA, A, LDA
+     $ )
+                        CALL AB_SLACPY( 'Full', M, NRHS, COPYB, LDB, B,
      $                               LDB )
 *
-                        SRNAMT = 'SGELSY'
-                        CALL SGELSY( M, N, NRHS, A, LDA, B, LDB, IWORK,
+                        SRNAMT = 'AB_AB_SGELSY'
+                        CALL AB_AB_SGELSY( M, N, NRHS, A, LDA, B, LDB, I
+     $WORK,
      $                               RCOND, CRANK, WORK, LWLSY, INFO )
                         IF( INFO.NE.0 )
-     $                     CALL ALAERH( PATH, 'SGELSY', INFO, 0, ' ', M,
+     $                     CALL AB_ALAERH( PATH, 'AB_AB_SGELSY', INFO, 0
+     $, ' ', M,
      $                                  N, NRHS, -1, NB, ITYPE, NFAIL,
      $                                  NERRS, NOUT )
 *
 *                       Test 3:  Compute relative error in svd
 *                                workspace: M*N + 4*MIN(M,N) + MAX(M,N)
 *
-                        RESULT( 3 ) = SQRT12( CRANK, CRANK, A, LDA,
+                        RESULT( 3 ) = AB_SQRT12( CRANK, CRANK, A, LDA,
      $                                COPYS, WORK, LWORK )
 *
 *                       Test 4:  Compute error in solution
 *                                workspace:  M*NRHS + M
 *
-                        CALL SLACPY( 'Full', M, NRHS, COPYB, LDB, WORK,
+                        CALL AB_SLACPY( 'Full', M, NRHS, COPYB, LDB, WOR
+     $K,
      $                               LDWORK )
-                        CALL SQRT16( 'No transpose', M, N, NRHS, COPYA,
+                        CALL AB_SQRT16( 'No transpose', M, N, NRHS, COPY
+     $A,
      $                               LDA, B, LDB, WORK, LDWORK,
      $                               WORK( M*NRHS+1 ), RESULT( 4 ) )
 *
@@ -685,7 +714,8 @@
 *
                         RESULT( 5 ) = ZERO
                         IF( M.GT.CRANK )
-     $                     RESULT( 5 ) = SQRT17( 'No transpose', 1, M,
+     $                     RESULT( 5 ) = AB_SQRT17( 'No transpose', 1, M
+     $,
      $                                   N, NRHS, COPYA, LDA, B, LDB,
      $                                   COPYB, LDB, C, WORK, LWORK )
 *
@@ -695,24 +725,28 @@
                         RESULT( 6 ) = ZERO
 *
                         IF( N.GT.CRANK )
-     $                     RESULT( 6 ) = SQRT14( 'No transpose', M, N,
+     $                     RESULT( 6 ) = AB_SQRT14( 'No transpose', M, N
+     $,
      $                                   NRHS, COPYA, LDA, B, LDB,
      $                                   WORK, LWORK )
 *
-*                       Test SGELSS
+*                       Test AB_AB_SGELSS
 *
-*                       SGELSS:  Compute the minimum-norm solution X
+*                       AB_AB_SGELSS:  Compute the minimum-norm solution X
 *                       to min( norm( A * X - B ) )
 *                       using the SVD.
 *
-                        CALL SLACPY( 'Full', M, N, COPYA, LDA, A, LDA )
-                        CALL SLACPY( 'Full', M, NRHS, COPYB, LDB, B,
+                        CALL AB_SLACPY( 'Full', M, N, COPYA, LDA, A, LDA
+     $ )
+                        CALL AB_SLACPY( 'Full', M, NRHS, COPYB, LDB, B,
      $                               LDB )
-                        SRNAMT = 'SGELSS'
-                        CALL SGELSS( M, N, NRHS, A, LDA, B, LDB, S,
+                        SRNAMT = 'AB_AB_SGELSS'
+                        CALL AB_AB_SGELSS( M, N, NRHS, A, LDA, B, LDB, S
+     $,
      $                               RCOND, CRANK, WORK, LWORK, INFO )
                         IF( INFO.NE.0 )
-     $                     CALL ALAERH( PATH, 'SGELSS', INFO, 0, ' ', M,
+     $                     CALL AB_ALAERH( PATH, 'AB_AB_SGELSS', INFO, 0
+     $, ' ', M,
      $                                  N, NRHS, -1, NB, ITYPE, NFAIL,
      $                                  NERRS, NOUT )
 *
@@ -722,9 +756,9 @@
 *                       Test 7:  Compute relative error in svd
 *
                         IF( RANK.GT.0 ) THEN
-                           CALL SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
-                           RESULT( 7 ) = SASUM( MNMIN, S, 1 ) /
-     $                                   SASUM( MNMIN, COPYS, 1 ) /
+                           CALL AB_SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
+                           RESULT( 7 ) = AB_SASUM( MNMIN, S, 1 ) /
+     $                                   AB_SASUM( MNMIN, COPYS, 1 ) /
      $                                   ( EPS*REAL( MNMIN ) )
                         ELSE
                            RESULT( 7 ) = ZERO
@@ -732,9 +766,11 @@
 *
 *                       Test 8:  Compute error in solution
 *
-                        CALL SLACPY( 'Full', M, NRHS, COPYB, LDB, WORK,
+                        CALL AB_SLACPY( 'Full', M, NRHS, COPYB, LDB, WOR
+     $K,
      $                               LDWORK )
-                        CALL SQRT16( 'No transpose', M, N, NRHS, COPYA,
+                        CALL AB_SQRT16( 'No transpose', M, N, NRHS, COPY
+     $A,
      $                               LDA, B, LDB, WORK, LDWORK,
      $                               WORK( M*NRHS+1 ), RESULT( 8 ) )
 *
@@ -742,7 +778,8 @@
 *
                         RESULT( 9 ) = ZERO
                         IF( M.GT.CRANK )
-     $                     RESULT( 9 ) = SQRT17( 'No transpose', 1, M,
+     $                     RESULT( 9 ) = AB_SQRT17( 'No transpose', 1, M
+     $,
      $                                   N, NRHS, COPYA, LDA, B, LDB,
      $                                   COPYB, LDB, C, WORK, LWORK )
 *
@@ -750,13 +787,14 @@
 *
                         RESULT( 10 ) = ZERO
                         IF( N.GT.CRANK )
-     $                     RESULT( 10 ) = SQRT14( 'No transpose', M, N,
+     $                     RESULT( 10 ) = AB_SQRT14( 'No transpose', M, 
+     $N,
      $                                    NRHS, COPYA, LDA, B, LDB,
      $                                    WORK, LWORK )
 *
-*                       Test SGELSD
+*                       Test AB_AB_SGELSD
 *
-*                       SGELSD:  Compute the minimum-norm solution X
+*                       AB_AB_SGELSD:  Compute the minimum-norm solution X
 *                       to min( norm( A * X - B ) ) using a
 *                       divide and conquer SVD.
 *
@@ -766,25 +804,28 @@
                            IWORK( J ) = 0
    80                   CONTINUE
 *
-                        CALL SLACPY( 'Full', M, N, COPYA, LDA, A, LDA )
-                        CALL SLACPY( 'Full', M, NRHS, COPYB, LDB, B,
+                        CALL AB_SLACPY( 'Full', M, N, COPYA, LDA, A, LDA
+     $ )
+                        CALL AB_SLACPY( 'Full', M, NRHS, COPYB, LDB, B,
      $                               LDB )
 *
-                        SRNAMT = 'SGELSD'
-                        CALL SGELSD( M, N, NRHS, A, LDA, B, LDB, S,
+                        SRNAMT = 'AB_AB_SGELSD'
+                        CALL AB_AB_SGELSD( M, N, NRHS, A, LDA, B, LDB, S
+     $,
      $                               RCOND, CRANK, WORK, LWORK, IWORK,
      $                               INFO )
                         IF( INFO.NE.0 )
-     $                     CALL ALAERH( PATH, 'SGELSD', INFO, 0, ' ', M,
+     $                     CALL AB_ALAERH( PATH, 'AB_AB_SGELSD', INFO, 0
+     $, ' ', M,
      $                                  N, NRHS, -1, NB, ITYPE, NFAIL,
      $                                  NERRS, NOUT )
 *
 *                       Test 11:  Compute relative error in svd
 *
                         IF( RANK.GT.0 ) THEN
-                           CALL SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
-                           RESULT( 11 ) = SASUM( MNMIN, S, 1 ) /
-     $                                    SASUM( MNMIN, COPYS, 1 ) /
+                           CALL AB_SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
+                           RESULT( 11 ) = AB_SASUM( MNMIN, S, 1 ) /
+     $                                    AB_SASUM( MNMIN, COPYS, 1 ) /
      $                                    ( EPS*REAL( MNMIN ) )
                         ELSE
                            RESULT( 11 ) = ZERO
@@ -792,9 +833,11 @@
 *
 *                       Test 12:  Compute error in solution
 *
-                        CALL SLACPY( 'Full', M, NRHS, COPYB, LDB, WORK,
+                        CALL AB_SLACPY( 'Full', M, NRHS, COPYB, LDB, WOR
+     $K,
      $                               LDWORK )
-                        CALL SQRT16( 'No transpose', M, N, NRHS, COPYA,
+                        CALL AB_SQRT16( 'No transpose', M, N, NRHS, COPY
+     $A,
      $                               LDA, B, LDB, WORK, LDWORK,
      $                               WORK( M*NRHS+1 ), RESULT( 12 ) )
 *
@@ -802,7 +845,8 @@
 *
                         RESULT( 13 ) = ZERO
                         IF( M.GT.CRANK )
-     $                     RESULT( 13 ) = SQRT17( 'No transpose', 1, M,
+     $                     RESULT( 13 ) = AB_SQRT17( 'No transpose', 1, 
+     $M,
      $                                    N, NRHS, COPYA, LDA, B, LDB,
      $                                    COPYB, LDB, C, WORK, LWORK )
 *
@@ -810,7 +854,8 @@
 *
                         RESULT( 14 ) = ZERO
                         IF( N.GT.CRANK )
-     $                     RESULT( 14 ) = SQRT14( 'No transpose', M, N,
+     $                     RESULT( 14 ) = AB_SQRT14( 'No transpose', M, 
+     $N,
      $                                    NRHS, COPYA, LDA, B, LDB,
      $                                    WORK, LWORK )
 *
@@ -820,7 +865,7 @@
                         DO 90 K = 3, 14
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL ALAHD( NOUT, PATH )
+     $                           CALL AB_ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9998 )M, N, NRHS, NB,
      $                           ITYPE, K, RESULT( K )
                               NFAIL = NFAIL + 1
@@ -837,7 +882,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' TRANS=''', A1, ''', M=', I5, ', N=', I5, ', NRHS=', I4,
      $      ', NB=', I4, ', type', I2, ', test(', I2, ')=', G12.5 )
@@ -851,6 +896,6 @@
       DEALLOCATE( IWORK )
       RETURN
 *
-*     End of SDRVLS
+*     End of AB_SDRVLS
 *
       END

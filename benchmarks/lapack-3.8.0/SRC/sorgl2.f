@@ -1,4 +1,4 @@
-*> \brief \b SORGL2
+*> \brief \b AB_SORGL2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SORGL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgl2.f">
+*> Download AB_SORGL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORGL2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORGL2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORGL2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_SORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> SORGL2 generates an m by n real matrix Q with orthonormal rows,
+*> AB_SORGL2 generates an m by n real matrix Q with orthonormal rows,
 *> which is defined as the first m rows of a product of k elementary
 *> reflectors of order n
 *>
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
-*> as returned by SGELQF.
+*> as returned by AB_AB_SGELQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the i-th row must contain the vector which defines
 *>          the elementary reflector H(i), for i = 1,2,...,k, as returned
-*>          by SGELQF in the first k rows of its array argument A.
+*>          by AB_AB_SGELQF in the first k rows of its array argument A.
 *>          On exit, the m-by-n matrix Q.
 *> \endverbatim
 *>
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by SGELQF.
+*>          reflector H(i), as returned by AB_AB_SGELQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -111,7 +111,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_SORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,7 +135,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SSCAL, XERBLA
+      EXTERNAL           AB_SLARF, AB_SSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -155,7 +155,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SORGL2', -INFO )
+         CALL AB_XERBLA( 'AB_SORGL2', -INFO )
          RETURN
       END IF
 *
@@ -184,10 +184,10 @@
          IF( I.LT.N ) THEN
             IF( I.LT.M ) THEN
                A( I, I ) = ONE
-               CALL SLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+               CALL AB_SLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
      $                     TAU( I ), A( I+1, I ), LDA, WORK )
             END IF
-            CALL SSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
+            CALL AB_SSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
          END IF
          A( I, I ) = ONE - TAU( I )
 *
@@ -199,6 +199,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of SORGL2
+*     End of AB_SORGL2
 *
       END

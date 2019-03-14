@@ -1,4 +1,4 @@
-*> \brief \b DTGEVC
+*> \brief \b AB_DTGEVC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTGEVC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgevc.f">
+*> Download AB_DTGEVC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTGEVC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgevc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTGEVC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgevc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTGEVC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+*       SUBROUTINE AB_DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
 *                          LDVL, VR, LDVR, MM, M, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,14 +38,14 @@
 *>
 *> \verbatim
 *>
-*> DTGEVC computes some or all of the right and/or left eigenvectors of
+*> AB_DTGEVC computes some or all of the right and/or left eigenvectors of
 *> a pair of real matrices (S,P), where S is a quasi-triangular matrix
 *> and P is upper triangular.  Matrix pairs of this type are produced by
 *> the generalized Schur factorization of a matrix pair (A,B):
 *>
 *>    A = Q*S*Z**T,  B = Q*P*Z**T
 *>
-*> as computed by DGGHRD + DHGEQZ.
+*> as computed by AB_DGGHRD + AB_DHGEQZ.
 *>
 *> The right eigenvector x and the left eigenvector y of (S,P)
 *> corresponding to an eigenvalue w are defined by:
@@ -110,7 +110,7 @@
 *> \verbatim
 *>          S is DOUBLE PRECISION array, dimension (LDS,N)
 *>          The upper quasi-triangular matrix S from a generalized Schur
-*>          factorization, as computed by DHGEQZ.
+*>          factorization, as computed by AB_DHGEQZ.
 *> \endverbatim
 *>
 *> \param[in] LDS
@@ -123,7 +123,7 @@
 *> \verbatim
 *>          P is DOUBLE PRECISION array, dimension (LDP,N)
 *>          The upper triangular matrix P from a generalized Schur
-*>          factorization, as computed by DHGEQZ.
+*>          factorization, as computed by AB_DHGEQZ.
 *>          2-by-2 diagonal blocks of P corresponding to 2-by-2 blocks
 *>          of S must be in positive diagonal form.
 *> \endverbatim
@@ -139,7 +139,7 @@
 *>          VL is DOUBLE PRECISION array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the orthogonal matrix Q
-*>          of left Schur vectors returned by DHGEQZ).
+*>          of left Schur vectors returned by AB_DHGEQZ).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -149,7 +149,7 @@
 *>
 *>          A complex eigenvector corresponding to a complex eigenvalue
 *>          is stored in two consecutive columns, the first holding the
-*>          real part, and the second the imaginary part.
+*>          real part, and the AB_SECOND the imaginary part.
 *>
 *>          Not referenced if SIDE = 'R'.
 *> \endverbatim
@@ -166,7 +166,7 @@
 *>          VR is DOUBLE PRECISION array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Z (usually the orthogonal matrix Z
-*>          of right Schur vectors returned by DHGEQZ).
+*>          of right Schur vectors returned by AB_DHGEQZ).
 *>
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
@@ -178,7 +178,7 @@
 *>
 *>          A complex eigenvector corresponding to a complex eigenvalue
 *>          is stored in two consecutive columns, the first holding the
-*>          real part and the second the imaginary part.
+*>          real part and the AB_SECOND the imaginary part.
 *>
 *>          Not referenced if SIDE = 'L'.
 *> \endverbatim
@@ -292,7 +292,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+      SUBROUTINE AB_DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -335,12 +335,13 @@
      $                   SUMP( 2, 2 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DLABAD, DLACPY, DLAG2, DLALN2, XERBLA
+      EXTERNAL           AB_DGEMV, AB_DLABAD, AB_DLACPY, AB_DLAG2, AB_DL
+     $ALN2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -349,15 +350,15 @@
 *
 *     Decode and Test the input parameters
 *
-      IF( LSAME( HOWMNY, 'A' ) ) THEN
+      IF( AB_LSAME( HOWMNY, 'A' ) ) THEN
          IHWMNY = 1
          ILALL = .TRUE.
          ILBACK = .FALSE.
-      ELSE IF( LSAME( HOWMNY, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( HOWMNY, 'S' ) ) THEN
          IHWMNY = 2
          ILALL = .FALSE.
          ILBACK = .FALSE.
-      ELSE IF( LSAME( HOWMNY, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( HOWMNY, 'B' ) ) THEN
          IHWMNY = 3
          ILALL = .TRUE.
          ILBACK = .TRUE.
@@ -366,15 +367,15 @@
          ILALL = .TRUE.
       END IF
 *
-      IF( LSAME( SIDE, 'R' ) ) THEN
+      IF( AB_LSAME( SIDE, 'R' ) ) THEN
          ISIDE = 1
          COMPL = .FALSE.
          COMPR = .TRUE.
-      ELSE IF( LSAME( SIDE, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'L' ) ) THEN
          ISIDE = 2
          COMPL = .TRUE.
          COMPR = .FALSE.
-      ELSE IF( LSAME( SIDE, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'B' ) ) THEN
          ISIDE = 3
          COMPL = .TRUE.
          COMPR = .TRUE.
@@ -395,7 +396,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DTGEVC', -INFO )
+         CALL AB_XERBLA( 'AB_DTGEVC', -INFO )
          RETURN
       END IF
 *
@@ -452,7 +453,7 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DTGEVC', -INFO )
+         CALL AB_XERBLA( 'AB_DTGEVC', -INFO )
          RETURN
       END IF
 *
@@ -464,10 +465,10 @@
 *
 *     Machine Constants
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, BIG )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      CALL AB_DLABAD( SAFMIN, BIG )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SMALL = SAFMIN*N / ULP
       BIG = ONE / SMALL
       BIGNUM = ONE / ( SAFMIN*N )
@@ -520,7 +521,7 @@
          DO 220 JE = 1, N
 *
 *           Skip this iteration if (a) HOWMNY='S' and SELECT=.FALSE., or
-*           (b) this would be the second of a complex pair.
+*           (b) this would be the AB_SECOND of a complex pair.
 *           Check for complex eigenvalue, so as to be sure of which
 *           entry(-ies) of SELECT to look at.
 *
@@ -622,7 +623,7 @@
 *
 *              Complex eigenvalue
 *
-               CALL DLAG2( S( JE, JE ), LDS, P( JE, JE ), LDP,
+               CALL AB_DLAG2( S( JE, JE ), LDS, P( JE, JE ), LDP,
      $                     SAFMIN*SAFETY, ACOEF, TEMP, BCOEFR, TEMP2,
      $                     BCOEFI )
                BCOEFI = -BCOEFI
@@ -768,7 +769,8 @@
 *              Solve  ( a A - b B )  y = SUM(,)
 *              with scaling and perturbation of the denominator
 *
-               CALL DLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ), LDS,
+               CALL AB_DLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ), L
+     $DS,
      $                      BDIAG( 1 ), BDIAG( 2 ), SUM, 2, BCOEFR,
      $                      BCOEFI, WORK( 2*N+J ), N, SCALE, TEMP,
      $                      IINFO )
@@ -790,15 +792,17 @@
             IEIG = IEIG + 1
             IF( ILBACK ) THEN
                DO 170 JW = 0, NW - 1
-                  CALL DGEMV( 'N', N, N+1-JE, ONE, VL( 1, JE ), LDVL,
+                  CALL AB_DGEMV( 'N', N, N+1-JE, ONE, VL( 1, JE ), LDVL,
      $                        WORK( ( JW+2 )*N+JE ), 1, ZERO,
      $                        WORK( ( JW+4 )*N+1 ), 1 )
   170          CONTINUE
-               CALL DLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1, JE ),
+               CALL AB_DLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1, JE )
+     $,
      $                      LDVL )
                IBEG = 1
             ELSE
-               CALL DLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1, IEIG ),
+               CALL AB_DLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1, IEIG
+     $ ),
      $                      LDVL )
                IBEG = JE
             END IF
@@ -842,7 +846,7 @@
          DO 500 JE = N, 1, -1
 *
 *           Skip this iteration if (a) HOWMNY='S' and SELECT=.FALSE., or
-*           (b) this would be the second of a complex pair.
+*           (b) this would be the AB_SECOND of a complex pair.
 *           Check for complex eigenvalue, so as to be sure of which
 *           entry(-ies) of SELECT to look at -- if complex, SELECT(JE)
 *           or SELECT(JE-1).
@@ -957,7 +961,8 @@
 *
 *              Complex eigenvalue
 *
-               CALL DLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ), LDP,
+               CALL AB_DLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ), LDP
+     $,
      $                     SAFMIN*SAFETY, ACOEF, TEMP, BCOEFR, TEMP2,
      $                     BCOEFI )
                IF( BCOEFI.EQ.ZERO ) THEN
@@ -1058,7 +1063,8 @@
 *
 *              Compute x(j) (and x(j+1), if 2-by-2 block)
 *
-               CALL DLALN2( .FALSE., NA, NW, DMIN, ACOEF, S( J, J ),
+               CALL AB_DLALN2( .FALSE., NA, NW, DMIN, ACOEF, S( J, J 
+     $),
      $                      LDS, BDIAG( 1 ), BDIAG( 2 ), WORK( 2*N+J ),
      $                      N, BCOEFR, BCOEFI, SUM, 2, SCALE, TEMP,
      $                      IINFO )
@@ -1206,6 +1212,6 @@
 *
       RETURN
 *
-*     End of DTGEVC
+*     End of AB_DTGEVC
 *
       END

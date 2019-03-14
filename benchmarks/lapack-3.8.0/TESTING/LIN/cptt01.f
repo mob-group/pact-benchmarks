@@ -1,4 +1,4 @@
-*> \brief \b CPTT01
+*> \brief \b AB_CPTT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPTT01( N, D, E, DF, EF, WORK, RESID )
+*       SUBROUTINE AB_CPTT01( N, D, E, DF, EF, WORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> CPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
+*> AB_CPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
 *> factorization and computes the residual
 *>    norm(L*D*L' - A) / ( n * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -90,7 +90,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CPTT01( N, D, E, DF, EF, WORK, RESID )
+      SUBROUTINE AB_CPTT01( N, D, E, DF, EF, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,8 +118,8 @@
       COMPLEX            DE
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, REAL
@@ -133,7 +133,7 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Construct the difference L*D*L' - A.
 *
@@ -171,6 +171,6 @@
 *
       RETURN
 *
-*     End of CPTT01
+*     End of AB_CPTT01
 *
       END

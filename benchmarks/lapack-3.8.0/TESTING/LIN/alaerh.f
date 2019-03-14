@@ -1,4 +1,4 @@
-*> \brief \b ALAERH
+*> \brief \b AB_ALAERH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, KU,
+*       SUBROUTINE AB_ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, KU,
 *                          N5, IMAT, NFAIL, NERRS, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -25,8 +25,8 @@
 *>
 *> \verbatim
 *>
-*> ALAERH is an error handler for the LAPACK routines.  It prints the
-*> header if this is the first error message and prints the error code
+*> AB_ALAERH is an error handler for the LAPACK routines.  It prints the
+*> AB_HEADER if this is the first error message and prints the error code
 *> and form of recovery, if any.  The character evaluations in this
 *> routine may make it slow, but it should not be called once the LAPACK
 *> routines are fully debugged.
@@ -114,14 +114,14 @@
 *> \verbatim
 *>          NFAIL is INTEGER
 *>          The number of prior tests that did not pass the threshold;
-*>          used to determine if the header should be printed.
+*>          used to determine if the AB_HEADER should be printed.
 *> \endverbatim
 *>
 *> \param[in,out] NERRS
 *> \verbatim
 *>          NERRS is INTEGER
 *>          On entry, the number of errors already detected; used to
-*>          determine if the header should be printed.
+*>          determine if the AB_HEADER should be printed.
 *>          On exit, NERRS is increased by 1.
 *> \endverbatim
 *>
@@ -144,7 +144,8 @@
 *> \ingroup aux_lin
 *
 *  =====================================================================
-      SUBROUTINE ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, KU,
+      SUBROUTINE AB_ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, K
+     $U,
      $                   N5, IMAT, NFAIL, NERRS, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -168,14 +169,14 @@
       CHARACTER*3        C3
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, LSAMEN
-      EXTERNAL           LSAME, LSAMEN
+      LOGICAL            AB_LSAME, AB_AB_LSAMEN
+      EXTERNAL           AB_LSAME, AB_AB_LSAMEN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN_TRIM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAHD
+      EXTERNAL           AB_ALADHD, AB_ALAHD
 *     ..
 *     .. Executable Statements ..
 *
@@ -184,13 +185,14 @@
       P2 = PATH( 2: 3 )
       C3 = SUBNAM( 4: 6 )
 *
-*     Print the header if this is the first error message.
+*     Print the AB_HEADER if this is the first error message.
 *
       IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 ) THEN
-         IF( LSAMEN( 3, C3, 'SV ' ) .OR. LSAMEN( 3, C3, 'SVX' ) ) THEN
-            CALL ALADHD( NOUT, PATH )
+         IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) .OR. AB_AB_LSAMEN( 3, C3, 'SVX
+     $' ) ) THEN
+            CALL AB_ALADHD( NOUT, PATH )
          ELSE
-            CALL ALAHD( NOUT, PATH )
+            CALL AB_ALAHD( NOUT, PATH )
          END IF
       END IF
       NERRS = NERRS + 1
@@ -198,11 +200,11 @@
 *     Print the message detailing the error and form of recovery,
 *     if any.
 *
-      IF( LSAMEN( 2, P2, 'GE' ) ) THEN
+      IF( AB_AB_LSAMEN( 2, P2, 'GE' ) ) THEN
 *
 *        xGE:  General matrices
 *
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9988 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, M, N, N5,
@@ -214,7 +216,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9984 )
@@ -225,7 +227,7 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9992 )
@@ -237,29 +239,30 @@
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'TRI' ) ) THEN
 *
             WRITE( NOUT, FMT = 9971 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
 *
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
 *
             WRITE( NOUT, FMT = 9978 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
 *
-         ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9969 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M,
      $         IMAT
 *
-         ELSE IF( LSAMEN( 3, C3, 'LS ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'LS ' ) ) THEN
 *
             WRITE( NOUT, FMT = 9965 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N,
      $         KL, N5, IMAT
 *
-         ELSE IF( LSAMEN( 3, C3, 'LSX' ) .OR. LSAMEN( 3, C3, 'LSS' ) )
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'LSX' ) .OR. AB_AB_LSAMEN( 3, 
+     $C3, 'LSS' ) )
      $             THEN
 *
             WRITE( NOUT, FMT = 9974 )
@@ -272,11 +275,11 @@
      $         IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'GB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'GB' ) ) THEN
 *
 *        xGB:  General band matrices
 *
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9989 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, M, N, KL,
@@ -289,7 +292,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9986 )
@@ -301,7 +304,7 @@
      $            IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9993 )
@@ -313,12 +316,12 @@
      $            OPTS( 2: 2 ), N, KL, KU, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
 *
             WRITE( NOUT, FMT = 9977 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, KU, IMAT
 *
-         ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9968 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, KL,
@@ -331,11 +334,11 @@
      $         KU, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'GT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'GT' ) ) THEN
 *
 *        xGT:  General tridiagonal matrices
 *
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9987 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, N, IMAT
@@ -346,7 +349,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9984 )
@@ -357,7 +360,7 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9992 )
@@ -369,7 +372,7 @@
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9969 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M,
@@ -382,12 +385,12 @@
      $         IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'PO' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PO' ) ) THEN
 *
 *        xPO:  Symmetric or Hermitian positive definite matrices
 *
          UPLO = OPTS( 1: 1 )
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9980 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
@@ -399,7 +402,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9979 )
@@ -410,7 +413,7 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9990 )
@@ -422,13 +425,13 @@
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'TRI' ) ) THEN
 *
             WRITE( NOUT, FMT = 9956 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
 *
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
-     $            LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
+     $            AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9960 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
@@ -439,12 +442,12 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'PS' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PS' ) ) THEN
 *
 *        xPS:  Symmetric or Hermitian positive semi-definite matrices
 *
          UPLO = OPTS( 1: 1 )
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9980 )SUBNAM, INFO, INFOE, UPLO, M,
      $            N5, IMAT
@@ -454,7 +457,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9979 )SUBNAM, INFO, INFOE, UPLO, N,
@@ -463,7 +466,7 @@
                WRITE( NOUT, FMT = 9955 )SUBNAM, INFO, UPLO, N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9990 )SUBNAM, INFO, INFOE,
@@ -473,12 +476,12 @@
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'TRI' ) ) THEN
 *
             WRITE( NOUT, FMT = 9956 )SUBNAM, INFO, UPLO, M, N5, IMAT
 *
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMT' ) .OR.
-     $            LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMT' ) .OR.
+     $            AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9960 )SUBNAM, INFO, UPLO, M, IMAT
 *
@@ -487,13 +490,13 @@
             WRITE( NOUT, FMT = 9955 )SUBNAM, INFO, UPLO, M, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'SY' )
-     $         .OR. LSAMEN( 2, P2, 'SR' )
-     $         .OR. LSAMEN( 2, P2, 'SK' )
-     $         .OR. LSAMEN( 2, P2, 'HE' )
-     $         .OR. LSAMEN( 2, P2, 'HR' )
-     $         .OR. LSAMEN( 2, P2, 'HK' )
-     $         .OR. LSAMEN( 2, P2, 'HA' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'SY' )
+     $         .OR. AB_AB_LSAMEN( 2, P2, 'SR' )
+     $         .OR. AB_AB_LSAMEN( 2, P2, 'SK' )
+     $         .OR. AB_AB_LSAMEN( 2, P2, 'HE' )
+     $         .OR. AB_AB_LSAMEN( 2, P2, 'HR' )
+     $         .OR. AB_AB_LSAMEN( 2, P2, 'HK' )
+     $         .OR. AB_AB_LSAMEN( 2, P2, 'HA' ) ) THEN
 *
 *        xSY: symmetric indefinite matrices
 *             with partial (Bunch-Kaufman) pivoting;
@@ -513,7 +516,7 @@
 *             Aasen Algorithm
 *
          UPLO = OPTS( 1: 1 )
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9980 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
@@ -525,7 +528,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 2, C3, 'SV' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 2, C3, 'SV' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9979 )
@@ -536,7 +539,7 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9990 )
@@ -548,8 +551,9 @@
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
-     $            LSAMEN( 3, C3, 'TRI' ) .OR. LSAMEN( 3, C3, 'CON' ) )
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
+     $            AB_AB_LSAMEN( 3, C3, 'TRI' ) .OR. AB_AB_LSAMEN( 3, C3,
+     $ 'CON' ) )
      $             THEN
 *
             WRITE( NOUT, FMT = 9960 )
@@ -561,13 +565,14 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'PP' ) .OR. LSAMEN( 2, P2, 'SP' ) .OR.
-     $         LSAMEN( 2, P2, 'HP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PP' ) .OR. AB_AB_LSAMEN( 2, P2, 
+     $'SP' ) .OR.
+     $         AB_AB_LSAMEN( 2, P2, 'HP' ) ) THEN
 *
 *        xPP, xHP, or xSP:  Symmetric or Hermitian packed matrices
 *
          UPLO = OPTS( 1: 1 )
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9983 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
@@ -579,7 +584,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9979 )
@@ -590,7 +595,7 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9990 )
@@ -602,8 +607,9 @@
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
-     $            LSAMEN( 3, C3, 'TRI' ) .OR. LSAMEN( 3, C3, 'CON' ) )
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
+     $            AB_AB_LSAMEN( 3, C3, 'TRI' ) .OR. AB_AB_LSAMEN( 3, C3,
+     $ 'CON' ) )
      $             THEN
 *
             WRITE( NOUT, FMT = 9960 )
@@ -615,12 +621,12 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'PB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PB' ) ) THEN
 *
 *        xPB:  Symmetric (Hermitian) positive definite band matrix
 *
          UPLO = OPTS( 1: 1 )
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9982 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
@@ -633,7 +639,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9981 )
@@ -645,7 +651,7 @@
      $            IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9991 )
@@ -657,8 +663,8 @@
      $            OPTS( 2: 2 ), N, KL, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
-     $            LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
+     $            AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9959 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, KL, IMAT
@@ -670,11 +676,11 @@
      $         IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'PT' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PT' ) ) THEN
 *
 *        xPT:  Positive definite tridiagonal matrices
 *
-         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9987 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, N, IMAT
@@ -685,7 +691,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SV ' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9984 )
@@ -696,7 +702,7 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9994 )
@@ -708,10 +714,10 @@
      $            N5, IMAT
             END IF
 *
-         ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
 *
-            IF( LSAME( SUBNAM( 1: 1 ), 'S' ) .OR.
-     $          LSAME( SUBNAM( 1: 1 ), 'D' ) ) THEN
+            IF( AB_LSAME( SUBNAM( 1: 1 ), 'S' ) .OR.
+     $          AB_LSAME( SUBNAM( 1: 1 ), 'D' ) ) THEN
                WRITE( NOUT, FMT = 9973 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, IMAT
             ELSE
@@ -727,19 +733,19 @@
      $         IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'TR' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'TR' ) ) THEN
 *
 *        xTR:  Triangular matrix
 *
-         IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRI' ) ) THEN
             WRITE( NOUT, FMT = 9961 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), M, N5, IMAT
-         ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
             WRITE( NOUT, FMT = 9967 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, IMAT
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATRS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATRS' ) ) THEN
             WRITE( NOUT, FMT = 9952 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), OPTS( 4: 4 ), M, IMAT
@@ -749,19 +755,19 @@
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'TP' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'TP' ) ) THEN
 *
 *        xTP:  Triangular packed matrix
 *
-         IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'TRI' ) ) THEN
             WRITE( NOUT, FMT = 9962 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), M, IMAT
-         ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
             WRITE( NOUT, FMT = 9967 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, IMAT
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATPS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATPS' ) ) THEN
             WRITE( NOUT, FMT = 9952 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), OPTS( 4: 4 ), M, IMAT
@@ -771,15 +777,15 @@
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'TB' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'TB' ) ) THEN
 *
 *        xTB:  Triangular band matrix
 *
-         IF( LSAMEN( 3, C3, 'CON' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'CON' ) ) THEN
             WRITE( NOUT, FMT = 9966 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, KL, IMAT
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATBS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATBS' ) ) THEN
             WRITE( NOUT, FMT = 9951 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), OPTS( 4: 4 ), M, KL, IMAT
@@ -789,55 +795,55 @@
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, KL, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'QR' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'QR' ) ) THEN
 *
 *        xQR:  QR factorization
 *
-         IF( LSAMEN( 3, C3, 'QRS' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'QRS' ) ) THEN
             WRITE( NOUT, FMT = 9974 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
             WRITE( NOUT, FMT = 9978 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'LQ' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'LQ' ) ) THEN
 *
 *        xLQ:  LQ factorization
 *
-         IF( LSAMEN( 3, C3, 'LQS' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'LQS' ) ) THEN
             WRITE( NOUT, FMT = 9974 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
             WRITE( NOUT, FMT = 9978 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'QL' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'QL' ) ) THEN
 *
 *        xQL:  QL factorization
 *
-         IF( LSAMEN( 3, C3, 'QLS' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'QLS' ) ) THEN
             WRITE( NOUT, FMT = 9974 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
             WRITE( NOUT, FMT = 9978 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'RQ' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'RQ' ) ) THEN
 *
 *        xRQ:  RQ factorization
 *
-         IF( LSAMEN( 3, C3, 'RQS' ) ) THEN
+         IF( AB_AB_LSAMEN( 3, C3, 'RQS' ) ) THEN
             WRITE( NOUT, FMT = 9974 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
-         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
+         ELSE IF( AB_AB_LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
             WRITE( NOUT, FMT = 9978 )
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'LU' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'LU' ) ) THEN
 *
          IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
             WRITE( NOUT, FMT = 9988 )
@@ -848,7 +854,7 @@
      $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'CH' ) ) THEN
+      ELSE IF( AB_AB_LSAMEN( 2, P2, 'CH' ) ) THEN
 *
          IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
             WRITE( NOUT, FMT = 9985 )
@@ -1153,6 +1159,6 @@
 *
       RETURN
 *
-*     End of ALAERH
+*     End of AB_ALAERH
 *
       END

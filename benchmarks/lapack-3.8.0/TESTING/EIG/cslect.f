@@ -1,4 +1,4 @@
-*> \brief \b CSLECT
+*> \brief \b AB_CSLECT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION CSLECT( Z )
+*       LOGICAL          FUNCTION AB_CSLECT( Z )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX            Z
@@ -20,15 +20,15 @@
 *>
 *> \verbatim
 *>
-*> CSLECT returns .TRUE. if the eigenvalue Z is to be selected,
+*> AB_CSLECT returns .TRUE. if the eigenvalue Z is to be selected,
 *> otherwise it returns .FALSE.
-*> It is used by CCHK41 to test if CGEES successfully sorts eigenvalues,
-*> and by CCHK43 to test if CGEESX successfully sorts eigenvalues.
+*> It is used by AB_CCHK41 to test if AB_CGEES successfully sorts eigenvalues,
+*> and by AB_CCHK43 to test if AB_AB_CGEESX successfully sorts eigenvalues.
 *>
 *> The common block /SSLCT/ controls how eigenvalues are selected.
-*> If SELOPT = 0, then CSLECT return .TRUE. when real(Z) is less than
+*> If SELOPT = 0, then AB_CSLECT return .TRUE. when real(Z) is less than
 *> zero, and .FALSE. otherwise.
-*> If SELOPT is at least 1, CSLECT returns SELVAL(SELOPT) and adds 1
+*> If SELOPT is at least 1, AB_CSLECT returns SELVAL(SELOPT) and adds 1
 *> to SELOPT, cycling back to 1 at SELMAX.
 *> \endverbatim
 *
@@ -54,7 +54,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION CSLECT( Z )
+      LOGICAL          FUNCTION AB_CSLECT( Z )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,20 +91,20 @@
 *     .. Executable Statements ..
 *
       IF( SELOPT.EQ.0 ) THEN
-         CSLECT = ( REAL( Z ).LT.ZERO )
+         AB_CSLECT = ( REAL( Z ).LT.ZERO )
       ELSE
          RMIN = ABS( Z-CMPLX( SELWR( 1 ), SELWI( 1 ) ) )
-         CSLECT = SELVAL( 1 )
+         AB_CSLECT = SELVAL( 1 )
          DO 10 I = 2, SELDIM
             X = ABS( Z-CMPLX( SELWR( I ), SELWI( I ) ) )
             IF( X.LE.RMIN ) THEN
                RMIN = X
-               CSLECT = SELVAL( I )
+               AB_CSLECT = SELVAL( I )
             END IF
    10    CONTINUE
       END IF
       RETURN
 *
-*     End of CSLECT
+*     End of AB_CSLECT
 *
       END

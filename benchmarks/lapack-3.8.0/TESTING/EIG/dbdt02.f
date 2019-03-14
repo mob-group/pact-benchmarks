@@ -1,4 +1,4 @@
-*> \brief \b DBDT02
+*> \brief \b AB_DBDT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
+*       SUBROUTINE AB_DBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDB, LDC, LDU, M, N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> DBDT02 tests the change of basis C = U' * B by computing the residual
+*> AB_DBDT02 tests the change of basis C = U' * B by computing the residual
 *>
 *>    RESID = norm( B - U * C ) / ( max(m,n) * norm(B) * EPS ),
 *>
@@ -109,7 +109,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE DBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
+      SUBROUTINE AB_DBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,11 +136,11 @@
       DOUBLE PRECISION   BNORM, EPS, REALMN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           DASUM, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMV
+      EXTERNAL           AB_DCOPY, AB_DGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -153,20 +153,21 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
       REALMN = DBLE( MAX( M, N ) )
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
 *     Compute norm( B - U * C )
 *
       DO 10 J = 1, N
-         CALL DCOPY( M, B( 1, J ), 1, WORK, 1 )
-         CALL DGEMV( 'No transpose', M, M, -ONE, U, LDU, C( 1, J ), 1,
+         CALL AB_DCOPY( M, B( 1, J ), 1, WORK, 1 )
+         CALL AB_DGEMV( 'No transpose', M, M, -ONE, U, LDU, C( 1, J ), 1
+     $,
      $               ONE, WORK, 1 )
-         RESID = MAX( RESID, DASUM( M, WORK, 1 ) )
+         RESID = MAX( RESID, AB_DASUM( M, WORK, 1 ) )
    10 CONTINUE
 *
 *     Compute norm of B.
 *
-      BNORM = DLANGE( '1', M, N, B, LDB, WORK )
+      BNORM = AB_DLANGE( '1', M, N, B, LDB, WORK )
 *
       IF( BNORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -185,6 +186,6 @@
       END IF
       RETURN
 *
-*     End of DBDT02
+*     End of AB_DBDT02
 *
       END

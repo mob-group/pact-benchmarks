@@ -1,4 +1,4 @@
-*> \brief \b STPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q.
+*> \brief \b AB_AB_STPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download STPQRT2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpqrt2.f">
+*> Download AB_AB_STPQRT2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_STPQRT2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpqrt2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_STPQRT2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpqrt2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_STPQRT2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STPQRT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
+*       SUBROUTINE AB_AB_STPQRT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER   INFO, LDA, LDB, LDT, N, M, L
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> STPQRT2 computes a QR factorization of a real "triangular-pentagonal"
+*> AB_AB_STPQRT2 computes a QR factorization of a real "triangular-pentagonal"
 *> matrix C, which is composed of a triangular block A and pentagonal block B,
 *> using the compact WY representation for Q.
 *> \endverbatim
@@ -171,7 +171,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STPQRT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
+      SUBROUTINE AB_AB_STPQRT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -196,7 +196,7 @@
       REAL   ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  SLARFG, SGEMV, SGER, STRMV, XERBLA
+      EXTERNAL  AB_AB_SLARFG, AB_SGEMV, AB_SGER, AB_STRMV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX, MIN
@@ -220,7 +220,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STPQRT2', -INFO )
+         CALL AB_XERBLA( 'AB_AB_STPQRT2', -INFO )
          RETURN
       END IF
 *
@@ -233,7 +233,7 @@
 *        Generate elementary reflector H(I) to annihilate B(:,I)
 *
          P = M-L+MIN( L, I )
-         CALL SLARFG( P+1, A( I, I ), B( 1, I ), 1, T( I, 1 ) )
+         CALL AB_AB_SLARFG( P+1, A( I, I ), B( 1, I ), 1, T( I, 1 ) )
          IF( I.LT.N ) THEN
 *
 *           W(1:N-I) := C(I:M,I+1:N)^H * C(I:M,I) [use W = T(:,N)]
@@ -241,7 +241,7 @@
             DO J = 1, N-I
                T( J, N ) = (A( I, I+J ))
             END DO
-            CALL SGEMV( 'T', P, N-I, ONE, B( 1, I+1 ), LDB,
+            CALL AB_SGEMV( 'T', P, N-I, ONE, B( 1, I+1 ), LDB,
      $                  B( 1, I ), 1, ONE, T( 1, N ), 1 )
 *
 *           C(I:M,I+1:N) = C(I:m,I+1:N) + alpha*C(I:M,I)*W(1:N-1)^H
@@ -250,7 +250,7 @@
             DO J = 1, N-I
                A( I, I+J ) = A( I, I+J ) + ALPHA*(T( J, N ))
             END DO
-            CALL SGER( P, N-I, ALPHA, B( 1, I ), 1,
+            CALL AB_SGER( P, N-I, ALPHA, B( 1, I ), 1,
      $           T( 1, N ), 1, B( 1, I+1 ), LDB )
          END IF
       END DO
@@ -273,22 +273,22 @@
          DO J = 1, P
             T( J, I ) = ALPHA*B( M-L+J, I )
          END DO
-         CALL STRMV( 'U', 'T', 'N', P, B( MP, 1 ), LDB,
+         CALL AB_STRMV( 'U', 'T', 'N', P, B( MP, 1 ), LDB,
      $               T( 1, I ), 1 )
 *
 *        Rectangular part of B2
 *
-         CALL SGEMV( 'T', L, I-1-P, ALPHA, B( MP, NP ), LDB,
+         CALL AB_SGEMV( 'T', L, I-1-P, ALPHA, B( MP, NP ), LDB,
      $               B( MP, I ), 1, ZERO, T( NP, I ), 1 )
 *
 *        B1
 *
-         CALL SGEMV( 'T', M-L, I-1, ALPHA, B, LDB, B( 1, I ), 1,
+         CALL AB_SGEMV( 'T', M-L, I-1, ALPHA, B, LDB, B( 1, I ), 1,
      $               ONE, T( 1, I ), 1 )
 *
 *        T(1:I-1,I) := T(1:I-1,1:I-1) * T(1:I-1,I)
 *
-         CALL STRMV( 'U', 'N', 'N', I-1, T, LDT, T( 1, I ), 1 )
+         CALL AB_STRMV( 'U', 'N', 'N', I-1, T, LDT, T( 1, I ), 1 )
 *
 *        T(I,I) = tau(I)
 *
@@ -297,6 +297,6 @@
       END DO
 
 *
-*     End of STPQRT2
+*     End of AB_AB_STPQRT2
 *
       END

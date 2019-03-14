@@ -1,4 +1,4 @@
-*> \brief \b CCHKQRT
+*> \brief \b AB_AB_CCHKQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+*       SUBROUTINE AB_CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
 *                           NBVAL, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKTSQR tests CGEQR and CGEMQR.
+*> AB_CCHKTSQR tests AB_CGEQR and AB_CGEMQR.
 *> \endverbatim
 *
 *  Arguments:
@@ -99,7 +99,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+      SUBROUTINE AB_CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
       IMPLICIT NONE
 *
@@ -132,8 +132,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRTSQR,
-     $                   CTSQR01, XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CERRTSQR,
+     $                   AB_CTSQR01, AB_XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -159,7 +159,7 @@
 *
 *     Test the error exits
 *
-      IF( TSTERR ) CALL CERRTSQR( PATH, NOUT )
+      IF( TSTERR ) CALL AB_CERRTSQR( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of M in MVAL.
@@ -174,14 +174,14 @@
               IF (MIN(M,N).NE.0) THEN
               DO INB = 1, NNB
                 MB = NBVAL( INB )
-                  CALL XLAENV( 1, MB )
+                  CALL AB_XLAENV( 1, MB )
                   DO IMB = 1, NNB
                     NB = NBVAL( IMB )
-                    CALL XLAENV( 2, NB )
+                    CALL AB_XLAENV( 2, NB )
 *
-*                 Test DGEQR and DGEMQR
+*                 Test AB_DGEQR and AB_DGEMQR
 *
-                    CALL CTSQR01( 'TS', M, N, MB, NB, RESULT )
+                    CALL AB_CTSQR01( 'TS', M, N, MB, NB, RESULT )
 *
 *                 Print information about the tests that did not
 *                 pass the threshold.
@@ -189,7 +189,7 @@
                     DO T = 1, NTESTS
                       IF( RESULT( T ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )M, N, MB, NB,
      $                       T, RESULT( T )
                         NFAIL = NFAIL + 1
@@ -214,14 +214,14 @@
               IF (MIN(M,N).NE.0) THEN
               DO INB = 1, NNB
                 MB = NBVAL( INB )
-                  CALL XLAENV( 1, MB )
+                  CALL AB_XLAENV( 1, MB )
                   DO IMB = 1, NNB
                     NB = NBVAL( IMB )
-                    CALL XLAENV( 2, NB )
+                    CALL AB_XLAENV( 2, NB )
 *
-*                 Test DGEQR and DGEMQR
+*                 Test AB_DGEQR and AB_DGEMQR
 *
-                    CALL CTSQR01( 'SW', M, N, MB, NB, RESULT )
+                    CALL AB_CTSQR01( 'SW', M, N, MB, NB, RESULT )
 *
 *                 Print information about the tests that did not
 *                 pass the threshold.
@@ -229,7 +229,7 @@
                     DO T = 1, NTESTS
                       IF( RESULT( T ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9998 )M, N, MB, NB,
      $                       T, RESULT( T )
                         NFAIL = NFAIL + 1
@@ -244,7 +244,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 'TS: M=', I5, ', N=', I5, ', MB=', I5,
      $      ', NB=', I5,' test(', I2, ')=', G12.5 )
@@ -252,6 +252,6 @@
      $      ', NB=', I5,' test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of CCHKQRT
+*     End of AB_AB_CCHKQRT
 *
       END

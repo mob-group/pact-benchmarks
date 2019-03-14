@@ -1,4 +1,4 @@
-*> \brief \b SLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
+*> \brief \b AB_SLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLACON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slacon.f">
+*> Download AB_SLACON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLACON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slacon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLACON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slacon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLACON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLACON( N, V, X, ISGN, EST, KASE )
+*       SUBROUTINE AB_SLACON( N, V, X, ISGN, EST, KASE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KASE, N
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SLACON estimates the 1-norm of a square, real matrix A.
+*> AB_SLACON estimates the 1-norm of a square, real matrix A.
 *> Reverse communication is used for evaluating matrix-vector products.
 *> \endverbatim
 *
@@ -61,7 +61,7 @@
 *>         On an intermediate return, X should be overwritten by
 *>               A * X,   if KASE=1,
 *>               A**T * X,  if KASE=2,
-*>         and SLACON must be re-called with all the other parameters
+*>         and AB_SLACON must be re-called with all the other parameters
 *>         unchanged.
 *> \endverbatim
 *>
@@ -74,17 +74,17 @@
 *> \verbatim
 *>          EST is REAL
 *>         On entry with KASE = 1 or 2 and JUMP = 3, EST should be
-*>         unchanged from the previous call to SLACON.
+*>         unchanged from the previous call to AB_SLACON.
 *>         On exit, EST is an estimate (a lower bound) for norm(A).
 *> \endverbatim
 *>
 *> \param[in,out] KASE
 *> \verbatim
 *>          KASE is INTEGER
-*>         On the initial call to SLACON, KASE should be 0.
+*>         On the initial call to AB_SLACON, KASE should be 0.
 *>         On an intermediate return, KASE will be 1 or 2, indicating
 *>         whether X should be overwritten by A * X  or A**T * X.
-*>         On the final return from SLACON, KASE will again be 0.
+*>         On the final return from AB_SLACON, KASE will again be 0.
 *> \endverbatim
 *
 *  Authors:
@@ -113,7 +113,7 @@
 *>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
 *>
 *  =====================================================================
-      SUBROUTINE SLACON( N, V, X, ISGN, EST, KASE )
+      SUBROUTINE AB_SLACON( N, V, X, ISGN, EST, KASE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,12 +142,12 @@
       REAL               ALTSGN, ESTOLD, TEMP
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               SASUM
-      EXTERNAL           ISAMAX, SASUM
+      INTEGER            AB_ISAMAX
+      REAL               AB_SASUM
+      EXTERNAL           AB_ISAMAX, AB_SASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY
+      EXTERNAL           AB_SCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, NINT, REAL, SIGN
@@ -178,7 +178,7 @@
 *        ... QUIT
          GO TO 150
       END IF
-      EST = SASUM( N, X, 1 )
+      EST = AB_SASUM( N, X, 1 )
 *
       DO 30 I = 1, N
          X( I ) = SIGN( ONE, X( I ) )
@@ -192,7 +192,7 @@
 *     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X.
 *
    40 CONTINUE
-      J = ISAMAX( N, X, 1 )
+      J = AB_ISAMAX( N, X, 1 )
       ITER = 2
 *
 *     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
@@ -210,9 +210,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
    70 CONTINUE
-      CALL SCOPY( N, X, 1, V, 1 )
+      CALL AB_SCOPY( N, X, 1, V, 1 )
       ESTOLD = EST
-      EST = SASUM( N, V, 1 )
+      EST = AB_SASUM( N, V, 1 )
       DO 80 I = 1, N
          IF( NINT( SIGN( ONE, X( I ) ) ).NE.ISGN( I ) )
      $      GO TO 90
@@ -238,7 +238,7 @@
 *
   110 CONTINUE
       JLAST = J
-      J = ISAMAX( N, X, 1 )
+      J = AB_ISAMAX( N, X, 1 )
       IF( ( X( JLAST ).NE.ABS( X( J ) ) ) .AND. ( ITER.LT.ITMAX ) ) THEN
          ITER = ITER + 1
          GO TO 50
@@ -260,9 +260,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
   140 CONTINUE
-      TEMP = TWO*( SASUM( N, X, 1 ) / REAL( 3*N ) )
+      TEMP = TWO*( AB_SASUM( N, X, 1 ) / REAL( 3*N ) )
       IF( TEMP.GT.EST ) THEN
-         CALL SCOPY( N, X, 1, V, 1 )
+         CALL AB_SCOPY( N, X, 1, V, 1 )
          EST = TEMP
       END IF
 *
@@ -270,6 +270,6 @@
       KASE = 0
       RETURN
 *
-*     End of SLACON
+*     End of AB_SLACON
 *
       END

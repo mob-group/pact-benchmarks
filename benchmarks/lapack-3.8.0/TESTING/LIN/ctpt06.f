@@ -1,4 +1,4 @@
-*> \brief \b CTPT06
+*> \brief \b AB_CTPT06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWORK, RAT )
+*       SUBROUTINE AB_CTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWORK, RAT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -26,9 +26,9 @@
 *>
 *> \verbatim
 *>
-*> CTPT06 computes a test ratio comparing RCOND (the reciprocal
+*> AB_CTPT06 computes a test ratio comparing RCOND (the reciprocal
 *> condition number of the triangular matrix A) and RCONDC, the estimate
-*> computed by CTPCON.  Information about the triangular matrix is used
+*> computed by AB_CTPCON.  Information about the triangular matrix is used
 *> if one estimate is zero and the other is non-zero to decide if
 *> underflow in the estimate is justified.
 *> \endverbatim
@@ -48,7 +48,7 @@
 *> \verbatim
 *>          RCONDC is REAL
 *>          The estimate of the reciprocal condition number computed by
-*>          CTPCON.
+*>          AB_CTPCON.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -110,7 +110,8 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWORK, RAT )
+      SUBROUTINE AB_CTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWORK, RAT
+     $ )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,15 +138,15 @@
       REAL               ANORM, BIGNUM, EPS, RMAX, RMIN
 *     ..
 *     .. External Functions ..
-      REAL               CLANTP, SLAMCH
-      EXTERNAL           CLANTP, SLAMCH
+      REAL               AB_CLANTP, AB_SLAMCH
+      EXTERNAL           AB_CLANTP, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       RMAX = MAX( RCOND, RCONDC )
       RMIN = MIN( RCOND, RCONDC )
 *
@@ -177,14 +178,14 @@
 *        estimate multiplied by BIGNUM/TMAX, where TMAX is the maximum
 *        element in absolute value in A.
 *
-         BIGNUM = ONE / SLAMCH( 'Safe minimum' )
-         ANORM = CLANTP( 'M', UPLO, DIAG, N, AP, RWORK )
+         BIGNUM = ONE / AB_SLAMCH( 'Safe minimum' )
+         ANORM = AB_CLANTP( 'M', UPLO, DIAG, N, AP, RWORK )
 *
          RAT = RMAX*( MIN( BIGNUM / MAX( ONE, ANORM ), ONE / EPS ) )
       END IF
 *
       RETURN
 *
-*     End of CTPT06
+*     End of AB_CTPT06
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DLAEDA used by sstedc. Computes the Z vector determining the rank-one modification of the diagonal matrix. Used when the original matrix is dense.
+*> \brief \b AB_DLAEDA used by AB_SSTEDC. Computes the Z vector determining the rank-one modification of the diagonal matrix. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAEDA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaeda.f">
+*> Download AB_DLAEDA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAEDA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaeda.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAEDA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaeda.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAEDA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
+*       SUBROUTINE AB_DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
 *                          GIVCOL, GIVNUM, Q, QPTR, Z, ZTEMP, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLAEDA computes the Z vector corresponding to the merge step in the
+*> AB_DLAEDA computes the Z vector corresponding to the merge step in the
 *> CURLVLth step of the merge process with TLVLS steps for the CURPBMth
 *> problem.
 *> \endverbatim
@@ -129,7 +129,7 @@
 *>          Z is DOUBLE PRECISION array, dimension (N)
 *>         On output this vector contains the updating vector (the last
 *>         row of the first sub-eigenvector matrix and the first row of
-*>         the second sub-eigenvector matrix).
+*>         the AB_SECOND sub-eigenvector matrix).
 *> \endverbatim
 *>
 *> \param[out] ZTEMP
@@ -163,7 +163,8 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
+      SUBROUTINE AB_DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVP
+     $TR,
      $                   GIVCOL, GIVNUM, Q, QPTR, Z, ZTEMP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -191,7 +192,7 @@
      $                   PTR, ZPTR1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMV, DROT, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DGEMV, AB_DROT, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, INT, SQRT
@@ -206,7 +207,7 @@
          INFO = -1
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAEDA', -INFO )
+         CALL AB_XERBLA( 'AB_DLAEDA', -INFO )
          RETURN
       END IF
 *
@@ -215,7 +216,7 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-*     Determine location of first number in second half.
+*     Determine location of first number in AB_SECOND half.
 *
       MID = N / 2 + 1
 *
@@ -237,9 +238,9 @@
       DO 10 K = 1, MID - BSIZ1 - 1
          Z( K ) = ZERO
    10 CONTINUE
-      CALL DCOPY( BSIZ1, Q( QPTR( CURR )+BSIZ1-1 ), BSIZ1,
+      CALL AB_DCOPY( BSIZ1, Q( QPTR( CURR )+BSIZ1-1 ), BSIZ1,
      $            Z( MID-BSIZ1 ), 1 )
-      CALL DCOPY( BSIZ2, Q( QPTR( CURR+1 ) ), BSIZ2, Z( MID ), 1 )
+      CALL AB_DCOPY( BSIZ2, Q( QPTR( CURR+1 ) ), BSIZ2, Z( MID ), 1 )
       DO 20 K = MID + BSIZ2, N
          Z( K ) = ZERO
    20 CONTINUE
@@ -258,12 +259,12 @@
 *       Apply Givens at CURR and CURR+1
 *
          DO 30 I = GIVPTR( CURR ), GIVPTR( CURR+1 ) - 1
-            CALL DROT( 1, Z( ZPTR1+GIVCOL( 1, I )-1 ), 1,
+            CALL AB_DROT( 1, Z( ZPTR1+GIVCOL( 1, I )-1 ), 1,
      $                 Z( ZPTR1+GIVCOL( 2, I )-1 ), 1, GIVNUM( 1, I ),
      $                 GIVNUM( 2, I ) )
    30    CONTINUE
          DO 40 I = GIVPTR( CURR+1 ), GIVPTR( CURR+2 ) - 1
-            CALL DROT( 1, Z( MID-1+GIVCOL( 1, I ) ), 1,
+            CALL AB_DROT( 1, Z( MID-1+GIVCOL( 1, I ) ), 1,
      $                 Z( MID-1+GIVCOL( 2, I ) ), 1, GIVNUM( 1, I ),
      $                 GIVNUM( 2, I ) )
    40    CONTINUE
@@ -286,16 +287,17 @@
          BSIZ2 = INT( HALF+SQRT( DBLE( QPTR( CURR+2 )-QPTR( CURR+
      $           1 ) ) ) )
          IF( BSIZ1.GT.0 ) THEN
-            CALL DGEMV( 'T', BSIZ1, BSIZ1, ONE, Q( QPTR( CURR ) ),
+            CALL AB_DGEMV( 'T', BSIZ1, BSIZ1, ONE, Q( QPTR( CURR ) ),
      $                  BSIZ1, ZTEMP( 1 ), 1, ZERO, Z( ZPTR1 ), 1 )
          END IF
-         CALL DCOPY( PSIZ1-BSIZ1, ZTEMP( BSIZ1+1 ), 1, Z( ZPTR1+BSIZ1 ),
+         CALL AB_DCOPY( PSIZ1-BSIZ1, ZTEMP( BSIZ1+1 ), 1, Z( ZPTR1+BSIZ1
+     $ ),
      $               1 )
          IF( BSIZ2.GT.0 ) THEN
-            CALL DGEMV( 'T', BSIZ2, BSIZ2, ONE, Q( QPTR( CURR+1 ) ),
+            CALL AB_DGEMV( 'T', BSIZ2, BSIZ2, ONE, Q( QPTR( CURR+1 ) ),
      $                  BSIZ2, ZTEMP( PSIZ1+1 ), 1, ZERO, Z( MID ), 1 )
          END IF
-         CALL DCOPY( PSIZ2-BSIZ2, ZTEMP( PSIZ1+BSIZ2+1 ), 1,
+         CALL AB_DCOPY( PSIZ2-BSIZ2, ZTEMP( PSIZ1+BSIZ2+1 ), 1,
      $               Z( MID+BSIZ2 ), 1 )
 *
          PTR = PTR + 2**( TLVLS-K )
@@ -303,6 +305,6 @@
 *
       RETURN
 *
-*     End of DLAEDA
+*     End of AB_DLAEDA
 *
       END

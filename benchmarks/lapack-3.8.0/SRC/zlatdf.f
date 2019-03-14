@@ -1,4 +1,4 @@
-*> \brief \b ZLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contribution to the reciprocal Dif-estimate.
+*> \brief \b AB_ZLATDF uses the LU factorization of the n-by-n matrix computed by AB_SGETC2 and computes a contribution to the reciprocal Dif-estimate.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,24 +6,24 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLATDF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatdf.f">
+*> Download AB_ZLATDF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLATDF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatdf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLATDF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatdf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLATDF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
+*       SUBROUTINE AB_ZLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RAB_DSCAL, IPIV,
 *                          JPIV )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IJOB, LDZ, N
-*       DOUBLE PRECISION   RDSCAL, RDSUM
+*       DOUBLE PRECISION   RAB_DSCAL, RDSUM
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * ), JPIV( * )
@@ -36,13 +36,13 @@
 *>
 *> \verbatim
 *>
-*> ZLATDF computes the contribution to the reciprocal Dif-estimate
+*> AB_ZLATDF computes the contribution to the reciprocal Dif-estimate
 *> by solving for x in Z * x = b, where b is chosen such that the norm
 *> of x is as large as possible. It is assumed that LU decomposition
-*> of Z has been computed by ZGETC2. On entry RHS = f holds the
+*> of Z has been computed by AB_ZGETC2. On entry RHS = f holds the
 *> contribution from earlier solved sub-systems, and on return RHS = x.
 *>
-*> The factorization of Z returned by ZGETC2 has the form
+*> The factorization of Z returned by AB_ZGETC2 has the form
 *> Z = P * L * U * Q, where P and Q are permutation matrices. L is lower
 *> triangular with unit diagonal elements and U is upper triangular.
 *> \endverbatim
@@ -54,7 +54,7 @@
 *> \verbatim
 *>          IJOB is INTEGER
 *>          IJOB = 2: First compute an approximative null-vector e
-*>              of Z using ZGECON, e is normalized and solve for
+*>              of Z using AB_ZGECON, e is normalized and solve for
 *>              Zx = +-e - f with the sign giving the greater value of
 *>              2-norm(x).  About 5 times as expensive as Default.
 *>          IJOB .ne. 2: Local look ahead strategy where
@@ -72,7 +72,7 @@
 *> \verbatim
 *>          Z is COMPLEX*16 array, dimension (LDZ, N)
 *>          On entry, the LU part of the factorization of the n-by-n
-*>          matrix Z computed by ZGETC2:  Z = P * L * U * Q
+*>          matrix Z computed by AB_ZGETC2:  Z = P * L * U * Q
 *> \endverbatim
 *>
 *> \param[in] LDZ
@@ -93,23 +93,23 @@
 *> \verbatim
 *>          RDSUM is DOUBLE PRECISION
 *>          On entry, the sum of squares of computed contributions to
-*>          the Dif-estimate under computation by ZTGSYL, where the
-*>          scaling factor RDSCAL (see below) has been factored out.
+*>          the Dif-estimate under computation by AB_ZTGSYL, where the
+*>          scaling factor RAB_DSCAL (see below) has been factored out.
 *>          On exit, the corresponding sum of squares updated with the
 *>          contributions from the current sub-system.
 *>          If TRANS = 'T' RDSUM is not touched.
-*>          NOTE: RDSUM only makes sense when ZTGSY2 is called by CTGSYL.
+*>          NOTE: RDSUM only makes sense when AB_ZTGSY2 is called by AB_CTGSYL.
 *> \endverbatim
 *>
-*> \param[in,out] RDSCAL
+*> \param[in,out] RAB_DSCAL
 *> \verbatim
-*>          RDSCAL is DOUBLE PRECISION
+*>          RAB_DSCAL is DOUBLE PRECISION
 *>          On entry, scaling factor used to prevent overflow in RDSUM.
-*>          On exit, RDSCAL is updated w.r.t. the current contributions
+*>          On exit, RAB_DSCAL is updated w.r.t. the current contributions
 *>          in RDSUM.
-*>          If TRANS = 'T', RDSCAL is not touched.
-*>          NOTE: RDSCAL only makes sense when ZTGSY2 is called by
-*>          ZTGSYL.
+*>          If TRANS = 'T', RAB_DSCAL is not touched.
+*>          NOTE: RAB_DSCAL only makes sense when AB_ZTGSY2 is called by
+*>          AB_ZTGSYL.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -166,7 +166,8 @@
 *>         1995.
 *
 *  =====================================================================
-      SUBROUTINE ZLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
+      SUBROUTINE AB_ZLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RAB_DSCAL, IPIV
+     $,
      $                   JPIV )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -176,7 +177,7 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            IJOB, LDZ, N
-      DOUBLE PRECISION   RDSCAL, RDSUM
+      DOUBLE PRECISION   RAB_DSCAL, RDSUM
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * ), JPIV( * )
@@ -203,13 +204,14 @@
       COMPLEX*16         WORK( 4*MAXDIM ), XM( MAXDIM ), XP( MAXDIM )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZGECON, ZGESC2, ZLASSQ, ZLASWP,
-     $                   ZSCAL
+      EXTERNAL           AB_ZAXPY, AB_ZCOPY, AB_ZGECON, AB_ZGESC2, AB_ZL
+     $ASSQ, AB_ZLASWP,
+     $                   AB_ZSCAL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DZASUM
-      COMPLEX*16         ZDOTC
-      EXTERNAL           DZASUM, ZDOTC
+      DOUBLE PRECISION   AB_DZASUM
+      COMPLEX*16         AB_ZDOTC
+      EXTERNAL           AB_DZASUM, AB_ZDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, SQRT
@@ -220,7 +222,7 @@
 *
 *        Apply permutations IPIV to RHS
 *
-         CALL ZLASWP( 1, RHS, LDZ, 1, N-1, IPIV, 1 )
+         CALL AB_ZLASWP( 1, RHS, LDZ, 1, N-1, IPIV, 1 )
 *
 *        Solve for L-part choosing RHS either to +1 or -1.
 *
@@ -233,9 +235,10 @@
 *           Lockahead for L- part RHS(1:N-1) = +-1
 *           SPLUS and SMIN computed more efficiently than in BSOLVE[1].
 *
-            SPLUS = SPLUS + DBLE( ZDOTC( N-J, Z( J+1, J ), 1, Z( J+1,
+            SPLUS = SPLUS + DBLE( AB_ZDOTC( N-J, Z( J+1, J ), 1, Z( J+1,
      $              J ), 1 ) )
-            SMINU = DBLE( ZDOTC( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 ) )
+            SMINU = DBLE( AB_ZDOTC( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 )
+     $ )
             SPLUS = SPLUS*DBLE( RHS( J ) )
             IF( SPLUS.GT.SMINU ) THEN
                RHS( J ) = BP
@@ -256,7 +259,7 @@
 *           Compute the remaining r.h.s.
 *
             TEMP = -RHS( J )
-            CALL ZAXPY( N-J, TEMP, Z( J+1, J ), 1, RHS( J+1 ), 1 )
+            CALL AB_ZAXPY( N-J, TEMP, Z( J+1, J ), 1, RHS( J+1 ), 1 )
    10    CONTINUE
 *
 *        Solve for U- part, lockahead for RHS(N) = +-1. This is not done
@@ -264,7 +267,7 @@
 *        any ill-conditioning of the original matrix is transfered to U
 *        and not to L. U(N, N) is an approximation to sigma_min(LU).
 *
-         CALL ZCOPY( N-1, RHS, 1, WORK, 1 )
+         CALL AB_ZCOPY( N-1, RHS, 1, WORK, 1 )
          WORK( N ) = RHS( N ) + CONE
          RHS( N ) = RHS( N ) - CONE
          SPLUS = ZERO
@@ -281,15 +284,15 @@
             SMINU = SMINU + ABS( RHS( I ) )
    30    CONTINUE
          IF( SPLUS.GT.SMINU )
-     $      CALL ZCOPY( N, WORK, 1, RHS, 1 )
+     $      CALL AB_ZCOPY( N, WORK, 1, RHS, 1 )
 *
 *        Apply the permutations JPIV to the computed solution (RHS)
 *
-         CALL ZLASWP( 1, RHS, LDZ, 1, N-1, JPIV, -1 )
+         CALL AB_ZLASWP( 1, RHS, LDZ, 1, N-1, JPIV, -1 )
 *
 *        Compute the sum of squares
 *
-         CALL ZLASSQ( N, RHS, 1, RDSCAL, RDSUM )
+         CALL AB_ZLASSQ( N, RHS, 1, RAB_DSCAL, RDSUM )
          RETURN
       END IF
 *
@@ -297,27 +300,27 @@
 *
 *     Compute approximate nullvector XM of Z
 *
-      CALL ZGECON( 'I', N, Z, LDZ, ONE, RTEMP, WORK, RWORK, INFO )
-      CALL ZCOPY( N, WORK( N+1 ), 1, XM, 1 )
+      CALL AB_ZGECON( 'I', N, Z, LDZ, ONE, RTEMP, WORK, RWORK, INFO )
+      CALL AB_ZCOPY( N, WORK( N+1 ), 1, XM, 1 )
 *
 *     Compute RHS
 *
-      CALL ZLASWP( 1, XM, LDZ, 1, N-1, IPIV, -1 )
-      TEMP = CONE / SQRT( ZDOTC( N, XM, 1, XM, 1 ) )
-      CALL ZSCAL( N, TEMP, XM, 1 )
-      CALL ZCOPY( N, XM, 1, XP, 1 )
-      CALL ZAXPY( N, CONE, RHS, 1, XP, 1 )
-      CALL ZAXPY( N, -CONE, XM, 1, RHS, 1 )
-      CALL ZGESC2( N, Z, LDZ, RHS, IPIV, JPIV, SCALE )
-      CALL ZGESC2( N, Z, LDZ, XP, IPIV, JPIV, SCALE )
-      IF( DZASUM( N, XP, 1 ).GT.DZASUM( N, RHS, 1 ) )
-     $   CALL ZCOPY( N, XP, 1, RHS, 1 )
+      CALL AB_ZLASWP( 1, XM, LDZ, 1, N-1, IPIV, -1 )
+      TEMP = CONE / SQRT( AB_ZDOTC( N, XM, 1, XM, 1 ) )
+      CALL AB_ZSCAL( N, TEMP, XM, 1 )
+      CALL AB_ZCOPY( N, XM, 1, XP, 1 )
+      CALL AB_ZAXPY( N, CONE, RHS, 1, XP, 1 )
+      CALL AB_ZAXPY( N, -CONE, XM, 1, RHS, 1 )
+      CALL AB_ZGESC2( N, Z, LDZ, RHS, IPIV, JPIV, SCALE )
+      CALL AB_ZGESC2( N, Z, LDZ, XP, IPIV, JPIV, SCALE )
+      IF( AB_DZASUM( N, XP, 1 ).GT.AB_DZASUM( N, RHS, 1 ) )
+     $   CALL AB_ZCOPY( N, XP, 1, RHS, 1 )
 *
 *     Compute the sum of squares
 *
-      CALL ZLASSQ( N, RHS, 1, RDSCAL, RDSUM )
+      CALL AB_ZLASSQ( N, RHS, 1, RAB_DSCAL, RDSUM )
       RETURN
 *
-*     End of ZLATDF
+*     End of AB_ZLATDF
 *
       END

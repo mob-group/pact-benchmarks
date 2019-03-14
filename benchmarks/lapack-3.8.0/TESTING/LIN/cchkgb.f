@@ -1,4 +1,4 @@
-*> \brief \b CCHKGB
+*> \brief \b AB_CCHKGB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
+*       SUBROUTINE AB_CCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
 *                          NSVAL, THRESH, TSTERR, A, LA, AFAC, LAFAC, B,
 *                          X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKGB tests CGBTRF, -TRS, -RFS, and -CON
+*> AB_CCHKGB tests AB_CGBTRF, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -187,7 +187,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
+      SUBROUTINE AB_CCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
      $                   NSVAL, THRESH, TSTERR, A, LA, AFAC, LAFAC, B,
      $                   X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -238,14 +238,17 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGB, CLANGE, SGET06
-      EXTERNAL           CLANGB, CLANGE, SGET06
+      REAL               AB_CLANGB, AB_CLANGE, AB_SGET06
+      EXTERNAL           AB_CLANGB, AB_CLANGE, AB_SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CCOPY, CERRGE, CGBCON,
-     $                   CGBRFS, CGBT01, CGBT02, CGBT05, CGBTRF, CGBTRS,
-     $                   CGET04, CLACPY, CLARHS, CLASET, CLATB4, CLATMS,
-     $                   XLAENV
+      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CCOPY, AB_CE
+     $RRGE, AB_CGBCON,
+     $                   AB_CGBRFS, AB_CGBT01, AB_CGBT02, AB_CGBT05, AB_
+     $CGBTRF, AB_CGBTRS,
+     $                   AB_CGET04, AB_CLACPY, AB_CLARHS, AB_CLASET, AB_
+     $CLATB4, AB_CLATMS,
+     $                   AB_XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN
@@ -279,7 +282,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRGE( PATH, NOUT )
+     $   CALL AB_CERRGE( PATH, NOUT )
       INFOT = 0
 *
 *     Initialize the first value for the lower and upper bandwidths.
@@ -350,7 +353,7 @@
                   LDAFAC = 2*KL + KU + 1
                   IF( ( LDA*N ).GT.LA .OR. ( LDAFAC*N ).GT.LAFAC ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL ALAHD( NOUT, PATH )
+     $                  CALL AB_ALAHD( NOUT, PATH )
                      IF( N*( KL+KU+1 ).GT.LA ) THEN
                         WRITE( NOUT, FMT = 9999 )LA, M, N, KL, KU,
      $                     N*( KL+KU+1 )
@@ -380,25 +383,26 @@
 *
                      IF( .NOT.ZEROT .OR. .NOT.DOTYPE( 1 ) ) THEN
 *
-*                       Set up parameters with CLATB4 and generate a
-*                       test matrix with CLATMS.
+*                       Set up parameters with AB_CLATB4 and generate a
+*                       test matrix with AB_CLATMS.
 *
-                        CALL CLATB4( PATH, IMAT, M, N, TYPE, KL, KU,
+                        CALL AB_CLATB4( PATH, IMAT, M, N, TYPE, KL, KU,
      $                               ANORM, MODE, CNDNUM, DIST )
 *
                         KOFF = MAX( 1, KU+2-N )
                         DO 20 I = 1, KOFF - 1
                            A( I ) = ZERO
    20                   CONTINUE
-                        SRNAMT = 'CLATMS'
-                        CALL CLATMS( M, N, DIST, ISEED, TYPE, RWORK,
+                        SRNAMT = 'AB_CLATMS'
+                        CALL AB_CLATMS( M, N, DIST, ISEED, TYPE, RWORK,
      $                               MODE, CNDNUM, ANORM, KL, KU, 'Z',
      $                               A( KOFF ), LDA, WORK, INFO )
 *
-*                       Check the error code from CLATMS.
+*                       Check the error code from AB_CLATMS.
 *
                         IF( INFO.NE.0 ) THEN
-                           CALL ALAERH( PATH, 'CLATMS', INFO, 0, ' ', M,
+                           CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, '
+     $ ', M,
      $                                  N, KL, KU, -1, IMAT, NFAIL,
      $                                  NERRS, NOUT )
                            GO TO 120
@@ -408,7 +412,7 @@
 *                       Use the same matrix for types 3 and 4 as for
 *                       type 2 by copying back the zeroed out column.
 *
-                        CALL CCOPY( I2-I1+1, B, 1, A( IOFF+I1 ), 1 )
+                        CALL AB_CCOPY( I2-I1+1, B, 1, A( IOFF+I1 ), 1 )
                      END IF
 *
 *                    For types 2, 3, and 4, zero one or more columns of
@@ -430,7 +434,8 @@
 *
                            I1 = MAX( 1, KU+2-IZERO )
                            I2 = MIN( KL+KU+1, KU+1+( M-IZERO ) )
-                           CALL CCOPY( I2-I1+1, A( IOFF+I1 ), 1, B, 1 )
+                           CALL AB_CCOPY( I2-I1+1, A( IOFF+I1 ), 1, B, 1
+     $ )
 *
                            DO 30 I = I1, I2
                               A( IOFF+I ) = ZERO
@@ -450,28 +455,30 @@
 *                    loop over INB, cause the code to bomb on a Sun
 *                    SPARCstation.
 *
-*                     ANORMO = CLANGB( 'O', N, KL, KU, A, LDA, RWORK )
-*                     ANORMI = CLANGB( 'I', N, KL, KU, A, LDA, RWORK )
+*                     ANORMO = AB_CLANGB( 'O', N, KL, KU, A, LDA, RWORK )
+*                     ANORMI = AB_CLANGB( 'I', N, KL, KU, A, LDA, RWORK )
 *
 *                    Do for each blocksize in NBVAL
 *
                      DO 110 INB = 1, NNB
                         NB = NBVAL( INB )
-                        CALL XLAENV( 1, NB )
+                        CALL AB_XLAENV( 1, NB )
 *
 *                       Compute the LU factorization of the band matrix.
 *
                         IF( M.GT.0 .AND. N.GT.0 )
-     $                     CALL CLACPY( 'Full', KL+KU+1, N, A, LDA,
+     $                     CALL AB_CLACPY( 'Full', KL+KU+1, N, A, LDA,
      $                                  AFAC( KL+1 ), LDAFAC )
-                        SRNAMT = 'CGBTRF'
-                        CALL CGBTRF( M, N, KL, KU, AFAC, LDAFAC, IWORK,
+                        SRNAMT = 'AB_CGBTRF'
+                        CALL AB_CGBTRF( M, N, KL, KU, AFAC, LDAFAC, IWOR
+     $K,
      $                               INFO )
 *
-*                       Check error code from CGBTRF.
+*                       Check error code from AB_CGBTRF.
 *
                         IF( INFO.NE.IZERO )
-     $                     CALL ALAERH( PATH, 'CGBTRF', INFO, IZERO,
+     $                     CALL AB_ALAERH( PATH, 'AB_CGBTRF', INFO, IZER
+     $O,
      $                                  ' ', M, N, KL, KU, NB, IMAT,
      $                                  NFAIL, NERRS, NOUT )
                         TRFCON = .FALSE.
@@ -480,7 +487,8 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL CGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC,
+                        CALL AB_CGBT01( M, N, KL, KU, A, LDA, AFAC, LDAF
+     $AC,
      $                               IWORK, WORK, RESULT( 1 ) )
 *
 *                       Print information about the tests so far that
@@ -488,7 +496,7 @@
 *
                         IF( RESULT( 1 ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALAHD( NOUT, PATH )
+     $                        CALL AB_ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9997 )M, N, KL, KU, NB,
      $                        IMAT, 1, RESULT( 1 )
                            NFAIL = NFAIL + 1
@@ -501,8 +509,10 @@
                         IF( INB.GT.1 .OR. M.NE.N )
      $                     GO TO 110
 *
-                        ANORMO = CLANGB( 'O', N, KL, KU, A, LDA, RWORK )
-                        ANORMI = CLANGB( 'I', N, KL, KU, A, LDA, RWORK )
+                        ANORMO = AB_CLANGB( 'O', N, KL, KU, A, LDA, RWOR
+     $K )
+                        ANORMI = AB_CLANGB( 'I', N, KL, KU, A, LDA, RWOR
+     $K )
 *
                         IF( INFO.EQ.0 ) THEN
 *
@@ -510,16 +520,16 @@
 *                          estimate of CNDNUM = norm(A) * norm(inv(A)).
 *
                            LDB = MAX( 1, N )
-                           CALL CLASET( 'Full', N, N, CMPLX( ZERO ),
+                           CALL AB_CLASET( 'Full', N, N, CMPLX( ZERO ),
      $                                  CMPLX( ONE ), WORK, LDB )
-                           SRNAMT = 'CGBTRS'
-                           CALL CGBTRS( 'No transpose', N, KL, KU, N,
+                           SRNAMT = 'AB_CGBTRS'
+                           CALL AB_CGBTRS( 'No transpose', N, KL, KU, N,
      $                                  AFAC, LDAFAC, IWORK, WORK, LDB,
      $                                  INFO )
 *
 *                          Compute the 1-norm condition number of A.
 *
-                           AINVNM = CLANGE( 'O', N, N, WORK, LDB,
+                           AINVNM = AB_CLANGE( 'O', N, N, WORK, LDB,
      $                              RWORK )
                            IF( ANORMO.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                               RCONDO = ONE
@@ -530,7 +540,7 @@
 *                          Compute the infinity-norm condition number of
 *                          A.
 *
-                           AINVNM = CLANGE( 'I', N, N, WORK, LDB,
+                           AINVNM = AB_CLANGE( 'I', N, N, WORK, LDB,
      $                              RWORK )
                            IF( ANORMI.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                               RCONDI = ONE
@@ -568,29 +578,34 @@
 *+    TEST 2:
 *                             Solve and compute residual for A * X = B.
 *
-                              SRNAMT = 'CLARHS'
-                              CALL CLARHS( PATH, XTYPE, ' ', TRANS, N,
+                              SRNAMT = 'AB_CLARHS'
+                              CALL AB_CLARHS( PATH, XTYPE, ' ', TRANS, N
+     $,
      $                                     N, KL, KU, NRHS, A, LDA,
      $                                     XACT, LDB, B, LDB, ISEED,
      $                                     INFO )
                               XTYPE = 'C'
-                              CALL CLACPY( 'Full', N, NRHS, B, LDB, X,
+                              CALL AB_CLACPY( 'Full', N, NRHS, B, LDB, X
+     $,
      $                                     LDB )
 *
-                              SRNAMT = 'CGBTRS'
-                              CALL CGBTRS( TRANS, N, KL, KU, NRHS, AFAC,
+                              SRNAMT = 'AB_CGBTRS'
+                              CALL AB_CGBTRS( TRANS, N, KL, KU, NRHS, AF
+     $AC,
      $                                     LDAFAC, IWORK, X, LDB, INFO )
 *
-*                             Check error code from CGBTRS.
+*                             Check error code from AB_CGBTRS.
 *
                               IF( INFO.NE.0 )
-     $                           CALL ALAERH( PATH, 'CGBTRS', INFO, 0,
+     $                           CALL AB_ALAERH( PATH, 'AB_CGBTRS', INFO
+     $, 0,
      $                                        TRANS, N, N, KL, KU, -1,
      $                                        IMAT, NFAIL, NERRS, NOUT )
 *
-                              CALL CLACPY( 'Full', N, NRHS, B, LDB,
+                              CALL AB_CLACPY( 'Full', N, NRHS, B, LDB,
      $                                     WORK, LDB )
-                              CALL CGBT02( TRANS, M, N, KL, KU, NRHS, A,
+                              CALL AB_CGBT02( TRANS, M, N, KL, KU, NRHS,
+     $ A,
      $                                     LDA, X, LDB, WORK, LDB,
      $                                     RESULT( 2 ) )
 *
@@ -598,30 +613,33 @@
 *                             Check solution from generated exact
 *                             solution.
 *
-                              CALL CGET04( N, NRHS, X, LDB, XACT, LDB,
+                              CALL AB_CGET04( N, NRHS, X, LDB, XACT, LDB
+     $,
      $                                     RCONDC, RESULT( 3 ) )
 *
 *+    TESTS 4, 5, 6:
 *                             Use iterative refinement to improve the
 *                             solution.
 *
-                              SRNAMT = 'CGBRFS'
-                              CALL CGBRFS( TRANS, N, KL, KU, NRHS, A,
+                              SRNAMT = 'AB_CGBRFS'
+                              CALL AB_CGBRFS( TRANS, N, KL, KU, NRHS, A,
      $                                     LDA, AFAC, LDAFAC, IWORK, B,
      $                                     LDB, X, LDB, RWORK,
      $                                     RWORK( NRHS+1 ), WORK,
      $                                     RWORK( 2*NRHS+1 ), INFO )
 *
-*                             Check error code from CGBRFS.
+*                             Check error code from AB_CGBRFS.
 *
                               IF( INFO.NE.0 )
-     $                           CALL ALAERH( PATH, 'CGBRFS', INFO, 0,
+     $                           CALL AB_ALAERH( PATH, 'AB_CGBRFS', INFO
+     $, 0,
      $                                        TRANS, N, N, KL, KU, NRHS,
      $                                        IMAT, NFAIL, NERRS, NOUT )
 *
-                              CALL CGET04( N, NRHS, X, LDB, XACT, LDB,
+                              CALL AB_CGET04( N, NRHS, X, LDB, XACT, LDB
+     $,
      $                                     RCONDC, RESULT( 4 ) )
-                              CALL CGBT05( TRANS, N, KL, KU, NRHS, A,
+                              CALL AB_CGBT05( TRANS, N, KL, KU, NRHS, A,
      $                                     LDA, B, LDB, X, LDB, XACT,
      $                                     LDB, RWORK, RWORK( NRHS+1 ),
      $                                     RESULT( 5 ) )
@@ -632,7 +650,7 @@
                               DO 60 K = 2, 6
                                  IF( RESULT( K ).GE.THRESH ) THEN
                                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                                 CALL ALAHD( NOUT, PATH )
+     $                                 CALL AB_ALAHD( NOUT, PATH )
                                     WRITE( NOUT, FMT = 9996 )TRANS, N,
      $                                 KL, KU, NRHS, IMAT, K,
      $                                 RESULT( K )
@@ -657,26 +675,28 @@
                               RCONDC = RCONDI
                               NORM = 'I'
                            END IF
-                           SRNAMT = 'CGBCON'
-                           CALL CGBCON( NORM, N, KL, KU, AFAC, LDAFAC,
+                           SRNAMT = 'AB_CGBCON'
+                           CALL AB_CGBCON( NORM, N, KL, KU, AFAC, LDAFAC
+     $,
      $                                  IWORK, ANORM, RCOND, WORK,
      $                                  RWORK, INFO )
 *
-*                             Check error code from CGBCON.
+*                             Check error code from AB_CGBCON.
 *
                            IF( INFO.NE.0 )
-     $                        CALL ALAERH( PATH, 'CGBCON', INFO, 0,
+     $                        CALL AB_ALAERH( PATH, 'AB_CGBCON', INFO, 0
+     $,
      $                                     NORM, N, N, KL, KU, -1, IMAT,
      $                                     NFAIL, NERRS, NOUT )
 *
-                           RESULT( 7 ) = SGET06( RCOND, RCONDC )
+                           RESULT( 7 ) = AB_SGET06( RCOND, RCONDC )
 *
 *                          Print information about the tests that did
 *                          not pass the threshold.
 *
                            IF( RESULT( 7 ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL ALAHD( NOUT, PATH )
+     $                           CALL AB_ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9995 )NORM, N, KL, KU,
      $                           IMAT, 7, RESULT( 7 )
                               NFAIL = NFAIL + 1
@@ -692,12 +712,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
- 9999 FORMAT( ' *** In CCHKGB, LA=', I5, ' is too small for M=', I5,
+ 9999 FORMAT( ' *** In AB_CCHKGB, LA=', I5, ' is too small for M=', I5,
      $      ', N=', I5, ', KL=', I4, ', KU=', I4,
      $      / ' ==> Increase LA to at least ', I5 )
- 9998 FORMAT( ' *** In CCHKGB, LAFAC=', I5, ' is too small for M=', I5,
+ 9998 FORMAT( ' *** In AB_CCHKGB, LAFAC=', I5, ' is too small for M=', I
+     $5,
      $      ', N=', I5, ', KL=', I4, ', KU=', I4,
      $      / ' ==> Increase LAFAC to at least ', I5 )
  9997 FORMAT( ' M =', I5, ', N =', I5, ', KL=', I5, ', KU=', I5,
@@ -709,6 +730,6 @@
 *
       RETURN
 *
-*     End of CCHKGB
+*     End of AB_CCHKGB
 *
       END

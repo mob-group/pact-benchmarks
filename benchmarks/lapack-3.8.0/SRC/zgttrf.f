@@ -1,4 +1,4 @@
-*> \brief \b ZGTTRF
+*> \brief \b AB_ZGTTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGTTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgttrf.f">
+*> Download AB_ZGTTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGTTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgttrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGTTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgttrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGTTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
+*       SUBROUTINE AB_ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZGTTRF computes an LU factorization of a complex tridiagonal matrix A
+*> AB_ZGTTRF computes an LU factorization of a complex tridiagonal matrix A
 *> using elimination with partial pivoting and row interchanges.
 *>
 *> The factorization has the form
@@ -86,7 +86,7 @@
 *> \verbatim
 *>          DU2 is COMPLEX*16 array, dimension (N-2)
 *>          On exit, DU2 is overwritten by the (n-2) elements of the
-*>          second super-diagonal of U.
+*>          AB_SECOND super-diagonal of U.
 *> \endverbatim
 *>
 *> \param[out] IPIV
@@ -122,7 +122,7 @@
 *> \ingroup complex16GTcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
+      SUBROUTINE AB_ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,7 +148,7 @@
       COMPLEX*16         FACT, TEMP, ZDUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG
@@ -164,7 +164,7 @@
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL XERBLA( 'ZGTTRF', -INFO )
+         CALL AB_XERBLA( 'AB_ZGTTRF', -INFO )
          RETURN
       END IF
 *
@@ -238,6 +238,6 @@
 *
       RETURN
 *
-*     End of ZGTTRF
+*     End of AB_ZGTTRF
 *
       END

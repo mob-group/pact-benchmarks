@@ -1,4 +1,4 @@
-*> \brief \b DLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
+*> \brief \b AB_DLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLACN2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlacn2.f">
+*> Download AB_DLACN2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLACN2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlacn2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLACN2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlacn2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLACN2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLACN2( N, V, X, ISGN, EST, KASE, ISAVE )
+*       SUBROUTINE AB_DLACN2( N, V, X, ISGN, EST, KASE, ISAVE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KASE, N
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DLACN2 estimates the 1-norm of a square, real matrix A.
+*> AB_DLACN2 estimates the 1-norm of a square, real matrix A.
 *> Reverse communication is used for evaluating matrix-vector products.
 *> \endverbatim
 *
@@ -61,7 +61,7 @@
 *>         On an intermediate return, X should be overwritten by
 *>               A * X,   if KASE=1,
 *>               A**T * X,  if KASE=2,
-*>         and DLACN2 must be re-called with all the other parameters
+*>         and AB_DLACN2 must be re-called with all the other parameters
 *>         unchanged.
 *> \endverbatim
 *>
@@ -74,23 +74,23 @@
 *> \verbatim
 *>          EST is DOUBLE PRECISION
 *>         On entry with KASE = 1 or 2 and ISAVE(1) = 3, EST should be
-*>         unchanged from the previous call to DLACN2.
+*>         unchanged from the previous call to AB_DLACN2.
 *>         On exit, EST is an estimate (a lower bound) for norm(A).
 *> \endverbatim
 *>
 *> \param[in,out] KASE
 *> \verbatim
 *>          KASE is INTEGER
-*>         On the initial call to DLACN2, KASE should be 0.
+*>         On the initial call to AB_DLACN2, KASE should be 0.
 *>         On an intermediate return, KASE will be 1 or 2, indicating
 *>         whether X should be overwritten by A * X  or A**T * X.
-*>         On the final return from DLACN2, KASE will again be 0.
+*>         On the final return from AB_DLACN2, KASE will again be 0.
 *> \endverbatim
 *>
 *> \param[in,out] ISAVE
 *> \verbatim
 *>          ISAVE is INTEGER array, dimension (3)
-*>         ISAVE is used to save variables between calls to DLACN2
+*>         ISAVE is used to save variables between calls to AB_DLACN2
 *> \endverbatim
 *
 *  Authors:
@@ -112,10 +112,10 @@
 *>
 *>  Originally named SONEST, dated March 16, 1988.
 *>
-*>  This is a thread safe version of DLACON, which uses the array ISAVE
+*>  This is a thread safe version of AB_DLACON, which uses the array ISAVE
 *>  in place of a SAVE statement, as follows:
 *>
-*>     DLACON     DLACN2
+*>     AB_DLACON     AB_DLACN2
 *>      JUMP     ISAVE(1)
 *>      J        ISAVE(2)
 *>      ITER     ISAVE(3)
@@ -134,7 +134,7 @@
 *>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
 *>
 *  =====================================================================
-      SUBROUTINE DLACN2( N, V, X, ISGN, EST, KASE, ISAVE )
+      SUBROUTINE AB_DLACN2( N, V, X, ISGN, EST, KASE, ISAVE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,12 +163,12 @@
       DOUBLE PRECISION   ALTSGN, ESTOLD, TEMP
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM
-      EXTERNAL           IDAMAX, DASUM
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DASUM
+      EXTERNAL           AB_IDAMAX, AB_DASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY
+      EXTERNAL           AB_DCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, NINT, SIGN
@@ -196,7 +196,7 @@
 *        ... QUIT
          GO TO 150
       END IF
-      EST = DASUM( N, X, 1 )
+      EST = AB_DASUM( N, X, 1 )
 *
       DO 30 I = 1, N
          X( I ) = SIGN( ONE, X( I ) )
@@ -210,7 +210,7 @@
 *     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X.
 *
    40 CONTINUE
-      ISAVE( 2 ) = IDAMAX( N, X, 1 )
+      ISAVE( 2 ) = AB_IDAMAX( N, X, 1 )
       ISAVE( 3 ) = 2
 *
 *     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
@@ -228,9 +228,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
    70 CONTINUE
-      CALL DCOPY( N, X, 1, V, 1 )
+      CALL AB_DCOPY( N, X, 1, V, 1 )
       ESTOLD = EST
-      EST = DASUM( N, V, 1 )
+      EST = AB_DASUM( N, V, 1 )
       DO 80 I = 1, N
          IF( NINT( SIGN( ONE, X( I ) ) ).NE.ISGN( I ) )
      $      GO TO 90
@@ -256,7 +256,7 @@
 *
   110 CONTINUE
       JLAST = ISAVE( 2 )
-      ISAVE( 2 ) = IDAMAX( N, X, 1 )
+      ISAVE( 2 ) = AB_IDAMAX( N, X, 1 )
       IF( ( X( JLAST ).NE.ABS( X( ISAVE( 2 ) ) ) ) .AND.
      $    ( ISAVE( 3 ).LT.ITMAX ) ) THEN
          ISAVE( 3 ) = ISAVE( 3 ) + 1
@@ -279,9 +279,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
   140 CONTINUE
-      TEMP = TWO*( DASUM( N, X, 1 ) / DBLE( 3*N ) )
+      TEMP = TWO*( AB_DASUM( N, X, 1 ) / DBLE( 3*N ) )
       IF( TEMP.GT.EST ) THEN
-         CALL DCOPY( N, X, 1, V, 1 )
+         CALL AB_DCOPY( N, X, 1, V, 1 )
          EST = TEMP
       END IF
 *
@@ -289,6 +289,6 @@
       KASE = 0
       RETURN
 *
-*     End of DLACN2
+*     End of AB_DLACN2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CTGEXC
+*> \brief \b AB_CTGEXC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTGEXC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgexc.f">
+*> Download AB_CTGEXC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTGEXC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgexc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTGEXC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgexc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTGEXC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+*       SUBROUTINE AB_CTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, IFST, ILST, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CTGEXC reorders the generalized Schur decomposition of a complex
+*> AB_CTGEXC reorders the generalized Schur decomposition of a complex
 *> matrix pair (A,B), using an unitary equivalence transformation
 *> (A, B) := Q * (A, B) * Z**H, so that the diagonal block of (A, B) with
 *> row index IFST is moved to row ILST.
@@ -197,7 +197,7 @@
 *>      1996.
 *>
 *  =====================================================================
-      SUBROUTINE CTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+      SUBROUTINE AB_CTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, IFST, ILST, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -220,7 +220,7 @@
       INTEGER            HERE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTGEX2, XERBLA
+      EXTERNAL           AB_CTGEX2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -235,9 +235,11 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -7
-      ELSE IF( LDQ.LT.1 .OR. WANTQ .AND. ( LDQ.LT.MAX( 1, N ) ) ) THEN
+      ELSE IF( LDQ.LT.1 .OR. WANTQ .AND. ( LDQ.LT.MAX( 1, N ) ) ) THE
+     $N
          INFO = -9
-      ELSE IF( LDZ.LT.1 .OR. WANTZ .AND. ( LDZ.LT.MAX( 1, N ) ) ) THEN
+      ELSE IF( LDZ.LT.1 .OR. WANTZ .AND. ( LDZ.LT.MAX( 1, N ) ) ) THE
+     $N
          INFO = -11
       ELSE IF( IFST.LT.1 .OR. IFST.GT.N ) THEN
          INFO = -12
@@ -245,7 +247,7 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTGEXC', -INFO )
+         CALL AB_XERBLA( 'AB_CTGEXC', -INFO )
          RETURN
       END IF
 *
@@ -264,7 +266,8 @@
 *
 *        Swap with next one below
 *
-         CALL CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z, LDZ,
+         CALL AB_CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z, LDZ
+     $,
      $                HERE, INFO )
          IF( INFO.NE.0 ) THEN
             ILST = HERE
@@ -281,7 +284,8 @@
 *
 *        Swap with next one above
 *
-         CALL CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z, LDZ,
+         CALL AB_CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z, LDZ
+     $,
      $                HERE, INFO )
          IF( INFO.NE.0 ) THEN
             ILST = HERE
@@ -295,6 +299,6 @@
       ILST = HERE
       RETURN
 *
-*     End of CTGEXC
+*     End of AB_CTGEXC
 *
       END

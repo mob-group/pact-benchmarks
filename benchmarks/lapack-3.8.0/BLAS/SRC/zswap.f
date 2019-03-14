@@ -1,4 +1,4 @@
-*> \brief \b ZSWAP
+*> \brief \b AB_ZSWAP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSWAP(N,ZX,INCX,ZY,INCY)
+*       SUBROUTINE AB_ZSWAP(N,ZX,INCX,ZY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    ZSWAP interchanges two vectors.
+*>    AB_ZSWAP interchanges two vectors.
 *> \endverbatim
 *
 *  Arguments:
@@ -79,7 +79,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZSWAP(N,ZX,INCX,ZY,INCY)
+      SUBROUTINE AB_ZSWAP(N,ZX,INCX,ZY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

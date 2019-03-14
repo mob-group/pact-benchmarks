@@ -1,4 +1,4 @@
-*> \brief \b ALAESM
+*> \brief \b AB_ALAESM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ALAESM( PATH, OK, NOUT )
+*       SUBROUTINE AB_ALAESM( PATH, OK, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            OK
@@ -22,7 +22,7 @@
 *>
 *> \verbatim
 *>
-*> ALAESM prints a summary of results from one of the -ERR- routines.
+*> AB_ALAESM prints a summary of results from one of the -ERR- routines.
 *> \endverbatim
 *
 *  Arguments:
@@ -37,7 +37,7 @@
 *> \param[in] OK
 *> \verbatim
 *>          OK is LOGICAL
-*>          The flag from CHKXER that indicates whether or not the tests
+*>          The flag from AB_CHKXER that indicates whether or not the tests
 *>          of error exits passed.
 *> \endverbatim
 *>
@@ -61,7 +61,7 @@
 *> \ingroup aux_lin
 *
 *  =====================================================================
-      SUBROUTINE ALAESM( PATH, OK, NOUT )
+      SUBROUTINE AB_ALAESM( PATH, OK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -90,6 +90,6 @@
      $      'exits ***' )
       RETURN
 *
-*     End of ALAESM
+*     End of AB_ALAESM
 *
       END

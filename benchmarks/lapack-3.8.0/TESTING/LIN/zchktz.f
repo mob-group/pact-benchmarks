@@ -1,4 +1,4 @@
-*> \brief \b ZCHKTZ
+*> \brief \b AB_ZCHKTZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
+*       SUBROUTINE AB_ZCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
 *                          COPYA, S, TAU, WORK, RWORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKTZ tests ZTZRZF.
+*> AB_ZCHKTZ tests AB_ZTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -134,7 +134,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
+      SUBROUTINE AB_ZCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, 
+     $A,
      $                   COPYA, S, TAU, WORK, RWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -175,12 +176,13 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZQRT12, ZRZT01, ZRZT02
-      EXTERNAL           DLAMCH, ZQRT12, ZRZT01, ZRZT02
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZQRT12, AB_ZRZT01, AB_ZRZT02
+      EXTERNAL           AB_DLAMCH, AB_ZQRT12, AB_ZRZT01, AB_ZRZT02
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHD, ALASUM, DLAORD, ZERRTZ, ZGEQR2, ZLACPY,
-     $                   ZLASET, ZLATMS, ZTZRZF
+      EXTERNAL           AB_ALAHD, AB_ALASUM, AB_DLAORD, AB_ZERRTZ, AB_A
+     $B_ZGEQR2, AB_ZLACPY,
+     $                   AB_ZLASET, AB_ZLATMS, AB_ZTZRZF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, MAX, MIN
@@ -209,12 +211,12 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL ZERRTZ( PATH, NOUT )
+     $   CALL AB_ZERRTZ( PATH, NOUT )
       INFOT = 0
 *
       DO 70 IM = 1, NM
@@ -244,52 +246,55 @@
 *
                   MODE = IMODE - 1
 *
-*                 Test ZTZRQF
+*                 Test AB_ZTZRQF
 *
 *                 Generate test matrix of size m by n using
 *                 singular value distribution indicated by `mode'.
 *
                   IF( MODE.EQ.0 ) THEN
-                     CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ),
+                     CALL AB_ZLASET( 'Full', M, N, DCMPLX( ZERO ),
      $                            DCMPLX( ZERO ), A, LDA )
                      DO 30 I = 1, MNMIN
                         S( I ) = ZERO
    30                CONTINUE
                   ELSE
-                     CALL ZLATMS( M, N, 'Uniform', ISEED,
+                     CALL AB_ZLATMS( M, N, 'Uniform', ISEED,
      $                            'Nonsymmetric', S, IMODE,
      $                            ONE / EPS, ONE, M, N, 'No packing', A,
      $                            LDA, WORK, INFO )
-                     CALL ZGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+1 ),
+                     CALL AB_AB_ZGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+
+     $1 ),
      $                            INFO )
-                     CALL ZLASET( 'Lower', M-1, N, DCMPLX( ZERO ),
+                     CALL AB_ZLASET( 'Lower', M-1, N, DCMPLX( ZERO ),
      $                            DCMPLX( ZERO ), A( 2 ), LDA )
-                     CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
+                     CALL AB_DLAORD( 'Decreasing', MNMIN, S, 1 )
                   END IF
 *
 *                 Save A and its singular values
 *
-                  CALL ZLACPY( 'All', M, N, A, LDA, COPYA, LDA )
+                  CALL AB_ZLACPY( 'All', M, N, A, LDA, COPYA, LDA )
 *
-*                 Call ZTZRZF to reduce the upper trapezoidal matrix to
+*                 Call AB_ZTZRZF to reduce the upper trapezoidal matrix to
 *                 upper triangular form.
 *
-                  SRNAMT = 'ZTZRZF'
-                  CALL ZTZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+                  SRNAMT = 'AB_ZTZRZF'
+                  CALL AB_ZTZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = ZQRT12( M, M, A, LDA, S, WORK,
+                  RESULT( 1 ) = AB_ZQRT12( M, M, A, LDA, S, WORK,
      $                          LWORK, RWORK )
 *
 *                 Compute norm( A - R*Q )
 *
-                  RESULT( 2 ) = ZRZT01( M, N, COPYA, A, LDA, TAU, WORK,
+                  RESULT( 2 ) = AB_ZRZT01( M, N, COPYA, A, LDA, TAU, WOR
+     $K,
      $                          LWORK )
 *
 *                 Compute norm(Q'*Q - I).
 *
-                  RESULT( 3 ) = ZRZT02( M, N, A, LDA, TAU, WORK, LWORK )
+                  RESULT( 3 ) = AB_ZRZT02( M, N, A, LDA, TAU, WORK, LWOR
+     $K )
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
@@ -297,7 +302,7 @@
                   DO 40 K = 1, NTESTS
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALAHD( NOUT, PATH )
+     $                     CALL AB_ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )M, N, IMODE, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -311,11 +316,11 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M =', I5, ', N =', I5, ', type ', I2, ', test ', I2,
      $      ', ratio =', G12.5 )
 *
-*     End if ZCHKTZ
+*     End if AB_ZCHKTZ
 *
       END

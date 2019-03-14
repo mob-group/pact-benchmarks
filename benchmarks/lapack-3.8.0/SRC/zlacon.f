@@ -1,4 +1,4 @@
-*> \brief \b ZLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
+*> \brief \b AB_ZLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLACON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlacon.f">
+*> Download AB_ZLACON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLACON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlacon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLACON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlacon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLACON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLACON( N, V, X, EST, KASE )
+*       SUBROUTINE AB_ZLACON( N, V, X, EST, KASE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KASE, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZLACON estimates the 1-norm of a square, complex matrix A.
+*> AB_ZLACON estimates the 1-norm of a square, complex matrix A.
 *> Reverse communication is used for evaluating matrix-vector products.
 *> \endverbatim
 *
@@ -60,7 +60,7 @@
 *>         On an intermediate return, X should be overwritten by
 *>               A * X,   if KASE=1,
 *>               A**H * X,  if KASE=2,
-*>         where A**H is the conjugate transpose of A, and ZLACON must be
+*>         where A**H is the conjugate transpose of A, and AB_ZLACON must be
 *>         re-called with all the other parameters unchanged.
 *> \endverbatim
 *>
@@ -68,17 +68,17 @@
 *> \verbatim
 *>          EST is DOUBLE PRECISION
 *>         On entry with KASE = 1 or 2 and JUMP = 3, EST should be
-*>         unchanged from the previous call to ZLACON.
+*>         unchanged from the previous call to AB_ZLACON.
 *>         On exit, EST is an estimate (a lower bound) for norm(A).
 *> \endverbatim
 *>
 *> \param[in,out] KASE
 *> \verbatim
 *>          KASE is INTEGER
-*>         On the initial call to ZLACON, KASE should be 0.
+*>         On the initial call to AB_ZLACON, KASE should be 0.
 *>         On an intermediate return, KASE will be 1 or 2, indicating
 *>         whether X should be overwritten by A * X  or A**H * X.
-*>         On the final return from ZLACON, KASE will again be 0.
+*>         On the final return from AB_ZLACON, KASE will again be 0.
 *> \endverbatim
 *
 *  Authors:
@@ -112,7 +112,7 @@
 *>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
 *>
 *  =====================================================================
-      SUBROUTINE ZLACON( N, V, X, EST, KASE )
+      SUBROUTINE AB_ZLACON( N, V, X, EST, KASE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -143,12 +143,12 @@
       DOUBLE PRECISION   ABSXI, ALTSGN, ESTOLD, SAFMIN, TEMP
 *     ..
 *     .. External Functions ..
-      INTEGER            IZMAX1
-      DOUBLE PRECISION   DLAMCH, DZSUM1
-      EXTERNAL           IZMAX1, DLAMCH, DZSUM1
+      INTEGER            AB_IZMAX1
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZSUM1
+      EXTERNAL           AB_IZMAX1, AB_DLAMCH, AB_DZSUM1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZCOPY
+      EXTERNAL           AB_ZCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG
@@ -158,7 +158,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       IF( KASE.EQ.0 ) THEN
          DO 10 I = 1, N
             X( I ) = DCMPLX( ONE / DBLE( N ) )
@@ -180,7 +180,7 @@
 *        ... QUIT
          GO TO 130
       END IF
-      EST = DZSUM1( N, X, 1 )
+      EST = AB_DZSUM1( N, X, 1 )
 *
       DO 30 I = 1, N
          ABSXI = ABS( X( I ) )
@@ -199,7 +199,7 @@
 *     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY CTRANS(A)*X.
 *
    40 CONTINUE
-      J = IZMAX1( N, X, 1 )
+      J = AB_IZMAX1( N, X, 1 )
       ITER = 2
 *
 *     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
@@ -217,9 +217,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
    70 CONTINUE
-      CALL ZCOPY( N, X, 1, V, 1 )
+      CALL AB_ZCOPY( N, X, 1, V, 1 )
       ESTOLD = EST
-      EST = DZSUM1( N, V, 1 )
+      EST = AB_DZSUM1( N, V, 1 )
 *
 *     TEST FOR CYCLING.
       IF( EST.LE.ESTOLD )
@@ -243,7 +243,7 @@
 *
    90 CONTINUE
       JLAST = J
-      J = IZMAX1( N, X, 1 )
+      J = AB_IZMAX1( N, X, 1 )
       IF( ( ABS( X( JLAST ) ).NE.ABS( X( J ) ) ) .AND.
      $    ( ITER.LT.ITMAX ) ) THEN
          ITER = ITER + 1
@@ -266,9 +266,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
   120 CONTINUE
-      TEMP = TWO*( DZSUM1( N, X, 1 ) / DBLE( 3*N ) )
+      TEMP = TWO*( AB_DZSUM1( N, X, 1 ) / DBLE( 3*N ) )
       IF( TEMP.GT.EST ) THEN
-         CALL ZCOPY( N, X, 1, V, 1 )
+         CALL AB_ZCOPY( N, X, 1, V, 1 )
          EST = TEMP
       END IF
 *
@@ -276,6 +276,6 @@
       KASE = 0
       RETURN
 *
-*     End of ZLACON
+*     End of AB_ZLACON
 *
       END

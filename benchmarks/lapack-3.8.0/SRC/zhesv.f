@@ -1,4 +1,4 @@
-*> \brief <b> ZHESV computes the solution to system of linear equations A * X = B for HE matrices</b>
+*> \brief <b> AB_ZHESV computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHESV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv.f">
+*> Download AB_ZHESV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHESV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHESV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHESV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHESV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE AB_ZHESV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                         LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZHESV computes the solution to a complex system of linear equations
+*> AB_ZHESV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
 *> matrices.
@@ -88,7 +88,7 @@
 *>          On exit, if INFO = 0, the block diagonal matrix D and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*D*U**H or A = L*D*L**H as computed by
-*>          ZHETRF.
+*>          AB_ZHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -101,7 +101,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D, as
-*>          determined by ZHETRF.  If IPIV(k) > 0, then rows and columns
+*>          determined by AB_ZHETRF.  If IPIV(k) > 0, then rows and columns
 *>          k and IPIV(k) were interchanged, and D(k,k) is a 1-by-1
 *>          diagonal block.  If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0,
 *>          then rows and columns k-1 and -IPIV(k) were interchanged and
@@ -135,14 +135,14 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= 1, and for best performance
 *>          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
-*>          ZHETRF.
+*>          AB_ZHETRF.
 *>          for LWORK < N, TRS will be done with Level BLAS 2
 *>          for LWORK >= N, TRS will be done with Level BLAS 3
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -168,7 +168,7 @@
 *> \ingroup complex16HEsolve
 *
 *  =====================================================================
-      SUBROUTINE ZHESV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+      SUBROUTINE AB_ZHESV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                  LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -192,12 +192,12 @@
       INTEGER            LWKOPT, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHETRF, ZHETRS, ZHETRS2
+      EXTERNAL           AB_XERBLA, AB_ZHETRF, AB_ZHETRS, AB_AB_ZHETRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -208,7 +208,8 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
+     $THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -226,14 +227,14 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = ILAENV( 1, 'ZHETRF', UPLO, N, -1, -1, -1 )
+            NB = AB_ILAENV( 1, 'AB_ZHETRF', UPLO, N, -1, -1, -1 )
             LWKOPT = N*NB
          END IF
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHESV ', -INFO )
+         CALL AB_XERBLA( 'AB_ZHESV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -241,7 +242,7 @@
 *
 *     Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
-      CALL ZHETRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL AB_ZHETRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
@@ -250,13 +251,13 @@
 *
 *        Solve with TRS ( Use Level BLAS 2)
 *
-            CALL ZHETRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+            CALL AB_ZHETRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
          ELSE
 *
 *        Solve with TRS2 ( Use Level BLAS 3)
 *
-            CALL ZHETRS2( UPLO,N,NRHS,A,LDA,IPIV,B,LDB,WORK,INFO )
+            CALL AB_AB_ZHETRS2( UPLO,N,NRHS,A,LDA,IPIV,B,LDB,WORK,INFO )
 *
          END IF
 *
@@ -266,6 +267,6 @@
 *
       RETURN
 *
-*     End of ZHESV
+*     End of AB_ZHESV
 *
       END

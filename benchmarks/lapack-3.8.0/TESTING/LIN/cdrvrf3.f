@@ -1,4 +1,4 @@
-*> \brief \b CDRVRF3
+*> \brief \b AB_CDRVRF3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
-*      +                    S_WORK_CLANGE, C_WORK_CGEQRF, TAU )
+*       SUBROUTINE AB_CDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+*      +                    S_WORK_AB_CLANGE, C_WORK_AB_AB_CGEQRF, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -17,10 +17,10 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            NVAL( NN )
-*       REAL               S_WORK_CLANGE( * )
+*       REAL               S_WORK_AB_CLANGE( * )
 *       COMPLEX            A( LDA, * ), ARF( * ), B1( LDA, * ),
 *      +                   B2( LDA, * )
-*       COMPLEX            C_WORK_CGEQRF( * ), TAU( * )
+*       COMPLEX            C_WORK_AB_AB_CGEQRF( * ), TAU( * )
 *       ..
 *
 *
@@ -29,8 +29,8 @@
 *>
 *> \verbatim
 *>
-*> CDRVRF3 tests the LAPACK RFP routines:
-*>     CTFSM
+*> AB_CDRVRF3 tests the LAPACK RFP routines:
+*>     AB_CTFSM
 *> \endverbatim
 *
 *  Arguments:
@@ -88,14 +88,14 @@
 *>          B2 is COMPLEX array, dimension (LDA,NMAX)
 *> \endverbatim
 *>
-*> \param[out] S_WORK_CLANGE
+*> \param[out] S_WORK_AB_CLANGE
 *> \verbatim
-*>          S_WORK_CLANGE is REAL array, dimension (NMAX)
+*>          S_WORK_AB_CLANGE is REAL array, dimension (NMAX)
 *> \endverbatim
 *>
-*> \param[out] C_WORK_CGEQRF
+*> \param[out] C_WORK_AB_AB_CGEQRF
 *> \verbatim
-*>          C_WORK_CGEQRF is COMPLEX array, dimension (NMAX)
+*>          C_WORK_AB_AB_CGEQRF is COMPLEX array, dimension (NMAX)
 *> \endverbatim
 *>
 *> \param[out] TAU
@@ -116,8 +116,9 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
-     +                    S_WORK_CLANGE, C_WORK_CGEQRF, TAU )
+      SUBROUTINE AB_CDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2
+     $,
+     +                    S_WORK_AB_CLANGE, C_WORK_AB_AB_CGEQRF, TAU )
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,10 +131,10 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            NVAL( NN )
-      REAL               S_WORK_CLANGE( * )
+      REAL               S_WORK_AB_CLANGE( * )
       COMPLEX            A( LDA, * ), ARF( * ), B1( LDA, * ),
      +                   B2( LDA, * )
-      COMPLEX            C_WORK_CGEQRF( * ), TAU( * )
+      COMPLEX            C_WORK_AB_AB_CGEQRF( * ), TAU( * )
 *     ..
 *
 *  =====================================================================
@@ -159,12 +160,13 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, CLANGE
-      COMPLEX            CLARND
-      EXTERNAL           SLAMCH, CLARND, CLANGE
+      REAL               AB_SLAMCH, AB_CLANGE
+      COMPLEX            AB_CLARND
+      EXTERNAL           AB_SLAMCH, AB_CLARND, AB_CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTRTTF, CGEQRF, CGEQLF, CTFSM, CTRSM
+      EXTERNAL           AB_CTRTTF, AB_AB_CGEQRF, AB_CGEQLF, AB_CTFSM, A
+     $B_CTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -193,7 +195,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
       DO 170 IIM = 1, NN
 *
@@ -230,7 +232,7 @@
                               ELSE IF ( IALPHA.EQ. 2) THEN
                                  ALPHA = ONE
                               ELSE
-                                 ALPHA = CLARND( 4, ISEED )
+                                 ALPHA = AB_CLARND( 4, ISEED )
                               END IF
 *
 *                             All the parameters are set:
@@ -266,7 +268,7 @@
 *
                               DO J = 1, NA
                                  DO I = 1, NA
-                                    A( I, J) = CLARND( 4, ISEED )
+                                    A( I, J) = AB_CLARND( 4, ISEED )
                                  END DO
                               END DO
 *
@@ -275,18 +277,18 @@
 *                                The case IUPLO.EQ.1 is when SIDE.EQ.'U'
 *                                -> QR factorization.
 *
-                                 SRNAMT = 'CGEQRF'
-                                 CALL CGEQRF( NA, NA, A, LDA, TAU,
-     +                                        C_WORK_CGEQRF, LDA,
+                                 SRNAMT = 'AB_AB_CGEQRF'
+                                 CALL AB_AB_CGEQRF( NA, NA, A, LDA, TAU,
+     +                                        C_WORK_AB_AB_CGEQRF, LDA,
      +                                        INFO )
                               ELSE
 *
 *                                The case IUPLO.EQ.2 is when SIDE.EQ.'L'
 *                                -> QL factorization.
 *
-                                 SRNAMT = 'CGELQF'
-                                 CALL CGELQF( NA, NA, A, LDA, TAU,
-     +                                        C_WORK_CGEQRF, LDA,
+                                 SRNAMT = 'AB_AB_CGELQF'
+                                 CALL AB_AB_CGELQF( NA, NA, A, LDA, TAU,
+     +                                        C_WORK_AB_AB_CGEQRF, LDA,
      +                                        INFO )
                               END IF
 *
@@ -296,13 +298,15 @@
 *                             value 1.0E+00.
 *
                               DO J = 1, NA
-                                 A( J, J) = A(J,J) * CLARND( 5, ISEED )
+                                 A( J, J) = A(J,J) * AB_CLARND( 5, ISEED
+     $ )
                               END DO
 *
 *                             Store a copy of A in RFP format (in ARF).
 *
-                              SRNAMT = 'CTRTTF'
-                              CALL CTRTTF( CFORM, UPLO, NA, A, LDA, ARF,
+                              SRNAMT = 'AB_CTRTTF'
+                              CALL AB_CTRTTF( CFORM, UPLO, NA, A, LDA, A
+     $RF,
      +                                     INFO )
 *
 *                             Generate B1 our M--by--N right-hand side
@@ -310,23 +314,24 @@
 *
                               DO J = 1, N
                                  DO I = 1, M
-                                    B1( I, J) = CLARND( 4, ISEED )
+                                    B1( I, J) = AB_CLARND( 4, ISEED )
                                     B2( I, J) = B1( I, J)
                                  END DO
                               END DO
 *
 *                             Solve op( A ) X = B or X op( A ) = B
-*                             with CTRSM
+*                             with AB_CTRSM
 *
-                              SRNAMT = 'CTRSM'
-                              CALL CTRSM( SIDE, UPLO, TRANS, DIAG, M, N,
+                              SRNAMT = 'AB_CTRSM'
+                              CALL AB_CTRSM( SIDE, UPLO, TRANS, DIAG, M,
+     $ N,
      +                               ALPHA, A, LDA, B1, LDA )
 *
 *                             Solve op( A ) X = B or X op( A ) = B
-*                             with CTFSM
+*                             with AB_CTFSM
 *
-                              SRNAMT = 'CTFSM'
-                              CALL CTFSM( CFORM, SIDE, UPLO, TRANS,
+                              SRNAMT = 'AB_CTFSM'
+                              CALL AB_CTFSM( CFORM, SIDE, UPLO, TRANS,
      +                                    DIAG, M, N, ALPHA, ARF, B2,
      +                                    LDA )
 *
@@ -338,8 +343,8 @@
                                  END DO
                               END DO
 *
-                              RESULT(1) = CLANGE( 'I', M, N, B1, LDA,
-     +                                            S_WORK_CLANGE )
+                              RESULT(1) = AB_CLANGE( 'I', M, N, B1, LDA,
+     +                                            S_WORK_AB_CLANGE )
 *
                               RESULT(1) = RESULT(1) / SQRT( EPS )
      +                                    / MAX ( MAX( M, N), 1 )
@@ -349,7 +354,7 @@
                                     WRITE( NOUT, * )
                                     WRITE( NOUT, FMT = 9999 )
                                  END IF
-                                 WRITE( NOUT, FMT = 9997 ) 'CTFSM',
+                                 WRITE( NOUT, FMT = 9997 ) 'AB_CTFSM',
      +                              CFORM, SIDE, UPLO, TRANS, DIAG, M,
      +                              N, RESULT(1)
                                  NFAIL = NFAIL + 1
@@ -367,12 +372,12 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'CTFSM', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'AB_CTFSM', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'CTFSM', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'AB_CTFSM', NFAIL, NRUN
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing CTFSM
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_CTFSM
      +         ***')
  9997 FORMAT( 1X, '     Failure in ',A5,', CFORM=''',A1,''',',
      + ' SIDE=''',A1,''',',' UPLO=''',A1,''',',' TRANS=''',A1,''',',
@@ -384,6 +389,6 @@
 *
       RETURN
 *
-*     End of CDRVRF3
+*     End of AB_CDRVRF3
 *
       END

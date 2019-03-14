@@ -1,4 +1,4 @@
-*> \brief \b SLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom.
+*> \brief \b AB_SLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASCL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slascl.f">
+*> Download AB_SLASCL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASCL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slascl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASCL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slascl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASCL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASCL( TYPE, KL, KU, CFROM, CTO, M, N, A, LDA, INFO )
+*       SUBROUTINE AB_SLASCL( TYPE, KL, KU, CFROM, CTO, M, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TYPE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SLASCL multiplies the M by N real matrix A by the real scalar
+*> AB_SLASCL multiplies the M by N real matrix A by the real scalar
 *> CTO/CFROM.  This is done without over/underflow as long as the final
 *> result CTO*A(I,J)/CFROM does not over/underflow. TYPE specifies that
 *> A may be full, upper triangular, lower triangular, upper Hessenberg,
@@ -60,7 +60,7 @@
 *>                  and upper bandwidth KU and with the only the upper
 *>                  half stored.
 *>          = 'Z':  A is a band matrix with lower bandwidth KL and upper
-*>                  bandwidth KU. See SGBTRF for storage details.
+*>                  bandwidth KU. See AB_SGBTRF for storage details.
 *> \endverbatim
 *>
 *> \param[in] KL
@@ -141,7 +141,8 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLASCL( TYPE, KL, KU, CFROM, CTO, M, N, A, LDA, INFO )
+      SUBROUTINE AB_SLASCL( TYPE, KL, KU, CFROM, CTO, M, N, A, LDA, INFO
+     $ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -169,15 +170,15 @@
       REAL               BIGNUM, CFROM1, CFROMC, CTO1, CTOC, MUL, SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -185,19 +186,19 @@
 *
       INFO = 0
 *
-      IF( LSAME( TYPE, 'G' ) ) THEN
+      IF( AB_LSAME( TYPE, 'G' ) ) THEN
          ITYPE = 0
-      ELSE IF( LSAME( TYPE, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( TYPE, 'L' ) ) THEN
          ITYPE = 1
-      ELSE IF( LSAME( TYPE, 'U' ) ) THEN
+      ELSE IF( AB_LSAME( TYPE, 'U' ) ) THEN
          ITYPE = 2
-      ELSE IF( LSAME( TYPE, 'H' ) ) THEN
+      ELSE IF( AB_LSAME( TYPE, 'H' ) ) THEN
          ITYPE = 3
-      ELSE IF( LSAME( TYPE, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( TYPE, 'B' ) ) THEN
          ITYPE = 4
-      ELSE IF( LSAME( TYPE, 'Q' ) ) THEN
+      ELSE IF( AB_LSAME( TYPE, 'Q' ) ) THEN
          ITYPE = 5
-      ELSE IF( LSAME( TYPE, 'Z' ) ) THEN
+      ELSE IF( AB_LSAME( TYPE, 'Z' ) ) THEN
          ITYPE = 6
       ELSE
          ITYPE = -1
@@ -205,9 +206,9 @@
 *
       IF( ITYPE.EQ.-1 ) THEN
          INFO = -1
-      ELSE IF( CFROM.EQ.ZERO .OR. SISNAN(CFROM) ) THEN
+      ELSE IF( CFROM.EQ.ZERO .OR. AB_SISNAN(CFROM) ) THEN
          INFO = -4
-      ELSE IF( SISNAN(CTO) ) THEN
+      ELSE IF( AB_SISNAN(CTO) ) THEN
          INFO = -5
       ELSE IF( M.LT.0 ) THEN
          INFO = -6
@@ -231,7 +232,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLASCL', -INFO )
+         CALL AB_XERBLA( 'AB_SLASCL', -INFO )
          RETURN
       END IF
 *
@@ -242,7 +243,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
 *
       CFROMC = CFROM
@@ -264,7 +265,8 @@
             MUL = CTOC
             DONE = .TRUE.
             CFROMC = ONE
-         ELSE IF( ABS( CFROM1 ).GT.ABS( CTOC ) .AND. CTOC.NE.ZERO ) THEN
+         ELSE IF( ABS( CFROM1 ).GT.ABS( CTOC ) .AND. CTOC.NE.ZERO ) T
+     $HEN
             MUL = SMLNUM
             DONE = .FALSE.
             CFROMC = CFROM1
@@ -363,6 +365,6 @@
 *
       RETURN
 *
-*     End of SLASCL
+*     End of AB_SLASCL
 *
       END

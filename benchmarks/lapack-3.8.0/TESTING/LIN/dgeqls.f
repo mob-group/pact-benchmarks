@@ -1,4 +1,4 @@
-*> \brief \b DGEQLS
+*> \brief \b AB_DGEQLS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE AB_DGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the QL factorization
 *>     A = Q*L
-*> computed by DGEQLF.
+*> computed by AB_DGEQLF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          Details of the QL factorization of the original matrix A as
-*>          returned by DGEQLF.
+*>          returned by AB_DGEQLF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,7 +119,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+      SUBROUTINE AB_DGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK
+     $,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -142,7 +143,7 @@
       PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DORMQL, DTRSM, XERBLA
+      EXTERNAL           AB_DORMQL, AB_DTRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -162,12 +163,13 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, M ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
+     $0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEQLS', -INFO )
+         CALL AB_XERBLA( 'AB_DGEQLS', -INFO )
          RETURN
       END IF
 *
@@ -178,16 +180,18 @@
 *
 *     B := Q' * B
 *
-      CALL DORMQL( 'Left', 'Transpose', M, NRHS, N, A, LDA, TAU, B, LDB,
+      CALL AB_DORMQL( 'Left', 'Transpose', M, NRHS, N, A, LDA, TAU, B, L
+     $DB,
      $             WORK, LWORK, INFO )
 *
 *     Solve L*X = B(m-n+1:m,:)
 *
-      CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRHS,
+      CALL AB_DTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N, NRH
+     $S,
      $            ONE, A( M-N+1, 1 ), LDA, B( M-N+1, 1 ), LDB )
 *
       RETURN
 *
-*     End of DGEQLS
+*     End of AB_DGEQLS
 *
       END

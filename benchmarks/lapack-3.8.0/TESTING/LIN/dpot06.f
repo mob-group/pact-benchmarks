@@ -1,4 +1,4 @@
-*> \brief \b DPOT06
+*> \brief \b AB_DPOT06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE AB_DPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> DPOT06 computes the residual for a solution of a system of linear
+*> AB_DPOT06 computes the residual for a solution of a system of linear
 *> equations  A*x = b :
 *>    RESID = norm(B - A*X,inf) / ( norm(A,inf) * norm(X,inf) * EPS ),
 *> where EPS is the machine epsilon.
@@ -124,7 +124,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE AB_DPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -154,12 +154,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           IDAMAX, DLAMCH, DLANSY
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSY
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYMM
+      EXTERNAL           AB_DSYMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, ABS
@@ -175,8 +175,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANSY( 'I', UPLO, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_DLANSY( 'I', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -185,7 +185,7 @@
 *     Compute  B - A*X  and store in B.
       IFAIL=0
 *
-      CALL DSYMM( 'Left', UPLO, N, NRHS, NEGONE, A, LDA, X,
+      CALL AB_DSYMM( 'Left', UPLO, N, NRHS, NEGONE, A, LDA, X,
      $            LDX, ONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -193,8 +193,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = ABS(B(IDAMAX( N, B( 1, J ), 1 ),J))
-         XNORM = ABS(X(IDAMAX( N, X( 1, J ), 1 ),J))
+         BNORM = ABS(B(AB_IDAMAX( N, B( 1, J ), 1 ),J))
+         XNORM = ABS(X(AB_IDAMAX( N, X( 1, J ), 1 ),J))
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -204,6 +204,6 @@
 *
       RETURN
 *
-*     End of DPOT06
+*     End of AB_DPOT06
 *
       END

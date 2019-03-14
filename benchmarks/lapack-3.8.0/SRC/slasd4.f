@@ -1,4 +1,4 @@
-*> \brief \b SLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by sbdsdc.
+*> \brief \b AB_SLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by AB_SBDSDC.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASD4 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd4.f">
+*> Download AB_SLASD4 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASD4.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASD4.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASD4.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
+*       SUBROUTINE AB_SLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            I, INFO, N
@@ -123,7 +123,7 @@
 *>  whether D(i) or D(i+1) is treated as the origin.
 *>
 *>            ORGATI = .true.    origin at i
-*>            ORGATI = .false.   origin at i+1
+*>            ORGATI = .FALSE.   origin at i+1
 *>
 *>  Logical variable SWTCH3 (switch-for-3-poles?) is for noting
 *>  if we are working with THREE poles!
@@ -151,7 +151,7 @@
 *>     at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
+      SUBROUTINE AB_SLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,11 +188,11 @@
       REAL               DD( 3 ), ZZ( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAED6, SLASD5
+      EXTERNAL           AB_SLAED6, AB_SLASD5
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -215,13 +215,13 @@
          RETURN
       END IF
       IF( N.EQ.2 ) THEN
-         CALL SLASD5( I, D, Z, DELTA, RHO, SIGMA, WORK )
+         CALL AB_SLASD5( I, D, Z, DELTA, RHO, SIGMA, WORK )
          RETURN
       END IF
 *
 *     Compute machine epsilon
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       RHOINV = ONE / RHO
       TAU2= ZERO
 *
@@ -699,11 +699,11 @@
             DD( 1 ) = DTIIM
             DD( 2 ) = DELTA( II )*WORK( II )
             DD( 3 ) = DTIIP
-            CALL SLAED6( NITER, ORGATI, C, DD, ZZ, W, ETA, INFO )
+            CALL AB_SLAED6( NITER, ORGATI, C, DD, ZZ, W, ETA, INFO )
 *
             IF( INFO.NE.0 ) THEN
 *
-*              If INFO is not 0, i.e., SLAED6 failed, switch back
+*              If INFO is not 0, i.e., AB_SLAED6 failed, switch back
 *              to 2 pole interpolation.
 *
                SWTCH3 = .FALSE.
@@ -918,11 +918,11 @@
                DD( 1 ) = DTIIM
                DD( 2 ) = DELTA( II )*WORK( II )
                DD( 3 ) = DTIIP
-               CALL SLAED6( NITER, ORGATI, C, DD, ZZ, W, ETA, INFO )
+               CALL AB_SLAED6( NITER, ORGATI, C, DD, ZZ, W, ETA, INFO )
 *
                IF( INFO.NE.0 ) THEN
 *
-*                 If INFO is not 0, i.e., SLAED6 failed, switch
+*                 If INFO is not 0, i.e., AB_SLAED6 failed, switch
 *                 back to two pole interpolation
 *
                   SWTCH3 = .FALSE.
@@ -1056,6 +1056,6 @@
   240 CONTINUE
       RETURN
 *
-*     End of SLASD4
+*     End of AB_SLASD4
 *
       END

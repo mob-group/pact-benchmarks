@@ -1,4 +1,4 @@
-*> \brief \b ZLATM6
+*> \brief \b AB_ZLATM6
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
+*       SUBROUTINE AB_ZLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
 *                          BETA, WX, WY, S, DIF )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> ZLATM6 generates test matrices for the generalized eigenvalue
+*> AB_ZLATM6 generates test matrices for the generalized eigenvalue
 *> problem, their corresponding right and left eigenvector matrices,
 *> and also reciprocal condition numbers for all eigenvalues and
 *> the reciprocal condition numbers of eigenvectors corresponding to
@@ -171,7 +171,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE ZLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
+      SUBROUTINE AB_ZLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
      $                   BETA, WX, WY, S, DIF )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -209,7 +209,7 @@
       INTRINSIC          CDABS, DBLE, DCMPLX, DCONJG, SQRT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGESVD, ZLACPY, ZLAKF2
+      EXTERNAL           AB_AB_ZGESVD, AB_ZLACPY, AB_ZLAKF2
 *     ..
 *     .. Executable Statements ..
 *
@@ -239,7 +239,7 @@
 *
 *     Form X and Y
 *
-      CALL ZLACPY( 'F', N, N, B, LDA, Y, LDY )
+      CALL AB_ZLACPY( 'F', N, N, B, LDA, Y, LDY )
       Y( 3, 1 ) = -DCONJG( WY )
       Y( 4, 1 ) = DCONJG( WY )
       Y( 5, 1 ) = -DCONJG( WY )
@@ -247,7 +247,7 @@
       Y( 4, 2 ) = DCONJG( WY )
       Y( 5, 2 ) = -DCONJG( WY )
 *
-      CALL ZLACPY( 'F', N, N, B, LDA, X, LDX )
+      CALL AB_ZLACPY( 'F', N, N, B, LDA, X, LDX )
       X( 1, 3 ) = -WX
       X( 1, 4 ) = -WX
       X( 1, 5 ) = WX
@@ -283,18 +283,20 @@
       S( 5 ) = RONE / SQRT( ( RONE+TWO*CDABS( WX )*CDABS( WX ) ) /
      $         ( RONE+CDABS( A( 5, 5 ) )*CDABS( A( 5, 5 ) ) ) )
 *
-      CALL ZLAKF2( 1, 4, A, LDA, A( 2, 2 ), B, B( 2, 2 ), Z, 8 )
-      CALL ZGESVD( 'N', 'N', 8, 8, Z, 8, RWORK, WORK, 1, WORK( 2 ), 1,
+      CALL AB_ZLAKF2( 1, 4, A, LDA, A( 2, 2 ), B, B( 2, 2 ), Z, 8 )
+      CALL AB_AB_ZGESVD( 'N', 'N', 8, 8, Z, 8, RWORK, WORK, 1, WORK( 2 )
+     $, 1,
      $             WORK( 3 ), 24, RWORK( 9 ), INFO )
       DIF( 1 ) = RWORK( 8 )
 *
-      CALL ZLAKF2( 4, 1, A, LDA, A( 5, 5 ), B, B( 5, 5 ), Z, 8 )
-      CALL ZGESVD( 'N', 'N', 8, 8, Z, 8, RWORK, WORK, 1, WORK( 2 ), 1,
+      CALL AB_ZLAKF2( 4, 1, A, LDA, A( 5, 5 ), B, B( 5, 5 ), Z, 8 )
+      CALL AB_AB_ZGESVD( 'N', 'N', 8, 8, Z, 8, RWORK, WORK, 1, WORK( 2 )
+     $, 1,
      $             WORK( 3 ), 24, RWORK( 9 ), INFO )
       DIF( 5 ) = RWORK( 8 )
 *
       RETURN
 *
-*     End of ZLATM6
+*     End of AB_ZLATM6
 *
       END

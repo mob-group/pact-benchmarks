@@ -1,4 +1,4 @@
-*> \brief \b DERRQRT
+*> \brief \b AB_AB_DERRQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DERRQRT( PATH, NUNIT )
+*       SUBROUTINE AB_AB_DERRQRT( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DERRQRT tests the error exits for the DOUBLE PRECISION routines
+*> AB_AB_DERRQRT tests the error exits for the DOUBLE PRECISION routines
 *> that use the QRT decomposition of a general matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DERRQRT( PATH, NUNIT )
+      SUBROUTINE AB_AB_DERRQRT( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,9 @@
      $                   C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, DGEQRT2, DGEQRT3, DGEQRT,
-     $                   DGEMQRT
+      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_AB_DGEQRT2, AB_AB_D
+     $GEQRT3, AB_AB_DGEQRT,
+     $                   AB_AB_DGEMQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,100 +115,111 @@
 *
 *     Error exits for QRT factorization
 *
-*     DGEQRT
+*     AB_AB_DGEQRT
 *
-      SRNAMT = 'DGEQRT'
+      SRNAMT = 'AB_AB_DGEQRT'
       INFOT = 1
-      CALL DGEQRT( -1, 0, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT( -1, 0, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DGEQRT( 0, -1, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT( 0, -1, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL DGEQRT( 0, 0, 0, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT( 0, 0, 0, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DGEQRT( 2, 1, 1, A, 1, T, 1, W, INFO )
-      CALL CHKXER( 'DGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT( 2, 1, 1, A, 1, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL DGEQRT( 2, 2, 2, A, 2, T, 1, W, INFO )
-      CALL CHKXER( 'DGEQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT( 2, 2, 2, A, 2, T, 1, W, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT', INFOT, NOUT, LERR, OK )
 *
-*     DGEQRT2
+*     AB_AB_AB_DGEQRT2
 *
-      SRNAMT = 'DGEQRT2'
+      SRNAMT = 'AB_AB_AB_DGEQRT2'
       INFOT = 1
-      CALL DGEQRT2( -1, 0, A, 1, T, 1, INFO )
-      CALL CHKXER( 'DGEQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_AB_DGEQRT2( -1, 0, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_AB_DGEQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DGEQRT2( 0, -1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'DGEQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_AB_DGEQRT2( 0, -1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_AB_DGEQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DGEQRT2( 2, 1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'DGEQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_AB_DGEQRT2( 2, 1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_AB_DGEQRT2', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL DGEQRT2( 2, 2, A, 2, T, 1, INFO )
-      CALL CHKXER( 'DGEQRT2', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_AB_DGEQRT2( 2, 2, A, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_AB_DGEQRT2', INFOT, NOUT, LERR, OK )
 *
-*     DGEQRT3
+*     AB_AB_DGEQRT3
 *
-      SRNAMT = 'DGEQRT3'
+      SRNAMT = 'AB_AB_DGEQRT3'
       INFOT = 1
-      CALL DGEQRT3( -1, 0, A, 1, T, 1, INFO )
-      CALL CHKXER( 'DGEQRT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT3( -1, 0, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT3', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DGEQRT3( 0, -1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'DGEQRT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT3( 0, -1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT3', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DGEQRT3( 2, 1, A, 1, T, 1, INFO )
-      CALL CHKXER( 'DGEQRT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT3( 2, 1, A, 1, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT3', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL DGEQRT3( 2, 2, A, 2, T, 1, INFO )
-      CALL CHKXER( 'DGEQRT3', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEQRT3( 2, 2, A, 2, T, 1, INFO )
+      CALL AB_CHKXER( 'AB_AB_DGEQRT3', INFOT, NOUT, LERR, OK )
 *
-*     DGEMQRT
+*     AB_AB_DGEMQRT
 *
-      SRNAMT = 'DGEMQRT'
+      SRNAMT = 'AB_AB_DGEMQRT'
       INFOT = 1
-      CALL DGEMQRT( '/', 'N', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( '/', 'N', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DGEMQRT( 'L', '/', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'L', '/', 0, 0, 0, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL DGEMQRT( 'L', 'N', -1, 0, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'L', 'N', -1, 0, 0, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DGEMQRT( 'L', 'N', 0, -1, 0, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'L', 'N', 0, -1, 0, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DGEMQRT( 'L', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'L', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL DGEMQRT( 'R', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'R', 'N', 0, 0, -1, 1, A, 1, T, 1, C, 1, W, IN
+     $FO )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL DGEMQRT( 'L', 'N', 0, 0, 0, 0, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'L', 'N', 0, 0, 0, 0, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL DGEMQRT( 'R', 'N', 1, 2, 1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'R', 'N', 1, 2, 1, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL DGEMQRT( 'L', 'N', 2, 1, 1, 1, A, 1, T, 1, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'L', 'N', 2, 1, 1, 1, A, 1, T, 1, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL DGEMQRT( 'R', 'N', 1, 1, 1, 1, A, 1, T, 0, C, 1, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'R', 'N', 1, 1, 1, 1, A, 1, T, 0, C, 1, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL DGEMQRT( 'L', 'N', 1, 1, 1, 1, A, 1, T, 1, C, 0, W, INFO )
-      CALL CHKXER( 'DGEMQRT', INFOT, NOUT, LERR, OK )
+      CALL AB_AB_DGEMQRT( 'L', 'N', 1, 1, 1, 1, A, 1, T, 1, C, 0, W, INF
+     $O )
+      CALL AB_CHKXER( 'AB_AB_DGEMQRT', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL ALAESM( PATH, OK, NOUT )
+      CALL AB_ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of DERRQRT
+*     End of AB_AB_DERRQRT
 *
       END

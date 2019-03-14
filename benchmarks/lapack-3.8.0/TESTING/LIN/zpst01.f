@@ -1,4 +1,4 @@
-*> \brief \b ZPST01
+*> \brief \b AB_ZPST01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
+*       SUBROUTINE AB_ZPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
 *                          PIV, RWORK, RESID, RANK )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> ZPST01 reconstructs an Hermitian positive semidefinite matrix A
+*> AB_ZPST01 reconstructs an Hermitian positive semidefinite matrix A
 *> from its L or U factors and the permutation matrix P and computes
 *> the residual
 *>    norm( P*L*L'*P' - A ) / ( N * norm(A) * EPS ) or
@@ -133,7 +133,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
+      SUBROUTINE AB_ZPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
      $                   PIV, RWORK, RESID, RANK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -167,13 +167,13 @@
       INTEGER            I, J, K
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         ZDOTC
-      DOUBLE PRECISION   DLAMCH, ZLANHE
-      LOGICAL            LSAME
-      EXTERNAL           ZDOTC, DLAMCH, ZLANHE, LSAME
+      COMPLEX*16         AB_ZDOTC
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_ZDOTC, AB_DLAMCH, AB_ZLANHE, AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHER, ZSCAL, ZTRMV
+      EXTERNAL           AB_ZHER, AB_ZSCAL, AB_ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG, DIMAG
@@ -189,8 +189,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
-      ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -208,7 +208,7 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
          IF( RANK.LT.N ) THEN
             DO 120 J = RANK + 1, N
@@ -222,12 +222,12 @@
 *
 *           Compute the (K,K) element of the result.
 *
-            TR = ZDOTC( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
+            TR = AB_ZDOTC( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
             AFAC( K, K ) = TR
 *
 *           Compute the rest of column K.
 *
-            CALL ZTRMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
+            CALL AB_ZTRMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
 *
   130    CONTINUE
@@ -249,20 +249,20 @@
 *           columns K+1 through N.
 *
             IF( K+1.LE.N )
-     $         CALL ZHER( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
+     $         CALL AB_ZHER( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
      $                    AFAC( K+1, K+1 ), LDAFAC )
 *
 *           Scale column K by the diagonal element.
 *
             TC = AFAC( K, K )
-            CALL ZSCAL( N-K+1, TC, AFAC( K, K ), 1 )
+            CALL AB_ZSCAL( N-K+1, TC, AFAC( K, K ), 1 )
   160    CONTINUE
 *
       END IF
 *
 *        Form P*L*L'*P' or P*U'*U*P'
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
          DO 180 J = 1, N
             DO 170 I = 1, N
@@ -295,7 +295,7 @@
 *
 *     Compute the difference  P*L*L'*P' - A (or P*U'*U*P' - A).
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 220 J = 1, N
             DO 210 I = 1, J - 1
                PERM( I, J ) = PERM( I, J ) - A( I, J )
@@ -314,12 +314,12 @@
 *     Compute norm( P*L*L'P - A ) / ( N * norm(A) * EPS ), or
 *     ( P*U'*U*P' - A )/ ( N * norm(A) * EPS ).
 *
-      RESID = ZLANHE( '1', UPLO, N, PERM, LDAFAC, RWORK )
+      RESID = AB_ZLANHE( '1', UPLO, N, PERM, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of ZPST01
+*     End of AB_ZPST01
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZQRT14
+*> \brief \b AB_ZQRT14
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION ZQRT14( TRANS, M, N, NRHS, A, LDA, X,
+*       DOUBLE PRECISION FUNCTION AB_ZQRT14( TRANS, M, N, NRHS, A, LDA, X,
 *                        LDX, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> ZQRT14 checks whether X is in the row space of A or A'.  It does so
+*> AB_ZQRT14 checks whether X is in the row space of A or A'.  It does so
 *> by scaling both X and A such that their norms are in the range
 *> [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
 *> (if TRANS = 'C') or an LQ factorization of [A',X]' (if TRANS = 'N'),
@@ -113,7 +113,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION ZQRT14( TRANS, M, N, NRHS, A, LDA, X,
+      DOUBLE PRECISION FUNCTION AB_ZQRT14( TRANS, M, N, NRHS, A, LDA, X,
      $                 LDX, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -144,48 +144,50 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, DLAMCH, ZLANGE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGELQ2, ZGEQR2, ZLACPY, ZLASCL
+      EXTERNAL           AB_XERBLA, AB_AB_ZGELQ2, AB_AB_ZGEQR2, AB_ZLACP
+     $Y, AB_ZLASCL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      ZQRT14 = ZERO
-      IF( LSAME( TRANS, 'N' ) ) THEN
+      AB_ZQRT14 = ZERO
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
          LDWORK = M + NRHS
          TPSD = .FALSE.
          IF( LWORK.LT.( M+NRHS )*( N+2 ) ) THEN
-            CALL XERBLA( 'ZQRT14', 10 )
+            CALL AB_XERBLA( 'AB_ZQRT14', 10 )
             RETURN
          ELSE IF( N.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
-      ELSE IF( LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( AB_LSAME( TRANS, 'C' ) ) THEN
          LDWORK = M
          TPSD = .TRUE.
          IF( LWORK.LT.( N+NRHS )*( M+2 ) ) THEN
-            CALL XERBLA( 'ZQRT14', 10 )
+            CALL AB_XERBLA( 'AB_ZQRT14', 10 )
             RETURN
          ELSE IF( M.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
       ELSE
-         CALL XERBLA( 'ZQRT14', 1 )
+         CALL AB_XERBLA( 'AB_ZQRT14', 1 )
          RETURN
       END IF
 *
 *     Copy and scale A
 *
-      CALL ZLACPY( 'All', M, N, A, LDA, WORK, LDWORK )
-      ANRM = ZLANGE( 'M', M, N, WORK, LDWORK, RWORK )
+      CALL AB_ZLACPY( 'All', M, N, A, LDA, WORK, LDWORK )
+      ANRM = AB_ZLANGE( 'M', M, N, WORK, LDWORK, RWORK )
       IF( ANRM.NE.ZERO )
-     $   CALL ZLASCL( 'G', 0, 0, ANRM, ONE, M, N, WORK, LDWORK, INFO )
+     $   CALL AB_ZLASCL( 'G', 0, 0, ANRM, ONE, M, N, WORK, LDWORK, INFO 
+     $)
 *
 *     Copy X or X' into the right place and scale it
 *
@@ -193,18 +195,18 @@
 *
 *        Copy X into columns n+1:n+nrhs of work
 *
-         CALL ZLACPY( 'All', M, NRHS, X, LDX, WORK( N*LDWORK+1 ),
+         CALL AB_ZLACPY( 'All', M, NRHS, X, LDX, WORK( N*LDWORK+1 ),
      $                LDWORK )
-         XNRM = ZLANGE( 'M', M, NRHS, WORK( N*LDWORK+1 ), LDWORK,
+         XNRM = AB_ZLANGE( 'M', M, NRHS, WORK( N*LDWORK+1 ), LDWORK,
      $          RWORK )
          IF( XNRM.NE.ZERO )
-     $      CALL ZLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
+     $      CALL AB_ZLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
      $                   WORK( N*LDWORK+1 ), LDWORK, INFO )
-         ANRM = ZLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
+         ANRM = AB_ZLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
 *
 *        Compute QR factorization of X
 *
-         CALL ZGEQR2( M, N+NRHS, WORK, LDWORK,
+         CALL AB_AB_ZGEQR2( M, N+NRHS, WORK, LDWORK,
      $                WORK( LDWORK*( N+NRHS )+1 ),
      $                WORK( LDWORK*( N+NRHS )+MIN( M, N+NRHS )+1 ),
      $                INFO )
@@ -229,14 +231,14 @@
    30       CONTINUE
    40    CONTINUE
 *
-         XNRM = ZLANGE( 'M', NRHS, N, WORK( M+1 ), LDWORK, RWORK )
+         XNRM = AB_ZLANGE( 'M', NRHS, N, WORK( M+1 ), LDWORK, RWORK )
          IF( XNRM.NE.ZERO )
-     $      CALL ZLASCL( 'G', 0, 0, XNRM, ONE, NRHS, N, WORK( M+1 ),
+     $      CALL AB_ZLASCL( 'G', 0, 0, XNRM, ONE, NRHS, N, WORK( M+1 ),
      $                   LDWORK, INFO )
 *
 *        Compute LQ factorization of work
 *
-         CALL ZGELQ2( LDWORK, N, WORK, LDWORK, WORK( LDWORK*N+1 ),
+         CALL AB_AB_ZGELQ2( LDWORK, N, WORK, LDWORK, WORK( LDWORK*N+1 ),
      $                WORK( LDWORK*( N+1 )+1 ), INFO )
 *
 *        Compute largest entry in lower triangle in
@@ -251,10 +253,11 @@
 *
       END IF
 *
-      ZQRT14 = ERR / ( DBLE( MAX( M, N, NRHS ) )*DLAMCH( 'Epsilon' ) )
+      AB_ZQRT14 = ERR / ( DBLE( MAX( M, N, NRHS ) )*AB_DLAMCH( 'Epsilon'
+     $ ) )
 *
       RETURN
 *
-*     End of ZQRT14
+*     End of AB_ZQRT14
 *
       END

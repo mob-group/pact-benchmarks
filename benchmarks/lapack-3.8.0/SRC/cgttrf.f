@@ -1,4 +1,4 @@
-*> \brief \b CGTTRF
+*> \brief \b AB_CGTTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGTTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgttrf.f">
+*> Download AB_CGTTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGTTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgttrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGTTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgttrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGTTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
+*       SUBROUTINE AB_CGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CGTTRF computes an LU factorization of a complex tridiagonal matrix A
+*> AB_CGTTRF computes an LU factorization of a complex tridiagonal matrix A
 *> using elimination with partial pivoting and row interchanges.
 *>
 *> The factorization has the form
@@ -86,7 +86,7 @@
 *> \verbatim
 *>          DU2 is COMPLEX array, dimension (N-2)
 *>          On exit, DU2 is overwritten by the (n-2) elements of the
-*>          second super-diagonal of U.
+*>          AB_SECOND super-diagonal of U.
 *> \endverbatim
 *>
 *> \param[out] IPIV
@@ -122,7 +122,7 @@
 *> \ingroup complexGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE CGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
+      SUBROUTINE AB_CGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,7 +148,7 @@
       COMPLEX            FACT, TEMP, ZDUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, REAL
@@ -164,7 +164,7 @@
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL XERBLA( 'CGTTRF', -INFO )
+         CALL AB_XERBLA( 'AB_CGTTRF', -INFO )
          RETURN
       END IF
 *
@@ -238,6 +238,6 @@
 *
       RETURN
 *
-*     End of CGTTRF
+*     End of AB_CGTTRF
 *
       END

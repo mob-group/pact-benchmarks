@@ -1,4 +1,4 @@
-*> \brief \b ZHERFS
+*> \brief \b AB_AB_ZHERFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHERFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zherfs.f">
+*> Download AB_AB_ZHERFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZHERFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zherfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZHERFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zherfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZHERFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+*       SUBROUTINE AB_AB_ZHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
 *                          X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> ZHERFS improves the computed solution to a system of linear
+*> AB_AB_ZHERFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is Hermitian indefinite, and
 *> provides error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -90,7 +90,7 @@
 *>          The factored form of the matrix A.  AF contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor U or L from the factorization A = U*D*U**H or
-*>          A = L*D*L**H as computed by ZHETRF.
+*>          A = L*D*L**H as computed by AB_ZHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -103,7 +103,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by ZHETRF.
+*>          as determined by AB_ZHETRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -121,7 +121,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX*16 array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by ZHETRS.
+*>          On entry, the solution matrix X, as computed by AB_ZHETRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -189,7 +189,8 @@
 *> \ingroup complex16HEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+      SUBROUTINE AB_AB_ZHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+     $ LDB,
      $                   X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -232,15 +233,16 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZHEMV, ZHETRS, ZLACN2
+      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZCOPY, AB_ZHEMV, AB_ZHE
+     $TRS, AB_ZLACN2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -253,8 +255,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -270,7 +272,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHERFS', -INFO )
+         CALL AB_XERBLA( 'AB_AB_ZHERFS', -INFO )
          RETURN
       END IF
 *
@@ -287,8 +289,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = N + 1
-      EPS = DLAMCH( 'Epsilon' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -304,8 +306,9 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 1 )
+         CALL AB_ZCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL AB_ZHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 
+     $1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -366,8 +369,8 @@
 *
 *           Update solution and try again.
 *
-            CALL ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
-            CALL ZAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
+            CALL AB_ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+            CALL AB_ZAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -391,7 +394,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use ZLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_ZLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -406,13 +409,14 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL AB_ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**H).
 *
-               CALL ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL AB_ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO
+     $ )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -423,7 +427,8 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+               CALL AB_ZHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO
+     $ )
             END IF
             GO TO 100
          END IF
@@ -441,6 +446,6 @@
 *
       RETURN
 *
-*     End of ZHERFS
+*     End of AB_AB_ZHERFS
 *
       END

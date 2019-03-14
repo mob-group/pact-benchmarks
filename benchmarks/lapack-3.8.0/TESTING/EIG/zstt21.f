@@ -1,4 +1,4 @@
-*> \brief \b ZSTT21
+*> \brief \b AB_ZSTT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
+*       SUBROUTINE AB_ZSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
 *                          RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> ZSTT21  checks a decomposition of the form
+*> AB_ZSTT21  checks a decomposition of the form
 *>
 *>    A = U S UC>
 *> where * means conjugate transpose, A is real symmetric tridiagonal,
@@ -44,7 +44,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, ZSTT21 does nothing.
+*>          The size of the matrix.  If it is zero, AB_ZSTT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -129,7 +129,8 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE ZSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
+      SUBROUTINE AB_ZSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWOR
+     $K,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -160,11 +161,11 @@
       DOUBLE PRECISION   ANORM, TEMP1, TEMP2, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHE
-      EXTERNAL           DLAMCH, ZLANGE, ZLANHE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZHER, ZHER2, ZLASET
+      EXTERNAL           AB_ZGEMM, AB_ZHER, AB_AB_ZHER2, AB_ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
@@ -178,14 +179,14 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
 *
 *     Do Test 1
 *
 *     Copy A & Compute its 1-Norm:
 *
-      CALL ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+      CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
       ANORM = ZERO
       TEMP1 = ZERO
@@ -204,17 +205,17 @@
 *     Norm of A - USU*
 *
       DO 20 J = 1, N
-         CALL ZHER( 'L', N, -SD( J ), U( 1, J ), 1, WORK, N )
+         CALL AB_ZHER( 'L', N, -SD( J ), U( 1, J ), 1, WORK, N )
    20 CONTINUE
 *
       IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
          DO 30 J = 1, N - 1
-            CALL ZHER2( 'L', N, -DCMPLX( SE( J ) ), U( 1, J ), 1,
+            CALL AB_AB_ZHER2( 'L', N, -DCMPLX( SE( J ) ), U( 1, J ), 1,
      $                  U( 1, J+1 ), 1, WORK, N )
    30    CONTINUE
       END IF
 *
-      WNORM = ZLANHE( '1', 'L', N, WORK, N, RWORK )
+      WNORM = AB_ZLANHE( '1', 'L', N, WORK, N, RWORK )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -230,18 +231,19 @@
 *
 *     Compute  UU* - I
 *
-      CALL ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO, WORK,
+      CALL AB_ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO, WOR
+     $K,
      $            N )
 *
       DO 40 J = 1, N
          WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
    40 CONTINUE
 *
-      RESULT( 2 ) = MIN( DBLE( N ), ZLANGE( '1', N, N, WORK, N,
+      RESULT( 2 ) = MIN( DBLE( N ), AB_ZLANGE( '1', N, N, WORK, N,
      $              RWORK ) ) / ( N*ULP )
 *
       RETURN
 *
-*     End of ZSTT21
+*     End of AB_ZSTT21
 *
       END

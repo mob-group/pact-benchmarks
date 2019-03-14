@@ -1,4 +1,4 @@
-*> \brief \b SQLT01
+*> \brief \b AB_SQLT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE AB_SQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> SQLT01 tests SGEQLF, which computes the QL factorization of an m-by-n
-*> matrix A, and partially tests SORGQL which forms the m-by-m
+*> AB_SQLT01 tests AB_SGEQLF, which computes the QL factorization of an m-by-n
+*> matrix A, and partially tests AB_SORGQL which forms the m-by-m
 *> orthogonal matrix Q.
 *>
-*> SQLT01 compares L with Q'*A, and checks that Q is orthogonal.
+*> AB_SQLT01 compares L with Q'*A, and checks that Q is orthogonal.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,8 +57,8 @@
 *> \param[out] AF
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
-*>          Details of the QL factorization of A, as returned by SGEQLF.
-*>          See SGEQLF for further details.
+*>          Details of the QL factorization of A, as returned by AB_SGEQLF.
+*>          See AB_SGEQLF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (min(M,N))
 *>          The scalar factors of the elementary reflectors, as returned
-*>          by SGEQLF.
+*>          by AB_SGEQLF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -123,7 +123,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
+      SUBROUTINE AB_SQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -153,11 +153,12 @@
       REAL               ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SGEQLF, SLACPY, SLASET, SORGQL, SSYRK
+      EXTERNAL           AB_SGEMM, AB_SGEQLF, AB_SLACPY, AB_SLASET, AB_S
+     $ORGQL, AB_AB_SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -171,61 +172,63 @@
 *     .. Executable Statements ..
 *
       MINMN = MIN( M, N )
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL SLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL AB_SLACPY( 'Full', M, N, A, LDA, AF, LDA )
 *
 *     Factorize the matrix A in the array AF.
 *
-      SRNAMT = 'SGEQLF'
-      CALL SGEQLF( M, N, AF, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_SGEQLF'
+      CALL AB_SGEQLF( M, N, AF, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy details of Q
 *
-      CALL SLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
+      CALL AB_SLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
       IF( M.GE.N ) THEN
          IF( N.LT.M .AND. N.GT.0 )
-     $      CALL SLACPY( 'Full', M-N, N, AF, LDA, Q( 1, M-N+1 ), LDA )
+     $      CALL AB_SLACPY( 'Full', M-N, N, AF, LDA, Q( 1, M-N+1 ), LDA 
+     $)
          IF( N.GT.1 )
-     $      CALL SLACPY( 'Upper', N-1, N-1, AF( M-N+1, 2 ), LDA,
+     $      CALL AB_SLACPY( 'Upper', N-1, N-1, AF( M-N+1, 2 ), LDA,
      $                   Q( M-N+1, M-N+2 ), LDA )
       ELSE
          IF( M.GT.1 )
-     $      CALL SLACPY( 'Upper', M-1, M-1, AF( 1, N-M+2 ), LDA,
+     $      CALL AB_SLACPY( 'Upper', M-1, M-1, AF( 1, N-M+2 ), LDA,
      $                   Q( 1, 2 ), LDA )
       END IF
 *
 *     Generate the m-by-m matrix Q
 *
-      SRNAMT = 'SORGQL'
-      CALL SORGQL( M, M, MINMN, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'AB_SORGQL'
+      CALL AB_SORGQL( M, M, MINMN, Q, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy L
 *
-      CALL SLASET( 'Full', M, N, ZERO, ZERO, L, LDA )
+      CALL AB_SLASET( 'Full', M, N, ZERO, ZERO, L, LDA )
       IF( M.GE.N ) THEN
          IF( N.GT.0 )
-     $      CALL SLACPY( 'Lower', N, N, AF( M-N+1, 1 ), LDA,
+     $      CALL AB_SLACPY( 'Lower', N, N, AF( M-N+1, 1 ), LDA,
      $                   L( M-N+1, 1 ), LDA )
       ELSE
          IF( N.GT.M .AND. M.GT.0 )
-     $      CALL SLACPY( 'Full', M, N-M, AF, LDA, L, LDA )
+     $      CALL AB_SLACPY( 'Full', M, N-M, AF, LDA, L, LDA )
          IF( M.GT.0 )
-     $      CALL SLACPY( 'Lower', M, M, AF( 1, N-M+1 ), LDA,
+     $      CALL AB_SLACPY( 'Lower', M, M, AF( 1, N-M+1 ), LDA,
      $                   L( 1, N-M+1 ), LDA )
       END IF
 *
 *     Compute L - Q'*A
 *
-      CALL SGEMM( 'Transpose', 'No transpose', M, N, M, -ONE, Q, LDA, A,
+      CALL AB_SGEMM( 'Transpose', 'No transpose', M, N, M, -ONE, Q, LDA,
+     $ A,
      $            LDA, ONE, L, LDA )
 *
 *     Compute norm( L - Q'*A ) / ( M * norm(A) * EPS ) .
 *
-      ANORM = SLANGE( '1', M, N, A, LDA, RWORK )
-      RESID = SLANGE( '1', M, N, L, LDA, RWORK )
+      ANORM = AB_SLANGE( '1', M, N, A, LDA, RWORK )
+      RESID = AB_SLANGE( '1', M, N, L, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / REAL( MAX( 1, M ) ) ) / ANORM ) / EPS
       ELSE
@@ -234,18 +237,19 @@
 *
 *     Compute I - Q'*Q
 *
-      CALL SLASET( 'Full', M, M, ZERO, ONE, L, LDA )
-      CALL SSYRK( 'Upper', 'Transpose', M, M, -ONE, Q, LDA, ONE, L,
+      CALL AB_SLASET( 'Full', M, M, ZERO, ONE, L, LDA )
+      CALL AB_AB_SSYRK( 'Upper', 'Transpose', M, M, -ONE, Q, LDA, ONE, L
+     $,
      $            LDA )
 *
 *     Compute norm( I - Q'*Q ) / ( M * EPS ) .
 *
-      RESID = SLANSY( '1', 'Upper', M, L, LDA, RWORK )
+      RESID = AB_SLANSY( '1', 'Upper', M, L, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / REAL( MAX( 1, M ) ) ) / EPS
 *
       RETURN
 *
-*     End of SQLT01
+*     End of AB_SQLT01
 *
       END

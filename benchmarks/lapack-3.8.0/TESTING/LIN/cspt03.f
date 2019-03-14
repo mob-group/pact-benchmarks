@@ -1,4 +1,4 @@
-*> \brief \b CSPT03
+*> \brief \b AB_CSPT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
+*       SUBROUTINE AB_CSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> CSPT03 computes the residual for a complex symmetric packed matrix
+*> AB_CSPT03 computes the residual for a complex symmetric packed matrix
 *> times its inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -107,7 +107,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
+      SUBROUTINE AB_CSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -137,10 +137,11 @@
       COMPLEX            T
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE, CLANSP, SLAMCH
-      COMPLEX            CDOTU
-      EXTERNAL           LSAME, CLANGE, CLANSP, SLAMCH, CDOTU
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE, AB_CLANSP, AB_SLAMCH
+      COMPLEX            AB_CDOTU
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_CLANSP, AB_SLAMCH, AB_C
+     $DOTU
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -157,9 +158,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANSP( '1', UPLO, N, A, RWORK )
-      AINVNM = CLANSP( '1', UPLO, N, AINV, RWORK )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      ANORM = AB_CLANSP( '1', UPLO, N, A, RWORK )
+      AINVNM = AB_CLANSP( '1', UPLO, N, AINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -171,7 +172,7 @@
 *     Each element of - A * AINV is computed by taking the dot product
 *     of a row of A with a column of AINV.
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
          DO 70 I = 1, N
             ICOL = ( ( I-1 )*I ) / 2 + 1
 *
@@ -179,7 +180,7 @@
 *
             DO 30 J = 1, I
                JCOL = ( ( J-1 )*J ) / 2 + 1
-               T = CDOTU( J, A( ICOL ), 1, AINV( JCOL ), 1 )
+               T = AB_CDOTU( J, A( ICOL ), 1, AINV( JCOL ), 1 )
                JCOL = JCOL + 2*J - 1
                KCOL = ICOL - 1
                DO 10 K = J + 1, I
@@ -199,7 +200,7 @@
 *
             DO 60 J = I + 1, N
                JCOL = ( ( J-1 )*J ) / 2 + 1
-               T = CDOTU( I, A( ICOL ), 1, AINV( JCOL ), 1 )
+               T = AB_CDOTU( I, A( ICOL ), 1, AINV( JCOL ), 1 )
                JCOL = JCOL - 1
                KCOL = ICOL + 2*I - 1
                DO 40 K = I + 1, J
@@ -227,7 +228,7 @@
             ICOL = NALL - ( ( N-I+1 )*( N-I+2 ) ) / 2 + 1
             DO 100 J = 1, I
                JCOL = NALL - ( ( N-J )*( N-J+1 ) ) / 2 - ( N-I )
-               T = CDOTU( N-I+1, A( ICOL ), 1, AINV( JCOL ), 1 )
+               T = AB_CDOTU( N-I+1, A( ICOL ), 1, AINV( JCOL ), 1 )
                KCOL = I
                JCOL = J
                DO 80 K = 1, J - 1
@@ -248,7 +249,7 @@
             ICOL = NALL - ( ( N-I )*( N-I+1 ) ) / 2
             DO 130 J = I + 1, N
                JCOL = NALL - ( ( N-J+1 )*( N-J+2 ) ) / 2 + 1
-               T = CDOTU( N-J+1, A( ICOL-N+J ), 1, AINV( JCOL ), 1 )
+               T = AB_CDOTU( N-J+1, A( ICOL-N+J ), 1, AINV( JCOL ), 1 )
                KCOL = I
                JCOL = J
                DO 110 K = 1, I - 1
@@ -274,12 +275,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = CLANGE( '1', N, N, WORK, LDW, RWORK )
+      RESID = AB_CLANGE( '1', N, N, WORK, LDW, RWORK )
 *
       RESID = ( ( RESID*RCOND )/EPS ) / REAL( N )
 *
       RETURN
 *
-*     End of CSPT03
+*     End of AB_CSPT03
 *
       END

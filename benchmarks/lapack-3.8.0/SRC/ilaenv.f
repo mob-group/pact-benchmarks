@@ -1,4 +1,4 @@
-*> \brief \b ILAENV
+*> \brief \b AB_ILAENV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ILAENV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaenv.f">
+*> Download AB_ILAENV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ILAENV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaenv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ILAENV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaenv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ILAENV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+*       INTEGER FUNCTION AB_ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*( * )    NAME, OPTS
@@ -31,13 +31,13 @@
 *>
 *> \verbatim
 *>
-*> ILAENV is called from the LAPACK routines to choose problem-dependent
+*> AB_ILAENV is called from the LAPACK routines to choose problem-dependent
 *> parameters for the local environment.  See ISPEC for a description of
 *> the parameters.
 *>
-*> ILAENV returns an INTEGER
-*> if ILAENV >= 0: ILAENV returns the value of the parameter specified by ISPEC
-*> if ILAENV < 0:  if ILAENV = -k, the k-th argument had an illegal value.
+*> AB_ILAENV returns an INTEGER
+*> if AB_ILAENV >= 0: AB_ILAENV returns the value of the parameter specified by ISPEC
+*> if AB_ILAENV < 0:  if AB_ILAENV = -k, the k-th argument had an illegal value.
 *>
 *> This version provides a set of parameters which should give good,
 *> but not optimal, performance on many of the currently available
@@ -56,7 +56,7 @@
 *> \verbatim
 *>          ISPEC is INTEGER
 *>          Specifies the parameter to be returned as the value of
-*>          ILAENV.
+*>          AB_ILAENV.
 *>          = 1: the optimal blocksize; if this value is 1, an unblocked
 *>               algorithm will give the best performance.
 *>          = 2: the minimum block size for which the block routine
@@ -68,7 +68,7 @@
 *>               eigenvalue routines (DEPRECATED)
 *>          = 5: the minimum column dimension for blocking to be used;
 *>               rectangular blocks must have dimension at least k by m,
-*>               where k is given by ILAENV(2,...) and m by ILAENV(5,...)
+*>               where k is given by AB_ILAENV(2,...) and m by AB_ILAENV(5,...)
 *>          = 6: the crossover point for the SVD (when reducing an m by n
 *>               matrix to bidiagonal form, if max(m,n)/min(m,n) exceeds
 *>               this value, a QR factorization is used first to reduce
@@ -83,7 +83,7 @@
 *>          =11: infinity arithmetic can be trusted not to trap
 *>          12 <= ISPEC <= 16:
 *>               xHSEQR or related subroutines,
-*>               see IPARMQ for detailed explanation
+*>               see AB_IPARMQ for detailed explanation
 *> \endverbatim
 *>
 *> \param[in] NAME
@@ -141,7 +141,7 @@
 *>
 *> \verbatim
 *>
-*>  The following conventions have been used when calling ILAENV from the
+*>  The following conventions have been used when calling AB_ILAENV from the
 *>  LAPACK routines:
 *>  1)  OPTS is a concatenation of all of the character options to
 *>      subroutine NAME, in the same order that they appear in the
@@ -149,18 +149,18 @@
 *>      the value of the parameter specified by ISPEC.
 *>  2)  The problem dimensions N1, N2, N3, N4 are specified in the order
 *>      that they appear in the argument list for NAME.  N1 is used
-*>      first, N2 second, and so on, and unused problem dimensions are
+*>      first, N2 AB_SECOND, and so on, and unused problem dimensions are
 *>      passed a value of -1.
-*>  3)  The parameter value returned by ILAENV is checked for validity in
-*>      the calling subroutine.  For example, ILAENV is used to retrieve
-*>      the optimal blocksize for STRTRI as follows:
+*>  3)  The parameter value returned by AB_ILAENV is checked for validity in
+*>      the calling subroutine.  For example, AB_ILAENV is used to retrieve
+*>      the optimal blocksize for AB_STRTRI as follows:
 *>
-*>      NB = ILAENV( 1, 'STRTRI', UPLO // DIAG, N, -1, -1, -1 )
+*>      NB = AB_ILAENV( 1, 'AB_STRTRI', UPLO // DIAG, N, -1, -1, -1 )
 *>      IF( NB.LE.1 ) NB = MAX( 1, N )
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+      INTEGER FUNCTION AB_ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -183,8 +183,8 @@
       INTRINSIC          CHAR, ICHAR, INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            IEEECK, IPARMQ, IPARAM2STAGE
-      EXTERNAL           IEEECK, IPARMQ, IPARAM2STAGE
+      INTEGER            AB_IEEECK, AB_IPARMQ, IPARAM2STAGE
+      EXTERNAL           AB_IEEECK, AB_IPARMQ, IPARAM2STAGE
 *     ..
 *     .. Executable Statements ..
 *
@@ -193,14 +193,14 @@
 *
 *     Invalid value for ISPEC
 *
-      ILAENV = -1
+      AB_ILAENV = -1
       RETURN
 *
    10 CONTINUE
 *
 *     Convert NAME to upper case if the first character is lower case.
 *
-      ILAENV = 1
+      AB_ILAENV = 1
       SUBNAM = NAME
       IC = ICHAR( SUBNAM( 1: 1 ) )
       IZ = ICHAR( 'Z' )
@@ -486,7 +486,7 @@
             END IF
          END IF
       END IF
-      ILAENV = NB
+      AB_ILAENV = NB
       RETURN
 *
    60 CONTINUE
@@ -569,7 +569,7 @@
             NBMIN = 2
          END IF
       END IF
-      ILAENV = NBMIN
+      AB_ILAENV = NBMIN
       RETURN
 *
    70 CONTINUE
@@ -628,42 +628,42 @@
             NX = 128
          END IF
       END IF
-      ILAENV = NX
+      AB_ILAENV = NX
       RETURN
 *
    80 CONTINUE
 *
 *     ISPEC = 4:  number of shifts (used by xHSEQR)
 *
-      ILAENV = 6
+      AB_ILAENV = 6
       RETURN
 *
    90 CONTINUE
 *
 *     ISPEC = 5:  minimum column dimension (not used)
 *
-      ILAENV = 2
+      AB_ILAENV = 2
       RETURN
 *
   100 CONTINUE
 *
 *     ISPEC = 6:  crossover point for SVD (used by xGELSS and xGESVD)
 *
-      ILAENV = INT( REAL( MIN( N1, N2 ) )*1.6E0 )
+      AB_ILAENV = INT( REAL( MIN( N1, N2 ) )*1.6E0 )
       RETURN
 *
   110 CONTINUE
 *
 *     ISPEC = 7:  number of processors (not used)
 *
-      ILAENV = 1
+      AB_ILAENV = 1
       RETURN
 *
   120 CONTINUE
 *
 *     ISPEC = 8:  crossover point for multishift (used by xHSEQR)
 *
-      ILAENV = 50
+      AB_ILAENV = 50
       RETURN
 *
   130 CONTINUE
@@ -672,17 +672,17 @@
 *                 computation tree in the divide-and-conquer algorithm
 *                 (used by xGELSD and xGESDD)
 *
-      ILAENV = 25
+      AB_ILAENV = 25
       RETURN
 *
   140 CONTINUE
 *
 *     ISPEC = 10: ieee NaN arithmetic can be trusted not to trap
 *
-*     ILAENV = 0
-      ILAENV = 1
-      IF( ILAENV.EQ.1 ) THEN
-         ILAENV = IEEECK( 1, 0.0, 1.0 )
+*     AB_ILAENV = 0
+      AB_ILAENV = 1
+      IF( AB_ILAENV.EQ.1 ) THEN
+         AB_ILAENV = AB_IEEECK( 1, 0.0, 1.0 )
       END IF
       RETURN
 *
@@ -690,10 +690,10 @@
 *
 *     ISPEC = 11: infinity arithmetic can be trusted not to trap
 *
-*     ILAENV = 0
-      ILAENV = 1
-      IF( ILAENV.EQ.1 ) THEN
-         ILAENV = IEEECK( 0, 0.0, 1.0 )
+*     AB_ILAENV = 0
+      AB_ILAENV = 1
+      IF( AB_ILAENV.EQ.1 ) THEN
+         AB_ILAENV = AB_IEEECK( 0, 0.0, 1.0 )
       END IF
       RETURN
 *
@@ -701,9 +701,9 @@
 *
 *     12 <= ISPEC <= 16: xHSEQR or related subroutines.
 *
-      ILAENV = IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+      AB_ILAENV = AB_IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
       RETURN
 *
-*     End of ILAENV
+*     End of AB_ILAENV
 *
       END

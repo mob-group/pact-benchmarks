@@ -1,4 +1,4 @@
-*> \brief \b CQRT17
+*> \brief \b AB_CQRT17
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION CQRT17( TRANS, IRESID, M, N, NRHS, A,
+*       REAL             FUNCTION AB_CQRT17( TRANS, IRESID, M, N, NRHS, A,
 *                        LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> CQRT17 computes the ratio
+*> AB_CQRT17 computes the ratio
 *>
 *>    || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
 *>
@@ -147,7 +147,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      REAL             FUNCTION CQRT17( TRANS, IRESID, M, N, NRHS, A,
+      REAL             FUNCTION AB_CQRT17( TRANS, IRESID, M, N, NRHS, A,
      $                 LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -178,65 +178,66 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLASCL, XERBLA
+      EXTERNAL           AB_CGEMM, AB_CLACPY, AB_CLASCL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      CQRT17 = ZERO
+      AB_CQRT17 = ZERO
 *
-      IF( LSAME( TRANS, 'N' ) ) THEN
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
          NROWS = M
          NCOLS = N
-      ELSE IF( LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( AB_LSAME( TRANS, 'C' ) ) THEN
          NROWS = N
          NCOLS = M
       ELSE
-         CALL XERBLA( 'CQRT17', 1 )
+         CALL AB_XERBLA( 'AB_CQRT17', 1 )
          RETURN
       END IF
 *
       IF( LWORK.LT.NCOLS*NRHS ) THEN
-         CALL XERBLA( 'CQRT17', 13 )
+         CALL AB_XERBLA( 'AB_CQRT17', 13 )
          RETURN
       END IF
 *
       IF( M.LE.0 .OR. N.LE.0 .OR. NRHS.LE.0 )
      $   RETURN
 *
-      NORMA = CLANGE( 'One-norm', M, N, A, LDA, RWORK )
-      SMLNUM = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
+      NORMA = AB_CLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' ) / AB_SLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
 *     compute residual and scale it
 *
-      CALL CLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
-      CALL CGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS,
+      CALL AB_CLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
+      CALL AB_CGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS,
      $            CMPLX( -ONE ), A, LDA, X, LDX, CMPLX( ONE ), C, LDB )
-      NORMRS = CLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
+      NORMRS = AB_CLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
       IF( NORMRS.GT.SMLNUM ) THEN
          ISCL = 1
-         CALL CLASCL( 'General', 0, 0, NORMRS, ONE, NROWS, NRHS, C, LDB,
+         CALL AB_CLASCL( 'General', 0, 0, NORMRS, ONE, NROWS, NRHS, C, L
+     $DB,
      $                INFO )
       END IF
 *
 *     compute R'*A
 *
-      CALL CGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
+      CALL AB_CGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
      $            CMPLX( ONE ), C, LDB, A, LDA, CMPLX( ZERO ), WORK,
      $            NRHS )
 *
 *     compute and properly scale error
 *
-      ERR = CLANGE( 'One-norm', NRHS, NCOLS, WORK, NRHS, RWORK )
+      ERR = AB_CLANGE( 'One-norm', NRHS, NCOLS, WORK, NRHS, RWORK )
       IF( NORMA.NE.ZERO )
      $   ERR = ERR / NORMA
 *
@@ -244,7 +245,7 @@
      $   ERR = ERR*NORMRS
 *
       IF( IRESID.EQ.1 ) THEN
-         NORMB = CLANGE( 'One-norm', NROWS, NRHS, B, LDB, RWORK )
+         NORMB = AB_CLANGE( 'One-norm', NROWS, NRHS, B, LDB, RWORK )
          IF( NORMB.NE.ZERO )
      $      ERR = ERR / NORMB
       ELSE
@@ -252,9 +253,10 @@
      $      ERR = ERR / NORMRS
       END IF
 *
-      CQRT17 = ERR / ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N, NRHS ) ) )
+      AB_CQRT17 = ERR / ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N, NRHS )
+     $ ) )
       RETURN
 *
-*     End of CQRT17
+*     End of AB_CQRT17
 *
       END

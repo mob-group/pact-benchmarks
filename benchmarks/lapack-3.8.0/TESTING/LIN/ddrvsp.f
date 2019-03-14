@@ -1,4 +1,4 @@
-*> \brief \b DDRVSP
+*> \brief \b AB_DDRVSP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DDRVSP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE AB_DDRVSP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                          NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DDRVSP tests the driver routines DSPSV and -SVX.
+*> AB_DDRVSP tests the driver routines AB_DSPSV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -152,7 +152,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DDRVSP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+      SUBROUTINE AB_DDRVSP( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX
+     $,
      $                   A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
 *
@@ -198,13 +199,16 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, DLANSP
-      EXTERNAL           DGET06, DLANSP
+      DOUBLE PRECISION   AB_DGET06, AB_DLANSP
+      EXTERNAL           AB_DGET06, AB_DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, DCOPY, DERRVX, DGET04,
-     $                   DLACPY, DLARHS, DLASET, DLATB4, DLATMS, DPPT02,
-     $                   DPPT05, DSPSV, DSPSVX, DSPT01, DSPTRF, DSPTRI
+      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_DCOPY, AB_D
+     $ERRVX, AB_DGET04,
+     $                   AB_DLACPY, AB_DLARHS, AB_DLASET, AB_DLATB4, AB_
+     $DLATMS, AB_DPPT02,
+     $                   AB_DPPT05, AB_DSPSV, AB_AB_DSPSVX, AB_DSPT01, A
+     $B_DSPTRF, AB_DSPTRI
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -239,7 +243,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL DERRVX( PATH, NOUT )
+     $   CALL AB_DERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of N in NVAL
@@ -277,21 +281,23 @@
                   PACKIT = 'R'
                END IF
 *
-*              Set up parameters with DLATB4 and generate a test matrix
-*              with DLATMS.
+*              Set up parameters with AB_DLATB4 and generate a test matrix
+*              with AB_DLATMS.
 *
-               CALL DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+               CALL AB_DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
+     $DE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'DLATMS'
-               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'AB_DLATMS'
+               CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, PACKIT, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from DLATMS.
+*              Check error code from AB_DLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, UPLO, N, N
+     $, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 160
                END IF
@@ -370,7 +376,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by DSPSVX.
+*                 the value returned by AB_AB_DSPSVX.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -381,18 +387,18 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = DLANSP( '1', UPLO, N, A, RWORK )
+                     ANORM = AB_DLANSP( '1', UPLO, N, A, RWORK )
 *
 *                    Factor the matrix A.
 *
-                     CALL DCOPY( NPP, A, 1, AFAC, 1 )
-                     CALL DSPTRF( UPLO, N, AFAC, IWORK, INFO )
+                     CALL AB_DCOPY( NPP, A, 1, AFAC, 1 )
+                     CALL AB_DSPTRF( UPLO, N, AFAC, IWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-                     CALL DCOPY( NPP, AFAC, 1, AINV, 1 )
-                     CALL DSPTRI( UPLO, N, AINV, IWORK, WORK, INFO )
-                     AINVNM = DLANSP( '1', UPLO, N, AINV, RWORK )
+                     CALL AB_DCOPY( NPP, AFAC, 1, AINV, 1 )
+                     CALL AB_DSPTRI( UPLO, N, AINV, IWORK, WORK, INFO )
+                     AINVNM = AB_DLANSP( '1', UPLO, N, AINV, RWORK )
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -405,22 +411,22 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'DLARHS'
-                  CALL DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'AB_DLARHS'
+                  CALL AB_DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test DSPSV  ---
+*                 --- Test AB_DSPSV  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL DCOPY( NPP, A, 1, AFAC, 1 )
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL AB_DCOPY( NPP, A, 1, AFAC, 1 )
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using DSPSV.
+*                    Factor the matrix and solve the system using AB_DSPSV.
 *
-                     SRNAMT = 'DSPSV '
-                     CALL DSPSV( UPLO, N, NRHS, AFAC, IWORK, X, LDA,
+                     SRNAMT = 'AB_DSPSV '
+                     CALL AB_DSPSV( UPLO, N, NRHS, AFAC, IWORK, X, LDA,
      $                           INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -440,10 +446,11 @@
                         END IF
                      END IF
 *
-*                    Check error code from DSPSV .
+*                    Check error code from AB_DSPSV .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'DSPSV ', INFO, K, UPLO, N,
+                        CALL AB_ALAERH( PATH, 'AB_DSPSV ', INFO, K, UPLO
+     $, N,
      $                               N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 120
@@ -454,18 +461,20 @@
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL DSPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA,
+                     CALL AB_DSPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA,
      $                            RWORK, RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL DPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA,
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_DPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA
+     $,
      $                            RWORK, RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -475,8 +484,9 @@
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'DSPSV ', UPLO, N,
+     $                        CALL AB_ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'AB_DSPSV ', UPLO, N
+     $,
      $                        IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -485,18 +495,19 @@
   120                CONTINUE
                   END IF
 *
-*                 --- Test DSPSVX ---
+*                 --- Test AB_AB_DSPSVX ---
 *
                   IF( IFACT.EQ.2 .AND. NPP.GT.0 )
-     $               CALL DLASET( 'Full', NPP, 1, ZERO, ZERO, AFAC,
+     $               CALL AB_DLASET( 'Full', NPP, 1, ZERO, ZERO, AFAC,
      $                            NPP )
-                  CALL DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
+                  CALL AB_DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
 *
 *                 Solve the system and compute the condition number and
-*                 error bounds using DSPSVX.
+*                 error bounds using AB_AB_DSPSVX.
 *
-                  SRNAMT = 'DSPSVX'
-                  CALL DSPSVX( FACT, UPLO, N, NRHS, A, AFAC, IWORK, B,
+                  SRNAMT = 'AB_AB_DSPSVX'
+                  CALL AB_AB_DSPSVX( FACT, UPLO, N, NRHS, A, AFAC, IWORK
+     $, B,
      $                         LDA, X, LDA, RCOND, RWORK,
      $                         RWORK( NRHS+1 ), WORK, IWORK( N+1 ),
      $                         INFO )
@@ -518,10 +529,11 @@
                      END IF
                   END IF
 *
-*                 Check the error code from DSPSVX.
+*                 Check the error code from AB_AB_DSPSVX.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'DSPSVX', INFO, K, FACT // UPLO,
+                     CALL AB_ALAERH( PATH, 'AB_AB_DSPSVX', INFO, K, FACT
+     $ // UPLO,
      $                            N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                            NERRS, NOUT )
                      GO TO 150
@@ -533,7 +545,8 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL DSPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA,
+                        CALL AB_DSPT01( UPLO, N, A, AFAC, IWORK, AINV, L
+     $DA,
      $                               RWORK( 2*NRHS+1 ), RESULT( 1 ) )
                         K1 = 1
                      ELSE
@@ -542,28 +555,30 @@
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL DPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA,
+                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
+     $)
+                     CALL AB_DPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA
+     $,
      $                            RWORK( 2*NRHS+1 ), RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
 *
 *                    Check the error bounds from iterative refinement.
 *
-                     CALL DPPT05( UPLO, N, NRHS, A, B, LDA, X, LDA,
+                     CALL AB_DPPT05( UPLO, N, NRHS, A, B, LDA, X, LDA,
      $                            XACT, LDA, RWORK, RWORK( NRHS+1 ),
      $                            RESULT( 4 ) )
                   ELSE
                      K1 = 6
                   END IF
 *
-*                 Compare RCOND from DSPSVX with the computed value
+*                 Compare RCOND from AB_AB_DSPSVX with the computed value
 *                 in RCONDC.
 *
-                  RESULT( 6 ) = DGET06( RCOND, RCONDC )
+                  RESULT( 6 ) = AB_DGET06( RCOND, RCONDC )
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
@@ -571,8 +586,9 @@
                   DO 140 K = K1, 6
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL ALADHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9998 )'DSPSVX', FACT, UPLO,
+     $                     CALL AB_ALADHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9998 )'AB_AB_DSPSVX', FACT, U
+     $PLO,
      $                     N, IMAT, K, RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -587,7 +603,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
@@ -595,6 +611,6 @@
      $      ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of DDRVSP
+*     End of AB_DDRVSP
 *
       END

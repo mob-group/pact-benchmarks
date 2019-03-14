@@ -1,4 +1,4 @@
-*> \brief \b DLA_PORCOND estimates the Skeel condition number for a symmetric positive-definite matrix.
+*> \brief \b AB_DLA_PORCOND estimates the Skeel condition number for a symmetric positive-definite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLA_PORCOND + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_porcond.f">
+*> Download AB_DLA_PORCOND + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLA_PORCOND.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_porcond.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLA_PORCOND.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_porcond.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLA_PORCOND.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
+*       DOUBLE PRECISION FUNCTION AB_DLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
 *                                              CMODE, C, INFO, WORK,
 *                                              IWORK )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*>    DLA_PORCOND Estimates the Skeel condition number of  op(A) * op2(C)
+*>    AB_DLA_PORCOND Estimates the Skeel condition number of  op(A) * op2(C)
 *>    where op2 is determined by CMODE as follows
 *>    CMODE =  1    op2(C) = C
 *>    CMODE =  0    op2(C) = I
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDAF,N)
 *>     The triangular factor U or L from the Cholesky factorization
-*>     A = U**T*U or A = L*L**T, as computed by DPOTRF.
+*>     A = U**T*U or A = L*L**T, as computed by AB_DPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -138,7 +138,8 @@
 *> \ingroup doublePOcomputational
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
+      DOUBLE PRECISION FUNCTION AB_DLA_PORCOND( UPLO, N, A, LDA, AF, LDA
+     $F,
      $                                       CMODE, C, INFO, WORK,
      $                                       IWORK )
 *
@@ -168,34 +169,34 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACN2, DPOTRS, XERBLA
+      EXTERNAL           AB_DLACN2, AB_DPOTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      DLA_PORCOND = 0.0D+0
+      AB_DLA_PORCOND = 0.0D+0
 *
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLA_PORCOND', -INFO )
+         CALL AB_XERBLA( 'AB_DLA_PORCOND', -INFO )
          RETURN
       END IF
 
       IF( N.EQ.0 ) THEN
-         DLA_PORCOND = 1.0D+0
+         AB_DLA_PORCOND = 1.0D+0
          RETURN
       END IF
       UP = .FALSE.
-      IF ( LSAME( UPLO, 'U' ) ) UP = .TRUE.
+      IF ( AB_LSAME( UPLO, 'U' ) ) UP = .TRUE.
 *
 *     Compute the equilibration matrix R such that
 *     inv(R)*A*C has unit 1-norm.
@@ -262,7 +263,7 @@
 
       KASE = 0
    10 CONTINUE
-      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -273,9 +274,9 @@
             END DO
 
             IF (UP) THEN
-               CALL DPOTRS( 'Upper', N, 1, AF, LDAF, WORK, N, INFO )
+               CALL AB_DPOTRS( 'Upper', N, 1, AF, LDAF, WORK, N, INFO )
             ELSE
-               CALL DPOTRS( 'Lower', N, 1, AF, LDAF, WORK, N, INFO )
+               CALL AB_DPOTRS( 'Lower', N, 1, AF, LDAF, WORK, N, INFO )
             ENDIF
 *
 *           Multiply by inv(C).
@@ -304,9 +305,9 @@
             END IF
 
             IF ( UP ) THEN
-               CALL DPOTRS( 'Upper', N, 1, AF, LDAF, WORK, N, INFO )
+               CALL AB_DPOTRS( 'Upper', N, 1, AF, LDAF, WORK, N, INFO )
             ELSE
-               CALL DPOTRS( 'Lower', N, 1, AF, LDAF, WORK, N, INFO )
+               CALL AB_DPOTRS( 'Lower', N, 1, AF, LDAF, WORK, N, INFO )
             ENDIF
 *
 *           Multiply by R.
@@ -321,7 +322,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0D+0 )
-     $   DLA_PORCOND = ( 1.0D+0 / AINVNM )
+     $   AB_DLA_PORCOND = ( 1.0D+0 / AINVNM )
 *
       RETURN
 *
