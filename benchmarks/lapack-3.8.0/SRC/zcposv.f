@@ -1,4 +1,4 @@
-*> \brief <b> AB_ZCPOSV computes the solution to system of linear equations A * X = B for PO matrices</b>
+*> \brief <b> ZCPOSV computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZCPOSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZCPOSV.f">
+*> Download ZCPOSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zcposv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZCPOSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zcposv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZCPOSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zcposv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
+*       SUBROUTINE ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
 *                          SWORK, RWORK, ITER, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,12 +38,12 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCPOSV computes the solution to a complex system of linear equations
+*> ZCPOSV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian positive definite matrix and X and B
 *> are N-by-NRHS matrices.
 *>
-*> AB_ZCPOSV first attempts to factorize the matrix in COMPLEX and use this
+*> ZCPOSV first attempts to factorize the matrix in COMPLEX and use this
 *> factorization within an iterative refinement procedure to produce a
 *> solution with COMPLEX*16 normwise backward error quality (see below).
 *> If the approach fails the method switches to a COMPLEX*16
@@ -53,7 +53,7 @@
 *> the ratio COMPLEX performance over COMPLEX*16 performance is too
 *> small. A reasonable strategy should take the number of right-hand
 *> sides and the size of the matrix into account. This might be done
-*> with a call to AB_ILAENV in the future. Up to now, we always try
+*> with a call to ILAENV in the future. Up to now, we always try
 *> iterative refinement.
 *>
 *> The iterative refinement process is stopped if
@@ -175,7 +175,7 @@
 *>                    implementation- or machine-specific reasons
 *>               -2 : narrowing the precision induced an overflow,
 *>                    the routine fell back to full precision
-*>               -3 : failure of AB_CPOTRF
+*>               -3 : failure of CPOTRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
 *>          > 0: iterative refinement has been successfully used.
@@ -206,7 +206,7 @@
 *> \ingroup complex16POsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
+      SUBROUTINE ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
      $                   SWORK, RWORK, ITER, INFO )
 *
 *  -- LAPACK driver routine (version 3.8.0) --
@@ -247,16 +247,14 @@
       COMPLEX*16         ZDUM
 *
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZAXPY, AB_ZHEMM, AB_ZLACPY, AB_ZLAT2C, AB_ZL
-     $AG2C, AB_CLAG2Z,
-     $                   AB_CPOTRF, AB_CPOTRS, AB_XERBLA, AB_ZPOTRF, AB_
-     $ZPOTRS
+      EXTERNAL           ZAXPY, ZHEMM, ZLACPY, ZLAT2C, ZLAG2C, CLAG2Z,
+     $                   CPOTRF, CPOTRS, XERBLA, ZPOTRF, ZPOTRS
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH, AB_ZLANHE
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_IZAMAX, DLAMCH, AB_ZLANHE, AB_LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH, ZLANHE
+      LOGICAL            LSAME
+      EXTERNAL           IZAMAX, DLAMCH, ZLANHE, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -273,8 +271,7 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -288,7 +285,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZCPOSV', -INFO )
+         CALL XERBLA( 'ZCPOSV', -INFO )
          RETURN
       END IF
 *
@@ -307,7 +304,7 @@
 *
 *     Compute some constants.
 *
-      ANRM = AB_ZLANHE( 'I', UPLO, N, A, LDA, RWORK )
+      ANRM = ZLANHE( 'I', UPLO, N, A, LDA, RWORK )
       EPS = DLAMCH( 'Epsilon' )
       CTE = ANRM*EPS*SQRT( DBLE( N ) )*BWDMAX
 *
@@ -319,7 +316,7 @@
 *     Convert B from double precision to single precision and store the
 *     result in SX.
 *
-      CALL AB_ZLAG2C( N, NRHS, B, LDB, SWORK( PTSX ), N, INFO )
+      CALL ZLAG2C( N, NRHS, B, LDB, SWORK( PTSX ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -2
@@ -329,7 +326,7 @@
 *     Convert A from double precision to single precision and store the
 *     result in SA.
 *
-      CALL AB_ZLAT2C( UPLO, N, A, LDA, SWORK( PTSA ), N, INFO )
+      CALL ZLAT2C( UPLO, N, A, LDA, SWORK( PTSA ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -2
@@ -338,7 +335,7 @@
 *
 *     Compute the Cholesky factorization of SA.
 *
-      CALL AB_CPOTRF( UPLO, N, SWORK( PTSA ), N, INFO )
+      CALL CPOTRF( UPLO, N, SWORK( PTSA ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -3
@@ -347,26 +344,26 @@
 *
 *     Solve the system SA*SX = SB.
 *
-      CALL AB_CPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ), N,
+      CALL CPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ), N,
      $             INFO )
 *
 *     Convert SX back to COMPLEX*16
 *
-      CALL AB_CLAG2Z( N, NRHS, SWORK( PTSX ), N, X, LDX, INFO )
+      CALL CLAG2Z( N, NRHS, SWORK( PTSX ), N, X, LDX, INFO )
 *
 *     Compute R = B - AX (R is WORK).
 *
-      CALL AB_ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
+      CALL ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-      CALL AB_ZHEMM( 'Left', UPLO, N, NRHS, NEGONE, A, LDA, X, LDX, ONE,
+      CALL ZHEMM( 'Left', UPLO, N, NRHS, NEGONE, A, LDA, X, LDX, ONE,
      $            WORK, N )
 *
 *     Check whether the NRHS normwise backward errors satisfy the
 *     stopping criterion. If yes, set ITER=0 and return.
 *
       DO I = 1, NRHS
-         XNRM = CABS1( X( AB_IZAMAX( N, X( 1, I ), 1 ), I ) )
-         RNRM = CABS1( WORK( AB_IZAMAX( N, WORK( 1, I ), 1 ), I ) )
+         XNRM = CABS1( X( IZAMAX( N, X( 1, I ), 1 ), I ) )
+         RNRM = CABS1( WORK( IZAMAX( N, WORK( 1, I ), 1 ), I ) )
          IF( RNRM.GT.XNRM*CTE )
      $      GO TO 10
       END DO
@@ -384,7 +381,7 @@
 *        Convert R (in WORK) from double precision to single precision
 *        and store the result in SX.
 *
-         CALL AB_ZLAG2C( N, NRHS, WORK, N, SWORK( PTSX ), N, INFO )
+         CALL ZLAG2C( N, NRHS, WORK, N, SWORK( PTSX ), N, INFO )
 *
          IF( INFO.NE.0 ) THEN
             ITER = -2
@@ -393,32 +390,31 @@
 *
 *        Solve the system SA*SX = SR.
 *
-         CALL AB_CPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ),
-     $ N,
+         CALL CPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ), N,
      $                INFO )
 *
 *        Convert SX back to double precision and update the current
 *        iterate.
 *
-         CALL AB_CLAG2Z( N, NRHS, SWORK( PTSX ), N, WORK, N, INFO )
+         CALL CLAG2Z( N, NRHS, SWORK( PTSX ), N, WORK, N, INFO )
 *
          DO I = 1, NRHS
-            CALL AB_ZAXPY( N, ONE, WORK( 1, I ), 1, X( 1, I ), 1 )
+            CALL ZAXPY( N, ONE, WORK( 1, I ), 1, X( 1, I ), 1 )
          END DO
 *
 *        Compute R = B - AX (R is WORK).
 *
-         CALL AB_ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
+         CALL ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-         CALL AB_ZHEMM( 'L', UPLO, N, NRHS, NEGONE, A, LDA, X, LDX, ONE,
+         CALL ZHEMM( 'L', UPLO, N, NRHS, NEGONE, A, LDA, X, LDX, ONE,
      $               WORK, N )
 *
 *        Check whether the NRHS normwise backward errors satisfy the
 *        stopping criterion. If yes, set ITER=IITER>0 and return.
 *
          DO I = 1, NRHS
-            XNRM = CABS1( X( AB_IZAMAX( N, X( 1, I ), 1 ), I ) )
-            RNRM = CABS1( WORK( AB_IZAMAX( N, WORK( 1, I ), 1 ), I ) )
+            XNRM = CABS1( X( IZAMAX( N, X( 1, I ), 1 ), I ) )
+            RNRM = CABS1( WORK( IZAMAX( N, WORK( 1, I ), 1 ), I ) )
             IF( RNRM.GT.XNRM*CTE )
      $         GO TO 20
          END DO
@@ -446,16 +442,16 @@
 *     Single-precision iterative refinement failed to converge to a
 *     satisfactory solution, so we resort to double precision.
 *
-      CALL AB_ZPOTRF( UPLO, N, A, LDA, INFO )
+      CALL ZPOTRF( UPLO, N, A, LDA, INFO )
 *
       IF( INFO.NE.0 )
      $   RETURN
 *
-      CALL AB_ZLACPY( 'All', N, NRHS, B, LDB, X, LDX )
-      CALL AB_ZPOTRS( UPLO, N, NRHS, A, LDA, X, LDX, INFO )
+      CALL ZLACPY( 'All', N, NRHS, B, LDB, X, LDX )
+      CALL ZPOTRS( UPLO, N, NRHS, A, LDA, X, LDX, INFO )
 *
       RETURN
 *
-*     End of AB_ZCPOSV.
+*     End of ZCPOSV.
 *
       END

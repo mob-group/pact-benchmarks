@@ -1,4 +1,4 @@
-*> \brief \b AB_DGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by AB_SGTTRF.
+*> \brief \b DGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by sgttrf.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGTTS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGTTS2.f">
+*> Download DGTTS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtts2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGTTS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtts2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGTTS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtts2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
+*       SUBROUTINE DGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            ITRANS, LDB, N, NRHS
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DGTTS2 solves one of the systems of equations
+*> DGTTS2 solves one of the systems of equations
 *>    A*X = B  or  A**T*X = B,
 *> with a tridiagonal matrix A using the LU factorization computed
-*> by AB_DGTTRF.
+*> by DGTTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -126,8 +126,7 @@
 *> \ingroup doubleGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LD
-     $B )
+      SUBROUTINE DGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -270,6 +269,6 @@
          END IF
       END IF
 *
-*     End of AB_DGTTS2
+*     End of DGTTS2
 *
       END

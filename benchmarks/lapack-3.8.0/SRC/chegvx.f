@@ -1,4 +1,4 @@
-*> \brief \b AB_CHEGVX
+*> \brief \b CHEGVX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHEGVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHEGVx.f">
+*> Download CHEGVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chegvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHEGVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chegvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHEGVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHEGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
+*       SUBROUTINE CHEGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
 *                          VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
 *                          LWORK, RWORK, IWORK, IFAIL, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHEGVX computes selected eigenvalues, and optionally, eigenvectors
+*> CHEGVX computes selected eigenvalues, and optionally, eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.  Here A and
 *> B are assumed to be Hermitian and B is also positive definite.
@@ -243,12 +243,12 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,2*N).
 *>          For optimal efficiency, LWORK >= (NB+1)*N,
-*>          where NB is the blocksize for AB_CHETRD returned by AB_ILAENV.
+*>          where NB is the blocksize for CHETRD returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -275,8 +275,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_CPOTRF or AB_CHEEVX returned an error code:
-*>             <= N:  if INFO = i, AB_CHEEVX failed to converge;
+*>          > 0:  CPOTRF or CHEEVX returned an error code:
+*>             <= N:  if INFO = i, CHEEVX failed to converge;
 *>                    i eigenvectors failed to converge.  Their indices
 *>                    are stored in array IFAIL.
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
@@ -303,7 +303,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_CHEGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
+      SUBROUTINE CHEGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
      $                   VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
      $                   LWORK, RWORK, IWORK, IFAIL, INFO )
 *
@@ -336,13 +336,12 @@
       INTEGER            LWKOPT, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV, AB_LSAME
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHEEVX, AB_CHEGST, AB_CPOTRF, AB_CTRMM, AB_C
-     $TRSM, AB_XERBLA
+      EXTERNAL           CHEEVX, CHEGST, CPOTRF, CTRMM, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -351,21 +350,21 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -392,7 +391,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = AB_ILAENV( 1, 'AB_CHETRD', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'CHETRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 1, ( NB + 1 )*N )
          WORK( 1 ) = LWKOPT
 *
@@ -402,7 +401,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHEGVX', -INFO )
+         CALL XERBLA( 'CHEGVX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -417,7 +416,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL AB_CPOTRF( UPLO, N, B, LDB, INFO )
+      CALL CPOTRF( UPLO, N, B, LDB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -425,9 +424,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL AB_CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABST
-     $OL,
+      CALL CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      CALL CHEEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABSTOL,
      $             M, W, Z, LDZ, WORK, LWORK, RWORK, IWORK, IFAIL,
      $             INFO )
 *
@@ -448,8 +446,7 @@
                TRANS = 'C'
             END IF
 *
-            CALL AB_CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, 
-     $B,
+            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, B,
      $                  LDB, Z, LDZ )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -463,8 +460,7 @@
                TRANS = 'N'
             END IF
 *
-            CALL AB_CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, 
-     $B,
+            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, CONE, B,
      $                  LDB, Z, LDZ )
          END IF
       END IF
@@ -475,6 +471,6 @@
 *
       RETURN
 *
-*     End of AB_CHEGVX
+*     End of CHEGVX
 *
       END

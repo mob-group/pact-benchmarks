@@ -1,6 +1,6 @@
-*> \brief <b> AB_CHBEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> CHBEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
-*  @generated from AB_ZHBEV_2stage.f, fortran z -> c, Sat Nov  5 23:18:20 2016
+*  @generated from zhbev_2stage.f, fortran z -> c, Sat Nov  5 23:18:20 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHBEV_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHBEV_2stage.f">
+*> Download CHBEV_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chbev_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHBEV_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chbev_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHBEV_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbev_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+*       SUBROUTINE CHBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
 *                                WORK, LWORK, RWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHBEV_2STAGE computes all the eigenvalues and, optionally, eigenvectors of
+*> CHBEV_2STAGE computes all the eigenvalues and, optionally, eigenvectors of
 *> a complex Hermitian band matrix A using the 2stage technique for
 *> the reduction to tridiagonal.
 *> \endverbatim
@@ -145,7 +145,7 @@
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -208,8 +208,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_CHBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ
-     $,
+      SUBROUTINE CHBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
      $                         WORK, LWORK, RWORK, INFO )
 *
       IMPLICIT NONE
@@ -242,15 +241,14 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV2STAGE
-      REAL               SLAMCH, AB_CLANHB
-      EXTERNAL           AB_LSAME, SLAMCH, AB_CLANHB, AB_ILAENV2STAGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      REAL               SLAMCH, CLANHB
+      EXTERNAL           LSAME, SLAMCH, CLANHB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL, AB_SSTERF, AB_XERBLA, AB_CLASCL, AB_C
-     $STEQR,
-     $                   AB_CHETRD_2STAGE, AB_CHETRD_HB2ST
+      EXTERNAL           SSCAL, SSTERF, XERBLA, CLASCL, CSTEQR,
+     $                   CHETRD_2STAGE, CHETRD_HB2ST
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, SQRT
@@ -259,14 +257,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -283,11 +281,11 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            IB    = AB_ILAENV2STAGE( 2, 'AB_CHETRD_HB2ST', JOBZ,
+            IB    = ILAENV2STAGE( 2, 'CHETRD_HB2ST', JOBZ,
      $                            N, KD, -1, -1 )
-            LHTRD = AB_ILAENV2STAGE( 3, 'AB_CHETRD_HB2ST', JOBZ,
+            LHTRD = ILAENV2STAGE( 3, 'CHETRD_HB2ST', JOBZ,
      $                            N, KD, IB, -1 )
-            LWTRD = AB_ILAENV2STAGE( 4, 'AB_CHETRD_HB2ST', JOBZ,
+            LWTRD = ILAENV2STAGE( 4, 'CHETRD_HB2ST', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = LHTRD + LWTRD
             WORK( 1 )  = LWMIN
@@ -298,7 +296,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHBEV_2STAGE ', -INFO )
+         CALL XERBLA( 'CHBEV_2STAGE ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -331,7 +329,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_CLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
+      ANRM = CLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -342,32 +340,30 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
       END IF
 *
-*     Call AB_CHBTRD_HB2ST to reduce Hermitian band matrix to tridiagonal form.
+*     Call CHBTRD_HB2ST to reduce Hermitian band matrix to tridiagonal form.
 *
       INDE    = 1
       INDHOUS = 1
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL AB_CHETRD_HB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, W,
+      CALL CHETRD_HB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, W,
      $                    RWORK( INDE ), WORK( INDHOUS ), LHTRD, 
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, call AB_CSTEQR.
+*     For eigenvalues only, call SSTERF.  For eigenvectors, call CSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_SSTERF( N, W, RWORK( INDE ), INFO )
+         CALL SSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
          INDRWK = INDE + N
-         CALL AB_CSTEQR( JOBZ, N, W, RWORK( INDE ), Z, LDZ,
+         CALL CSTEQR( JOBZ, N, W, RWORK( INDE ), Z, LDZ,
      $                RWORK( INDRWK ), INFO )
       END IF
 *
@@ -379,7 +375,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     Set WORK(1) to optimal workspace size.
@@ -388,6 +384,6 @@
 *
       RETURN
 *
-*     End of AB_CHBEV_2STAGE
+*     End of CHBEV_2STAGE
 *
       END

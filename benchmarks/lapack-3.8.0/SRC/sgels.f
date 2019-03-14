@@ -1,4 +1,4 @@
-*> \brief <b> AB_SGELS solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> SGELS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGELS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGELS.f">
+*> Download SGELS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgels.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGELS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgels.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGELS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgels.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
+*       SUBROUTINE SGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGELS solves overdetermined or underdetermined real linear systems
+*> SGELS solves overdetermined or underdetermined real linear systems
 *> involving an M-by-N matrix A, or its transpose, using a QR or LQ
 *> factorization of A.  It is assumed that A has full rank.
 *>
@@ -96,9 +96,9 @@
 *>          On entry, the M-by-N matrix A.
 *>          On exit,
 *>            if M >= N, A is overwritten by details of its QR
-*>                       factorization as returned by AB_SGEQRF;
+*>                       factorization as returned by SGEQRF;
 *>            if M <  N, A is overwritten by details of its LQ
-*>                       factorization as returned by AB_SGELQF.
+*>                       factorization as returned by SGELQF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -153,7 +153,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -180,8 +180,7 @@
 *> \ingroup realGEsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_SGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWOR
-     $K,
+      SUBROUTINE SGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
      $                  INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -212,15 +211,14 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, SLAMCH, AB_SLANGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGELQF, AB_SGEQRF, AB_SLABAD, AB_SLASCL, AB_
-     $SLASET, AB_SORMLQ,
-     $                   AB_SORMQR, AB_STRTRS, AB_XERBLA
+      EXTERNAL           SGELQF, SGEQRF, SLABAD, SLASCL, SLASET, SORMLQ,
+     $                   SORMQR, STRTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -232,8 +230,7 @@
       INFO = 0
       MN = MIN( M, N )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.( AB_LSAME( TRANS, 'N' ) .OR. AB_LSAME( TRANS, 'T' ) ) ) 
-     $THEN
+      IF( .NOT.( LSAME( TRANS, 'N' ) .OR. LSAME( TRANS, 'T' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -255,29 +252,25 @@
       IF( INFO.EQ.0 .OR. INFO.EQ.-10 ) THEN
 *
          TPSD = .TRUE.
-         IF( AB_LSAME( TRANS, 'N' ) )
+         IF( LSAME( TRANS, 'N' ) )
      $      TPSD = .FALSE.
 *
          IF( M.GE.N ) THEN
-            NB = AB_ILAENV( 1, 'AB_SGEQRF', ' ', M, N, -1, -1 )
+            NB = ILAENV( 1, 'SGEQRF', ' ', M, N, -1, -1 )
             IF( TPSD ) THEN
-               NB = MAX( NB, AB_ILAENV( 1, 'AB_SORMQR', 'LN', M, NRHS, N
-     $,
+               NB = MAX( NB, ILAENV( 1, 'SORMQR', 'LN', M, NRHS, N,
      $              -1 ) )
             ELSE
-               NB = MAX( NB, AB_ILAENV( 1, 'AB_SORMQR', 'LT', M, NRHS, N
-     $,
+               NB = MAX( NB, ILAENV( 1, 'SORMQR', 'LT', M, NRHS, N,
      $              -1 ) )
             END IF
          ELSE
-            NB = AB_ILAENV( 1, 'AB_SGELQF', ' ', M, N, -1, -1 )
+            NB = ILAENV( 1, 'SGELQF', ' ', M, N, -1, -1 )
             IF( TPSD ) THEN
-               NB = MAX( NB, AB_ILAENV( 1, 'AB_SORMLQ', 'LT', N, NRHS, M
-     $,
+               NB = MAX( NB, ILAENV( 1, 'SORMLQ', 'LT', N, NRHS, M,
      $              -1 ) )
             ELSE
-               NB = MAX( NB, AB_ILAENV( 1, 'AB_SORMLQ', 'LN', N, NRHS, M
-     $,
+               NB = MAX( NB, ILAENV( 1, 'SORMLQ', 'LN', N, NRHS, M,
      $              -1 ) )
             END IF
          END IF
@@ -288,7 +281,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGELS ', -INFO )
+         CALL XERBLA( 'SGELS ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -297,7 +290,7 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-         CALL AB_SLASET( 'Full', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL SLASET( 'Full', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          RETURN
       END IF
 *
@@ -305,49 +298,49 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_SLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = SLANGE( 'M', M, N, A, LDA, RWORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL AB_SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          GO TO 50
       END IF
 *
       BROW = M
       IF( TPSD )
      $   BROW = N
-      BNRM = AB_SLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
+      BNRM = SLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
+         CALL SLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
+         CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 2
       END IF
@@ -356,8 +349,7 @@
 *
 *        compute QR factorization of A
 *
-         CALL AB_SGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN
-     $,
+         CALL SGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
      $                INFO )
 *
 *        workspace at least N, optimally N*NB
@@ -368,7 +360,7 @@
 *
 *           B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-            CALL AB_SORMQR( 'Left', 'Transpose', M, NRHS, N, A, LDA,
+            CALL SORMQR( 'Left', 'Transpose', M, NRHS, N, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -376,8 +368,7 @@
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
-            CALL AB_STRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS
-     $,
+            CALL STRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -392,7 +383,7 @@
 *
 *           B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS)
 *
-            CALL AB_STRTRS( 'Upper', 'Transpose', 'Non-unit', N, NRHS,
+            CALL STRTRS( 'Upper', 'Transpose', 'Non-unit', N, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -409,7 +400,7 @@
 *
 *           B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS)
 *
-            CALL AB_SORMQR( 'Left', 'No transpose', M, NRHS, N, A, LDA,
+            CALL SORMQR( 'Left', 'No transpose', M, NRHS, N, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -423,8 +414,7 @@
 *
 *        Compute LQ factorization of A
 *
-         CALL AB_SGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN
-     $,
+         CALL SGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
      $                INFO )
 *
 *        workspace at least M, optimally M*NB.
@@ -435,8 +425,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS)
 *
-            CALL AB_STRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS
-     $,
+            CALL STRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -453,7 +442,7 @@
 *
 *           B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS)
 *
-            CALL AB_SORMLQ( 'Left', 'Transpose', N, NRHS, M, A, LDA,
+            CALL SORMLQ( 'Left', 'Transpose', N, NRHS, M, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -467,7 +456,7 @@
 *
 *           B(1:N,1:NRHS) := Q * B(1:N,1:NRHS)
 *
-            CALL AB_SORMLQ( 'Left', 'No transpose', N, NRHS, M, A, LDA,
+            CALL SORMLQ( 'Left', 'No transpose', N, NRHS, M, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -475,7 +464,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS)
 *
-            CALL AB_STRTRS( 'Lower', 'Transpose', 'Non-unit', M, NRHS,
+            CALL STRTRS( 'Lower', 'Transpose', 'Non-unit', M, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -491,17 +480,17 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
+         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
+         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
+         CALL SLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
+         CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       END IF
 *
@@ -510,6 +499,6 @@
 *
       RETURN
 *
-*     End of AB_SGELS
+*     End of SGELS
 *
       END

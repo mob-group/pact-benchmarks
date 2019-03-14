@@ -1,4 +1,4 @@
-*> \brief \b AB_SSTEBZ
+*> \brief \b SSTEBZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSTEBZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSTEBZ.f">
+*> Download SSTEBZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstebz.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSTEBZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sstebz.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSTEBZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstebz.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, E,
+*       SUBROUTINE SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, E,
 *                          M, NSPLIT, W, IBLOCK, ISPLIT, WORK, IWORK,
 *                          INFO )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSTEBZ computes the eigenvalues of a symmetric tridiagonal
+*> SSTEBZ computes the eigenvalues of a symmetric tridiagonal
 *> matrix T.  The user may ask for all eigenvalues, all eigenvalues
 *> in the half-open interval (VL, VU], or the IL-th through IU-th
 *> eigenvalues.
@@ -167,7 +167,7 @@
 *> \verbatim
 *>          W is REAL array, dimension (N)
 *>          On exit, the first M elements of W will contain the
-*>          eigenvalues.  (AB_SSTEBZ may use the remaining N-M elements as
+*>          eigenvalues.  (SSTEBZ may use the remaining N-M elements as
 *>          workspace.)
 *> \endverbatim
 *>
@@ -178,7 +178,7 @@
 *>          matrix T is considered to split into a block diagonal
 *>          matrix.  On exit, if INFO = 0, IBLOCK(i) specifies to which
 *>          block (from 1 to the number of blocks) the eigenvalue W(i)
-*>          belongs.  (AB_SSTEBZ may use the remaining N-M elements as
+*>          belongs.  (SSTEBZ may use the remaining N-M elements as
 *>          workspace.)
 *> \endverbatim
 *>
@@ -269,8 +269,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, 
-     $E,
+      SUBROUTINE SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, E,
      $                   M, NSPLIT, W, IBLOCK, ISPLIT, WORK, IWORK,
      $                   INFO )
 *
@@ -311,13 +310,13 @@
       INTEGER            IDUMMA( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
       REAL               SLAMCH
-      EXTERNAL           AB_LSAME, AB_ILAENV, SLAMCH
+      EXTERNAL           LSAME, ILAENV, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLAEBZ, AB_XERBLA
+      EXTERNAL           SLAEBZ, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MIN, SQRT
@@ -328,11 +327,11 @@
 *
 *     Decode RANGE
 *
-      IF( AB_LSAME( RANGE, 'A' ) ) THEN
+      IF( LSAME( RANGE, 'A' ) ) THEN
          IRANGE = 1
-      ELSE IF( AB_LSAME( RANGE, 'V' ) ) THEN
+      ELSE IF( LSAME( RANGE, 'V' ) ) THEN
          IRANGE = 2
-      ELSE IF( AB_LSAME( RANGE, 'I' ) ) THEN
+      ELSE IF( LSAME( RANGE, 'I' ) ) THEN
          IRANGE = 3
       ELSE
          IRANGE = 0
@@ -340,9 +339,9 @@
 *
 *     Decode ORDER
 *
-      IF( AB_LSAME( ORDER, 'B' ) ) THEN
+      IF( LSAME( ORDER, 'B' ) ) THEN
          IORDER = 2
-      ELSE IF( AB_LSAME( ORDER, 'E' ) ) THEN
+      ELSE IF( LSAME( ORDER, 'E' ) ) THEN
          IORDER = 1
       ELSE
          IORDER = 0
@@ -367,7 +366,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSTEBZ', -INFO )
+         CALL XERBLA( 'SSTEBZ', -INFO )
          RETURN
       END IF
 *
@@ -395,7 +394,7 @@
       SAFEMN = SLAMCH( 'S' )
       ULP = SLAMCH( 'P' )
       RTOLI = ULP*RELFAC
-      NB = AB_ILAENV( 1, 'AB_SSTEBZ', ' ', N, -1, -1, -1 )
+      NB = ILAENV( 1, 'SSTEBZ', ' ', N, -1, -1, -1 )
       IF( NB.LE.1 )
      $   NB = 0
 *
@@ -484,8 +483,7 @@
          IWORK( 5 ) = IL - 1
          IWORK( 6 ) = IU
 *
-         CALL AB_SLAEBZ( 3, ITMAX, N, 2, 2, NB, ATOLI, RTOLI, PIVMIN, D,
-     $ E,
+         CALL SLAEBZ( 3, ITMAX, N, 2, 2, NB, ATOLI, RTOLI, PIVMIN, D, E,
      $                WORK, IWORK( 5 ), WORK( N+1 ), WORK( N+5 ), IOUT,
      $                IWORK, W, IBLOCK, IINFO )
 *
@@ -614,7 +612,7 @@
 *
             WORK( N+1 ) = GL
             WORK( N+IN+1 ) = GU
-            CALL AB_SLAEBZ( 1, 0, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
+            CALL SLAEBZ( 1, 0, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
      $                   D( IBEGIN ), E( IBEGIN ), WORK( IBEGIN ),
      $                   IDUMMA, WORK( N+1 ), WORK( N+2*IN+1 ), IM,
      $                   IWORK, W( M+1 ), IBLOCK( M+1 ), IINFO )
@@ -627,8 +625,7 @@
 *
             ITMAX = INT( ( LOG( GU-GL+PIVMIN )-LOG( PIVMIN ) ) /
      $              LOG( TWO ) ) + 2
-            CALL AB_SLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI, PIVMI
-     $N,
+            CALL SLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
      $                   D( IBEGIN ), E( IBEGIN ), WORK( IBEGIN ),
      $                   IDUMMA, WORK( N+1 ), WORK( N+2*IN+1 ), IOUT,
      $                   IWORK, W( M+1 ), IBLOCK( M+1 ), IINFO )
@@ -768,6 +765,6 @@
      $   INFO = INFO + 2
       RETURN
 *
-*     End of AB_SSTEBZ
+*     End of SSTEBZ
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SPOEQUB
+*> \brief \b SPOEQUB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPOEQUB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPOEQUb.f">
+*> Download SPOEQUB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spoequb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPOEQUb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spoequb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPOEQUb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spoequb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
+*       SUBROUTINE SPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPOEQUB computes row and column scalings intended to equilibrate a
+*> SPOEQUB computes row and column scalings intended to equilibrate a
 *> symmetric positive definite matrix A and reduce its condition number
 *> (with respect to the two-norm).  S contains the scale factors,
 *> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
@@ -43,7 +43,7 @@
 *> smallest possible condition number over all possible diagonal
 *> scalings.
 *>
-*> This routine differs from AB_SPOEQU by restricting the scaling factors
+*> This routine differs from SPOEQU by restricting the scaling factors
 *> to a power of the radix.  Barring over- and underflow, scaling by
 *> these factors introduces no additional rounding errors.  However, the
 *> scaled diagonal entries are no longer approximately 1 but lie
@@ -116,7 +116,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
+      SUBROUTINE SPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,7 +146,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT, LOG, INT
@@ -164,7 +164,7 @@
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPOEQUB', -INFO )
+         CALL XERBLA( 'SPOEQUB', -INFO )
          RETURN
       END IF
 *
@@ -216,6 +216,6 @@
 *
       RETURN
 *
-*     End of AB_SPOEQUB
+*     End of SPOEQUB
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> AB_CHECON_ROOK estimates the reciprocal of the condition number fort HE matrices using factorization obtained with one of the bounded diagonal pivoting methods (max 2 interchanges) </b>
+*> \brief <b> CHECON_ROOK estimates the reciprocal of the condition number fort HE matrices using factorization obtained with one of the bounded diagonal pivoting methods (max 2 interchanges) </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHECON_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHECON_rook.f">
+*> Download CHECON_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/checon_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHECON_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/checon_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHECON_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/checon_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+*       SUBROUTINE CHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
 *                               INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CHECON_ROOK estimates the reciprocal of the condition number of a complex
+*> CHECON_ROOK estimates the reciprocal of the condition number of a complex
 *> Hermitian matrix A using the factorization A = U*D*U**H or
-*> A = L*D*L**H computed by AB_CHETRF_ROOK.
+*> A = L*D*L**H computed by CHETRF_ROOK.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_CHETRF_ROOK.
+*>          obtain the factor U or L as computed by CHETRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -80,7 +80,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_CHETRF_ROOK.
+*>          as determined by CHETRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -136,8 +136,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_CHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WO
-     $RK,
+      SUBROUTINE CHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
      $                        INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -170,11 +169,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHETRS_ROOK, AB_CLACN2, AB_XERBLA
+      EXTERNAL           CHETRS_ROOK, CLACN2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -184,8 +183,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -195,7 +194,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHECON_ROOK', -INFO )
+         CALL XERBLA( 'CHECON_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -233,12 +232,12 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**H) or inv(U*D*U**H).
 *
-         CALL AB_CHETRS_ROOK( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
+         CALL CHETRS_ROOK( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
@@ -249,6 +248,6 @@
 *
       RETURN
 *
-*     End of AB_CHECON_ROOK
+*     End of CHECON_ROOK
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLANGB returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of general band matrix.
+*> \brief \b ZLANGB returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of general band matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLANGB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLANGB.f">
+*> Download ZLANGB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlangb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLANGB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlangb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLANGB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlangb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_ZLANGB( NORM, N, KL, KU, AB, LDAB,
+*       DOUBLE PRECISION FUNCTION ZLANGB( NORM, N, KL, KU, AB, LDAB,
 *                        WORK )
 *
 *       .. Scalar Arguments ..
@@ -36,15 +36,15 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLANGB  returns the value of the one norm,  or the Frobenius norm, or
+*> ZLANGB  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the element of  largest absolute value  of an
 *> n by n band matrix  A,  with kl sub-diagonals and ku super-diagonals.
 *> \endverbatim
 *>
-*> \return AB_ZLANGB
+*> \return ZLANGB
 *> \verbatim
 *>
-*>    AB_ZLANGB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    ZLANGB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -64,14 +64,14 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in AB_ZLANGB as described
+*>          Specifies the value to be returned in ZLANGB as described
 *>          above.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, AB_ZLANGB is
+*>          The order of the matrix A.  N >= 0.  When N = 0, ZLANGB is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -122,7 +122,7 @@
 *> \ingroup complex16GBauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_ZLANGB( NORM, N, KL, KU, AB, LDAB,
+      DOUBLE PRECISION FUNCTION ZLANGB( NORM, N, KL, KU, AB, LDAB,
      $                 WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -150,11 +150,11 @@
       DOUBLE PRECISION   SCALE, SUM, VALUE, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           AB_LSAME, AB_DISNAN
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASSQ
+      EXTERNAL           ZLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -163,7 +163,7 @@
 *
       IF( N.EQ.0 ) THEN
          VALUE = ZERO
-      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
@@ -171,10 +171,10 @@
          DO 20 J = 1, N
             DO 10 I = MAX( KU+2-J, 1 ), MIN( N+KU+1-J, KL+KU+1 )
                TEMP = ABS( AB( I, J ) )
-               IF( VALUE.LT.TEMP .OR. AB_DISNAN( TEMP ) ) VALUE = TEMP
+               IF( VALUE.LT.TEMP .OR. DISNAN( TEMP ) ) VALUE = TEMP
    10       CONTINUE
    20    CONTINUE
-      ELSE IF( ( AB_LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
 *
 *        Find norm1(A).
 *
@@ -184,9 +184,9 @@
             DO 30 I = MAX( KU+2-J, 1 ), MIN( N+KU+1-J, KL+KU+1 )
                SUM = SUM + ABS( AB( I, J ) )
    30       CONTINUE
-            IF( VALUE.LT.SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
+            IF( VALUE.LT.SUM .OR. DISNAN( SUM ) ) VALUE = SUM
    40    CONTINUE
-      ELSE IF( AB_LSAME( NORM, 'I' ) ) THEN
+      ELSE IF( LSAME( NORM, 'I' ) ) THEN
 *
 *        Find normI(A).
 *
@@ -202,10 +202,9 @@
          VALUE = ZERO
          DO 80 I = 1, N
             TEMP = WORK( I )
-            IF( VALUE.LT.TEMP .OR. AB_DISNAN( TEMP ) ) VALUE = TEMP
+            IF( VALUE.LT.TEMP .OR. DISNAN( TEMP ) ) VALUE = TEMP
    80    CONTINUE
-      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' ) ) 
-     $) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
@@ -214,15 +213,14 @@
          DO 90 J = 1, N
             L = MAX( 1, J-KU )
             K = KU + 1 - J + L
-            CALL AB_ZLASSQ( MIN( N, J+KL )-L+1, AB( K, J ), 1, SCALE, SU
-     $M )
+            CALL ZLASSQ( MIN( N, J+KL )-L+1, AB( K, J ), 1, SCALE, SUM )
    90    CONTINUE
          VALUE = SCALE*SQRT( SUM )
       END IF
 *
-      AB_ZLANGB = VALUE
+      ZLANGB = VALUE
       RETURN
 *
-*     End of AB_ZLANGB
+*     End of ZLANGB
 *
       END

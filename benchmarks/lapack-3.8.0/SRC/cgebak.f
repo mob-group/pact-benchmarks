@@ -1,4 +1,4 @@
-*> \brief \b AB_CGEBAK
+*> \brief \b CGEBAK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGEBAK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEBAK.f">
+*> Download CGEBAK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebak.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEBAK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebak.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEBAK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebak.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
+*       SUBROUTINE CGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CGEBAK forms the right or left eigenvectors of a complex general
+*> CGEBAK forms the right or left eigenvectors of a complex general
 *> matrix by backward transformation on the computed eigenvectors of the
-*> balanced matrix output by AB_CGEBAL.
+*> balanced matrix output by CGEBAL.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *>          = 'S', do backward transformation for scaling only;
 *>          = 'B', do backward transformations for both permutation and
 *>                 scaling.
-*>          JOB must be the same as the argument JOB supplied to AB_CGEBAL.
+*>          JOB must be the same as the argument JOB supplied to CGEBAL.
 *> \endverbatim
 *>
 *> \param[in] SIDE
@@ -77,7 +77,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*>          The integers ILO and IHI determined by AB_CGEBAL.
+*>          The integers ILO and IHI determined by CGEBAL.
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
 *> \endverbatim
 *>
@@ -85,7 +85,7 @@
 *> \verbatim
 *>          SCALE is REAL array, dimension (N)
 *>          Details of the permutation and scaling factors, as returned
-*>          by AB_CGEBAL.
+*>          by CGEBAL.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -98,7 +98,7 @@
 *> \verbatim
 *>          V is COMPLEX array, dimension (LDV,M)
 *>          On entry, the matrix of right or left eigenvectors to be
-*>          transformed, as returned by AB_CHSEIN or AB_CTREVC.
+*>          transformed, as returned by CHSEIN or CTREVC.
 *>          On exit, V is overwritten by the transformed eigenvectors.
 *> \endverbatim
 *>
@@ -128,7 +128,7 @@
 *> \ingroup complexGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
+      SUBROUTINE CGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -157,11 +157,11 @@
       REAL               S
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CSSCAL, AB_CSWAP, AB_XERBLA
+      EXTERNAL           CSSCAL, CSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -170,14 +170,12 @@
 *
 *     Decode and Test the input parameters
 *
-      RIGHTV = AB_LSAME( SIDE, 'R' )
-      LEFTV = AB_LSAME( SIDE, 'L' )
+      RIGHTV = LSAME( SIDE, 'R' )
+      LEFTV = LSAME( SIDE, 'L' )
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.AB_LSAME( JOB, 'P' ) .AND
-     $.
-     $    .NOT.AB_LSAME( JOB, 'S' ) .AND. .NOT.AB_LSAME( JOB, 'B' ) ) TH
-     $EN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -2
@@ -193,7 +191,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGEBAK', -INFO )
+         CALL XERBLA( 'CGEBAK', -INFO )
          RETURN
       END IF
 *
@@ -203,7 +201,7 @@
      $   RETURN
       IF( M.EQ.0 )
      $   RETURN
-      IF( AB_LSAME( JOB, 'N' ) )
+      IF( LSAME( JOB, 'N' ) )
      $   RETURN
 *
       IF( ILO.EQ.IHI )
@@ -211,19 +209,19 @@
 *
 *     Backward balance
 *
-      IF( AB_LSAME( JOB, 'S' ) .OR. AB_LSAME( JOB, 'B' ) ) THEN
+      IF( LSAME( JOB, 'S' ) .OR. LSAME( JOB, 'B' ) ) THEN
 *
          IF( RIGHTV ) THEN
             DO 10 I = ILO, IHI
                S = SCALE( I )
-               CALL AB_CSSCAL( M, S, V( I, 1 ), LDV )
+               CALL CSSCAL( M, S, V( I, 1 ), LDV )
    10       CONTINUE
          END IF
 *
          IF( LEFTV ) THEN
             DO 20 I = ILO, IHI
                S = ONE / SCALE( I )
-               CALL AB_CSSCAL( M, S, V( I, 1 ), LDV )
+               CALL CSSCAL( M, S, V( I, 1 ), LDV )
    20       CONTINUE
          END IF
 *
@@ -235,7 +233,7 @@
 *              IHI+1 step 1 until N do --
 *
    30 CONTINUE
-      IF( AB_LSAME( JOB, 'P' ) .OR. AB_LSAME( JOB, 'B' ) ) THEN
+      IF( LSAME( JOB, 'P' ) .OR. LSAME( JOB, 'B' ) ) THEN
          IF( RIGHTV ) THEN
             DO 40 II = 1, N
                I = II
@@ -246,7 +244,7 @@
                K = SCALE( I )
                IF( K.EQ.I )
      $            GO TO 40
-               CALL AB_CSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
+               CALL CSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
    40       CONTINUE
          END IF
 *
@@ -260,13 +258,13 @@
                K = SCALE( I )
                IF( K.EQ.I )
      $            GO TO 50
-               CALL AB_CSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
+               CALL CSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
    50       CONTINUE
          END IF
       END IF
 *
       RETURN
 *
-*     End of AB_CGEBAK
+*     End of CGEBAK
 *
       END

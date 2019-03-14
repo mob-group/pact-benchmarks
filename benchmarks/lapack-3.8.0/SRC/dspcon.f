@@ -1,4 +1,4 @@
-*> \brief \b AB_DSPCON
+*> \brief \b DSPCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSPCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSPCON.f">
+*> Download DSPCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dspcon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSPCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dspcon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSPCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspcon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, IWORK,
+*       SUBROUTINE DSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, IWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DSPCON estimates the reciprocal of the condition number (in the
+*> DSPCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a real symmetric packed matrix A using the factorization
-*> A = U*D*U**T or A = L*D*L**T computed by AB_DSPTRF.
+*> A = U*D*U**T or A = L*D*L**T computed by DSPTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          AP is DOUBLE PRECISION array, dimension (N*(N+1)/2)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_DSPTRF, stored as a
+*>          obtain the factor U or L as computed by DSPTRF, stored as a
 *>          packed triangular matrix.
 *> \endverbatim
 *>
@@ -75,7 +75,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_DSPTRF.
+*>          as determined by DSPTRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -122,8 +122,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, IWORK
-     $,
+      SUBROUTINE DSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, IWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -156,19 +155,19 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLACN2, AB_DSPTRS, AB_XERBLA
+      EXTERNAL           DLACN2, DSPTRS, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -176,7 +175,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSPCON', -INFO )
+         CALL XERBLA( 'DSPCON', -INFO )
          RETURN
       END IF
 *
@@ -218,12 +217,12 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
 *
-         CALL AB_DSPTRS( UPLO, N, 1, AP, IPIV, WORK, N, INFO )
+         CALL DSPTRS( UPLO, N, 1, AP, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
@@ -234,6 +233,6 @@
 *
       RETURN
 *
-*     End of AB_DSPCON
+*     End of DSPCON
 *
       END

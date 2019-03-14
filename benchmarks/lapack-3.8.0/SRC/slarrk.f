@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARRK computes one eigenvalue of a symmetric tridiagonal matrix T to suitable accuracy.
+*> \brief \b SLARRK computes one eigenvalue of a symmetric tridiagonal matrix T to suitable accuracy.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARRK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARRK.f">
+*> Download SLARRK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrk.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARRK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrk.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARRK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrk.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARRK( N, IW, GL, GU,
+*       SUBROUTINE SLARRK( N, IW, GL, GU,
 *                           D, E2, PIVMIN, RELTOL, W, WERR, INFO)
 *
 *       .. Scalar Arguments ..
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARRK computes one eigenvalue of a symmetric tridiagonal
+*> SLARRK computes one eigenvalue of a symmetric tridiagonal
 *> matrix T to suitable accuracy. This is an auxiliary code to be
-*> called from AB_SSTEMR.
+*> called from SSTEMR.
 *>
 *> To avoid overflow, the matrix must be scaled so that its
 *> largest element is no greater than overflow**(1/2) * underflow**(1/4) in absolute value, and for greatest
@@ -142,7 +142,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARRK( N, IW, GL, GU,
+      SUBROUTINE SLARRK( N, IW, GL, GU,
      $                    D, E2, PIVMIN, RELTOL, W, WERR, INFO)
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -251,6 +251,6 @@
 
       RETURN
 *
-*     End of AB_SLARRK
+*     End of SLARRK
 *
       END

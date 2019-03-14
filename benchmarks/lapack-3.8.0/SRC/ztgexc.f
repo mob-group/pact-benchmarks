@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTGEXC
+*> \brief \b ZTGEXC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZTGEXC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTGEXC.f">
+*> Download ZTGEXC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgexc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTGEXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgexc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTGEXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgexc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+*       SUBROUTINE ZTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, IFST, ILST, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTGEXC reorders the generalized Schur decomposition of a complex
+*> ZTGEXC reorders the generalized Schur decomposition of a complex
 *> matrix pair (A,B), using an unitary equivalence transformation
 *> (A, B) := Q * (A, B) * Z**H, so that the diagonal block of (A, B) with
 *> row index IFST is moved to row ILST.
@@ -197,7 +197,7 @@
 *>      1996.
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+      SUBROUTINE ZTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, IFST, ILST, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -220,7 +220,7 @@
       INTEGER            HERE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZTGEX2
+      EXTERNAL           XERBLA, ZTGEX2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -245,7 +245,7 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTGEXC', -INFO )
+         CALL XERBLA( 'ZTGEXC', -INFO )
          RETURN
       END IF
 *
@@ -264,8 +264,7 @@
 *
 *        Swap with next one below
 *
-         CALL AB_ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z, LDZ
-     $,
+         CALL ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z, LDZ,
      $                HERE, INFO )
          IF( INFO.NE.0 ) THEN
             ILST = HERE
@@ -282,8 +281,7 @@
 *
 *        Swap with next one above
 *
-         CALL AB_ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z, LDZ
-     $,
+         CALL ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z, LDZ,
      $                HERE, INFO )
          IF( INFO.NE.0 ) THEN
             ILST = HERE
@@ -297,6 +295,6 @@
       ILST = HERE
       RETURN
 *
-*     End of AB_ZTGEXC
+*     End of ZTGEXC
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> AB_SGTSVX computes the solution to system of linear equations A * X = B for GT matrices </b>
+*> \brief <b> SGTSVX computes the solution to system of linear equations A * X = B for GT matrices </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGTSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGTSVx.f">
+*> Download SGTSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtsvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGTSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgtsvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGTSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtsvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+*       SUBROUTINE SGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
 *                          DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
 *                          WORK, IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGTSVX uses the LU factorization to compute the solution to a real
+*> SGTSVX uses the LU factorization to compute the solution to a real
 *> system of linear equations A * X = B or A**T * X = B,
 *> where A is a tridiagonal matrix of order N and X and B are N-by-NRHS
 *> matrices.
@@ -136,7 +136,7 @@
 *>          DLF is REAL array, dimension (N-1)
 *>          If FACT = 'F', then DLF is an input argument and on entry
 *>          contains the (n-1) multipliers that define the matrix L from
-*>          the LU factorization of A as computed by AB_SGTTRF.
+*>          the LU factorization of A as computed by SGTTRF.
 *>
 *>          If FACT = 'N', then DLF is an output argument and on exit
 *>          contains the (n-1) multipliers that define the matrix L from
@@ -182,7 +182,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the LU factorization of A as
-*>          computed by AB_SGTTRF.
+*>          computed by SGTTRF.
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains the pivot indices from the LU factorization of A;
@@ -289,8 +289,7 @@
 *> \ingroup realGTsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_SGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DU
-     $F,
+      SUBROUTINE SGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
      $                   DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
 *
@@ -323,14 +322,13 @@
       REAL               ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANGT
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANGT
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLANGT
+      EXTERNAL           LSAME, SLAMCH, SLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGTCON, AB_SGTRFS, AB_SGTTRF, AB_S
-     $GTTRS, AB_SLACPY,
-     $                   AB_XERBLA
+      EXTERNAL           SCOPY, SGTCON, SGTRFS, SGTTRF, SGTTRS, SLACPY,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -338,12 +336,12 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
+      NOFACT = LSAME( FACT, 'N' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -355,7 +353,7 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGTSVX', -INFO )
+         CALL XERBLA( 'SGTSVX', -INFO )
          RETURN
       END IF
 *
@@ -363,12 +361,12 @@
 *
 *        Compute the LU factorization of A.
 *
-         CALL AB_SCOPY( N, D, 1, DF, 1 )
+         CALL SCOPY( N, D, 1, DF, 1 )
          IF( N.GT.1 ) THEN
-            CALL AB_SCOPY( N-1, DL, 1, DLF, 1 )
-            CALL AB_SCOPY( N-1, DU, 1, DUF, 1 )
+            CALL SCOPY( N-1, DL, 1, DLF, 1 )
+            CALL SCOPY( N-1, DU, 1, DUF, 1 )
          END IF
-         CALL AB_SGTTRF( N, DLF, DF, DUF, DU2, IPIV, INFO )
+         CALL SGTTRF( N, DLF, DF, DUF, DU2, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -385,25 +383,23 @@
       ELSE
          NORM = 'I'
       END IF
-      ANORM = AB_SLANGT( NORM, N, DL, D, DU )
+      ANORM = SLANGT( NORM, N, DL, D, DU )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL AB_SGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WO
-     $RK,
+      CALL SGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WORK,
      $             IWORK, INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_SGTTRS( TRANS, N, NRHS, DLF, DF, DUF, DU2, IPIV, X, LDX,
+      CALL SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL SGTTRS( TRANS, N, NRHS, DLF, DF, DUF, DU2, IPIV, X, LDX,
      $             INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL AB_SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV
-     $,
+      CALL SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV,
      $             B, LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
@@ -413,6 +409,6 @@
 *
       RETURN
 *
-*     End of AB_SGTSVX
+*     End of SGTSVX
 *
       END

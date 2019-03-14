@@ -1,4 +1,4 @@
-*> \brief \b AB_DSYGV
+*> \brief \b DSYGV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSYGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYGV.f">
+*> Download DSYGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsygv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsygv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+*       SUBROUTINE DSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
 *                         LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSYGV computes all the eigenvalues, and optionally, the eigenvectors
+*> DSYGV computes all the eigenvalues, and optionally, the eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.
 *> Here A and B are assumed to be symmetric and B is also
@@ -136,12 +136,12 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,3*N-1).
 *>          For optimal efficiency, LWORK >= (NB+2)*N,
-*>          where NB is the blocksize for AB_DSYTRD returned by AB_ILAENV.
+*>          where NB is the blocksize for DSYTRD returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -149,8 +149,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_DPOTRF or AB_DSYEV returned an error code:
-*>             <= N:  if INFO = i, AB_DSYEV failed to converge;
+*>          > 0:  DPOTRF or DSYEV returned an error code:
+*>             <= N:  if INFO = i, DSYEV failed to converge;
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero;
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
@@ -172,8 +172,7 @@
 *> \ingroup doubleSYeigen
 *
 *  =====================================================================
-      SUBROUTINE AB_DSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK
-     $,
+      SUBROUTINE DSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
      $                  LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -201,13 +200,12 @@
       INTEGER            LWKMIN, LWKOPT, NB, NEIG
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DPOTRF, AB_DSYEV, AB_DSYGST, AB_DTRMM, AB_DT
-     $RSM, AB_XERBLA
+      EXTERNAL           DPOTRF, DSYEV, DSYGST, DTRMM, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -216,16 +214,16 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -237,7 +235,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 3*N - 1 )
-         NB = AB_ILAENV( 1, 'AB_DSYTRD', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'DSYTRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( LWKMIN, ( NB + 2 )*N )
          WORK( 1 ) = LWKOPT
 *
@@ -247,7 +245,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSYGV ', -INFO )
+         CALL XERBLA( 'DSYGV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -260,7 +258,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL AB_DPOTRF( UPLO, N, B, LDB, INFO )
+      CALL DPOTRF( UPLO, N, B, LDB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -268,8 +266,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL AB_DSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
+      CALL DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      CALL DSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
 *
       IF( WANTZ ) THEN
 *
@@ -289,8 +287,7 @@
                TRANS = 'T'
             END IF
 *
-            CALL AB_DTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE
-     $,
+            CALL DTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -304,8 +301,7 @@
                TRANS = 'N'
             END IF
 *
-            CALL AB_DTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE
-     $,
+            CALL DTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF
@@ -313,6 +309,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_DSYGV
+*     End of DSYGV
 *
       END

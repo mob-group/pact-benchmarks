@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAMRG creates a permutation list to merge the entries of two independently sorted sets into a single set sorted in ascending order.
+*> \brief \b DLAMRG creates a permutation list to merge the entries of two independently sorted sets into a single set sorted in ascending order.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAMRG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAMRG.f">
+*> Download DLAMRG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlamrg.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAMRG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlamrg.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAMRG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlamrg.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAMRG( N1, N2, A, DTRD1, DTRD2, INDEX )
+*       SUBROUTINE DLAMRG( N1, N2, A, DTRD1, DTRD2, INDEX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            DTRD1, DTRD2, N1, N2
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAMRG will create a permutation list which will merge the elements
+*> DLAMRG will create a permutation list which will merge the elements
 *> of A (which is composed of two independently sorted sets) into a
 *> single set which is sorted in ascending order.
 *> \endverbatim
@@ -97,7 +97,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAMRG( N1, N2, A, DTRD1, DTRD2, INDEX )
+      SUBROUTINE DLAMRG( N1, N2, A, DTRD1, DTRD2, INDEX )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -166,6 +166,6 @@
 *
       RETURN
 *
-*     End of AB_DLAMRG
+*     End of DLAMRG
 *
       END

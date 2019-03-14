@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAQR2 performs the unitary similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
+*> \brief \b CLAQR2 performs the unitary similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAQR2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQR2.f">
+*> Download CLAQR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqr2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQR2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqr2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQR2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqr2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+*       SUBROUTINE CLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
 *                          IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
 *                          NV, WV, LDWV, WORK, LWORK )
 *
@@ -38,8 +38,8 @@
 *>
 *> \verbatim
 *>
-*>    AB_CLAQR2 is identical to AB_CLAQR3 except that it avoids
-*>    recursion by calling AB_CLAHQR instead of AB_CLAQR4.
+*>    CLAQR2 is identical to CLAQR3 except that it avoids
+*>    recursion by calling CLAHQR instead of CLAQR4.
 *>
 *>    Aggressive early deflation:
 *>
@@ -239,11 +239,11 @@
 *>          suffices, but greater efficiency may result from larger
 *>          values of LWORK.
 *>
-*>          If LWORK = -1, then a workspace query is assumed; AB_CLAQR2
+*>          If LWORK = -1, then a workspace query is assumed; CLAQR2
 *>          only estimates the optimal workspace size for the given
 *>          values of N, NW, KTOP and KBOT.  The estimate is returned
 *>          in WORK(1).  No error message related to LWORK is issued
-*>          by AB_XERBLA.  Neither H nor Z are accessed.
+*>          by XERBLA.  Neither H nor Z are accessed.
 *> \endverbatim
 *
 *  Authors:
@@ -265,8 +265,7 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILO
-     $Z,
+      SUBROUTINE CLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
      $                   IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
      $                   NV, WV, LDWV, WORK, LWORK )
 *
@@ -305,10 +304,8 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CGEHRD, AB_CGEMM, AB_CLACPY, AB_CL
-     $AHQR, AB_CLARF,
-     $                   AB_CLARFG, AB_CLASET, AB_CTREXC, AB_CUNMHR, AB_
-     $SLABAD
+      EXTERNAL           CCOPY, CGEHRD, CGEMM, CLACPY, CLAHQR, CLARF,
+     $                   CLARFG, CLASET, CTREXC, CUNMHR, SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, INT, MAX, MIN, REAL
@@ -328,15 +325,14 @@
          LWKOPT = 1
       ELSE
 *
-*        ==== Workspace query call to AB_CGEHRD ====
+*        ==== Workspace query call to CGEHRD ====
 *
-         CALL AB_CGEHRD( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
+         CALL CGEHRD( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
          LWK1 = INT( WORK( 1 ) )
 *
-*        ==== Workspace query call to AB_CUNMHR ====
+*        ==== Workspace query call to CUNMHR ====
 *
-         CALL AB_CUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV
-     $,
+         CALL CUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
      $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
@@ -367,7 +363,7 @@
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL AB_SLABAD( SAFMIN, SAFMAX )
+      CALL SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *
@@ -405,12 +401,11 @@
 *     .    the deflation window that converged using INFQR
 *     .    here and there to keep track.) ====
 *
-      CALL AB_CLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
-      CALL AB_CCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 
-     $)
+      CALL CLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
+      CALL CCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 )
 *
-      CALL AB_CLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
-      CALL AB_CLAHQR( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ), 1,
+      CALL CLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
+      CALL CLAHQR( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ), 1,
      $             JW, V, LDV, INFQR )
 *
 *     ==== Deflation detection loop ====
@@ -433,10 +428,10 @@
          ELSE
 *
 *           ==== One undeflatable eigenvalue.  Move it up out of the
-*           .    way.   (AB_CTREXC can not fail in this case.) ====
+*           .    way.   (CTREXC can not fail in this case.) ====
 *
             IFST = NS
-            CALL AB_CTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO )
+            CALL CTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO )
             ILST = ILST + 1
          END IF
    10 CONTINUE
@@ -459,8 +454,7 @@
    20       CONTINUE
             ILST = I
             IF( IFST.NE.ILST )
-     $         CALL AB_CTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO
-     $ )
+     $         CALL CTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO )
    30    CONTINUE
       END IF
 *
@@ -476,25 +470,24 @@
 *
 *           ==== Reflect spike back into lower triangle ====
 *
-            CALL AB_CCOPY( NS, V, LDV, WORK, 1 )
+            CALL CCOPY( NS, V, LDV, WORK, 1 )
             DO 50 I = 1, NS
                WORK( I ) = CONJG( WORK( I ) )
    50       CONTINUE
             BETA = WORK( 1 )
-            CALL AB_CLARFG( NS, BETA, WORK( 2 ), 1, TAU )
+            CALL CLARFG( NS, BETA, WORK( 2 ), 1, TAU )
             WORK( 1 ) = ONE
 *
-            CALL AB_CLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT 
-     $)
+            CALL CLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT )
 *
-            CALL AB_CLARF( 'L', NS, JW, WORK, 1, CONJG( TAU ), T, LDT,
+            CALL CLARF( 'L', NS, JW, WORK, 1, CONJG( TAU ), T, LDT,
      $                  WORK( JW+1 ) )
-            CALL AB_CLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
+            CALL CLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
-            CALL AB_CLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
+            CALL CLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
      $                  WORK( JW+1 ) )
 *
-            CALL AB_CGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
+            CALL CGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
      $                   LWORK-JW, INFO )
          END IF
 *
@@ -502,16 +495,15 @@
 *
          IF( KWTOP.GT.1 )
      $      H( KWTOP, KWTOP-1 ) = S*CONJG( V( 1, 1 ) )
-         CALL AB_CLACPY( 'U', JW, JW, T, LDT, H( KWTOP, KWTOP ), LDH )
-         CALL AB_CCOPY( JW-1, T( 2, 1 ), LDT+1, H( KWTOP+1, KWTOP ),
+         CALL CLACPY( 'U', JW, JW, T, LDT, H( KWTOP, KWTOP ), LDH )
+         CALL CCOPY( JW-1, T( 2, 1 ), LDT+1, H( KWTOP+1, KWTOP ),
      $               LDH+1 )
 *
 *        ==== Accumulate orthogonal matrix in order update
 *        .    H and Z, if requested.  ====
 *
          IF( NS.GT.1 .AND. S.NE.ZERO )
-     $      CALL AB_CUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LD
-     $V,
+     $      CALL CUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
      $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
@@ -523,10 +515,9 @@
          END IF
          DO 60 KROW = LTOP, KWTOP - 1, NV
             KLN = MIN( NV, KWTOP-KROW )
-            CALL AB_CGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
+            CALL CGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
      $                  LDH, V, LDV, ZERO, WV, LDWV )
-            CALL AB_CLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LD
-     $H )
+            CALL CLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LDH )
    60    CONTINUE
 *
 *        ==== Update horizontal slab in H ====
@@ -534,9 +525,9 @@
          IF( WANTT ) THEN
             DO 70 KCOL = KBOT + 1, N, NH
                KLN = MIN( NH, N-KCOL+1 )
-               CALL AB_CGEMM( 'C', 'N', JW, KLN, JW, ONE, V, LDV,
+               CALL CGEMM( 'C', 'N', JW, KLN, JW, ONE, V, LDV,
      $                     H( KWTOP, KCOL ), LDH, ZERO, T, LDT )
-               CALL AB_CLACPY( 'A', JW, KLN, T, LDT, H( KWTOP, KCOL ),
+               CALL CLACPY( 'A', JW, KLN, T, LDT, H( KWTOP, KCOL ),
      $                      LDH )
    70       CONTINUE
          END IF
@@ -546,10 +537,9 @@
          IF( WANTZ ) THEN
             DO 80 KROW = ILOZ, IHIZ, NV
                KLN = MIN( NV, IHIZ-KROW+1 )
-               CALL AB_CGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP
-     $ ),
+               CALL CGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP ),
      $                     LDZ, V, LDV, ZERO, WV, LDWV )
-               CALL AB_CLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
+               CALL CLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
      $                      LDZ )
    80       CONTINUE
          END IF
@@ -571,6 +561,6 @@
 *
       WORK( 1 ) = CMPLX( LWKOPT, 0 )
 *
-*     ==== End of AB_CLAQR2 ====
+*     ==== End of CLAQR2 ====
 *
       END

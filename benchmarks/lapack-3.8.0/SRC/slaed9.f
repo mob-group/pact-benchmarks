@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAED9 used by AB_SSTEDC. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is dense.
+*> \brief \b SLAED9 used by sstedc. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAED9 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED9.f">
+*> Download SLAED9 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed9.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED9.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed9.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED9.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed9.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMDA, W,
+*       SUBROUTINE SLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMDA, W,
 *                          S, LDS, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAED9 finds the roots of the secular equation, as defined by the
+*> SLAED9 finds the roots of the secular equation, as defined by the
 *> values in D, Z, and RHO, between KSTART and KSTOP.  It makes the
-*> appropriate calls to AB_SLAED4 and then stores the new matrix of
+*> appropriate calls to SLAED4 and then stores the new matrix of
 *> eigenvectors for use in calculating the next level of Z vectors.
 *> \endverbatim
 *
@@ -49,7 +49,7 @@
 *> \verbatim
 *>          K is INTEGER
 *>          The number of terms in the rational function to be solved by
-*>          AB_SLAED4.  K >= 0.
+*>          SLAED4.  K >= 0.
 *> \endverbatim
 *>
 *> \param[in] KSTART
@@ -153,8 +153,7 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMDA,
-     $ W,
+      SUBROUTINE SLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMDA, W,
      $                   S, LDS, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -178,11 +177,11 @@
       REAL               TEMP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMC3, AB_SNRM2
-      EXTERNAL           SLAMC3, AB_SNRM2
+      REAL               SLAMC3, SNRM2
+      EXTERNAL           SLAMC3, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SLAED4, AB_XERBLA
+      EXTERNAL           SCOPY, SLAED4, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -208,7 +207,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLAED9', -INFO )
+         CALL XERBLA( 'SLAED9', -INFO )
          RETURN
       END IF
 *
@@ -239,7 +238,7 @@
    10 CONTINUE
 *
       DO 20 J = KSTART, KSTOP
-         CALL AB_SLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
+         CALL SLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
 *
 *        If the zero finder fails, the computation is terminated.
 *
@@ -258,11 +257,11 @@
 *
 *     Compute updated W.
 *
-      CALL AB_SCOPY( K, W, 1, S, 1 )
+      CALL SCOPY( K, W, 1, S, 1 )
 *
 *     Initialize W(I) = Q(I,I)
 *
-      CALL AB_SCOPY( K, Q, LDQ+1, W, 1 )
+      CALL SCOPY( K, Q, LDQ+1, W, 1 )
       DO 70 J = 1, K
          DO 50 I = 1, J - 1
             W( I ) = W( I )*( Q( I, J ) / ( DLAMDA( I )-DLAMDA( J ) ) )
@@ -281,7 +280,7 @@
          DO 90 I = 1, K
             Q( I, J ) = W( I ) / Q( I, J )
    90    CONTINUE
-         TEMP = AB_SNRM2( K, Q( 1, J ), 1 )
+         TEMP = SNRM2( K, Q( 1, J ), 1 )
          DO 100 I = 1, K
             S( I, J ) = Q( I, J ) / TEMP
   100    CONTINUE
@@ -290,6 +289,6 @@
   120 CONTINUE
       RETURN
 *
-*     End of AB_SLAED9
+*     End of SLAED9
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHPTRF
+*> \brief \b ZHPTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHPTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHPTRF.f">
+*> Download ZHPTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHPTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhptrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHPTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHPTRF( UPLO, N, AP, IPIV, INFO )
+*       SUBROUTINE ZHPTRF( UPLO, N, AP, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHPTRF computes the factorization of a complex Hermitian packed
+*> ZHPTRF computes the factorization of a complex Hermitian packed
 *> matrix A using the Bunch-Kaufman diagonal pivoting method:
 *>
 *>    A = U*D*U**H  or  A = L*D*L**H
@@ -157,7 +157,7 @@
 *>  J. Lewis, Boeing Computer Services Company
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHPTRF( UPLO, N, AP, IPIV, INFO )
+      SUBROUTINE ZHPTRF( UPLO, N, AP, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -190,13 +190,13 @@
       COMPLEX*16         D12, D21, T, WK, WKM1, WKP1, ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DLAPY2
-      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAPY2
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAPY2
+      EXTERNAL           LSAME, IZAMAX, DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZDSCAL, AB_ZHPR, AB_ZSWAP
+      EXTERNAL           XERBLA, ZDSCAL, ZHPR, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, SQRT
@@ -212,14 +212,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHPTRF', -INFO )
+         CALL XERBLA( 'ZHPTRF', -INFO )
          RETURN
       END IF
 *
@@ -254,7 +254,7 @@
 *        column K, and COLMAX is its absolute value
 *
          IF( K.GT.1 ) THEN
-            IMAX = AB_IZAMAX( K-1, AP( KC ), 1 )
+            IMAX = IZAMAX( K-1, AP( KC ), 1 )
             COLMAX = CABS1( AP( KC+IMAX-1 ) )
          ELSE
             COLMAX = ZERO
@@ -291,7 +291,7 @@
    20          CONTINUE
                KPC = ( IMAX-1 )*IMAX / 2 + 1
                IF( IMAX.GT.1 ) THEN
-                  JMAX = AB_IZAMAX( IMAX-1, AP( KPC ), 1 )
+                  JMAX = IZAMAX( IMAX-1, AP( KPC ), 1 )
                   ROWMAX = MAX( ROWMAX, CABS1( AP( KPC+JMAX-1 ) ) )
                END IF
 *
@@ -325,7 +325,7 @@
 *              Interchange rows and columns KK and KP in the leading
 *              submatrix A(1:k,1:k)
 *
-               CALL AB_ZSWAP( KP-1, AP( KNC ), 1, AP( KPC ), 1 )
+               CALL ZSWAP( KP-1, AP( KNC ), 1, AP( KPC ), 1 )
                KX = KPC + KP - 1
                DO 30 J = KP + 1, KK - 1
                   KX = KX + J - 1
@@ -364,11 +364,11 @@
 *              A := A - U(k)*D(k)*U(k)**H = A - W(k)*1/D(k)*W(k)**H
 *
                R1 = ONE / DBLE( AP( KC+K-1 ) )
-               CALL AB_ZHPR( UPLO, K-1, -R1, AP( KC ), 1, AP )
+               CALL ZHPR( UPLO, K-1, -R1, AP( KC ), 1, AP )
 *
 *              Store U(k) in column k
 *
-               CALL AB_ZDSCAL( K-1, R1, AP( KC ), 1 )
+               CALL ZDSCAL( K-1, R1, AP( KC ), 1 )
             ELSE
 *
 *              2-by-2 pivot block D(k): columns k and k-1 now hold
@@ -385,7 +385,7 @@
 *
                IF( K.GT.2 ) THEN
 *
-                  D = AB_DLAPY2( DBLE( AP( K-1+( K-1 )*K / 2 ) ),
+                  D = DLAPY2( DBLE( AP( K-1+( K-1 )*K / 2 ) ),
      $                DIMAG( AP( K-1+( K-1 )*K / 2 ) ) )
                   D22 = DBLE( AP( K-1+( K-2 )*( K-1 ) / 2 ) ) / D
                   D11 = DBLE( AP( K+( K-1 )*K / 2 ) ) / D
@@ -457,7 +457,7 @@
 *        column K, and COLMAX is its absolute value
 *
          IF( K.LT.N ) THEN
-            IMAX = K + AB_IZAMAX( N-K, AP( KC+1 ), 1 )
+            IMAX = K + IZAMAX( N-K, AP( KC+1 ), 1 )
             COLMAX = CABS1( AP( KC+IMAX-K ) )
          ELSE
             COLMAX = ZERO
@@ -493,7 +493,7 @@
    70          CONTINUE
                KPC = NPP - ( N-IMAX+1 )*( N-IMAX+2 ) / 2 + 1
                IF( IMAX.LT.N ) THEN
-                  JMAX = IMAX + AB_IZAMAX( N-IMAX, AP( KPC+1 ), 1 )
+                  JMAX = IMAX + IZAMAX( N-IMAX, AP( KPC+1 ), 1 )
                   ROWMAX = MAX( ROWMAX, CABS1( AP( KPC+JMAX-IMAX ) ) )
                END IF
 *
@@ -527,8 +527,7 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL AB_ZSWAP( N-KP, AP( KNC+KP-KK+1 ), 1, AP( KPC+1 )
-     $,
+     $            CALL ZSWAP( N-KP, AP( KNC+KP-KK+1 ), 1, AP( KPC+1 ),
      $                        1 )
                KX = KNC + KP - KK
                DO 80 J = KK + 1, KP - 1
@@ -570,12 +569,12 @@
 *                 A := A - L(k)*D(k)*L(k)**H = A - W(k)*(1/D(k))*W(k)**H
 *
                   R1 = ONE / DBLE( AP( KC ) )
-                  CALL AB_ZHPR( UPLO, N-K, -R1, AP( KC+1 ), 1,
+                  CALL ZHPR( UPLO, N-K, -R1, AP( KC+1 ), 1,
      $                       AP( KC+N-K+1 ) )
 *
 *                 Store L(k) in column K
 *
-                  CALL AB_ZDSCAL( N-K, R1, AP( KC+1 ), 1 )
+                  CALL ZDSCAL( N-K, R1, AP( KC+1 ), 1 )
                END IF
             ELSE
 *
@@ -596,8 +595,7 @@
 *                 where L(k) and L(k+1) are the k-th and (k+1)-th
 *                 columns of L
 *
-                  D = AB_DLAPY2( DBLE( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) )
-     $,
+                  D = DLAPY2( DBLE( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) ),
      $                DIMAG( AP( K+1+( K-1 )*( 2*N-K ) / 2 ) ) )
                   D11 = DBLE( AP( K+1+K*( 2*N-K-1 ) / 2 ) ) / D
                   D22 = DBLE( AP( K+( K-1 )*( 2*N-K ) / 2 ) ) / D
@@ -647,6 +645,6 @@
   110 CONTINUE
       RETURN
 *
-*     End of AB_ZHPTRF
+*     End of ZHPTRF
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CSYTRS2
+*> \brief \b CSYTRS2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CSYTRS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSYTRS2.f">
+*> Download CSYTRS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrs2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSYTRS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytrs2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSYTRS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrs2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+*       SUBROUTINE CSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                           WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CSYTRS2 solves a system of linear equations A*X = B with a COMPLEX
+*> CSYTRS2 solves a system of linear equations A*X = B with a COMPLEX
 *> symmetric matrix A using the factorization A = U*D*U**T or
-*> A = L*D*L**T computed by AB_CSYTRF and converted by AB_CSYCONV.
+*> A = L*D*L**T computed by CSYTRF and converted by CSYCONV.
 *> \endverbatim
 *
 *  Arguments:
@@ -70,7 +70,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_CSYTRF.
+*>          obtain the factor U or L as computed by CSYTRF.
 *>          Note that A is input / output. This might be counter-intuitive,
 *>          and one may think that A is input only. A is input / output. This
 *>          is because, at the start of the subroutine, we permute A in a
@@ -88,7 +88,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_CSYTRF.
+*>          as determined by CSYTRF.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -129,7 +129,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE CSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                    WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -158,12 +158,11 @@
       COMPLEX            AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CSCAL, AB_CSYCONV, AB_CSWAP, AB_CTRSM, AB_XE
-     $RBLA
+      EXTERNAL           CSCAL, CSYCONV, CSWAP, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -171,8 +170,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -184,7 +183,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CSYTRS2', -INFO )
+         CALL XERBLA( 'CSYTRS2', -INFO )
          RETURN
       END IF
 *
@@ -195,7 +194,7 @@
 *
 *     Convert A
 *
-      CALL AB_CSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
+      CALL CSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
 *
       IF( UPPER ) THEN
 *
@@ -209,28 +208,28 @@
 *           Interchange rows K and IPIV(K).
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K-1
          ELSE
 *           2 x 2 diagonal block
 *           Interchange rows K-1 and -IPIV(K).
             KP = -IPIV( K )
             IF( KP.EQ.-IPIV( K-1 ) )
-     $         CALL AB_CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
             K=K-2
          END IF
         END DO
 *
 *  Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-        CALL AB_CTRSM('L','U','N','U',N,NRHS,ONE,A,LDA,B,LDB)
+        CALL CTRSM('L','U','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *  Compute D \ B -> B   [ D \ (U \P**T * B) ]
 *
          I=N
          DO WHILE ( I .GE. 1 )
             IF( IPIV(I) .GT. 0 ) THEN
-              CALL AB_CSCAL( NRHS, ONE / A( I, I ), B( I, 1 ), LDB )
+              CALL CSCAL( NRHS, ONE / A( I, I ), B( I, 1 ), LDB )
             ELSEIF ( I .GT. 1) THEN
                IF ( IPIV(I-1) .EQ. IPIV(I) ) THEN
                   AKM1K = WORK(I)
@@ -251,7 +250,7 @@
 *
 *      Compute (U**T \ B) -> B   [ U**T \ (D \ (U \P**T * B) ) ]
 *
-         CALL AB_CTRSM('L','U','T','U',N,NRHS,ONE,A,LDA,B,LDB)
+         CALL CTRSM('L','U','T','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *       P * B  [ P * (U**T \ (D \ (U \P**T * B) )) ]
 *
@@ -262,14 +261,14 @@
 *           Interchange rows K and IPIV(K).
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K+1
          ELSE
 *           2 x 2 diagonal block
 *           Interchange rows K-1 and -IPIV(K).
             KP = -IPIV( K )
             IF( K .LT. N .AND. KP.EQ.-IPIV( K+1 ) )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K+2
          ENDIF
         END DO
@@ -286,28 +285,28 @@
 *           Interchange rows K and IPIV(K).
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K+1
          ELSE
 *           2 x 2 diagonal block
 *           Interchange rows K and -IPIV(K+1).
             KP = -IPIV( K+1 )
             IF( KP.EQ.-IPIV( K ) )
-     $         CALL AB_CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
             K=K+2
          ENDIF
         END DO
 *
 *  Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-        CALL AB_CTRSM('L','L','N','U',N,NRHS,ONE,A,LDA,B,LDB)
+        CALL CTRSM('L','L','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *  Compute D \ B -> B   [ D \ (L \P**T * B) ]
 *
          I=1
          DO WHILE ( I .LE. N )
             IF( IPIV(I) .GT. 0 ) THEN
-              CALL AB_CSCAL( NRHS, ONE / A( I, I ), B( I, 1 ), LDB )
+              CALL CSCAL( NRHS, ONE / A( I, I ), B( I, 1 ), LDB )
             ELSE
                   AKM1K = WORK(I)
                   AKM1 = A( I, I ) / AKM1K
@@ -326,7 +325,7 @@
 *
 *  Compute (L**T \ B) -> B   [ L**T \ (D \ (L \P**T * B) ) ]
 *
-        CALL AB_CTRSM('L','L','T','U',N,NRHS,ONE,A,LDA,B,LDB)
+        CALL CTRSM('L','L','T','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *       P * B  [ P * (L**T \ (D \ (L \P**T * B) )) ]
 *
@@ -337,14 +336,14 @@
 *           Interchange rows K and IPIV(K).
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K-1
          ELSE
 *           2 x 2 diagonal block
 *           Interchange rows K-1 and -IPIV(K).
             KP = -IPIV( K )
             IF( K.GT.1 .AND. KP.EQ.-IPIV( K-1 ) )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K=K-2
          ENDIF
         END DO
@@ -353,10 +352,10 @@
 *
 *     Revert A
 *
-      CALL AB_CSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
+      CALL CSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       RETURN
 *
-*     End of AB_CSYTRS2
+*     End of CSYTRS2
 *
       END

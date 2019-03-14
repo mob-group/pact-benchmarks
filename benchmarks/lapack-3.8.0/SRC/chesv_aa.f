@@ -1,4 +1,4 @@
-*> \brief <b> AB_CHESV_AA computes the solution to system of linear equations A * X = B for HE matrices</b>
+*> \brief <b> CHESV_AA computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHESV_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHESV_aa.f">
+*> Download CHESV_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chesv_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHESV_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chesv_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHESV_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesv_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE CHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                            LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHESV_AA computes the solution to a complex system of linear equations
+*> CHESV_AA computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
 *> matrices.
@@ -87,7 +87,7 @@
 *>          On exit, if INFO = 0, the tridiagonal matrix T and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*T*U**H or A = L*T*L**H as computed by
-*>          AB_CHETRF_AA.
+*>          CHETRF_AA.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -128,12 +128,12 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= MAX(1,2*N,3*N-2), and for best 
 *>          performance LWORK >= MAX(1,N*NB), where NB is the optimal
-*>          blocksize for AB_CHETRF.
+*>          blocksize for CHETRF.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -159,7 +159,7 @@
 *> \ingroup complexHEsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_CHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+      SUBROUTINE CHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                     LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.8.0) --
@@ -183,12 +183,12 @@
       INTEGER            LWKOPT, LWKOPT_HETRF, LWKOPT_HETRS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_CHETRF_AA, AB_CHETRS_AA
+      EXTERNAL           XERBLA, CHETRF_AA, CHETRS_AA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -199,8 +199,7 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -213,9 +212,9 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL AB_CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
+         CALL CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
          LWKOPT_HETRF = INT( WORK(1) )
-         CALL AB_CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+         CALL CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                   -1, INFO )
          LWKOPT_HETRS = INT( WORK(1) )
          LWKOPT = MAX( LWKOPT_HETRF, LWKOPT_HETRS )
@@ -226,7 +225,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHESV_AA ', -INFO )
+         CALL XERBLA( 'CHESV_AA ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -234,12 +233,12 @@
 *
 *     Compute the factorization A = U*T*U**H or A = L*T*L**H.
 *
-      CALL AB_CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL AB_CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+         CALL CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                      LWORK, INFO )
 *
       END IF
@@ -248,6 +247,6 @@
 *
       RETURN
 *
-*     End of AB_CHESV_AA
+*     End of CHESV_AA
 *
       END

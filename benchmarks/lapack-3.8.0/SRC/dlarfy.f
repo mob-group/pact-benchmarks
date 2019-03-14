@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARFY
+*> \brief \b DLARFY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE DLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLARFY applies an elementary reflector, or Householder matrix, H,
+*> DLARFY applies an elementary reflector, or Householder matrix, H,
 *> to an n x n symmetric matrix C, from both the left and the right.
 *>
 *> H is represented in the form
@@ -106,7 +106,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE DLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -132,11 +132,11 @@
       DOUBLE PRECISION   ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DSYMV, AB_DSYR2
+      EXTERNAL           DAXPY, DSYMV, DSYR2
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DDOT
-      EXTERNAL           AB_DDOT
+      DOUBLE PRECISION   DDOT
+      EXTERNAL           DDOT
 *     ..
 *     .. Executable Statements ..
 *
@@ -145,17 +145,17 @@
 *
 *     Form  w:= C * v
 *
-      CALL AB_DSYMV( UPLO, N, ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
+      CALL DSYMV( UPLO, N, ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
 *
-      ALPHA = -HALF*TAU*AB_DDOT( N, WORK, 1, V, INCV )
-      CALL AB_DAXPY( N, ALPHA, V, INCV, WORK, 1 )
+      ALPHA = -HALF*TAU*DDOT( N, WORK, 1, V, INCV )
+      CALL DAXPY( N, ALPHA, V, INCV, WORK, 1 )
 *
 *     C := C - v * w' - w * v'
 *
-      CALL AB_DSYR2( UPLO, N, -TAU, V, INCV, WORK, 1, C, LDC )
+      CALL DSYR2( UPLO, N, -TAU, V, INCV, WORK, 1, C, LDC )
 *
       RETURN
 *
-*     End of AB_DLARFY
+*     End of DLARFY
 *
       END

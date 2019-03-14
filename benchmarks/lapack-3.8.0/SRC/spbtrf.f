@@ -1,4 +1,4 @@
-*> \brief \b AB_SPBTRF
+*> \brief \b SPBTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPBTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPBTRF.f">
+*> Download SPBTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbtrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPBTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spbtrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPBTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbtrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPBTRF( UPLO, N, KD, AB, LDAB, INFO )
+*       SUBROUTINE SPBTRF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPBTRF computes the Cholesky factorization of a real symmetric
+*> SPBTRF computes the Cholesky factorization of a real symmetric
 *> positive definite band matrix A.
 *>
 *> The factorization has the form
@@ -140,7 +140,7 @@
 *>  Peter Mayes and Giuseppe Radicati, IBM ECSEC, Rome, March 23, 1989
 *
 *  =====================================================================
-      SUBROUTINE AB_SPBTRF( UPLO, N, KD, AB, LDAB, INFO )
+      SUBROUTINE SPBTRF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -170,13 +170,12 @@
       REAL               WORK( LDWORK, NBMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SPBTF2, AB_SPOTF2, AB_SSYRK, AB_ST
-     $RSM, AB_XERBLA
+      EXTERNAL           SGEMM, SPBTF2, SPOTF2, SSYRK, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -186,8 +185,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( ( .NOT.AB_LSAME( UPLO, 'U' ) ) .AND.
-     $    ( .NOT.AB_LSAME( UPLO, 'L' ) ) ) THEN
+      IF( ( .NOT.LSAME( UPLO, 'U' ) ) .AND.
+     $    ( .NOT.LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -197,7 +196,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPBTRF', -INFO )
+         CALL XERBLA( 'SPBTRF', -INFO )
          RETURN
       END IF
 *
@@ -208,7 +207,7 @@
 *
 *     Determine the block size for this environment
 *
-      NB = AB_ILAENV( 1, 'AB_SPBTRF', UPLO, N, KD, -1, -1 )
+      NB = ILAENV( 1, 'SPBTRF', UPLO, N, KD, -1, -1 )
 *
 *     The block size must not exceed the semi-bandwidth KD, and must not
 *     exceed the limit set by the size of the local array WORK.
@@ -219,12 +218,12 @@
 *
 *        Use unblocked code
 *
-         CALL AB_SPBTF2( UPLO, N, KD, AB, LDAB, INFO )
+         CALL SPBTF2( UPLO, N, KD, AB, LDAB, INFO )
       ELSE
 *
 *        Use blocked code
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *           Compute the Cholesky factorization of a symmetric band
 *           matrix, given the upper triangle of the matrix in band
@@ -245,7 +244,7 @@
 *
 *              Factorize the diagonal block
 *
-               CALL AB_SPOTF2( UPLO, IB, AB( KD+1, I ), LDAB-1, II )
+               CALL SPOTF2( UPLO, IB, AB( KD+1, I ), LDAB-1, II )
                IF( II.NE.0 ) THEN
                   INFO = I + II - 1
                   GO TO 150
@@ -273,13 +272,13 @@
 *
 *                    Update A12
 *
-                     CALL AB_STRSM( 'Left', 'Upper', 'Transpose',
+                     CALL STRSM( 'Left', 'Upper', 'Transpose',
      $                           'Non-unit', IB, I2, ONE, AB( KD+1, I ),
      $                           LDAB-1, AB( KD+1-IB, I+IB ), LDAB-1 )
 *
 *                    Update A22
 *
-                     CALL AB_SSYRK( 'Upper', 'Transpose', I2, IB, -ONE,
+                     CALL SSYRK( 'Upper', 'Transpose', I2, IB, -ONE,
      $                           AB( KD+1-IB, I+IB ), LDAB-1, ONE,
      $                           AB( KD+1, I+IB ), LDAB-1 )
                   END IF
@@ -296,22 +295,21 @@
 *
 *                    Update A13 (in the work array).
 *
-                     CALL AB_STRSM( 'Left', 'Upper', 'Transpose',
+                     CALL STRSM( 'Left', 'Upper', 'Transpose',
      $                           'Non-unit', IB, I3, ONE, AB( KD+1, I ),
      $                           LDAB-1, WORK, LDWORK )
 *
 *                    Update A23
 *
                      IF( I2.GT.0 )
-     $                  CALL AB_SGEMM( 'Transpose', 'No Transpose', I2, 
-     $I3,
+     $                  CALL SGEMM( 'Transpose', 'No Transpose', I2, I3,
      $                              IB, -ONE, AB( KD+1-IB, I+IB ),
      $                              LDAB-1, WORK, LDWORK, ONE,
      $                              AB( 1+IB, I+KD ), LDAB-1 )
 *
 *                    Update A33
 *
-                     CALL AB_SSYRK( 'Upper', 'Transpose', I3, IB, -ONE,
+                     CALL SSYRK( 'Upper', 'Transpose', I3, IB, -ONE,
      $                           WORK, LDWORK, ONE, AB( KD+1, I+KD ),
      $                           LDAB-1 )
 *
@@ -346,7 +344,7 @@
 *
 *              Factorize the diagonal block
 *
-               CALL AB_SPOTF2( UPLO, IB, AB( 1, I ), LDAB-1, II )
+               CALL SPOTF2( UPLO, IB, AB( 1, I ), LDAB-1, II )
                IF( II.NE.0 ) THEN
                   INFO = I + II - 1
                   GO TO 150
@@ -374,14 +372,13 @@
 *
 *                    Update A21
 *
-                     CALL AB_STRSM( 'Right', 'Lower', 'Transpose',
+                     CALL STRSM( 'Right', 'Lower', 'Transpose',
      $                           'Non-unit', I2, IB, ONE, AB( 1, I ),
      $                           LDAB-1, AB( 1+IB, I ), LDAB-1 )
 *
 *                    Update A22
 *
-                     CALL AB_SSYRK( 'Lower', 'No Transpose', I2, IB, -ON
-     $E,
+                     CALL SSYRK( 'Lower', 'No Transpose', I2, IB, -ONE,
      $                           AB( 1+IB, I ), LDAB-1, ONE,
      $                           AB( 1, I+IB ), LDAB-1 )
                   END IF
@@ -398,23 +395,21 @@
 *
 *                    Update A31 (in the work array).
 *
-                     CALL AB_STRSM( 'Right', 'Lower', 'Transpose',
+                     CALL STRSM( 'Right', 'Lower', 'Transpose',
      $                           'Non-unit', I3, IB, ONE, AB( 1, I ),
      $                           LDAB-1, WORK, LDWORK )
 *
 *                    Update A32
 *
                      IF( I2.GT.0 )
-     $                  CALL AB_SGEMM( 'No transpose', 'Transpose', I3, 
-     $I2,
+     $                  CALL SGEMM( 'No transpose', 'Transpose', I3, I2,
      $                              IB, -ONE, WORK, LDWORK,
      $                              AB( 1+IB, I ), LDAB-1, ONE,
      $                              AB( 1+KD-IB, I+IB ), LDAB-1 )
 *
 *                    Update A33
 *
-                     CALL AB_SSYRK( 'Lower', 'No Transpose', I3, IB, -ON
-     $E,
+                     CALL SSYRK( 'Lower', 'No Transpose', I3, IB, -ONE,
      $                           WORK, LDWORK, ONE, AB( 1, I+KD ),
      $                           LDAB-1 )
 *
@@ -435,6 +430,6 @@
   150 CONTINUE
       RETURN
 *
-*     End of AB_SPBTRF
+*     End of SPBTRF
 *
       END

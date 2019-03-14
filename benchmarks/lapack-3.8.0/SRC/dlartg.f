@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARTG generates a plane rotation with real cosine and real sine.
+*> \brief \b DLARTG generates a plane rotation with real cosine and real sine.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLARTG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARTG.f">
+*> Download DLARTG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartg.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARTG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartg.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARTG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartg.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARTG( F, G, CS, SN, R )
+*       SUBROUTINE DLARTG( F, G, CS, SN, R )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   CS, F, G, R, SN
@@ -30,17 +30,17 @@
 *>
 *> \verbatim
 *>
-*> AB_DLARTG generate a plane rotation so that
+*> DLARTG generate a plane rotation so that
 *>
 *>    [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
 *>    [ -SN  CS  ]     [ G ]     [ 0 ]
 *>
-*> This is a slower, more accurate version of the BLAS1 routine AB_DROTG,
+*> This is a slower, more accurate version of the BLAS1 routine DROTG,
 *> with the following other differences:
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=1 and SN=0.
 *>    If F=0 and (G .ne. 0), then CS=0 and SN=1 without doing any
-*>       floating point operations (saves work in AB_DBDSQR when
+*>       floating point operations (saves work in DBDSQR when
 *>       there are zeros on the diagonal).
 *>
 *> If F exceeds G in magnitude, CS will be positive.
@@ -95,7 +95,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLARTG( F, G, CS, SN, R )
+      SUBROUTINE DLARTG( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -199,6 +199,6 @@
       END IF
       RETURN
 *
-*     End of AB_DLARTG
+*     End of DLARTG
 *
       END

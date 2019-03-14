@@ -1,4 +1,4 @@
-*> \brief \b AB_ZUNGBR
+*> \brief \b ZUNGBR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZUNGBR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNGBR.f">
+*> Download ZUNGBR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungbr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNGBR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungbr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNGBR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungbr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZUNGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE ZUNGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          VECT
@@ -34,23 +34,23 @@
 *>
 *> \verbatim
 *>
-*> AB_ZUNGBR generates one of the complex unitary matrices Q or P**H
-*> determined by AB_ZGEBRD when reducing a complex matrix A to bidiagonal
+*> ZUNGBR generates one of the complex unitary matrices Q or P**H
+*> determined by ZGEBRD when reducing a complex matrix A to bidiagonal
 *> form: A = Q * B * P**H.  Q and P**H are defined as products of
 *> elementary reflectors H(i) or G(i) respectively.
 *>
 *> If VECT = 'Q', A is assumed to have been an M-by-K matrix, and Q
 *> is of order M:
-*> if m >= k, Q = H(1) H(2) . . . H(k) and AB_ZUNGBR returns the first n
+*> if m >= k, Q = H(1) H(2) . . . H(k) and ZUNGBR returns the first n
 *> columns of Q, where m >= n >= k;
-*> if m < k, Q = H(1) H(2) . . . H(m-1) and AB_ZUNGBR returns Q as an
+*> if m < k, Q = H(1) H(2) . . . H(m-1) and ZUNGBR returns Q as an
 *> M-by-M matrix.
 *>
 *> If VECT = 'P', A is assumed to have been a K-by-N matrix, and P**H
 *> is of order N:
-*> if k < n, P**H = G(k) . . . G(2) G(1) and AB_ZUNGBR returns the first m
+*> if k < n, P**H = G(k) . . . G(2) G(1) and ZUNGBR returns the first m
 *> rows of P**H, where n >= m >= k;
-*> if k >= n, P**H = G(n-1) . . . G(2) G(1) and AB_ZUNGBR returns P**H as
+*> if k >= n, P**H = G(n-1) . . . G(2) G(1) and ZUNGBR returns P**H as
 *> an N-by-N matrix.
 *> \endverbatim
 *
@@ -61,7 +61,7 @@
 *> \verbatim
 *>          VECT is CHARACTER*1
 *>          Specifies whether the matrix Q or the matrix P**H is
-*>          required, as defined in the transformation applied by AB_ZGEBRD:
+*>          required, as defined in the transformation applied by ZGEBRD:
 *>          = 'Q':  generate Q;
 *>          = 'P':  generate P**H.
 *> \endverbatim
@@ -86,9 +86,9 @@
 *> \verbatim
 *>          K is INTEGER
 *>          If VECT = 'Q', the number of columns in the original M-by-K
-*>          matrix reduced by AB_ZGEBRD.
+*>          matrix reduced by ZGEBRD.
 *>          If VECT = 'P', the number of rows in the original K-by-N
-*>          matrix reduced by AB_ZGEBRD.
+*>          matrix reduced by ZGEBRD.
 *>          K >= 0.
 *> \endverbatim
 *>
@@ -96,7 +96,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the vectors which define the elementary reflectors,
-*>          as returned by AB_ZGEBRD.
+*>          as returned by ZGEBRD.
 *>          On exit, the M-by-N matrix Q or P**H.
 *> \endverbatim
 *>
@@ -113,7 +113,7 @@
 *>                                (min(N,K)) if VECT = 'P'
 *>          TAU(i) must contain the scalar factor of the elementary
 *>          reflector H(i) or G(i), which determines Q or P**H, as
-*>          returned by AB_ZGEBRD in its array argument TAUQ or TAUP.
+*>          returned by ZGEBRD in its array argument TAUQ or TAUP.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -132,7 +132,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -155,8 +155,7 @@
 *> \ingroup complex16GBcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZUNGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INF
-     $O )
+      SUBROUTINE ZUNGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -183,11 +182,11 @@
       INTEGER            I, IINFO, J, LWKOPT, MN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZUNGLQ, AB_ZUNGQR
+      EXTERNAL           XERBLA, ZUNGLQ, ZUNGQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -197,10 +196,10 @@
 *     Test the input arguments
 *
       INFO = 0
-      WANTQ = AB_LSAME( VECT, 'Q' )
+      WANTQ = LSAME( VECT, 'Q' )
       MN = MIN( M, N )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.WANTQ .AND. .NOT.AB_LSAME( VECT, 'P' ) ) THEN
+      IF( .NOT.WANTQ .AND. .NOT.LSAME( VECT, 'P' ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -220,21 +219,19 @@
          WORK( 1 ) = 1
          IF( WANTQ ) THEN
             IF( M.GE.K ) THEN
-               CALL AB_ZUNGQR( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
+               CALL ZUNGQR( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
             ELSE
                IF( M.GT.1 ) THEN
-                  CALL AB_ZUNGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WO
-     $RK,
+                  CALL ZUNGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
      $                         -1, IINFO )
                END IF
             END IF
          ELSE
             IF( K.LT.N ) THEN
-               CALL AB_ZUNGLQ( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
+               CALL ZUNGLQ( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
             ELSE
                IF( N.GT.1 ) THEN
-                  CALL AB_ZUNGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WO
-     $RK,
+                  CALL ZUNGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
      $                         -1, IINFO )
                END IF
             END IF
@@ -244,7 +241,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZUNGBR', -INFO )
+         CALL XERBLA( 'ZUNGBR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          WORK( 1 ) = LWKOPT
@@ -260,14 +257,14 @@
 *
       IF( WANTQ ) THEN
 *
-*        Form Q, determined by a call to AB_ZGEBRD to reduce an m-by-k
+*        Form Q, determined by a call to ZGEBRD to reduce an m-by-k
 *        matrix
 *
          IF( M.GE.K ) THEN
 *
 *           If m >= k, assume m >= n >= k
 *
-            CALL AB_ZUNGQR( M, N, K, A, LDA, TAU, WORK, LWORK, IINFO )
+            CALL ZUNGQR( M, N, K, A, LDA, TAU, WORK, LWORK, IINFO )
 *
          ELSE
 *
@@ -291,20 +288,20 @@
 *
 *              Form Q(2:m,2:m)
 *
-               CALL AB_ZUNGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
+               CALL ZUNGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
      $                      LWORK, IINFO )
             END IF
          END IF
       ELSE
 *
-*        Form P**H, determined by a call to AB_ZGEBRD to reduce a k-by-n
+*        Form P**H, determined by a call to ZGEBRD to reduce a k-by-n
 *        matrix
 *
          IF( K.LT.N ) THEN
 *
 *           If k < n, assume k <= m <= n
 *
-            CALL AB_ZUNGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, IINFO )
+            CALL ZUNGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, IINFO )
 *
          ELSE
 *
@@ -328,7 +325,7 @@
 *
 *              Form P**H(2:n,2:n)
 *
-               CALL AB_ZUNGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
+               CALL ZUNGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
      $                      LWORK, IINFO )
             END IF
          END IF
@@ -336,6 +333,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_ZUNGBR
+*     End of ZUNGBR
 *
       END

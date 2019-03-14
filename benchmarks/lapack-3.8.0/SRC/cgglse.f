@@ -1,4 +1,4 @@
-*> \brief <b> AB_CGGLSE solves overdetermined or underdetermined systems for OTHER matrices</b>
+*> \brief <b> CGGLSE solves overdetermined or underdetermined systems for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGGLSE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGGLSE.f">
+*> Download CGGLSE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgglse.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGGLSE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgglse.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGGLSE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgglse.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
+*       SUBROUTINE CGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGGLSE solves the linear equality-constrained least squares (LSE)
+*> CGGLSE solves the linear equality-constrained least squares (LSE)
 *> problem:
 *>
 *>         minimize || c - A*x ||_2   subject to   B*x = d
@@ -139,12 +139,12 @@
 *>          The dimension of the array WORK. LWORK >= max(1,M+N+P).
 *>          For optimum performance LWORK >= P+min(M,N)+max(M,N)*NB,
 *>          where NB is an upper bound for the optimal blocksizes for
-*>          AB_CGEQRF, AB_CGERQF, AB_CUNMQR and AB_CUNMRQ.
+*>          CGEQRF, CGERQF, CUNMQR and CUNMRQ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -177,8 +177,7 @@
 *> \ingroup complexOTHERsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_CGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWOR
-     $K,
+      SUBROUTINE CGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
      $                   INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -206,13 +205,12 @@
      $                   NB4, NR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CGEMV, AB_CGGRQF, AB_CTR
-     $MV, AB_CTRTRS,
-     $                   AB_CUNMQR, AB_CUNMRQ, AB_XERBLA
+      EXTERNAL           CAXPY, CCOPY, CGEMV, CGGRQF, CTRMV, CTRTRS,
+     $                   CUNMQR, CUNMRQ, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -243,10 +241,10 @@
             LWKMIN = 1
             LWKOPT = 1
          ELSE
-            NB1 = AB_ILAENV( 1, 'AB_CGEQRF', ' ', M, N, -1, -1 )
-            NB2 = AB_ILAENV( 1, 'AB_CGERQF', ' ', M, N, -1, -1 )
-            NB3 = AB_ILAENV( 1, 'AB_CUNMQR', ' ', M, N, P, -1 )
-            NB4 = AB_ILAENV( 1, 'AB_CUNMRQ', ' ', M, N, P, -1 )
+            NB1 = ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
+            NB2 = ILAENV( 1, 'CGERQF', ' ', M, N, -1, -1 )
+            NB3 = ILAENV( 1, 'CUNMQR', ' ', M, N, P, -1 )
+            NB4 = ILAENV( 1, 'CUNMRQ', ' ', M, N, P, -1 )
             NB = MAX( NB1, NB2, NB3, NB4 )
             LWKMIN = M + N + P
             LWKOPT = P + MN + MAX( M, N )*NB
@@ -259,7 +257,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGGLSE', -INFO )
+         CALL XERBLA( 'CGGLSE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -279,14 +277,14 @@
 *     where T12 and R11 are upper triangular, and Q and Z are
 *     unitary.
 *
-      CALL AB_CGGRQF( P, M, N, B, LDB, WORK, A, LDA, WORK( P+1 ),
+      CALL CGGRQF( P, M, N, B, LDB, WORK, A, LDA, WORK( P+1 ),
      $             WORK( P+MN+1 ), LWORK-P-MN, INFO )
       LOPT = WORK( P+MN+1 )
 *
 *     Update c = Z**H *c = ( c1 ) N-P
 *                       ( c2 ) M+P-N
 *
-      CALL AB_CUNMQR( 'Left', 'Conjugate Transpose', M, 1, MN, A, LDA,
+      CALL CUNMQR( 'Left', 'Conjugate Transpose', M, 1, MN, A, LDA,
      $             WORK( P+1 ), C, MAX( 1, M ), WORK( P+MN+1 ),
      $             LWORK-P-MN, INFO )
       LOPT = MAX( LOPT, INT( WORK( P+MN+1 ) ) )
@@ -294,7 +292,7 @@
 *     Solve T12*x2 = d for x2
 *
       IF( P.GT.0 ) THEN
-         CALL AB_CTRTRS( 'Upper', 'No transpose', 'Non-unit', P, 1,
+         CALL CTRTRS( 'Upper', 'No transpose', 'Non-unit', P, 1,
      $                B( 1, N-P+1 ), LDB, D, P, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -304,19 +302,18 @@
 *
 *        Put the solution in X
 *
-      CALL AB_CCOPY( P, D, 1, X( N-P+1 ), 1 )
+      CALL CCOPY( P, D, 1, X( N-P+1 ), 1 )
 *
 *        Update c1
 *
-         CALL AB_CGEMV( 'No transpose', N-P, P, -CONE, A( 1, N-P+1 ), LD
-     $A,
+         CALL CGEMV( 'No transpose', N-P, P, -CONE, A( 1, N-P+1 ), LDA,
      $               D, 1, CONE, C, 1 )
       END IF
 *
 *     Solve R11*x1 = c1 for x1
 *
       IF( N.GT.P ) THEN
-         CALL AB_CTRTRS( 'Upper', 'No transpose', 'Non-unit', N-P, 1,
+         CALL CTRTRS( 'Upper', 'No transpose', 'Non-unit', N-P, 1,
      $                A, LDA, C, N-P, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -326,7 +323,7 @@
 *
 *        Put the solutions in X
 *
-         CALL AB_CCOPY( N-P, C, 1, X, 1 )
+         CALL CCOPY( N-P, C, 1, X, 1 )
       END IF
 *
 *     Compute the residual vector:
@@ -334,26 +331,25 @@
       IF( M.LT.N ) THEN
          NR = M + P - N
          IF( NR.GT.0 )
-     $      CALL AB_CGEMV( 'No transpose', NR, N-M, -CONE, A( N-P+1, M+1
-     $ ),
+     $      CALL CGEMV( 'No transpose', NR, N-M, -CONE, A( N-P+1, M+1 ),
      $                  LDA, D( NR+1 ), 1, CONE, C( N-P+1 ), 1 )
       ELSE
          NR = P
       END IF
       IF( NR.GT.0 ) THEN
-         CALL AB_CTRMV( 'Upper', 'No transpose', 'Non unit', NR,
+         CALL CTRMV( 'Upper', 'No transpose', 'Non unit', NR,
      $               A( N-P+1, N-P+1 ), LDA, D, 1 )
-         CALL AB_CAXPY( NR, -CONE, D, 1, C( N-P+1 ), 1 )
+         CALL CAXPY( NR, -CONE, D, 1, C( N-P+1 ), 1 )
       END IF
 *
 *     Backward transformation x = Q**H*x
 *
-      CALL AB_CUNMRQ( 'Left', 'Conjugate Transpose', N, 1, P, B, LDB,
+      CALL CUNMRQ( 'Left', 'Conjugate Transpose', N, 1, P, B, LDB,
      $             WORK( 1 ), X, N, WORK( P+MN+1 ), LWORK-P-MN, INFO )
       WORK( 1 ) = P + MN + MAX( LOPT, INT( WORK( P+MN+1 ) ) )
 *
       RETURN
 *
-*     End of AB_CGGLSE
+*     End of CGGLSE
 *
       END

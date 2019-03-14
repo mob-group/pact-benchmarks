@@ -1,4 +1,4 @@
-*> \brief <b> AB_DGESVX computes the solution to system of linear equations A * X = B for GE matrices</b>
+*> \brief <b> DGESVX computes the solution to system of linear equations A * X = B for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGESVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGESVx.f">
+*> Download DGESVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgesvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGESVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgesvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGESVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE DGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                          EQUED, R, C, B, LDB, X, LDX, RCOND, FERR, BERR,
 *                          WORK, IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGESVX uses the LU factorization to compute the solution to a real
+*> DGESVX uses the LU factorization to compute the solution to a real
 *> system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N matrix and X and B are N-by-NRHS matrices.
@@ -157,7 +157,7 @@
 *>          AF is DOUBLE PRECISION array, dimension (LDAF,N)
 *>          If FACT = 'F', then AF is an input argument and on entry
 *>          contains the factors L and U from the factorization
-*>          A = P*L*U as computed by AB_DGETRF.  If EQUED .ne. 'N', then
+*>          A = P*L*U as computed by DGETRF.  If EQUED .ne. 'N', then
 *>          AF is the factored form of the equilibrated matrix A.
 *>
 *>          If FACT = 'N', then AF is an output argument and on exit
@@ -181,7 +181,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the factorization A = P*L*U
-*>          as computed by AB_DGETRF; row i of the matrix was interchanged
+*>          as computed by DGETRF; row i of the matrix was interchanged
 *>          with row IPIV(i).
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
@@ -345,8 +345,7 @@
 *> \ingroup doubleGEsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_DGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV
-     $,
+      SUBROUTINE DGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $                   EQUED, R, C, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
 *
@@ -381,14 +380,13 @@
      $                   ROWCND, RPVGRW, SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE, AB_DLANTR
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANGE, AB_DLANTR
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANGE, DLANTR
+      EXTERNAL           LSAME, DLAMCH, DLANGE, DLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGECON, AB_DGEEQU, AB_DGERFS, AB_DGETRF, AB_
-     $DGETRS, AB_DLACPY,
-     $                   AB_DLAQGE, AB_XERBLA
+      EXTERNAL           DGECON, DGEEQU, DGERFS, DGETRF, DGETRS, DLACPY,
+     $                   DLAQGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -396,28 +394,27 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      EQUIL = AB_LSAME( FACT, 'E' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      NOFACT = LSAME( FACT, 'N' )
+      EQUIL = LSAME( FACT, 'E' )
+      NOTRAN = LSAME( TRANS, 'N' )
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          ROWEQU = .FALSE.
          COLEQU = .FALSE.
       ELSE
-         ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
-         COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
+         ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
+         COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
          SMLNUM = DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.AB_LSAME( FACT, 'F' ) 
-     $)
+      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -427,8 +424,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
-     $         ( ROWEQU .OR. COLEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
+     $         ( ROWEQU .OR. COLEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -10
       ELSE
          IF( ROWEQU ) THEN
@@ -471,7 +468,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGESVX', -INFO )
+         CALL XERBLA( 'DGESVX', -INFO )
          RETURN
       END IF
 *
@@ -479,16 +476,15 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL AB_DGEEQU( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX, INFEQ
-     $U )
+         CALL DGEEQU( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
 *
-            CALL AB_DLAQGE( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+            CALL DLAQGE( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $                   EQUED )
-            ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
-            COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
+            ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
+            COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
          END IF
       END IF
 *
@@ -514,8 +510,8 @@
 *
 *        Compute the LU factorization of A.
 *
-         CALL AB_DLACPY( 'Full', N, N, A, LDA, AF, LDAF )
-         CALL AB_DGETRF( N, N, AF, LDAF, IPIV, INFO )
+         CALL DLACPY( 'Full', N, N, A, LDA, AF, LDAF )
+         CALL DGETRF( N, N, AF, LDAF, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -524,12 +520,12 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = AB_DLANTR( 'M', 'U', 'N', INFO, INFO, AF, LDAF,
+            RPVGRW = DLANTR( 'M', 'U', 'N', INFO, INFO, AF, LDAF,
      $               WORK )
             IF( RPVGRW.EQ.ZERO ) THEN
                RPVGRW = ONE
             ELSE
-               RPVGRW = AB_DLANGE( 'M', N, INFO, A, LDA, WORK ) / RPVGRW
+               RPVGRW = DLANGE( 'M', N, INFO, A, LDA, WORK ) / RPVGRW
             END IF
             WORK( 1 ) = RPVGRW
             RCOND = ZERO
@@ -545,28 +541,27 @@
       ELSE
          NORM = 'I'
       END IF
-      ANORM = AB_DLANGE( NORM, N, N, A, LDA, WORK )
-      RPVGRW = AB_DLANTR( 'M', 'U', 'N', N, N, AF, LDAF, WORK )
+      ANORM = DLANGE( NORM, N, N, A, LDA, WORK )
+      RPVGRW = DLANTR( 'M', 'U', 'N', N, N, AF, LDAF, WORK )
       IF( RPVGRW.EQ.ZERO ) THEN
          RPVGRW = ONE
       ELSE
-         RPVGRW = AB_DLANGE( 'M', N, N, A, LDA, WORK ) / RPVGRW
+         RPVGRW = DLANGE( 'M', N, N, A, LDA, WORK ) / RPVGRW
       END IF
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL AB_DGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO
-     $ )
+      CALL DGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
 *
 *     Compute the solution matrix X.
 *
-      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_DGETRS( TRANS, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
+      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL DGETRS( TRANS, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL AB_DGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB, X,
+      CALL DGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB, X,
      $             LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original
@@ -602,6 +597,6 @@
      $   INFO = N + 1
       RETURN
 *
-*     End of AB_DGESVX
+*     End of DGESVX
 *
       END

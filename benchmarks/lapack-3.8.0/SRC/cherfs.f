@@ -1,4 +1,4 @@
-*> \brief \b AB_CHERFS
+*> \brief \b CHERFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHERFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHERfs.f">
+*> Download CHERFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cherfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHERfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cherfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHERfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cherfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+*       SUBROUTINE CHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
 *                          X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHERFS improves the computed solution to a system of linear
+*> CHERFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is Hermitian indefinite, and
 *> provides error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -90,7 +90,7 @@
 *>          The factored form of the matrix A.  AF contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor U or L from the factorization A = U*D*U**H or
-*>          A = L*D*L**H as computed by AB_CHETRF.
+*>          A = L*D*L**H as computed by CHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -103,7 +103,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_CHETRF.
+*>          as determined by CHETRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -121,7 +121,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_CHETRS.
+*>          On entry, the solution matrix X, as computed by CHETRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -189,8 +189,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LD
-     $B,
+      SUBROUTINE CHERFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
      $                   X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -233,16 +232,15 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CHEMV, AB_CHETRS, AB_CLA
-     $CN2, AB_XERBLA
+      EXTERNAL           CAXPY, CCOPY, CHEMV, CHETRS, CLACN2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -255,8 +253,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -272,7 +270,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHERFS', -INFO )
+         CALL XERBLA( 'CHERFS', -INFO )
          RETURN
       END IF
 *
@@ -306,9 +304,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL AB_CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL AB_CHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 
-     $1 )
+         CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL CHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -369,8 +366,8 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_CHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
-            CALL AB_CAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
+            CALL CHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+            CALL CAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -394,7 +391,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_CLACN2 to estimate the infinity-norm of the matrix
+*        Use CLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -409,14 +406,13 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL AB_CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**H).
 *
-               CALL AB_CHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO
-     $ )
+               CALL CHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -427,8 +423,7 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL AB_CHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO
-     $ )
+               CALL CHETRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             END IF
             GO TO 100
          END IF
@@ -446,6 +441,6 @@
 *
       RETURN
 *
-*     End of AB_CHERFS
+*     End of CHERFS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DCABS1
+*> \brief \b DCABS1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DCABS1(Z)
+*       DOUBLE PRECISION FUNCTION DCABS1(Z)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 Z
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCABS1 computes |Re(.)| + |Im(.)| of a double complex number
+*> DCABS1 computes |Re(.)| + |Im(.)| of a double complex number
 *> \endverbatim
 *
 *  Arguments:
@@ -45,7 +45,7 @@
 *> \ingroup double_blas_level1
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DCABS1(Z)
+      DOUBLE PRECISION FUNCTION DCABS1(Z)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -61,6 +61,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC ABS,DBLE,DIMAG
 *
-      AB_DCABS1 = ABS(DBLE(Z)) + ABS(DIMAG(Z))
+      DCABS1 = ABS(DBLE(Z)) + ABS(DIMAG(Z))
       RETURN
       END

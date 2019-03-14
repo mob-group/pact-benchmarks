@@ -1,7 +1,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTPLQT( M, N, L, MB, A, LDA, B, LDB, T, LDT, WORK,
+*       SUBROUTINE CTPLQT( M, N, L, MB, A, LDA, B, LDB, T, LDT, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -17,7 +17,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CTPLQT computes a blocked LQ factorization of a complex
+*> CTPLQT computes a blocked LQ factorization of a complex
 *> "triangular-pentagonal" matrix C, which is composed of a
 *> triangular block A and pentagonal block B, using the compact
 *> WY representation for Q.
@@ -169,7 +169,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CTPLQT( M, N, L, MB, A, LDA, B, LDB, T, LDT, WORK,
+      SUBROUTINE CTPLQT( M, N, L, MB, A, LDA, B, LDB, T, LDT, WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -191,7 +191,7 @@
       INTEGER    I, IB, LB, NB, IINFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   AB_CTPLQT2, AB_CTPRFB, AB_XERBLA
+      EXTERNAL   CTPLQT2, CTPRFB, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -214,7 +214,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CTPLQT', -INFO )
+         CALL XERBLA( 'CTPLQT', -INFO )
          RETURN
       END IF
 *
@@ -234,13 +234,13 @@
             LB = NB-N+L-I+1
          END IF
 *
-         CALL AB_CTPLQT2( IB, NB, LB, A(I,I), LDA, B( I, 1 ), LDB,
+         CALL CTPLQT2( IB, NB, LB, A(I,I), LDA, B( I, 1 ), LDB,
      $                 T(1, I ), LDT, IINFO )
 *
 *     Update by applying H**T to B(I+IB:M,:) from the right
 *
          IF( I+IB.LE.M ) THEN
-            CALL AB_CTPRFB( 'R', 'N', 'F', 'R', M-I-IB+1, NB, IB, LB,
+            CALL CTPRFB( 'R', 'N', 'F', 'R', M-I-IB+1, NB, IB, LB,
      $                    B( I, 1 ), LDB, T( 1, I ), LDT,
      $                    A( I+IB, I ), LDA, B( I+IB, 1 ), LDB,
      $                    WORK, M-I-IB+1)
@@ -248,6 +248,6 @@
       END DO
       RETURN
 *
-*     End of AB_CTPLQT
+*     End of CTPLQT
 *
       END

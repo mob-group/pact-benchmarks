@@ -1,4 +1,4 @@
-*> \brief \b AB_DLASD6 computes the SVD of an updated upper bidiagonal matrix obtained by merging two smaller ones by appending a row. Used by AB_SBDSDC.
+*> \brief \b DLASD6 computes the SVD of an updated upper bidiagonal matrix obtained by merging two smaller ones by appending a row. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLASD6 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASD6.f">
+*> Download DLASD6 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd6.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASD6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd6.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASD6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd6.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLASD6( ICOMPQ, NL, NR, SQRE, D, VF, VL, ALPHA, BETA,
+*       SUBROUTINE DLASD6( ICOMPQ, NL, NR, SQRE, D, VF, VL, ALPHA, BETA,
 *                          IDXQ, PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM,
 *                          LDGNUM, POLES, DIFL, DIFR, Z, K, C, S, WORK,
 *                          IWORK, INFO )
@@ -42,15 +42,15 @@
 *>
 *> \verbatim
 *>
-*> AB_DLASD6 computes the SVD of an updated upper bidiagonal matrix B
+*> DLASD6 computes the SVD of an updated upper bidiagonal matrix B
 *> obtained by merging two smaller ones by appending a row. This
 *> routine is used only for the problem which requires all singular
 *> values and optionally singular vector matrices in factored form.
 *> B is an N-by-M matrix with N = NL + NR + 1 and M = N + SQRE.
-*> A related subroutine, AB_DLASD1, handles the case in which all singular
+*> A related subroutine, DLASD1, handles the case in which all singular
 *> values and singular vectors of the bidiagonal matrix are desired.
 *>
-*> AB_DLASD6 computes the SVD as follows:
+*> DLASD6 computes the SVD as follows:
 *>
 *>               ( D1(in)    0    0       0 )
 *>   B = U(in) * (   Z1**T   a   Z2**T    b ) * VT(in)
@@ -66,7 +66,7 @@
 *> components of all the right singular vectors of the lower block, and
 *> the last components of all the right singular vectors of the upper
 *> block. These components are stored and updated in VF and VL,
-*> respectively, in AB_DLASD6. Hence U and VT are not explicitly
+*> respectively, in DLASD6. Hence U and VT are not explicitly
 *> referenced.
 *>
 *> The singular values are stored in D. The algorithm consists of two
@@ -76,16 +76,16 @@
 *>       when there are multiple singular values or if there is a zero
 *>       in the Z vector. For each such occurrence the dimension of the
 *>       secular equation problem is reduced by one. This stage is
-*>       performed by the routine AB_DLASD7.
+*>       performed by the routine DLASD7.
 *>
 *>       The second stage consists of calculating the updated
 *>       singular values. This is done by finding the roots of the
-*>       secular equation via the routine AB_DLASD4 (as called by AB_DLASD8).
+*>       secular equation via the routine DLASD4 (as called by DLASD8).
 *>       This routine also updates VF and VL and computes the distances
 *>       between the updated singular values and the old singular
 *>       values.
 *>
-*> AB_DLASD6 is called from AB_DLASDA.
+*> DLASD6 is called from DLASDA.
 *> \endverbatim
 *
 *  Arguments:
@@ -240,7 +240,7 @@
 *>          If ICOMPQ = 1, DIFR(1:K,2) is an array containing the
 *>          normalizing factors for the right singular vector matrix.
 *>
-*>         See AB_DLASD8 for details on DIFL and DIFR.
+*>         See DLASD8 for details on DIFL and DIFR.
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -308,8 +308,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLASD6( ICOMPQ, NL, NR, SQRE, D, VF, VL, ALPHA, BETA
-     $,
+      SUBROUTINE DLASD6( ICOMPQ, NL, NR, SQRE, D, VF, VL, ALPHA, BETA,
      $                   IDXQ, PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM,
      $                   LDGNUM, POLES, DIFL, DIFR, Z, K, C, S, WORK,
      $                   IWORK, INFO )
@@ -344,8 +343,7 @@
       DOUBLE PRECISION   ORGNRM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DLAMRG, AB_DLASCL, AB_DLASD7, AB_D
-     $LASD8, AB_XERBLA
+      EXTERNAL           DCOPY, DLAMRG, DLASCL, DLASD7, DLASD8, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -372,13 +370,13 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLASD6', -INFO )
+         CALL XERBLA( 'DLASD6', -INFO )
          RETURN
       END IF
 *
 *     The following values are for bookkeeping purposes only.  They are
 *     integer pointers which indicate the portion of the workspace
-*     used by a particular array in AB_DLASD7 and AB_DLASD8.
+*     used by a particular array in DLASD7 and DLASD8.
 *
       ISIGMA = 1
       IW = ISIGMA + N
@@ -398,13 +396,13 @@
             ORGNRM = ABS( D( I ) )
          END IF
    10 CONTINUE
-      CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
+      CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
       ALPHA = ALPHA / ORGNRM
       BETA = BETA / ORGNRM
 *
 *     Sort and Deflate singular values.
 *
-      CALL AB_DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, WORK( IW ), VF,
+      CALL DLASD7( ICOMPQ, NL, NR, SQRE, K, D, Z, WORK( IW ), VF,
      $             WORK( IVFW ), VL, WORK( IVLW ), ALPHA, BETA,
      $             WORK( ISIGMA ), IWORK( IDX ), IWORK( IDXP ), IDXQ,
      $             PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM, C, S,
@@ -412,7 +410,7 @@
 *
 *     Solve Secular Equation, compute DIFL, DIFR, and update VF, VL.
 *
-      CALL AB_DLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDGNUM,
+      CALL DLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDGNUM,
      $             WORK( ISIGMA ), WORK( IW ), INFO )
 *
 *     Report the possible convergence failure.
@@ -424,22 +422,22 @@
 *     Save the poles if ICOMPQ = 1.
 *
       IF( ICOMPQ.EQ.1 ) THEN
-         CALL AB_DCOPY( K, D, 1, POLES( 1, 1 ), 1 )
-         CALL AB_DCOPY( K, WORK( ISIGMA ), 1, POLES( 1, 2 ), 1 )
+         CALL DCOPY( K, D, 1, POLES( 1, 1 ), 1 )
+         CALL DCOPY( K, WORK( ISIGMA ), 1, POLES( 1, 2 ), 1 )
       END IF
 *
 *     Unscale.
 *
-      CALL AB_DLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+      CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
 *
 *     Prepare the IDXQ sorting permutation.
 *
       N1 = K
       N2 = N - K
-      CALL AB_DLAMRG( N1, N2, D, 1, -1, IDXQ )
+      CALL DLAMRG( N1, N2, D, 1, -1, IDXQ )
 *
       RETURN
 *
-*     End of AB_DLASD6
+*     End of DLASD6
 *
       END

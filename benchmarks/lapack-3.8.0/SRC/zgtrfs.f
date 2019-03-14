@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGTRFS
+*> \brief \b ZGTRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGTRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGTRFS.f">
+*> Download ZGTRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgtrfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGTRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgtrfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGTRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgtrfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+*       SUBROUTINE ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
 *                          IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
 *                          INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGTRFS improves the computed solution to a system of linear
+*> ZGTRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is tridiagonal, and provides
 *> error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -92,7 +92,7 @@
 *> \verbatim
 *>          DLF is COMPLEX*16 array, dimension (N-1)
 *>          The (n-1) multipliers that define the matrix L from the
-*>          LU factorization of A as computed by AB_ZGTTRF.
+*>          LU factorization of A as computed by ZGTTRF.
 *> \endverbatim
 *>
 *> \param[in] DF
@@ -138,7 +138,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX*16 array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_ZGTTRS.
+*>          On entry, the solution matrix X, as computed by ZGTTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -206,8 +206,7 @@
 *> \ingroup complex16GTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2
-     $,
+      SUBROUTINE ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
 *
@@ -251,16 +250,15 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZCOPY, AB_ZGTTRS, AB_ZL
-     $ACN2, AB_ZLAGTM
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGTTRS, ZLACN2, ZLAGTM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -273,9 +271,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    AB_LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -287,7 +285,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGTRFS', -INFO )
+         CALL XERBLA( 'ZGTRFS', -INFO )
          RETURN
       END IF
 *
@@ -330,9 +328,8 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
-         CALL AB_ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL AB_ZLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, O
-     $NE,
+         CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL ZLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, ONE,
      $                WORK, N )
 *
 *        Compute abs(op(A))*abs(x) + abs(b) for use in the backward
@@ -407,10 +404,9 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_ZGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK, 
-     $N,
+            CALL ZGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV, WORK, N,
      $                   INFO )
-            CALL AB_ZAXPY( N, DCMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
+            CALL ZAXPY( N, DCMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -434,7 +430,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_ZLACN2 to estimate the infinity-norm of the matrix
+*        Use ZLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -449,14 +445,13 @@
 *
          KASE = 0
    70    CONTINUE
-         CALL AB_ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**H).
 *
-               CALL AB_ZGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV, WO
-     $RK,
+               CALL ZGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
      $                      N, INFO )
                DO 80 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
@@ -468,8 +463,7 @@
                DO 90 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
    90          CONTINUE
-               CALL AB_ZGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV, WO
-     $RK,
+               CALL ZGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV, WORK,
      $                      N, INFO )
             END IF
             GO TO 70
@@ -488,6 +482,6 @@
 *
       RETURN
 *
-*     End of AB_ZGTRFS
+*     End of ZGTRFS
 *
       END

@@ -1,6 +1,6 @@
-*> \brief <b> AB_CHBEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> CHBEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
-*  @generated from AB_ZHBEVx_2stage.f, fortran z -> c, Sat Nov  5 23:18:22 2016
+*  @generated from zhbevx_2stage.f, fortran z -> c, Sat Nov  5 23:18:22 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHBEVX_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHBEVx_2stage.f">
+*> Download CHBEVX_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chbevx_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHBEVx_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chbevx_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHBEVx_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbevx_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB,
+*       SUBROUTINE CHBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB,
 *                                 Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W,
 *                                 Z, LDZ, WORK, LWORK, RWORK, IWORK, 
 *                                 IFAIL, INFO )
@@ -45,7 +45,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHBEVX_2STAGE computes selected eigenvalues and, optionally, eigenvectors
+*> CHBEVX_2STAGE computes selected eigenvalues and, optionally, eigenvectors
 *> of a complex Hermitian band matrix A using the 2stage technique for
 *> the reduction to tridiagonal.  Eigenvalues and eigenvectors
 *> can be selected by specifying either a range of values or a range of
@@ -246,7 +246,7 @@
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -322,7 +322,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_CHBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB,
+      SUBROUTINE CHBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB,
      $                          Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W,
      $                          Z, LDZ, WORK, LWORK, RWORK, IWORK, 
      $                          IFAIL, INFO )
@@ -368,17 +368,15 @@
       COMPLEX            CTMP1
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV2STAGE
-      REAL               SLAMCH, AB_CLANHB
-      EXTERNAL           AB_LSAME, SLAMCH, AB_CLANHB, AB_ILAENV2STAGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      REAL               SLAMCH, CLANHB
+      EXTERNAL           LSAME, SLAMCH, CLANHB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SSCAL, AB_SSTEBZ, AB_SSTERF, AB_XE
-     $RBLA, AB_CCOPY,
-     $                   AB_CGEMV, AB_CLACPY, AB_CLASCL, AB_CSTEIN, AB_C
-     $STEQR,
-     $                   AB_CSWAP, AB_CHETRD_HB2ST
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CCOPY,
+     $                   CGEMV, CLACPY, CLASCL, CSTEIN, CSTEQR,
+     $                   CSWAP, CHETRD_HB2ST
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, MAX, MIN, SQRT
@@ -387,19 +385,19 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -431,11 +429,11 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            IB    = AB_ILAENV2STAGE( 2, 'AB_CHETRD_HB2ST', JOBZ,
+            IB    = ILAENV2STAGE( 2, 'CHETRD_HB2ST', JOBZ,
      $                            N, KD, -1, -1 )
-            LHTRD = AB_ILAENV2STAGE( 3, 'AB_CHETRD_HB2ST', JOBZ, 
+            LHTRD = ILAENV2STAGE( 3, 'CHETRD_HB2ST', JOBZ, 
      $                            N, KD, IB, -1 )
-            LWTRD = AB_ILAENV2STAGE( 4, 'AB_CHETRD_HB2ST', JOBZ, 
+            LWTRD = ILAENV2STAGE( 4, 'CHETRD_HB2ST', JOBZ, 
      $                            N, KD, IB, -1 )
             LWMIN = LHTRD + LWTRD
             WORK( 1 )  = LWMIN
@@ -446,7 +444,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHBEVX_2STAGE', -INFO )
+         CALL XERBLA( 'CHBEVX_2STAGE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -498,7 +496,7 @@
          VLL = ZERO
          VUU = ZERO
       END IF
-      ANRM = AB_CLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
+      ANRM = CLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / ANRM
@@ -508,11 +506,9 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
          IF( ABSTOL.GT.0 )
      $      ABSTLL = ABSTOL*SIGMA
@@ -522,7 +518,7 @@
          END IF
       END IF
 *
-*     Call AB_CHBTRD_HB2ST to reduce Hermitian band matrix to tridiagonal form.
+*     Call CHBTRD_HB2ST to reduce Hermitian band matrix to tridiagonal form.
 *
       INDD = 1
       INDE = INDD + N
@@ -532,13 +528,13 @@
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL AB_CHETRD_HB2ST( 'N', JOBZ, UPLO, N, KD, AB, LDAB,
+      CALL CHETRD_HB2ST( 'N', JOBZ, UPLO, N, KD, AB, LDAB,
      $                    RWORK( INDD ), RWORK( INDE ), WORK( INDHOUS ),
      $                    LHTRD, WORK( INDWRK ), LLWORK, IINFO )
 *
 *     If all eigenvalues are desired and ABSTOL is less than or equal
-*     to zero, then call AB_SSTERF or AB_CSTEQR.  If this fails for some
-*     eigenvalue, then try AB_SSTEBZ.
+*     to zero, then call SSTERF or CSTEQR.  If this fails for some
+*     eigenvalue, then try SSTEBZ.
 *
       TEST = .FALSE.
       IF (INDEIG) THEN
@@ -547,15 +543,15 @@
          END IF
       END IF
       IF ((ALLEIG .OR. TEST) .AND. (ABSTOL.LE.ZERO)) THEN
-         CALL AB_SCOPY( N, RWORK( INDD ), 1, W, 1 )
+         CALL SCOPY( N, RWORK( INDD ), 1, W, 1 )
          INDEE = INDRWK + 2*N
          IF( .NOT.WANTZ ) THEN
-            CALL AB_SCOPY( N-1, RWORK( INDE ), 1, RWORK( INDEE ), 1 )
-            CALL AB_SSTERF( N, W, RWORK( INDEE ), INFO )
+            CALL SCOPY( N-1, RWORK( INDE ), 1, RWORK( INDEE ), 1 )
+            CALL SSTERF( N, W, RWORK( INDEE ), INFO )
          ELSE
-            CALL AB_CLACPY( 'A', N, N, Q, LDQ, Z, LDZ )
-            CALL AB_SCOPY( N-1, RWORK( INDE ), 1, RWORK( INDEE ), 1 )
-            CALL AB_CSTEQR( JOBZ, N, W, RWORK( INDEE ), Z, LDZ,
+            CALL CLACPY( 'A', N, N, Q, LDQ, Z, LDZ )
+            CALL SCOPY( N-1, RWORK( INDE ), 1, RWORK( INDEE ), 1 )
+            CALL CSTEQR( JOBZ, N, W, RWORK( INDEE ), Z, LDZ,
      $                   RWORK( INDRWK ), INFO )
             IF( INFO.EQ.0 ) THEN
                DO 10 I = 1, N
@@ -570,7 +566,7 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call AB_SSTEBZ and, if eigenvectors are desired, AB_CSTEIN.
+*     Otherwise, call SSTEBZ and, if eigenvectors are desired, CSTEIN.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -580,22 +576,22 @@
       INDIBL = 1
       INDISP = INDIBL + N
       INDIWK = INDISP + N
-      CALL AB_SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
+      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             RWORK( INDD ), RWORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), RWORK( INDRWK ),
      $             IWORK( INDIWK ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL AB_CSTEIN( N, RWORK( INDD ), RWORK( INDE ), M, W,
+         CALL CSTEIN( N, RWORK( INDD ), RWORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
      $                RWORK( INDRWK ), IWORK( INDIWK ), IFAIL, INFO )
 *
 *        Apply unitary matrix used in reduction to tridiagonal
-*        form to eigenvectors returned by AB_CSTEIN.
+*        form to eigenvectors returned by CSTEIN.
 *
          DO 20 J = 1, M
-            CALL AB_CCOPY( N, Z( 1, J ), 1, WORK( 1 ), 1 )
-            CALL AB_CGEMV( 'N', N, N, CONE, Q, LDQ, WORK, 1, CZERO,
+            CALL CCOPY( N, Z( 1, J ), 1, WORK( 1 ), 1 )
+            CALL CGEMV( 'N', N, N, CONE, Q, LDQ, WORK, 1, CZERO,
      $                  Z( 1, J ), 1 )
    20    CONTINUE
       END IF
@@ -609,7 +605,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -632,7 +628,7 @@
                IWORK( INDIBL+I-1 ) = IWORK( INDIBL+J-1 )
                W( J ) = TMP1
                IWORK( INDIBL+J-1 ) = ITMP1
-               CALL AB_CSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL CSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
                IF( INFO.NE.0 ) THEN
                   ITMP1 = IFAIL( I )
                   IFAIL( I ) = IFAIL( J )
@@ -648,6 +644,6 @@
 *
       RETURN
 *
-*     End of AB_CHBEVX_2STAGE
+*     End of CHBEVX_2STAGE
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DLA_SYRCOND estimates the Skeel condition number for a symmetric indefinite matrix.
+*> \brief \b DLA_SYRCOND estimates the Skeel condition number for a symmetric indefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLA_SYRCOND + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLA_SYRCOND.f">
+*> Download DLA_SYRCOND + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_syrcond.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLA_SYRCOND.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_syrcond.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLA_SYRCOND.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_syrcond.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF,
+*       DOUBLE PRECISION FUNCTION DLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF,
 *                                              IPIV, CMODE, C, INFO, WORK,
 *                                              IWORK )
 *
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_DLA_SYRCOND estimates the Skeel condition number of  op(A) * op2(C)
+*>    DLA_SYRCOND estimates the Skeel condition number of  op(A) * op2(C)
 *>    where op2 is determined by CMODE as follows
 *>    CMODE =  1    op2(C) = C
 *>    CMODE =  0    op2(C) = I
@@ -81,7 +81,7 @@
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDAF,N)
 *>     The block diagonal matrix D and the multipliers used to
-*>     obtain the factor U or L as computed by AB_DSYTRF.
+*>     obtain the factor U or L as computed by DSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -94,7 +94,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     Details of the interchanges and the block structure of D
-*>     as determined by AB_DSYTRF.
+*>     as determined by DSYTRF.
 *> \endverbatim
 *>
 *> \param[in] CMODE
@@ -144,8 +144,7 @@
 *> \ingroup doubleSYcomputational
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DLA_SYRCOND( UPLO, N, A, LDA, AF, LDA
-     $F,
+      DOUBLE PRECISION FUNCTION DLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF,
      $                                       IPIV, CMODE, C, INFO, WORK,
      $                                       IWORK )
 *
@@ -175,19 +174,19 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLACN2, AB_XERBLA, AB_DSYTRS
+      EXTERNAL           DLACN2, XERBLA, DSYTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      AB_DLA_SYRCOND = 0.0D+0
+      DLA_SYRCOND = 0.0D+0
 *
       INFO = 0
       IF( N.LT.0 ) THEN
@@ -198,15 +197,15 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLA_SYRCOND', -INFO )
+         CALL XERBLA( 'DLA_SYRCOND', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 ) THEN
-         AB_DLA_SYRCOND = 1.0D+0
+         DLA_SYRCOND = 1.0D+0
          RETURN
       END IF
       UP = .FALSE.
-      IF ( AB_LSAME( UPLO, 'U' ) ) UP = .TRUE.
+      IF ( LSAME( UPLO, 'U' ) ) UP = .TRUE.
 *
 *     Compute the equilibration matrix R such that
 *     inv(R)*A*C has unit 1-norm.
@@ -275,7 +274,7 @@
 
       KASE = 0
    10 CONTINUE
-      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -286,11 +285,9 @@
             END DO
 
             IF ( UP ) THEN
-               CALL AB_DSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO 
-     $)
+               CALL DSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             ELSE
-               CALL AB_DSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO 
-     $)
+               CALL DSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             ENDIF
 *
 *           Multiply by inv(C).
@@ -319,11 +316,9 @@
             END IF
 
             IF ( UP ) THEN
-               CALL AB_DSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO 
-     $)
+               CALL DSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             ELSE
-               CALL AB_DSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO 
-     $)
+               CALL DSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             ENDIF
 *
 *           Multiply by R.
@@ -339,7 +334,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0D+0 )
-     $   AB_DLA_SYRCOND = ( 1.0D+0 / AINVNM )
+     $   DLA_SYRCOND = ( 1.0D+0 / AINVNM )
 *
       RETURN
 *

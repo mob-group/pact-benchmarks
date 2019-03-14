@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARTGP generates a plane rotation so that the diagonal is nonnegative.
+*> \brief \b DLARTGP generates a plane rotation so that the diagonal is nonnegative.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLARTGP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARTGp.f">
+*> Download DLARTGP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartgp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARTGp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartgp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARTGp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartgp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARTGP( F, G, CS, SN, R )
+*       SUBROUTINE DLARTGP( F, G, CS, SN, R )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   CS, F, G, R, SN
@@ -30,12 +30,12 @@
 *>
 *> \verbatim
 *>
-*> AB_DLARTGP generates a plane rotation so that
+*> DLARTGP generates a plane rotation so that
 *>
 *>    [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
 *>    [ -SN  CS  ]     [ G ]     [ 0 ]
 *>
-*> This is a slower, more accurate version of the Level 1 BLAS routine AB_DROTG,
+*> This is a slower, more accurate version of the Level 1 BLAS routine DROTG,
 *> with the following other differences:
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=(+/-)1 and SN=0.
@@ -93,7 +93,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLARTGP( F, G, CS, SN, R )
+      SUBROUTINE DLARTGP( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -197,6 +197,6 @@
       END IF
       RETURN
 *
-*     End of AB_DLARTGP
+*     End of DLARTGP
 *
       END

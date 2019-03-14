@@ -1,4 +1,4 @@
-*> \brief \b AB_DGEBAL
+*> \brief \b DGEBAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGEBAL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEBAL.f">
+*> Download DGEBAL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgebal.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEBAL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgebal.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEBAL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgebal.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+*       SUBROUTINE DGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOB
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGEBAL balances a general real matrix A.  This involves, first,
+*> DGEBAL balances a general real matrix A.  This involves, first,
 *> permuting A by a similarity transformation to isolate eigenvalues
 *> in the first 1 to ILO-1 and last IHI+1 to N elements on the
 *> diagonal; and second, applying a diagonal similarity transformation
@@ -158,7 +158,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+      SUBROUTINE DGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -190,14 +190,13 @@
      $                   SFMIN2
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_DISNAN, AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DNRM2
-      EXTERNAL           AB_DISNAN, AB_LSAME, AB_IDAMAX, DLAMCH, AB_DNRM
-     $2
+      LOGICAL            DISNAN, LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH, DNRM2
+      EXTERNAL           DISNAN, LSAME, IDAMAX, DLAMCH, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSCAL, AB_DSWAP, AB_XERBLA
+      EXTERNAL           DSCAL, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -205,10 +204,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.AB_LSAME( JOB, 'P' ) .AND
-     $.
-     $    .NOT.AB_LSAME( JOB, 'S' ) .AND. .NOT.AB_LSAME( JOB, 'B' ) ) TH
-     $EN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -216,7 +213,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGEBAL', -INFO )
+         CALL XERBLA( 'DGEBAL', -INFO )
          RETURN
       END IF
 *
@@ -226,14 +223,14 @@
       IF( N.EQ.0 )
      $   GO TO 210
 *
-      IF( AB_LSAME( JOB, 'N' ) ) THEN
+      IF( LSAME( JOB, 'N' ) ) THEN
          DO 10 I = 1, N
             SCALE( I ) = ONE
    10    CONTINUE
          GO TO 210
       END IF
 *
-      IF( AB_LSAME( JOB, 'S' ) )
+      IF( LSAME( JOB, 'S' ) )
      $   GO TO 120
 *
 *     Permutation to isolate eigenvalues if possible
@@ -247,8 +244,8 @@
       IF( J.EQ.M )
      $   GO TO 30
 *
-      CALL AB_DSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
-      CALL AB_DSWAP( N-K+1, A( J, K ), LDA, A( M, K ), LDA )
+      CALL DSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
+      CALL DSWAP( N-K+1, A( J, K ), LDA, A( M, K ), LDA )
 *
    30 CONTINUE
       GO TO ( 40, 80 )IEXC
@@ -302,7 +299,7 @@
          SCALE( I ) = ONE
   130 CONTINUE
 *
-      IF( AB_LSAME( JOB, 'P' ) )
+      IF( LSAME( JOB, 'P' ) )
      $   GO TO 210
 *
 *     Balance the submatrix in rows K to L.
@@ -319,11 +316,11 @@
 *
       DO 200 I = K, L
 *
-         C = AB_DNRM2( L-K+1, A( K, I ), 1 )
-         R = AB_DNRM2( L-K+1, A( I, K ), LDA )
-         ICA = AB_IDAMAX( L, A( 1, I ), 1 )
+         C = DNRM2( L-K+1, A( K, I ), 1 )
+         R = DNRM2( L-K+1, A( I, K ), LDA )
+         ICA = IDAMAX( L, A( 1, I ), 1 )
          CA = ABS( A( ICA, I ) )
-         IRA = AB_IDAMAX( N-K+1, A( I, K ), LDA )
+         IRA = IDAMAX( N-K+1, A( I, K ), LDA )
          RA = ABS( A( I, IRA+K-1 ) )
 *
 *        Guard against zero C or R due to underflow.
@@ -336,12 +333,12 @@
   160    CONTINUE
          IF( C.GE.G .OR. MAX( F, C, CA ).GE.SFMAX2 .OR.
      $       MIN( R, G, RA ).LE.SFMIN2 )GO TO 170
-            IF( AB_DISNAN( C+F+CA+R+G+RA ) ) THEN
+            IF( DISNAN( C+F+CA+R+G+RA ) ) THEN
 *
 *           Exit if NaN to avoid infinite loop
 *
             INFO = -3
-            CALL AB_XERBLA( 'AB_DGEBAL', -INFO )
+            CALL XERBLA( 'DGEBAL', -INFO )
             RETURN
          END IF
          F = F*SCLFAC
@@ -382,8 +379,8 @@
          SCALE( I ) = SCALE( I )*F
          NOCONV = .TRUE.
 *
-         CALL AB_DSCAL( N-K+1, G, A( I, K ), LDA )
-         CALL AB_DSCAL( L, F, A( 1, I ), 1 )
+         CALL DSCAL( N-K+1, G, A( I, K ), LDA )
+         CALL DSCAL( L, F, A( 1, I ), 1 )
 *
   200 CONTINUE
 *
@@ -396,6 +393,6 @@
 *
       RETURN
 *
-*     End of AB_DGEBAL
+*     End of DGEBAL
 *
       END

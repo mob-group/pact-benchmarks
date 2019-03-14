@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARGV generates a vector of plane rotations with real cosines and real sines.
+*> \brief \b SLARGV generates a vector of plane rotations with real cosines and real sines.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARGV.f">
+*> Download SLARGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slargv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slargv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slargv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARGV( N, X, INCX, Y, INCY, C, INCC )
+*       SUBROUTINE SLARGV( N, X, INCX, Y, INCY, C, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, INCY, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARGV generates a vector of real plane rotations, determined by
+*> SLARGV generates a vector of real plane rotations, determined by
 *> elements of the real vectors x and y. For i = 1,2,...,n
 *>
 *>    (  c(i)  s(i) ) ( x(i) ) = ( a(i) )
@@ -102,7 +102,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARGV( N, X, INCX, Y, INCY, C, INCC )
+      SUBROUTINE SLARGV( N, X, INCX, Y, INCY, C, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,6 +162,6 @@
    10 CONTINUE
       RETURN
 *
-*     End of AB_SLARGV
+*     End of SLARGV
 *
       END

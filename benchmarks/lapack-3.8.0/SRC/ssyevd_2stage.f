@@ -1,6 +1,6 @@
-*> \brief <b> AB_SSYEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
+*> \brief <b> SSYEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
 *
-*  @generated from AB_DSYEVd_2stage.f, fortran d -> s, Sat Nov  5 23:55:54 2016
+*  @generated from dsyevd_2stage.f, fortran d -> s, Sat Nov  5 23:55:54 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSYEVD_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYEVd_2stage.f">
+*> Download SSYEVD_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevd_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYEVd_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyevd_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYEVd_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevd_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+*       SUBROUTINE SSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
 *                                IWORK, LIWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSYEVD_2STAGE computes all eigenvalues and, optionally, eigenvectors of a
+*> SSYEVD_2STAGE computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A using the 2stage technique for
 *> the reduction to tridiagonal. If eigenvectors are desired, it uses a
 *> divide and conquer algorithm.
@@ -134,7 +134,7 @@
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by AB_XERBLA.
+*>          LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -155,7 +155,7 @@
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by AB_XERBLA.
+*>          LWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -224,8 +224,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_SSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK
-     $,
+      SUBROUTINE SSYEVD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
      $                          IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -260,15 +259,14 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV2STAGE
-      REAL               SLAMCH, AB_SLANSY
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANSY, AB_ILAENV2STAGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      REAL               SLAMCH, SLANSY
+      EXTERNAL           LSAME, SLAMCH, SLANSY, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLACPY, AB_SLASCL, AB_SORMTR, AB_SSCAL, AB_S
-     $STEDC, AB_SSTERF,
-     $                   AB_SSYTRD_2STAGE, AB_XERBLA
+      EXTERNAL           SLACPY, SLASCL, SORMTR, SSCAL, SSTEDC, SSTERF,
+     $                   SSYTRD_2STAGE, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -277,14 +275,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -297,13 +295,13 @@
             LIWMIN = 1
             LWMIN = 1
          ELSE
-            KD    = AB_ILAENV2STAGE( 1, 'AB_SSYTRD_2STAGE', JOBZ,
+            KD    = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ,
      $                            N, -1, -1, -1 )
-            IB    = AB_ILAENV2STAGE( 2, 'AB_SSYTRD_2STAGE', JOBZ,
+            IB    = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ,
      $                            N, KD, -1, -1 )
-            LHTRD = AB_ILAENV2STAGE( 3, 'AB_SSYTRD_2STAGE', JOBZ,
+            LHTRD = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
-            LWTRD = AB_ILAENV2STAGE( 4, 'AB_SSYTRD_2STAGE', JOBZ,
+            LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
             IF( WANTZ ) THEN
                LIWMIN = 3 + 5*N
@@ -324,7 +322,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSYEVD_2STAGE', -INFO )
+         CALL XERBLA( 'SSYEVD_2STAGE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -353,7 +351,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_SLANSY( 'M', UPLO, N, A, LDA, WORK )
+      ANRM = SLANSY( 'M', UPLO, N, A, LDA, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -363,9 +361,9 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 )
-     $   CALL AB_SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+     $   CALL SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
 *
-*     Call AB_SSYTRD_2STAGE to reduce symmetric matrix to tridiagonal form.
+*     Call SSYTRD_2STAGE to reduce symmetric matrix to tridiagonal form.
 *
       INDE    = 1
       INDTAU  = INDE + N
@@ -375,38 +373,38 @@
       INDWK2  = INDWRK + N*N
       LLWRK2  = LWORK - INDWK2 + 1
 *
-      CALL AB_SSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK( INDE ),
+      CALL SSYTRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK( INDE ),
      $                    WORK( INDTAU ), WORK( INDHOUS ), LHTRD, 
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, first call
-*     AB_SSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
-*     tridiagonal matrix, then call AB_SORMTR to multiply it by the
+*     For eigenvalues only, call SSTERF.  For eigenvectors, first call
+*     SSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
+*     tridiagonal matrix, then call SORMTR to multiply it by the
 *     Householder transformations stored in A.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
+         CALL SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
 *        Not available in this release, and agrument checking should not
 *        let it getting here
          RETURN
-         CALL AB_SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
+         CALL SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, IWORK, LIWORK, INFO )
-         CALL AB_SORMTR( 'L', UPLO, 'N', N, N, A, LDA, WORK( INDTAU ),
+         CALL SORMTR( 'L', UPLO, 'N', N, N, A, LDA, WORK( INDTAU ),
      $                WORK( INDWRK ), N, WORK( INDWK2 ), LLWRK2, IINFO )
-         CALL AB_SLACPY( 'A', N, N, WORK( INDWRK ), N, A, LDA )
+         CALL SLACPY( 'A', N, N, WORK( INDWRK ), N, A, LDA )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
 *
       IF( ISCALE.EQ.1 )
-     $   CALL AB_SSCAL( N, ONE / SIGMA, W, 1 )
+     $   CALL SSCAL( N, ONE / SIGMA, W, 1 )
 *
       WORK( 1 )  = LWMIN
       IWORK( 1 ) = LIWMIN
 *
       RETURN
 *
-*     End of AB_SSYEVD_2STAGE
+*     End of SSYEVD_2STAGE
 *
       END

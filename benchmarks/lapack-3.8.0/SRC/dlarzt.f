@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARZT forms the triangular factor T of a block reflector H = I - vtvH.
+*> \brief \b DLARZT forms the triangular factor T of a block reflector H = I - vtvH.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLARZT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARZt.f">
+*> Download DLARZT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarzt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARZt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarzt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARZt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarzt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE DLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLARZT forms the triangular factor T of a real block reflector
+*> DLARZT forms the triangular factor T of a real block reflector
 *> H of order > n, which is defined as a product of k elementary
 *> reflectors.
 *>
@@ -183,7 +183,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      SUBROUTINE DLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -208,24 +208,24 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DTRMV, AB_XERBLA
+      EXTERNAL           DGEMV, DTRMV, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Executable Statements ..
 *
 *     Check for currently supported options
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( DIRECT, 'B' ) ) THEN
+      IF( .NOT.LSAME( DIRECT, 'B' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( STOREV, 'R' ) ) THEN
+      ELSE IF( .NOT.LSAME( STOREV, 'R' ) ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLARZT', -INFO )
+         CALL XERBLA( 'DLARZT', -INFO )
          RETURN
       END IF
 *
@@ -245,13 +245,13 @@
 *
 *              T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**T
 *
-               CALL AB_DGEMV( 'No transpose', K-I, N, -TAU( I ),
+               CALL DGEMV( 'No transpose', K-I, N, -TAU( I ),
      $                     V( I+1, 1 ), LDV, V( I, 1 ), LDV, ZERO,
      $                     T( I+1, I ), 1 )
 *
 *              T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i)
 *
-               CALL AB_DTRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
+               CALL DTRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
      $                     T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
             END IF
             T( I, I ) = TAU( I )
@@ -259,6 +259,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of AB_DLARZT
+*     End of DLARZT
 *
       END

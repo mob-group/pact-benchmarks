@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLARF applies an elementary reflector to a general rectangular matrix.
+*> \brief \b ZLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLARF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLARF.f">
+*> Download ZLARF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLARF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLARF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE ZLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLARF applies a complex elementary reflector H to a complex M-by-N
+*> ZLARF applies a complex elementary reflector H to a complex M-by-N
 *> matrix C, from either the left or the right. H is represented in the
 *> form
 *>
@@ -126,7 +126,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE ZLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -154,16 +154,16 @@
       INTEGER            I, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMV, AB_ZGERC
+      EXTERNAL           ZGEMV, ZGERC
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAZLR, AB_ILAZLC
-      EXTERNAL           AB_LSAME, AB_ILAZLR, AB_ILAZLC
+      LOGICAL            LSAME
+      INTEGER            ILAZLR, ILAZLC
+      EXTERNAL           LSAME, ILAZLR, ILAZLC
 *     ..
 *     .. Executable Statements ..
 *
-      APPLYLEFT = AB_LSAME( SIDE, 'L' )
+      APPLYLEFT = LSAME( SIDE, 'L' )
       LASTV = 0
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
@@ -186,10 +186,10 @@
          END DO
          IF( APPLYLEFT ) THEN
 *     Scan for the last non-zero column in C(1:lastv,:).
-            LASTC = AB_ILAZLC(LASTV, N, C, LDC)
+            LASTC = ILAZLC(LASTV, N, C, LDC)
          ELSE
 *     Scan for the last non-zero row in C(:,1:lastv).
-            LASTC = AB_ILAZLR(M, LASTV, C, LDC)
+            LASTC = ILAZLR(M, LASTV, C, LDC)
          END IF
       END IF
 *     Note that lastc.eq.0 renders the BLAS operations null; no special
@@ -202,13 +202,12 @@
 *
 *           w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1)
 *
-            CALL AB_ZGEMV( 'Conjugate transpose', LASTV, LASTC, ONE,
+            CALL ZGEMV( 'Conjugate transpose', LASTV, LASTC, ONE,
      $           C, LDC, V, INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H
 *
-            CALL AB_ZGERC( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC 
-     $)
+            CALL ZGERC( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
          END IF
       ELSE
 *
@@ -218,17 +217,16 @@
 *
 *           w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
 *
-            CALL AB_ZGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
+            CALL ZGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
      $           V, INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H
 *
-            CALL AB_ZGERC( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC 
-     $)
+            CALL ZGERC( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
          END IF
       END IF
       RETURN
 *
-*     End of AB_ZLARF
+*     End of ZLARF
 *
       END

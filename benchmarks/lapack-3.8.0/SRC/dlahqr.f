@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
+*> \brief \b DLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAHQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAHQR.f">
+*> Download DLAHQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlahqr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAHQR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlahqr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAHQR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlahqr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+*       SUBROUTINE DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
 *                          ILOZ, IHIZ, Z, LDZ, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,8 +35,8 @@
 *>
 *> \verbatim
 *>
-*>    AB_DLAHQR is an auxiliary routine called by AB_DHSEQR to update the
-*>    eigenvalues and Schur decomposition already computed by AB_DHSEQR, by
+*>    DLAHQR is an auxiliary routine called by DHSEQR to update the
+*>    eigenvalues and Schur decomposition already computed by DHSEQR, by
 *>    dealing with the Hessenberg submatrix in rows and columns ILO to
 *>    IHI.
 *> \endverbatim
@@ -74,7 +74,7 @@
 *>          IHI is INTEGER
 *>          It is assumed that H is already upper quasi-triangular in
 *>          rows and columns IHI+1:N, and that H(ILO,ILO-1) = 0 (unless
-*>          ILO = 1). AB_DLAHQR works primarily with the Hessenberg
+*>          ILO = 1). DLAHQR works primarily with the Hessenberg
 *>          submatrix in rows and columns ILO to IHI, but applies
 *>          transformations to all of H if WANTT is .TRUE..
 *>          1 <= ILO <= max(1,IHI); IHI <= N.
@@ -135,7 +135,7 @@
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension (LDZ,N)
 *>          If WANTZ is .TRUE., on entry Z must contain the current
-*>          matrix Z of transformations accumulated by AB_DHSEQR, and on
+*>          matrix Z of transformations accumulated by DHSEQR, and on
 *>          exit Z has been updated; transformations are applied only to
 *>          the submatrix Z(ILOZ:IHIZ,ILO:IHI).
 *>          If WANTZ is .FALSE., Z is not referenced.
@@ -151,7 +151,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>           =   0: successful exit
-*>          .GT. 0: If INFO = i, AB_DLAHQR failed to compute all the
+*>          .GT. 0: If INFO = i, DLAHQR failed to compute all the
 *>                  eigenvalues ILO to IHI in a total of 30 iterations
 *>                  per eigenvalue; elements i+1:ihi of WR and WI
 *>                  contain those eigenvalues which have been
@@ -197,14 +197,14 @@
 *>
 *>     12-04 Further modifications by
 *>     Ralph Byers, University of Kansas, USA
-*>     This is a modified version of AB_DLAHQR from LAPACK version 3.0.
+*>     This is a modified version of DLAHQR from LAPACK version 3.0.
 *>     It is (1) more robust against overflow and underflow and
 *>     (2) adopts the more conservative Ahues & Tisseur stopping
 *>     criterion (LAWN 122, 1997).
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+      SUBROUTINE DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -243,8 +243,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DLABAD, AB_DLANV2, AB_DLARFG, AB_D
-     $ROT
+      EXTERNAL           DCOPY, DLABAD, DLANV2, DLARFG, DROT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -278,7 +277,7 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
-      CALL AB_DLABAD( SAFMIN, SAFMAX )
+      CALL DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( NH ) / ULP )
 *
@@ -474,8 +473,8 @@
 *
             NR = MIN( 3, I-K+1 )
             IF( K.GT.M )
-     $         CALL AB_DCOPY( NR, H( K, K-1 ), 1, V, 1 )
-            CALL AB_DLARFG( NR, V( 1 ), V( 2 ), 1, T1 )
+     $         CALL DCOPY( NR, H( K, K-1 ), 1, V, 1 )
+            CALL DLARFG( NR, V( 1 ), V( 2 ), 1, T1 )
             IF( K.GT.M ) THEN
                H( K, K-1 ) = V( 1 )
                H( K+1, K-1 ) = ZERO
@@ -580,7 +579,7 @@
 *        Transform the 2-by-2 submatrix to standard Schur form,
 *        and compute and store the eigenvalues.
 *
-         CALL AB_DLANV2( H( I-1, I-1 ), H( I-1, I ), H( I, I-1 ),
+         CALL DLANV2( H( I-1, I-1 ), H( I-1, I ), H( I, I-1 ),
      $                H( I, I ), WR( I-1 ), WI( I-1 ), WR( I ), WI( I ),
      $                CS, SN )
 *
@@ -589,17 +588,15 @@
 *           Apply the transformation to the rest of H.
 *
             IF( I2.GT.I )
-     $         CALL AB_DROT( I2-I, H( I-1, I+1 ), LDH, H( I, I+1 ), LDH,
+     $         CALL DROT( I2-I, H( I-1, I+1 ), LDH, H( I, I+1 ), LDH,
      $                    CS, SN )
-            CALL AB_DROT( I-I1-1, H( I1, I-1 ), 1, H( I1, I ), 1, CS, SN
-     $ )
+            CALL DROT( I-I1-1, H( I1, I-1 ), 1, H( I1, I ), 1, CS, SN )
          END IF
          IF( WANTZ ) THEN
 *
 *           Apply the transformation to Z.
 *
-            CALL AB_DROT( NZ, Z( ILOZ, I-1 ), 1, Z( ILOZ, I ), 1, CS, SN
-     $ )
+            CALL DROT( NZ, Z( ILOZ, I-1 ), 1, Z( ILOZ, I ), 1, CS, SN )
          END IF
       END IF
 *
@@ -611,6 +608,6 @@
   160 CONTINUE
       RETURN
 *
-*     End of AB_DLAHQR
+*     End of DLAHQR
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DPOTRF2
+*> \brief \b DPOTRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE AB_DPOTRF2( UPLO, N, A, LDA, INFO )
+*       RECURSIVE SUBROUTINE DPOTRF2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPOTRF2 computes the Cholesky factorization of a real symmetric
+*> DPOTRF2 computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A using the recursive algorithm.
 *>
 *> The factorization has the form
@@ -104,7 +104,7 @@
 *> \ingroup doublePOcomputational
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE AB_DPOTRF2( UPLO, N, A, LDA, INFO )
+      RECURSIVE SUBROUTINE DPOTRF2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,11 +130,11 @@
       INTEGER            N1, N2, IINFO
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           AB_LSAME, AB_DISNAN
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSYRK, AB_DTRSM, AB_XERBLA
+      EXTERNAL           DSYRK, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -144,8 +144,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -153,7 +153,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DPOTRF2', -INFO )
+         CALL XERBLA( 'DPOTRF2', -INFO )
          RETURN
       END IF
 *
@@ -168,7 +168,7 @@
 *
 *        Test for non-positive-definiteness
 *
-         IF( A( 1, 1 ).LE.ZERO.OR.AB_DISNAN( A( 1, 1 ) ) ) THEN
+         IF( A( 1, 1 ).LE.ZERO.OR.DISNAN( A( 1, 1 ) ) ) THEN
             INFO = 1
             RETURN
          END IF
@@ -185,7 +185,7 @@
 *
 *        Factor A11
 *
-         CALL AB_DPOTRF2( UPLO, N1, A( 1, 1 ), LDA, IINFO )
+         CALL DPOTRF2( UPLO, N1, A( 1, 1 ), LDA, IINFO )
          IF ( IINFO.NE.0 ) THEN
             INFO = IINFO
             RETURN
@@ -197,14 +197,14 @@
 *
 *           Update and scale A12
 *
-            CALL AB_DTRSM( 'L', 'U', 'T', 'N', N1, N2, ONE,
+            CALL DTRSM( 'L', 'U', 'T', 'N', N1, N2, ONE,
      $                  A( 1, 1 ), LDA, A( 1, N1+1 ), LDA )
 *
 *           Update and factor A22
 *
-            CALL AB_DSYRK( UPLO, 'T', N2, N1, -ONE, A( 1, N1+1 ), LDA,
+            CALL DSYRK( UPLO, 'T', N2, N1, -ONE, A( 1, N1+1 ), LDA,
      $                  ONE, A( N1+1, N1+1 ), LDA )
-            CALL AB_DPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
+            CALL DPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
             IF ( IINFO.NE.0 ) THEN
                INFO = IINFO + N1
                RETURN
@@ -216,14 +216,14 @@
 *
 *           Update and scale A21
 *
-            CALL AB_DTRSM( 'R', 'L', 'T', 'N', N2, N1, ONE,
+            CALL DTRSM( 'R', 'L', 'T', 'N', N2, N1, ONE,
      $                  A( 1, 1 ), LDA, A( N1+1, 1 ), LDA )
 *
 *           Update and factor A22
 *
-            CALL AB_DSYRK( UPLO, 'N', N2, N1, -ONE, A( N1+1, 1 ), LDA,
+            CALL DSYRK( UPLO, 'N', N2, N1, -ONE, A( N1+1, 1 ), LDA,
      $                  ONE, A( N1+1, N1+1 ), LDA )
-            CALL AB_DPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
+            CALL DPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
             IF ( IINFO.NE.0 ) THEN
                INFO = IINFO + N1
                RETURN
@@ -232,6 +232,6 @@
       END IF
       RETURN
 *
-*     End of AB_DPOTRF2
+*     End of DPOTRF2
 *
       END

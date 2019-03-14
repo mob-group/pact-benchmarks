@@ -1,4 +1,4 @@
-*> \brief \b AB_SPOTRF
+*> \brief \b SPOTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPOTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPOTRF.f">
+*> Download SPOTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spotrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPOTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spotrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPOTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOTRF( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE SPOTRF( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPOTRF computes the Cholesky factorization of a real symmetric
+*> SPOTRF computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -105,7 +105,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOTRF( UPLO, N, A, LDA, INFO )
+      SUBROUTINE SPOTRF( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,13 +131,12 @@
       INTEGER            J, JB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SPOTRF2, AB_SSYRK, AB_STRSM, AB_XE
-     $RBLA
+      EXTERNAL           SGEMM, SPOTRF2, SSYRK, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -147,8 +146,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -156,7 +155,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPOTRF', -INFO )
+         CALL XERBLA( 'SPOTRF', -INFO )
          RETURN
       END IF
 *
@@ -167,12 +166,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_SPOTRF', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'SPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code.
 *
-         CALL AB_SPOTRF2( UPLO, N, A, LDA, INFO )
+         CALL SPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -187,21 +186,19 @@
 *              for non-positive-definiteness.
 *
                JB = MIN( NB, N-J+1 )
-               CALL AB_SSYRK( 'Upper', 'Transpose', JB, J-1, -ONE,
+               CALL SSYRK( 'Upper', 'Transpose', JB, J-1, -ONE,
      $                     A( 1, J ), LDA, ONE, A( J, J ), LDA )
-               CALL AB_SPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL SPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
 *
 *                 Compute the current block row.
 *
-                  CALL AB_SGEMM( 'Transpose', 'No transpose', JB, N-J-JB
-     $+1,
+                  CALL SGEMM( 'Transpose', 'No transpose', JB, N-J-JB+1,
      $                        J-1, -ONE, A( 1, J ), LDA, A( 1, J+JB ),
      $                        LDA, ONE, A( J, J+JB ), LDA )
-                  CALL AB_STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit
-     $',
+                  CALL STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit',
      $                        JB, N-J-JB+1, ONE, A( J, J ), LDA,
      $                        A( J, J+JB ), LDA )
                END IF
@@ -217,21 +214,19 @@
 *              for non-positive-definiteness.
 *
                JB = MIN( NB, N-J+1 )
-               CALL AB_SSYRK( 'Lower', 'No transpose', JB, J-1, -ONE,
+               CALL SSYRK( 'Lower', 'No transpose', JB, J-1, -ONE,
      $                     A( J, 1 ), LDA, ONE, A( J, J ), LDA )
-               CALL AB_SPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL SPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
 *
 *                 Compute the current block column.
 *
-                  CALL AB_SGEMM( 'No transpose', 'Transpose', N-J-JB+1, 
-     $JB,
+                  CALL SGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
      $                        J-1, -ONE, A( J+JB, 1 ), LDA, A( J, 1 ),
      $                        LDA, ONE, A( J+JB, J ), LDA )
-                  CALL AB_STRSM( 'Right', 'Lower', 'Transpose', 'Non-uni
-     $t',
+                  CALL STRSM( 'Right', 'Lower', 'Transpose', 'Non-unit',
      $                        N-J-JB+1, JB, ONE, A( J, J ), LDA,
      $                        A( J+JB, J ), LDA )
                END IF
@@ -246,6 +241,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of AB_SPOTRF
+*     End of SPOTRF
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CHBMV
+*> \brief \b CHBMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE CHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHBMV  performs the matrix-vector  operation
+*> CHBMV  performs the matrix-vector  operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -185,7 +185,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      SUBROUTINE CHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -214,11 +214,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,KPLUS1,KX,KY,L
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG,MAX,MIN,REAL
@@ -227,7 +227,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
+      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -241,7 +241,7 @@
           INFO = 11
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_CHBMV ',INFO)
+          CALL XERBLA('CHBMV ',INFO)
           RETURN
       END IF
 *
@@ -294,7 +294,7 @@
           END IF
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
-      IF (AB_LSAME(UPLO,'U')) THEN
+      IF (LSAME(UPLO,'U')) THEN
 *
 *        Form  y  when upper triangle of A is stored.
 *
@@ -375,6 +375,6 @@
 *
       RETURN
 *
-*     End of AB_CHBMV .
+*     End of CHBMV .
 *
       END

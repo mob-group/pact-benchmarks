@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGTTRS
+*> \brief \b ZGTTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGTTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGTTRS.f">
+*> Download ZGTTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgttrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGTTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgttrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGTTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgttrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
+*       SUBROUTINE ZGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGTTRS solves one of the systems of equations
+*> ZGTTRS solves one of the systems of equations
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B,
 *> with a tridiagonal matrix A using the LU factorization computed
-*> by AB_ZGTTRF.
+*> by ZGTTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -135,8 +135,7 @@
 *> \ingroup complex16GTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB
-     $,
+      SUBROUTINE ZGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -160,11 +159,11 @@
       INTEGER            ITRANS, J, JB, NB
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZGTTS2
+      EXTERNAL           XERBLA, ZGTTS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -184,7 +183,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGTTRS', -INFO )
+         CALL XERBLA( 'ZGTTRS', -INFO )
          RETURN
       END IF
 *
@@ -208,21 +207,19 @@
       IF( NRHS.EQ.1 ) THEN
          NB = 1
       ELSE
-         NB = MAX( 1, AB_ILAENV( 1, 'AB_ZGTTRS', TRANS, N, NRHS, -1, -1 
-     $) )
+         NB = MAX( 1, ILAENV( 1, 'ZGTTRS', TRANS, N, NRHS, -1, -1 ) )
       END IF
 *
       IF( NB.GE.NRHS ) THEN
-         CALL AB_ZGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
+         CALL ZGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
       ELSE
          DO 10 J = 1, NRHS, NB
             JB = MIN( NRHS-J+1, NB )
-            CALL AB_ZGTTS2( ITRANS, N, JB, DL, D, DU, DU2, IPIV, B( 1, J
-     $ ),
+            CALL ZGTTS2( ITRANS, N, JB, DL, D, DU, DU2, IPIV, B( 1, J ),
      $                   LDB )
    10    CONTINUE
       END IF
 *
-*     End of AB_ZGTTRS
+*     End of ZGTTRS
 *
       END

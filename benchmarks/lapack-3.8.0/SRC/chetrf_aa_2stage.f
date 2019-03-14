@@ -1,4 +1,4 @@
-*> \brief \b AB_CHETRF_AA_2STAGE
+*> \brief \b CHETRF_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHETRF_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHETRF_aa_2stage.f">
+*> Download CHETRF_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_aa_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHETRF_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrf_aa_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHETRF_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_aa_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE AB_CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
+*      SUBROUTINE CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
 *                                   IPIV2, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHETRF_AA_2STAGE computes the factorization of a real hermitian matrix A
+*> CHETRF_AA_2STAGE computes the factorization of a real hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**T  or  A = L*T*L**T
@@ -99,7 +99,7 @@
 *>          If LTB = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of LTB, 
 *>          returns this value as the first entry of TB, and
-*>          no error message related to LTB is issued by AB_XERBLA.
+*>          no error message related to LTB is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IPIV
@@ -131,7 +131,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the WORK array,
 *>          returns this value as the first entry of the WORK array, and
-*>          no error message related to LWORK is issued by AB_XERBLA.
+*>          no error message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -155,7 +155,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
+      SUBROUTINE CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
      $                             IPIV2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -187,15 +187,15 @@
       COMPLEX            PIV
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
       
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_CCOPY, AB_CLACGV, AB_CLACPY,
-     $                   AB_CLASET, AB_CGBTRF, AB_CGEMM,  AB_CGETRF, 
-     $                   AB_CHEGST, AB_CSWAP, AB_CTRSM 
+      EXTERNAL           XERBLA, CCOPY, CLACGV, CLACPY,
+     $                   CLASET, CGBTRF, CGEMM,  CGETRF, 
+     $                   CHEGST, CSWAP, CTRSM 
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MIN, MAX
@@ -205,10 +205,10 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       WQUERY = ( LWORK.EQ.-1 )
       TQUERY = ( LTB.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -221,13 +221,13 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHETRF_AA_2STAGE', -INFO )
+         CALL XERBLA( 'CHETRF_AA_2STAGE', -INFO )
          RETURN
       END IF
 *
 *     Answer the query
 *
-      NB = AB_ILAENV( 1, 'AB_CHETRF_AA_2STAGE', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'CHETRF_AA_2STAGE', UPLO, N, -1, -1, -1 )
       IF( INFO.EQ.0 ) THEN
          IF( TQUERY ) THEN
             TB( 1 ) = (3*NB+1)*N
@@ -291,7 +291,7 @@
                   ELSE
                      JB = 2*NB
                   END IF
-                  CALL AB_CGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                    NB, KB, JB,
      $                    ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
      $                         A( (I-1)*NB+1, J*NB+1 ), LDA,
@@ -303,7 +303,7 @@
                   ELSE
                      JB = 3*NB
                   END IF
-                  CALL AB_CGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                    NB, KB, JB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
@@ -314,29 +314,29 @@
 *         
 *           Compute T(J,J)
 *     
-            CALL AB_CLACPY( 'Upper', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
+            CALL CLACPY( 'Upper', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
      $                   TB( TD+1 + (J*NB)*LDTB ), LDTB-1 ) 
             IF( J.GT.1 ) THEN
 *              T(J,J) = U(1:J,J)'*H(1:J)             
-               CALL AB_CGEMM( 'Conjugate transpose', 'NoTranspose',
+               CALL CGEMM( 'Conjugate transpose', 'NoTranspose',
      $                 KB, KB, (J-1)*NB,
      $                -ONE, A( 1, J*NB+1 ), LDA,
      $                      WORK( NB+1 ), N,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
 *              T(J,J) += U(J,J)'*T(J,J-1)*U(J-1,J)
-               CALL AB_CGEMM( 'Conjugate transpose', 'NoTranspose',
+               CALL CGEMM( 'Conjugate transpose', 'NoTranspose',
      $                 KB, NB, KB,
      $                 ONE,  A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                       TB( TD+NB+1 + ((J-1)*NB)*LDTB ), LDTB-1,
      $                 ZERO, WORK( 1 ), N )
-               CALL AB_CGEMM( 'NoTranspose', 'NoTranspose',
+               CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, KB, NB,
      $                -ONE, WORK( 1 ), N,
      $                      A( (J-2)*NB+1, J*NB+1 ), LDA,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
             END IF
             IF( J.GT.0 ) THEN 
-               CALL AB_CHEGST( 1, 'Upper', KB, 
+               CALL CHEGST( 1, 'Upper', KB, 
      $                      TB( TD+1 + (J*NB)*LDTB ), LDTB-1, 
      $                      A( (J-1)*NB+1, J*NB+1 ), LDA, IINFO )
             END IF
@@ -358,13 +358,13 @@
 *                 Compute H(J,J)
 *
                   IF( J.EQ.1 ) THEN
-                     CALL AB_CGEMM( 'NoTranspose', 'NoTranspose',
+                     CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                       KB, KB, KB,
      $                       ONE,  TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                             A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                       ZERO, WORK( J*NB+1 ), N )
                   ELSE
-                     CALL AB_CGEMM( 'NoTranspose', 'NoTranspose',
+                     CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                      KB, KB, NB+KB,
      $                      ONE, TB( TD+NB+1 + ((J-1)*NB)*LDTB ),
      $                         LDTB-1,
@@ -374,24 +374,24 @@
 *
 *                 Update with the previous column
 *
-                  CALL AB_CGEMM( 'Conjugate transpose', 'NoTranspose',
+                  CALL CGEMM( 'Conjugate transpose', 'NoTranspose',
      $                    NB, N-(J+1)*NB, J*NB,
      $                    -ONE, WORK( NB+1 ), N,
      $                          A( 1, (J+1)*NB+1 ), LDA,
      $                     ONE, A( J*NB+1, (J+1)*NB+1 ), LDA )
                END IF
 *
-*              Copy panel to workspace to call AB_CGETRF
+*              Copy panel to workspace to call CGETRF
 *
                DO K = 1, NB
-                   CALL AB_CCOPY( N-(J+1)*NB,
+                   CALL CCOPY( N-(J+1)*NB,
      $                         A( J*NB+K, (J+1)*NB+1 ), LDA,
      $                         WORK( 1+(K-1)*N ), 1 )
                END DO
 *
 *              Factorize panel
 *
-               CALL AB_CGETRF( N-(J+1)*NB, NB, 
+               CALL CGETRF( N-(J+1)*NB, NB, 
      $                      WORK, N,
      $                      IPIV( (J+1)*NB+1 ), IINFO )
 c               IF (IINFO.NE.0 .AND. INFO.EQ.0) THEN
@@ -404,25 +404,25 @@ c               END IF
 *
 *                  Copy only L-factor
 *
-                   CALL AB_CCOPY( N-K-(J+1)*NB,
+                   CALL CCOPY( N-K-(J+1)*NB,
      $                         WORK( K+1+(K-1)*N ), 1,
      $                         A( J*NB+K, (J+1)*NB+K+1 ), LDA )
 *
 *                  Transpose U-factor to be copied back into T(J+1, J)
 *
-                   CALL AB_CLACGV( K, WORK( 1+(K-1)*N ), 1 )
+                   CALL CLACGV( K, WORK( 1+(K-1)*N ), 1 )
                END DO
 *         
 *              Compute T(J+1, J), zero out for GEMM update
 *     
                KB = MIN(NB, N-(J+1)*NB)
-               CALL AB_CLASET( 'Full', KB, NB, ZERO, ZERO, 
+               CALL CLASET( 'Full', KB, NB, ZERO, ZERO, 
      $                      TB( TD+NB+1 + (J*NB)*LDTB), LDTB-1 )
-               CALL AB_CLACPY( 'Upper', KB, NB,
+               CALL CLACPY( 'Upper', KB, NB,
      $                      WORK, N,
      $                      TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                IF( J.GT.0 ) THEN 
-                  CALL AB_CTRSM( 'R', 'U', 'N', 'U', KB, NB, ONE,
+                  CALL CTRSM( 'R', 'U', 'N', 'U', KB, NB, ONE,
      $                        A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                        TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                END IF
@@ -436,7 +436,7 @@ c               END IF
      $                  = CONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
                   END DO
                END DO
-               CALL AB_CLASET( 'Lower', KB, NB, ZERO, ONE, 
+               CALL CLASET( 'Lower', KB, NB, ZERO, ONE, 
      $                      A( J*NB+1, (J+1)*NB+1), LDA )
 *              
 *              Apply pivots to trailing submatrix of A
@@ -449,15 +449,15 @@ c               END IF
                   I2 = IPIV( (J+1)*NB+K )
                   IF( I1.NE.I2 ) THEN 
 *                    > Apply pivots to previous columns of L
-                     CALL AB_CSWAP( K-1, A( (J+1)*NB+1, I1 ), 1, 
+                     CALL CSWAP( K-1, A( (J+1)*NB+1, I1 ), 1, 
      $                                A( (J+1)*NB+1, I2 ), 1 )
 *                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)               
-                     CALL AB_CSWAP( I2-I1-1, A( I1, I1+1 ), LDA,
+                     CALL CSWAP( I2-I1-1, A( I1, I1+1 ), LDA,
      $                                    A( I1+1, I2 ), 1 )
-                     CALL AB_CLACGV( I2-I1, A( I1, I1+1 ), LDA )
-                     CALL AB_CLACGV( I2-I1-1, A( I1+1, I2 ), 1 )
+                     CALL CLACGV( I2-I1, A( I1, I1+1 ), LDA )
+                     CALL CLACGV( I2-I1-1, A( I1+1, I2 ), 1 )
 *                    > Swap A(I2+1:M, I1) with A(I2+1:M, I2)
-                     CALL AB_CSWAP( N-I2, A( I1, I2+1 ), LDA,
+                     CALL CSWAP( N-I2, A( I1, I2+1 ), LDA,
      $                                 A( I2, I2+1 ), LDA ) 
 *                    > Swap A(I1, I1) with A(I2, I2)
                      PIV = A( I1, I1 )
@@ -465,7 +465,7 @@ c               END IF
                      A( I2, I2 ) = PIV
 *                    > Apply pivots to previous columns of L
                      IF( J.GT.0 ) THEN
-                        CALL AB_CSWAP( J*NB, A( 1, I1 ), 1,
+                        CALL CSWAP( J*NB, A( 1, I1 ), 1,
      $                                    A( 1, I2 ), 1 )
                      END IF
                   ENDIF   
@@ -491,7 +491,7 @@ c               END IF
                   ELSE
                      JB = 2*NB
                   END IF
-                  CALL AB_CGEMM( 'NoTranspose', 'Conjugate transpose',
+                  CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                    NB, KB, JB,
      $                    ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
      $                         A( J*NB+1, (I-1)*NB+1 ), LDA,
@@ -503,7 +503,7 @@ c               END IF
                   ELSE
                      JB = 3*NB
                   END IF
-                  CALL AB_CGEMM( 'NoTranspose', 'Conjugate transpose',
+                  CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                    NB, KB, JB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
@@ -514,29 +514,29 @@ c               END IF
 *         
 *           Compute T(J,J)
 *     
-            CALL AB_CLACPY( 'Lower', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
+            CALL CLACPY( 'Lower', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
      $                   TB( TD+1 + (J*NB)*LDTB ), LDTB-1 ) 
             IF( J.GT.1 ) THEN
 *              T(J,J) = L(J,1:J)*H(1:J)             
-               CALL AB_CGEMM( 'NoTranspose', 'NoTranspose',
+               CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, KB, (J-1)*NB,
      $                -ONE, A( J*NB+1, 1 ), LDA,
      $                      WORK( NB+1 ), N,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
 *              T(J,J) += L(J,J)*T(J,J-1)*L(J,J-1)'
-               CALL AB_CGEMM( 'NoTranspose', 'NoTranspose',
+               CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, NB, KB,
      $                 ONE,  A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                       TB( TD+NB+1 + ((J-1)*NB)*LDTB ), LDTB-1,
      $                 ZERO, WORK( 1 ), N )
-               CALL AB_CGEMM( 'NoTranspose', 'Conjugate transpose',
+               CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                 KB, KB, NB,
      $                -ONE, WORK( 1 ), N,
      $                      A( J*NB+1, (J-2)*NB+1 ), LDA,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
             END IF
             IF( J.GT.0 ) THEN 
-               CALL AB_CHEGST( 1, 'Lower', KB, 
+               CALL CHEGST( 1, 'Lower', KB, 
      $                      TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                      A( J*NB+1, (J-1)*NB+1 ), LDA, IINFO )
             END IF
@@ -558,15 +558,13 @@ c               END IF
 *                 Compute H(J,J)
 *
                   IF( J.EQ.1 ) THEN
-                     CALL AB_CGEMM( 'NoTranspose', 'Conjugate transpose'
-     $,
+                     CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                       KB, KB, KB,
      $                       ONE,  TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                             A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                       ZERO, WORK( J*NB+1 ), N )
                   ELSE
-                     CALL AB_CGEMM( 'NoTranspose', 'Conjugate transpose'
-     $,
+                     CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                      KB, KB, NB+KB,
      $                      ONE, TB( TD+NB+1 + ((J-1)*NB)*LDTB ),
      $                         LDTB-1,
@@ -576,7 +574,7 @@ c               END IF
 *
 *                 Update with the previous column
 *
-                  CALL AB_CGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                    N-(J+1)*NB, NB, J*NB,
      $                    -ONE, A( (J+1)*NB+1, 1 ), LDA,
      $                          WORK( NB+1 ), N,
@@ -585,7 +583,7 @@ c               END IF
 *
 *              Factorize panel
 *
-               CALL AB_CGETRF( N-(J+1)*NB, NB, 
+               CALL CGETRF( N-(J+1)*NB, NB, 
      $                      A( (J+1)*NB+1, J*NB+1 ), LDA,
      $                      IPIV( (J+1)*NB+1 ), IINFO )
 c               IF (IINFO.NE.0 .AND. INFO.EQ.0) THEN
@@ -595,13 +593,13 @@ c               END IF
 *              Compute T(J+1, J), zero out for GEMM update
 *     
                KB = MIN(NB, N-(J+1)*NB)
-               CALL AB_CLASET( 'Full', KB, NB, ZERO, ZERO, 
+               CALL CLASET( 'Full', KB, NB, ZERO, ZERO, 
      $                      TB( TD+NB+1 + (J*NB)*LDTB), LDTB-1 )
-               CALL AB_CLACPY( 'Upper', KB, NB,
+               CALL CLACPY( 'Upper', KB, NB,
      $                      A( (J+1)*NB+1, J*NB+1 ), LDA,
      $                      TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                IF( J.GT.0 ) THEN 
-                  CALL AB_CTRSM( 'R', 'L', 'C', 'U', KB, NB, ONE,
+                  CALL CTRSM( 'R', 'L', 'C', 'U', KB, NB, ONE,
      $                        A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                        TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                END IF
@@ -615,7 +613,7 @@ c               END IF
      $                  = CONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
                   END DO
                END DO
-               CALL AB_CLASET( 'Upper', KB, NB, ZERO, ONE, 
+               CALL CLASET( 'Upper', KB, NB, ZERO, ONE, 
      $                      A( (J+1)*NB+1, J*NB+1), LDA )
 *              
 *              Apply pivots to trailing submatrix of A
@@ -628,15 +626,15 @@ c               END IF
                   I2 = IPIV( (J+1)*NB+K )
                   IF( I1.NE.I2 ) THEN 
 *                    > Apply pivots to previous columns of L
-                     CALL AB_CSWAP( K-1, A( I1, (J+1)*NB+1 ), LDA, 
+                     CALL CSWAP( K-1, A( I1, (J+1)*NB+1 ), LDA, 
      $                                A( I2, (J+1)*NB+1 ), LDA )
 *                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)               
-                     CALL AB_CSWAP( I2-I1-1, A( I1+1, I1 ), 1,
+                     CALL CSWAP( I2-I1-1, A( I1+1, I1 ), 1,
      $                                    A( I2, I1+1 ), LDA )
-                     CALL AB_CLACGV( I2-I1, A( I1+1, I1 ), 1 )
-                     CALL AB_CLACGV( I2-I1-1, A( I2, I1+1 ), LDA )
+                     CALL CLACGV( I2-I1, A( I1+1, I1 ), 1 )
+                     CALL CLACGV( I2-I1-1, A( I2, I1+1 ), LDA )
 *                    > Swap A(I2+1:M, I1) with A(I2+1:M, I2)
-                     CALL AB_CSWAP( N-I2, A( I2+1, I1 ), 1,
+                     CALL CSWAP( N-I2, A( I2+1, I1 ), 1,
      $                                 A( I2+1, I2 ), 1 ) 
 *                    > Swap A(I1, I1) with A(I2, I2)
                      PIV = A( I1, I1 )
@@ -644,7 +642,7 @@ c               END IF
                      A( I2, I2 ) = PIV
 *                    > Apply pivots to previous columns of L
                      IF( J.GT.0 ) THEN
-                        CALL AB_CSWAP( J*NB, A( I1, 1 ), LDA,
+                        CALL CSWAP( J*NB, A( I1, 1 ), LDA,
      $                                    A( I2, 1 ), LDA )
                      END IF
                   ENDIF   
@@ -652,15 +650,15 @@ c               END IF
 *         
 *              Apply pivots to previous columns of L
 *         
-c               CALL AB_CLASWP( J*NB, A( 1, 1 ), LDA, 
+c               CALL CLASWP( J*NB, A( 1, 1 ), LDA, 
 c     $                     (J+1)*NB+1, (J+1)*NB+KB, IPIV, 1 )
             END IF
          END DO
       END IF
 *
 *     Factor the band matrix
-      CALL AB_CGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
+      CALL CGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
 *
-*     End of AB_CHETRF_AA_2STAGE
+*     End of CHETRF_AA_2STAGE
 *
       END

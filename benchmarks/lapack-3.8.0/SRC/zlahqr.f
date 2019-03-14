@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
+*> \brief \b ZLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAHQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAHQR.f">
+*> Download ZLAHQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahqr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAHQR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlahqr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAHQR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahqr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
+*       SUBROUTINE ZLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
 *                          IHIZ, Z, LDZ, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,8 +35,8 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZLAHQR is an auxiliary routine called by AB_CHSEQR to update the
-*>    eigenvalues and Schur decomposition already computed by AB_CHSEQR, by
+*>    ZLAHQR is an auxiliary routine called by CHSEQR to update the
+*>    eigenvalues and Schur decomposition already computed by CHSEQR, by
 *>    dealing with the Hessenberg submatrix in rows and columns ILO to
 *>    IHI.
 *> \endverbatim
@@ -74,7 +74,7 @@
 *>          IHI is INTEGER
 *>          It is assumed that H is already upper triangular in rows and
 *>          columns IHI+1:N, and that H(ILO,ILO-1) = 0 (unless ILO = 1).
-*>          AB_ZLAHQR works primarily with the Hessenberg submatrix in rows
+*>          ZLAHQR works primarily with the Hessenberg submatrix in rows
 *>          and columns ILO to IHI, but applies transformations to all of
 *>          H if WANTT is .TRUE..
 *>          1 <= ILO <= max(1,IHI); IHI <= N.
@@ -123,7 +123,7 @@
 *> \verbatim
 *>          Z is COMPLEX*16 array, dimension (LDZ,N)
 *>          If WANTZ is .TRUE., on entry Z must contain the current
-*>          matrix Z of transformations accumulated by AB_CHSEQR, and on
+*>          matrix Z of transformations accumulated by CHSEQR, and on
 *>          exit Z has been updated; transformations are applied only to
 *>          the submatrix Z(ILOZ:IHIZ,ILO:IHI).
 *>          If WANTZ is .FALSE., Z is not referenced.
@@ -139,7 +139,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>           =   0: successful exit
-*>          .GT. 0: if INFO = i, AB_ZLAHQR failed to compute all the
+*>          .GT. 0: if INFO = i, ZLAHQR failed to compute all the
 *>                  eigenvalues ILO to IHI in a total of 30 iterations
 *>                  per eigenvalue; elements i+1:ihi of W contain
 *>                  those eigenvalues which have been successfully
@@ -185,14 +185,14 @@
 *>
 *>     12-04 Further modifications by
 *>     Ralph Byers, University of Kansas, USA
-*>     This is a modified version of AB_ZLAHQR from LAPACK version 3.0.
+*>     This is a modified version of ZLAHQR from LAPACK version 3.0.
 *>     It is (1) more robust against overflow and underflow and
 *>     (2) adopts the more conservative Ahues & Tisseur stopping
 *>     criterion (LAWN 122, 1997).
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
+      SUBROUTINE ZLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
      $                   IHIZ, Z, LDZ, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -231,12 +231,12 @@
       COMPLEX*16         V( 2 )
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         AB_ZLADIV
+      COMPLEX*16         ZLADIV
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_ZLADIV, DLAMCH
+      EXTERNAL           ZLADIV, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_ZCOPY, AB_ZLARFG, AB_ZSCAL
+      EXTERNAL           DLABAD, ZCOPY, ZLARFG, ZSCAL
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -283,12 +283,11 @@
             SC = H( I, I-1 ) / CABS1( H( I, I-1 ) )
             SC = DCONJG( SC ) / ABS( SC )
             H( I, I-1 ) = ABS( H( I, I-1 ) )
-            CALL AB_ZSCAL( JHI-I+1, SC, H( I, I ), LDH )
-            CALL AB_ZSCAL( MIN( JHI, I+1 )-JLO+1, DCONJG( SC ),
+            CALL ZSCAL( JHI-I+1, SC, H( I, I ), LDH )
+            CALL ZSCAL( MIN( JHI, I+1 )-JLO+1, DCONJG( SC ),
      $                  H( JLO, I ), 1 )
             IF( WANTZ )
-     $         CALL AB_ZSCAL( IHIZ-ILOZ+1, DCONJG( SC ), Z( ILOZ, I ), 1
-     $ )
+     $         CALL ZSCAL( IHIZ-ILOZ+1, DCONJG( SC ), Z( ILOZ, I ), 1 )
          END IF
    20 CONTINUE
 *
@@ -299,7 +298,7 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL AB_DLABAD( SAFMIN, SAFMAX )
+      CALL DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( NH ) / ULP )
 *
@@ -413,7 +412,7 @@
                   IF( DBLE( X / SX )*DBLE( Y )+DIMAG( X / SX )*
      $                DIMAG( Y ).LT.RZERO )Y = -Y
                END IF
-               T = T - U*AB_ZLADIV( U, ( X+Y ) )
+               T = T - U*ZLADIV( U, ( X+Y ) )
             END IF
          END IF
 *
@@ -463,12 +462,12 @@
 *           chases the bulge one step toward the bottom of the active
 *           submatrix.
 *
-*           V(2) is always real before the call to AB_ZLARFG, and hence
+*           V(2) is always real before the call to ZLARFG, and hence
 *           after the call T2 ( = T1*V(2) ) is also real.
 *
             IF( K.GT.M )
-     $         CALL AB_ZCOPY( 2, H( K, K-1 ), 1, V, 1 )
-            CALL AB_ZLARFG( 2, V( 1 ), V( 2 ), 1, T1 )
+     $         CALL ZCOPY( 2, H( K, K-1 ), 1, V, 1 )
+            CALL ZLARFG( 2, V( 1 ), V( 2 ), 1, T1 )
             IF( K.GT.M ) THEN
                H( K, K-1 ) = V( 1 )
                H( K+1, K-1 ) = ZERO
@@ -520,11 +519,10 @@
                DO 110 J = M, I
                   IF( J.NE.M+1 ) THEN
                      IF( I2.GT.J )
-     $                  CALL AB_ZSCAL( I2-J, TEMP, H( J, J+1 ), LDH )
-                     CALL AB_ZSCAL( J-I1, DCONJG( TEMP ), H( I1, J ), 1 
-     $)
+     $                  CALL ZSCAL( I2-J, TEMP, H( J, J+1 ), LDH )
+                     CALL ZSCAL( J-I1, DCONJG( TEMP ), H( I1, J ), 1 )
                      IF( WANTZ ) THEN
-                        CALL AB_ZSCAL( NZ, DCONJG( TEMP ), Z( ILOZ, J ),
+                        CALL ZSCAL( NZ, DCONJG( TEMP ), Z( ILOZ, J ),
      $                              1 )
                      END IF
                   END IF
@@ -540,10 +538,10 @@
             H( I, I-1 ) = RTEMP
             TEMP = TEMP / RTEMP
             IF( I2.GT.I )
-     $         CALL AB_ZSCAL( I2-I, DCONJG( TEMP ), H( I, I+1 ), LDH )
-            CALL AB_ZSCAL( I-I1, TEMP, H( I1, I ), 1 )
+     $         CALL ZSCAL( I2-I, DCONJG( TEMP ), H( I, I+1 ), LDH )
+            CALL ZSCAL( I-I1, TEMP, H( I1, I ), 1 )
             IF( WANTZ ) THEN
-               CALL AB_ZSCAL( NZ, TEMP, Z( ILOZ, I ), 1 )
+               CALL ZSCAL( NZ, TEMP, Z( ILOZ, I ), 1 )
             END IF
          END IF
 *
@@ -568,6 +566,6 @@
   150 CONTINUE
       RETURN
 *
-*     End of AB_ZLAHQR
+*     End of ZLAHQR
 *
       END

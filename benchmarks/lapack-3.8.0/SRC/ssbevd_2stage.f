@@ -1,6 +1,6 @@
-*> \brief <b> AB_SSBEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> SSBEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
-*  @generated from AB_DSBEVd_2stage.f, fortran d -> s, Sat Nov  5 23:58:03 2016
+*  @generated from dsbevd_2stage.f, fortran d -> s, Sat Nov  5 23:58:03 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSBEVD_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSBEVd_2stage.f">
+*> Download SSBEVD_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssbevd_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSBEVd_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssbevd_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSBEVd_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbevd_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+*       SUBROUTINE SSBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
 *                                 WORK, LWORK, IWORK, LIWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSBEVD_2STAGE computes all the eigenvalues and, optionally, eigenvectors of
+*> SSBEVD_2STAGE computes all the eigenvalues and, optionally, eigenvectors of
 *> a real symmetric band matrix A using the 2stage technique for
 *> the reduction to tridiagonal. If eigenvectors are desired, it uses
 *> a divide and conquer algorithm.
@@ -153,7 +153,7 @@
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by AB_XERBLA.
+*>          LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -173,7 +173,7 @@
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by AB_XERBLA.
+*>          LWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -231,8 +231,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_SSBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LD
-     $Z,
+      SUBROUTINE SSBEVD_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
      $                          WORK, LWORK, IWORK, LIWORK, INFO )
 *
       IMPLICIT NONE
@@ -266,15 +265,14 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV2STAGE
-      REAL               SLAMCH, AB_SLANSB
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANSB, AB_ILAENV2STAGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      REAL               SLAMCH, SLANSB
+      EXTERNAL           LSAME, SLAMCH, SLANSB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_SLASCL, AB_SSCAL, AB_SS
-     $TEDC,
-     $                   AB_SSTERF, AB_XERBLA, AB_SSYTRD_SB2ST
+      EXTERNAL           SGEMM, SLACPY, SLASCL, SSCAL, SSTEDC,
+     $                   SSTERF, XERBLA, SSYTRD_SB2ST
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -283,8 +281,8 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
@@ -292,12 +290,9 @@
          LIWMIN = 1
          LWMIN = 1
       ELSE
-         IB    = AB_ILAENV2STAGE( 2, 'AB_SSYTRD_SB2ST', JOBZ, N, KD, -1,
-     $ -1 )
-         LHTRD = AB_ILAENV2STAGE( 3, 'AB_SSYTRD_SB2ST', JOBZ, N, KD, IB,
-     $ -1 )
-         LWTRD = AB_ILAENV2STAGE( 4, 'AB_SSYTRD_SB2ST', JOBZ, N, KD, IB,
-     $ -1 )
+         IB    = ILAENV2STAGE( 2, 'SSYTRD_SB2ST', JOBZ, N, KD, -1, -1 )
+         LHTRD = ILAENV2STAGE( 3, 'SSYTRD_SB2ST', JOBZ, N, KD, IB, -1 )
+         LWTRD = ILAENV2STAGE( 4, 'SSYTRD_SB2ST', JOBZ, N, KD, IB, -1 )
          IF( WANTZ ) THEN
             LIWMIN = 3 + 5*N
             LWMIN = 1 + 5*N + 2*N**2
@@ -306,9 +301,9 @@
             LWMIN = MAX( 2*N, N+LHTRD+LWTRD )
          END IF
       END IF
-      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -332,7 +327,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSBEVD_2STAGE', -INFO )
+         CALL XERBLA( 'SSBEVD_2STAGE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -361,7 +356,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_SLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
+      ANRM = SLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -372,15 +367,13 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
       END IF
 *
-*     Call AB_SSYTRD_SB2ST to reduce band symmetric matrix to tridiagonal form.
+*     Call SSYTRD_SB2ST to reduce band symmetric matrix to tridiagonal form.
 *
       INDE    = 1
       INDHOUS = INDE + N
@@ -389,32 +382,31 @@
       INDWK2  = INDWRK + N*N
       LLWRK2  = LWORK - INDWK2 + 1
 *
-      CALL AB_SSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, W,
+      CALL SSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, W,
      $                    WORK( INDE ), WORK( INDHOUS ), LHTRD, 
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, call AB_SSTEDC.
+*     For eigenvalues only, call SSTERF.  For eigenvectors, call SSTEDC.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
+         CALL SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL AB_SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
+         CALL SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, IWORK, LIWORK, INFO )
-         CALL AB_SGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), 
-     $N,
+         CALL SGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), N,
      $               ZERO, WORK( INDWK2 ), N )
-         CALL AB_SLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
+         CALL SLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
 *
       IF( ISCALE.EQ.1 )
-     $   CALL AB_SSCAL( N, ONE / SIGMA, W, 1 )
+     $   CALL SSCAL( N, ONE / SIGMA, W, 1 )
 *
       WORK( 1 ) = LWMIN
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of AB_SSBEVD_2STAGE
+*     End of SSBEVD_2STAGE
 *
       END

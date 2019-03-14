@@ -1,4 +1,4 @@
-*> \brief \b AB_DISNAN tests input for NaN.
+*> \brief \b DISNAN tests input for NaN.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DISNAN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DISNAN.f">
+*> Download DISNAN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/disnan.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DISNAN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/disnan.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DISNAN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/disnan.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       LOGICAL FUNCTION AB_DISNAN( DIN )
+*       LOGICAL FUNCTION DISNAN( DIN )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION, INTENT(IN) :: DIN
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DISNAN returns .TRUE. if its argument is NaN, and .FALSE.
+*> DISNAN returns .TRUE. if its argument is NaN, and .FALSE.
 *> otherwise.  To be replaced by the Fortran 2003 intrinsic in the
 *> future.
 *> \endverbatim
@@ -57,7 +57,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      LOGICAL FUNCTION AB_DISNAN( DIN )
+      LOGICAL FUNCTION DISNAN( DIN )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -71,10 +71,10 @@
 *  =====================================================================
 *
 *  .. External Functions ..
-      LOGICAL AB_DLAISNAN
-      EXTERNAL AB_DLAISNAN
+      LOGICAL DLAISNAN
+      EXTERNAL DLAISNAN
 *  ..
 *  .. Executable Statements ..
-      AB_DISNAN = AB_DLAISNAN(DIN,DIN)
+      DISNAN = DLAISNAN(DIN,DIN)
       RETURN
       END

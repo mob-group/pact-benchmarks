@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARUV returns a vector of n random real numbers from a uniform distribution.
+*> \brief \b SLARUV returns a vector of n random real numbers from a uniform distribution.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARUV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARUV.f">
+*> Download SLARUV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaruv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARUV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaruv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARUV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaruv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARUV( ISEED, N, X )
+*       SUBROUTINE SLARUV( ISEED, N, X )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARUV returns a vector of n random real numbers from a uniform (0,1)
+*> SLARUV returns a vector of n random real numbers from a uniform (0,1)
 *> distribution (n <= 128).
 *>
-*> This is an auxiliary routine called by AB_SLARNV and AB_CLARNV.
+*> This is an auxiliary routine called by SLARNV and CLARNV.
 *> \endverbatim
 *
 *  Arguments:
@@ -93,7 +93,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLARUV( ISEED, N, X )
+      SUBROUTINE SLARUV( ISEED, N, X )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -442,6 +442,6 @@
       ISEED( 4 ) = IT4
       RETURN
 *
-*     End of AB_SLARUV
+*     End of SLARUV
 *
       END

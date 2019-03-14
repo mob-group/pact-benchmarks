@@ -1,4 +1,4 @@
-*> \brief \b AB_CSWAP
+*> \brief \b CSWAP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSWAP(N,CX,INCX,CY,INCY)
+*       SUBROUTINE CSWAP(N,CX,INCX,CY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>   AB_CSWAP interchanges two vectors.
+*>   CSWAP interchanges two vectors.
 *> \endverbatim
 *
 *  Arguments:
@@ -79,7 +79,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CSWAP(N,CX,INCX,CY,INCY)
+      SUBROUTINE CSWAP(N,CX,INCX,CY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

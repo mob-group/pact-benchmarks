@@ -1,4 +1,4 @@
-*> \brief \b AB_CROTG
+*> \brief \b CROTG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CROTG(CA,CB,C,S)
+*       SUBROUTINE CROTG(CA,CB,C,S)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX CA,CB,S
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CROTG determines a complex Givens rotation.
+*> CROTG determines a complex Givens rotation.
 *> \endverbatim
 *
 *  Arguments:
@@ -60,7 +60,7 @@
 *> \ingroup complex_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE AB_CROTG(CA,CB,C,S)
+      SUBROUTINE CROTG(CA,CB,C,S)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

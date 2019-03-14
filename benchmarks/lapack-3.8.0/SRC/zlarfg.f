@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLARFG generates an elementary reflector (Householder matrix).
+*> \brief \b ZLARFG generates an elementary reflector (Householder matrix).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLARFG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLARFg.f">
+*> Download ZLARFG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarfg.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLARFg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarfg.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLARFg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarfg.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLARFG( N, ALPHA, X, INCX, TAU )
+*       SUBROUTINE ZLARFG( N, ALPHA, X, INCX, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLARFG generates a complex elementary reflector H of order n, such
+*> ZLARFG generates a complex elementary reflector H of order n, such
 *> that
 *>
 *>       H**H * ( alpha ) = ( beta ),   H**H * H = I.
@@ -104,7 +104,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLARFG( N, ALPHA, X, INCX, TAU )
+      SUBROUTINE ZLARFG( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,15 +130,15 @@
       DOUBLE PRECISION   ALPHI, ALPHR, BETA, RSAFMN, SAFMIN, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY3, AB_DZNRM2
-      COMPLEX*16         AB_ZLADIV
-      EXTERNAL           DLAMCH, AB_DLAPY3, AB_DZNRM2, AB_ZLADIV
+      DOUBLE PRECISION   DLAMCH, DLAPY3, DZNRM2
+      COMPLEX*16         ZLADIV
+      EXTERNAL           DLAMCH, DLAPY3, DZNRM2, ZLADIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZDSCAL, AB_ZSCAL
+      EXTERNAL           ZDSCAL, ZSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -147,7 +147,7 @@
          RETURN
       END IF
 *
-      XNORM = AB_DZNRM2( N-1, X, INCX )
+      XNORM = DZNRM2( N-1, X, INCX )
       ALPHR = DBLE( ALPHA )
       ALPHI = DIMAG( ALPHA )
 *
@@ -160,7 +160,7 @@
 *
 *        general case
 *
-         BETA = -SIGN( AB_DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+         BETA = -SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          SAFMIN = DLAMCH( 'S' ) / DLAMCH( 'E' )
          RSAFMN = ONE / SAFMIN
 *
@@ -171,7 +171,7 @@
 *
    10       CONTINUE
             KNT = KNT + 1
-            CALL AB_ZDSCAL( N-1, RSAFMN, X, INCX )
+            CALL ZDSCAL( N-1, RSAFMN, X, INCX )
             BETA = BETA*RSAFMN
             ALPHI = ALPHI*RSAFMN
             ALPHR = ALPHR*RSAFMN
@@ -180,13 +180,13 @@
 *
 *           New BETA is at most 1, at least SAFMIN
 *
-            XNORM = AB_DZNRM2( N-1, X, INCX )
+            XNORM = DZNRM2( N-1, X, INCX )
             ALPHA = DCMPLX( ALPHR, ALPHI )
-            BETA = -SIGN( AB_DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+            BETA = -SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
          TAU = DCMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA )
-         ALPHA = AB_ZLADIV( DCMPLX( ONE ), ALPHA-BETA )
-         CALL AB_ZSCAL( N-1, ALPHA, X, INCX )
+         ALPHA = ZLADIV( DCMPLX( ONE ), ALPHA-BETA )
+         CALL ZSCAL( N-1, ALPHA, X, INCX )
 *
 *        If ALPHA is subnormal, it may lose relative accuracy
 *
@@ -198,6 +198,6 @@
 *
       RETURN
 *
-*     End of AB_ZLARFG
+*     End of ZLARFG
 *
       END

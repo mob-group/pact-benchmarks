@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by AB_SPPEQU.
+*> \brief \b DLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by sppequ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAQSP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAQSP.f">
+*> Download DLAQSP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqsp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAQSP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqsp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAQSP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqsp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE DLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAQSP equilibrates a symmetric matrix A using the scaling factors
+*> DLAQSP equilibrates a symmetric matrix A using the scaling factors
 *> in the vector S.
 *> \endverbatim
 *
@@ -123,7 +123,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+      SUBROUTINE DLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -150,9 +150,9 @@
       DOUBLE PRECISION   CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -177,7 +177,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored.
 *
@@ -207,6 +207,6 @@
 *
       RETURN
 *
-*     End of AB_DLAQSP
+*     End of DLAQSP
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CLACP2 copies all or part of a real two-dimensional array to a complex array.
+*> \brief \b CLACP2 copies all or part of a real two-dimensional array to a complex array.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLACP2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLACP2.f">
+*> Download CLACP2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clacp2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLACP2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clacp2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLACP2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clacp2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLACP2( UPLO, M, N, A, LDA, B, LDB )
+*       SUBROUTINE CLACP2( UPLO, M, N, A, LDA, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLACP2 copies all or part of a real two-dimensional matrix A to a
+*> CLACP2 copies all or part of a real two-dimensional matrix A to a
 *> complex matrix B.
 *> \endverbatim
 *
@@ -102,7 +102,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLACP2( UPLO, M, N, A, LDA, B, LDB )
+      SUBROUTINE CLACP2( UPLO, M, N, A, LDA, B, LDB )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -124,22 +124,22 @@
       INTEGER            I, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
 *     ..
 *     .. Executable Statements ..
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, MIN( J, M )
                B( I, J ) = A( I, J )
    10       CONTINUE
    20    CONTINUE
 *
-      ELSE IF( AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( LSAME( UPLO, 'L' ) ) THEN
          DO 40 J = 1, N
             DO 30 I = J, M
                B( I, J ) = A( I, J )
@@ -156,6 +156,6 @@
 *
       RETURN
 *
-*     End of AB_CLACP2
+*     End of CLACP2
 *
       END

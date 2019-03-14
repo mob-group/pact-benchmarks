@@ -1,4 +1,4 @@
-*> \brief \b AB_SPPTRF
+*> \brief \b SPPTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPPTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPPTRF.f">
+*> Download SPPTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spptrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPPTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spptrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPPTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spptrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPPTRF( UPLO, N, AP, INFO )
+*       SUBROUTINE SPPTRF( UPLO, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPPTRF computes the Cholesky factorization of a real symmetric
+*> SPPTRF computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A stored in packed format.
 *>
 *> The factorization has the form
@@ -117,7 +117,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SPPTRF( UPLO, N, AP, INFO )
+      SUBROUTINE SPPTRF( UPLO, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,12 +144,12 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SDOT
-      EXTERNAL           AB_LSAME, AB_SDOT
+      LOGICAL            LSAME
+      REAL               SDOT
+      EXTERNAL           LSAME, SDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL, AB_SSPR, AB_STPSV, AB_XERBLA
+      EXTERNAL           SSCAL, SSPR, STPSV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -159,14 +159,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPPTRF', -INFO )
+         CALL XERBLA( 'SPPTRF', -INFO )
          RETURN
       END IF
 *
@@ -187,12 +187,12 @@
 *           Compute elements 1:J-1 of column J.
 *
             IF( J.GT.1 )
-     $         CALL AB_STPSV( 'Upper', 'Transpose', 'Non-unit', J-1, AP,
+     $         CALL STPSV( 'Upper', 'Transpose', 'Non-unit', J-1, AP,
      $                     AP( JC ), 1 )
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = AP( JJ ) - AB_SDOT( J-1, AP( JC ), 1, AP( JC ), 1 )
+            AJJ = AP( JJ ) - SDOT( J-1, AP( JC ), 1, AP( JC ), 1 )
             IF( AJJ.LE.ZERO ) THEN
                AP( JJ ) = AJJ
                GO TO 30
@@ -220,8 +220,8 @@
 *           submatrix.
 *
             IF( J.LT.N ) THEN
-               CALL AB_SSCAL( N-J, ONE / AJJ, AP( JJ+1 ), 1 )
-               CALL AB_SSPR( 'Lower', N-J, -ONE, AP( JJ+1 ), 1,
+               CALL SSCAL( N-J, ONE / AJJ, AP( JJ+1 ), 1 )
+               CALL SSPR( 'Lower', N-J, -ONE, AP( JJ+1 ), 1,
      $                    AP( JJ+N-J+1 ) )
                JJ = JJ + N - J + 1
             END IF
@@ -235,6 +235,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of AB_SPPTRF
+*     End of SPPTRF
 *
       END

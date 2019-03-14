@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARRA computes the splitting points with the specified threshold.
+*> \brief \b SLARRA computes the splitting points with the specified threshold.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARRA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARRA.f">
+*> Download SLARRA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarra.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARRA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarra.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARRA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarra.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARRA( N, D, E, E2, SPLTOL, TNRM,
+*       SUBROUTINE SLARRA( N, D, E, E2, SPLTOL, TNRM,
 *                           NSPLIT, ISPLIT, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *> \verbatim
 *>
 *> Compute the splitting points with threshold SPLTOL.
-*> AB_SLARRA sets any "small" off-diagonal elements to zero.
+*> SLARRA sets any "small" off-diagonal elements to zero.
 *> \endverbatim
 *
 *  Arguments:
@@ -133,7 +133,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARRA( N, D, E, E2, SPLTOL, TNRM,
+      SUBROUTINE SLARRA( N, D, E, E2, SPLTOL, TNRM,
      $                    NSPLIT, ISPLIT, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -205,6 +205,6 @@
 
       RETURN
 *
-*     End of AB_SLARRA
+*     End of SLARRA
 *
       END

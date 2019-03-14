@@ -1,4 +1,4 @@
-*> \brief \b AB_SPORFSX
+*> \brief \b SPORFSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPORFSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPORFSx.f">
+*> Download SPORFSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sporfsx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPORFSx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sporfsx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPORFSx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sporfsx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
+*       SUBROUTINE SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
 *                           LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
 *                           ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
 *                           WORK, IWORK, INFO )
@@ -44,7 +44,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_SPORFSX improves the computed solution to a system of linear
+*>    SPORFSX improves the computed solution to a system of linear
 *>    equations when the coefficient matrix is symmetric positive
 *>    definite, and provides error bounds and backward error estimates
 *>    for the solution.  In addition to normwise error bound, the code
@@ -123,7 +123,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>     The triangular factor U or L from the Cholesky factorization
-*>     A = U**T*U or A = L*L**T, as computed by AB_SPOTRF.
+*>     A = U**T*U or A = L*L**T, as computed by SPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -163,7 +163,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>     On entry, the solution matrix X, as computed by AB_SGETRS.
+*>     On entry, the solution matrix X, as computed by SGETRS.
 *>     On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -389,8 +389,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, 
-     $B,
+      SUBROUTINE SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
      $                    LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, IWORK, INFO )
@@ -450,17 +449,17 @@
       REAL               RTHRESH, UNSTABLE_THRESH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_SPOCON, AB_SLA_PORFSX_EXTENDED
+      EXTERNAL           XERBLA, SPOCON, SLA_PORFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, AB_ILAPREC
-      EXTERNAL           SLAMCH, AB_SLANSY, AB_SLA_PORCOND
-      REAL               SLAMCH, AB_SLANSY, AB_SLA_PORCOND
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAPREC
+      EXTERNAL           LSAME, ILAPREC
+      EXTERNAL           SLAMCH, SLANSY, SLA_PORCOND
+      REAL               SLAMCH, SLANSY, SLA_PORCOND
+      LOGICAL            LSAME
+      INTEGER            ILAPREC
 *     ..
 *     .. Executable Statements ..
 *
@@ -510,13 +509,13 @@
          N_NORMS = 2
       END IF
 *
-      RCEQU = AB_LSAME( EQUED, 'Y' )
+      RCEQU = LSAME( EQUED, 'Y' )
 *
 *     Test input parameters.
 *
-      IF (.NOT.AB_LSAME(UPLO, 'U') .AND. .NOT.AB_LSAME(UPLO, 'L')) THEN
+      IF (.NOT.LSAME(UPLO, 'U') .AND. .NOT.LSAME(UPLO, 'L')) THEN
         INFO = -1
-      ELSE IF( .NOT.RCEQU .AND. .NOT.AB_LSAME( EQUED, 'N' ) ) THEN
+      ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
       ELSE IF( N.LT.0 ) THEN
         INFO = -3
@@ -532,7 +531,7 @@
         INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_SPORFSX', -INFO )
+        CALL XERBLA( 'SPORFSX', -INFO )
         RETURN
       END IF
 *
@@ -581,17 +580,17 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = AB_SLANSY( NORM, UPLO, N, A, LDA, WORK )
-      CALL AB_SPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK,
+      ANORM = SLANSY( NORM, UPLO, N, A, LDA, WORK )
+      CALL SPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK,
      $     IWORK, INFO )
 *
 *     Perform refinement on each right-hand side
 *
       IF ( REF_TYPE .NE. 0 ) THEN
 
-         PREC_TYPE = AB_ILAPREC( 'D' )
+         PREC_TYPE = ILAPREC( 'D' )
 
-         CALL AB_SLA_PORFSX_EXTENDED( PREC_TYPE, UPLO,  N,
+         CALL SLA_PORFSX_EXTENDED( PREC_TYPE, UPLO,  N,
      $        NRHS, A, LDA, AF, LDAF, RCEQU, S, B,
      $        LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $        WORK( N+1 ), WORK( 1 ), WORK( 2*N+1 ), WORK( 1 ), RCOND,
@@ -605,10 +604,10 @@
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( RCEQU ) THEN
-            RCOND_TMP = AB_SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
+            RCOND_TMP = SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
      $           -1, S, INFO, WORK, IWORK )
          ELSE
-            RCOND_TMP = AB_SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
+            RCOND_TMP = SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
      $           0, S, INFO, WORK, IWORK )
          END IF
          DO J = 1, NRHS
@@ -653,7 +652,7 @@
          DO J = 1, NRHS
             IF (ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
-               RCOND_TMP = AB_SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF, 1,
+               RCOND_TMP = SLA_PORCOND( UPLO, N, A, LDA, AF, LDAF, 1,
      $              X( 1, J ), INFO, WORK, IWORK )
             ELSE
                RCOND_TMP = 0.0
@@ -689,6 +688,6 @@
 *
       RETURN
 *
-*     End of AB_SPORFSX
+*     End of SPORFSX
 *
       END

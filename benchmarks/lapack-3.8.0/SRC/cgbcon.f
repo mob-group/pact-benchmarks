@@ -1,4 +1,4 @@
-*> \brief \b AB_CGBCON
+*> \brief \b CGBCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGBCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGBCON.f">
+*> Download CGBCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbcon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGBCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgbcon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGBCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbcon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCOND,
+*       SUBROUTINE CGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCOND,
 *                          WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,9 +38,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CGBCON estimates the reciprocal of the condition number of a complex
+*> CGBCON estimates the reciprocal of the condition number of a complex
 *> general band matrix A, in either the 1-norm or the infinity-norm,
-*> using the LU factorization computed by AB_CGBTRF.
+*> using the LU factorization computed by CGBTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as
@@ -81,7 +81,7 @@
 *> \verbatim
 *>          AB is COMPLEX array, dimension (LDAB,N)
 *>          Details of the LU factorization of the band matrix A, as
-*>          computed by AB_CGBTRF.  U is stored as an upper triangular band
+*>          computed by CGBTRF.  U is stored as an upper triangular band
 *>          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
 *>          the multipliers used during the factorization are stored in
 *>          rows KL+KU+2 to 2*KL+KU+1.
@@ -144,8 +144,7 @@
 *> \ingroup complexGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCON
-     $D,
+      SUBROUTINE CGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCOND,
      $                   WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -181,15 +180,14 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ICAMAX
+      LOGICAL            LSAME
+      INTEGER            ICAMAX
       REAL               SLAMCH
-      COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_ICAMAX, SLAMCH, AB_CDOTC
+      COMPLEX            CDOTC
+      EXTERNAL           LSAME, ICAMAX, SLAMCH, CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CLACN2, AB_CLATBS, AB_CSRSCL, AB_X
-     $ERBLA
+      EXTERNAL           CAXPY, CLACN2, CLATBS, CSRSCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MIN, REAL
@@ -205,8 +203,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
-      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
+      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
+      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -220,7 +218,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGBCON', -INFO )
+         CALL XERBLA( 'CGBCON', -INFO )
          RETURN
       END IF
 *
@@ -249,7 +247,7 @@
       LNOTI = KL.GT.0
       KASE = 0
    10 CONTINUE
-      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.KASE1 ) THEN
 *
@@ -264,21 +262,19 @@
                      WORK( JP ) = WORK( J )
                      WORK( J ) = T
                   END IF
-                  CALL AB_CAXPY( LM, -T, AB( KD+1, J ), 1, WORK( J+1 ), 
-     $1 )
+                  CALL CAXPY( LM, -T, AB( KD+1, J ), 1, WORK( J+1 ), 1 )
    20          CONTINUE
             END IF
 *
 *           Multiply by inv(U).
 *
-            CALL AB_CLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
-     $ N,
+            CALL CLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
      $                   KL+KU, AB, LDAB, WORK, SCALE, RWORK, INFO )
          ELSE
 *
 *           Multiply by inv(U**H).
 *
-            CALL AB_CLATBS( 'Upper', 'Conjugate transpose', 'Non-unit',
+            CALL CLATBS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, KL+KU, AB, LDAB, WORK, SCALE, RWORK,
      $                   INFO )
 *
@@ -287,8 +283,7 @@
             IF( LNOTI ) THEN
                DO 30 J = N - 1, 1, -1
                   LM = MIN( KL, N-J )
-                  WORK( J ) = WORK( J ) - AB_CDOTC( LM, AB( KD+1, J ), 1
-     $,
+                  WORK( J ) = WORK( J ) - CDOTC( LM, AB( KD+1, J ), 1,
      $                        WORK( J+1 ), 1 )
                   JP = IPIV( J )
                   IF( JP.NE.J ) THEN
@@ -304,10 +299,10 @@
 *
          NORMIN = 'Y'
          IF( SCALE.NE.ONE ) THEN
-            IX = AB_ICAMAX( N, WORK, 1 )
+            IX = ICAMAX( N, WORK, 1 )
             IF( SCALE.LT.CABS1( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 40
-            CALL AB_CSRSCL( N, SCALE, WORK, 1 )
+            CALL CSRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -320,6 +315,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of AB_CGBCON
+*     End of CGBCON
 *
       END

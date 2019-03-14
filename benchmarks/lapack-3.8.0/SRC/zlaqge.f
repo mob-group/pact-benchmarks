@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAQGE scales a general rectangular matrix, using row and column scaling factors computed by AB_SGEEQU.
+*> \brief \b ZLAQGE scales a general rectangular matrix, using row and column scaling factors computed by sgeequ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAQGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQGE.f">
+*> Download ZLAQGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqge.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqge.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqge.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+*       SUBROUTINE ZLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                          EQUED )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAQGE equilibrates a general M by N matrix A using the row and
+*> ZLAQGE equilibrates a general M by N matrix A using the row and
 *> column scaling factors in the vectors R and C.
 *> \endverbatim
 *
@@ -140,7 +140,7 @@
 *> \ingroup complex16GEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+      SUBROUTINE ZLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $                   EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -233,6 +233,6 @@
 *
       RETURN
 *
-*     End of AB_ZLAQGE
+*     End of ZLAQGE
 *
       END

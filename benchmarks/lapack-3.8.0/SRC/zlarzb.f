@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLARZB applies a block reflector or its conjugate-transpose to a general matrix.
+*> \brief \b ZLARZB applies a block reflector or its conjugate-transpose to a general matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLARZB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLARZb.f">
+*> Download ZLARZB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarzb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLARZb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarzb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLARZb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarzb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
+*       SUBROUTINE ZLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
 *                          LDV, T, LDT, C, LDC, WORK, LDWORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLARZB applies a complex block reflector H or its transpose H**H
+*> ZLARZB applies a complex block reflector H or its transpose H**H
 *> to a complex distributed M-by-N  C from the left or the right.
 *>
 *> Currently, only STOREV = 'R' and DIRECT = 'B' are supported.
@@ -180,7 +180,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
+      SUBROUTINE ZLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
      $                   LDV, T, LDT, C, LDC, WORK, LDWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,12 +208,11 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZCOPY, AB_ZGEMM, AB_ZLACGV, AB_ZT
-     $RMM
+      EXTERNAL           XERBLA, ZCOPY, ZGEMM, ZLACGV, ZTRMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -225,44 +224,43 @@
 *     Check for currently supported options
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( DIRECT, 'B' ) ) THEN
+      IF( .NOT.LSAME( DIRECT, 'B' ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.AB_LSAME( STOREV, 'R' ) ) THEN
+      ELSE IF( .NOT.LSAME( STOREV, 'R' ) ) THEN
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLARZB', -INFO )
+         CALL XERBLA( 'ZLARZB', -INFO )
          RETURN
       END IF
 *
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+      IF( LSAME( TRANS, 'N' ) ) THEN
          TRANST = 'C'
       ELSE
          TRANST = 'N'
       END IF
 *
-      IF( AB_LSAME( SIDE, 'L' ) ) THEN
+      IF( LSAME( SIDE, 'L' ) ) THEN
 *
 *        Form  H * C  or  H**H * C
 *
 *        W( 1:n, 1:k ) = C( 1:k, 1:n )**H
 *
          DO 10 J = 1, K
-            CALL AB_ZCOPY( N, C( J, 1 ), LDC, WORK( 1, J ), 1 )
+            CALL ZCOPY( N, C( J, 1 ), LDC, WORK( 1, J ), 1 )
    10    CONTINUE
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) + ...
 *                        C( m-l+1:m, 1:n )**H * V( 1:k, 1:l )**T
 *
          IF( L.GT.0 )
-     $      CALL AB_ZGEMM( 'Transpose', 'Conjugate transpose', N, K, L,
+     $      CALL ZGEMM( 'Transpose', 'Conjugate transpose', N, K, L,
      $                  ONE, C( M-L+1, 1 ), LDC, V, LDV, ONE, WORK,
      $                  LDWORK )
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T  or  W( 1:m, 1:k ) * T
 *
-         CALL AB_ZTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE,
-     $ T,
+         CALL ZTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE, T,
      $               LDT, WORK, LDWORK )
 *
 *        C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**H
@@ -277,38 +275,36 @@
 *                            V( 1:k, 1:l )**H * W( 1:n, 1:k )**H
 *
          IF( L.GT.0 )
-     $      CALL AB_ZGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, L
-     $DV,
+     $      CALL ZGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, LDV,
      $                  WORK, LDWORK, ONE, C( M-L+1, 1 ), LDC )
 *
-      ELSE IF( AB_LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( LSAME( SIDE, 'R' ) ) THEN
 *
 *        Form  C * H  or  C * H**H
 *
 *        W( 1:m, 1:k ) = C( 1:m, 1:k )
 *
          DO 40 J = 1, K
-            CALL AB_ZCOPY( M, C( 1, J ), 1, WORK( 1, J ), 1 )
+            CALL ZCOPY( M, C( 1, J ), 1, WORK( 1, J ), 1 )
    40    CONTINUE
 *
 *        W( 1:m, 1:k ) = W( 1:m, 1:k ) + ...
 *                        C( 1:m, n-l+1:n ) * V( 1:k, 1:l )**H
 *
          IF( L.GT.0 )
-     $      CALL AB_ZGEMM( 'No transpose', 'Transpose', M, K, L, ONE,
+     $      CALL ZGEMM( 'No transpose', 'Transpose', M, K, L, ONE,
      $                  C( 1, N-L+1 ), LDC, V, LDV, ONE, WORK, LDWORK )
 *
 *        W( 1:m, 1:k ) = W( 1:m, 1:k ) * conjg( T )  or
 *                        W( 1:m, 1:k ) * T**H
 *
          DO 50 J = 1, K
-            CALL AB_ZLACGV( K-J+1, T( J, J ), 1 )
+            CALL ZLACGV( K-J+1, T( J, J ), 1 )
    50    CONTINUE
-         CALL AB_ZTRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE, 
-     $T,
+         CALL ZTRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE, T,
      $               LDT, WORK, LDWORK )
          DO 60 J = 1, K
-            CALL AB_ZLACGV( K-J+1, T( J, J ), 1 )
+            CALL ZLACGV( K-J+1, T( J, J ), 1 )
    60    CONTINUE
 *
 *        C( 1:m, 1:k ) = C( 1:m, 1:k ) - W( 1:m, 1:k )
@@ -323,20 +319,19 @@
 *                            W( 1:m, 1:k ) * conjg( V( 1:k, 1:l ) )
 *
          DO 90 J = 1, L
-            CALL AB_ZLACGV( K, V( 1, J ), 1 )
+            CALL ZLACGV( K, V( 1, J ), 1 )
    90    CONTINUE
          IF( L.GT.0 )
-     $      CALL AB_ZGEMM( 'No transpose', 'No transpose', M, L, K, -ONE
-     $,
+     $      CALL ZGEMM( 'No transpose', 'No transpose', M, L, K, -ONE,
      $                  WORK, LDWORK, V, LDV, ONE, C( 1, N-L+1 ), LDC )
          DO 100 J = 1, L
-            CALL AB_ZLACGV( K, V( 1, J ), 1 )
+            CALL ZLACGV( K, V( 1, J ), 1 )
   100    CONTINUE
 *
       END IF
 *
       RETURN
 *
-*     End of AB_ZLARZB
+*     End of ZLARZB
 *
       END

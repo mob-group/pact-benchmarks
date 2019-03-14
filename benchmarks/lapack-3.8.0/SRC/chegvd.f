@@ -1,4 +1,4 @@
-*> \brief \b AB_CHEGVD
+*> \brief \b CHEGVD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHEGVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHEGVd.f">
+*> Download CHEGVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chegvd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHEGVd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chegvd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHEGVd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegvd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+*       SUBROUTINE CHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
 *                          LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHEGVD computes all the eigenvalues, and optionally, the eigenvectors
+*> CHEGVD computes all the eigenvalues, and optionally, the eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.  Here A and
 *> B are assumed to be Hermitian and B is also positive definite.
@@ -152,7 +152,7 @@
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -173,7 +173,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -194,7 +194,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -202,7 +202,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_CPOTRF or AB_CHEEVD returned an error code:
+*>          > 0:  CPOTRF or CHEEVD returned an error code:
 *>             <= N:  if INFO = i and JOBZ = 'N', then the algorithm
 *>                    failed to converge; i off-diagonal elements of an
 *>                    intermediate tridiagonal form did not converge to
@@ -234,7 +234,7 @@
 *>
 *> \verbatim
 *>
-*>  Modified so that no backsubstitution is performed if AB_CHEEVD fails to
+*>  Modified so that no backsubstitution is performed if CHEEVD fails to
 *>  converge (NEIG in old code could be greater than N causing out of
 *>  bounds reference to A - reported by Ralf Meyer).  Also corrected the
 *>  description of INFO and the test on ITYPE. Sven, 16 Feb 05.
@@ -246,8 +246,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_CHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WOR
-     $K,
+      SUBROUTINE CHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -277,12 +276,11 @@
       INTEGER            LIOPT, LIWMIN, LOPT, LROPT, LRWMIN, LWMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHEEVD, AB_CHEGST, AB_CPOTRF, AB_CTRMM, AB_C
-     $TRSM, AB_XERBLA
+      EXTERNAL           CHEEVD, CHEGST, CPOTRF, CTRMM, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -291,8 +289,8 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 .OR. LRWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
@@ -314,9 +312,9 @@
       LIOPT = LIWMIN
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -341,7 +339,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHEGVD', -INFO )
+         CALL XERBLA( 'CHEGVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -354,7 +352,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL AB_CPOTRF( UPLO, N, B, LDB, INFO )
+      CALL CPOTRF( UPLO, N, B, LDB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -362,9 +360,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL AB_CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, LRWO
-     $RK,
+      CALL CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      CALL CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, LRWORK,
      $             IWORK, LIWORK, INFO )
       LOPT = MAX( REAL( LOPT ), REAL( WORK( 1 ) ) )
       LROPT = MAX( REAL( LROPT ), REAL( RWORK( 1 ) ) )
@@ -385,7 +382,7 @@
                TRANS = 'C'
             END IF
 *
-            CALL AB_CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, N, CONE,
+            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, N, CONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -399,7 +396,7 @@
                TRANS = 'N'
             END IF
 *
-            CALL AB_CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, N, CONE,
+            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, N, CONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF
@@ -410,6 +407,6 @@
 *
       RETURN
 *
-*     End of AB_CHEGVD
+*     End of CHEGVD
 *
       END

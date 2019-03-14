@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPORFS
+*> \brief \b ZPORFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZPORFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPORFS.f">
+*> Download ZPORFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zporfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPORFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zporfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPORFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zporfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X,
+*       SUBROUTINE ZPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X,
 *                          LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPORFS improves the computed solution to a system of linear
+*> ZPORFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is Hermitian positive definite,
 *> and provides error bounds and backward error estimates for the
 *> solution.
@@ -88,7 +88,7 @@
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDAF,N)
 *>          The triangular factor U or L from the Cholesky factorization
-*>          A = U**H*U or A = L*L**H, as computed by AB_ZPOTRF.
+*>          A = U**H*U or A = L*L**H, as computed by ZPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -112,7 +112,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX*16 array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_ZPOTRS.
+*>          On entry, the solution matrix X, as computed by ZPOTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -180,7 +180,7 @@
 *> \ingroup complex16POcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X,
+      SUBROUTINE ZPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X,
      $                   LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -222,16 +222,15 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZCOPY, AB_ZHEMV, AB_ZLA
-     $CN2, AB_ZPOTRS
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZHEMV, ZLACN2, ZPOTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -244,8 +243,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -261,7 +260,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZPORFS', -INFO )
+         CALL XERBLA( 'ZPORFS', -INFO )
          RETURN
       END IF
 *
@@ -295,9 +294,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL AB_ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL AB_ZHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 
-     $1 )
+         CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL ZHEMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -358,8 +356,8 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_ZPOTRS( UPLO, N, 1, AF, LDAF, WORK, N, INFO )
-            CALL AB_ZAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
+            CALL ZPOTRS( UPLO, N, 1, AF, LDAF, WORK, N, INFO )
+            CALL ZAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -383,7 +381,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_ZLACN2 to estimate the infinity-norm of the matrix
+*        Use ZLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -398,13 +396,13 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL AB_ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**H).
 *
-               CALL AB_ZPOTRS( UPLO, N, 1, AF, LDAF, WORK, N, INFO )
+               CALL ZPOTRS( UPLO, N, 1, AF, LDAF, WORK, N, INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -415,7 +413,7 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL AB_ZPOTRS( UPLO, N, 1, AF, LDAF, WORK, N, INFO )
+               CALL ZPOTRS( UPLO, N, 1, AF, LDAF, WORK, N, INFO )
             END IF
             GO TO 100
          END IF
@@ -433,6 +431,6 @@
 *
       RETURN
 *
-*     End of AB_ZPORFS
+*     End of ZPORFS
 *
       END

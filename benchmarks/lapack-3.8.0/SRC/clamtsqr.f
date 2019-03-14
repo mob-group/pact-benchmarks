@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE AB_CLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
+*      SUBROUTINE CLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
 *     $                     LDT, C, LDC, WORK, LWORK, INFO )
 *
 *
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*>      AB_CLAMTSQR overwrites the general complex M-by-N matrix C with
+*>      CLAMTSQR overwrites the general complex M-by-N matrix C with
 *>
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
@@ -26,7 +26,7 @@
 *> TRANS = 'C':      Q**H * C       C * Q**H
 *>      where Q is a real orthogonal matrix defined as the product
 *>      of blocked elementary reflectors computed by tall skinny
-*>      QR factorization (AB_CLATSQR)
+*>      QR factorization (CLATSQR)
 *> \endverbatim
 *
 *  Arguments:
@@ -71,7 +71,7 @@
 *> \verbatim
 *>          MB is INTEGER
 *>          The block size to be used in the blocked QR.
-*>          MB > N. (must be the same as AB_DLATSQR)
+*>          MB > N. (must be the same as DLATSQR)
 *> \endverbatim
 *>
 *> \param[in] NB
@@ -86,7 +86,7 @@
 *>          A is COMPLEX array, dimension (LDA,K)
 *>          The i-th column must contain the vector which defines the
 *>          blockedelementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by AB_DLATSQR in the first k columns of
+*>          returned by DLATSQR in the first k columns of
 *>          its array argument A.
 *> \endverbatim
 *>
@@ -141,7 +141,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *>
 *> \endverbatim
 *> \param[out] INFO
@@ -192,7 +192,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
+      SUBROUTINE CLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
      $        LDT, C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -217,20 +217,20 @@
       INTEGER    I, II, KK, LW, CTR
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     .. External Subroutines ..
-      EXTERNAL   AB_CGEMQRT, AB_CTPMQRT, AB_XERBLA
+      EXTERNAL   CGEMQRT, CTPMQRT, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments
 *
       LQUERY  = LWORK.LT.0
-      NOTRAN  = AB_LSAME( TRANS, 'N' )
-      TRAN    = AB_LSAME( TRANS, 'C' )
-      LEFT    = AB_LSAME( SIDE, 'L' )
-      RIGHT   = AB_LSAME( SIDE, 'R' )
+      NOTRAN  = LSAME( TRANS, 'N' )
+      TRAN    = LSAME( TRANS, 'C' )
+      LEFT    = LSAME( SIDE, 'L' )
+      RIGHT   = LSAME( SIDE, 'R' )
       IF (LEFT) THEN
         LW = N * NB
       ELSE
@@ -265,7 +265,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_CLAMTSQR', -INFO )
+        CALL XERBLA( 'CLAMTSQR', -INFO )
         RETURN
       ELSE IF (LQUERY) THEN
        RETURN
@@ -278,7 +278,7 @@
       END IF
 *
       IF((MB.LE.K).OR.(MB.GE.MAX(M,N,K))) THEN
-        CALL AB_CGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA,
+        CALL CGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA,
      $        T, LDT, C, LDC, WORK, INFO)
         RETURN
        END IF
@@ -291,7 +291,7 @@
          CTR = (M-K)/(MB-K)
          IF (KK.GT.0) THEN
            II=M-KK+1
-           CALL AB_CTPMQRT('L','N',KK , N, K, 0, NB, A(II,1), LDA,
+           CALL CTPMQRT('L','N',KK , N, K, 0, NB, A(II,1), LDA,
      $       T(1, CTR*K+1),LDT , C(1,1), LDC,
      $       C(II,1), LDC, WORK, INFO )
          ELSE
@@ -303,7 +303,7 @@
 *         Multiply Q to the current block of C (I:I+MB,1:N)
 *
            CTR = CTR - 1
-           CALL AB_CTPMQRT('L','N',MB-K , N, K, 0,NB, A(I,1), LDA,
+           CALL CTPMQRT('L','N',MB-K , N, K, 0,NB, A(I,1), LDA,
      $         T(1,CTR*K+1),LDT, C(1,1), LDC,
      $         C(I,1), LDC, WORK, INFO )
 
@@ -311,7 +311,7 @@
 *
 *         Multiply Q to the first block of C (1:MB,1:N)
 *
-         CALL AB_CGEMQRT('L','N',MB , N, K, NB, A(1,1), LDA, T
+         CALL CGEMQRT('L','N',MB , N, K, NB, A(1,1), LDA, T
      $            ,LDT ,C(1,1), LDC, WORK, INFO )
 *
       ELSE IF (LEFT.AND.TRAN) THEN
@@ -321,14 +321,14 @@
          KK = MOD((M-K),(MB-K))
          II=M-KK+1
          CTR = 1
-         CALL AB_CGEMQRT('L','C',MB , N, K, NB, A(1,1), LDA, T
+         CALL CGEMQRT('L','C',MB , N, K, NB, A(1,1), LDA, T
      $            ,LDT ,C(1,1), LDC, WORK, INFO )
 *
          DO I=MB+1,II-MB+K,(MB-K)
 *
 *         Multiply Q to the current block of C (I:I+MB,1:N)
 *
-          CALL AB_CTPMQRT('L','C',MB-K , N, K, 0,NB, A(I,1), LDA,
+          CALL CTPMQRT('L','C',MB-K , N, K, 0,NB, A(I,1), LDA,
      $       T(1, CTR*K+1),LDT, C(1,1), LDC,
      $       C(I,1), LDC, WORK, INFO )
           CTR = CTR + 1
@@ -338,7 +338,7 @@
 *
 *         Multiply Q to the last block of C
 *
-          CALL AB_CTPMQRT('L','C',KK , N, K, 0,NB, A(II,1), LDA,
+          CALL CTPMQRT('L','C',KK , N, K, 0,NB, A(II,1), LDA,
      $      T(1,CTR*K+1), LDT, C(1,1), LDC,
      $      C(II,1), LDC, WORK, INFO )
 *
@@ -352,7 +352,7 @@
           CTR = (N-K)/(MB-K)
           IF (KK.GT.0) THEN
             II=N-KK+1
-            CALL AB_CTPMQRT('R','C',M , KK, K, 0, NB, A(II,1), LDA,
+            CALL CTPMQRT('R','C',M , KK, K, 0, NB, A(II,1), LDA,
      $        T(1, CTR*K+1), LDT, C(1,1), LDC,
      $        C(1,II), LDC, WORK, INFO )
           ELSE
@@ -364,14 +364,14 @@
 *         Multiply Q to the current block of C (1:M,I:I+MB)
 *
             CTR = CTR - 1
-            CALL AB_CTPMQRT('R','C',M , MB-K, K, 0,NB, A(I,1), LDA,
+            CALL CTPMQRT('R','C',M , MB-K, K, 0,NB, A(I,1), LDA,
      $          T(1,CTR*K+1), LDT, C(1,1), LDC,
      $          C(1,I), LDC, WORK, INFO )
           END DO
 *
 *         Multiply Q to the first block of C (1:M,1:MB)
 *
-          CALL AB_CGEMQRT('R','C',M , MB, K, NB, A(1,1), LDA, T
+          CALL CGEMQRT('R','C',M , MB, K, NB, A(1,1), LDA, T
      $              ,LDT ,C(1,1), LDC, WORK, INFO )
 *
       ELSE IF (RIGHT.AND.NOTRAN) THEN
@@ -381,14 +381,14 @@
          KK = MOD((N-K),(MB-K))
          II=N-KK+1
          CTR = 1
-         CALL AB_CGEMQRT('R','N', M, MB , K, NB, A(1,1), LDA, T
+         CALL CGEMQRT('R','N', M, MB , K, NB, A(1,1), LDA, T
      $              ,LDT ,C(1,1), LDC, WORK, INFO )
 *
          DO I=MB+1,II-MB+K,(MB-K)
 *
 *         Multiply Q to the current block of C (1:M,I:I+MB)
 *
-          CALL AB_CTPMQRT('R','N', M, MB-K, K, 0,NB, A(I,1), LDA,
+          CALL CTPMQRT('R','N', M, MB-K, K, 0,NB, A(I,1), LDA,
      $         T(1,CTR*K+1),LDT, C(1,1), LDC,
      $         C(1,I), LDC, WORK, INFO )
           CTR = CTR + 1
@@ -398,7 +398,7 @@
 *
 *         Multiply Q to the last block of C
 *
-          CALL AB_CTPMQRT('R','N', M, KK , K, 0,NB, A(II,1), LDA,
+          CALL CTPMQRT('R','N', M, KK , K, 0,NB, A(II,1), LDA,
      $        T(1,CTR*K+1),LDT, C(1,1), LDC,
      $        C(1,II), LDC, WORK, INFO )
 *
@@ -409,6 +409,6 @@
       WORK(1) = LW
       RETURN
 *
-*     End of AB_CLAMTSQR
+*     End of CLAMTSQR
 *
       END

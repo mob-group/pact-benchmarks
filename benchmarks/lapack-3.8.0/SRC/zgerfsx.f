@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGERFSX
+*> \brief \b ZGERFSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGERFSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGERFSx.f">
+*> Download ZGERFSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgerfsx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGERFSx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgerfsx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGERFSx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgerfsx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE ZGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
 *                           ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
 *                           WORK, RWORK, INFO )
@@ -44,7 +44,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZGERFSX improves the computed solution to a system of linear
+*>    ZGERFSX improves the computed solution to a system of linear
 *>    equations and provides error bounds and backward error estimates
 *>    for the solution.  In addition to normwise error bound, the code
 *>    provides maximum componentwise error bound if possible.  See
@@ -122,7 +122,7 @@
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDAF,N)
 *>     The factors L and U from the factorization A = P*L*U
-*>     as computed by AB_ZGETRF.
+*>     as computed by ZGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -134,7 +134,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>     The pivot indices from AB_ZGETRF; for 1<=i<=N, row i of the
+*>     The pivot indices from ZGETRF; for 1<=i<=N, row i of the
 *>     matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -183,7 +183,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX*16 array, dimension (LDX,NRHS)
-*>     On entry, the solution matrix X, as computed by AB_ZGETRS.
+*>     On entry, the solution matrix X, as computed by ZGETRS.
 *>     On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -409,8 +409,7 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IP
-     $IV,
+      SUBROUTINE ZGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $                    R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
@@ -470,26 +469,24 @@
       DOUBLE PRECISION   RTHRESH, UNSTABLE_THRESH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZGECON, AB_ZLA_GERFSX_EXTENDED
+      EXTERNAL           XERBLA, ZGECON, ZLA_GERFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT, TRANSFER
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, AB_ILATRANS, AB_ILAPREC
-      EXTERNAL           DLAMCH, AB_ZLANGE, AB_ZLA_GERCOND_X, AB_ZLA_GER
-     $COND_C
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE, AB_ZLA_GERCOND_X, AB_ZLA_GER
-     $COND_C
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILATRANS, AB_ILAPREC
+      EXTERNAL           LSAME, ILATRANS, ILAPREC
+      EXTERNAL           DLAMCH, ZLANGE, ZLA_GERCOND_X, ZLA_GERCOND_C
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLA_GERCOND_X, ZLA_GERCOND_C
+      LOGICAL            LSAME
+      INTEGER            ILATRANS, ILAPREC
 *     ..
 *     .. Executable Statements ..
 *
 *     Check the input parameters.
 *
       INFO = 0
-      TRANS_TYPE = AB_ILATRANS( TRANS )
+      TRANS_TYPE = ILATRANS( TRANS )
       REF_TYPE = INT( ITREF_DEFAULT )
       IF ( NPARAMS .GE. LA_LINRX_ITREF_I ) THEN
          IF ( PARAMS( LA_LINRX_ITREF_I ) .LT. 0.0D+0 ) THEN
@@ -533,16 +530,16 @@
          N_NORMS = 2
       END IF
 *
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
-      COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
+      COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
 *
 *     Test input parameters.
 *
       IF( TRANS_TYPE.EQ.-1 ) THEN
         INFO = -1
       ELSE IF( .NOT.ROWEQU .AND. .NOT.COLEQU .AND.
-     $         .NOT.AB_LSAME( EQUED, 'N' ) ) THEN
+     $         .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
       ELSE IF( N.LT.0 ) THEN
         INFO = -3
@@ -558,7 +555,7 @@
         INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_ZGERFSX', -INFO )
+        CALL XERBLA( 'ZGERFSX', -INFO )
         RETURN
       END IF
 *
@@ -611,18 +608,17 @@
       ELSE
          NORM = '1'
       END IF
-      ANORM = AB_ZLANGE( NORM, N, N, A, LDA, RWORK )
-      CALL AB_ZGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO
-     $ )
+      ANORM = ZLANGE( NORM, N, N, A, LDA, RWORK )
+      CALL ZGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO )
 *
 *     Perform refinement on each right-hand side
 *
       IF ( REF_TYPE .NE. 0 ) THEN
 
-         PREC_TYPE = AB_ILAPREC( 'E' )
+         PREC_TYPE = ILAPREC( 'E' )
 
          IF ( NOTRAN ) THEN
-            CALL AB_ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
+            CALL ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
      $           NRHS, A, LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK, RWORK, WORK(N+1),
@@ -630,7 +626,7 @@
      $           RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
      $           INFO )
          ELSE
-            CALL AB_ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
+            CALL ZLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
      $           NRHS, A, LDA, AF, LDAF, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK, RWORK, WORK(N+1),
@@ -646,16 +642,13 @@
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( COLEQU .AND. NOTRAN ) THEN
-            RCOND_TMP = AB_ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IP
-     $IV,
+            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
      $           C, .TRUE., INFO, WORK, RWORK )
          ELSE IF ( ROWEQU .AND. .NOT. NOTRAN ) THEN
-            RCOND_TMP = AB_ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IP
-     $IV,
+            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
      $           R, .TRUE., INFO, WORK, RWORK )
          ELSE
-            RCOND_TMP = AB_ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IP
-     $IV,
+            RCOND_TMP = ZLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV,
      $           C, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS
@@ -700,7 +693,7 @@
          DO J = 1, NRHS
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
-               RCOND_TMP = AB_ZLA_GERCOND_X( TRANS, N, A, LDA, AF, LDAF,
+               RCOND_TMP = ZLA_GERCOND_X( TRANS, N, A, LDA, AF, LDAF,
      $              IPIV, X(1,J), INFO, WORK, RWORK )
             ELSE
                RCOND_TMP = 0.0D+0
@@ -736,6 +729,6 @@
 *
       RETURN
 *
-*     End of AB_ZGERFSX
+*     End of ZGERFSX
 *
       END

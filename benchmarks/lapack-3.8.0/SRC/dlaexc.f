@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular matrix in Schur canonical form, by an orthogonal similarity transformation.
+*> \brief \b DLAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular matrix in Schur canonical form, by an orthogonal similarity transformation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAEXC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAEXC.f">
+*> Download DLAEXC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaexc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAEXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaexc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAEXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaexc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
+*       SUBROUTINE DLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAEXC swaps adjacent diagonal blocks T11 and T22 of order 1 or 2 in
+*> DLAEXC swaps adjacent diagonal blocks T11 and T22 of order 1 or 2 in
 *> an upper quasi-triangular matrix T by an orthogonal similarity
 *> transformation.
 *>
@@ -135,7 +135,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
+      SUBROUTINE DLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
      $                   INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -172,13 +172,12 @@
      $                   X( LDX, 2 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE
-      EXTERNAL           DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLACPY, AB_DLANV2, AB_DLARFG, AB_DLARFX, AB_
-     $DLARTG, AB_DLASY2,
-     $                   AB_DROT
+      EXTERNAL           DLACPY, DLANV2, DLARFG, DLARFX, DLARTG, DLASY2,
+     $                   DROT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -207,15 +206,14 @@
 *
 *        Determine the transformation to perform the interchange.
 *
-         CALL AB_DLARTG( T( J1, J2 ), T22-T11, CS, SN, TEMP )
+         CALL DLARTG( T( J1, J2 ), T22-T11, CS, SN, TEMP )
 *
 *        Apply transformation to the matrix T.
 *
          IF( J3.LE.N )
-     $      CALL AB_DROT( N-J1-1, T( J1, J3 ), LDT, T( J2, J3 ), LDT, CS
-     $,
+     $      CALL DROT( N-J1-1, T( J1, J3 ), LDT, T( J2, J3 ), LDT, CS,
      $                 SN )
-         CALL AB_DROT( J1-1, T( 1, J1 ), 1, T( 1, J2 ), 1, CS, SN )
+         CALL DROT( J1-1, T( 1, J1 ), 1, T( 1, J2 ), 1, CS, SN )
 *
          T( J1, J1 ) = T22
          T( J2, J2 ) = T11
@@ -224,7 +222,7 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_DROT( N, Q( 1, J1 ), 1, Q( 1, J2 ), 1, CS, SN )
+            CALL DROT( N, Q( 1, J1 ), 1, Q( 1, J2 ), 1, CS, SN )
          END IF
 *
       ELSE
@@ -235,8 +233,8 @@
 *        and compute its norm.
 *
          ND = N1 + N2
-         CALL AB_DLACPY( 'Full', ND, ND, T( J1, J1 ), LDT, D, LDD )
-         DNORM = AB_DLANGE( 'Max', ND, ND, D, LDD, WORK )
+         CALL DLACPY( 'Full', ND, ND, T( J1, J1 ), LDT, D, LDD )
+         DNORM = DLANGE( 'Max', ND, ND, D, LDD, WORK )
 *
 *        Compute machine-dependent threshold for test for accepting
 *        swap.
@@ -247,7 +245,7 @@
 *
 *        Solve T11*X - X*T22 = scale*T12 for X.
 *
-         CALL AB_DLASY2( .FALSE., .FALSE., -1, N1, N2, D, LDD,
+         CALL DLASY2( .FALSE., .FALSE., -1, N1, N2, D, LDD,
      $                D( N1+1, N1+1 ), LDD, D( 1, N1+1 ), LDD, SCALE, X,
      $                LDX, XNORM, IERR )
 *
@@ -265,14 +263,14 @@
          U( 1 ) = SCALE
          U( 2 ) = X( 1, 1 )
          U( 3 ) = X( 1, 2 )
-         CALL AB_DLARFG( 3, U( 3 ), U, 1, TAU )
+         CALL DLARFG( 3, U( 3 ), U, 1, TAU )
          U( 3 ) = ONE
          T11 = T( J1, J1 )
 *
 *        Perform swap provisionally on diagonal block in D.
 *
-         CALL AB_DLARFX( 'L', 3, 3, U, TAU, D, LDD, WORK )
-         CALL AB_DLARFX( 'R', 3, 3, U, TAU, D, LDD, WORK )
+         CALL DLARFX( 'L', 3, 3, U, TAU, D, LDD, WORK )
+         CALL DLARFX( 'R', 3, 3, U, TAU, D, LDD, WORK )
 *
 *        Test whether to reject swap.
 *
@@ -281,9 +279,8 @@
 *
 *        Accept swap: apply transformation to the entire matrix T.
 *
-         CALL AB_DLARFX( 'L', 3, N-J1+1, U, TAU, T( J1, J1 ), LDT, WORK 
-     $)
-         CALL AB_DLARFX( 'R', J2, 3, U, TAU, T( 1, J1 ), LDT, WORK )
+         CALL DLARFX( 'L', 3, N-J1+1, U, TAU, T( J1, J1 ), LDT, WORK )
+         CALL DLARFX( 'R', J2, 3, U, TAU, T( 1, J1 ), LDT, WORK )
 *
          T( J3, J1 ) = ZERO
          T( J3, J2 ) = ZERO
@@ -293,7 +290,7 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_DLARFX( 'R', N, 3, U, TAU, Q( 1, J1 ), LDQ, WORK )
+            CALL DLARFX( 'R', N, 3, U, TAU, Q( 1, J1 ), LDQ, WORK )
          END IF
          GO TO 40
 *
@@ -308,14 +305,14 @@
          U( 1 ) = -X( 1, 1 )
          U( 2 ) = -X( 2, 1 )
          U( 3 ) = SCALE
-         CALL AB_DLARFG( 3, U( 1 ), U( 2 ), 1, TAU )
+         CALL DLARFG( 3, U( 1 ), U( 2 ), 1, TAU )
          U( 1 ) = ONE
          T33 = T( J3, J3 )
 *
 *        Perform swap provisionally on diagonal block in D.
 *
-         CALL AB_DLARFX( 'L', 3, 3, U, TAU, D, LDD, WORK )
-         CALL AB_DLARFX( 'R', 3, 3, U, TAU, D, LDD, WORK )
+         CALL DLARFX( 'L', 3, 3, U, TAU, D, LDD, WORK )
+         CALL DLARFX( 'R', 3, 3, U, TAU, D, LDD, WORK )
 *
 *        Test whether to reject swap.
 *
@@ -324,8 +321,8 @@
 *
 *        Accept swap: apply transformation to the entire matrix T.
 *
-         CALL AB_DLARFX( 'R', J3, 3, U, TAU, T( 1, J1 ), LDT, WORK )
-         CALL AB_DLARFX( 'L', 3, N-J1, U, TAU, T( J1, J2 ), LDT, WORK )
+         CALL DLARFX( 'R', J3, 3, U, TAU, T( 1, J1 ), LDT, WORK )
+         CALL DLARFX( 'L', 3, N-J1, U, TAU, T( J1, J2 ), LDT, WORK )
 *
          T( J1, J1 ) = T33
          T( J2, J1 ) = ZERO
@@ -335,7 +332,7 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_DLARFX( 'R', N, 3, U, TAU, Q( 1, J1 ), LDQ, WORK )
+            CALL DLARFX( 'R', N, 3, U, TAU, Q( 1, J1 ), LDQ, WORK )
          END IF
          GO TO 40
 *
@@ -352,22 +349,22 @@
          U1( 1 ) = -X( 1, 1 )
          U1( 2 ) = -X( 2, 1 )
          U1( 3 ) = SCALE
-         CALL AB_DLARFG( 3, U1( 1 ), U1( 2 ), 1, TAU1 )
+         CALL DLARFG( 3, U1( 1 ), U1( 2 ), 1, TAU1 )
          U1( 1 ) = ONE
 *
          TEMP = -TAU1*( X( 1, 2 )+U1( 2 )*X( 2, 2 ) )
          U2( 1 ) = -TEMP*U1( 2 ) - X( 2, 2 )
          U2( 2 ) = -TEMP*U1( 3 )
          U2( 3 ) = SCALE
-         CALL AB_DLARFG( 3, U2( 1 ), U2( 2 ), 1, TAU2 )
+         CALL DLARFG( 3, U2( 1 ), U2( 2 ), 1, TAU2 )
          U2( 1 ) = ONE
 *
 *        Perform swap provisionally on diagonal block in D.
 *
-         CALL AB_DLARFX( 'L', 3, 4, U1, TAU1, D, LDD, WORK )
-         CALL AB_DLARFX( 'R', 4, 3, U1, TAU1, D, LDD, WORK )
-         CALL AB_DLARFX( 'L', 3, 4, U2, TAU2, D( 2, 1 ), LDD, WORK )
-         CALL AB_DLARFX( 'R', 4, 3, U2, TAU2, D( 1, 2 ), LDD, WORK )
+         CALL DLARFX( 'L', 3, 4, U1, TAU1, D, LDD, WORK )
+         CALL DLARFX( 'R', 4, 3, U1, TAU1, D, LDD, WORK )
+         CALL DLARFX( 'L', 3, 4, U2, TAU2, D( 2, 1 ), LDD, WORK )
+         CALL DLARFX( 'R', 4, 3, U2, TAU2, D( 1, 2 ), LDD, WORK )
 *
 *        Test whether to reject swap.
 *
@@ -376,12 +373,10 @@
 *
 *        Accept swap: apply transformation to the entire matrix T.
 *
-         CALL AB_DLARFX( 'L', 3, N-J1+1, U1, TAU1, T( J1, J1 ), LDT, WOR
-     $K )
-         CALL AB_DLARFX( 'R', J4, 3, U1, TAU1, T( 1, J1 ), LDT, WORK )
-         CALL AB_DLARFX( 'L', 3, N-J1+1, U2, TAU2, T( J2, J1 ), LDT, WOR
-     $K )
-         CALL AB_DLARFX( 'R', J4, 3, U2, TAU2, T( 1, J2 ), LDT, WORK )
+         CALL DLARFX( 'L', 3, N-J1+1, U1, TAU1, T( J1, J1 ), LDT, WORK )
+         CALL DLARFX( 'R', J4, 3, U1, TAU1, T( 1, J1 ), LDT, WORK )
+         CALL DLARFX( 'L', 3, N-J1+1, U2, TAU2, T( J2, J1 ), LDT, WORK )
+         CALL DLARFX( 'R', J4, 3, U2, TAU2, T( 1, J2 ), LDT, WORK )
 *
          T( J3, J1 ) = ZERO
          T( J3, J2 ) = ZERO
@@ -392,8 +387,8 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_DLARFX( 'R', N, 3, U1, TAU1, Q( 1, J1 ), LDQ, WORK )
-            CALL AB_DLARFX( 'R', N, 3, U2, TAU2, Q( 1, J2 ), LDQ, WORK )
+            CALL DLARFX( 'R', N, 3, U1, TAU1, Q( 1, J1 ), LDQ, WORK )
+            CALL DLARFX( 'R', N, 3, U2, TAU2, Q( 1, J2 ), LDQ, WORK )
          END IF
 *
    40    CONTINUE
@@ -402,14 +397,13 @@
 *
 *           Standardize new 2-by-2 block T11
 *
-            CALL AB_DLANV2( T( J1, J1 ), T( J1, J2 ), T( J2, J1 ),
+            CALL DLANV2( T( J1, J1 ), T( J1, J2 ), T( J2, J1 ),
      $                   T( J2, J2 ), WR1, WI1, WR2, WI2, CS, SN )
-            CALL AB_DROT( N-J1-1, T( J1, J1+2 ), LDT, T( J2, J1+2 ), LDT
-     $,
+            CALL DROT( N-J1-1, T( J1, J1+2 ), LDT, T( J2, J1+2 ), LDT,
      $                 CS, SN )
-            CALL AB_DROT( J1-1, T( 1, J1 ), 1, T( 1, J2 ), 1, CS, SN )
+            CALL DROT( J1-1, T( 1, J1 ), 1, T( 1, J2 ), 1, CS, SN )
             IF( WANTQ )
-     $         CALL AB_DROT( N, Q( 1, J1 ), 1, Q( 1, J2 ), 1, CS, SN )
+     $         CALL DROT( N, Q( 1, J1 ), 1, Q( 1, J2 ), 1, CS, SN )
          END IF
 *
          IF( N1.EQ.2 ) THEN
@@ -418,14 +412,14 @@
 *
             J3 = J1 + N2
             J4 = J3 + 1
-            CALL AB_DLANV2( T( J3, J3 ), T( J3, J4 ), T( J4, J3 ),
+            CALL DLANV2( T( J3, J3 ), T( J3, J4 ), T( J4, J3 ),
      $                   T( J4, J4 ), WR1, WI1, WR2, WI2, CS, SN )
             IF( J3+2.LE.N )
-     $         CALL AB_DROT( N-J3-1, T( J3, J3+2 ), LDT, T( J4, J3+2 ),
+     $         CALL DROT( N-J3-1, T( J3, J3+2 ), LDT, T( J4, J3+2 ),
      $                    LDT, CS, SN )
-            CALL AB_DROT( J3-1, T( 1, J3 ), 1, T( 1, J4 ), 1, CS, SN )
+            CALL DROT( J3-1, T( 1, J3 ), 1, T( 1, J4 ), 1, CS, SN )
             IF( WANTQ )
-     $         CALL AB_DROT( N, Q( 1, J3 ), 1, Q( 1, J4 ), 1, CS, SN )
+     $         CALL DROT( N, Q( 1, J3 ), 1, Q( 1, J4 ), 1, CS, SN )
          END IF
 *
       END IF
@@ -437,6 +431,6 @@
       INFO = 1
       RETURN
 *
-*     End of AB_DLAEXC
+*     End of DLAEXC
 *
       END

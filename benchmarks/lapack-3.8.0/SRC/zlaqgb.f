@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAQGB scales a general band matrix, using row and column scaling factors computed by AB_SGBEQU.
+*> \brief \b ZLAQGB scales a general band matrix, using row and column scaling factors computed by sgbequ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAQGB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQGB.f">
+*> Download ZLAQGB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqgb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQGB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqgb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQGB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqgb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+*       SUBROUTINE ZLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                          AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAQGB equilibrates a general M by N band matrix A with KL
+*> ZLAQGB equilibrates a general M by N band matrix A with KL
 *> subdiagonals and KU superdiagonals using the row and scaling factors
 *> in the vectors R and C.
 *> \endverbatim
@@ -157,8 +157,7 @@
 *> \ingroup complex16GBauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND
-     $,
+      SUBROUTINE ZLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
      $                   AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -254,6 +253,6 @@
 *
       RETURN
 *
-*     End of AB_ZLAQGB
+*     End of ZLAQGB
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLACRM multiplies a complex matrix by a square real matrix.
+*> \brief \b ZLACRM multiplies a complex matrix by a square real matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLACRM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLACRM.f">
+*> Download ZLACRM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlacrm.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLACRM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlacrm.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLACRM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlacrm.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
+*       SUBROUTINE ZLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDB, LDC, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLACRM performs a very simple matrix-matrix multiplication:
+*> ZLACRM performs a very simple matrix-matrix multiplication:
 *>          C := A * B,
 *> where A is M by N and complex; B is N by N and real;
 *> C is M by N and complex.
@@ -112,7 +112,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
+      SUBROUTINE ZLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -140,7 +140,7 @@
       INTRINSIC          DBLE, DCMPLX, DIMAG
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM
+      EXTERNAL           DGEMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -156,7 +156,7 @@
    20 CONTINUE
 *
       L = M*N + 1
-      CALL AB_DGEMM( 'N', 'N', M, N, N, ONE, RWORK, M, B, LDB, ZERO,
+      CALL DGEMM( 'N', 'N', M, N, N, ONE, RWORK, M, B, LDB, ZERO,
      $            RWORK( L ), M )
       DO 40 J = 1, N
          DO 30 I = 1, M
@@ -169,7 +169,7 @@
             RWORK( ( J-1 )*M+I ) = DIMAG( A( I, J ) )
    50    CONTINUE
    60 CONTINUE
-      CALL AB_DGEMM( 'N', 'N', M, N, N, ONE, RWORK, M, B, LDB, ZERO,
+      CALL DGEMM( 'N', 'N', M, N, N, ONE, RWORK, M, B, LDB, ZERO,
      $            RWORK( L ), M )
       DO 80 J = 1, N
          DO 70 I = 1, M
@@ -180,6 +180,6 @@
 *
       RETURN
 *
-*     End of AB_ZLACRM
+*     End of ZLACRM
 *
       END

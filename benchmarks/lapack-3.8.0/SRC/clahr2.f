@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAHR2 reduces the specified number of first columns of a general rectangular matrix A so that elements below the specified subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
+*> \brief \b CLAHR2 reduces the specified number of first columns of a general rectangular matrix A so that elements below the specified subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAHR2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAHR2.f">
+*> Download CLAHR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahr2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAHR2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahr2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAHR2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahr2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+*       SUBROUTINE CLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LDT, LDY, N, NB
@@ -34,13 +34,13 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAHR2 reduces the first NB columns of A complex general n-BY-(n-k+1)
+*> CLAHR2 reduces the first NB columns of A complex general n-BY-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
 *> reduction is performed by an unitary similarity transformation
 *> Q**H * A * Q. The routine returns the matrices V and T which determine
 *> Q as a block reflector I - V*T*v**H, and also the matrix Y = A * V * T.
 *>
-*> This is an auxiliary routine called by AB_CGEHRD.
+*> This is an auxiliary routine called by CGEHRD.
 *> \endverbatim
 *
 *  Arguments:
@@ -164,11 +164,11 @@
 *>  modified element of the upper Hessenberg matrix H, and vi denotes an
 *>  element of the vector defining H(i).
 *>
-*>  This subroutine is a slight modification of LAPACK-3.0's AB_DLAHRD
+*>  This subroutine is a slight modification of LAPACK-3.0's DLAHRD
 *>  incorporating improvements proposed by Quintana-Orti and Van de
 *>  Gejin. Note that the entries of A(1:K,2:NB) differ from those
-*>  returned by the original LAPACK-3.0's AB_DLAHRD routine. (This
-*>  subroutine is not backward compatible with LAPACK-3.0's AB_DLAHRD.)
+*>  returned by the original LAPACK-3.0's DLAHRD routine. (This
+*>  subroutine is not backward compatible with LAPACK-3.0's DLAHRD.)
 *> \endverbatim
 *
 *> \par References:
@@ -179,7 +179,7 @@
 *>  Mathematical Software, 32(2):180-194, June 2006.
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+      SUBROUTINE CLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -206,10 +206,8 @@
       COMPLEX            EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CGEMM, AB_CGEMV, AB_CLAC
-     $PY,
-     $                   AB_CLARFG, AB_CSCAL, AB_CTRMM, AB_CTRMV, AB_CLA
-     $CGV
+      EXTERNAL           CAXPY, CCOPY, CGEMM, CGEMV, CLACPY,
+     $                   CLARFG, CSCAL, CTRMM, CTRMV, CLACGV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -228,11 +226,10 @@
 *
 *           Update I-th column of A - Y * V**H
 *
-            CALL AB_CLACGV( I-1, A( K+I-1, 1 ), LDA )
-            CALL AB_CGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY
-     $,
+            CALL CLACGV( I-1, A( K+I-1, 1 ), LDA )
+            CALL CGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( K+1, I ), 1 )
-            CALL AB_CLACGV( I-1, A( K+I-1, 1 ), LDA )
+            CALL CLACGV( I-1, A( K+I-1, 1 ), LDA )
 *
 *           Apply I - V * T**H * V**H to this column (call it b) from the
 *           left, using the last column of T as workspace
@@ -244,35 +241,35 @@
 *
 *           w := V1**H * b1
 *
-            CALL AB_CCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
-            CALL AB_CTRMV( 'Lower', 'Conjugate transpose', 'UNIT',
+            CALL CCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
+            CALL CTRMV( 'Lower', 'Conjugate transpose', 'UNIT',
      $                  I-1, A( K+1, 1 ),
      $                  LDA, T( 1, NB ), 1 )
 *
 *           w := w + V2**H * b2
 *
-            CALL AB_CGEMV( 'Conjugate transpose', N-K-I+1, I-1,
+            CALL CGEMV( 'Conjugate transpose', N-K-I+1, I-1,
      $                  ONE, A( K+I, 1 ),
      $                  LDA, A( K+I, I ), 1, ONE, T( 1, NB ), 1 )
 *
 *           w := T**H * w
 *
-            CALL AB_CTRMV( 'Upper', 'Conjugate transpose', 'NON-UNIT',
+            CALL CTRMV( 'Upper', 'Conjugate transpose', 'NON-UNIT',
      $                  I-1, T, LDT,
      $                  T( 1, NB ), 1 )
 *
 *           b2 := b2 - V2*w
 *
-            CALL AB_CGEMV( 'NO TRANSPOSE', N-K-I+1, I-1, -ONE,
+            CALL CGEMV( 'NO TRANSPOSE', N-K-I+1, I-1, -ONE,
      $                  A( K+I, 1 ),
      $                  LDA, T( 1, NB ), 1, ONE, A( K+I, I ), 1 )
 *
 *           b1 := b1 - V1*w
 *
-            CALL AB_CTRMV( 'Lower', 'NO TRANSPOSE',
+            CALL CTRMV( 'Lower', 'NO TRANSPOSE',
      $                  'UNIT', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
-            CALL AB_CAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
+            CALL CAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
 *
             A( K+I-1, I-1 ) = EI
          END IF
@@ -280,29 +277,28 @@
 *        Generate the elementary reflector H(I) to annihilate
 *        A(K+I+1:N,I)
 *
-         CALL AB_CLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 
-     $1,
+         CALL CLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 1,
      $                TAU( I ) )
          EI = A( K+I, I )
          A( K+I, I ) = ONE
 *
 *        Compute  Y(K+1:N,I)
 *
-         CALL AB_CGEMV( 'NO TRANSPOSE', N-K, N-K-I+1,
+         CALL CGEMV( 'NO TRANSPOSE', N-K, N-K-I+1,
      $               ONE, A( K+1, I+1 ),
      $               LDA, A( K+I, I ), 1, ZERO, Y( K+1, I ), 1 )
-         CALL AB_CGEMV( 'Conjugate transpose', N-K-I+1, I-1,
+         CALL CGEMV( 'Conjugate transpose', N-K-I+1, I-1,
      $               ONE, A( K+I, 1 ), LDA,
      $               A( K+I, I ), 1, ZERO, T( 1, I ), 1 )
-         CALL AB_CGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE,
+         CALL CGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE,
      $               Y( K+1, 1 ), LDY,
      $               T( 1, I ), 1, ONE, Y( K+1, I ), 1 )
-         CALL AB_CSCAL( N-K, TAU( I ), Y( K+1, I ), 1 )
+         CALL CSCAL( N-K, TAU( I ), Y( K+1, I ), 1 )
 *
 *        Compute T(1:I,I)
 *
-         CALL AB_CSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
-         CALL AB_CTRMV( 'Upper', 'No Transpose', 'NON-UNIT',
+         CALL CSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
+         CALL CTRMV( 'Upper', 'No Transpose', 'NON-UNIT',
      $               I-1, T, LDT,
      $               T( 1, I ), 1 )
          T( I, I ) = TAU( I )
@@ -312,21 +308,21 @@
 *
 *     Compute Y(1:K,1:NB)
 *
-      CALL AB_CLACPY( 'ALL', K, NB, A( 1, 2 ), LDA, Y, LDY )
-      CALL AB_CTRMM( 'RIGHT', 'Lower', 'NO TRANSPOSE',
+      CALL CLACPY( 'ALL', K, NB, A( 1, 2 ), LDA, Y, LDY )
+      CALL CTRMM( 'RIGHT', 'Lower', 'NO TRANSPOSE',
      $            'UNIT', K, NB,
      $            ONE, A( K+1, 1 ), LDA, Y, LDY )
       IF( N.GT.K+NB )
-     $   CALL AB_CGEMM( 'NO TRANSPOSE', 'NO TRANSPOSE', K,
+     $   CALL CGEMM( 'NO TRANSPOSE', 'NO TRANSPOSE', K,
      $               NB, N-K-NB, ONE,
      $               A( 1, 2+NB ), LDA, A( K+1+NB, 1 ), LDA, ONE, Y,
      $               LDY )
-      CALL AB_CTRMM( 'RIGHT', 'Upper', 'NO TRANSPOSE',
+      CALL CTRMM( 'RIGHT', 'Upper', 'NO TRANSPOSE',
      $            'NON-UNIT', K, NB,
      $            ONE, T, LDT, Y, LDY )
 *
       RETURN
 *
-*     End of AB_CLAHR2
+*     End of CLAHR2
 *
       END

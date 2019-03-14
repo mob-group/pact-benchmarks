@@ -1,4 +1,4 @@
-*> \brief \b AB_SSCAL
+*> \brief \b SSCAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSCAL(N,SA,SX,INCX)
+*       SUBROUTINE SSCAL(N,SA,SX,INCX)
 *
 *       .. Scalar Arguments ..
 *       REAL SA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_SSCAL scales a vector by a constant.
+*>    SSCAL scales a vector by a constant.
 *>    uses unrolled loops for increment equal to 1.
 *> \endverbatim
 *
@@ -77,7 +77,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SSCAL(N,SA,SX,INCX)
+      SUBROUTINE SSCAL(N,SA,SX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

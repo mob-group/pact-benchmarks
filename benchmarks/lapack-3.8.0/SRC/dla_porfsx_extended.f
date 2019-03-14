@@ -1,4 +1,4 @@
-*> \brief \b AB_DLA_PORFSX_EXTENDED improves the computed solution to a system of linear equations for symmetric or Hermitian positive-definite matrices by performing extra-precise iterative refinement and provides error bounds and backward error estimates for the solution.
+*> \brief \b DLA_PORFSX_EXTENDED improves the computed solution to a system of linear equations for symmetric or Hermitian positive-definite matrices by performing extra-precise iterative refinement and provides error bounds and backward error estimates for the solution.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLA_PORFSX_EXTENDED + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLA_PORFSX_EXTENDED.f">
+*> Download DLA_PORFSX_EXTENDED + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_porfsx_extended.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLA_PORFSX_EXTENDED.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_porfsx_extended.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLA_PORFSX_EXTENDED.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_porfsx_extended.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+*       SUBROUTINE DLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
 *                                       AF, LDAF, COLEQU, C, B, LDB, Y,
 *                                       LDY, BERR_OUT, N_NORMS,
 *                                       ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -47,10 +47,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DLA_PORFSX_EXTENDED improves the computed solution to a system of
+*> DLA_PORFSX_EXTENDED improves the computed solution to a system of
 *> linear equations by performing extra-precise iterative refinement
 *> and provides error bounds and backward error estimates for the solution.
-*> This subroutine is called by AB_DPORFSX to perform iterative refinement.
+*> This subroutine is called by DPORFSX to perform iterative refinement.
 *> In addition to normwise error bound, the code provides maximum
 *> componentwise error bound if possible. See comments for ERR_BNDS_NORM
 *> and ERR_BNDS_COMP for details of the error bounds. Note that this
@@ -65,7 +65,7 @@
 *> \verbatim
 *>          PREC_TYPE is INTEGER
 *>     Specifies the intermediate precision to be used in refinement.
-*>     The value is defined by AB_ILAPREC(P) where P is a CHARACTER and
+*>     The value is defined by ILAPREC(P) where P is a CHARACTER and
 *>     P    = 'S':  Single
 *>          = 'D':  Double
 *>          = 'I':  Indigenous
@@ -109,7 +109,7 @@
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDAF,N)
 *>     The triangular factor U or L from the Cholesky factorization
-*>     A = U**T*U or A = L*L**T, as computed by AB_DPOTRF.
+*>     A = U**T*U or A = L*L**T, as computed by DPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -154,7 +154,7 @@
 *> \param[in,out] Y
 *> \verbatim
 *>          Y is DOUBLE PRECISION array, dimension (LDY,NRHS)
-*>     On entry, the solution matrix X, as computed by AB_DPOTRS.
+*>     On entry, the solution matrix X, as computed by DPOTRS.
 *>     On exit, the improved solution matrix Y.
 *> \endverbatim
 *>
@@ -171,7 +171,7 @@
 *>     error for right-hand-side j from the formula
 *>         max(i) ( abs(RES(i)) / ( abs(op(A_s))*abs(Y) + abs(B_s) )(i) )
 *>     where abs(Z) is the componentwise absolute value of the matrix
-*>     or vector Z. This is computed by AB_DLA_LIN_BERR.
+*>     or vector Z. This is computed by DLA_LIN_BERR.
 *> \endverbatim
 *>
 *> \param[in] N_NORMS
@@ -362,7 +362,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>       = 0:  Successful exit.
-*>       < 0:  if INFO = -i, the ith argument to AB_DPOTRS had an illegal
+*>       < 0:  if INFO = -i, the ith argument to DPOTRS had an illegal
 *>             value
 *> \endverbatim
 *
@@ -379,8 +379,7 @@
 *> \ingroup doublePOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LD
-     $A,
+      SUBROUTINE DLA_PORFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
      $                                AF, LDAF, COLEQU, C, B, LDB, Y,
      $                                LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -445,15 +444,14 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_ILAUPLO
-      INTEGER            AB_ILAUPLO
+      LOGICAL            LSAME
+      EXTERNAL           ILAUPLO
+      INTEGER            ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL          AB_DAXPY, AB_DCOPY, AB_DPOTRS, AB_DSYMV, BLAS_DS
-     $YMV_X,
-     $                  BLAS_DSYMV2_X, AB_DLA_SYAMV, AB_DLA_WWADDW,
-     $                  AB_DLA_LIN_BERR
+      EXTERNAL          DAXPY, DCOPY, DPOTRS, DSYMV, BLAS_DSYMV_X,
+     $                  BLAS_DSYMV2_X, DLA_SYAMV, DLA_WWADDW,
+     $                  DLA_LIN_BERR
       DOUBLE PRECISION   DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
@@ -469,10 +467,10 @@
 *     Using HUGEVAL may lead to spurious underflows.
       INCR_THRESH = DBLE( N ) * EPS
 
-      IF ( AB_LSAME ( UPLO, 'L' ) ) THEN
-         UPLO2 = AB_ILAUPLO( 'L' )
+      IF ( LSAME ( UPLO, 'L' ) ) THEN
+         UPLO2 = ILAUPLO( 'L' )
       ELSE
-         UPLO2 = AB_ILAUPLO( 'U' )
+         UPLO2 = ILAUPLO( 'U' )
       ENDIF
 
       DO J = 1, NRHS
@@ -503,9 +501,9 @@
 *         Compute residual RES = B_s - op(A_s) * Y,
 *             op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
-            CALL AB_DCOPY( N, B( 1, J ), 1, RES, 1 )
+            CALL DCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL AB_DSYMV( UPLO, N, -1.0D+0, A, LDA, Y(1,J), 1,
+               CALL DSYMV( UPLO, N, -1.0D+0, A, LDA, Y(1,J), 1,
      $              1.0D+0, RES, 1 )
             ELSE IF ( Y_PREC_STATE .EQ. EXTRA_RESIDUAL ) THEN
                CALL BLAS_DSYMV_X( UPLO2, N, -1.0D+0, A, LDA,
@@ -516,8 +514,8 @@
             END IF
 
 !         XXX: RES is no longer needed.
-            CALL AB_DCOPY( N, RES, 1, DY, 1 )
-            CALL AB_DPOTRS( UPLO, N, 1, AF, LDAF, DY, N, INFO )
+            CALL DCOPY( N, RES, 1, DY, 1 )
+            CALL DPOTRS( UPLO, N, 1, AF, LDAF, DY, N, INFO )
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.
 *
@@ -625,9 +623,9 @@
 *           Update soluton.
 *
             IF (Y_PREC_STATE .LT. EXTRA_Y) THEN
-               CALL AB_DAXPY( N, 1.0D+0, DY, 1, Y(1,J), 1 )
+               CALL DAXPY( N, 1.0D+0, DY, 1, Y(1,J), 1 )
             ELSE
-               CALL AB_DLA_WWADDW( N, Y( 1, J ), Y_TAIL, DY )
+               CALL DLA_WWADDW( N, Y( 1, J ), Y_TAIL, DY )
             END IF
 
          END DO
@@ -658,9 +656,8 @@
 *        Compute residual RES = B_s - op(A_s) * Y,
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
-         CALL AB_DCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL AB_DSYMV( UPLO, N, -1.0D+0, A, LDA, Y(1,J), 1, 1.0D+0, RES
-     $,
+         CALL DCOPY( N, B( 1, J ), 1, RES, 1 )
+         CALL DSYMV( UPLO, N, -1.0D+0, A, LDA, Y(1,J), 1, 1.0D+0, RES,
      $     1 )
 
          DO I = 1, N
@@ -669,10 +666,10 @@
 *
 *     Compute abs(op(A_s))*abs(Y) + abs(B_s).
 *
-         CALL AB_DLA_SYAMV( UPLO2, N, 1.0D+0,
+         CALL DLA_SYAMV( UPLO2, N, 1.0D+0,
      $        A, LDA, Y(1, J), 1, 1.0D+0, AYB, 1 )
 
-         CALL AB_DLA_LIN_BERR( N, N, 1, RES, AYB, BERR_OUT( J ) )
+         CALL DLA_LIN_BERR( N, N, 1, RES, AYB, BERR_OUT( J ) )
 *
 *     End of loop for each RHS.
 *

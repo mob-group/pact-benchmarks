@@ -1,4 +1,4 @@
-*> \brief \b AB_SGERFSX
+*> \brief \b SGERFSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGERFSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGERfsx.f">
+*> Download SGERFSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgerfsx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGERfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgerfsx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGERfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerfsx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
 *                           ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
 *                           WORK, IWORK, INFO )
@@ -44,7 +44,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_SGERFSX improves the computed solution to a system of linear
+*>    SGERFSX improves the computed solution to a system of linear
 *>    equations and provides error bounds and backward error estimates
 *>    for the solution.  In addition to normwise error bound, the code
 *>    provides maximum componentwise error bound if possible.  See
@@ -122,7 +122,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>     The factors L and U from the factorization A = P*L*U
-*>     as computed by AB_SGETRF.
+*>     as computed by SGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -134,7 +134,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>     The pivot indices from AB_SGETRF; for 1<=i<=N, row i of the
+*>     The pivot indices from SGETRF; for 1<=i<=N, row i of the
 *>     matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -183,7 +183,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>     On entry, the solution matrix X, as computed by AB_SGETRS.
+*>     On entry, the solution matrix X, as computed by SGETRS.
 *>     On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -409,8 +409,7 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IP
-     $IV,
+      SUBROUTINE SGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $                    R, C, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, IWORK, INFO )
@@ -470,24 +469,24 @@
       REAL               RTHRESH, UNSTABLE_THRESH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_SGECON, AB_SLA_GERFSX_EXTENDED
+      EXTERNAL           XERBLA, SGECON, SLA_GERFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, AB_ILATRANS, AB_ILAPREC
-      EXTERNAL           SLAMCH, AB_SLANGE, SLA_GERCOND
-      REAL               SLAMCH, AB_SLANGE, SLA_GERCOND
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILATRANS, AB_ILAPREC
+      EXTERNAL           LSAME, ILATRANS, ILAPREC
+      EXTERNAL           SLAMCH, SLANGE, SLA_GERCOND
+      REAL               SLAMCH, SLANGE, SLA_GERCOND
+      LOGICAL            LSAME
+      INTEGER            ILATRANS, ILAPREC
 *     ..
 *     .. Executable Statements ..
 *
 *     Check the input parameters.
 *
       INFO = 0
-      TRANS_TYPE = AB_ILATRANS( TRANS )
+      TRANS_TYPE = ILATRANS( TRANS )
       REF_TYPE = INT( ITREF_DEFAULT )
       IF ( NPARAMS .GE. LA_LINRX_ITREF_I ) THEN
          IF ( PARAMS( LA_LINRX_ITREF_I ) .LT. 0.0 ) THEN
@@ -531,16 +530,16 @@
          N_NORMS = 2
       END IF
 *
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
-      COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
+      COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
 *
 *     Test input parameters.
 *
       IF( TRANS_TYPE.EQ.-1 ) THEN
         INFO = -1
       ELSE IF( .NOT.ROWEQU .AND. .NOT.COLEQU .AND.
-     $         .NOT.AB_LSAME( EQUED, 'N' ) ) THEN
+     $         .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
       ELSE IF( N.LT.0 ) THEN
         INFO = -3
@@ -556,7 +555,7 @@
         INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_SGERFSX', -INFO )
+        CALL XERBLA( 'SGERFSX', -INFO )
         RETURN
       END IF
 *
@@ -609,25 +608,24 @@
       ELSE
          NORM = '1'
       END IF
-      ANORM = AB_SLANGE( NORM, N, N, A, LDA, WORK )
-      CALL AB_SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO
-     $ )
+      ANORM = SLANGE( NORM, N, N, A, LDA, WORK )
+      CALL SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
 *
 *     Perform refinement on each right-hand side
 *
       IF ( REF_TYPE .NE. 0 ) THEN
 
-         PREC_TYPE = AB_ILAPREC( 'D' )
+         PREC_TYPE = ILAPREC( 'D' )
 
          IF ( NOTRAN ) THEN
-            CALL AB_SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
+            CALL SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
      $           NRHS, A, LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK(N+1), WORK(1), WORK(2*N+1),
      $           WORK(1), RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH,
      $           IGNORE_CWISE, INFO )
          ELSE
-            CALL AB_SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
+            CALL SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
      $           NRHS, A, LDA, AF, LDAF, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK(N+1), WORK(1), WORK(2*N+1),
@@ -728,6 +726,6 @@
 *
       RETURN
 *
-*     End of AB_SGERFSX
+*     End of SGERFSX
 *
       END

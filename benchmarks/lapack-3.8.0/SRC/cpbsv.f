@@ -1,4 +1,4 @@
-*> \brief <b> AB_CPBSV computes the solution to system of linear equations A * X = B for OTHER matrices</b>
+*> \brief <b> CPBSV computes the solution to system of linear equations A * X = B for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPBSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPBSV.f">
+*> Download CPBSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbsv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPBSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbsv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPBSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbsv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+*       SUBROUTINE CPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPBSV computes the solution to a complex system of linear equations
+*> CPBSV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian positive definite band matrix and X
 *> and B are N-by-NRHS matrices.
@@ -162,7 +162,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+      SUBROUTINE CPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -180,11 +180,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CPBTRF, AB_CPBTRS, AB_XERBLA
+      EXTERNAL           CPBTRF, CPBTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -194,8 +194,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -209,22 +208,22 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPBSV ', -INFO )
+         CALL XERBLA( 'CPBSV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the Cholesky factorization A = U**H*U or A = L*L**H.
 *
-      CALL AB_CPBTRF( UPLO, N, KD, AB, LDAB, INFO )
+      CALL CPBTRF( UPLO, N, KD, AB, LDAB, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL AB_CPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+         CALL CPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
       END IF
       RETURN
 *
-*     End of AB_CPBSV
+*     End of CPBSV
 *
       END

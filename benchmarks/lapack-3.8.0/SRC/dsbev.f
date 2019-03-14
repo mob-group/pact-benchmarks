@@ -1,4 +1,4 @@
-*> \brief <b> AB_DSBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> DSBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSBEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSBEV.f">
+*> Download DSBEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbev.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSBEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbev.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSBEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbev.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSBEV( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+*       SUBROUTINE DSBEV( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSBEV computes all the eigenvalues and, optionally, eigenvectors of
+*> DSBEV computes all the eigenvalues and, optionally, eigenvectors of
 *> a real symmetric band matrix A.
 *> \endverbatim
 *
@@ -143,7 +143,7 @@
 *> \ingroup doubleOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_DSBEV( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+      SUBROUTINE DSBEV( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
      $                  INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -172,13 +172,12 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANSB
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANSB
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANSB
+      EXTERNAL           LSAME, DLAMCH, DLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASCL, AB_DSBTRD, AB_DSCAL, AB_DSTEQR, AB_D
-     $STERF, AB_XERBLA
+      EXTERNAL           DLASCL, DSBTRD, DSCAL, DSTEQR, DSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -187,13 +186,13 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -206,7 +205,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSBEV ', -INFO )
+         CALL XERBLA( 'DSBEV ', -INFO )
          RETURN
       END IF
 *
@@ -237,7 +236,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_DLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
+      ANRM = DLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -248,29 +247,25 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
       END IF
 *
-*     Call AB_DSBTRD to reduce symmetric band matrix to tridiagonal form.
+*     Call DSBTRD to reduce symmetric band matrix to tridiagonal form.
 *
       INDE = 1
       INDWRK = INDE + N
-      CALL AB_DSBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, WORK( INDE ), Z, L
-     $DZ,
+      CALL DSBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, WORK( INDE ), Z, LDZ,
      $             WORK( INDWRK ), IINFO )
 *
-*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, call AB_SSTEQR.
+*     For eigenvalues only, call DSTERF.  For eigenvectors, call SSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_DSTERF( N, W, WORK( INDE ), INFO )
+         CALL DSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL AB_DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK 
-     $),
+         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
      $                INFO )
       END IF
 *
@@ -282,11 +277,11 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
       RETURN
 *
-*     End of AB_DSBEV
+*     End of DSBEV
 *
       END

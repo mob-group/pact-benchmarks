@@ -1,4 +1,4 @@
-*> \brief \b AB_DSPMV
+*> \brief \b DSPMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE DSPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSPMV  performs the matrix-vector operation
+*> DSPMV  performs the matrix-vector operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -145,7 +145,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DSPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+      SUBROUTINE DSPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -172,17 +172,17 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
+      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -192,7 +192,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_DSPMV ',INFO)
+          CALL XERBLA('DSPMV ',INFO)
           RETURN
       END IF
 *
@@ -246,7 +246,7 @@
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
       KK = 1
-      IF (AB_LSAME(UPLO,'U')) THEN
+      IF (LSAME(UPLO,'U')) THEN
 *
 *        Form  y  when AP contains the upper triangle.
 *
@@ -326,6 +326,6 @@
 *
       RETURN
 *
-*     End of AB_DSPMV .
+*     End of DSPMV .
 *
       END

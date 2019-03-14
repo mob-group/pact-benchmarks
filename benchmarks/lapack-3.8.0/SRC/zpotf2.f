@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
+*> \brief \b ZPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZPOTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPOTF2.f">
+*> Download ZPOTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpotf2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPOTF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpotf2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPOTF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpotf2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPOTF2( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE ZPOTF2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPOTF2 computes the Cholesky factorization of a complex Hermitian
+*> ZPOTF2 computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -107,7 +107,7 @@
 *> \ingroup complex16POcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPOTF2( UPLO, N, A, LDA, INFO )
+      SUBROUTINE ZPOTF2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,12 +136,12 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_DISNAN
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_ZDOTC, AB_DISNAN
+      LOGICAL            LSAME, DISNAN
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, ZDOTC, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZDSCAL, AB_ZGEMV, AB_ZLACGV
+      EXTERNAL           XERBLA, ZDSCAL, ZGEMV, ZLACGV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, SQRT
@@ -151,8 +151,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -160,7 +160,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZPOTF2', -INFO )
+         CALL XERBLA( 'ZPOTF2', -INFO )
          RETURN
       END IF
 *
@@ -177,9 +177,9 @@
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = DBLE( A( J, J ) ) - AB_ZDOTC( J-1, A( 1, J ), 1,
+            AJJ = DBLE( A( J, J ) ) - ZDOTC( J-1, A( 1, J ), 1,
      $            A( 1, J ), 1 )
-            IF( AJJ.LE.ZERO.OR.AB_DISNAN( AJJ ) ) THEN
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF
@@ -189,11 +189,11 @@
 *           Compute elements J+1:N of row J.
 *
             IF( J.LT.N ) THEN
-               CALL AB_ZLACGV( J-1, A( 1, J ), 1 )
-               CALL AB_ZGEMV( 'Transpose', J-1, N-J, -CONE, A( 1, J+1 ),
+               CALL ZLACGV( J-1, A( 1, J ), 1 )
+               CALL ZGEMV( 'Transpose', J-1, N-J, -CONE, A( 1, J+1 ),
      $                     LDA, A( 1, J ), 1, CONE, A( J, J+1 ), LDA )
-               CALL AB_ZLACGV( J-1, A( 1, J ), 1 )
-               CALL AB_ZDSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
+               CALL ZLACGV( J-1, A( 1, J ), 1 )
+               CALL ZDSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
             END IF
    10    CONTINUE
       ELSE
@@ -204,9 +204,9 @@
 *
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
-            AJJ = DBLE( A( J, J ) ) - AB_ZDOTC( J-1, A( J, 1 ), LDA,
+            AJJ = DBLE( A( J, J ) ) - ZDOTC( J-1, A( J, 1 ), LDA,
      $            A( J, 1 ), LDA )
-            IF( AJJ.LE.ZERO.OR.AB_DISNAN( AJJ ) ) THEN
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF
@@ -216,12 +216,11 @@
 *           Compute elements J+1:N of column J.
 *
             IF( J.LT.N ) THEN
-               CALL AB_ZLACGV( J-1, A( J, 1 ), LDA )
-               CALL AB_ZGEMV( 'No transpose', N-J, J-1, -CONE, A( J+1, 1
-     $ ),
+               CALL ZLACGV( J-1, A( J, 1 ), LDA )
+               CALL ZGEMV( 'No transpose', N-J, J-1, -CONE, A( J+1, 1 ),
      $                     LDA, A( J, 1 ), LDA, CONE, A( J+1, J ), 1 )
-               CALL AB_ZLACGV( J-1, A( J, 1 ), LDA )
-               CALL AB_ZDSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
+               CALL ZLACGV( J-1, A( J, 1 ), LDA )
+               CALL ZDSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
             END IF
    20    CONTINUE
       END IF
@@ -233,6 +232,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of AB_ZPOTF2
+*     End of ZPOTF2
 *
       END

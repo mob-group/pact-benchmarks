@@ -1,4 +1,4 @@
-*> \brief <b> AB_DSPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> DSPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSPEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSPEV.f">
+*> Download DSPEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dspev.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSPEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dspev.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSPEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspev.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
+*       SUBROUTINE DSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBZ, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSPEV computes all the eigenvalues and, optionally, eigenvectors of a
+*> DSPEV computes all the eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A in packed storage.
 *> \endverbatim
 *
@@ -128,7 +128,7 @@
 *> \ingroup doubleOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_DSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
+      SUBROUTINE DSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -156,13 +156,12 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANSP
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANSP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANSP
+      EXTERNAL           LSAME, DLAMCH, DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DOPGTR, AB_DSCAL, AB_DSPTRD, AB_DSTEQR, AB_D
-     $STERF, AB_XERBLA
+      EXTERNAL           DOPGTR, DSCAL, DSPTRD, DSTEQR, DSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -171,13 +170,12 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
+      WANTZ = LSAME( JOBZ, 'V' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( AB_LSAME( UPLO, 'U' ) .OR. AB_LSAME( UPLO, 'L' ) )
-     $ )
+      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -187,7 +185,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSPEV ', -INFO )
+         CALL XERBLA( 'DSPEV ', -INFO )
          RETURN
       END IF
 *
@@ -214,7 +212,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_DLANSP( 'M', UPLO, N, AP, WORK )
+      ANRM = DLANSP( 'M', UPLO, N, AP, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -224,27 +222,25 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL AB_DSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
+         CALL DSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
       END IF
 *
-*     Call AB_DSPTRD to reduce symmetric packed matrix to tridiagonal form.
+*     Call DSPTRD to reduce symmetric packed matrix to tridiagonal form.
 *
       INDE = 1
       INDTAU = INDE + N
-      CALL AB_DSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINF
-     $O )
+      CALL DSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINFO )
 *
-*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, first call
-*     AB_DOPGTR to generate the orthogonal matrix, then call AB_DSTEQR.
+*     For eigenvalues only, call DSTERF.  For eigenvectors, first call
+*     DOPGTR to generate the orthogonal matrix, then call DSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_DSTERF( N, W, WORK( INDE ), INFO )
+         CALL DSTERF( N, W, WORK( INDE ), INFO )
       ELSE
          INDWRK = INDTAU + N
-         CALL AB_DOPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
+         CALL DOPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
      $                WORK( INDWRK ), IINFO )
-         CALL AB_DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDTAU 
-     $),
+         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDTAU ),
      $                INFO )
       END IF
 *
@@ -256,11 +252,11 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
       RETURN
 *
-*     End of AB_DSPEV
+*     End of DSPEV
 *
       END

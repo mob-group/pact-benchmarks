@@ -1,4 +1,4 @@
-*> \brief \b AB_DHGEQZ
+*> \brief \b DHGEQZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DHGEQZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DHGEQZ.f">
+*> Download DHGEQZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhgeqz.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DHGEQZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dhgeqz.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DHGEQZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhgeqz.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
+*       SUBROUTINE DHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
 *                          ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
 *                          LWORK, INFO )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DHGEQZ computes the eigenvalues of a real matrix pair (H,T),
+*> DHGEQZ computes the eigenvalues of a real matrix pair (H,T),
 *> where H is an upper Hessenberg matrix and T is upper triangular,
 *> using the double-shift QZ method.
 *> Matrix pairs of this type are produced by the reduction to
@@ -46,7 +46,7 @@
 *>
 *>    A = Q1*H*Z1**T,  B = Q1*T*Z1**T,
 *>
-*> as computed by AB_DGGHRD.
+*> as computed by DGGHRD.
 *>
 *> If JOB='S', then the Hessenberg-triangular pair (H,T) is
 *> also reduced to generalized Schur form,
@@ -69,7 +69,7 @@
 *> Optionally, the orthogonal matrix Q from the generalized Schur
 *> factorization may be postmultiplied into an input matrix Q1, and the
 *> orthogonal matrix Z may be postmultiplied into an input matrix Z1.
-*> If Q1 and Z1 are the orthogonal matrices from AB_DGGHRD that reduced
+*> If Q1 and Z1 are the orthogonal matrices from DGGHRD that reduced
 *> the matrix pair (A,B) to generalized upper Hessenberg form, then the
 *> output matrices Q1*Q and Z1*Z are the orthogonal factors from the
 *> generalized Schur factorization of (A,B):
@@ -258,7 +258,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -300,8 +300,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, L
-     $DT,
+      SUBROUTINE DHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
      $                   ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
      $                   LWORK, INFO )
 *
@@ -349,15 +348,13 @@
       DOUBLE PRECISION   V( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANHS, AB_DLAPY2, AB_DLAPY3
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANHS, AB_DLAPY2, AB_DLAP
-     $Y3
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANHS, DLAPY2, DLAPY3
+      EXTERNAL           LSAME, DLAMCH, DLANHS, DLAPY2, DLAPY3
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAG2, AB_DLARFG, AB_DLARTG, AB_DLASET, AB_D
-     $LASV2, AB_DROT,
-     $                   AB_XERBLA
+      EXTERNAL           DLAG2, DLARFG, DLARTG, DLASET, DLASV2, DROT,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -366,36 +363,36 @@
 *
 *     Decode JOB, COMPQ, COMPZ
 *
-      IF( AB_LSAME( JOB, 'E' ) ) THEN
+      IF( LSAME( JOB, 'E' ) ) THEN
          ILSCHR = .FALSE.
          ISCHUR = 1
-      ELSE IF( AB_LSAME( JOB, 'S' ) ) THEN
+      ELSE IF( LSAME( JOB, 'S' ) ) THEN
          ILSCHR = .TRUE.
          ISCHUR = 2
       ELSE
          ISCHUR = 0
       END IF
 *
-      IF( AB_LSAME( COMPQ, 'N' ) ) THEN
+      IF( LSAME( COMPQ, 'N' ) ) THEN
          ILQ = .FALSE.
          ICOMPQ = 1
-      ELSE IF( AB_LSAME( COMPQ, 'V' ) ) THEN
+      ELSE IF( LSAME( COMPQ, 'V' ) ) THEN
          ILQ = .TRUE.
          ICOMPQ = 2
-      ELSE IF( AB_LSAME( COMPQ, 'I' ) ) THEN
+      ELSE IF( LSAME( COMPQ, 'I' ) ) THEN
          ILQ = .TRUE.
          ICOMPQ = 3
       ELSE
          ICOMPQ = 0
       END IF
 *
-      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
+      IF( LSAME( COMPZ, 'N' ) ) THEN
          ILZ = .FALSE.
          ICOMPZ = 1
-      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
          ILZ = .TRUE.
          ICOMPZ = 2
-      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
          ILZ = .TRUE.
          ICOMPZ = 3
       ELSE
@@ -431,7 +428,7 @@
          INFO = -19
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DHGEQZ', -INFO )
+         CALL XERBLA( 'DHGEQZ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -447,9 +444,9 @@
 *     Initialize Q and Z
 *
       IF( ICOMPQ.EQ.3 )
-     $   CALL AB_DLASET( 'Full', N, N, ZERO, ONE, Q, LDQ )
+     $   CALL DLASET( 'Full', N, N, ZERO, ONE, Q, LDQ )
       IF( ICOMPZ.EQ.3 )
-     $   CALL AB_DLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
+     $   CALL DLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
 *
 *     Machine Constants
 *
@@ -457,8 +454,8 @@
       SAFMIN = DLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       ULP = DLAMCH( 'E' )*DLAMCH( 'B' )
-      ANORM = AB_DLANHS( 'F', IN, H( ILO, ILO ), LDH, WORK )
-      BNORM = AB_DLANHS( 'F', IN, T( ILO, ILO ), LDT, WORK )
+      ANORM = DLANHS( 'F', IN, H( ILO, ILO ), LDH, WORK )
+      BNORM = DLANHS( 'F', IN, T( ILO, ILO ), LDT, WORK )
       ATOL = MAX( SAFMIN, ULP*ANORM )
       BTOL = MAX( SAFMIN, ULP*BNORM )
       ASCALE = ONE / MAX( SAFMIN, ANORM )
@@ -591,16 +588,15 @@
                IF( ILAZRO .OR. ILAZR2 ) THEN
                   DO 40 JCH = J, ILAST - 1
                      TEMP = H( JCH, JCH )
-                     CALL AB_DLARTG( TEMP, H( JCH+1, JCH ), C, S,
+                     CALL DLARTG( TEMP, H( JCH+1, JCH ), C, S,
      $                            H( JCH, JCH ) )
                      H( JCH+1, JCH ) = ZERO
-                     CALL AB_DROT( ILASTM-JCH, H( JCH, JCH+1 ), LDH,
+                     CALL DROT( ILASTM-JCH, H( JCH, JCH+1 ), LDH,
      $                          H( JCH+1, JCH+1 ), LDH, C, S )
-                     CALL AB_DROT( ILASTM-JCH, T( JCH, JCH+1 ), LDT,
+                     CALL DROT( ILASTM-JCH, T( JCH, JCH+1 ), LDT,
      $                          T( JCH+1, JCH+1 ), LDT, C, S )
                      IF( ILQ )
-     $                  CALL AB_DROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 
-     $1,
+     $                  CALL DROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
      $                             C, S )
                      IF( ILAZR2 )
      $                  H( JCH, JCH-1 ) = H( JCH, JCH-1 )*C
@@ -623,30 +619,27 @@
 *
                   DO 50 JCH = J, ILAST - 1
                      TEMP = T( JCH, JCH+1 )
-                     CALL AB_DLARTG( TEMP, T( JCH+1, JCH+1 ), C, S,
+                     CALL DLARTG( TEMP, T( JCH+1, JCH+1 ), C, S,
      $                            T( JCH, JCH+1 ) )
                      T( JCH+1, JCH+1 ) = ZERO
                      IF( JCH.LT.ILASTM-1 )
-     $                  CALL AB_DROT( ILASTM-JCH-1, T( JCH, JCH+2 ), LDT
-     $,
+     $                  CALL DROT( ILASTM-JCH-1, T( JCH, JCH+2 ), LDT,
      $                             T( JCH+1, JCH+2 ), LDT, C, S )
-                     CALL AB_DROT( ILASTM-JCH+2, H( JCH, JCH-1 ), LDH,
+                     CALL DROT( ILASTM-JCH+2, H( JCH, JCH-1 ), LDH,
      $                          H( JCH+1, JCH-1 ), LDH, C, S )
                      IF( ILQ )
-     $                  CALL AB_DROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 
-     $1,
+     $                  CALL DROT( N, Q( 1, JCH ), 1, Q( 1, JCH+1 ), 1,
      $                             C, S )
                      TEMP = H( JCH+1, JCH )
-                     CALL AB_DLARTG( TEMP, H( JCH+1, JCH-1 ), C, S,
+                     CALL DLARTG( TEMP, H( JCH+1, JCH-1 ), C, S,
      $                            H( JCH+1, JCH ) )
                      H( JCH+1, JCH-1 ) = ZERO
-                     CALL AB_DROT( JCH+1-IFRSTM, H( IFRSTM, JCH ), 1,
+                     CALL DROT( JCH+1-IFRSTM, H( IFRSTM, JCH ), 1,
      $                          H( IFRSTM, JCH-1 ), 1, C, S )
-                     CALL AB_DROT( JCH-IFRSTM, T( IFRSTM, JCH ), 1,
+                     CALL DROT( JCH-IFRSTM, T( IFRSTM, JCH ), 1,
      $                          T( IFRSTM, JCH-1 ), 1, C, S )
                      IF( ILZ )
-     $                  CALL AB_DROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ), 
-     $1,
+     $                  CALL DROT( N, Z( 1, JCH ), 1, Z( 1, JCH-1 ), 1,
      $                             C, S )
    50             CONTINUE
                   GO TO 70
@@ -673,16 +666,15 @@
 *
    70    CONTINUE
          TEMP = H( ILAST, ILAST )
-         CALL AB_DLARTG( TEMP, H( ILAST, ILAST-1 ), C, S,
+         CALL DLARTG( TEMP, H( ILAST, ILAST-1 ), C, S,
      $                H( ILAST, ILAST ) )
          H( ILAST, ILAST-1 ) = ZERO
-         CALL AB_DROT( ILAST-IFRSTM, H( IFRSTM, ILAST ), 1,
+         CALL DROT( ILAST-IFRSTM, H( IFRSTM, ILAST ), 1,
      $              H( IFRSTM, ILAST-1 ), 1, C, S )
-         CALL AB_DROT( ILAST-IFRSTM, T( IFRSTM, ILAST ), 1,
+         CALL DROT( ILAST-IFRSTM, T( IFRSTM, ILAST ), 1,
      $              T( IFRSTM, ILAST-1 ), 1, C, S )
          IF( ILZ )
-     $      CALL AB_DROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C, S 
-     $)
+     $      CALL DROT( N, Z( 1, ILAST ), 1, Z( 1, ILAST-1 ), 1, C, S )
 *
 *        H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI,
 *                              and BETA
@@ -761,9 +753,9 @@
 *
 *           Shifts based on the generalized eigenvalues of the
 *           bottom-right 2x2 block of A and B. The first eigenvalue
-*           returned by AB_DLAG2 is the Wilkinson shift (AEP p.512),
+*           returned by DLAG2 is the Wilkinson shift (AEP p.512),
 *
-            CALL AB_DLAG2( H( ILAST-1, ILAST-1 ), LDH,
+            CALL DLAG2( H( ILAST-1, ILAST-1 ), LDH,
      $                  T( ILAST-1, ILAST-1 ), LDT, SAFMIN*SAFETY, S1,
      $                  S2, WR, WR2, WI )
 *
@@ -821,14 +813,14 @@
 *
          TEMP = S1*H( ISTART, ISTART ) - WR*T( ISTART, ISTART )
          TEMP2 = S1*H( ISTART+1, ISTART )
-         CALL AB_DLARTG( TEMP, TEMP2, C, S, TEMPR )
+         CALL DLARTG( TEMP, TEMP2, C, S, TEMPR )
 *
 *        Sweep
 *
          DO 190 J = ISTART, ILAST - 1
             IF( J.GT.ISTART ) THEN
                TEMP = H( J, J-1 )
-               CALL AB_DLARTG( TEMP, H( J+1, J-1 ), C, S, H( J, J-1 ) )
+               CALL DLARTG( TEMP, H( J+1, J-1 ), C, S, H( J, J-1 ) )
                H( J+1, J-1 ) = ZERO
             END IF
 *
@@ -849,7 +841,7 @@
             END IF
 *
             TEMP = T( J+1, J+1 )
-            CALL AB_DLARTG( TEMP, T( J+1, J ), C, S, T( J+1, J+1 ) )
+            CALL DLARTG( TEMP, T( J+1, J ), C, S, T( J+1, J+1 ) )
             T( J+1, J ) = ZERO
 *
             DO 160 JR = IFRSTM, MIN( J+2, ILAST )
@@ -891,7 +883,7 @@
 *                   B = (         )  with B11 non-negative.
 *                       (  0  B22 )
 *
-            CALL AB_DLASV2( T( ILAST-1, ILAST-1 ), T( ILAST-1, ILAST ),
+            CALL DLASV2( T( ILAST-1, ILAST-1 ), T( ILAST-1, ILAST ),
      $                   T( ILAST, ILAST ), B22, B11, SR, CR, SL, CL )
 *
             IF( B11.LT.ZERO ) THEN
@@ -901,25 +893,23 @@
                B22 = -B22
             END IF
 *
-            CALL AB_DROT( ILASTM+1-IFIRST, H( ILAST-1, ILAST-1 ), LDH,
+            CALL DROT( ILASTM+1-IFIRST, H( ILAST-1, ILAST-1 ), LDH,
      $                 H( ILAST, ILAST-1 ), LDH, CL, SL )
-            CALL AB_DROT( ILAST+1-IFRSTM, H( IFRSTM, ILAST-1 ), 1,
+            CALL DROT( ILAST+1-IFRSTM, H( IFRSTM, ILAST-1 ), 1,
      $                 H( IFRSTM, ILAST ), 1, CR, SR )
 *
             IF( ILAST.LT.ILASTM )
-     $         CALL AB_DROT( ILASTM-ILAST, T( ILAST-1, ILAST+1 ), LDT,
+     $         CALL DROT( ILASTM-ILAST, T( ILAST-1, ILAST+1 ), LDT,
      $                    T( ILAST, ILAST+1 ), LDT, CL, SL )
             IF( IFRSTM.LT.ILAST-1 )
-     $         CALL AB_DROT( IFIRST-IFRSTM, T( IFRSTM, ILAST-1 ), 1,
+     $         CALL DROT( IFIRST-IFRSTM, T( IFRSTM, ILAST-1 ), 1,
      $                    T( IFRSTM, ILAST ), 1, CR, SR )
 *
             IF( ILQ )
-     $         CALL AB_DROT( N, Q( 1, ILAST-1 ), 1, Q( 1, ILAST ), 1, CL
-     $,
+     $         CALL DROT( N, Q( 1, ILAST-1 ), 1, Q( 1, ILAST ), 1, CL,
      $                    SL )
             IF( ILZ )
-     $         CALL AB_DROT( N, Z( 1, ILAST-1 ), 1, Z( 1, ILAST ), 1, CR
-     $,
+     $         CALL DROT( N, Z( 1, ILAST-1 ), 1, Z( 1, ILAST ), 1, CR,
      $                    SR )
 *
             T( ILAST-1, ILAST-1 ) = B11
@@ -947,7 +937,7 @@
 *
 *           Recompute shift
 *
-            CALL AB_DLAG2( H( ILAST-1, ILAST-1 ), LDH,
+            CALL DLAG2( H( ILAST-1, ILAST-1 ), LDH,
      $                  T( ILAST-1, ILAST-1 ), LDT, SAFMIN*SAFETY, S1,
      $                  TEMP, WR, TEMP2, WI )
 *
@@ -980,12 +970,12 @@
 *
             IF( ABS( C11R )+ABS( C11I )+ABS( C12 ).GT.ABS( C21 )+
      $          ABS( C22R )+ABS( C22I ) ) THEN
-               T1 = AB_DLAPY3( C12, C11R, C11I )
+               T1 = DLAPY3( C12, C11R, C11I )
                CZ = C12 / T1
                SZR = -C11R / T1
                SZI = -C11I / T1
             ELSE
-               CZ = AB_DLAPY2( C22R, C22I )
+               CZ = DLAPY2( C22R, C22I )
                IF( CZ.LE.SAFMIN ) THEN
                   CZ = ZERO
                   SZR = ONE
@@ -993,7 +983,7 @@
                ELSE
                   TEMPR = C22R / CZ
                   TEMPI = C22I / CZ
-                  T1 = AB_DLAPY2( CZ, C21 )
+                  T1 = DLAPY2( CZ, C21 )
                   CZ = CZ / T1
                   SZR = -C21*TEMPR / T1
                   SZI = C21*TEMPI / T1
@@ -1018,7 +1008,7 @@
                A1I = SZI*A12
                A2R = CZ*A21 + SZR*A22
                A2I = SZI*A22
-               CQ = AB_DLAPY2( A1R, A1I )
+               CQ = DLAPY2( A1R, A1I )
                IF( CQ.LE.SAFMIN ) THEN
                   CQ = ZERO
                   SQR = ONE
@@ -1030,7 +1020,7 @@
                   SQI = TEMPI*A2R - TEMPR*A2I
                END IF
             END IF
-            T1 = AB_DLAPY3( CQ, SQR, SQI )
+            T1 = DLAPY3( CQ, SQR, SQI )
             CQ = CQ / T1
             SQR = SQR / T1
             SQI = SQI / T1
@@ -1041,10 +1031,10 @@
             TEMPI = SQR*SZI + SQI*SZR
             B1R = CQ*CZ*B11 + TEMPR*B22
             B1I = TEMPI*B22
-            B1A = AB_DLAPY2( B1R, B1I )
+            B1A = DLAPY2( B1R, B1I )
             B2R = CQ*CZ*B22 + TEMPR*B11
             B2I = -TEMPI*B11
-            B2A = AB_DLAPY2( B2R, B2I )
+            B2A = DLAPY2( B2R, B2I )
 *
 *           Normalize so beta > 0, and Im( alpha1 ) > 0
 *
@@ -1114,7 +1104,7 @@
 *
             ISTART = IFIRST
 *
-            CALL AB_DLARFG( 3, V( 1 ), V( 2 ), 1, TAU )
+            CALL DLARFG( 3, V( 1 ), V( 2 ), 1, TAU )
             V( 1 ) = ONE
 *
 *           Sweep
@@ -1130,7 +1120,7 @@
                   V( 2 ) = H( J+1, J-1 )
                   V( 3 ) = H( J+2, J-1 )
 *
-                  CALL AB_DLARFG( 3, H( J, J-1 ), V( 2 ), 1, TAU )
+                  CALL DLARFG( 3, H( J, J-1 ), V( 2 ), 1, TAU )
                   V( 1 ) = ONE
                   H( J+1, J-1 ) = ZERO
                   H( J+2, J-1 ) = ZERO
@@ -1275,7 +1265,7 @@
 *
             J = ILAST - 1
             TEMP = H( J, J-1 )
-            CALL AB_DLARTG( TEMP, H( J+1, J-1 ), C, S, H( J, J-1 ) )
+            CALL DLARTG( TEMP, H( J+1, J-1 ), C, S, H( J, J-1 ) )
             H( J+1, J-1 ) = ZERO
 *
             DO 300 JC = J, ILASTM
@@ -1297,7 +1287,7 @@
 *           Rotations from the right.
 *
             TEMP = T( J+1, J+1 )
-            CALL AB_DLARTG( TEMP, T( J+1, J ), C, S, T( J+1, J+1 ) )
+            CALL DLARTG( TEMP, T( J+1, J ), C, S, T( J+1, J+1 ) )
             T( J+1, J ) = ZERO
 *
             DO 320 JR = IFRSTM, ILAST
@@ -1372,6 +1362,6 @@
       WORK( 1 ) = DBLE( N )
       RETURN
 *
-*     End of AB_DHGEQZ
+*     End of DHGEQZ
 *
       END

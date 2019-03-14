@@ -1,4 +1,4 @@
-*> \brief \b AB_DLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to real tridiagonal form by an orthogonal similarity transformation.
+*> \brief \b DLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to real tridiagonal form by an orthogonal similarity transformation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLATRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLATRD.f">
+*> Download DLATRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLATRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLATRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
+*       SUBROUTINE DLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,17 +34,17 @@
 *>
 *> \verbatim
 *>
-*> AB_DLATRD reduces NB rows and columns of a real symmetric matrix A to
+*> DLATRD reduces NB rows and columns of a real symmetric matrix A to
 *> symmetric tridiagonal form by an orthogonal similarity
 *> transformation Q**T * A * Q, and returns the matrices V and W which are
 *> needed to apply the transformation to the unreduced part of A.
 *>
-*> If UPLO = 'U', AB_DLATRD reduces the last NB rows and columns of a
+*> If UPLO = 'U', DLATRD reduces the last NB rows and columns of a
 *> matrix, of which the upper triangle is supplied;
-*> if UPLO = 'L', AB_DLATRD reduces the first NB rows and columns of a
+*> if UPLO = 'L', DLATRD reduces the first NB rows and columns of a
 *> matrix, of which the lower triangle is supplied.
 *>
-*> This is an auxiliary routine called by AB_DSYTRD.
+*> This is an auxiliary routine called by DSYTRD.
 *> \endverbatim
 *
 *  Arguments:
@@ -196,7 +196,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
+      SUBROUTINE DLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -222,13 +222,12 @@
       DOUBLE PRECISION   ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DGEMV, AB_DLARFG, AB_DSCAL, AB_DSY
-     $MV
+      EXTERNAL           DAXPY, DGEMV, DLARFG, DSCAL, DSYMV
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DDOT
-      EXTERNAL           AB_LSAME, AB_DDOT
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DDOT
+      EXTERNAL           LSAME, DDOT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -240,7 +239,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Reduce last NB columns of upper triangle
 *
@@ -250,10 +249,9 @@
 *
 *              Update A(1:i,i)
 *
-               CALL AB_DGEMV( 'No transpose', I, N-I, -ONE, A( 1, I+1 ),
+               CALL DGEMV( 'No transpose', I, N-I, -ONE, A( 1, I+1 ),
      $                     LDA, W( I, IW+1 ), LDW, ONE, A( 1, I ), 1 )
-               CALL AB_DGEMV( 'No transpose', I, N-I, -ONE, W( 1, IW+1 )
-     $,
+               CALL DGEMV( 'No transpose', I, N-I, -ONE, W( 1, IW+1 ),
      $                     LDW, A( I, I+1 ), LDA, ONE, A( 1, I ), 1 )
             END IF
             IF( I.GT.1 ) THEN
@@ -261,33 +259,30 @@
 *              Generate elementary reflector H(i) to annihilate
 *              A(1:i-2,i)
 *
-               CALL AB_DLARFG( I-1, A( I-1, I ), A( 1, I ), 1, TAU( I-1 
-     $) )
+               CALL DLARFG( I-1, A( I-1, I ), A( 1, I ), 1, TAU( I-1 ) )
                E( I-1 ) = A( I-1, I )
                A( I-1, I ) = ONE
 *
 *              Compute W(1:i-1,i)
 *
-               CALL AB_DSYMV( 'Upper', I-1, ONE, A, LDA, A( 1, I ), 1,
+               CALL DSYMV( 'Upper', I-1, ONE, A, LDA, A( 1, I ), 1,
      $                     ZERO, W( 1, IW ), 1 )
                IF( I.LT.N ) THEN
-                  CALL AB_DGEMV( 'Transpose', I-1, N-I, ONE, W( 1, IW+1 
-     $),
+                  CALL DGEMV( 'Transpose', I-1, N-I, ONE, W( 1, IW+1 ),
      $                        LDW, A( 1, I ), 1, ZERO, W( I+1, IW ), 1 )
-                  CALL AB_DGEMV( 'No transpose', I-1, N-I, -ONE,
+                  CALL DGEMV( 'No transpose', I-1, N-I, -ONE,
      $                        A( 1, I+1 ), LDA, W( I+1, IW ), 1, ONE,
      $                        W( 1, IW ), 1 )
-                  CALL AB_DGEMV( 'Transpose', I-1, N-I, ONE, A( 1, I+1 )
-     $,
+                  CALL DGEMV( 'Transpose', I-1, N-I, ONE, A( 1, I+1 ),
      $                        LDA, A( 1, I ), 1, ZERO, W( I+1, IW ), 1 )
-                  CALL AB_DGEMV( 'No transpose', I-1, N-I, -ONE,
+                  CALL DGEMV( 'No transpose', I-1, N-I, -ONE,
      $                        W( 1, IW+1 ), LDW, W( I+1, IW ), 1, ONE,
      $                        W( 1, IW ), 1 )
                END IF
-               CALL AB_DSCAL( I-1, TAU( I-1 ), W( 1, IW ), 1 )
-               ALPHA = -HALF*TAU( I-1 )*AB_DDOT( I-1, W( 1, IW ), 1,
+               CALL DSCAL( I-1, TAU( I-1 ), W( 1, IW ), 1 )
+               ALPHA = -HALF*TAU( I-1 )*DDOT( I-1, W( 1, IW ), 1,
      $                 A( 1, I ), 1 )
-               CALL AB_DAXPY( I-1, ALPHA, A( 1, I ), 1, W( 1, IW ), 1 )
+               CALL DAXPY( I-1, ALPHA, A( 1, I ), 1, W( 1, IW ), 1 )
             END IF
 *
    10    CONTINUE
@@ -299,42 +294,36 @@
 *
 *           Update A(i:n,i)
 *
-            CALL AB_DGEMV( 'No transpose', N-I+1, I-1, -ONE, A( I, 1 ),
+            CALL DGEMV( 'No transpose', N-I+1, I-1, -ONE, A( I, 1 ),
      $                  LDA, W( I, 1 ), LDW, ONE, A( I, I ), 1 )
-            CALL AB_DGEMV( 'No transpose', N-I+1, I-1, -ONE, W( I, 1 ),
+            CALL DGEMV( 'No transpose', N-I+1, I-1, -ONE, W( I, 1 ),
      $                  LDW, A( I, 1 ), LDA, ONE, A( I, I ), 1 )
             IF( I.LT.N ) THEN
 *
 *              Generate elementary reflector H(i) to annihilate
 *              A(i+2:n,i)
 *
-               CALL AB_DLARFG( N-I, A( I+1, I ), A( MIN( I+2, N ), I ), 
-     $1,
+               CALL DLARFG( N-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1,
      $                      TAU( I ) )
                E( I ) = A( I+1, I )
                A( I+1, I ) = ONE
 *
 *              Compute W(i+1:n,i)
 *
-               CALL AB_DSYMV( 'Lower', N-I, ONE, A( I+1, I+1 ), LDA,
+               CALL DSYMV( 'Lower', N-I, ONE, A( I+1, I+1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, W( I+1, I ), 1 )
-               CALL AB_DGEMV( 'Transpose', N-I, I-1, ONE, W( I+1, 1 ), L
-     $DW,
+               CALL DGEMV( 'Transpose', N-I, I-1, ONE, W( I+1, 1 ), LDW,
      $                     A( I+1, I ), 1, ZERO, W( 1, I ), 1 )
-               CALL AB_DGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1, 1 
-     $),
+               CALL DGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1, 1 ),
      $                     LDA, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
-               CALL AB_DGEMV( 'Transpose', N-I, I-1, ONE, A( I+1, 1 ), L
-     $DA,
+               CALL DGEMV( 'Transpose', N-I, I-1, ONE, A( I+1, 1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, W( 1, I ), 1 )
-               CALL AB_DGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1, 1 
-     $),
+               CALL DGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1, 1 ),
      $                     LDW, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
-               CALL AB_DSCAL( N-I, TAU( I ), W( I+1, I ), 1 )
-               ALPHA = -HALF*TAU( I )*AB_DDOT( N-I, W( I+1, I ), 1,
+               CALL DSCAL( N-I, TAU( I ), W( I+1, I ), 1 )
+               ALPHA = -HALF*TAU( I )*DDOT( N-I, W( I+1, I ), 1,
      $                 A( I+1, I ), 1 )
-               CALL AB_DAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ), 1
-     $ )
+               CALL DAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ), 1 )
             END IF
 *
    20    CONTINUE
@@ -342,6 +331,6 @@
 *
       RETURN
 *
-*     End of AB_DLATRD
+*     End of DLATRD
 *
       END

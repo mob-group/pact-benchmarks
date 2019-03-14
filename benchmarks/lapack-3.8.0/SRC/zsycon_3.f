@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSYCON_3
+*> \brief \b ZSYCON_3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZSYCON_3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSYCON_3.f">
+*> Download ZSYCON_3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsycon_3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSYCON_3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsycon_3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSYCON_3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsycon_3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSYCON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
+*       SUBROUTINE ZSYCON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
 *                            WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *  =============
 *>
 *> \verbatim
-*> AB_ZSYCON_3 estimates the reciprocal of the condition number (in the
+*> ZSYCON_3 estimates the reciprocal of the condition number (in the
 *> 1-norm) of a complex symmetric matrix A using the factorization
-*> computed by AB_ZSYTRF_RK or AB_ZSYTRF_BK:
+*> computed by ZSYTRF_RK or ZSYTRF_BK:
 *>
 *>    A = P*U*D*(U**T)*(P**T) or A = P*L*D*(L**T)*(P**T),
 *>
@@ -49,7 +49,7 @@
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
-*> This routine uses BLAS3 solver AB_ZSYTRS_3.
+*> This routine uses BLAS3 solver ZSYTRS_3.
 *> \endverbatim
 *
 *  Arguments:
@@ -74,7 +74,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          Diagonal of the block diagonal matrix D and factors U or L
-*>          as computed by AB_ZSYTRF_RK and AB_ZSYTRF_BK:
+*>          as computed by ZSYTRF_RK and ZSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -107,7 +107,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_ZSYTRF_RK or AB_ZSYTRF_BK.
+*>          as determined by ZSYTRF_RK or ZSYTRF_BK.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -168,7 +168,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSYCON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
+      SUBROUTINE ZSYCON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
      $                     WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -203,11 +203,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLACN2, AB_ZSYTRS_3, AB_XERBLA
+      EXTERNAL           ZLACN2, ZSYTRS_3, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -217,8 +217,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -228,7 +228,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZSYCON_3', -INFO )
+         CALL XERBLA( 'ZSYCON_3', -INFO )
          RETURN
       END IF
 *
@@ -266,12 +266,12 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL AB_ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
 *
-         CALL AB_ZSYTRS_3( UPLO, N, 1, A, LDA, E, IPIV, WORK, N, INFO )
+         CALL ZSYTRS_3( UPLO, N, 1, A, LDA, E, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
@@ -282,6 +282,6 @@
 *
       RETURN
 *
-*     End of AB_ZSYCON_3
+*     End of ZSYCON_3
 *
       END

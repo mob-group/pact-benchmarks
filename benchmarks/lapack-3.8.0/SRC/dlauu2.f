@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
+*> \brief \b DLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAUU2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAUU2.f">
+*> Download DLAUU2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlauu2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAUU2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlauu2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAUU2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlauu2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAUU2( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE DLAUU2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAUU2 computes the product U * U**T or L**T * L, where the triangular
+*> DLAUU2 computes the product U * U**T or L**T * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -100,7 +100,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAUU2( UPLO, N, A, LDA, INFO )
+      SUBROUTINE DLAUU2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,12 +127,12 @@
       DOUBLE PRECISION   AII
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DDOT
-      EXTERNAL           AB_LSAME, AB_DDOT
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DDOT
+      EXTERNAL           LSAME, DDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DSCAL, AB_XERBLA
+      EXTERNAL           DGEMV, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -142,8 +142,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -151,7 +151,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLAUU2', -INFO )
+         CALL XERBLA( 'DLAUU2', -INFO )
          RETURN
       END IF
 *
@@ -167,13 +167,11 @@
          DO 10 I = 1, N
             AII = A( I, I )
             IF( I.LT.N ) THEN
-               A( I, I ) = AB_DDOT( N-I+1, A( I, I ), LDA, A( I, I ), LD
-     $A )
-               CALL AB_DGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 )
-     $,
+               A( I, I ) = DDOT( N-I+1, A( I, I ), LDA, A( I, I ), LDA )
+               CALL DGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
      $                     LDA, A( I, I+1 ), LDA, AII, A( 1, I ), 1 )
             ELSE
-               CALL AB_DSCAL( I, AII, A( 1, I ), 1 )
+               CALL DSCAL( I, AII, A( 1, I ), 1 )
             END IF
    10    CONTINUE
 *
@@ -184,18 +182,17 @@
          DO 20 I = 1, N
             AII = A( I, I )
             IF( I.LT.N ) THEN
-               A( I, I ) = AB_DDOT( N-I+1, A( I, I ), 1, A( I, I ), 1 )
-               CALL AB_DGEMV( 'Transpose', N-I, I-1, ONE, A( I+1, 1 ), L
-     $DA,
+               A( I, I ) = DDOT( N-I+1, A( I, I ), 1, A( I, I ), 1 )
+               CALL DGEMV( 'Transpose', N-I, I-1, ONE, A( I+1, 1 ), LDA,
      $                     A( I+1, I ), 1, AII, A( I, 1 ), LDA )
             ELSE
-               CALL AB_DSCAL( I, AII, A( I, 1 ), LDA )
+               CALL DSCAL( I, AII, A( I, 1 ), LDA )
             END IF
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_DLAUU2
+*     End of DLAUU2
 *
       END

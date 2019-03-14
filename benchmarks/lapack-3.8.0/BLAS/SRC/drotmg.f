@@ -1,4 +1,4 @@
-*> \brief \b AB_DROTMG
+*> \brief \b DROTMG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+*       SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION DD1,DD2,DX1,DY1
@@ -88,7 +88,7 @@
 *> \ingroup double_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE AB_DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+      SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

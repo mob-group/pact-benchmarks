@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAG2C converts a complex double precision matrix to a complex single precision matrix.
+*> \brief \b ZLAG2C converts a complex double precision matrix to a complex single precision matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAG2C + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAG2C.f">
+*> Download ZLAG2C + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlag2c.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAG2C.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlag2c.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAG2C.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlag2c.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAG2C( M, N, A, LDA, SA, LDSA, INFO )
+*       SUBROUTINE ZLAG2C( M, N, A, LDA, SA, LDSA, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDSA, M, N
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAG2C converts a COMPLEX*16 matrix, SA, to a COMPLEX matrix, A.
+*> ZLAG2C converts a COMPLEX*16 matrix, SA, to a COMPLEX matrix, A.
 *>
 *> RMAX is the overflow for the SINGLE PRECISION arithmetic
-*> AB_ZLAG2C checks that all the entries of A are between -RMAX and
+*> ZLAG2C checks that all the entries of A are between -RMAX and
 *> RMAX. If not the conversion is aborted and a flag is raised.
 *>
 *> This is an auxiliary routine so there is no argument checking.
@@ -105,7 +105,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAG2C( M, N, A, LDA, SA, LDSA, INFO )
+      SUBROUTINE ZLAG2C( M, N, A, LDA, SA, LDSA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,6 +152,6 @@
    30 CONTINUE
       RETURN
 *
-*     End of AB_ZLAG2C
+*     End of ZLAG2C
 *
       END

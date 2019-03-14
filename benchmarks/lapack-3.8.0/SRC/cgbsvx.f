@@ -1,4 +1,4 @@
-*> \brief <b> AB_CGBSVX computes the solution to system of linear equations A * X = B for GB matrices</b>
+*> \brief <b> CGBSVX computes the solution to system of linear equations A * X = B for GB matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGBSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGBSVx.f">
+*> Download CGBSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbsvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGBSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgbsvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGBSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbsvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGBSVX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+*       SUBROUTINE CGBSVX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
 *                          LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
 *                          RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGBSVX uses the LU factorization to compute the solution to a complex
+*> CGBSVX uses the LU factorization to compute the solution to a complex
 *> system of linear equations A * X = B, A**T * X = B, or A**H * X = B,
 *> where A is a band matrix of order N with KL subdiagonals and KU
 *> superdiagonals, and X and B are N-by-NRHS matrices.
@@ -176,7 +176,7 @@
 *>          AFB is COMPLEX array, dimension (LDAFB,N)
 *>          If FACT = 'F', then AFB is an input argument and on entry
 *>          contains details of the LU factorization of the band matrix
-*>          A, as computed by AB_CGBTRF.  U is stored as an upper triangular
+*>          A, as computed by CGBTRF.  U is stored as an upper triangular
 *>          band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
 *>          and the multipliers used during the factorization are stored
 *>          in rows KL+KU+2 to 2*KL+KU+1.  If EQUED .ne. 'N', then AFB is
@@ -202,7 +202,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the factorization A = L*U
-*>          as computed by AB_CGBTRF; row i of the matrix was interchanged
+*>          as computed by CGBTRF; row i of the matrix was interchanged
 *>          with row IPIV(i).
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
@@ -366,7 +366,7 @@
 *> \ingroup complexGBsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_CGBSVX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+      SUBROUTINE CGBSVX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
      $                   LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
      $                   RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
@@ -405,14 +405,13 @@
      $                   ROWCND, RPVGRW, SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANGB, AB_CLANTB, SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANGB, AB_CLANTB, SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANGB, CLANTB, SLAMCH
+      EXTERNAL           LSAME, CLANGB, CLANTB, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CGBCON, AB_CGBEQU, AB_CGBRFS, AB_C
-     $GBTRF, AB_CGBTRS,
-     $                   AB_CLACPY, AB_CLAQGB, AB_XERBLA
+      EXTERNAL           CCOPY, CGBCON, CGBEQU, CGBRFS, CGBTRF, CGBTRS,
+     $                   CLACPY, CLAQGB, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -420,28 +419,27 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      EQUIL = AB_LSAME( FACT, 'E' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      NOFACT = LSAME( FACT, 'N' )
+      EQUIL = LSAME( FACT, 'E' )
+      NOTRAN = LSAME( TRANS, 'N' )
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          ROWEQU = .FALSE.
          COLEQU = .FALSE.
       ELSE
-         ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
-         COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
+         ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
+         COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
          SMLNUM = SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.AB_LSAME( FACT, 'F' ) 
-     $)
+      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -455,8 +453,8 @@
          INFO = -8
       ELSE IF( LDAFB.LT.2*KL+KU+1 ) THEN
          INFO = -10
-      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
-     $         ( ROWEQU .OR. COLEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
+     $         ( ROWEQU .OR. COLEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -12
       ELSE
          IF( ROWEQU ) THEN
@@ -499,7 +497,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGBSVX', -INFO )
+         CALL XERBLA( 'CGBSVX', -INFO )
          RETURN
       END IF
 *
@@ -507,17 +505,16 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL AB_CGBEQU( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+         CALL CGBEQU( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
      $                AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
 *
-            CALL AB_CLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND
-     $,
+            CALL CLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
      $                   AMAX, EQUED )
-            ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
-            COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
+            ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
+            COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
          END IF
       END IF
 *
@@ -546,11 +543,11 @@
          DO 70 J = 1, N
             J1 = MAX( J-KU, 1 )
             J2 = MIN( J+KL, N )
-            CALL AB_CCOPY( J2-J1+1, AB( KU+1-J+J1, J ), 1,
+            CALL CCOPY( J2-J1+1, AB( KU+1-J+J1, J ), 1,
      $                  AFB( KL+KU+1-J+J1, J ), 1 )
    70    CONTINUE
 *
-         CALL AB_CGBTRF( N, N, KL, KU, AFB, LDAFB, IPIV, INFO )
+         CALL CGBTRF( N, N, KL, KU, AFB, LDAFB, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -565,8 +562,7 @@
                   ANORM = MAX( ANORM, ABS( AB( I, J ) ) )
    80          CONTINUE
    90       CONTINUE
-            RPVGRW = AB_CLANTB( 'M', 'U', 'N', INFO, MIN( INFO-1, KL+KU 
-     $),
+            RPVGRW = CLANTB( 'M', 'U', 'N', INFO, MIN( INFO-1, KL+KU ),
      $                       AFB( MAX( 1, KL+KU+2-INFO ), 1 ), LDAFB,
      $                       RWORK )
             IF( RPVGRW.EQ.ZERO ) THEN
@@ -588,30 +584,29 @@
       ELSE
          NORM = 'I'
       END IF
-      ANORM = AB_CLANGB( NORM, N, KL, KU, AB, LDAB, RWORK )
-      RPVGRW = AB_CLANTB( 'M', 'U', 'N', N, KL+KU, AFB, LDAFB, RWORK )
+      ANORM = CLANGB( NORM, N, KL, KU, AB, LDAB, RWORK )
+      RPVGRW = CLANTB( 'M', 'U', 'N', N, KL+KU, AFB, LDAFB, RWORK )
       IF( RPVGRW.EQ.ZERO ) THEN
          RPVGRW = ONE
       ELSE
-         RPVGRW = AB_CLANGB( 'M', N, KL, KU, AB, LDAB, RWORK ) / RPVGRW
+         RPVGRW = CLANGB( 'M', N, KL, KU, AB, LDAB, RWORK ) / RPVGRW
       END IF
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL AB_CGBCON( NORM, N, KL, KU, AFB, LDAFB, IPIV, ANORM, RCOND,
+      CALL CGBCON( NORM, N, KL, KU, AFB, LDAFB, IPIV, ANORM, RCOND,
      $             WORK, RWORK, INFO )
 *
 *     Compute the solution matrix X.
 *
-      CALL AB_CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_CGBTRS( TRANS, N, KL, KU, NRHS, AFB, LDAFB, IPIV, X, LDX,
+      CALL CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL CGBTRS( TRANS, N, KL, KU, NRHS, AFB, LDAFB, IPIV, X, LDX,
      $             INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL AB_CGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB, IPIV
-     $,
+      CALL CGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB, IPIV,
      $             B, LDB, X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original
@@ -647,6 +642,6 @@
       RWORK( 1 ) = RPVGRW
       RETURN
 *
-*     End of AB_CGBSVX
+*     End of CGBSVX
 *
       END

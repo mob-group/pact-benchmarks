@@ -1,4 +1,4 @@
-*> \brief \b AB_DGBBRD
+*> \brief \b DGBBRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGBBRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGBBRD.f">
+*> Download DGBBRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbbrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGBBRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbbrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGBBRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbbrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
+*       SUBROUTINE DGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
 *                          LDQ, PT, LDPT, C, LDC, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGBBRD reduces a real general m-by-n band matrix A to upper
+*> DGBBRD reduces a real general m-by-n band matrix A to upper
 *> bidiagonal form B by an orthogonal transformation: Q**T * A * P = B.
 *>
 *> The routine computes B, and optionally forms Q or P**T, or computes
@@ -184,7 +184,7 @@
 *> \ingroup doubleGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
+      SUBROUTINE DGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
      $                   LDQ, PT, LDPT, C, LDC, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -214,28 +214,26 @@
       DOUBLE PRECISION   RA, RB, RC, RS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLARGV, AB_DLARTG, AB_DLARTV, AB_DLASET, AB_
-     $DROT, AB_XERBLA
+      EXTERNAL           DLARGV, DLARTG, DLARTV, DLASET, DROT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
-      WANTB = AB_LSAME( VECT, 'B' )
-      WANTQ = AB_LSAME( VECT, 'Q' ) .OR. WANTB
-      WANTPT = AB_LSAME( VECT, 'P' ) .OR. WANTB
+      WANTB = LSAME( VECT, 'B' )
+      WANTQ = LSAME( VECT, 'Q' ) .OR. WANTB
+      WANTPT = LSAME( VECT, 'P' ) .OR. WANTB
       WANTC = NCC.GT.0
       KLU1 = KL + KU + 1
       INFO = 0
-      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.AB_LSAME( VECT, 'N' ) 
-     $)
+      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.LSAME( VECT, 'N' ) )
      $     THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
@@ -258,16 +256,16 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGBBRD', -INFO )
+         CALL XERBLA( 'DGBBRD', -INFO )
          RETURN
       END IF
 *
 *     Initialize Q and P**T to the unit matrix, if needed
 *
       IF( WANTQ )
-     $   CALL AB_DLASET( 'Full', M, M, ZERO, ONE, Q, LDQ )
+     $   CALL DLASET( 'Full', M, M, ZERO, ONE, Q, LDQ )
       IF( WANTPT )
-     $   CALL AB_DLASET( 'Full', N, N, ZERO, ONE, PT, LDPT )
+     $   CALL DLASET( 'Full', N, N, ZERO, ONE, PT, LDPT )
 *
 *     Quick return if possible.
 *
@@ -320,7 +318,7 @@
 *              which have been created below the band
 *
                IF( NR.GT.0 )
-     $            CALL AB_DLARGV( NR, AB( KLU1, J1-KLM-1 ), INCA,
+     $            CALL DLARGV( NR, AB( KLU1, J1-KLM-1 ), INCA,
      $                         WORK( J1 ), KB1, WORK( MN+J1 ), KB1 )
 *
 *              apply plane rotations from the left
@@ -332,8 +330,7 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL AB_DLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA
-     $,
+     $               CALL DLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA,
      $                            AB( KLU1-L+1, J1-KLM+L-1 ), INCA,
      $                            WORK( MN+J1 ), WORK( J1 ), KB1 )
    10          CONTINUE
@@ -344,12 +341,12 @@
 *                    generate plane rotation to annihilate a(i+ml-1,i)
 *                    within the band, and apply rotation from the left
 *
-                     CALL AB_DLARTG( AB( KU+ML-1, I ), AB( KU+ML, I ),
+                     CALL DLARTG( AB( KU+ML-1, I ), AB( KU+ML, I ),
      $                            WORK( MN+I+ML-1 ), WORK( I+ML-1 ),
      $                            RA )
                      AB( KU+ML-1, I ) = RA
                      IF( I.LT.N )
-     $                  CALL AB_DROT( MIN( KU+ML-2, N-I ),
+     $                  CALL DROT( MIN( KU+ML-2, N-I ),
      $                             AB( KU+ML-2, I+1 ), LDAB-1,
      $                             AB( KU+ML-1, I+1 ), LDAB-1,
      $                             WORK( MN+I+ML-1 ), WORK( I+ML-1 ) )
@@ -363,7 +360,7 @@
 *                 accumulate product of plane rotations in Q
 *
                   DO 20 J = J1, J2, KB1
-                     CALL AB_DROT( M, Q( 1, J-1 ), 1, Q( 1, J ), 1,
+                     CALL DROT( M, Q( 1, J-1 ), 1, Q( 1, J ), 1,
      $                          WORK( MN+J ), WORK( J ) )
    20             CONTINUE
                END IF
@@ -373,8 +370,7 @@
 *                 apply plane rotations to C
 *
                   DO 30 J = J1, J2, KB1
-                     CALL AB_DROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC
-     $,
+                     CALL DROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC,
      $                          WORK( MN+J ), WORK( J ) )
    30             CONTINUE
                END IF
@@ -400,7 +396,7 @@
 *              which have been generated above the band
 *
                IF( NR.GT.0 )
-     $            CALL AB_DLARGV( NR, AB( 1, J1+KUN-1 ), INCA,
+     $            CALL DLARGV( NR, AB( 1, J1+KUN-1 ), INCA,
      $                         WORK( J1+KUN ), KB1, WORK( MN+J1+KUN ),
      $                         KB1 )
 *
@@ -413,7 +409,7 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL AB_DLARTV( NRT, AB( L+1, J1+KUN-1 ), INCA,
+     $               CALL DLARTV( NRT, AB( L+1, J1+KUN-1 ), INCA,
      $                            AB( L, J1+KUN ), INCA,
      $                            WORK( MN+J1+KUN ), WORK( J1+KUN ),
      $                            KB1 )
@@ -425,12 +421,12 @@
 *                    generate plane rotation to annihilate a(i,i+mu-1)
 *                    within the band, and apply rotation from the right
 *
-                     CALL AB_DLARTG( AB( KU-MU+3, I+MU-2 ),
+                     CALL DLARTG( AB( KU-MU+3, I+MU-2 ),
      $                            AB( KU-MU+2, I+MU-1 ),
      $                            WORK( MN+I+MU-1 ), WORK( I+MU-1 ),
      $                            RA )
                      AB( KU-MU+3, I+MU-2 ) = RA
-                     CALL AB_DROT( MIN( KL+MU-2, M-I ),
+                     CALL DROT( MIN( KL+MU-2, M-I ),
      $                          AB( KU-MU+4, I+MU-2 ), 1,
      $                          AB( KU-MU+3, I+MU-1 ), 1,
      $                          WORK( MN+I+MU-1 ), WORK( I+MU-1 ) )
@@ -444,7 +440,7 @@
 *                 accumulate product of plane rotations in P**T
 *
                   DO 60 J = J1, J2, KB1
-                     CALL AB_DROT( N, PT( J+KUN-1, 1 ), LDPT,
+                     CALL DROT( N, PT( J+KUN-1, 1 ), LDPT,
      $                          PT( J+KUN, 1 ), LDPT, WORK( MN+J+KUN ),
      $                          WORK( J+KUN ) )
    60             CONTINUE
@@ -485,16 +481,16 @@
 *        and off-diagonal elements in E
 *
          DO 100 I = 1, MIN( M-1, N )
-            CALL AB_DLARTG( AB( 1, I ), AB( 2, I ), RC, RS, RA )
+            CALL DLARTG( AB( 1, I ), AB( 2, I ), RC, RS, RA )
             D( I ) = RA
             IF( I.LT.N ) THEN
                E( I ) = RS*AB( 1, I+1 )
                AB( 1, I+1 ) = RC*AB( 1, I+1 )
             END IF
             IF( WANTQ )
-     $         CALL AB_DROT( M, Q( 1, I ), 1, Q( 1, I+1 ), 1, RC, RS )
+     $         CALL DROT( M, Q( 1, I ), 1, Q( 1, I+1 ), 1, RC, RS )
             IF( WANTC )
-     $         CALL AB_DROT( NCC, C( I, 1 ), LDC, C( I+1, 1 ), LDC, RC,
+     $         CALL DROT( NCC, C( I, 1 ), LDC, C( I+1, 1 ), LDC, RC,
      $                    RS )
   100    CONTINUE
          IF( M.LE.N )
@@ -511,14 +507,14 @@
 *
             RB = AB( KU, M+1 )
             DO 110 I = M, 1, -1
-               CALL AB_DLARTG( AB( KU+1, I ), RB, RC, RS, RA )
+               CALL DLARTG( AB( KU+1, I ), RB, RC, RS, RA )
                D( I ) = RA
                IF( I.GT.1 ) THEN
                   RB = -RS*AB( KU, I )
                   E( I-1 ) = RC*AB( KU, I )
                END IF
                IF( WANTPT )
-     $            CALL AB_DROT( N, PT( I, 1 ), LDPT, PT( M+1, 1 ), LDPT,
+     $            CALL DROT( N, PT( I, 1 ), LDPT, PT( M+1, 1 ), LDPT,
      $                       RC, RS )
   110       CONTINUE
          ELSE
@@ -546,6 +542,6 @@
       END IF
       RETURN
 *
-*     End of AB_DGBBRD
+*     End of DGBBRD
 *
       END

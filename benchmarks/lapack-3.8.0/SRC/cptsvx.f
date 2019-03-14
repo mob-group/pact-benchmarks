@@ -1,4 +1,4 @@
-*> \brief <b> AB_CPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
+*> \brief <b> CPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPTSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPTSVx.f">
+*> Download CPTSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cptsvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPTSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cptsvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPTSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptsvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+*       SUBROUTINE CPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
 *                          RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPTSVX uses the factorization A = L*D*L**H to compute the solution
+*> CPTSVX uses the factorization A = L*D*L**H to compute the solution
 *> to a complex system of linear equations A*X = B, where A is an
 *> N-by-N Hermitian positive definite tridiagonal matrix and X and B
 *> are N-by-NRHS matrices.
@@ -231,7 +231,7 @@
 *> \ingroup complexPTsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_CPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+      SUBROUTINE CPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
      $                   RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -262,14 +262,13 @@
       REAL               ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANHT, SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANHT, SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANHT, SLAMCH
+      EXTERNAL           LSAME, CLANHT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CLACPY, AB_CPTCON, AB_CPTRFS, AB_C
-     $PTTRF, AB_CPTTRS,
-     $                   AB_SCOPY, AB_XERBLA
+      EXTERNAL           CCOPY, CLACPY, CPTCON, CPTRFS, CPTTRF, CPTTRS,
+     $                   SCOPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -279,8 +278,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
+      NOFACT = LSAME( FACT, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -292,7 +291,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPTSVX', -INFO )
+         CALL XERBLA( 'CPTSVX', -INFO )
          RETURN
       END IF
 *
@@ -300,10 +299,10 @@
 *
 *        Compute the L*D*L**H (or U**H*D*U) factorization of A.
 *
-         CALL AB_SCOPY( N, D, 1, DF, 1 )
+         CALL SCOPY( N, D, 1, DF, 1 )
          IF( N.GT.1 )
-     $      CALL AB_CCOPY( N-1, E, 1, EF, 1 )
-         CALL AB_CPTTRF( N, DF, EF, INFO )
+     $      CALL CCOPY( N-1, E, 1, EF, 1 )
+         CALL CPTTRF( N, DF, EF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -315,22 +314,21 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = AB_CLANHT( '1', N, D, E )
+      ANORM = CLANHT( '1', N, D, E )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL AB_CPTCON( N, DF, EF, ANORM, RCOND, RWORK, INFO )
+      CALL CPTCON( N, DF, EF, ANORM, RCOND, RWORK, INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL AB_CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_CPTTRS( 'Lower', N, NRHS, DF, EF, X, LDX, INFO )
+      CALL CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL CPTTRS( 'Lower', N, NRHS, DF, EF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL AB_CPTRFS( 'Lower', N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FE
-     $RR,
+      CALL CPTRFS( 'Lower', N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,
      $             BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
@@ -340,6 +338,6 @@
 *
       RETURN
 *
-*     End of AB_CPTSVX
+*     End of CPTSVX
 *
       END

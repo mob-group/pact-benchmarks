@@ -1,4 +1,4 @@
-*> \brief \b AB_SLA_SYRCOND estimates the Skeel condition number for a symmetric indefinite matrix.
+*> \brief \b SLA_SYRCOND estimates the Skeel condition number for a symmetric indefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLA_SYRCOND + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLA_SYRCOND.f">
+*> Download SLA_SYRCOND + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_syrcond.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLA_SYRCOND.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_syrcond.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLA_SYRCOND.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_syrcond.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION AB_SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV, CMODE,
+*       REAL FUNCTION SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV, CMODE,
 *                                  C, INFO, WORK, IWORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_SLA_SYRCOND estimates the Skeel condition number of  op(A) * op2(C)
+*>    SLA_SYRCOND estimates the Skeel condition number of  op(A) * op2(C)
 *>    where op2 is determined by CMODE as follows
 *>    CMODE =  1    op2(C) = C
 *>    CMODE =  0    op2(C) = I
@@ -80,7 +80,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>     The block diagonal matrix D and the multipliers used to
-*>     obtain the factor U or L as computed by AB_SSYTRF.
+*>     obtain the factor U or L as computed by SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -93,7 +93,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     Details of the interchanges and the block structure of D
-*>     as determined by AB_SSYTRF.
+*>     as determined by SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] CMODE
@@ -143,8 +143,7 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      REAL FUNCTION AB_SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV, CMO
-     $DE,
+      REAL FUNCTION SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV, CMODE,
      $                           C, INFO, WORK, IWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -173,19 +172,19 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLACN2, AB_XERBLA, AB_SSYTRS
+      EXTERNAL           SLACN2, XERBLA, SSYTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      AB_SLA_SYRCOND = 0.0
+      SLA_SYRCOND = 0.0
 *
       INFO = 0
       IF( N.LT.0 ) THEN
@@ -196,15 +195,15 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLA_SYRCOND', -INFO )
+         CALL XERBLA( 'SLA_SYRCOND', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 ) THEN
-         AB_SLA_SYRCOND = 1.0
+         SLA_SYRCOND = 1.0
          RETURN
       END IF
       UP = .FALSE.
-      IF ( AB_LSAME( UPLO, 'U' ) ) UP = .TRUE.
+      IF ( LSAME( UPLO, 'U' ) ) UP = .TRUE.
 *
 *     Compute the equilibration matrix R such that
 *     inv(R)*A*C has unit 1-norm.
@@ -273,7 +272,7 @@
 
       KASE = 0
    10 CONTINUE
-      CALL AB_SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -284,11 +283,9 @@
             END DO
 
             IF ( UP ) THEN
-               CALL AB_SSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO 
-     $)
+               CALL SSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             ELSE
-               CALL AB_SSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO 
-     $)
+               CALL SSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             ENDIF
 *
 *           Multiply by inv(C).
@@ -317,11 +314,9 @@
             END IF
 
             IF ( UP ) THEN
-               CALL AB_SSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO 
-     $)
+               CALL SSYTRS( 'U', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             ELSE
-               CALL AB_SSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO 
-     $)
+               CALL SSYTRS( 'L', N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             ENDIF
 *
 *           Multiply by R.
@@ -337,7 +332,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0 )
-     $   AB_SLA_SYRCOND = ( 1.0 / AINVNM )
+     $   SLA_SYRCOND = ( 1.0 / AINVNM )
 *
       RETURN
 *

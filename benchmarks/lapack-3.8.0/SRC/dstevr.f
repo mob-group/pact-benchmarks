@@ -1,4 +1,4 @@
-*> \brief <b> AB_DSTEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> DSTEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSTEVR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSTEVr.f">
+*> Download DSTEVR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstevr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSTEVr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstevr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSTEVr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstevr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
+*       SUBROUTINE DSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
 *                          M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
 *                          LIWORK, INFO )
 *
@@ -38,13 +38,13 @@
 *>
 *> \verbatim
 *>
-*> AB_DSTEVR computes selected eigenvalues and, optionally, eigenvectors
+*> DSTEVR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T.  Eigenvalues and
 *> eigenvectors can be selected by specifying either a range of values
 *> or a range of indices for the desired eigenvalues.
 *>
-*> Whenever possible, AB_DSTEVR calls AB_DSTEMR to compute the
-*> eigenspectrum using Relatively Robust Representations.  AB_DSTEMR
+*> Whenever possible, DSTEVR calls DSTEMR to compute the
+*> eigenspectrum using Relatively Robust Representations.  DSTEMR
 *> computes eigenvalues by the dqds algorithm, while orthogonal
 *> eigenvectors are computed from various "good" L D L^T representations
 *> (also known as Relatively Robust Representations). Gram-Schmidt
@@ -69,12 +69,12 @@
 *> UC Berkeley, May 1997.
 *>
 *>
-*> Note 1 : AB_DSTEVR calls AB_DSTEMR when the full spectrum is requested
+*> Note 1 : DSTEVR calls DSTEMR when the full spectrum is requested
 *> on machines which conform to the ieee-754 floating point standard.
-*> AB_DSTEVR calls AB_DSTEBZ and AB_DSTEIN on non-ieee machines and
+*> DSTEVR calls DSTEBZ and DSTEIN on non-ieee machines and
 *> when partial spectrum requests are made.
 *>
-*> Normal execution of AB_DSTEMR may create NaNs and infinities and
+*> Normal execution of DSTEMR may create NaNs and infinities and
 *> hence may abort due to a floating point exception in environments
 *> which do not handle NaNs and infinities in the ieee standard default
 *> manner.
@@ -97,8 +97,8 @@
 *>          = 'V': all eigenvalues in the half-open interval (VL,VU]
 *>                 will be found.
 *>          = 'I': the IL-th through IU-th eigenvalues will be found.
-*>          For RANGE = 'V' or 'I' and IU - IL < N - 1, AB_DSTEBZ and
-*>          AB_DSTEIN are called
+*>          For RANGE = 'V' or 'I' and IU - IL < N - 1, DSTEBZ and
+*>          DSTEIN are called
 *> \endverbatim
 *>
 *> \param[in] N
@@ -249,7 +249,7 @@
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by AB_XERBLA.
+*>          LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -268,7 +268,7 @@
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by AB_XERBLA.
+*>          LWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -300,8 +300,7 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE AB_DSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL
-     $,
+      SUBROUTINE DSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
      $                   M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
      $                   LIWORK, INFO )
 *
@@ -337,15 +336,14 @@
      $                   TMP1, TNRM, VLL, VUU
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_DLANST
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_DLANST
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, DLANST
+      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DSCAL, AB_DSTEBZ, AB_DSTEMR, AB_DS
-     $TEIN, AB_DSTERF,
-     $                   AB_DSWAP, AB_XERBLA
+      EXTERNAL           DCOPY, DSCAL, DSTEBZ, DSTEMR, DSTEIN, DSTERF,
+     $                   DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -355,12 +353,12 @@
 *
 *     Test the input parameters.
 *
-      IEEEOK = AB_ILAENV( 10, 'AB_DSTEVR', 'N', 1, 2, 3, 4 )
+      IEEEOK = ILAENV( 10, 'DSTEVR', 'N', 1, 2, 3, 4 )
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
 *
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LIWORK.EQ.-1 ) )
       LWMIN = MAX( 1, 20*N )
@@ -368,7 +366,7 @@
 *
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
@@ -404,7 +402,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSTEVR', -INFO )
+         CALL XERBLA( 'DSTEVR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -449,7 +447,7 @@
          VUU = VU
       END IF
 *
-      TNRM = AB_DLANST( 'M', N, D, E )
+      TNRM = DLANST( 'M', N, D, E )
       IF( TNRM.GT.ZERO .AND. TNRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / TNRM
@@ -458,8 +456,8 @@
          SIGMA = RMAX / TNRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL AB_DSCAL( N, SIGMA, D, 1 )
-         CALL AB_DSCAL( N-1, SIGMA, E( 1 ), 1 )
+         CALL DSCAL( N, SIGMA, D, 1 )
+         CALL DSCAL( N-1, SIGMA, E( 1 ), 1 )
          IF( VALEIG ) THEN
             VLL = VL*SIGMA
             VUU = VU*SIGMA
@@ -467,25 +465,25 @@
       END IF
 
 *     Initialize indices into workspaces.  Note: These indices are used only
-*     if AB_DSTERF or AB_DSTEMR fail.
+*     if DSTERF or DSTEMR fail.
 
-*     IWORK(INDIBL:INDIBL+M-1) corresponds to IBLOCK in AB_DSTEBZ and
+*     IWORK(INDIBL:INDIBL+M-1) corresponds to IBLOCK in DSTEBZ and
 *     stores the block indices of each of the M<=N eigenvalues.
       INDIBL = 1
-*     IWORK(INDISP:INDISP+NSPLIT-1) corresponds to ISPLIT in AB_DSTEBZ and
+*     IWORK(INDISP:INDISP+NSPLIT-1) corresponds to ISPLIT in DSTEBZ and
 *     stores the starting and finishing indices of each block.
       INDISP = INDIBL + N
 *     IWORK(INDIFL:INDIFL+N-1) stores the indices of eigenvectors
 *     that corresponding to eigenvectors that fail to converge in
-*     AB_DSTEIN.  This information is discarded; if any fail, the driver
+*     DSTEIN.  This information is discarded; if any fail, the driver
 *     returns INFO > 0.
       INDIFL = INDISP + N
 *     INDIWO is the offset of the remaining integer workspace.
       INDIWO = INDISP + N
 *
 *     If all eigenvalues are desired, then
-*     call AB_DSTERF or AB_DSTEMR.  If this fails for some eigenvalue, then
-*     try AB_DSTEBZ.
+*     call DSTERF or DSTEMR.  If this fails for some eigenvalue, then
+*     try DSTEBZ.
 *
 *
       TEST = .FALSE.
@@ -495,18 +493,18 @@
          END IF
       END IF
       IF( ( ALLEIG .OR. TEST ) .AND. IEEEOK.EQ.1 ) THEN
-         CALL AB_DCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
+         CALL DCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
          IF( .NOT.WANTZ ) THEN
-            CALL AB_DCOPY( N, D, 1, W, 1 )
-            CALL AB_DSTERF( N, W, WORK, INFO )
+            CALL DCOPY( N, D, 1, W, 1 )
+            CALL DSTERF( N, W, WORK, INFO )
          ELSE
-            CALL AB_DCOPY( N, D, 1, WORK( N+1 ), 1 )
+            CALL DCOPY( N, D, 1, WORK( N+1 ), 1 )
             IF (ABSTOL .LE. TWO*N*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
             END IF
-            CALL AB_DSTEMR( JOBZ, 'A', N, WORK( N+1 ), WORK, VL, VU, IL,
+            CALL DSTEMR( JOBZ, 'A', N, WORK( N+1 ), WORK, VL, VU, IL,
      $                   IU, M, W, Z, LDZ, N, ISUPPZ, TRYRAC,
      $                   WORK( 2*N+1 ), LWORK-2*N, IWORK, LIWORK, INFO )
 *
@@ -518,7 +516,7 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call AB_DSTEBZ and, if eigenvectors are desired, AB_DSTEIN.
+*     Otherwise, call DSTEBZ and, if eigenvectors are desired, DSTEIN.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -526,14 +524,12 @@
          ORDER = 'E'
       END IF
 
-      CALL AB_DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M
-     $,
+      CALL DSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M,
      $             NSPLIT, W, IWORK( INDIBL ), IWORK( INDISP ), WORK,
      $             IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL AB_DSTEIN( N, D, E, M, W, IWORK( INDIBL ), IWORK( INDISP )
-     $,
+         CALL DSTEIN( N, D, E, M, W, IWORK( INDIBL ), IWORK( INDISP ),
      $                Z, LDZ, WORK, IWORK( INDIWO ), IWORK( INDIFL ),
      $                INFO )
       END IF
@@ -547,7 +543,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -570,7 +566,7 @@
                IWORK( I ) = IWORK( J )
                W( J ) = TMP1
                IWORK( J ) = ITMP1
-               CALL AB_DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
             END IF
    30    CONTINUE
       END IF
@@ -583,6 +579,6 @@
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of AB_DSTEVR
+*     End of DSTEVR
 *
       END

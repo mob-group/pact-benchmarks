@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAPLL measures the linear dependence of two vectors.
+*> \brief \b CLAPLL measures the linear dependence of two vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAPLL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAPLL.f">
+*> Download CLAPLL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clapll.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAPLL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clapll.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAPLL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clapll.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAPLL( N, X, INCX, Y, INCY, SSMIN )
+*       SUBROUTINE CLAPLL( N, X, INCX, Y, INCY, SSMIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, INCY, N
@@ -98,7 +98,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAPLL( N, X, INCX, Y, INCY, SSMIN )
+      SUBROUTINE CLAPLL( N, X, INCX, Y, INCY, SSMIN )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,11 +129,11 @@
       INTRINSIC          ABS, CONJG
 *     ..
 *     .. External Functions ..
-      COMPLEX            AB_CDOTC
-      EXTERNAL           AB_CDOTC
+      COMPLEX            CDOTC
+      EXTERNAL           CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CLARFG, AB_SLAS2
+      EXTERNAL           CAXPY, CLARFG, SLAS2
 *     ..
 *     .. Executable Statements ..
 *
@@ -146,24 +146,24 @@
 *
 *     Compute the QR factorization of the N-by-2 matrix ( X Y )
 *
-      CALL AB_CLARFG( N, X( 1 ), X( 1+INCX ), INCX, TAU )
+      CALL CLARFG( N, X( 1 ), X( 1+INCX ), INCX, TAU )
       A11 = X( 1 )
       X( 1 ) = CONE
 *
-      C = -CONJG( TAU )*AB_CDOTC( N, X, INCX, Y, INCY )
-      CALL AB_CAXPY( N, C, X, INCX, Y, INCY )
+      C = -CONJG( TAU )*CDOTC( N, X, INCX, Y, INCY )
+      CALL CAXPY( N, C, X, INCX, Y, INCY )
 *
-      CALL AB_CLARFG( N-1, Y( 1+INCY ), Y( 1+2*INCY ), INCY, TAU )
+      CALL CLARFG( N-1, Y( 1+INCY ), Y( 1+2*INCY ), INCY, TAU )
 *
       A12 = Y( 1 )
       A22 = Y( 1+INCY )
 *
 *     Compute the SVD of 2-by-2 Upper triangular matrix.
 *
-      CALL AB_SLAS2( ABS( A11 ), ABS( A12 ), ABS( A22 ), SSMIN, SSMAX )
+      CALL SLAS2( ABS( A11 ), ABS( A12 ), ABS( A22 ), SSMIN, SSMAX )
 *
       RETURN
 *
-*     End of AB_CLAPLL
+*     End of CLAPLL
 *
       END

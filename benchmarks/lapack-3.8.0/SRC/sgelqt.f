@@ -1,7 +1,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
+*       SUBROUTINE SGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER   INFO, LDA, LDT, M, N, MB
@@ -16,7 +16,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGELQT computes a blocked LQ factorization of a real M-by-N matrix A
+*> DGELQT computes a blocked LQ factorization of a real M-by-N matrix A
 *> using the compact WY representation of Q.
 *> \endverbatim
 *
@@ -120,7 +120,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
+      SUBROUTINE SGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,8 +141,7 @@
       INTEGER    I, IB, IINFO, K
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   AB_SGEQRT2, AB_SGEQRT3, AB_SGELQT3, AB_SLARFB, AB_XERBL
-     $A
+      EXTERNAL   SGEQRT2, SGEQRT3, SGELQT3, SLARFB, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -161,7 +160,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGELQT', -INFO )
+         CALL XERBLA( 'SGELQT', -INFO )
          RETURN
       END IF
 *
@@ -177,18 +176,18 @@
 *
 *     Compute the LQ factorization of the current block A(I:M,I:I+IB-1)
 *
-         CALL AB_SGELQT3( IB, N-I+1, A(I,I), LDA, T(1,I), LDT, IINFO )
+         CALL SGELQT3( IB, N-I+1, A(I,I), LDA, T(1,I), LDT, IINFO )
          IF( I+IB.LE.M ) THEN
 *
 *     Update by applying H**T to A(I:M,I+IB:N) from the right
 *
-         CALL AB_SLARFB( 'R', 'N', 'F', 'R', M-I-IB+1, N-I+1, IB,
+         CALL SLARFB( 'R', 'N', 'F', 'R', M-I-IB+1, N-I+1, IB,
      $                   A( I, I ), LDA, T( 1, I ), LDT,
      $                   A( I+IB, I ), LDA, WORK , M-I-IB+1 )
          END IF
       END DO
       RETURN
 *
-*     End of AB_SGELQT
+*     End of SGELQT
 *
       END

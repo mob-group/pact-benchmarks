@@ -1,4 +1,4 @@
-*> \brief \b AB_SLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used by AB_SBDSDC.
+*> \brief \b SLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLASD1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASD1.f">
+*> Download SLASD1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASD1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASD1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
+*       SUBROUTINE SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
 *                          IDXQ, IWORK, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,13 +36,13 @@
 *>
 *> \verbatim
 *>
-*> AB_SLASD1 computes the SVD of an upper bidiagonal N-by-M matrix B,
-*> where N = NL + NR + 1 and M = N + SQRE. AB_SLASD1 is called from AB_SLASD0.
+*> SLASD1 computes the SVD of an upper bidiagonal N-by-M matrix B,
+*> where N = NL + NR + 1 and M = N + SQRE. SLASD1 is called from SLASD0.
 *>
-*> A related subroutine AB_SLASD7 handles the case in which the singular
+*> A related subroutine SLASD7 handles the case in which the singular
 *> values (and the singular vectors in factored form) are desired.
 *>
-*> AB_SLASD1 computes the SVD as follows:
+*> SLASD1 computes the SVD as follows:
 *>
 *>               ( D1(in)    0    0       0 )
 *>   B = U(in) * (   Z1**T   a   Z2**T    b ) * VT(in)
@@ -62,12 +62,12 @@
 *>    when there are multiple singular values or when there are zeros in
 *>    the Z vector.  For each such occurrence the dimension of the
 *>    secular equation problem is reduced by one.  This stage is
-*>    performed by the routine AB_SLASD2.
+*>    performed by the routine SLASD2.
 *>
 *>    The second stage consists of calculating the updated
 *>    singular values. This is done by finding the square roots of the
-*>    roots of the secular equation via the routine AB_SLASD4 (as called
-*>    by AB_SLASD3). This routine also calculates the singular vectors of
+*>    roots of the secular equation via the routine SLASD4 (as called
+*>    by SLASD3). This routine also calculates the singular vectors of
 *>    the current problem.
 *>
 *>    The final stage consists of computing the updated singular vectors
@@ -201,8 +201,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LD
-     $VT,
+      SUBROUTINE SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
      $                   IDXQ, IWORK, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -232,8 +231,7 @@
       REAL               ORGNRM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLAMRG, AB_SLASCL, AB_SLASD2, AB_SLASD3, AB_
-     $XERBLA
+      EXTERNAL           SLAMRG, SLASCL, SLASD2, SLASD3, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -252,7 +250,7 @@
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLASD1', -INFO )
+         CALL XERBLA( 'SLASD1', -INFO )
          RETURN
       END IF
 *
@@ -261,7 +259,7 @@
 *
 *     The following values are for bookkeeping purposes only.  They are
 *     integer pointers which indicate the portion of the workspace
-*     used by a particular array in AB_SLASD2 and AB_SLASD3.
+*     used by a particular array in SLASD2 and SLASD3.
 *
       LDU2 = N
       LDVT2 = M
@@ -286,14 +284,13 @@
             ORGNRM = ABS( D( I ) )
          END IF
    10 CONTINUE
-      CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
+      CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
       ALPHA = ALPHA / ORGNRM
       BETA = BETA / ORGNRM
 *
 *     Deflate singular values.
 *
-      CALL AB_SLASD2( NL, NR, SQRE, K, D, WORK( IZ ), ALPHA, BETA, U, LD
-     $U,
+      CALL SLASD2( NL, NR, SQRE, K, D, WORK( IZ ), ALPHA, BETA, U, LDU,
      $             VT, LDVT, WORK( ISIGMA ), WORK( IU2 ), LDU2,
      $             WORK( IVT2 ), LDVT2, IWORK( IDXP ), IWORK( IDX ),
      $             IWORK( IDXC ), IDXQ, IWORK( COLTYP ), INFO )
@@ -301,8 +298,7 @@
 *     Solve Secular Equation and update singular vectors.
 *
       LDQ = K
-      CALL AB_SLASD3( NL, NR, SQRE, K, D, WORK( IQ ), LDQ, WORK( ISIGMA 
-     $),
+      CALL SLASD3( NL, NR, SQRE, K, D, WORK( IQ ), LDQ, WORK( ISIGMA ),
      $             U, LDU, WORK( IU2 ), LDU2, VT, LDVT, WORK( IVT2 ),
      $             LDVT2, IWORK( IDXC ), IWORK( COLTYP ), WORK( IZ ),
      $             INFO )
@@ -315,16 +311,16 @@
 *
 *     Unscale.
 *
-      CALL AB_SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+      CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
 *
 *     Prepare the IDXQ sorting permutation.
 *
       N1 = K
       N2 = N - K
-      CALL AB_SLAMRG( N1, N2, D, 1, -1, IDXQ )
+      CALL SLAMRG( N1, N2, D, 1, -1, IDXQ )
 *
       RETURN
 *
-*     End of AB_SLASD1
+*     End of SLASD1
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTREXC
+*> \brief \b ZTREXC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZTREXC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTREXC.f">
+*> Download ZTREXC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrexc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTREXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrexc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTREXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrexc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
+*       SUBROUTINE ZTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          COMPQ
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTREXC reorders the Schur factorization of a complex matrix
+*> ZTREXC reorders the Schur factorization of a complex matrix
 *> A = Q*T*Q**H, so that the diagonal element of T with row index IFST
 *> is moved to row ILST.
 *>
@@ -124,7 +124,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
+      SUBROUTINE ZTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,11 +148,11 @@
       COMPLEX*16         SN, T11, T22, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZLARTG, AB_ZROT
+      EXTERNAL           XERBLA, ZLARTG, ZROT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX
@@ -162,8 +162,8 @@
 *     Decode and test the input parameters.
 *
       INFO = 0
-      WANTQ = AB_LSAME( COMPQ, 'V' )
-      IF( .NOT.AB_LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
+      WANTQ = LSAME( COMPQ, 'V' )
+      IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -177,7 +177,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTREXC', -INFO )
+         CALL XERBLA( 'ZTREXC', -INFO )
          RETURN
       END IF
 *
@@ -211,15 +211,14 @@
 *
 *        Determine the transformation to perform the interchange.
 *
-         CALL AB_ZLARTG( T( K, K+1 ), T22-T11, CS, SN, TEMP )
+         CALL ZLARTG( T( K, K+1 ), T22-T11, CS, SN, TEMP )
 *
 *        Apply transformation to the matrix T.
 *
          IF( K+2.LE.N )
-     $      CALL AB_ZROT( N-K-1, T( K, K+2 ), LDT, T( K+1, K+2 ), LDT, C
-     $S,
+     $      CALL ZROT( N-K-1, T( K, K+2 ), LDT, T( K+1, K+2 ), LDT, CS,
      $                 SN )
-         CALL AB_ZROT( K-1, T( 1, K ), 1, T( 1, K+1 ), 1, CS,
+         CALL ZROT( K-1, T( 1, K ), 1, T( 1, K+1 ), 1, CS,
      $              DCONJG( SN ) )
 *
          T( K, K ) = T22
@@ -229,7 +228,7 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_ZROT( N, Q( 1, K ), 1, Q( 1, K+1 ), 1, CS,
+            CALL ZROT( N, Q( 1, K ), 1, Q( 1, K+1 ), 1, CS,
      $                 DCONJG( SN ) )
          END IF
 *
@@ -237,6 +236,6 @@
 *
       RETURN
 *
-*     End of AB_ZTREXC
+*     End of ZTREXC
 *
       END

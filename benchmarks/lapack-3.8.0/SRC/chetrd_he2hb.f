@@ -1,6 +1,6 @@
-*> \brief \b AB_CHETRD_HE2HB
+*> \brief \b CHETRD_HE2HB
 *
-*  @generated from AB_ZHETRD_he2hb.f, fortran z -> c, Wed Dec  7 08:22:40 2016
+*  @generated from zhetrd_he2hb.f, fortran z -> c, Wed Dec  7 08:22:40 2016
 *      
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download AB_CHETRD_HE2HB + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHETRD.f"> 
+*> Download CHETRD_HE2HB + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrd.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHETRD.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrd.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHETRD.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHETRD_HE2HB( UPLO, N, KD, A, LDA, AB, LDAB, TAU, 
+*       SUBROUTINE CHETRD_HE2HB( UPLO, N, KD, A, LDA, AB, LDAB, TAU, 
 *                              WORK, LWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHETRD_HE2HB reduces a complex Hermitian matrix A to complex Hermitian
+*> CHETRD_HE2HB reduces a complex Hermitian matrix A to complex Hermitian
 *> band-diagonal form AB by a unitary similarity transformation:
 *> Q**H * A * Q = AB.
 *> \endverbatim
@@ -136,7 +136,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *>          LWORK_QUERY = N*KD + N*max(KD,FACTOPTNB) + 2*KD*KD
 *>          where FACTOPTNB is the blocking used by the QR or LQ
 *>          algorithm, usually FACTOPTNB=128 is a good choice otherwise
@@ -240,7 +240,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CHETRD_HE2HB( UPLO, N, KD, A, LDA, AB, LDAB, TAU, 
+      SUBROUTINE CHETRD_HE2HB( UPLO, N, KD, A, LDA, AB, LDAB, TAU, 
      $                         WORK, LWORK, INFO )
 *
       IMPLICIT NONE
@@ -277,17 +277,16 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_CHER2K, AB_CHEMM, AB_CGEMM, AB_CC
-     $OPY,
-     $                   AB_CLARFT, AB_CGELQF, AB_CGEQRF, AB_CLASET
+      EXTERNAL           XERBLA, CHER2K, CHEMM, CGEMM, CCOPY,
+     $                   CLARFT, CGELQF, CGEQRF, CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV 
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV 
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -295,11 +294,11 @@
 *     and test the input parameters
 *
       INFO   = 0
-      UPPER  = AB_LSAME( UPLO, 'U' )
+      UPPER  = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      LWMIN  = AB_ILAENV( 20, 'AB_CHETRD_HE2HB', '', N, KD, -1, -1 )
+      LWMIN  = ILAENV( 20, 'CHETRD_HE2HB', '', N, KD, -1, -1 )
       
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -314,7 +313,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHETRD_HE2HB', -INFO )
+         CALL XERBLA( 'CHETRD_HE2HB', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          WORK( 1 ) = LWMIN
@@ -328,13 +327,13 @@
           IF( UPPER ) THEN
               DO 100 I = 1, N
                   LK = MIN( KD+1, I )
-                  CALL AB_CCOPY( LK, A( I-LK+1, I ), 1, 
+                  CALL CCOPY( LK, A( I-LK+1, I ), 1, 
      $                            AB( KD+1-LK+1, I ), 1 )
   100         CONTINUE
           ELSE
               DO 110 I = 1, N
                   LK = MIN( KD+1, N-I+1 )
-                  CALL AB_CCOPY( LK, A( I, I ), 1, AB( 1, I ), 1 )
+                  CALL CCOPY( LK, A( I, I ), 1, AB( 1, I ), 1 )
   110         CONTINUE
           ENDIF
           WORK( 1 ) = 1
@@ -366,7 +365,7 @@
 *     Set the workspace of the triangular matrix T to zero once such a
 *     way everytime T is generated the upper/lower portion will be always zero  
 *   
-      CALL AB_CLASET( "A", LDT, KD, ZERO, ZERO, WORK( TPOS ), LDT )
+      CALL CLASET( "A", LDT, KD, ZERO, ZERO, WORK( TPOS ), LDT )
 *
       IF( UPPER ) THEN
           DO 10 I = 1, N - KD, KD
@@ -375,44 +374,43 @@
 *        
 *            Compute the LQ factorization of the current block
 *        
-             CALL AB_CGELQF( KD, PN, A( I, I+KD ), LDA,
+             CALL CGELQF( KD, PN, A( I, I+KD ), LDA,
      $                    TAU( I ), WORK( S2POS ), LS2, IINFO )
 *        
 *            Copy the upper portion of A into AB
 *        
              DO 20 J = I, I+PK-1
                 LK = MIN( KD, N-J ) + 1
-                CALL AB_CCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1
-     $ )
+                CALL CCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
    20        CONTINUE
 *                
-             CALL AB_CLASET( 'Lower', PK, PK, ZERO, ONE, 
+             CALL CLASET( 'Lower', PK, PK, ZERO, ONE, 
      $                    A( I, I+KD ), LDA )
 *        
 *            Form the matrix T
 *        
-             CALL AB_CLARFT( 'Forward', 'Rowwise', PN, PK,
+             CALL CLARFT( 'Forward', 'Rowwise', PN, PK,
      $                    A( I, I+KD ), LDA, TAU( I ), 
      $                    WORK( TPOS ), LDT )
 *        
 *            Compute W:
 *             
-             CALL AB_CGEMM( 'Conjugate', 'No transpose', PK, PN, PK,
+             CALL CGEMM( 'Conjugate', 'No transpose', PK, PN, PK,
      $                   ONE,  WORK( TPOS ), LDT,
      $                         A( I, I+KD ), LDA,
      $                   ZERO, WORK( S2POS ), LDS2 )
 *        
-             CALL AB_CHEMM( 'Right', UPLO, PK, PN,
+             CALL CHEMM( 'Right', UPLO, PK, PN,
      $                   ONE,  A( I+KD, I+KD ), LDA,
      $                         WORK( S2POS ), LDS2,
      $                   ZERO, WORK( WPOS ), LDW )
 *        
-             CALL AB_CGEMM( 'No transpose', 'Conjugate', PK, PK, PN,
+             CALL CGEMM( 'No transpose', 'Conjugate', PK, PK, PN,
      $                   ONE,  WORK( WPOS ), LDW,
      $                         WORK( S2POS ), LDS2,
      $                   ZERO, WORK( S1POS ), LDS1 )
 *        
-             CALL AB_CGEMM( 'No transpose', 'No transpose', PK, PN, PK,
+             CALL CGEMM( 'No transpose', 'No transpose', PK, PN, PK,
      $                   -HALF, WORK( S1POS ), LDS1, 
      $                          A( I, I+KD ), LDA,
      $                   ONE,   WORK( WPOS ), LDW )
@@ -421,7 +419,7 @@
 *            Update the unreduced submatrix A(i+kd:n,i+kd:n), using
 *            an update of the form:  A := A - V'*W - W'*V
 *        
-             CALL AB_CHER2K( UPLO, 'Conjugate', PN, PK,
+             CALL CHER2K( UPLO, 'Conjugate', PN, PK,
      $                    -ONE, A( I, I+KD ), LDA,
      $                          WORK( WPOS ), LDW,
      $                    RONE, A( I+KD, I+KD ), LDA )
@@ -431,7 +429,7 @@
 *
          DO 30 J = N-KD+1, N
             LK = MIN(KD, N-J) + 1
-            CALL AB_CCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
+            CALL CCOPY( LK, A( J, J ), LDA, AB( KD+1, J ), LDAB-1 )
    30    CONTINUE
 *
       ELSE
@@ -444,43 +442,43 @@
 *        
 *            Compute the QR factorization of the current block
 *        
-             CALL AB_CGEQRF( PN, KD, A( I+KD, I ), LDA,
+             CALL CGEQRF( PN, KD, A( I+KD, I ), LDA,
      $                    TAU( I ), WORK( S2POS ), LS2, IINFO )
 *        
 *            Copy the upper portion of A into AB 
 *        
              DO 50 J = I, I+PK-1
                 LK = MIN( KD, N-J ) + 1
-                CALL AB_CCOPY( LK, A( J, J ), 1, AB( 1, J ), 1 )
+                CALL CCOPY( LK, A( J, J ), 1, AB( 1, J ), 1 )
    50        CONTINUE
 *                
-             CALL AB_CLASET( 'Upper', PK, PK, ZERO, ONE, 
+             CALL CLASET( 'Upper', PK, PK, ZERO, ONE, 
      $                    A( I+KD, I ), LDA )
 *        
 *            Form the matrix T
 *        
-             CALL AB_CLARFT( 'Forward', 'Columnwise', PN, PK,
+             CALL CLARFT( 'Forward', 'Columnwise', PN, PK,
      $                    A( I+KD, I ), LDA, TAU( I ), 
      $                    WORK( TPOS ), LDT )
 *        
 *            Compute W:
 *             
-             CALL AB_CGEMM( 'No transpose', 'No transpose', PN, PK, PK,
+             CALL CGEMM( 'No transpose', 'No transpose', PN, PK, PK,
      $                   ONE, A( I+KD, I ), LDA,
      $                         WORK( TPOS ), LDT,
      $                   ZERO, WORK( S2POS ), LDS2 )
 *        
-             CALL AB_CHEMM( 'Left', UPLO, PN, PK,
+             CALL CHEMM( 'Left', UPLO, PN, PK,
      $                   ONE, A( I+KD, I+KD ), LDA,
      $                         WORK( S2POS ), LDS2,
      $                   ZERO, WORK( WPOS ), LDW )
 *        
-             CALL AB_CGEMM( 'Conjugate', 'No transpose', PK, PK, PN,
+             CALL CGEMM( 'Conjugate', 'No transpose', PK, PK, PN,
      $                   ONE, WORK( S2POS ), LDS2,
      $                         WORK( WPOS ), LDW,
      $                   ZERO, WORK( S1POS ), LDS1 )
 *        
-             CALL AB_CGEMM( 'No transpose', 'No transpose', PN, PK, PK,
+             CALL CGEMM( 'No transpose', 'No transpose', PN, PK, PK,
      $                   -HALF, A( I+KD, I ), LDA,
      $                         WORK( S1POS ), LDS1,
      $                   ONE, WORK( WPOS ), LDW )
@@ -489,7 +487,7 @@
 *            Update the unreduced submatrix A(i+kd:n,i+kd:n), using
 *            an update of the form:  A := A - V*W' - W*V'
 *        
-             CALL AB_CHER2K( UPLO, 'No transpose', PN, PK,
+             CALL CHER2K( UPLO, 'No transpose', PN, PK,
      $                    -ONE, A( I+KD, I ), LDA,
      $                           WORK( WPOS ), LDW,
      $                    RONE, A( I+KD, I+KD ), LDA )
@@ -497,7 +495,7 @@
 *            RESTORE A FOR COMPARISON AND CHECKING TO BE REMOVED
 *             DO 45 J = I, I+PK-1
 *                LK = MIN( KD, N-J ) + 1
-*                CALL AB_CCOPY( LK, AB( 1, J ), 1, A( J, J ), 1 )
+*                CALL CCOPY( LK, AB( 1, J ), 1, A( J, J ), 1 )
 *   45        CONTINUE
 *            ==================================================================
    40     CONTINUE
@@ -506,7 +504,7 @@
 *
          DO 60 J = N-KD+1, N
             LK = MIN(KD, N-J) + 1
-            CALL AB_CCOPY( LK, A( J, J ), 1, AB( 1, J ), 1 )
+            CALL CCOPY( LK, A( J, J ), 1, AB( 1, J ), 1 )
    60    CONTINUE
 
       END IF
@@ -514,6 +512,6 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of AB_CHETRD_HE2HB
+*     End of CHETRD_HE2HB
 *
       END

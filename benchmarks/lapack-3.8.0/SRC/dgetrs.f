@@ -1,4 +1,4 @@
-*> \brief \b AB_DGETRS
+*> \brief \b DGETRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGETRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGETRS.f">
+*> Download DGETRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgetrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGETRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgetrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGETRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgetrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DGETRS solves a system of linear equations
+*> DGETRS solves a system of linear equations
 *>    A * X = B  or  A**T * X = B
 *> with a general N-by-N matrix A using the LU factorization computed
-*> by AB_DGETRF.
+*> by DGETRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -70,7 +70,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          The factors L and U from the factorization A = P*L*U
-*>          as computed by AB_DGETRF.
+*>          as computed by DGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_DGETRF; for 1<=i<=N, row i of the
+*>          The pivot indices from DGETRF; for 1<=i<=N, row i of the
 *>          matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -119,7 +119,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      SUBROUTINE DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -145,11 +145,11 @@
       LOGICAL            NOTRAN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASWP, AB_DTRSM, AB_XERBLA
+      EXTERNAL           DLASWP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -159,9 +159,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    AB_LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -173,7 +173,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGETRS', -INFO )
+         CALL XERBLA( 'DGETRS', -INFO )
          RETURN
       END IF
 *
@@ -188,17 +188,16 @@
 *
 *        Apply row interchanges to the right hand sides.
 *
-         CALL AB_DLASWP( NRHS, B, LDB, 1, N, IPIV, 1 )
+         CALL DLASWP( NRHS, B, LDB, 1, N, IPIV, 1 )
 *
 *        Solve L*X = B, overwriting B with X.
 *
-         CALL AB_DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', N, NRHS
-     $,
+         CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', N, NRHS,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve U*X = B, overwriting B with X.
 *
-         CALL AB_DTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
+         CALL DTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
       ELSE
 *
@@ -206,23 +205,21 @@
 *
 *        Solve U**T *X = B, overwriting B with X.
 *
-         CALL AB_DTRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N, NRH
-     $S,
+         CALL DTRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N, NRHS,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve L**T *X = B, overwriting B with X.
 *
-         CALL AB_DTRSM( 'Left', 'Lower', 'Transpose', 'Unit', N, NRHS, O
-     $NE,
+         CALL DTRSM( 'Left', 'Lower', 'Transpose', 'Unit', N, NRHS, ONE,
      $               A, LDA, B, LDB )
 *
 *        Apply row interchanges to the solution vectors.
 *
-         CALL AB_DLASWP( NRHS, B, LDB, 1, N, IPIV, -1 )
+         CALL DLASWP( NRHS, B, LDB, 1, N, IPIV, -1 )
       END IF
 *
       RETURN
 *
-*     End of AB_DGETRS
+*     End of DGETRS
 *
       END

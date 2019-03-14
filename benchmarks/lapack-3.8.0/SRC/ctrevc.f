@@ -1,4 +1,4 @@
-*> \brief \b AB_CTREVC
+*> \brief \b CTREVC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CTREVC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTREVC.f">
+*> Download CTREVC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrevc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTREVC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrevc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTREVC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrevc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+*       SUBROUTINE CTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
 *                          LDVR, MM, M, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,10 +38,10 @@
 *>
 *> \verbatim
 *>
-*> AB_CTREVC computes some or all of the right and/or left eigenvectors of
+*> CTREVC computes some or all of the right and/or left eigenvectors of
 *> a complex upper triangular matrix T.
 *> Matrices of this type are produced by the Schur factorization of
-*> a complex general matrix:  A = Q*T*Q**H, as computed by AB_CHSEQR.
+*> a complex general matrix:  A = Q*T*Q**H, as computed by CHSEQR.
 *>
 *> The right eigenvector x and the left eigenvector y of T corresponding
 *> to an eigenvalue w are defined by:
@@ -115,7 +115,7 @@
 *>          VL is COMPLEX array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Q of
-*>          Schur vectors returned by AB_CHSEQR).
+*>          Schur vectors returned by CHSEQR).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -138,7 +138,7 @@
 *>          VR is COMPLEX array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Q of
-*>          Schur vectors returned by AB_CHSEQR).
+*>          Schur vectors returned by CHSEQR).
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*X;
@@ -215,8 +215,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, V
-     $R,
+      SUBROUTINE CTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
      $                   LDVR, MM, M, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -251,14 +250,13 @@
       COMPLEX            CDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ICAMAX
-      REAL               AB_SCASUM, SLAMCH
-      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SCASUM, SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ICAMAX
+      REAL               SCASUM, SLAMCH
+      EXTERNAL           LSAME, ICAMAX, SCASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CGEMV, AB_CLATRS, AB_CSSCAL, AB_SL
-     $ABAD, AB_XERBLA
+      EXTERNAL           CCOPY, CGEMV, CLATRS, CSSCAL, SLABAD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, REAL
@@ -273,13 +271,13 @@
 *
 *     Decode and test the input parameters
 *
-      BOTHV = AB_LSAME( SIDE, 'B' )
-      RIGHTV = AB_LSAME( SIDE, 'R' ) .OR. BOTHV
-      LEFTV = AB_LSAME( SIDE, 'L' ) .OR. BOTHV
+      BOTHV = LSAME( SIDE, 'B' )
+      RIGHTV = LSAME( SIDE, 'R' ) .OR. BOTHV
+      LEFTV = LSAME( SIDE, 'L' ) .OR. BOTHV
 *
-      ALLV = AB_LSAME( HOWMNY, 'A' )
-      OVER = AB_LSAME( HOWMNY, 'B' )
-      SOMEV = AB_LSAME( HOWMNY, 'S' )
+      ALLV = LSAME( HOWMNY, 'A' )
+      OVER = LSAME( HOWMNY, 'B' )
+      SOMEV = LSAME( HOWMNY, 'S' )
 *
 *     Set M to the number of columns required to store the selected
 *     eigenvectors.
@@ -311,7 +309,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CTREVC', -INFO )
+         CALL XERBLA( 'CTREVC', -INFO )
          RETURN
       END IF
 *
@@ -324,7 +322,7 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL AB_SLABAD( UNFL, OVFL )
+      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *
@@ -339,7 +337,7 @@
 *
       RWORK( 1 ) = ZERO
       DO 30 J = 2, N
-         RWORK( J ) = AB_SCASUM( J-1, T( 1, J ), 1 )
+         RWORK( J ) = SCASUM( J-1, T( 1, J ), 1 )
    30 CONTINUE
 *
       IF( RIGHTV ) THEN
@@ -373,7 +371,7 @@
    50       CONTINUE
 *
             IF( KI.GT.1 ) THEN
-               CALL AB_CLATRS( 'Upper', 'No transpose', 'Non-unit', 'Y',
+               CALL CLATRS( 'Upper', 'No transpose', 'Non-unit', 'Y',
      $                      KI-1, T, LDT, WORK( 1 ), SCALE, RWORK,
      $                      INFO )
                WORK( KI ) = SCALE
@@ -382,24 +380,23 @@
 *           Copy the vector x or Q*x to VR and normalize.
 *
             IF( .NOT.OVER ) THEN
-               CALL AB_CCOPY( KI, WORK( 1 ), 1, VR( 1, IS ), 1 )
+               CALL CCOPY( KI, WORK( 1 ), 1, VR( 1, IS ), 1 )
 *
-               II = AB_ICAMAX( KI, VR( 1, IS ), 1 )
+               II = ICAMAX( KI, VR( 1, IS ), 1 )
                REMAX = ONE / CABS1( VR( II, IS ) )
-               CALL AB_CSSCAL( KI, REMAX, VR( 1, IS ), 1 )
+               CALL CSSCAL( KI, REMAX, VR( 1, IS ), 1 )
 *
                DO 60 K = KI + 1, N
                   VR( K, IS ) = CMZERO
    60          CONTINUE
             ELSE
                IF( KI.GT.1 )
-     $            CALL AB_CGEMV( 'N', N, KI-1, CMONE, VR, LDVR, WORK( 1 
-     $),
+     $            CALL CGEMV( 'N', N, KI-1, CMONE, VR, LDVR, WORK( 1 ),
      $                        1, CMPLX( SCALE ), VR( 1, KI ), 1 )
 *
-               II = AB_ICAMAX( N, VR( 1, KI ), 1 )
+               II = ICAMAX( N, VR( 1, KI ), 1 )
                REMAX = ONE / CABS1( VR( II, KI ) )
-               CALL AB_CSSCAL( N, REMAX, VR( 1, KI ), 1 )
+               CALL CSSCAL( N, REMAX, VR( 1, KI ), 1 )
             END IF
 *
 *           Set back the original diagonal elements of T.
@@ -443,8 +440,7 @@
   100       CONTINUE
 *
             IF( KI.LT.N ) THEN
-               CALL AB_CLATRS( 'Upper', 'Conjugate transpose', 'Non-unit
-     $',
+               CALL CLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                      'Y', N-KI, T( KI+1, KI+1 ), LDT,
      $                      WORK( KI+1 ), SCALE, RWORK, INFO )
                WORK( KI ) = SCALE
@@ -453,25 +449,24 @@
 *           Copy the vector x or Q*x to VL and normalize.
 *
             IF( .NOT.OVER ) THEN
-               CALL AB_CCOPY( N-KI+1, WORK( KI ), 1, VL( KI, IS ), 1 )
+               CALL CCOPY( N-KI+1, WORK( KI ), 1, VL( KI, IS ), 1 )
 *
-               II = AB_ICAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
+               II = ICAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
                REMAX = ONE / CABS1( VL( II, IS ) )
-               CALL AB_CSSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
+               CALL CSSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
 *
                DO 110 K = 1, KI - 1
                   VL( K, IS ) = CMZERO
   110          CONTINUE
             ELSE
                IF( KI.LT.N )
-     $            CALL AB_CGEMV( 'N', N, N-KI, CMONE, VL( 1, KI+1 ), LDV
-     $L,
+     $            CALL CGEMV( 'N', N, N-KI, CMONE, VL( 1, KI+1 ), LDVL,
      $                        WORK( KI+1 ), 1, CMPLX( SCALE ),
      $                        VL( 1, KI ), 1 )
 *
-               II = AB_ICAMAX( N, VL( 1, KI ), 1 )
+               II = ICAMAX( N, VL( 1, KI ), 1 )
                REMAX = ONE / CABS1( VL( II, KI ) )
-               CALL AB_CSSCAL( N, REMAX, VL( 1, KI ), 1 )
+               CALL CSSCAL( N, REMAX, VL( 1, KI ), 1 )
             END IF
 *
 *           Set back the original diagonal elements of T.
@@ -486,6 +481,6 @@
 *
       RETURN
 *
-*     End of AB_CTREVC
+*     End of CTREVC
 *
       END

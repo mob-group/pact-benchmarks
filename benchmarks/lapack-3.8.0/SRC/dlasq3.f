@@ -1,4 +1,4 @@
-*> \brief \b AB_DLASQ3 checks for deflation, computes a shift and calls dqds. Used by AB_SBDSQR.
+*> \brief \b DLASQ3 checks for deflation, computes a shift and calls dqds. Used by sbdsqr.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLASQ3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASQ3.f">
+*> Download DLASQ3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasq3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASQ3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasq3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASQ3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasq3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
+*       SUBROUTINE DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
 *                          ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
 *                          DN2, G, TAU )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLASQ3 checks for deflation, computes a shift (TAU) and calls dqds.
+*> DLASQ3 checks for deflation, computes a shift (TAU) and calls dqds.
 *> In case of failure it changes shifts, and tries again until output
 *> is positive.
 *> \endverbatim
@@ -118,7 +118,7 @@
 *> \param[in] IEEE
 *> \verbatim
 *>          IEEE is LOGICAL
-*>         Flag for IEEE or non IEEE arithmetic (passed to AB_DLASQ5).
+*>         Flag for IEEE or non IEEE arithmetic (passed to DLASQ5).
 *> \endverbatim
 *>
 *> \param[in,out] TTYPE
@@ -162,7 +162,7 @@
 *>          TAU is DOUBLE PRECISION
 *>
 *>         These are passed as arguments in order to save their values
-*>         between calls to AB_DLASQ3.
+*>         between calls to DLASQ3.
 *> \endverbatim
 *
 *  Authors:
@@ -178,8 +178,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFA
-     $IL,
+      SUBROUTINE DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
      $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
      $                   DN2, G, TAU )
 *
@@ -212,12 +211,12 @@
       DOUBLE PRECISION   EPS, S, T, TEMP, TOL, TOL2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASQ4, AB_DLASQ5, AB_DLASQ6
+      EXTERNAL           DLASQ4, DLASQ5, DLASQ6
 *     ..
 *     .. External Function ..
       DOUBLE PRECISION   DLAMCH
-      LOGICAL            AB_DISNAN
-      EXTERNAL           AB_DISNAN, DLAMCH
+      LOGICAL            DISNAN
+      EXTERNAL           DISNAN, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -325,14 +324,14 @@
 *
 *     Choose a shift.
 *
-      CALL AB_DLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN, DN1,
+      CALL DLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN, DN1,
      $             DN2, TAU, TTYPE, G )
 *
 *     Call dqds until DMIN > 0.
 *
    70 CONTINUE
 *
-      CALL AB_DLASQ5( I0, N0, Z, PP, TAU, SIGMA, DMIN, DMIN1, DMIN2, DN,
+      CALL DLASQ5( I0, N0, Z, PP, TAU, SIGMA, DMIN, DMIN1, DMIN2, DN,
      $             DN1, DN2, IEEE, EPS )
 *
       NDIV = NDIV + ( N0-I0+2 )
@@ -379,7 +378,7 @@
             TTYPE = TTYPE - 12
          END IF
          GO TO 70
-      ELSE IF( AB_DISNAN( DMIN ) ) THEN
+      ELSE IF( DISNAN( DMIN ) ) THEN
 *
 *        NaN.
 *
@@ -399,7 +398,7 @@
 *     Risk of underflow.
 *
    80 CONTINUE
-      CALL AB_DLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN, DN1, DN2 )
+      CALL DLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN, DN1, DN2 )
       NDIV = NDIV + ( N0-I0+2 )
       ITER = ITER + 1
       TAU = ZERO
@@ -417,6 +416,6 @@
 *
       RETURN
 *
-*     End of AB_DLASQ3
+*     End of DLASQ3
 *
       END

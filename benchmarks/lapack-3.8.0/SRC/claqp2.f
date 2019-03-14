@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAQP2 computes a QR factorization with column pivoting of the matrix block.
+*> \brief \b CLAQP2 computes a QR factorization with column pivoting of the matrix block.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAQP2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQP2.f">
+*> Download CLAQP2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqp2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQP2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqp2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQP2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqp2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
+*       SUBROUTINE CLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
 *                          WORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAQP2 computes a QR factorization with column pivoting of
+*> CLAQP2 computes a QR factorization with column pivoting of
 *> the block A(OFFSET+1:M,1:N).
 *> The block A(1:OFFSET,1:N) is accordingly pivoted, but not factorized.
 *> \endverbatim
@@ -146,7 +146,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
+      SUBROUTINE CLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
      $                   WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -177,15 +177,15 @@
       COMPLEX            AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLARF, AB_CLARFG, AB_CSWAP
+      EXTERNAL           CLARF, CLARFG, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SCNRM2, SLAMCH
-      EXTERNAL           AB_ISAMAX, AB_SCNRM2, SLAMCH
+      INTEGER            ISAMAX
+      REAL               SCNRM2, SLAMCH
+      EXTERNAL           ISAMAX, SCNRM2, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -200,10 +200,10 @@
 *
 *        Determine ith pivot column and swap if necessary.
 *
-         PVT = ( I-1 ) + AB_ISAMAX( N-I+1, VN1( I ), 1 )
+         PVT = ( I-1 ) + ISAMAX( N-I+1, VN1( I ), 1 )
 *
          IF( PVT.NE.I ) THEN
-            CALL AB_CSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
+            CALL CSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
             ITEMP = JPVT( PVT )
             JPVT( PVT ) = JPVT( I )
             JPVT( I ) = ITEMP
@@ -214,11 +214,10 @@
 *        Generate elementary reflector H(i).
 *
          IF( OFFPI.LT.M ) THEN
-            CALL AB_CLARFG( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1
-     $,
+            CALL CLARFG( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1,
      $                   TAU( I ) )
          ELSE
-            CALL AB_CLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
+            CALL CLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
          END IF
 *
          IF( I.LT.N ) THEN
@@ -227,7 +226,7 @@
 *
             AII = A( OFFPI, I )
             A( OFFPI, I ) = CONE
-            CALL AB_CLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
+            CALL CLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
      $                  CONJG( TAU( I ) ), A( OFFPI, I+1 ), LDA,
      $                  WORK( 1 ) )
             A( OFFPI, I ) = AII
@@ -246,7 +245,7 @@
                TEMP2 = TEMP*( VN1( J ) / VN2( J ) )**2
                IF( TEMP2 .LE. TOL3Z ) THEN
                   IF( OFFPI.LT.M ) THEN
-                     VN1( J ) = AB_SCNRM2( M-OFFPI, A( OFFPI+1, J ), 1 )
+                     VN1( J ) = SCNRM2( M-OFFPI, A( OFFPI+1, J ), 1 )
                      VN2( J ) = VN1( J )
                   ELSE
                      VN1( J ) = ZERO
@@ -262,6 +261,6 @@
 *
       RETURN
 *
-*     End of AB_CLAQP2
+*     End of CLAQP2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> AB_SGELSX solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> SGELSX solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGELSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGELSx.f">
+*> Download SGELSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelsx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGELSx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelsx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGELSx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelsx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGELSX( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
+*       SUBROUTINE SGELSX( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine AB_SGELSY.
+*> This routine is deprecated and has been replaced by routine SGELSY.
 *>
-*> AB_SGELSX computes the minimum-norm solution to a real linear least
+*> SGELSX computes the minimum-norm solution to a real linear least
 *> squares problem:
 *>     minimize || A * X - B ||
 *> using a complete orthogonal factorization of A.  A is an M-by-N
@@ -175,8 +175,7 @@
 *> \ingroup realGEsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_SGELSX( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RAN
-     $K,
+      SUBROUTINE SGELSX( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
      $                   WORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -208,13 +207,12 @@
      $                   SMAXPR, SMIN, SMINPR, SMLNUM, T1, T2
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           SLAMCH, AB_SLANGE
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEQPF, AB_SLABAD, AB_SLAIC1, AB_SLASCL, AB_
-     $SLASET, AB_SLATZM,
-     $                   AB_SORM2R, AB_STRSM, AB_STZRQF, AB_XERBLA
+      EXTERNAL           SGEQPF, SLABAD, SLAIC1, SLASCL, SLASET, SLATZM,
+     $                   SORM2R, STRSM, STZRQF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -241,7 +239,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGELSX', -INFO )
+         CALL XERBLA( 'SGELSX', -INFO )
          RETURN
       END IF
 *
@@ -256,56 +254,53 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max elements outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_SLANGE( 'M', M, N, A, LDA, WORK )
+      ANRM = SLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL AB_SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          RANK = 0
          GO TO 100
       END IF
 *
-      BNRM = AB_SLANGE( 'M', M, NRHS, B, LDB, WORK )
+      BNRM = SLANGE( 'M', M, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO 
-     $)
+         CALL SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO 
-     $)
+         CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
          IBSCL = 2
       END IF
 *
 *     Compute QR factorization with column pivoting of A:
 *        A * P = Q * R
 *
-      CALL AB_SGEQPF( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ), INFO 
-     $)
+      CALL SGEQPF( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ), INFO )
 *
 *     workspace 3*N. Details of Householder rotations stored
 *     in WORK(1:MN).
@@ -318,7 +313,7 @@
       SMIN = SMAX
       IF( ABS( A( 1, 1 ) ).EQ.ZERO ) THEN
          RANK = 0
-         CALL AB_SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          GO TO 100
       ELSE
          RANK = 1
@@ -327,9 +322,9 @@
    10 CONTINUE
       IF( RANK.LT.MN ) THEN
          I = RANK + 1
-         CALL AB_SLAIC1( IMIN, RANK, WORK( ISMIN ), SMIN, A( 1, I ),
+         CALL SLAIC1( IMIN, RANK, WORK( ISMIN ), SMIN, A( 1, I ),
      $                A( I, I ), SMINPR, S1, C1 )
-         CALL AB_SLAIC1( IMAX, RANK, WORK( ISMAX ), SMAX, A( 1, I ),
+         CALL SLAIC1( IMAX, RANK, WORK( ISMAX ), SMAX, A( 1, I ),
      $                A( I, I ), SMAXPR, S2, C2 )
 *
          IF( SMAXPR*RCOND.LE.SMINPR ) THEN
@@ -353,21 +348,20 @@
 *     [R11,R12] = [ T11, 0 ] * Y
 *
       IF( RANK.LT.N )
-     $   CALL AB_STZRQF( RANK, N, A, LDA, WORK( MN+1 ), INFO )
+     $   CALL STZRQF( RANK, N, A, LDA, WORK( MN+1 ), INFO )
 *
 *     Details of Householder rotations stored in WORK(MN+1:2*MN)
 *
 *     B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-      CALL AB_SORM2R( 'Left', 'Transpose', M, NRHS, MN, A, LDA, WORK( 1 
-     $),
+      CALL SORM2R( 'Left', 'Transpose', M, NRHS, MN, A, LDA, WORK( 1 ),
      $             B, LDB, WORK( 2*MN+1 ), INFO )
 *
 *     workspace NRHS
 *
 *     B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS)
 *
-      CALL AB_STRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', RANK,
+      CALL STRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', RANK,
      $            NRHS, ONE, A, LDA, B, LDB )
 *
       DO 40 I = RANK + 1, N
@@ -380,7 +374,7 @@
 *
       IF( RANK.LT.N ) THEN
          DO 50 I = 1, RANK
-            CALL AB_SLATZM( 'Left', N-RANK+1, NRHS, A( I, RANK+1 ), LDA,
+            CALL SLATZM( 'Left', N-RANK+1, NRHS, A( I, RANK+1 ), LDA,
      $                   WORK( MN+I ), B( I, 1 ), B( RANK+1, 1 ), LDB,
      $                   WORK( 2*MN+1 ) )
    50    CONTINUE
@@ -418,28 +412,24 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO 
-     $)
-         CALL AB_SLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
+         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO 
-     $)
-         CALL AB_SLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
+         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO 
-     $)
+         CALL SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO 
-     $)
+         CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
       END IF
 *
   100 CONTINUE
 *
       RETURN
 *
-*     End of AB_SGELSX
+*     End of SGELSX
 *
       END

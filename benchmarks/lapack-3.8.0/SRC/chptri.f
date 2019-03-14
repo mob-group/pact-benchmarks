@@ -1,4 +1,4 @@
-*> \brief \b AB_CHPTRI
+*> \brief \b CHPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHPTRI.f">
+*> Download CHPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chptri.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chptri.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chptri.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+*       SUBROUTINE CHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CHPTRI computes the inverse of a complex Hermitian indefinite matrix
+*> CHPTRI computes the inverse of a complex Hermitian indefinite matrix
 *> A in packed storage using the factorization A = U*D*U**H or
-*> A = L*D*L**H computed by AB_CHPTRF.
+*> A = L*D*L**H computed by CHPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          AP is COMPLEX array, dimension (N*(N+1)/2)
 *>          On entry, the block diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_CHPTRF,
+*>          used to obtain the factor U or L as computed by CHPTRF,
 *>          stored as a packed triangular matrix.
 *>
 *>          On exit, if INFO = 0, the (Hermitian) inverse of the original
@@ -77,7 +77,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_CHPTRF.
+*>          as determined by CHPTRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -107,7 +107,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+      SUBROUTINE CHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,12 +138,12 @@
       COMPLEX            AKKP1, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_CDOTC
+      LOGICAL            LSAME
+      COMPLEX            CDOTC
+      EXTERNAL           LSAME, CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CHPMV, AB_CSWAP, AB_XERBLA
+      EXTERNAL           CCOPY, CHPMV, CSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, REAL
@@ -153,14 +153,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHPTRI', -INFO )
+         CALL XERBLA( 'CHPTRI', -INFO )
          RETURN
       END IF
 *
@@ -222,12 +222,11 @@
 *           Compute column K of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_CCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL AB_CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
+               CALL CCOPY( K-1, AP( KC ), 1, WORK, 1 )
+               CALL CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        REAL( AB_CDOTC( K-1, WORK, 1, AP( KC ), 1 
-     $) )
+     $                        REAL( CDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
             END IF
             KSTEP = 1
          ELSE
@@ -248,22 +247,19 @@
 *           Compute columns K and K+1 of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_CCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL AB_CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
+               CALL CCOPY( K-1, AP( KC ), 1, WORK, 1 )
+               CALL CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        REAL( AB_CDOTC( K-1, WORK, 1, AP( KC ), 1 
-     $) )
+     $                        REAL( CDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            AB_CDOTC( K-1, AP( KC ), 1, AP( KCNEXT
-     $ ),
+     $                            CDOTC( K-1, AP( KC ), 1, AP( KCNEXT ),
      $                            1 )
-               CALL AB_CCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
-               CALL AB_CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
+               CALL CCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
+               CALL CHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KCNEXT ), 1 )
                AP( KCNEXT+K ) = AP( KCNEXT+K ) -
-     $                          REAL( AB_CDOTC( K-1, WORK, 1, AP( KCNEXT
-     $ ),
+     $                          REAL( CDOTC( K-1, WORK, 1, AP( KCNEXT ),
      $                          1 ) )
             END IF
             KSTEP = 2
@@ -277,7 +273,7 @@
 *           submatrix A(1:k+1,1:k+1)
 *
             KPC = ( KP-1 )*KP / 2 + 1
-            CALL AB_CSWAP( KP-1, AP( KC ), 1, AP( KPC ), 1 )
+            CALL CSWAP( KP-1, AP( KC ), 1, AP( KPC ), 1 )
             KX = KPC + KP - 1
             DO 40 J = KP + 1, K - 1
                KX = KX + J - 1
@@ -330,10 +326,10 @@
 *           Compute column K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL AB_CCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL AB_CHPMV( UPLO, N-K, -CONE, AP( KC+N-K+1 ), WORK, 1,
+               CALL CCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
+               CALL CHPMV( UPLO, N-K, -CONE, AP( KC+N-K+1 ), WORK, 1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - REAL( AB_CDOTC( N-K, WORK, 1,
+               AP( KC ) = AP( KC ) - REAL( CDOTC( N-K, WORK, 1,
      $                    AP( KC+1 ), 1 ) )
             END IF
             KSTEP = 1
@@ -355,22 +351,19 @@
 *           Compute columns K-1 and K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL AB_CCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL AB_CHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK
-     $,
+               CALL CCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
+               CALL CHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
      $                     1, ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - REAL( AB_CDOTC( N-K, WORK, 1,
+               AP( KC ) = AP( KC ) - REAL( CDOTC( N-K, WORK, 1,
      $                    AP( KC+1 ), 1 ) )
                AP( KCNEXT+1 ) = AP( KCNEXT+1 ) -
-     $                          AB_CDOTC( N-K, AP( KC+1 ), 1,
+     $                          CDOTC( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
-               CALL AB_CCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL AB_CHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK
-     $,
+               CALL CCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
+               CALL CHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
      $                     1, ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
-     $                        REAL( AB_CDOTC( N-K, WORK, 1, AP( KCNEXT+2
-     $ ),
+     $                        REAL( CDOTC( N-K, WORK, 1, AP( KCNEXT+2 ),
      $                        1 ) )
             END IF
             KSTEP = 2
@@ -385,7 +378,7 @@
 *
             KPC = NPP - ( N-KP+1 )*( N-KP+2 ) / 2 + 1
             IF( KP.LT.N )
-     $         CALL AB_CSWAP( N-KP, AP( KC+KP-K+1 ), 1, AP( KPC+1 ), 1 )
+     $         CALL CSWAP( N-KP, AP( KC+KP-K+1 ), 1, AP( KPC+1 ), 1 )
             KX = KC + KP - K
             DO 70 J = K + 1, KP - 1
                KX = KX + N - J + 1
@@ -412,6 +405,6 @@
 *
       RETURN
 *
-*     End of AB_CHPTRI
+*     End of CHPTRI
 *
       END

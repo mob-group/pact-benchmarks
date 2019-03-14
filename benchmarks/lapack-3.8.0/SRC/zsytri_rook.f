@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSYTRI_ROOK
+*> \brief \b ZSYTRI_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZSYTRI_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSYTRI_rook.f">
+*> Download ZSYTRI_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytri_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSYTRI_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytri_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSYTRI_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytri_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
+*       SUBROUTINE ZSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSYTRI_ROOK computes the inverse of a complex symmetric
+*> ZSYTRI_ROOK computes the inverse of a complex symmetric
 *> matrix A using the factorization A = U*D*U**T or A = L*D*L**T
-*> computed by AB_ZSYTRF_ROOK.
+*> computed by ZSYTRF_ROOK.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the block diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_ZSYTRF_ROOK.
+*>          used to obtain the factor U or L as computed by ZSYTRF_ROOK.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_ZSYTRF_ROOK.
+*>          as determined by ZSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -127,7 +127,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      SUBROUTINE ZSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -156,12 +156,12 @@
       COMPLEX*16         AK, AKKP1, AKP1, D, T, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX*16         AB_ZDOTU
-      EXTERNAL           AB_LSAME, AB_ZDOTU
+      LOGICAL            LSAME
+      COMPLEX*16         ZDOTU
+      EXTERNAL           LSAME, ZDOTU
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZCOPY, AB_ZSWAP, AB_ZSYMV, AB_XERBLA
+      EXTERNAL           ZCOPY, ZSWAP, ZSYMV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -171,8 +171,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -180,7 +180,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZSYTRI_ROOK', -INFO )
+         CALL XERBLA( 'ZSYTRI_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -236,11 +236,10 @@
 *           Compute column K of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL AB_ZSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
+               CALL ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL ZSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - AB_ZDOTU( K-1, WORK, 1, A( 1, K )
-     $,
+               A( K, K ) = A( K, K ) - ZDOTU( K-1, WORK, 1, A( 1, K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -262,20 +261,18 @@
 *           Compute columns K and K+1 of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL AB_ZSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
+               CALL ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL ZSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - AB_ZDOTU( K-1, WORK, 1, A( 1, K )
-     $,
+               A( K, K ) = A( K, K ) - ZDOTU( K-1, WORK, 1, A( 1, K ),
      $                     1 )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       AB_ZDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ), 1
-     $ )
-               CALL AB_ZCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
-               CALL AB_ZSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
+     $                       ZDOTU( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+               CALL ZCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
+               CALL ZSYMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, CZERO,
      $                     A( 1, K+1 ), 1 )
                A( K+1, K+1 ) = A( K+1, K+1 ) -
-     $                         AB_ZDOTU( K-1, WORK, 1, A( 1, K+1 ), 1 )
+     $                         ZDOTU( K-1, WORK, 1, A( 1, K+1 ), 1 )
             END IF
             KSTEP = 2
          END IF
@@ -288,9 +285,8 @@
             KP = IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
-     $             CALL AB_ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL AB_ZSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LD
-     $A )
+     $             CALL ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+               CALL ZSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -303,9 +299,8 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
-     $            CALL AB_ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL AB_ZSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LD
-     $A )
+     $            CALL ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+               CALL ZSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -319,9 +314,8 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
-     $            CALL AB_ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL AB_ZSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LD
-     $A )
+     $            CALL ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+               CALL ZSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -358,12 +352,10 @@
 *           Compute column K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL AB_ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL AB_ZSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK,
-     $ 1,
+               CALL ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL ZSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK, 1,
      $                     CZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - AB_ZDOTU( N-K, WORK, 1, A( K+1, K
-     $ ),
+               A( K, K ) = A( K, K ) - ZDOTU( N-K, WORK, 1, A( K+1, K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -385,24 +377,19 @@
 *           Compute columns K-1 and K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL AB_ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL AB_ZSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK,
-     $ 1,
+               CALL ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL ZSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK, 1,
      $                     CZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - AB_ZDOTU( N-K, WORK, 1, A( K+1, K
-     $ ),
+               A( K, K ) = A( K, K ) - ZDOTU( N-K, WORK, 1, A( K+1, K ),
      $                     1 )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       AB_ZDOTU( N-K, A( K+1, K ), 1, A( K+1, K-1 
-     $),
+     $                       ZDOTU( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
      $                       1 )
-               CALL AB_ZCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL AB_ZSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK,
-     $ 1,
+               CALL ZCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
+               CALL ZSYMV( UPLO, N-K,-CONE, A( K+1, K+1 ), LDA, WORK, 1,
      $                     CZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         AB_ZDOTU( N-K, WORK, 1, A( K+1, K-1 ), 1 
-     $)
+     $                         ZDOTU( N-K, WORK, 1, A( K+1, K-1 ), 1 )
             END IF
             KSTEP = 2
          END IF
@@ -415,10 +402,8 @@
             KP = IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL AB_ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1
-     $ )
-               CALL AB_ZSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA 
-     $)
+     $            CALL ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+               CALL ZSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -431,10 +416,8 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL AB_ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1
-     $ )
-               CALL AB_ZSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA 
-     $)
+     $            CALL ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+               CALL ZSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -448,10 +431,8 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL AB_ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1
-     $ )
-               CALL AB_ZSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA 
-     $)
+     $            CALL ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+               CALL ZSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -465,6 +446,6 @@
 *
       RETURN
 *
-*     End of AB_ZSYTRI_ROOK
+*     End of ZSYTRI_ROOK
 *
       END

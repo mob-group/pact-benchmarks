@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAED7 used by AB_SSTEDC. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense.
+*> \brief \b CLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAED7 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAED7.f">
+*> Download CLAED7 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed7.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAED7.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed7.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAED7.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed7.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAED7( N, CUTPNT, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
+*       SUBROUTINE CLAED7( N, CUTPNT, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
 *                          LDQ, RHO, INDXQ, QSTORE, QPTR, PRMPTR, PERM,
 *                          GIVPTR, GIVCOL, GIVNUM, WORK, RWORK, IWORK,
 *                          INFO )
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAED7 computes the updated eigensystem of a diagonal
+*> CLAED7 computes the updated eigensystem of a diagonal
 *> matrix after modification by a rank-one symmetric matrix. This
 *> routine is used only for the eigenproblem which requires all
 *> eigenvalues and optionally eigenvectors of a dense or banded
@@ -59,11 +59,11 @@
 *>       when there are multiple eigenvalues or if there is a zero in
 *>       the Z vector.  For each such occurrence the dimension of the
 *>       secular equation problem is reduced by one.  This stage is
-*>       performed by the routine AB_SLAED2.
+*>       performed by the routine SLAED2.
 *>
 *>       The second stage consists of calculating the updated
 *>       eigenvalues. This is done by finding the roots of the secular
-*>       equation via the routine AB_SLAED4 (as called by AB_SLAED3).
+*>       equation via the routine SLAED4 (as called by SLAED3).
 *>       This routine also calculates the eigenvectors of the current
 *>       problem.
 *>
@@ -244,8 +244,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAED7( N, CUTPNT, QSIZ, TLVLS, CURLVL, CURPBM, D, Q
-     $,
+      SUBROUTINE CLAED7( N, CUTPNT, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
      $                   LDQ, RHO, INDXQ, QSTORE, QPTR, PRMPTR, PERM,
      $                   GIVPTR, GIVCOL, GIVNUM, WORK, RWORK, IWORK,
      $                   INFO )
@@ -274,8 +273,7 @@
      $                   INDXC, INDXP, IQ, IW, IZ, K, N1, N2, PTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLACRM, AB_CLAED8, AB_SLAED9, AB_SLAEDA, AB_
-     $SLAMRG, AB_XERBLA
+      EXTERNAL           CLACRM, CLAED8, SLAED9, SLAEDA, SLAMRG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -299,7 +297,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLAED7', -INFO )
+         CALL XERBLA( 'CLAED7', -INFO )
          RETURN
       END IF
 *
@@ -310,7 +308,7 @@
 *
 *     The following values are for bookkeeping purposes only.  They are
 *     integer pointers which indicate the portion of the workspace
-*     used by a particular array in AB_SLAED2 and AB_SLAED3.
+*     used by a particular array in SLAED2 and SLAED3.
 *
       IZ = 1
       IDLMDA = IZ + N
@@ -330,7 +328,7 @@
          PTR = PTR + 2**( TLVLS-I )
    10 CONTINUE
       CURR = PTR + CURPBM
-      CALL AB_SLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
+      CALL SLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
      $             GIVCOL, GIVNUM, QSTORE, QPTR, RWORK( IZ ),
      $             RWORK( IZ+N ), INFO )
 *
@@ -346,7 +344,7 @@
 *
 *     Sort and Deflate eigenvalues.
 *
-      CALL AB_CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, RWORK( IZ ),
+      CALL CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, RWORK( IZ ),
      $             RWORK( IDLMDA ), WORK, QSIZ, RWORK( IW ),
      $             IWORK( INDXP ), IWORK( INDX ), INDXQ,
      $             PERM( PRMPTR( CURR ) ), GIVPTR( CURR+1 ),
@@ -358,11 +356,10 @@
 *     Solve Secular Equation.
 *
       IF( K.NE.0 ) THEN
-         CALL AB_SLAED9( K, 1, K, N, D, RWORK( IQ ), K, RHO,
+         CALL SLAED9( K, 1, K, N, D, RWORK( IQ ), K, RHO,
      $                RWORK( IDLMDA ), RWORK( IW ),
      $                QSTORE( QPTR( CURR ) ), K, INFO )
-         CALL AB_CLACRM( QSIZ, K, WORK, QSIZ, QSTORE( QPTR( CURR ) ), K,
-     $ Q,
+         CALL CLACRM( QSIZ, K, WORK, QSIZ, QSTORE( QPTR( CURR ) ), K, Q,
      $                LDQ, RWORK( IQ ) )
          QPTR( CURR+1 ) = QPTR( CURR ) + K**2
          IF( INFO.NE.0 ) THEN
@@ -373,7 +370,7 @@
 *
          N1 = K
          N2 = N - K
-         CALL AB_SLAMRG( N1, N2, D, 1, -1, INDXQ )
+         CALL SLAMRG( N1, N2, D, 1, -1, INDXQ )
       ELSE
          QPTR( CURR+1 ) = QPTR( CURR )
          DO 20 I = 1, N
@@ -383,6 +380,6 @@
 *
       RETURN
 *
-*     End of AB_CLAED7
+*     End of CLAED7
 *
       END

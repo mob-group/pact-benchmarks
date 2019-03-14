@@ -1,4 +1,4 @@
-*> \brief \b AB_SGEQRT
+*> \brief \b SGEQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGEQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGEQRt.f">
+*> Download SGEQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqrt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGEQRt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeqrt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGEQRt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqrt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+*       SUBROUTINE SGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER INFO, LDA, LDT, M, N, NB
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGEQRT computes a blocked QR factorization of a real M-by-N matrix A
+*> SGEQRT computes a blocked QR factorization of a real M-by-N matrix A
 *> using the compact WY representation of Q.
 *> \endverbatim
 *
@@ -139,7 +139,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+      SUBROUTINE SGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,7 +162,7 @@
       PARAMETER( USE_RECURSIVE_QR=.TRUE. )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   AB_SGEQRT2, AB_SGEQRT3, AB_SLARFB, AB_XERBLA
+      EXTERNAL   SGEQRT2, SGEQRT3, SLARFB, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -181,7 +181,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGEQRT', -INFO )
+         CALL XERBLA( 'SGEQRT', -INFO )
          RETURN
       END IF
 *
@@ -198,23 +198,21 @@
 *     Compute the QR factorization of the current block A(I:M,I:I+IB-1)
 *
          IF( USE_RECURSIVE_QR ) THEN
-            CALL AB_SGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO 
-     $)
+            CALL SGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
          ELSE
-            CALL AB_SGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO 
-     $)
+            CALL SGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
          END IF
          IF( I+IB.LE.N ) THEN
 *
 *     Update by applying H**T to A(I:M,I+IB:N) from the left
 *
-            CALL AB_SLARFB( 'L', 'T', 'F', 'C', M-I+1, N-I-IB+1, IB,
+            CALL SLARFB( 'L', 'T', 'F', 'C', M-I+1, N-I-IB+1, IB,
      $                   A( I, I ), LDA, T( 1, I ), LDT,
      $                   A( I, I+IB ), LDA, WORK , N-I-IB+1 )
          END IF
       END DO
       RETURN
 *
-*     End of AB_SGEQRT
+*     End of SGEQRT
 *
       END

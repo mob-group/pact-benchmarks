@@ -1,4 +1,4 @@
-*> \brief \b AB_DGER
+*> \brief \b DGER
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+*       SUBROUTINE DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION ALPHA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGER   performs the rank 1 operation
+*> DGER   performs the rank 1 operation
 *>
 *>    A := alpha*x*y**T + A,
 *>
@@ -128,7 +128,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+      SUBROUTINE DGER(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -154,7 +154,7 @@
       INTEGER I,INFO,IX,J,JY,KX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -175,7 +175,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_DGER  ',INFO)
+          CALL XERBLA('DGER  ',INFO)
           RETURN
       END IF
 *
@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of AB_DGER  .
+*     End of DGER  .
 *
       END

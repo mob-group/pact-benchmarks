@@ -1,4 +1,4 @@
-*> \brief \b AB_CHPGST
+*> \brief \b CHPGST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHPGST + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHPGST.f">
+*> Download CHPGST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpgst.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHPGST.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpgst.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHPGST.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgst.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+*       SUBROUTINE CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHPGST reduces a complex Hermitian-definite generalized
+*> CHPGST reduces a complex Hermitian-definite generalized
 *> eigenproblem to standard form, using packed storage.
 *>
 *> If ITYPE = 1, the problem is A*x = lambda*B*x,
@@ -43,7 +43,7 @@
 *> If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H*A*L.
 *>
-*> B must have been previously factorized as U**H*U or L*L**H by AB_CPPTRF.
+*> B must have been previously factorized as U**H*U or L*L**H by CPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -88,7 +88,7 @@
 *> \verbatim
 *>          BP is COMPLEX array, dimension (N*(N+1)/2)
 *>          The triangular factor from the Cholesky factorization of B,
-*>          stored in the same format as A, as returned by AB_CPPTRF.
+*>          stored in the same format as A, as returned by CPPTRF.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -111,7 +111,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      SUBROUTINE CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,33 +141,32 @@
       COMPLEX            CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CHPMV, AB_CHPR2, AB_CSSCAL, AB_CTP
-     $MV, AB_CTPSV,
-     $                   AB_XERBLA
+      EXTERNAL           CAXPY, CHPMV, CHPR2, CSSCAL, CTPMV, CTPSV,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_CDOTC
+      LOGICAL            LSAME
+      COMPLEX            CDOTC
+      EXTERNAL           LSAME, CDOTC
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHPGST', -INFO )
+         CALL XERBLA( 'CHPGST', -INFO )
          RETURN
       END IF
 *
@@ -187,14 +186,12 @@
 *
                AP( JJ ) = REAL( AP( JJ ) )
                BJJ = BP( JJ )
-               CALL AB_CTPSV( UPLO, 'Conjugate transpose', 'Non-unit', J
-     $,
+               CALL CTPSV( UPLO, 'Conjugate transpose', 'Non-unit', J,
      $                     BP, AP( J1 ), 1 )
-               CALL AB_CHPMV( UPLO, J-1, -CONE, AP, BP( J1 ), 1, CONE,
+               CALL CHPMV( UPLO, J-1, -CONE, AP, BP( J1 ), 1, CONE,
      $                     AP( J1 ), 1 )
-               CALL AB_CSSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
-               AP( JJ ) = ( AP( JJ )-AB_CDOTC( J-1, AP( J1 ), 1, BP( J1 
-     $),
+               CALL CSSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
+               AP( JJ ) = ( AP( JJ )-CDOTC( J-1, AP( J1 ), 1, BP( J1 ),
      $                    1 ) ) / BJJ
    10       CONTINUE
          ELSE
@@ -214,13 +211,13 @@
                AKK = AKK / BKK**2
                AP( KK ) = AKK
                IF( K.LT.N ) THEN
-                  CALL AB_CSSCAL( N-K, ONE / BKK, AP( KK+1 ), 1 )
+                  CALL CSSCAL( N-K, ONE / BKK, AP( KK+1 ), 1 )
                   CT = -HALF*AKK
-                  CALL AB_CAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
-                  CALL AB_CHPR2( UPLO, N-K, -CONE, AP( KK+1 ), 1,
+                  CALL CAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
+                  CALL CHPR2( UPLO, N-K, -CONE, AP( KK+1 ), 1,
      $                        BP( KK+1 ), 1, AP( K1K1 ) )
-                  CALL AB_CAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
-                  CALL AB_CTPSV( UPLO, 'No transpose', 'Non-unit', N-K,
+                  CALL CAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
+                  CALL CTPSV( UPLO, 'No transpose', 'Non-unit', N-K,
      $                        BP( K1K1 ), AP( KK+1 ), 1 )
                END IF
                KK = K1K1
@@ -242,14 +239,14 @@
 *
                AKK = AP( KK )
                BKK = BP( KK )
-               CALL AB_CTPMV( UPLO, 'No transpose', 'Non-unit', K-1, BP,
+               CALL CTPMV( UPLO, 'No transpose', 'Non-unit', K-1, BP,
      $                     AP( K1 ), 1 )
                CT = HALF*AKK
-               CALL AB_CAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
-               CALL AB_CHPR2( UPLO, K-1, CONE, AP( K1 ), 1, BP( K1 ), 1,
+               CALL CAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
+               CALL CHPR2( UPLO, K-1, CONE, AP( K1 ), 1, BP( K1 ), 1,
      $                     AP )
-               CALL AB_CAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
-               CALL AB_CSSCAL( K-1, BKK, AP( K1 ), 1 )
+               CALL CAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
+               CALL CSSCAL( K-1, BKK, AP( K1 ), 1 )
                AP( KK ) = AKK*BKK**2
    30       CONTINUE
          ELSE
@@ -266,13 +263,12 @@
 *
                AJJ = AP( JJ )
                BJJ = BP( JJ )
-               AP( JJ ) = AJJ*BJJ + AB_CDOTC( N-J, AP( JJ+1 ), 1,
+               AP( JJ ) = AJJ*BJJ + CDOTC( N-J, AP( JJ+1 ), 1,
      $                    BP( JJ+1 ), 1 )
-               CALL AB_CSSCAL( N-J, BJJ, AP( JJ+1 ), 1 )
-               CALL AB_CHPMV( UPLO, N-J, CONE, AP( J1J1 ), BP( JJ+1 ), 1
-     $,
+               CALL CSSCAL( N-J, BJJ, AP( JJ+1 ), 1 )
+               CALL CHPMV( UPLO, N-J, CONE, AP( J1J1 ), BP( JJ+1 ), 1,
      $                     CONE, AP( JJ+1 ), 1 )
-               CALL AB_CTPMV( UPLO, 'Conjugate transpose', 'Non-unit',
+               CALL CTPMV( UPLO, 'Conjugate transpose', 'Non-unit',
      $                     N-J+1, BP( JJ ), AP( JJ ), 1 )
                JJ = J1J1
    40       CONTINUE
@@ -280,6 +276,6 @@
       END IF
       RETURN
 *
-*     End of AB_CHPGST
+*     End of CHPGST
 *
       END

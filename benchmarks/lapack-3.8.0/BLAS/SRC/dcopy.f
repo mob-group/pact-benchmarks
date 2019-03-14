@@ -1,4 +1,4 @@
-*> \brief \b AB_DCOPY
+*> \brief \b DCOPY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCOPY(N,DX,INCX,DY,INCY)
+*       SUBROUTINE DCOPY(N,DX,INCX,DY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_DCOPY copies a vector, x, to a vector, y.
+*>    DCOPY copies a vector, x, to a vector, y.
 *>    uses unrolled loops for increments equal to 1.
 *> \endverbatim
 *
@@ -80,7 +80,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DCOPY(N,DX,INCX,DY,INCY)
+      SUBROUTINE DCOPY(N,DX,INCX,DY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

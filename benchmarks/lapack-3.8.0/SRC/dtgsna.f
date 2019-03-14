@@ -1,4 +1,4 @@
-*> \brief \b AB_DTGSNA
+*> \brief \b DTGSNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DTGSNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTGSNA.f">
+*> Download DTGSNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgsna.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTGSNA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgsna.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTGSNA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgsna.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
+*       SUBROUTINE DTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
 *                          LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
 *                          IWORK, INFO )
 *
@@ -39,13 +39,13 @@
 *>
 *> \verbatim
 *>
-*> AB_DTGSNA estimates reciprocal condition numbers for specified
+*> DTGSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or eigenvectors of a matrix pair (A, B) in
 *> generalized real Schur canonical form (or of any matrix pair
 *> (Q*A*Z**T, Q*B*Z**T) with orthogonal matrices Q and Z, where
 *> Z**T denotes the transpose of Z.
 *>
-*> (A, B) must be in generalized real Schur form (as returned by AB_DGGES),
+*> (A, B) must be in generalized real Schur form (as returned by DGGES),
 *> i.e. A is block upper triangular with 1-by-1 and 2-by-2 diagonal
 *> blocks. B is upper triangular.
 *>
@@ -121,7 +121,7 @@
 *>          If JOB = 'E' or 'B', VL must contain left eigenvectors of
 *>          (A, B), corresponding to the eigenpairs specified by HOWMNY
 *>          and SELECT. The eigenvectors must be stored in consecutive
-*>          columns of VL, as returned by AB_DTGEVC.
+*>          columns of VL, as returned by DTGEVC.
 *>          If JOB = 'V', VL is not referenced.
 *> \endverbatim
 *>
@@ -138,7 +138,7 @@
 *>          If JOB = 'E' or 'B', VR must contain right eigenvectors of
 *>          (A, B), corresponding to the eigenpairs specified by HOWMNY
 *>          and SELECT. The eigenvectors must be stored in consecutive
-*>          columns ov VR, as returned by AB_DTGEVC.
+*>          columns ov VR, as returned by DTGEVC.
 *>          If JOB = 'V', VR is not referenced.
 *> \endverbatim
 *>
@@ -206,7 +206,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -285,9 +285,9 @@
 *>     Kronecker product between the matrices X and Y.
 *>
 *>     Note that if the default method for computing DIF(i) is wanted
-*>     (see AB_DLATDF), then the parameter DIFDRI (see below) should be
-*>     changed from 3 to 4 (routine AB_DLATDF(IJOB = 2 will be used)).
-*>     See AB_DTGSYL for more details.
+*>     (see DLATDF), then the parameter DIFDRI (see below) should be
+*>     changed from 3 to 4 (routine DLATDF(IJOB = 2 will be used)).
+*>     See DTGSYL for more details.
 *>
 *>  b) If the i-th and (i+1)-th eigenvalues are complex conjugate pair,
 *>
@@ -329,8 +329,8 @@
 *>                   [ kron(T11**T, In-2)  -kron(I2, T22) ]
 *>
 *>     Note that if the default method for computing DIF is wanted (see
-*>     AB_DLATDF), then the parameter DIFDRI (see below) should be changed
-*>     from 3 to 4 (routine AB_DLATDF(IJOB = 2 will be used)). See AB_DTGSYL
+*>     DLATDF), then the parameter DIFDRI (see below) should be changed
+*>     from 3 to 4 (routine DLATDF(IJOB = 2 will be used)). See DTGSYL
 *>     for more details.
 *>
 *>  For each eigenvalue/vector specified by SELECT, DIF stores a
@@ -377,7 +377,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
+      SUBROUTINE DTGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
      $                   LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -418,13 +418,12 @@
       DOUBLE PRECISION   DUMMY( 1 ), DUMMY1( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DDOT, DLAMCH, AB_DLAPY2, AB_DNRM2
-      EXTERNAL           AB_LSAME, AB_DDOT, DLAMCH, AB_DLAPY2, AB_DNRM2
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DDOT, DLAMCH, DLAPY2, DNRM2
+      EXTERNAL           LSAME, DDOT, DLAMCH, DLAPY2, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DLACPY, AB_DLAG2, AB_DTGEXC, AB_DT
-     $GSYL, AB_XERBLA
+      EXTERNAL           DGEMV, DLACPY, DLAG2, DTGEXC, DTGSYL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -433,18 +432,18 @@
 *
 *     Decode and test the input parameters
 *
-      WANTBH = AB_LSAME( JOB, 'B' )
-      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTDF = AB_LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTBH = LSAME( JOB, 'B' )
+      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTDF = LSAME( JOB, 'V' ) .OR. WANTBH
 *
-      SOMCON = AB_LSAME( HOWMNY, 'S' )
+      SOMCON = LSAME( HOWMNY, 'S' )
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
 *
       IF( .NOT.WANTS .AND. .NOT.WANTDF ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
+      ELSE IF( .NOT.LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -489,7 +488,7 @@
 *
          IF( N.EQ.0 ) THEN
             LWMIN = 1
-         ELSE IF( AB_LSAME( JOB, 'V' ) .OR. AB_LSAME( JOB, 'B' ) ) THEN
+         ELSE IF( LSAME( JOB, 'V' ) .OR. LSAME( JOB, 'B' ) ) THEN
             LWMIN = 2*N*( N + 2 ) + 16
          ELSE
             LWMIN = N
@@ -504,7 +503,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTGSNA', -INFO )
+         CALL XERBLA( 'DTGSNA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -558,35 +557,33 @@
 *
 *              Complex eigenvalue pair.
 *
-               RNRM = AB_DLAPY2( AB_DNRM2( N, VR( 1, KS ), 1 ),
-     $                AB_DNRM2( N, VR( 1, KS+1 ), 1 ) )
-               LNRM = AB_DLAPY2( AB_DNRM2( N, VL( 1, KS ), 1 ),
-     $                AB_DNRM2( N, VL( 1, KS+1 ), 1 ) )
-               CALL AB_DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZE
-     $RO,
+               RNRM = DLAPY2( DNRM2( N, VR( 1, KS ), 1 ),
+     $                DNRM2( N, VR( 1, KS+1 ), 1 ) )
+               LNRM = DLAPY2( DNRM2( N, VL( 1, KS ), 1 ),
+     $                DNRM2( N, VL( 1, KS+1 ), 1 ) )
+               CALL DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
      $                     WORK, 1 )
-               TMPRR = AB_DDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               TMPRI = AB_DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
-               CALL AB_DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS+1 ), 1,
+               TMPRR = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               TMPRI = DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
+               CALL DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS+1 ), 1,
      $                     ZERO, WORK, 1 )
-               TMPII = AB_DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
-               TMPIR = AB_DDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               TMPII = DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
+               TMPIR = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
                UHAV = TMPRR + TMPII
                UHAVI = TMPIR - TMPRI
-               CALL AB_DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZE
-     $RO,
+               CALL DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
      $                     WORK, 1 )
-               TMPRR = AB_DDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               TMPRI = AB_DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
-               CALL AB_DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS+1 ), 1,
+               TMPRR = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               TMPRI = DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
+               CALL DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS+1 ), 1,
      $                     ZERO, WORK, 1 )
-               TMPII = AB_DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
-               TMPIR = AB_DDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               TMPII = DDOT( N, WORK, 1, VL( 1, KS+1 ), 1 )
+               TMPIR = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
                UHBV = TMPRR + TMPII
                UHBVI = TMPIR - TMPRI
-               UHAV = AB_DLAPY2( UHAV, UHAVI )
-               UHBV = AB_DLAPY2( UHBV, UHBVI )
-               COND = AB_DLAPY2( UHAV, UHBV )
+               UHAV = DLAPY2( UHAV, UHAVI )
+               UHBV = DLAPY2( UHBV, UHBVI )
+               COND = DLAPY2( UHAV, UHBV )
                S( KS ) = COND / ( RNRM*LNRM )
                S( KS+1 ) = S( KS )
 *
@@ -594,17 +591,15 @@
 *
 *              Real eigenvalue.
 *
-               RNRM = AB_DNRM2( N, VR( 1, KS ), 1 )
-               LNRM = AB_DNRM2( N, VL( 1, KS ), 1 )
-               CALL AB_DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZE
-     $RO,
+               RNRM = DNRM2( N, VR( 1, KS ), 1 )
+               LNRM = DNRM2( N, VL( 1, KS ), 1 )
+               CALL DGEMV( 'N', N, N, ONE, A, LDA, VR( 1, KS ), 1, ZERO,
      $                     WORK, 1 )
-               UHAV = AB_DDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               CALL AB_DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZE
-     $RO,
+               UHAV = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               CALL DGEMV( 'N', N, N, ONE, B, LDB, VR( 1, KS ), 1, ZERO,
      $                     WORK, 1 )
-               UHBV = AB_DDOT( N, WORK, 1, VL( 1, KS ), 1 )
-               COND = AB_DLAPY2( UHAV, UHBV )
+               UHBV = DDOT( N, WORK, 1, VL( 1, KS ), 1 )
+               COND = DLAPY2( UHAV, UHBV )
                IF( COND.EQ.ZERO ) THEN
                   S( KS ) = -ONE
                ELSE
@@ -615,7 +610,7 @@
 *
          IF( WANTDF ) THEN
             IF( N.EQ.1 ) THEN
-               DIF( KS ) = AB_DLAPY2( A( 1, 1 ), B( 1, 1 ) )
+               DIF( KS ) = DLAPY2( A( 1, 1 ), B( 1, 1 ) )
                GO TO 20
             END IF
 *
@@ -634,7 +629,7 @@
                WORK( 6 ) = B( K+1, K )
                WORK( 7 ) = B( K, K+1 )
                WORK( 8 ) = B( K+1, K+1 )
-               CALL AB_DLAG2( WORK, 2, WORK( 5 ), 2, SMLNUM*EPS, BETA,
+               CALL DLAG2( WORK, 2, WORK( 5 ), 2, SMLNUM*EPS, BETA,
      $                     DUMMY1( 1 ), ALPHAR, DUMMY( 1 ), ALPHAI )
                ALPRQT = ONE
                C1 = TWO*( ALPHAR*ALPHAR+ALPHAI*ALPHAI+BETA*BETA )
@@ -648,13 +643,12 @@
 *           Copy the matrix (A, B) to the array WORK and swap the
 *           diagonal block beginning at A(k,k) to the (1,1) position.
 *
-            CALL AB_DLACPY( 'Full', N, N, A, LDA, WORK, N )
-            CALL AB_DLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
+            CALL DLACPY( 'Full', N, N, A, LDA, WORK, N )
+            CALL DLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
             IFST = K
             ILST = 1
 *
-            CALL AB_DTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ),
-     $ N,
+            CALL DTGEXC( .FALSE., .FALSE., N, WORK, N, WORK( N*N+1 ), N,
      $                   DUMMY, 1, DUMMY1, 1, IFST, ILST,
      $                   WORK( N*N*2+1 ), LWORK-2*N*N, IERR )
 *
@@ -680,8 +674,7 @@
                ELSE
                   I = N*N + 1
                   IZ = 2*N*N + 1
-                  CALL AB_DTGSYL( 'N', DIFDRI, N2, N1, WORK( N*N1+N1+1 )
-     $,
+                  CALL DTGSYL( 'N', DIFDRI, N2, N1, WORK( N*N1+N1+1 ),
      $                         N, WORK, N, WORK( N1+1 ), N,
      $                         WORK( N*N1+N1+I ), N, WORK( I ), N,
      $                         WORK( N1+I ), N, SCALE, DIF( KS ),
@@ -702,6 +695,6 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of AB_DTGSNA
+*     End of DTGSNA
 *
       END

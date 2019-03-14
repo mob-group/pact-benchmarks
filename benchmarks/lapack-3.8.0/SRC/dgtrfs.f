@@ -1,4 +1,4 @@
-*> \brief \b AB_DGTRFS
+*> \brief \b DGTRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGTRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGTRFS.f">
+*> Download DGTRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtrfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGTRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtrfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGTRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtrfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+*       SUBROUTINE DGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
 *                          IPIV, B, LDB, X, LDX, FERR, BERR, WORK, IWORK,
 *                          INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGTRFS improves the computed solution to a system of linear
+*> DGTRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is tridiagonal, and provides
 *> error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -91,7 +91,7 @@
 *> \verbatim
 *>          DLF is DOUBLE PRECISION array, dimension (N-1)
 *>          The (n-1) multipliers that define the matrix L from the
-*>          LU factorization of A as computed by AB_DGTTRF.
+*>          LU factorization of A as computed by DGTTRF.
 *> \endverbatim
 *>
 *> \param[in] DF
@@ -137,7 +137,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is DOUBLE PRECISION array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_DGTTRS.
+*>          On entry, the solution matrix X, as computed by DGTTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -205,8 +205,7 @@
 *> \ingroup doubleGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2
-     $,
+      SUBROUTINE DGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, IWORK,
      $                   INFO )
 *
@@ -248,25 +247,24 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGTTRS, AB_DLACN2, AB_DL
-     $AGTM, AB_XERBLA
+      EXTERNAL           DAXPY, DCOPY, DGTTRS, DLACN2, DLAGTM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    AB_LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -278,7 +276,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGTRFS', -INFO )
+         CALL XERBLA( 'DGTRFS', -INFO )
          RETURN
       END IF
 *
@@ -321,9 +319,8 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
-         CALL AB_DCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL AB_DLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, O
-     $NE,
+         CALL DCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL DLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, ONE,
      $                WORK( N+1 ), N )
 *
 *        Compute abs(op(A))*abs(x) + abs(b) for use in the backward
@@ -394,9 +391,9 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_DGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV,
+            CALL DGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV,
      $                   WORK( N+1 ), N, INFO )
-            CALL AB_DAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
+            CALL DAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -420,7 +417,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_DLACN2 to estimate the infinity-norm of the matrix
+*        Use DLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -434,15 +431,14 @@
 *
          KASE = 0
    70    CONTINUE
-         CALL AB_DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
-     $,
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL AB_DGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV,
+               CALL DGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV,
      $                      WORK( N+1 ), N, INFO )
                DO 80 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
@@ -454,7 +450,7 @@
                DO 90 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
    90          CONTINUE
-               CALL AB_DGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV,
+               CALL DGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV,
      $                      WORK( N+1 ), N, INFO )
             END IF
             GO TO 70
@@ -473,6 +469,6 @@
 *
       RETURN
 *
-*     End of AB_DGTRFS
+*     End of DGTRFS
 *
       END

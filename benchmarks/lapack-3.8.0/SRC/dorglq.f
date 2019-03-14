@@ -1,4 +1,4 @@
-*> \brief \b AB_DORGLQ
+*> \brief \b DORGLQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DORGLQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORGLQ.f">
+*> Download DORGLQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorglq.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORGLQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorglq.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORGLQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorglq.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE DORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, LWORK, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> AB_DORGLQ generates an M-by-N real matrix Q with orthonormal rows,
+*> DORGLQ generates an M-by-N real matrix Q with orthonormal rows,
 *> which is defined as the first M rows of a product of K elementary
 *> reflectors of order N
 *>
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
-*> as returned by AB_DGELQF.
+*> as returned by DGELQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the i-th row must contain the vector which defines
 *>          the elementary reflector H(i), for i = 1,2,...,k, as returned
-*>          by AB_DGELQF in the first k rows of its array argument A.
+*>          by DGELQF in the first k rows of its array argument A.
 *>          On exit, the M-by-N matrix Q.
 *> \endverbatim
 *>
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_DGELQF.
+*>          reflector H(i), as returned by DGELQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -102,7 +102,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -125,7 +125,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE DORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,21 +151,21 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLARFB, AB_DLARFT, AB_DORGL2, AB_XERBLA
+      EXTERNAL           DLARFB, DLARFT, DORGL2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments
 *
       INFO = 0
-      NB = AB_ILAENV( 1, 'AB_DORGLQ', ' ', M, N, K, -1 )
+      NB = ILAENV( 1, 'DORGLQ', ' ', M, N, K, -1 )
       LWKOPT = MAX( 1, M )*NB
       WORK( 1 ) = LWKOPT
       LQUERY = ( LWORK.EQ.-1 )
@@ -181,7 +181,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DORGLQ', -INFO )
+         CALL XERBLA( 'DORGLQ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -201,7 +201,7 @@
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, AB_ILAENV( 3, 'AB_DORGLQ', ' ', M, N, K, -1 ) )
+         NX = MAX( 0, ILAENV( 3, 'DORGLQ', ' ', M, N, K, -1 ) )
          IF( NX.LT.K ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -214,8 +214,7 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_DORGLQ', ' ', M, N, K, 
-     $-1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'DORGLQ', ' ', M, N, K, -1 ) )
             END IF
          END IF
       END IF
@@ -242,7 +241,7 @@
 *     Use unblocked code for the last or only block.
 *
       IF( KK.LT.M )
-     $   CALL AB_DORGL2( M-KK, N-KK, K-KK, A( KK+1, KK+1 ), LDA,
+     $   CALL DORGL2( M-KK, N-KK, K-KK, A( KK+1, KK+1 ), LDA,
      $                TAU( KK+1 ), WORK, IINFO )
 *
       IF( KK.GT.0 ) THEN
@@ -256,14 +255,12 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i) H(i+1) . . . H(i+ib-1)
 *
-               CALL AB_DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I 
-     $),
+               CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H**T to A(i+ib:m,i:n) from the right
 *
-               CALL AB_DLARFB( 'Right', 'Transpose', 'Forward', 'Rowwise
-     $',
+               CALL DLARFB( 'Right', 'Transpose', 'Forward', 'Rowwise',
      $                      M-I-IB+1, N-I+1, IB, A( I, I ), LDA, WORK,
      $                      LDWORK, A( I+IB, I ), LDA, WORK( IB+1 ),
      $                      LDWORK )
@@ -271,8 +268,7 @@
 *
 *           Apply H**T to columns i:n of current block
 *
-            CALL AB_DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ), WOR
-     $K,
+            CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ), WORK,
      $                   IINFO )
 *
 *           Set columns 1:i-1 of current block to zero
@@ -288,6 +284,6 @@
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of AB_DORGLQ
+*     End of DORGLQ
 *
       END

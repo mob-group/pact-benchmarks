@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
+*> \brief \b SLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAEIN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAEIN.f">
+*> Download SLAEIN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaein.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAEIN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaein.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAEIN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaein.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
+*       SUBROUTINE SLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
 *                          LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAEIN uses inverse iteration to find a right or left eigenvector
+*> SLAEIN uses inverse iteration to find a right or left eigenvector
 *> corresponding to the eigenvalue (WR,WI) of a real upper Hessenberg
 *> matrix H.
 *> \endverbatim
@@ -169,8 +169,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B
-     $,
+      SUBROUTINE SLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
      $                   LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -202,12 +201,12 @@
      $                   W1, X, XI, XR, Y
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SASUM, AB_SLAPY2, AB_SNRM2
-      EXTERNAL           AB_ISAMAX, AB_SASUM, AB_SLAPY2, AB_SNRM2
+      INTEGER            ISAMAX
+      REAL               SASUM, SLAPY2, SNRM2
+      EXTERNAL           ISAMAX, SASUM, SLAPY2, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLADIV, AB_SLATRS, AB_SSCAL
+      EXTERNAL           SLADIV, SLATRS, SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL, SQRT
@@ -248,8 +247,8 @@
 *
 *           Scale supplied initial vector.
 *
-            VNORM = AB_SNRM2( N, VR, 1 )
-            CALL AB_SSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), VR,
+            VNORM = SNRM2( N, VR, 1 )
+            CALL SSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), VR,
      $                  1 )
          END IF
 *
@@ -336,14 +335,13 @@
 *             or U**T*x = scale*v for a left eigenvector,
 *           overwriting x on v.
 *
-            CALL AB_SLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB
-     $,
+            CALL SLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB,
      $                   VR, SCALE, WORK, IERR )
             NORMIN = 'Y'
 *
 *           Test for sufficient growth in the norm of v.
 *
-            VNORM = AB_SASUM( N, VR, 1 )
+            VNORM = SASUM( N, VR, 1 )
             IF( VNORM.GE.GROWTO*SCALE )
      $         GO TO 120
 *
@@ -365,8 +363,8 @@
 *
 *        Normalize eigenvector.
 *
-         I = AB_ISAMAX( N, VR, 1 )
-         CALL AB_SSCAL( N, ONE / ABS( VR( I ) ), VR, 1 )
+         I = ISAMAX( N, VR, 1 )
+         CALL SSCAL( N, ONE / ABS( VR( I ) ), VR, 1 )
       ELSE
 *
 *        Complex eigenvalue.
@@ -383,11 +381,10 @@
 *
 *           Scale supplied initial vector.
 *
-            NORM = AB_SLAPY2( AB_SNRM2( N, VR, 1 ), AB_SNRM2( N, VI, 1 )
-     $ )
+            NORM = SLAPY2( SNRM2( N, VR, 1 ), SNRM2( N, VI, 1 ) )
             REC = ( EPS3*ROOTN ) / MAX( NORM, NRMSML )
-            CALL AB_SSCAL( N, REC, VR, 1 )
-            CALL AB_SSCAL( N, REC, VI, 1 )
+            CALL SSCAL( N, REC, VR, 1 )
+            CALL SSCAL( N, REC, VI, 1 )
          END IF
 *
          IF( RIGHTV ) THEN
@@ -404,7 +401,7 @@
   140       CONTINUE
 *
             DO 170 I = 1, N - 1
-               ABSBII = AB_SLAPY2( B( I, I ), B( I+1, I ) )
+               ABSBII = SLAPY2( B( I, I ), B( I+1, I ) )
                EI = H( I+1, I )
                IF( ABSBII.LT.ABS( EI ) ) THEN
 *
@@ -446,8 +443,8 @@
 *
 *              Compute 1-norm of offdiagonal elements of i-th row.
 *
-               WORK( I ) = AB_SASUM( N-I, B( I, I+1 ), LDB ) +
-     $                     AB_SASUM( N-I, B( I+2, I ), 1 )
+               WORK( I ) = SASUM( N-I, B( I, I+1 ), LDB ) +
+     $                     SASUM( N-I, B( I+2, I ), 1 )
   170       CONTINUE
             IF( B( N, N ).EQ.ZERO .AND. B( N+1, N ).EQ.ZERO )
      $         B( N, N ) = EPS3
@@ -471,7 +468,7 @@
 *
             DO 210 J = N, 2, -1
                EJ = H( J, J-1 )
-               ABSBJJ = AB_SLAPY2( B( J, J ), B( J+1, J ) )
+               ABSBJJ = SLAPY2( B( J, J ), B( J+1, J ) )
                IF( ABSBJJ.LT.ABS( EJ ) ) THEN
 *
 *                 Interchange columns and eliminate
@@ -512,8 +509,8 @@
 *
 *              Compute 1-norm of offdiagonal elements of j-th column.
 *
-               WORK( J ) = AB_SASUM( J-1, B( 1, J ), 1 ) +
-     $                     AB_SASUM( J-1, B( J+1, 1 ), LDB )
+               WORK( J ) = SASUM( J-1, B( 1, J ), 1 ) +
+     $                     SASUM( J-1, B( J+1, 1 ), LDB )
   210       CONTINUE
             IF( B( 1, 1 ).EQ.ZERO .AND. B( 2, 1 ).EQ.ZERO )
      $         B( 1, 1 ) = EPS3
@@ -537,8 +534,8 @@
 *
                IF( WORK( I ).GT.VCRIT ) THEN
                   REC = ONE / VMAX
-                  CALL AB_SSCAL( N, REC, VR, 1 )
-                  CALL AB_SSCAL( N, REC, VI, 1 )
+                  CALL SSCAL( N, REC, VR, 1 )
+                  CALL SSCAL( N, REC, VI, 1 )
                   SCALE = SCALE*REC
                   VMAX = ONE
                   VCRIT = BIGNUM
@@ -564,8 +561,8 @@
                      W1 = ABS( XR ) + ABS( XI )
                      IF( W1.GT.W*BIGNUM ) THEN
                         REC = ONE / W1
-                        CALL AB_SSCAL( N, REC, VR, 1 )
-                        CALL AB_SSCAL( N, REC, VI, 1 )
+                        CALL SSCAL( N, REC, VR, 1 )
+                        CALL SSCAL( N, REC, VI, 1 )
                         XR = VR( I )
                         XI = VI( I )
                         SCALE = SCALE*REC
@@ -575,8 +572,7 @@
 *
 *                 Divide by diagonal element of B.
 *
-                  CALL AB_SLADIV( XR, XI, B( I, I ), B( I+1, I ), VR( I 
-     $),
+                  CALL SLADIV( XR, XI, B( I, I ), B( I+1, I ), VR( I ),
      $                         VI( I ) )
                   VMAX = MAX( ABS( VR( I ) )+ABS( VI( I ) ), VMAX )
                   VCRIT = BIGNUM / VMAX
@@ -595,7 +591,7 @@
 *
 *           Test for sufficient growth in the norm of (VR,VI).
 *
-            VNORM = AB_SASUM( N, VR, 1 ) + AB_SASUM( N, VI, 1 )
+            VNORM = SASUM( N, VR, 1 ) + SASUM( N, VI, 1 )
             IF( VNORM.GE.GROWTO*SCALE )
      $         GO TO 280
 *
@@ -624,13 +620,13 @@
          DO 290 I = 1, N
             VNORM = MAX( VNORM, ABS( VR( I ) )+ABS( VI( I ) ) )
   290    CONTINUE
-         CALL AB_SSCAL( N, ONE / VNORM, VR, 1 )
-         CALL AB_SSCAL( N, ONE / VNORM, VI, 1 )
+         CALL SSCAL( N, ONE / VNORM, VR, 1 )
+         CALL SSCAL( N, ONE / VNORM, VI, 1 )
 *
       END IF
 *
       RETURN
 *
-*     End of AB_SLAEIN
+*     End of SLAEIN
 *
       END

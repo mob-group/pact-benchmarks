@@ -1,4 +1,4 @@
-*> \brief \b AB_SLASQ2 computes all the eigenvalues of the symmetric positive definite tridiagonal matrix associated with the qd Array Z to high relative accuracy. Used by AB_SBDSQR and AB_SSTEGR.
+*> \brief \b SLASQ2 computes all the eigenvalues of the symmetric positive definite tridiagonal matrix associated with the qd Array Z to high relative accuracy. Used by sbdsqr and sstegr.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLASQ2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASQ2.f">
+*> Download SLASQ2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASQ2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASQ2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLASQ2( N, Z, INFO )
+*       SUBROUTINE SLASQ2( N, Z, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLASQ2 computes all the eigenvalues of the symmetric positive
+*> SLASQ2 computes all the eigenvalues of the symmetric positive
 *> definite tridiagonal matrix associated with the qd array Z to high
 *> relative accuracy are computed to high relative accuracy, in the
 *> absence of denormalization, underflow and overflow.
@@ -44,10 +44,10 @@
 *> Z(1,3,5,,..). The tridiagonal is L*U or, if you prefer, the
 *> symmetric tridiagonal to which it is similar.
 *>
-*> Note : AB_SLASQ2 defines a logical variable, IEEE, which is true
+*> Note : SLASQ2 defines a logical variable, IEEE, which is true
 *> on machines which follow ieee-754 floating-point standard in their
 *> handling of infinities and NaNs, and false otherwise. This variable
-*> is passed to AB_SLASQ3.
+*> is passed to SLASQ3.
 *> \endverbatim
 *
 *  Arguments:
@@ -110,7 +110,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLASQ2( N, Z, INFO )
+      SUBROUTINE SLASQ2( N, Z, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,7 +144,7 @@
      $                   TOL2, TRACE, ZMAX, TEMPE, TEMPQ
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLASQ3, AB_SLASRT, AB_XERBLA
+      EXTERNAL           SLASQ3, SLASRT, XERBLA
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
@@ -156,7 +156,7 @@
 *     .. Executable Statements ..
 *
 *     Test the input arguments.
-*     (in case AB_SLASQ2 is not called by AB_SLASQ1)
+*     (in case SLASQ2 is not called by SLASQ1)
 *
       INFO = 0
       EPS = SLAMCH( 'Precision' )
@@ -166,7 +166,7 @@
 *
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_SLASQ2', 1 )
+         CALL XERBLA( 'SLASQ2', 1 )
          RETURN
       ELSE IF( N.EQ.0 ) THEN
          RETURN
@@ -176,7 +176,7 @@
 *
          IF( Z( 1 ).LT.ZERO ) THEN
             INFO = -201
-            CALL AB_XERBLA( 'AB_SLASQ2', 2 )
+            CALL XERBLA( 'SLASQ2', 2 )
          END IF
          RETURN
       ELSE IF( N.EQ.2 ) THEN
@@ -185,7 +185,7 @@
 *
          IF( Z( 2 ).LT.ZERO .OR. Z( 3 ).LT.ZERO ) THEN
             INFO = -2
-            CALL AB_XERBLA( 'AB_SLASQ2', 2 )
+            CALL XERBLA( 'SLASQ2', 2 )
             RETURN
          ELSE IF( Z( 3 ).GT.Z( 1 ) ) THEN
             D = Z( 3 )
@@ -222,11 +222,11 @@
       DO 10 K = 1, 2*( N-1 ), 2
          IF( Z( K ).LT.ZERO ) THEN
             INFO = -( 200+K )
-            CALL AB_XERBLA( 'AB_SLASQ2', 2 )
+            CALL XERBLA( 'SLASQ2', 2 )
             RETURN
          ELSE IF( Z( K+1 ).LT.ZERO ) THEN
             INFO = -( 200+K+1 )
-            CALL AB_XERBLA( 'AB_SLASQ2', 2 )
+            CALL XERBLA( 'SLASQ2', 2 )
             RETURN
          END IF
          D = D + Z( K )
@@ -237,7 +237,7 @@
    10 CONTINUE
       IF( Z( 2*N-1 ).LT.ZERO ) THEN
          INFO = -( 200+2*N-1 )
-         CALL AB_XERBLA( 'AB_SLASQ2', 2 )
+         CALL XERBLA( 'SLASQ2', 2 )
          RETURN
       END IF
       D = D + Z( 2*N-1 )
@@ -250,7 +250,7 @@
          DO 20 K = 2, N
             Z( K ) = Z( 2*K-1 )
    20    CONTINUE
-         CALL AB_SLASRT( 'D', N, Z, IINFO )
+         CALL SLASRT( 'D', N, Z, IINFO )
          Z( 2*N-1 ) = D
          RETURN
       END IF
@@ -266,8 +266,8 @@
 *
 *     Check whether the machine is IEEE conformable.
 *
-*     IEEE = AB_ILAENV( 10, 'AB_SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 .AND.
-*    $       AB_ILAENV( 11, 'AB_SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1
+*     IEEE = ILAENV( 10, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 .AND.
+*    $       ILAENV( 11, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1
 *
 *     [11/15/2008] The case IEEE=.TRUE. has a problem in single precision with
 *     some the test matrices of type 16. The double precision code is fine.
@@ -352,7 +352,7 @@
          PP = 1 - PP
    80 CONTINUE
 *
-*     Initialise variables to pass to AB_SLASQ3.
+*     Initialise variables to pass to SLASQ3.
 *
       TTYPE = 0
       DMIN1 = ZERO
@@ -453,7 +453,7 @@
 *        Now I0:N0 is unreduced.
 *        PP = 0 for ping, PP = 1 for pong.
 *        PP = 2 indicates that flipping was applied to the Z array and
-*               and that the tests for deflation upon entry in AB_SLASQ3
+*               and that the tests for deflation upon entry in SLASQ3
 *               should not be performed.
 *
          NBIG = 100*( N0-I0+1 )
@@ -463,8 +463,7 @@
 *
 *           While submatrix unfinished take a good dqds step.
 *
-            CALL AB_SLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFA
-     $IL,
+            CALL SLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
      $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
      $                   DN2, G, TAU )
 *
@@ -568,7 +567,7 @@
 *
 *     Sort and compute sum of eigenvalues.
 *
-      CALL AB_SLASRT( 'D', N, Z, IINFO )
+      CALL SLASRT( 'D', N, Z, IINFO )
 *
       E = ZERO
       DO 190 K = N, 1, -1
@@ -584,6 +583,6 @@
       Z( 2*N+5 ) = HUNDRD*NFAIL / REAL( ITER )
       RETURN
 *
-*     End of AB_SLASQ2
+*     End of SLASQ2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAIC1 applies one step of incremental condition estimation.
+*> \brief \b ZLAIC1 applies one step of incremental condition estimation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAIC1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAIC1.f">
+*> Download ZLAIC1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaic1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAIC1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaic1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAIC1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaic1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+*       SUBROUTINE ZLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            J, JOB
@@ -35,13 +35,13 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAIC1 applies one step of incremental condition estimation in
+*> ZLAIC1 applies one step of incremental condition estimation in
 *> its simplest version:
 *>
 *> Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j
 *> lower triangular matrix L, such that
 *>          twonorm(L*x) = sest
-*> Then AB_ZLAIC1 computes sestpr, s, c such that
+*> Then ZLAIC1 computes sestpr, s, c such that
 *> the vector
 *>                 [ s*x ]
 *>          xhat = [  c  ]
@@ -133,7 +133,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+      SUBROUTINE ZLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -167,13 +167,13 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           DLAMCH, AB_ZDOTC
+      COMPLEX*16         ZDOTC
+      EXTERNAL           DLAMCH, ZDOTC
 *     ..
 *     .. Executable Statements ..
 *
       EPS = DLAMCH( 'Epsilon' )
-      ALPHA = AB_ZDOTC( J, X, 1, W, 1 )
+      ALPHA = ZDOTC( J, X, 1, W, 1 )
 *
       ABSALP = ABS( ALPHA )
       ABSGAM = ABS( GAMMA )
@@ -366,6 +366,6 @@
       END IF
       RETURN
 *
-*     End of AB_ZLAIC1
+*     End of ZLAIC1
 *
       END

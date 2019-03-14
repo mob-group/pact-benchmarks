@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHEGV
+*> \brief \b ZHEGV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHEGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHEGV.f">
+*> Download ZHEGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHEGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhegv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHEGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHEGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
+*       SUBROUTINE ZHEGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
 *                         LWORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHEGV computes all the eigenvalues, and optionally, the eigenvectors
+*> ZHEGV computes all the eigenvalues, and optionally, the eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.
 *> Here A and B are assumed to be Hermitian and B is also
@@ -137,12 +137,12 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,2*N-1).
 *>          For optimal efficiency, LWORK >= (NB+1)*N,
-*>          where NB is the blocksize for AB_ZHETRD returned by AB_ILAENV.
+*>          where NB is the blocksize for ZHETRD returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -155,8 +155,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_ZPOTRF or AB_ZHEEV returned an error code:
-*>             <= N:  if INFO = i, AB_ZHEEV failed to converge;
+*>          > 0:  ZPOTRF or ZHEEV returned an error code:
+*>             <= N:  if INFO = i, ZHEEV failed to converge;
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero;
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
@@ -178,8 +178,7 @@
 *> \ingroup complex16HEeigen
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHEGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK
-     $,
+      SUBROUTINE ZHEGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
      $                  LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -208,13 +207,12 @@
       INTEGER            LWKOPT, NB, NEIG
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZHEEV, AB_ZHEGST, AB_ZPOTRF, AB_Z
-     $TRMM, AB_ZTRSM
+      EXTERNAL           XERBLA, ZHEEV, ZHEGST, ZPOTRF, ZTRMM, ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -223,16 +221,16 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -243,7 +241,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = AB_ILAENV( 1, 'AB_ZHETRD', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'ZHETRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 1, ( NB + 1 )*N )
          WORK( 1 ) = LWKOPT
 *
@@ -253,7 +251,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHEGV ', -INFO )
+         CALL XERBLA( 'ZHEGV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -266,7 +264,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL AB_ZPOTRF( UPLO, N, B, LDB, INFO )
+      CALL ZPOTRF( UPLO, N, B, LDB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -274,9 +272,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL AB_ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, INFO 
-     $)
+      CALL ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      CALL ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, INFO )
 *
       IF( WANTZ ) THEN
 *
@@ -296,8 +293,7 @@
                TRANS = 'C'
             END IF
 *
-            CALL AB_ZTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE
-     $,
+            CALL ZTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -311,8 +307,7 @@
                TRANS = 'N'
             END IF
 *
-            CALL AB_ZTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE
-     $,
+            CALL ZTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF
@@ -321,6 +316,6 @@
 *
       RETURN
 *
-*     End of AB_ZHEGV
+*     End of ZHEGV
 *
       END

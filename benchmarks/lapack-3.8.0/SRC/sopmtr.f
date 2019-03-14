@@ -1,4 +1,4 @@
-*> \brief \b AB_SOPMTR
+*> \brief \b SOPMTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SOPMTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SOPMTR.f">
+*> Download SOPMTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sopmtr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SOPMTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sopmtr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SOPMTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sopmtr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SOPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC, WORK,
+*       SUBROUTINE SOPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SOPMTR overwrites the general real M-by-N matrix C with
+*> SOPMTR overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
@@ -43,7 +43,7 @@
 *>
 *> where Q is a real orthogonal matrix of order nq, with nq = m if
 *> SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of
-*> nq-1 elementary reflectors, as returned by AB_SSPTRD using packed
+*> nq-1 elementary reflectors, as returned by SSPTRD using packed
 *> storage:
 *>
 *> if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);
@@ -65,9 +65,9 @@
 *> \verbatim
 *>          UPLO is CHARACTER*1
 *>          = 'U': Upper triangular packed storage used in previous
-*>                 call to AB_SSPTRD;
+*>                 call to SSPTRD;
 *>          = 'L': Lower triangular packed storage used in previous
-*>                 call to AB_SSPTRD.
+*>                 call to SSPTRD.
 *> \endverbatim
 *>
 *> \param[in] TRANS
@@ -95,7 +95,7 @@
 *>                               (M*(M+1)/2) if SIDE = 'L'
 *>                               (N*(N+1)/2) if SIDE = 'R'
 *>          The vectors which define the elementary reflectors, as
-*>          returned by AB_SSPTRD.  AP is modified by the routine but
+*>          returned by SSPTRD.  AP is modified by the routine but
 *>          restored on exit.
 *> \endverbatim
 *>
@@ -104,7 +104,7 @@
 *>          TAU is REAL array, dimension (M-1) if SIDE = 'L'
 *>                                     or (N-1) if SIDE = 'R'
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_SSPTRD.
+*>          reflector H(i), as returned by SSPTRD.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -147,8 +147,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SOPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC, WO
-     $RK,
+      SUBROUTINE SOPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC, WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -176,11 +175,11 @@
       REAL               AII
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLARF, AB_XERBLA
+      EXTERNAL           SLARF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -190,9 +189,9 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = AB_LSAME( SIDE, 'L' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      UPPER = AB_LSAME( UPLO, 'U' )
+      LEFT = LSAME( SIDE, 'L' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      UPPER = LSAME( UPLO, 'U' )
 *
 *     NQ is the order of Q
 *
@@ -201,11 +200,11 @@
       ELSE
          NQ = N
       END IF
-      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -215,7 +214,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SOPMTR', -INFO )
+         CALL XERBLA( 'SOPMTR', -INFO )
          RETURN
       END IF
 *
@@ -226,7 +225,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Q was determined by a call to AB_SSPTRD with UPLO = 'U'
+*        Q was determined by a call to SSPTRD with UPLO = 'U'
 *
          FORWRD = ( LEFT .AND. NOTRAN ) .OR.
      $            ( .NOT.LEFT .AND. .NOT.NOTRAN )
@@ -266,8 +265,7 @@
 *
             AII = AP( II )
             AP( II ) = ONE
-            CALL AB_SLARF( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C, L
-     $DC,
+            CALL SLARF( SIDE, MI, NI, AP( II-I+1 ), 1, TAU( I ), C, LDC,
      $                  WORK )
             AP( II ) = AII
 *
@@ -279,7 +277,7 @@
    10    CONTINUE
       ELSE
 *
-*        Q was determined by a call to AB_SSPTRD with UPLO = 'L'.
+*        Q was determined by a call to SSPTRD with UPLO = 'L'.
 *
          FORWRD = ( LEFT .AND. .NOT.NOTRAN ) .OR.
      $            ( .NOT.LEFT .AND. NOTRAN )
@@ -323,7 +321,7 @@
 *
 *           Apply H(i)
 *
-            CALL AB_SLARF( SIDE, MI, NI, AP( II ), 1, TAU( I ),
+            CALL SLARF( SIDE, MI, NI, AP( II ), 1, TAU( I ),
      $                  C( IC, JC ), LDC, WORK )
             AP( II ) = AII
 *
@@ -336,6 +334,6 @@
       END IF
       RETURN
 *
-*     End of AB_SOPMTR
+*     End of SOPMTR
 *
       END

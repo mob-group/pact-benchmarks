@@ -1,4 +1,4 @@
-*> \brief \b AB_CSYSWAPR
+*> \brief \b CSYSWAPR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CSYSWAPR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSYSWAPR.f">
+*> Download CSYSWAPR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyswapr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSYSWAPR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyswapr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSYSWAPR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyswapr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYSWAPR( UPLO, N, A, LDA, I1, I2)
+*       SUBROUTINE CSYSWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *       .. Scalar Arguments ..
 *       CHARACTER        UPLO
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSYSWAPR applies an elementary permutation on the rows and the columns of
+*> CSYSWAPR applies an elementary permutation on the rows and the columns of
 *> a symmetric matrix.
 *> \endverbatim
 *
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the NB diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_CSYTRF.
+*>          used to obtain the factor U or L as computed by CSYTRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -100,7 +100,7 @@
 *> \ingroup complexSYauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CSYSWAPR( UPLO, N, A, LDA, I1, I2)
+      SUBROUTINE CSYSWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,21 +123,21 @@
       COMPLEX            TMP
 *
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CSWAP
+      EXTERNAL           CSWAP
 *     ..
 *     .. Executable Statements ..
 *
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF (UPPER) THEN
 *
 *         UPPER
 *         first swap
 *          - swap column I1 and I2 from I1 to I1-1
-         CALL AB_CSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
+         CALL CSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
 *
 *          second swap :
 *          - swap A(I1,I1) and A(I2,I2)
@@ -165,7 +165,7 @@
 *         LOWER
 *         first swap
 *          - swap row I1 and I2 from I1 to I1-1
-         CALL AB_CSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
+         CALL CSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
 *
 *         second swap :
 *          - swap A(I1,I1) and A(I2,I2)
@@ -189,5 +189,5 @@
           END DO
 *
       ENDIF
-      END SUBROUTINE AB_CSYSWAPR
+      END SUBROUTINE CSYSWAPR
 

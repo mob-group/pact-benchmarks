@@ -1,4 +1,4 @@
-*> \brief <b> AB_ZGELSS solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> ZGELSS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGELSS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGELSs.f">
+*> Download ZGELSS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelss.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGELSs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgelss.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGELSs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgelss.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
+*       SUBROUTINE ZGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
 *                          WORK, LWORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGELSS computes the minimum norm solution to a complex linear
+*> ZGELSS computes the minimum norm solution to a complex linear
 *> least squares problem:
 *>
 *> Minimize 2-norm(| b - A*x |).
@@ -144,7 +144,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -175,7 +175,7 @@
 *> \ingroup complex16GEsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
+      SUBROUTINE ZGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
      $                   WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -215,18 +215,15 @@
       COMPLEX*16         DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_DLASCL, AB_DLASET, AB_XERBLA, AB_
-     $ZBDSQR, AB_ZCOPY,
-     $                   AB_ZDRSCL, AB_ZGEBRD, AB_ZGELQF, AB_ZGEMM, AB_Z
-     $GEMV, AB_ZGEQRF,
-     $                   AB_ZLACPY, AB_ZLASCL, AB_ZLASET, AB_ZUNGBR, AB_
-     $ZUNMBR, AB_ZUNMLQ,
-     $                   AB_ZUNMQR
+      EXTERNAL           DLABAD, DLASCL, DLASET, XERBLA, ZBDSQR, ZCOPY,
+     $                   ZDRSCL, ZGEBRD, ZGELQF, ZGEMM, ZGEMV, ZGEQRF,
+     $                   ZLACPY, ZLASCL, ZLASET, ZUNGBR, ZUNMBR, ZUNMLQ,
+     $                   ZUNMQR
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_ILAENV, DLAMCH, AB_ZLANGE
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           ILAENV, DLAMCH, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -257,50 +254,46 @@
 *       as well as the preferred amount for good performance.
 *       CWorkspace refers to complex workspace, and RWorkspace refers
 *       to real workspace. NB refers to the optimal block size for the
-*       immediately following subroutine, as returned by AB_ILAENV.)
+*       immediately following subroutine, as returned by ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             MM = M
-            MNTHR = AB_ILAENV( 6, 'AB_ZGELSS', ' ', M, N, NRHS, -1 )
+            MNTHR = ILAENV( 6, 'ZGELSS', ' ', M, N, NRHS, -1 )
             IF( M.GE.N .AND. M.GE.MNTHR ) THEN
 *
 *              Path 1a - overdetermined, with many more rows than
 *                        columns
 *
-*              Compute space needed for AB_ZGEQRF
-               CALL AB_ZGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO )
+*              Compute space needed for ZGEQRF
+               CALL ZGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO )
                LWORK_ZGEQRF=DUM(1)
-*              Compute space needed for AB_ZUNMQR
-               CALL AB_ZUNMQR( 'L', 'C', M, NRHS, N, A, LDA, DUM(1), B,
+*              Compute space needed for ZUNMQR
+               CALL ZUNMQR( 'L', 'C', M, NRHS, N, A, LDA, DUM(1), B,
      $                   LDB, DUM(1), -1, INFO )
                LWORK_ZUNMQR=DUM(1)
                MM = N
-               MAXWRK = MAX( MAXWRK, N + N*AB_ILAENV( 1, 'AB_ZGEQRF', ' 
-     $', M,
+               MAXWRK = MAX( MAXWRK, N + N*ILAENV( 1, 'ZGEQRF', ' ', M,
      $                       N, -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, N + NRHS*AB_ILAENV( 1, 'AB_ZUNMQR',
-     $ 'LC',
+               MAXWRK = MAX( MAXWRK, N + NRHS*ILAENV( 1, 'ZUNMQR', 'LC',
      $                       M, NRHS, N, -1 ) )
             END IF
             IF( M.GE.N ) THEN
 *
 *              Path 1 - overdetermined or exactly determined
 *
-*              Compute space needed for AB_ZGEBRD
-               CALL AB_ZGEBRD( MM, N, A, LDA, S, S, DUM(1), DUM(1), DUM(
-     $1),
+*              Compute space needed for ZGEBRD
+               CALL ZGEBRD( MM, N, A, LDA, S, S, DUM(1), DUM(1), DUM(1),
      $                      -1, INFO )
                LWORK_ZGEBRD=DUM(1)
-*              Compute space needed for AB_ZUNMBR
-               CALL AB_ZUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, DUM(1
-     $),
+*              Compute space needed for ZUNMBR
+               CALL ZUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, DUM(1),
      $                B, LDB, DUM(1), -1, INFO )
                LWORK_ZUNMBR=DUM(1)
-*              Compute space needed for AB_ZUNGBR
-               CALL AB_ZUNGBR( 'P', N, N, N, A, LDA, DUM(1),
+*              Compute space needed for ZUNGBR
+               CALL ZUNGBR( 'P', N, N, N, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
                LWORK_ZUNGBR=DUM(1)
 *              Compute total workspace needed
@@ -317,24 +310,24 @@
 *                 Path 2a - underdetermined, with many more columns
 *                 than rows
 *
-*                 Compute space needed for AB_ZGELQF
-                  CALL AB_ZGELQF( M, N, A, LDA, DUM(1), DUM(1),
+*                 Compute space needed for ZGELQF
+                  CALL ZGELQF( M, N, A, LDA, DUM(1), DUM(1),
      $                -1, INFO )
                   LWORK_ZGELQF=DUM(1)
-*                 Compute space needed for AB_ZGEBRD
-                  CALL AB_ZGEBRD( M, M, A, LDA, S, S, DUM(1), DUM(1),
+*                 Compute space needed for ZGEBRD
+                  CALL ZGEBRD( M, M, A, LDA, S, S, DUM(1), DUM(1),
      $                         DUM(1), -1, INFO )
                   LWORK_ZGEBRD=DUM(1)
-*                 Compute space needed for AB_ZUNMBR
-                  CALL AB_ZUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA,
+*                 Compute space needed for ZUNMBR
+                  CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA,
      $                DUM(1), B, LDB, DUM(1), -1, INFO )
                   LWORK_ZUNMBR=DUM(1)
-*                 Compute space needed for AB_ZUNGBR
-                  CALL AB_ZUNGBR( 'P', M, M, M, A, LDA, DUM(1),
+*                 Compute space needed for ZUNGBR
+                  CALL ZUNGBR( 'P', M, M, M, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
                   LWORK_ZUNGBR=DUM(1)
-*                 Compute space needed for AB_ZUNMLQ
-                  CALL AB_ZUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, DUM(1),
+*                 Compute space needed for ZUNMLQ
+                  CALL ZUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, DUM(1),
      $                 B, LDB, DUM(1), -1, INFO )
                   LWORK_ZUNMLQ=DUM(1)
 *                 Compute total workspace needed
@@ -352,16 +345,16 @@
 *
 *                 Path 2 - underdetermined
 *
-*                 Compute space needed for AB_ZGEBRD
-                  CALL AB_ZGEBRD( M, N, A, LDA, S, S, DUM(1), DUM(1),
+*                 Compute space needed for ZGEBRD
+                  CALL ZGEBRD( M, N, A, LDA, S, S, DUM(1), DUM(1),
      $                         DUM(1), -1, INFO )
                   LWORK_ZGEBRD=DUM(1)
-*                 Compute space needed for AB_ZUNMBR
-                  CALL AB_ZUNMBR( 'Q', 'L', 'C', M, NRHS, M, A, LDA,
+*                 Compute space needed for ZUNMBR
+                  CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, M, A, LDA,
      $                DUM(1), B, LDB, DUM(1), -1, INFO )
                   LWORK_ZUNMBR=DUM(1)
-*                 Compute space needed for AB_ZUNGBR
-                  CALL AB_ZUNGBR( 'P', M, N, M, A, LDA, DUM(1),
+*                 Compute space needed for ZUNGBR
+                  CALL ZUNGBR( 'P', M, N, M, A, LDA, DUM(1),
      $                   DUM(1), -1, INFO )
                   LWORK_ZUNGBR=DUM(1)
                   MAXWRK = 2*M + LWORK_ZGEBRD
@@ -379,7 +372,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGELSS', -INFO )
+         CALL XERBLA( 'ZGELSS', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -398,51 +391,49 @@
       SFMIN = DLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_ZLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = ZLANGE( 'M', M, N, A, LDA, RWORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL AB_ZLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
-         CALL AB_DLASET( 'F', MINMN, 1, ZERO, ZERO, S, MINMN )
+         CALL ZLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL DLASET( 'F', MINMN, 1, ZERO, ZERO, S, MINMN )
          RANK = 0
          GO TO 70
       END IF
 *
 *     Scale B if max element outside range [SMLNUM,BIGNUM]
 *
-      BNRM = AB_ZLANGE( 'M', M, NRHS, B, LDB, RWORK )
+      BNRM = ZLANGE( 'M', M, NRHS, B, LDB, RWORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO 
-     $)
+         CALL ZLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO 
-     $)
+         CALL ZLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
          IBSCL = 2
       END IF
 *
@@ -465,21 +456,20 @@
 *           (CWorkspace: need 2*N, prefer N+N*NB)
 *           (RWorkspace: none)
 *
-            CALL AB_ZGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+            CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
      $                   LWORK-IWORK+1, INFO )
 *
 *           Multiply B by transpose(Q)
 *           (CWorkspace: need N+NRHS, prefer N+NRHS*NB)
 *           (RWorkspace: none)
 *
-            CALL AB_ZUNMQR( 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAU ), 
-     $B,
+            CALL ZUNMQR( 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAU ), B,
      $                   LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *           Zero out below R
 *
             IF( N.GT.1 )
-     $         CALL AB_ZLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
+     $         CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
      $                      LDA )
          END IF
 *
@@ -492,7 +482,7 @@
 *        (CWorkspace: need 2*N+MM, prefer 2*N+(MM+N)*NB)
 *        (RWorkspace: need N)
 *
-         CALL AB_ZGEBRD( MM, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+         CALL ZGEBRD( MM, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                INFO )
 *
@@ -500,15 +490,14 @@
 *        (CWorkspace: need 2*N+NRHS, prefer 2*N+NRHS*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, WORK( ITAUQ
-     $ ),
+         CALL ZUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, WORK( ITAUQ ),
      $                B, LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors of R in A
 *        (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZUNGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
+         CALL ZUNGBR( 'P', N, N, N, A, LDA, WORK( ITAUP ),
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IRWORK = IE + N
 *
@@ -518,8 +507,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL AB_ZBDSQR( 'U', N, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM
-     $,
+         CALL ZBDSQR( 'U', N, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM,
      $                1, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -532,11 +520,10 @@
          RANK = 0
          DO 10 I = 1, N
             IF( S( I ).GT.THR ) THEN
-               CALL AB_ZDRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL ZDRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL AB_ZLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LD
-     $B )
+               CALL ZLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
             END IF
    10    CONTINUE
 *
@@ -545,22 +532,20 @@
 *        (RWorkspace: none)
 *
          IF( LWORK.GE.LDB*NRHS .AND. NRHS.GT.1 ) THEN
-            CALL AB_ZGEMM( 'C', 'N', N, NRHS, N, CONE, A, LDA, B, LDB,
+            CALL ZGEMM( 'C', 'N', N, NRHS, N, CONE, A, LDA, B, LDB,
      $                  CZERO, WORK, LDB )
-            CALL AB_ZLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
+            CALL ZLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = LWORK / N
             DO 20 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL AB_ZGEMM( 'C', 'N', N, BL, N, CONE, A, LDA, B( 1, I 
-     $),
+               CALL ZGEMM( 'C', 'N', N, BL, N, CONE, A, LDA, B( 1, I ),
      $                     LDB, CZERO, WORK, N )
-               CALL AB_ZLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
+               CALL ZLACPY( 'G', N, BL, WORK, N, B( 1, I ), LDB )
    20       CONTINUE
          ELSE
-            CALL AB_ZGEMV( 'C', N, N, CONE, A, LDA, B, 1, CZERO, WORK, 1
-     $ )
-            CALL AB_ZCOPY( N, WORK, 1, B, 1 )
+            CALL ZGEMV( 'C', N, N, CONE, A, LDA, B, 1, CZERO, WORK, 1 )
+            CALL ZCOPY( N, WORK, 1, B, 1 )
          END IF
 *
       ELSE IF( N.GE.MNTHR .AND. LWORK.GE.3*M+M*M+MAX( M, NRHS, N-2*M ) )
@@ -581,14 +566,14 @@
 *        (CWorkspace: need 2*M, prefer M+M*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
+         CALL ZGELQF( M, N, A, LDA, WORK( ITAU ), WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
          IL = IWORK
 *
 *        Copy L to WORK(IL), zeroing out above it
 *
-         CALL AB_ZLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWORK )
-         CALL AB_ZLASET( 'U', M-1, M-1, CZERO, CZERO, WORK( IL+LDWORK ),
+         CALL ZLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWORK )
+         CALL ZLASET( 'U', M-1, M-1, CZERO, CZERO, WORK( IL+LDWORK ),
      $                LDWORK )
          IE = 1
          ITAUQ = IL + LDWORK*M
@@ -599,7 +584,7 @@
 *        (CWorkspace: need M*M+4*M, prefer M*M+3*M+2*M*NB)
 *        (RWorkspace: need M)
 *
-         CALL AB_ZGEBRD( M, M, WORK( IL ), LDWORK, S, RWORK( IE ),
+         CALL ZGEBRD( M, M, WORK( IL ), LDWORK, S, RWORK( IE ),
      $                WORK( ITAUQ ), WORK( ITAUP ), WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
 *
@@ -607,7 +592,7 @@
 *        (CWorkspace: need M*M+3*M+NRHS, prefer M*M+3*M+NRHS*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZUNMBR( 'Q', 'L', 'C', M, NRHS, M, WORK( IL ), LDWORK,
+         CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, M, WORK( IL ), LDWORK,
      $                WORK( ITAUQ ), B, LDB, WORK( IWORK ),
      $                LWORK-IWORK+1, INFO )
 *
@@ -615,8 +600,7 @@
 *        (CWorkspace: need M*M+4*M-1, prefer M*M+3*M+(M-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZUNGBR( 'P', M, M, M, WORK( IL ), LDWORK, WORK( ITAUP )
-     $,
+         CALL ZUNGBR( 'P', M, M, M, WORK( IL ), LDWORK, WORK( ITAUP ),
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IRWORK = IE + M
 *
@@ -626,7 +610,7 @@
 *        (CWorkspace: need M*M)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL AB_ZBDSQR( 'U', M, M, 0, NRHS, S, RWORK( IE ), WORK( IL ),
+         CALL ZBDSQR( 'U', M, M, 0, NRHS, S, RWORK( IE ), WORK( IL ),
      $                LDWORK, A, LDA, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -639,11 +623,10 @@
          RANK = 0
          DO 30 I = 1, M
             IF( S( I ).GT.THR ) THEN
-               CALL AB_ZDRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL ZDRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL AB_ZLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LD
-     $B )
+               CALL ZLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
             END IF
    30    CONTINUE
          IWORK = IL + M*LDWORK
@@ -653,38 +636,34 @@
 *        (RWorkspace: none)
 *
          IF( LWORK.GE.LDB*NRHS+IWORK-1 .AND. NRHS.GT.1 ) THEN
-            CALL AB_ZGEMM( 'C', 'N', M, NRHS, M, CONE, WORK( IL ), LDWOR
-     $K,
+            CALL ZGEMM( 'C', 'N', M, NRHS, M, CONE, WORK( IL ), LDWORK,
      $                  B, LDB, CZERO, WORK( IWORK ), LDB )
-            CALL AB_ZLACPY( 'G', M, NRHS, WORK( IWORK ), LDB, B, LDB )
+            CALL ZLACPY( 'G', M, NRHS, WORK( IWORK ), LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = ( LWORK-IWORK+1 ) / M
             DO 40 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL AB_ZGEMM( 'C', 'N', M, BL, M, CONE, WORK( IL ), LDWO
-     $RK,
+               CALL ZGEMM( 'C', 'N', M, BL, M, CONE, WORK( IL ), LDWORK,
      $                     B( 1, I ), LDB, CZERO, WORK( IWORK ), M )
-               CALL AB_ZLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
+               CALL ZLACPY( 'G', M, BL, WORK( IWORK ), M, B( 1, I ),
      $                      LDB )
    40       CONTINUE
          ELSE
-            CALL AB_ZGEMV( 'C', M, M, CONE, WORK( IL ), LDWORK, B( 1, 1 
-     $),
+            CALL ZGEMV( 'C', M, M, CONE, WORK( IL ), LDWORK, B( 1, 1 ),
      $                  1, CZERO, WORK( IWORK ), 1 )
-            CALL AB_ZCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
+            CALL ZCOPY( M, WORK( IWORK ), 1, B( 1, 1 ), 1 )
          END IF
 *
 *        Zero out below first M rows of B
 *
-         CALL AB_ZLASET( 'F', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ), LDB 
-     $)
+         CALL ZLASET( 'F', N-M, NRHS, CZERO, CZERO, B( M+1, 1 ), LDB )
          IWORK = ITAU + M
 *
 *        Multiply transpose(Q) by B
 *        (CWorkspace: need M+NRHS, prefer M+NHRS*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, WORK( ITAU ), B,
+         CALL ZUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, WORK( ITAU ), B,
      $                LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
       ELSE
@@ -700,7 +679,7 @@
 *        (CWorkspace: need 3*M, prefer 2*M+(M+N)*NB)
 *        (RWorkspace: need N)
 *
-         CALL AB_ZGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+         CALL ZGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                WORK( ITAUP ), WORK( IWORK ), LWORK-IWORK+1,
      $                INFO )
 *
@@ -708,15 +687,14 @@
 *        (CWorkspace: need 2*M+NRHS, prefer 2*M+NRHS*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAUQ 
-     $),
+         CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, WORK( ITAUQ ),
      $                B, LDB, WORK( IWORK ), LWORK-IWORK+1, INFO )
 *
 *        Generate right bidiagonalizing vectors in A
 *        (CWorkspace: need 3*M, prefer 2*M+M*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZUNGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
+         CALL ZUNGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
      $                WORK( IWORK ), LWORK-IWORK+1, INFO )
          IRWORK = IE + M
 *
@@ -726,8 +704,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL AB_ZBDSQR( 'L', M, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM
-     $,
+         CALL ZBDSQR( 'L', M, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM,
      $                1, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -740,11 +717,10 @@
          RANK = 0
          DO 50 I = 1, M
             IF( S( I ).GT.THR ) THEN
-               CALL AB_ZDRSCL( NRHS, S( I ), B( I, 1 ), LDB )
+               CALL ZDRSCL( NRHS, S( I ), B( I, 1 ), LDB )
                RANK = RANK + 1
             ELSE
-               CALL AB_ZLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LD
-     $B )
+               CALL ZLASET( 'F', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
             END IF
    50    CONTINUE
 *
@@ -753,49 +729,43 @@
 *        (RWorkspace: none)
 *
          IF( LWORK.GE.LDB*NRHS .AND. NRHS.GT.1 ) THEN
-            CALL AB_ZGEMM( 'C', 'N', N, NRHS, M, CONE, A, LDA, B, LDB,
+            CALL ZGEMM( 'C', 'N', N, NRHS, M, CONE, A, LDA, B, LDB,
      $                  CZERO, WORK, LDB )
-            CALL AB_ZLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
+            CALL ZLACPY( 'G', N, NRHS, WORK, LDB, B, LDB )
          ELSE IF( NRHS.GT.1 ) THEN
             CHUNK = LWORK / N
             DO 60 I = 1, NRHS, CHUNK
                BL = MIN( NRHS-I+1, CHUNK )
-               CALL AB_ZGEMM( 'C', 'N', N, BL, M, CONE, A, LDA, B( 1, I 
-     $),
+               CALL ZGEMM( 'C', 'N', N, BL, M, CONE, A, LDA, B( 1, I ),
      $                     LDB, CZERO, WORK, N )
-               CALL AB_ZLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
+               CALL ZLACPY( 'F', N, BL, WORK, N, B( 1, I ), LDB )
    60       CONTINUE
          ELSE
-            CALL AB_ZGEMV( 'C', M, N, CONE, A, LDA, B, 1, CZERO, WORK, 1
-     $ )
-            CALL AB_ZCOPY( N, WORK, 1, B, 1 )
+            CALL ZGEMV( 'C', M, N, CONE, A, LDA, B, 1, CZERO, WORK, 1 )
+            CALL ZCOPY( N, WORK, 1, B, 1 )
          END IF
       END IF
 *
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO 
-     $)
-         CALL AB_DLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
+         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO 
-     $)
-         CALL AB_DLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
+         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL AB_ZLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO 
-     $)
+         CALL ZLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL AB_ZLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO 
-     $)
+         CALL ZLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
       END IF
    70 CONTINUE
       WORK( 1 ) = MAXWRK
       RETURN
 *
-*     End of AB_ZGELSS
+*     End of ZGELSS
 *
       END

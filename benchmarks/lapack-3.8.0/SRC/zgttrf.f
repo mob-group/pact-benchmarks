@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGTTRF
+*> \brief \b ZGTTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGTTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGTTRF.f">
+*> Download ZGTTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgttrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGTTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgttrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGTTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgttrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
+*       SUBROUTINE ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGTTRF computes an LU factorization of a complex tridiagonal matrix A
+*> ZGTTRF computes an LU factorization of a complex tridiagonal matrix A
 *> using elimination with partial pivoting and row interchanges.
 *>
 *> The factorization has the form
@@ -122,7 +122,7 @@
 *> \ingroup complex16GTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
+      SUBROUTINE ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,7 +148,7 @@
       COMPLEX*16         FACT, TEMP, ZDUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG
@@ -164,7 +164,7 @@
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_ZGTTRF', -INFO )
+         CALL XERBLA( 'ZGTTRF', -INFO )
          RETURN
       END IF
 *
@@ -238,6 +238,6 @@
 *
       RETURN
 *
-*     End of AB_ZGTTRF
+*     End of ZGTTRF
 *
       END

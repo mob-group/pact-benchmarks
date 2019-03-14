@@ -1,4 +1,4 @@
-*> \brief \b AB_SROTMG
+*> \brief \b SROTMG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SROTMG(SD1,SD2,SX1,SY1,SPARAM)
+*       SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
 *
 *       .. Scalar Arguments ..
 *       REAL SD1,SD2,SX1,SY1
@@ -88,7 +88,7 @@
 *> \ingroup single_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE AB_SROTMG(SD1,SD2,SX1,SY1,SPARAM)
+      SUBROUTINE SROTMG(SD1,SD2,SX1,SY1,SPARAM)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

@@ -1,6 +1,6 @@
-*> \brief \b AB_SSYTRD_2STAGE
+*> \brief \b SSYTRD_2STAGE
 *
-*  @generated from AB_ZHETRD_2stage.f, fortran z -> s, Sun Nov  6 19:34:06 2016
+*  @generated from zhetrd_2stage.f, fortran z -> s, Sun Nov  6 19:34:06 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download AB_SSYTRD_2STAGE + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYTRD_2stage.f"> 
+*> Download SSYTRD_2STAGE + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrd_2stage.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYTRD_2stage.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrd_2stage.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYTRD_2stage.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrd_2stage.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSYTRD_2STAGE( VECT, UPLO, N, A, LDA, D, E, TAU, 
+*       SUBROUTINE SSYTRD_2STAGE( VECT, UPLO, N, A, LDA, D, E, TAU, 
 *                                 HOUS2, LHOUS2, WORK, LWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSYTRD_2STAGE reduces a real symmetric matrix A to real symmetric
+*> SSYTRD_2STAGE reduces a real symmetric matrix A to real symmetric
 *> tridiagonal form T by a orthogonal similarity transformation:
 *> Q1**T Q2**T* A * Q2 * Q1 = T.
 *> \endverbatim
@@ -136,7 +136,7 @@
 *>          then a query is assumed; the routine
 *>          only calculates the optimal size of the HOUS2 array, returns
 *>          this value as the first entry of the HOUS2 array, and no error
-*>          message related to LHOUS2 is issued by AB_XERBLA.
+*>          message related to LHOUS2 is issued by XERBLA.
 *>          LHOUS2 = MAX(1, dimension) where
 *>          dimension = 4*N if VECT='N'
 *>          not available now if VECT='H'
@@ -155,7 +155,7 @@
 *>          then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *>          LWORK = MAX(1, dimension) where
 *>          dimension   = max(stage1,stage2) + (KD+1)*N
 *>                      = N*KD + N*max(KD+1,FACTOPTNB) 
@@ -222,7 +222,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SSYTRD_2STAGE( VECT, UPLO, N, A, LDA, D, E, TAU, 
+      SUBROUTINE SSYTRD_2STAGE( VECT, UPLO, N, A, LDA, D, E, TAU, 
      $                          HOUS2, LHOUS2, WORK, LWORK, INFO )
 *
       IMPLICIT NONE
@@ -249,38 +249,34 @@
       INTEGER            KD, IB, LWMIN, LHMIN, LWRK, LDAB, WPOS, ABPOS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_SSYTRD_SY2SB, AB_SSYTRD_SB2ST
+      EXTERNAL           XERBLA, SSYTRD_SY2SB, SSYTRD_SB2ST
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV2STAGE
-      EXTERNAL           AB_LSAME, AB_ILAENV2STAGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      EXTERNAL           LSAME, ILAENV2STAGE
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
       INFO   = 0
-      WANTQ  = AB_LSAME( VECT, 'V' )
-      UPPER  = AB_LSAME( UPLO, 'U' )
+      WANTQ  = LSAME( VECT, 'V' )
+      UPPER  = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 ) .OR. ( LHOUS2.EQ.-1 )
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      KD     = AB_ILAENV2STAGE( 1, 'AB_SSYTRD_2STAGE', VECT, N, -1, -1, 
-     $-1 )
-      IB     = AB_ILAENV2STAGE( 2, 'AB_SSYTRD_2STAGE', VECT, N, KD, -1, 
-     $-1 )
-      LHMIN  = AB_ILAENV2STAGE( 3, 'AB_SSYTRD_2STAGE', VECT, N, KD, IB, 
-     $-1 )
-      LWMIN  = AB_ILAENV2STAGE( 4, 'AB_SSYTRD_2STAGE', VECT, N, KD, IB, 
-     $-1 )
-*      WRITE(*,*),'AB_SSYTRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO,
+      KD     = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', VECT, N, -1, -1, -1 )
+      IB     = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', VECT, N, KD, IB, -1 )
+*      WRITE(*,*),'SSYTRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO,
 *     $            LHMIN, LWMIN
 *
-      IF( .NOT.AB_LSAME( VECT, 'N' ) ) THEN
+      IF( .NOT.LSAME( VECT, 'N' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -298,7 +294,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSYTRD_2STAGE', -INFO )
+         CALL XERBLA( 'SSYTRD_2STAGE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -317,17 +313,17 @@
       LWRK  = LWORK-LDAB*N
       ABPOS = 1
       WPOS  = ABPOS + LDAB*N
-      CALL AB_SSYTRD_SY2SB( UPLO, N, KD, A, LDA, WORK( ABPOS ), LDAB, 
+      CALL SSYTRD_SY2SB( UPLO, N, KD, A, LDA, WORK( ABPOS ), LDAB, 
      $                   TAU, WORK( WPOS ), LWRK, INFO )
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSYTRD_SY2SB', -INFO )
+         CALL XERBLA( 'SSYTRD_SY2SB', -INFO )
          RETURN
       END IF
-      CALL AB_SSYTRD_SB2ST( 'Y', VECT, UPLO, N, KD, 
+      CALL SSYTRD_SB2ST( 'Y', VECT, UPLO, N, KD, 
      $                   WORK( ABPOS ), LDAB, D, E, 
      $                   HOUS2, LHOUS2, WORK( WPOS ), LWRK, INFO )
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSYTRD_SB2ST', -INFO )
+         CALL XERBLA( 'SSYTRD_SB2ST', -INFO )
          RETURN
       END IF
 *
@@ -336,6 +332,6 @@
       WORK( 1 )  = LWMIN
       RETURN
 *
-*     End of AB_SSYTRD_2STAGE
+*     End of SSYTRD_2STAGE
 *
       END

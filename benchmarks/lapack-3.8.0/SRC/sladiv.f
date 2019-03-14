@@ -1,4 +1,4 @@
-*> \brief \b AB_SLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
+*> \brief \b SLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLADIV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLADIV.f">
+*> Download SLADIV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sladiv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLADIV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sladiv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLADIV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sladiv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLADIV( A, B, C, D, P, Q )
+*       SUBROUTINE SLADIV( A, B, C, D, P, Q )
 *
 *       .. Scalar Arguments ..
 *       REAL               A, B, C, D, P, Q
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLADIV performs complex division in  real arithmetic
+*> SLADIV performs complex division in  real arithmetic
 *>
 *>                       a + i*b
 *>            p + i*q = ---------
@@ -89,7 +89,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLADIV( A, B, C, D, P, Q )
+      SUBROUTINE SLADIV( A, B, C, D, P, Q )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,7 +118,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLADIV1
+      EXTERNAL           SLADIV1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -159,9 +159,9 @@
          S  = S * BE
       END IF
       IF( ABS( D ).LE.ABS( C ) ) THEN
-         CALL AB_SLADIV1(AA, BB, CC, DD, P, Q)
+         CALL SLADIV1(AA, BB, CC, DD, P, Q)
       ELSE
-         CALL AB_SLADIV1(BB, AA, DD, CC, P, Q)
+         CALL SLADIV1(BB, AA, DD, CC, P, Q)
          Q = -Q
       END IF
       P = P * S
@@ -169,14 +169,14 @@
 *
       RETURN
 *
-*     End of AB_SLADIV
+*     End of SLADIV
 *
       END
 
 *> \ingroup realOTHERauxiliary
 
 
-      SUBROUTINE AB_SLADIV1( A, B, C, D, P, Q )
+      SUBROUTINE SLADIV1( A, B, C, D, P, Q )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -197,26 +197,26 @@
       REAL               R, T
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLADIV2
-      EXTERNAL           AB_SLADIV2
+      REAL               SLADIV2
+      EXTERNAL           SLADIV2
 *     ..
 *     .. Executable Statements ..
 *
       R = D / C
       T = ONE / (C + D * R)
-      P = AB_SLADIV2(A, B, C, D, R, T)
+      P = SLADIV2(A, B, C, D, R, T)
       A = -A
-      Q = AB_SLADIV2(B, A, C, D, R, T)
+      Q = SLADIV2(B, A, C, D, R, T)
 *
       RETURN
 *
-*     End of AB_SLADIV1
+*     End of SLADIV1
 *
       END
 
 *> \ingroup realOTHERauxiliary
 
-      REAL FUNCTION AB_SLADIV2( A, B, C, D, R, T )
+      REAL FUNCTION SLADIV2( A, B, C, D, R, T )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -241,16 +241,16 @@
       IF( R.NE.ZERO ) THEN
          BR = B * R
          if( BR.NE.ZERO ) THEN
-            AB_SLADIV2 = (A + BR) * T
+            SLADIV2 = (A + BR) * T
          ELSE
-            AB_SLADIV2 = A * T + (B * T) * R
+            SLADIV2 = A * T + (B * T) * R
          END IF
       ELSE
-         AB_SLADIV2 = (A + D * (B / C)) * T
+         SLADIV2 = (A + D * (B / C)) * T
       END IF
 *
       RETURN
 *
-*     End of AB_SLADIV
+*     End of SLADIV
 *
       END

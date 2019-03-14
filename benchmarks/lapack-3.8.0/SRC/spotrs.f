@@ -1,4 +1,4 @@
-*> \brief \b AB_SPOTRS
+*> \brief \b SPOTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPOTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPOTRS.f">
+*> Download SPOTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spotrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPOTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spotrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPOTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+*       SUBROUTINE SPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SPOTRS solves a system of linear equations A*X = B with a symmetric
+*> SPOTRS solves a system of linear equations A*X = B with a symmetric
 *> positive definite matrix A using the Cholesky factorization
-*> A = U**T*U or A = L*L**T computed by AB_SPOTRF.
+*> A = U**T*U or A = L*L**T computed by SPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -66,7 +66,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          The triangular factor U or L from the Cholesky factorization
-*>          A = U**T*U or A = L*L**T, as computed by AB_SPOTRF.
+*>          A = U**T*U or A = L*L**T, as computed by SPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -108,7 +108,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+      SUBROUTINE SPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,11 +133,11 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_STRSM, AB_XERBLA
+      EXTERNAL           STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -147,8 +147,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -160,7 +160,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPOTRS', -INFO )
+         CALL XERBLA( 'SPOTRS', -INFO )
          RETURN
       END IF
 *
@@ -175,13 +175,12 @@
 *
 *        Solve U**T *X = B, overwriting B with X.
 *
-         CALL AB_STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N, NRH
-     $S,
+         CALL STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N, NRHS,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve U*X = B, overwriting B with X.
 *
-         CALL AB_STRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
+         CALL STRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
       ELSE
 *
@@ -189,18 +188,17 @@
 *
 *        Solve L*X = B, overwriting B with X.
 *
-         CALL AB_STRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N,
+         CALL STRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
 *
 *        Solve L**T *X = B, overwriting B with X.
 *
-         CALL AB_STRSM( 'Left', 'Lower', 'Transpose', 'Non-unit', N, NRH
-     $S,
+         CALL STRSM( 'Left', 'Lower', 'Transpose', 'Non-unit', N, NRHS,
      $               ONE, A, LDA, B, LDB )
       END IF
 *
       RETURN
 *
-*     End of AB_SPOTRS
+*     End of SPOTRS
 *
       END

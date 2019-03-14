@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGETF2 computes the LU factorization of a general m-by-n matrix using partial pivoting with row interchanges (unblocked algorithm).
+*> \brief \b ZGETF2 computes the LU factorization of a general m-by-n matrix using partial pivoting with row interchanges (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGETF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGETF2.f">
+*> Download ZGETF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgetf2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGETF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgetf2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGETF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgetf2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGETF2( M, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE ZGETF2( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGETF2 computes an LU factorization of a general m-by-n matrix A
+*> ZGETF2 computes an LU factorization of a general m-by-n matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> The factorization has the form
@@ -106,7 +106,7 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGETF2( M, N, A, LDA, IPIV, INFO )
+      SUBROUTINE ZGETF2( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,11 +134,11 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      INTEGER            AB_IZAMAX
-      EXTERNAL           DLAMCH, AB_IZAMAX
+      INTEGER            IZAMAX
+      EXTERNAL           DLAMCH, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZGERU, AB_ZSCAL, AB_ZSWAP
+      EXTERNAL           XERBLA, ZGERU, ZSCAL, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -156,7 +156,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGETF2', -INFO )
+         CALL XERBLA( 'ZGETF2', -INFO )
          RETURN
       END IF
 *
@@ -173,20 +173,20 @@
 *
 *        Find pivot and test for singularity.
 *
-         JP = J - 1 + AB_IZAMAX( M-J+1, A( J, J ), 1 )
+         JP = J - 1 + IZAMAX( M-J+1, A( J, J ), 1 )
          IPIV( J ) = JP
          IF( A( JP, J ).NE.ZERO ) THEN
 *
 *           Apply the interchange to columns 1:N.
 *
             IF( JP.NE.J )
-     $         CALL AB_ZSWAP( N, A( J, 1 ), LDA, A( JP, 1 ), LDA )
+     $         CALL ZSWAP( N, A( J, 1 ), LDA, A( JP, 1 ), LDA )
 *
 *           Compute elements J+1:M of J-th column.
 *
             IF( J.LT.M ) THEN
                IF( ABS(A( J, J )) .GE. SFMIN ) THEN
-                  CALL AB_ZSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 )
+                  CALL ZSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 )
                ELSE
                   DO 20 I = 1, M-J
                      A( J+I, J ) = A( J+I, J ) / A( J, J )
@@ -203,12 +203,12 @@
 *
 *           Update trailing submatrix.
 *
-            CALL AB_ZGERU( M-J, N-J, -ONE, A( J+1, J ), 1, A( J, J+1 ),
+            CALL ZGERU( M-J, N-J, -ONE, A( J+1, J ), 1, A( J, J+1 ),
      $                  LDA, A( J+1, J+1 ), LDA )
          END IF
    10 CONTINUE
       RETURN
 *
-*     End of AB_ZGETF2
+*     End of ZGETF2
 *
       END

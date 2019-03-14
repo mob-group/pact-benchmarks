@@ -1,4 +1,4 @@
-*> \brief \b AB_DSYTRF
+*> \brief \b DSYTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSYTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYTRF.f">
+*> Download DSYTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE DSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSYTRF computes the factorization of a real symmetric matrix A using
+*> DSYTRF computes the factorization of a real symmetric matrix A using
 *> the Bunch-Kaufman diagonal pivoting method.  The form of the
 *> factorization is
 *>
@@ -108,12 +108,12 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >=1.  For best performance
-*>          LWORK >= N*NB, where NB is the block size returned by AB_ILAENV.
+*>          LWORK >= N*NB, where NB is the block size returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -180,7 +180,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      SUBROUTINE DSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -203,12 +203,12 @@
       INTEGER            IINFO, IWS, J, K, KB, LDWORK, LWKOPT, NB, NBMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASYF, AB_DSYTF2, AB_XERBLA
+      EXTERNAL           DLASYF, DSYTF2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -218,9 +218,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -234,13 +234,13 @@
 *
 *        Determine the block size
 *
-         NB = AB_ILAENV( 1, 'AB_DSYTRF', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'DSYTRF', UPLO, N, -1, -1, -1 )
          LWKOPT = N*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSYTRF', -INFO )
+         CALL XERBLA( 'DSYTRF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -252,8 +252,7 @@
          IWS = LDWORK*NB
          IF( LWORK.LT.IWS ) THEN
             NB = MAX( LWORK / LDWORK, 1 )
-            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_DSYTRF', UPLO, N, -1, -1, 
-     $-1 ) )
+            NBMIN = MAX( 2, ILAENV( 2, 'DSYTRF', UPLO, N, -1, -1, -1 ) )
          END IF
       ELSE
          IWS = 1
@@ -266,7 +265,7 @@
 *        Factorize A as U*D*U**T using the upper triangle of A
 *
 *        K is the main loop index, decreasing from N to 1 in steps of
-*        KB, where KB is the number of columns factorized by AB_DLASYF;
+*        KB, where KB is the number of columns factorized by DLASYF;
 *        KB is either NB or NB-1, or K for the last block
 *
          K = N
@@ -282,13 +281,13 @@
 *           Factorize columns k-kb+1:k of A and use blocked code to
 *           update columns 1:k-kb
 *
-            CALL AB_DLASYF( UPLO, K, NB, KB, A, LDA, IPIV, WORK, LDWORK,
+            CALL DLASYF( UPLO, K, NB, KB, A, LDA, IPIV, WORK, LDWORK,
      $                   IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns 1:k of A
 *
-            CALL AB_DSYTF2( UPLO, K, A, LDA, IPIV, IINFO )
+            CALL DSYTF2( UPLO, K, A, LDA, IPIV, IINFO )
             KB = K
          END IF
 *
@@ -307,7 +306,7 @@
 *        Factorize A as L*D*L**T using the lower triangle of A
 *
 *        K is the main loop index, increasing from 1 to N in steps of
-*        KB, where KB is the number of columns factorized by AB_DLASYF;
+*        KB, where KB is the number of columns factorized by DLASYF;
 *        KB is either NB or NB-1, or N-K+1 for the last block
 *
          K = 1
@@ -323,15 +322,13 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL AB_DLASYF( UPLO, N-K+1, NB, KB, A( K, K ), LDA, IPIV( K
-     $ ),
+            CALL DLASYF( UPLO, N-K+1, NB, KB, A( K, K ), LDA, IPIV( K ),
      $                   WORK, LDWORK, IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns k:n of A
 *
-            CALL AB_DSYTF2( UPLO, N-K+1, A( K, K ), LDA, IPIV( K ), IINF
-     $O )
+            CALL DSYTF2( UPLO, N-K+1, A( K, K ), LDA, IPIV( K ), IINFO )
             KB = N - K + 1
          END IF
 *
@@ -361,6 +358,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_DSYTRF
+*     End of DSYTRF
 *
       END

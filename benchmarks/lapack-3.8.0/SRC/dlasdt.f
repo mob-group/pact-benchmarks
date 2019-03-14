@@ -1,4 +1,4 @@
-*> \brief \b AB_DLASDT creates a tree of subproblems for bidiagonal divide and conquer. Used by AB_SBDSDC.
+*> \brief \b DLASDT creates a tree of subproblems for bidiagonal divide and conquer. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLASDT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASDT.f">
+*> Download DLASDT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasdt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASDT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasdt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASDT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasdt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLASDT( N, LVL, ND, INODE, NDIML, NDIMR, MSUB )
+*       SUBROUTINE DLASDT( N, LVL, ND, INODE, NDIML, NDIMR, MSUB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LVL, MSUB, N, ND
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLASDT creates a tree of subproblems for bidiagonal divide and
+*> DLASDT creates a tree of subproblems for bidiagonal divide and
 *> conquer.
 *> \endverbatim
 *
@@ -103,7 +103,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLASDT( N, LVL, ND, INODE, NDIML, NDIMR, MSUB )
+      SUBROUTINE DLASDT( N, LVL, ND, INODE, NDIML, NDIMR, MSUB )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -167,6 +167,6 @@
 *
       RETURN
 *
-*     End of AB_DLASDT
+*     End of DLASDT
 *
       END

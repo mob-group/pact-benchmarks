@@ -1,4 +1,4 @@
-*> \brief \b AB_CGBBRD
+*> \brief \b CGBBRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGBBRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGBBRD.f">
+*> Download CGBBRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbbrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGBBRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgbbrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGBBRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbbrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
+*       SUBROUTINE CGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
 *                          LDQ, PT, LDPT, C, LDC, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGBBRD reduces a complex general m-by-n band matrix A to real upper
+*> CGBBRD reduces a complex general m-by-n band matrix A to real upper
 *> bidiagonal form B by a unitary transformation: Q**H * A * P = B.
 *>
 *> The routine computes B, and optionally forms Q or P**H, or computes
@@ -190,7 +190,7 @@
 *> \ingroup complexGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
+      SUBROUTINE CGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
      $                   LDQ, PT, LDPT, C, LDC, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -225,29 +225,27 @@
       COMPLEX            RA, RB, RS, T
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLARGV, AB_CLARTG, AB_CLARTV, AB_CLASET, AB_
-     $CROT, AB_CSCAL,
-     $                   AB_XERBLA
+      EXTERNAL           CLARGV, CLARTG, CLARTV, CLASET, CROT, CSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
-      WANTB = AB_LSAME( VECT, 'B' )
-      WANTQ = AB_LSAME( VECT, 'Q' ) .OR. WANTB
-      WANTPT = AB_LSAME( VECT, 'P' ) .OR. WANTB
+      WANTB = LSAME( VECT, 'B' )
+      WANTQ = LSAME( VECT, 'Q' ) .OR. WANTB
+      WANTPT = LSAME( VECT, 'P' ) .OR. WANTB
       WANTC = NCC.GT.0
       KLU1 = KL + KU + 1
       INFO = 0
-      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.AB_LSAME( VECT, 'N' ) 
-     $)
+      IF( .NOT.WANTQ .AND. .NOT.WANTPT .AND. .NOT.LSAME( VECT, 'N' ) )
      $     THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
@@ -270,16 +268,16 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGBBRD', -INFO )
+         CALL XERBLA( 'CGBBRD', -INFO )
          RETURN
       END IF
 *
 *     Initialize Q and P**H to the unit matrix, if needed
 *
       IF( WANTQ )
-     $   CALL AB_CLASET( 'Full', M, M, CZERO, CONE, Q, LDQ )
+     $   CALL CLASET( 'Full', M, M, CZERO, CONE, Q, LDQ )
       IF( WANTPT )
-     $   CALL AB_CLASET( 'Full', N, N, CZERO, CONE, PT, LDPT )
+     $   CALL CLASET( 'Full', N, N, CZERO, CONE, PT, LDPT )
 *
 *     Quick return if possible.
 *
@@ -331,7 +329,7 @@
 *              which have been created below the band
 *
                IF( NR.GT.0 )
-     $            CALL AB_CLARGV( NR, AB( KLU1, J1-KLM-1 ), INCA,
+     $            CALL CLARGV( NR, AB( KLU1, J1-KLM-1 ), INCA,
      $                         WORK( J1 ), KB1, RWORK( J1 ), KB1 )
 *
 *              apply plane rotations from the left
@@ -343,8 +341,7 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL AB_CLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA
-     $,
+     $               CALL CLARTV( NRT, AB( KLU1-L, J1-KLM+L-1 ), INCA,
      $                            AB( KLU1-L+1, J1-KLM+L-1 ), INCA,
      $                            RWORK( J1 ), WORK( J1 ), KB1 )
    10          CONTINUE
@@ -355,11 +352,11 @@
 *                    generate plane rotation to annihilate a(i+ml-1,i)
 *                    within the band, and apply rotation from the left
 *
-                     CALL AB_CLARTG( AB( KU+ML-1, I ), AB( KU+ML, I ),
+                     CALL CLARTG( AB( KU+ML-1, I ), AB( KU+ML, I ),
      $                            RWORK( I+ML-1 ), WORK( I+ML-1 ), RA )
                      AB( KU+ML-1, I ) = RA
                      IF( I.LT.N )
-     $                  CALL AB_CROT( MIN( KU+ML-2, N-I ),
+     $                  CALL CROT( MIN( KU+ML-2, N-I ),
      $                             AB( KU+ML-2, I+1 ), LDAB-1,
      $                             AB( KU+ML-1, I+1 ), LDAB-1,
      $                             RWORK( I+ML-1 ), WORK( I+ML-1 ) )
@@ -373,7 +370,7 @@
 *                 accumulate product of plane rotations in Q
 *
                   DO 20 J = J1, J2, KB1
-                     CALL AB_CROT( M, Q( 1, J-1 ), 1, Q( 1, J ), 1,
+                     CALL CROT( M, Q( 1, J-1 ), 1, Q( 1, J ), 1,
      $                          RWORK( J ), CONJG( WORK( J ) ) )
    20             CONTINUE
                END IF
@@ -383,8 +380,7 @@
 *                 apply plane rotations to C
 *
                   DO 30 J = J1, J2, KB1
-                     CALL AB_CROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC
-     $,
+                     CALL CROT( NCC, C( J-1, 1 ), LDC, C( J, 1 ), LDC,
      $                          RWORK( J ), WORK( J ) )
    30             CONTINUE
                END IF
@@ -410,7 +406,7 @@
 *              which have been generated above the band
 *
                IF( NR.GT.0 )
-     $            CALL AB_CLARGV( NR, AB( 1, J1+KUN-1 ), INCA,
+     $            CALL CLARGV( NR, AB( 1, J1+KUN-1 ), INCA,
      $                         WORK( J1+KUN ), KB1, RWORK( J1+KUN ),
      $                         KB1 )
 *
@@ -423,7 +419,7 @@
                      NRT = NR
                   END IF
                   IF( NRT.GT.0 )
-     $               CALL AB_CLARTV( NRT, AB( L+1, J1+KUN-1 ), INCA,
+     $               CALL CLARTV( NRT, AB( L+1, J1+KUN-1 ), INCA,
      $                            AB( L, J1+KUN ), INCA,
      $                            RWORK( J1+KUN ), WORK( J1+KUN ), KB1 )
    50          CONTINUE
@@ -434,11 +430,11 @@
 *                    generate plane rotation to annihilate a(i,i+mu-1)
 *                    within the band, and apply rotation from the right
 *
-                     CALL AB_CLARTG( AB( KU-MU+3, I+MU-2 ),
+                     CALL CLARTG( AB( KU-MU+3, I+MU-2 ),
      $                            AB( KU-MU+2, I+MU-1 ),
      $                            RWORK( I+MU-1 ), WORK( I+MU-1 ), RA )
                      AB( KU-MU+3, I+MU-2 ) = RA
-                     CALL AB_CROT( MIN( KL+MU-2, M-I ),
+                     CALL CROT( MIN( KL+MU-2, M-I ),
      $                          AB( KU-MU+4, I+MU-2 ), 1,
      $                          AB( KU-MU+3, I+MU-1 ), 1,
      $                          RWORK( I+MU-1 ), WORK( I+MU-1 ) )
@@ -452,7 +448,7 @@
 *                 accumulate product of plane rotations in P**H
 *
                   DO 60 J = J1, J2, KB1
-                     CALL AB_CROT( N, PT( J+KUN-1, 1 ), LDPT,
+                     CALL CROT( N, PT( J+KUN-1, 1 ), LDPT,
      $                          PT( J+KUN, 1 ), LDPT, RWORK( J+KUN ),
      $                          CONJG( WORK( J+KUN ) ) )
    60             CONTINUE
@@ -493,17 +489,17 @@
 *        elements on subdiagonal elements
 *
          DO 100 I = 1, MIN( M-1, N )
-            CALL AB_CLARTG( AB( 1, I ), AB( 2, I ), RC, RS, RA )
+            CALL CLARTG( AB( 1, I ), AB( 2, I ), RC, RS, RA )
             AB( 1, I ) = RA
             IF( I.LT.N ) THEN
                AB( 2, I ) = RS*AB( 1, I+1 )
                AB( 1, I+1 ) = RC*AB( 1, I+1 )
             END IF
             IF( WANTQ )
-     $         CALL AB_CROT( M, Q( 1, I ), 1, Q( 1, I+1 ), 1, RC,
+     $         CALL CROT( M, Q( 1, I ), 1, Q( 1, I+1 ), 1, RC,
      $                    CONJG( RS ) )
             IF( WANTC )
-     $         CALL AB_CROT( NCC, C( I, 1 ), LDC, C( I+1, 1 ), LDC, RC,
+     $         CALL CROT( NCC, C( I, 1 ), LDC, C( I+1, 1 ), LDC, RC,
      $                    RS )
   100    CONTINUE
       ELSE
@@ -518,14 +514,14 @@
 *
             RB = AB( KU, M+1 )
             DO 110 I = M, 1, -1
-               CALL AB_CLARTG( AB( KU+1, I ), RB, RC, RS, RA )
+               CALL CLARTG( AB( KU+1, I ), RB, RC, RS, RA )
                AB( KU+1, I ) = RA
                IF( I.GT.1 ) THEN
                   RB = -CONJG( RS )*AB( KU, I )
                   AB( KU, I ) = RC*AB( KU, I )
                END IF
                IF( WANTPT )
-     $            CALL AB_CROT( N, PT( I, 1 ), LDPT, PT( M+1, 1 ), LDPT,
+     $            CALL CROT( N, PT( I, 1 ), LDPT, PT( M+1, 1 ), LDPT,
      $                       RC, CONJG( RS ) )
   110       CONTINUE
          END IF
@@ -544,9 +540,9 @@
             T = CONE
          END IF
          IF( WANTQ )
-     $      CALL AB_CSCAL( M, T, Q( 1, I ), 1 )
+     $      CALL CSCAL( M, T, Q( 1, I ), 1 )
          IF( WANTC )
-     $      CALL AB_CSCAL( NCC, CONJG( T ), C( I, 1 ), LDC )
+     $      CALL CSCAL( NCC, CONJG( T ), C( I, 1 ), LDC )
          IF( I.LT.MINMN ) THEN
             IF( KU.EQ.0 .AND. KL.EQ.0 ) THEN
                E( I ) = ZERO
@@ -565,13 +561,13 @@
                   T = CONE
                END IF
                IF( WANTPT )
-     $            CALL AB_CSCAL( N, T, PT( I+1, 1 ), LDPT )
+     $            CALL CSCAL( N, T, PT( I+1, 1 ), LDPT )
                T = AB( KU+1, I+1 )*CONJG( T )
             END IF
          END IF
   120 CONTINUE
       RETURN
 *
-*     End of AB_CGBBRD
+*     End of CGBBRD
 *
       END

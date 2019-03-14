@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAQPS computes a step of QR factorization with column pivoting of a real m-by-n matrix A by using BLAS level 3.
+*> \brief \b CLAQPS computes a step of QR factorization with column pivoting of a real m-by-n matrix A by using BLAS level 3.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAQPS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQPS.f">
+*> Download CLAQPS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqps.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQPS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqps.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQPS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqps.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
+*       SUBROUTINE CLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
 *                          VN2, AUXV, F, LDF )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAQPS computes a step of QR factorization with column pivoting
+*> CLAQPS computes a step of QR factorization with column pivoting
 *> of a complex M-by-N matrix A by using Blas-3.  It tries to factorize
 *> NB columns from A starting from the row OFFSET+1, and updates all
 *> of the matrix with Blas-3 xGEMM.
@@ -175,8 +175,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1
-     $,
+      SUBROUTINE CLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
      $                   VN2, AUXV, F, LDF )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -208,15 +207,15 @@
       COMPLEX            AKK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CGEMV, AB_CLARFG, AB_CSWAP
+      EXTERNAL           CGEMM, CGEMV, CLARFG, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, NINT, REAL, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SCNRM2, SLAMCH
-      EXTERNAL           AB_ISAMAX, AB_SCNRM2, SLAMCH
+      INTEGER            ISAMAX
+      REAL               SCNRM2, SLAMCH
+      EXTERNAL           ISAMAX, SCNRM2, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -234,10 +233,10 @@
 *
 *        Determine ith pivot column and swap if necessary
 *
-         PVT = ( K-1 ) + AB_ISAMAX( N-K+1, VN1( K ), 1 )
+         PVT = ( K-1 ) + ISAMAX( N-K+1, VN1( K ), 1 )
          IF( PVT.NE.K ) THEN
-            CALL AB_CSWAP( M, A( 1, PVT ), 1, A( 1, K ), 1 )
-            CALL AB_CSWAP( K-1, F( PVT, 1 ), LDF, F( K, 1 ), LDF )
+            CALL CSWAP( M, A( 1, PVT ), 1, A( 1, K ), 1 )
+            CALL CSWAP( K-1, F( PVT, 1 ), LDF, F( K, 1 ), LDF )
             ITEMP = JPVT( PVT )
             JPVT( PVT ) = JPVT( K )
             JPVT( K ) = ITEMP
@@ -252,8 +251,7 @@
             DO 20 J = 1, K - 1
                F( K, J ) = CONJG( F( K, J ) )
    20       CONTINUE
-            CALL AB_CGEMV( 'No transpose', M-RK+1, K-1, -CONE, A( RK, 1 
-     $),
+            CALL CGEMV( 'No transpose', M-RK+1, K-1, -CONE, A( RK, 1 ),
      $                  LDA, F( K, 1 ), LDF, CONE, A( RK, K ), 1 )
             DO 30 J = 1, K - 1
                F( K, J ) = CONJG( F( K, J ) )
@@ -263,10 +261,9 @@
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL AB_CLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K 
-     $) )
+            CALL CLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
          ELSE
-            CALL AB_CLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
+            CALL CLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
 *
          AKK = A( RK, K )
@@ -277,7 +274,7 @@
 *        Compute  F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)**H*A(RK:M,K).
 *
          IF( K.LT.N ) THEN
-            CALL AB_CGEMV( 'Conjugate transpose', M-RK+1, N-K, TAU( K ),
+            CALL CGEMV( 'Conjugate transpose', M-RK+1, N-K, TAU( K ),
      $                  A( RK, K+1 ), LDA, A( RK, K ), 1, CZERO,
      $                  F( K+1, K ), 1 )
          END IF
@@ -293,12 +290,11 @@
 *                    *A(RK:M,K).
 *
          IF( K.GT.1 ) THEN
-            CALL AB_CGEMV( 'Conjugate transpose', M-RK+1, K-1, -TAU( K )
-     $,
+            CALL CGEMV( 'Conjugate transpose', M-RK+1, K-1, -TAU( K ),
      $                  A( RK, 1 ), LDA, A( RK, K ), 1, CZERO,
      $                  AUXV( 1 ), 1 )
 *
-            CALL AB_CGEMV( 'No transpose', N, K-1, CONE, F( 1, 1 ), LDF,
+            CALL CGEMV( 'No transpose', N, K-1, CONE, F( 1, 1 ), LDF,
      $                  AUXV( 1 ), 1, CONE, F( 1, K ), 1 )
          END IF
 *
@@ -306,8 +302,7 @@
 *        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**H.
 *
          IF( K.LT.N ) THEN
-            CALL AB_CGEMM( 'No transpose', 'Conjugate transpose', 1, N-K
-     $,
+            CALL CGEMM( 'No transpose', 'Conjugate transpose', 1, N-K,
      $                  K, -CONE, A( RK, 1 ), LDA, F( K+1, 1 ), LDF,
      $                  CONE, A( RK, K+1 ), LDA )
          END IF
@@ -348,8 +343,7 @@
 *                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)**H.
 *
       IF( KB.LT.MIN( N, M-OFFSET ) ) THEN
-         CALL AB_CGEMM( 'No transpose', 'Conjugate transpose', M-RK, N-K
-     $B,
+         CALL CGEMM( 'No transpose', 'Conjugate transpose', M-RK, N-KB,
      $               KB, -CONE, A( RK+1, 1 ), LDA, F( KB+1, 1 ), LDF,
      $               CONE, A( RK+1, KB+1 ), LDA )
       END IF
@@ -359,10 +353,10 @@
    60 CONTINUE
       IF( LSTICC.GT.0 ) THEN
          ITEMP = NINT( VN2( LSTICC ) )
-         VN1( LSTICC ) = AB_SCNRM2( M-RK, A( RK+1, LSTICC ), 1 )
+         VN1( LSTICC ) = SCNRM2( M-RK, A( RK+1, LSTICC ), 1 )
 *
 *        NOTE: The computation of VN1( LSTICC ) relies on the fact that
-*        AB_SNRM2 does not fail on vectors with norm below the value of
+*        SNRM2 does not fail on vectors with norm below the value of
 *        SQRT(DLAMCH('S'))
 *
          VN2( LSTICC ) = VN1( LSTICC )
@@ -372,6 +366,6 @@
 *
       RETURN
 *
-*     End of AB_CLAQPS
+*     End of CLAQPS
 *
       END

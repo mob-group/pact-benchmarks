@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHETRD
+*> \brief \b ZHETRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHETRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHETRD.f">
+*> Download ZHETRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHETRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHETRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHETRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE ZHETRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHETRD reduces a complex Hermitian matrix A to real symmetric
+*> ZHETRD reduces a complex Hermitian matrix A to real symmetric
 *> tridiagonal form T by a unitary similarity transformation:
 *> Q**H * A * Q = T.
 *> \endverbatim
@@ -121,7 +121,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -190,8 +190,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZHETRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INF
-     $O )
+      SUBROUTINE ZHETRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -221,24 +220,24 @@
      $                   NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZHER2K, AB_ZHETD2, AB_ZLATRD
+      EXTERNAL           XERBLA, ZHER2K, ZHETD2, ZLATRD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -252,13 +251,13 @@
 *
 *        Determine the block size.
 *
-         NB = AB_ILAENV( 1, 'AB_ZHETRD', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'ZHETRD', UPLO, N, -1, -1, -1 )
          LWKOPT = N*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHETRD', -INFO )
+         CALL XERBLA( 'ZHETRD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -278,8 +277,7 @@
 *        Determine when to cross over from blocked to unblocked code
 *        (last block is always handled by unblocked code).
 *
-         NX = MAX( NB, AB_ILAENV( 3, 'AB_ZHETRD', UPLO, N, -1, -1, -1 ) 
-     $)
+         NX = MAX( NB, ILAENV( 3, 'ZHETRD', UPLO, N, -1, -1, -1 ) )
          IF( NX.LT.N ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -293,7 +291,7 @@
 *              unblocked code by setting NX = N.
 *
                NB = MAX( LWORK / LDWORK, 1 )
-               NBMIN = AB_ILAENV( 2, 'AB_ZHETRD', UPLO, N, -1, -1, -1 )
+               NBMIN = ILAENV( 2, 'ZHETRD', UPLO, N, -1, -1, -1 )
                IF( NB.LT.NBMIN )
      $            NX = N
             END IF
@@ -316,13 +314,13 @@
 *           matrix W which is needed to update the unreduced part of
 *           the matrix
 *
-            CALL AB_ZLATRD( UPLO, I+NB-1, NB, A, LDA, E, TAU, WORK,
+            CALL ZLATRD( UPLO, I+NB-1, NB, A, LDA, E, TAU, WORK,
      $                   LDWORK )
 *
 *           Update the unreduced submatrix A(1:i-1,1:i-1), using an
 *           update of the form:  A := A - V*W**H - W*V**H
 *
-            CALL AB_ZHER2K( UPLO, 'No transpose', I-1, NB, -CONE,
+            CALL ZHER2K( UPLO, 'No transpose', I-1, NB, -CONE,
      $                   A( 1, I ), LDA, WORK, LDWORK, ONE, A, LDA )
 *
 *           Copy superdiagonal elements back into A, and diagonal
@@ -336,7 +334,7 @@
 *
 *        Use unblocked code to reduce the last or only block
 *
-         CALL AB_ZHETD2( UPLO, KK, A, LDA, D, E, TAU, IINFO )
+         CALL ZHETD2( UPLO, KK, A, LDA, D, E, TAU, IINFO )
       ELSE
 *
 *        Reduce the lower triangle of A
@@ -347,13 +345,13 @@
 *           matrix W which is needed to update the unreduced part of
 *           the matrix
 *
-            CALL AB_ZLATRD( UPLO, N-I+1, NB, A( I, I ), LDA, E( I ),
+            CALL ZLATRD( UPLO, N-I+1, NB, A( I, I ), LDA, E( I ),
      $                   TAU( I ), WORK, LDWORK )
 *
 *           Update the unreduced submatrix A(i+nb:n,i+nb:n), using
 *           an update of the form:  A := A - V*W**H - W*V**H
 *
-            CALL AB_ZHER2K( UPLO, 'No transpose', N-I-NB+1, NB, -CONE,
+            CALL ZHER2K( UPLO, 'No transpose', N-I-NB+1, NB, -CONE,
      $                   A( I+NB, I ), LDA, WORK( NB+1 ), LDWORK, ONE,
      $                   A( I+NB, I+NB ), LDA )
 *
@@ -368,13 +366,13 @@
 *
 *        Use unblocked code to reduce the last or only block
 *
-         CALL AB_ZHETD2( UPLO, N-I+1, A( I, I ), LDA, D( I ), E( I ),
+         CALL ZHETD2( UPLO, N-I+1, A( I, I ), LDA, D( I ), E( I ),
      $                TAU( I ), IINFO )
       END IF
 *
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_ZHETRD
+*     End of ZHETRD
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTPMQRT
+*> \brief \b ZTPMQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZTPMQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTPMQRT.f">
+*> Download ZTPMQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztpmqrt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTPMQRT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztpmqrt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTPMQRT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztpmqrt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T, LDT,
+*       SUBROUTINE ZTPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T, LDT,
 *                           A, LDA, B, LDB, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTPMQRT applies a complex orthogonal matrix Q obtained from a
+*> ZTPMQRT applies a complex orthogonal matrix Q obtained from a
 *> "triangular-pentagonal" complex block reflector H to a general
 *> complex matrix C, which consists of two blocks A and B.
 *> \endverbatim
@@ -89,7 +89,7 @@
 *>          NB is INTEGER
 *>          The block size used for the storage of T.  K >= NB >= 1.
 *>          This must be the same value of NB used to generate T
-*>          in AB_CTPQRT.
+*>          in CTPQRT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -97,7 +97,7 @@
 *>          V is COMPLEX*16 array, dimension (LDA,K)
 *>          The i-th column must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          AB_CTPQRT in B.  See Further Details.
+*>          CTPQRT in B.  See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -112,7 +112,7 @@
 *> \verbatim
 *>          T is COMPLEX*16 array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by AB_CTPQRT, stored as a NB-by-K matrix.
+*>          as returned by CTPQRT, stored as a NB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -213,8 +213,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZTPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T, LDT
-     $,
+      SUBROUTINE ZTPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T, LDT,
      $                    A, LDA, B, LDB, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -239,11 +238,11 @@
       INTEGER            I, IB, MB, LB, KF, LDAQ, LDVQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZTPRFB, AB_XERBLA
+      EXTERNAL           ZTPRFB, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -253,10 +252,10 @@
 *     .. Test the input arguments ..
 *
       INFO   = 0
-      LEFT   = AB_LSAME( SIDE,  'L' )
-      RIGHT  = AB_LSAME( SIDE,  'R' )
-      TRAN   = AB_LSAME( TRANS, 'C' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      LEFT   = LSAME( SIDE,  'L' )
+      RIGHT  = LSAME( SIDE,  'R' )
+      TRAN   = LSAME( TRANS, 'C' )
+      NOTRAN = LSAME( TRANS, 'N' )
 *
       IF ( LEFT ) THEN
          LDVQ = MAX( 1, M )
@@ -290,7 +289,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTPMQRT', -INFO )
+         CALL XERBLA( 'ZTPMQRT', -INFO )
          RETURN
       END IF
 *
@@ -308,7 +307,7 @@
             ELSE
                LB = MB-M+L-I+1
             END IF
-            CALL AB_ZTPRFB( 'L', 'C', 'F', 'C', MB, N, IB, LB,
+            CALL ZTPRFB( 'L', 'C', 'F', 'C', MB, N, IB, LB,
      $                   V( 1, I ), LDV, T( 1, I ), LDT,
      $                   A( I, 1 ), LDA, B, LDB, WORK, IB )
          END DO
@@ -323,7 +322,7 @@
             ELSE
                LB = MB-N+L-I+1
             END IF
-            CALL AB_ZTPRFB( 'R', 'N', 'F', 'C', M, MB, IB, LB,
+            CALL ZTPRFB( 'R', 'N', 'F', 'C', M, MB, IB, LB,
      $                   V( 1, I ), LDV, T( 1, I ), LDT,
      $                   A( 1, I ), LDA, B, LDB, WORK, M )
          END DO
@@ -339,7 +338,7 @@
             ELSE
                LB = MB-M+L-I+1
             END IF
-            CALL AB_ZTPRFB( 'L', 'N', 'F', 'C', MB, N, IB, LB,
+            CALL ZTPRFB( 'L', 'N', 'F', 'C', MB, N, IB, LB,
      $                   V( 1, I ), LDV, T( 1, I ), LDT,
      $                   A( I, 1 ), LDA, B, LDB, WORK, IB )
          END DO
@@ -355,7 +354,7 @@
             ELSE
                LB = MB-N+L-I+1
             END IF
-            CALL AB_ZTPRFB( 'R', 'C', 'F', 'C', M, MB, IB, LB,
+            CALL ZTPRFB( 'R', 'C', 'F', 'C', M, MB, IB, LB,
      $                   V( 1, I ), LDV, T( 1, I ), LDT,
      $                   A( 1, I ), LDA, B, LDB, WORK, M )
          END DO
@@ -364,6 +363,6 @@
 *
       RETURN
 *
-*     End of AB_ZTPMQRT
+*     End of ZTPMQRT
 *
       END

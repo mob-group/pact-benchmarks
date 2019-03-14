@@ -1,4 +1,4 @@
-*> \brief \b AB_STREVC3
+*> \brief \b STREVC3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STREVC3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STREVC3.f">
+*> Download STREVC3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strevc3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STREVC3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/strevc3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STREVC3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strevc3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+*       SUBROUTINE STREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
 *                           VR, LDVR, MM, M, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,10 +37,10 @@
 *>
 *> \verbatim
 *>
-*> AB_STREVC3 computes some or all of the right and/or left eigenvectors of
+*> STREVC3 computes some or all of the right and/or left eigenvectors of
 *> a real upper quasi-triangular matrix T.
 *> Matrices of this type are produced by the Schur factorization of
-*> a real general matrix:  A = Q*T*Q**T, as computed by AB_SHSEQR.
+*> a real general matrix:  A = Q*T*Q**T, as computed by SHSEQR.
 *>
 *> The right eigenvector x and the left eigenvector y of T corresponding
 *> to an eigenvalue w are defined by:
@@ -119,7 +119,7 @@
 *>          VL is REAL array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the orthogonal matrix Q
-*>          of Schur vectors returned by AB_SHSEQR).
+*>          of Schur vectors returned by SHSEQR).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -145,7 +145,7 @@
 *>          VR is REAL array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Q (usually the orthogonal matrix Q
-*>          of Schur vectors returned by AB_SHSEQR).
+*>          of Schur vectors returned by SHSEQR).
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*X;
@@ -197,7 +197,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -217,7 +217,7 @@
 *
 *> \date November 2017
 *
-*  @generated from AB_DTREVC3.f, fortran d -> s, Tue Apr 19 01:47:44 2016
+*  @generated from dtrevc3.f, fortran d -> s, Tue Apr 19 01:47:44 2016
 *
 *> \ingroup realOTHERcomputational
 *
@@ -236,7 +236,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_STREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
+      SUBROUTINE STREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
      $                    VR, LDVR, MM, M, WORK, LWORK, INFO )
       IMPLICIT NONE
 *
@@ -273,15 +273,14 @@
      $                   XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX, AB_ILAENV
-      REAL   AB_SDOT, SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_ILAENV, AB_SDOT, SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ISAMAX, ILAENV
+      REAL   SDOT, SLAMCH
+      EXTERNAL           LSAME, ISAMAX, ILAENV, SDOT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SGEMV, AB_SLALN2, AB_SSC
-     $AL, AB_XERBLA,
-     $                   AB_SLACPY, AB_SGEMM, AB_SLABAD, AB_SLASET
+      EXTERNAL           SAXPY, SCOPY, SGEMV, SLALN2, SSCAL, XERBLA,
+     $                   SLACPY, SGEMM, SLABAD, SLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -294,16 +293,16 @@
 *
 *     Decode and test the input parameters
 *
-      BOTHV  = AB_LSAME( SIDE, 'B' )
-      RIGHTV = AB_LSAME( SIDE, 'R' ) .OR. BOTHV
-      LEFTV  = AB_LSAME( SIDE, 'L' ) .OR. BOTHV
+      BOTHV  = LSAME( SIDE, 'B' )
+      RIGHTV = LSAME( SIDE, 'R' ) .OR. BOTHV
+      LEFTV  = LSAME( SIDE, 'L' ) .OR. BOTHV
 *
-      ALLV  = AB_LSAME( HOWMNY, 'A' )
-      OVER  = AB_LSAME( HOWMNY, 'B' )
-      SOMEV = AB_LSAME( HOWMNY, 'S' )
+      ALLV  = LSAME( HOWMNY, 'A' )
+      OVER  = LSAME( HOWMNY, 'B' )
+      SOMEV = LSAME( HOWMNY, 'S' )
 *
       INFO = 0
-      NB = AB_ILAENV( 1, 'AB_STREVC', SIDE // HOWMNY, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'STREVC', SIDE // HOWMNY, N, -1, -1, -1 )
       MAXWRK = N + 2*N*NB
       WORK(1) = MAXWRK
       LQUERY = ( LWORK.EQ.-1 )
@@ -361,7 +360,7 @@
          END IF
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STREVC3', -INFO )
+         CALL XERBLA( 'STREVC3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -378,7 +377,7 @@
       IF( OVER .AND. LWORK .GE. N + 2*N*NBMIN ) THEN
          NB = (LWORK - N) / (2*N)
          NB = MIN( NB, NBMAX )
-         CALL AB_SLASET( 'F', N, 1+2*NB, ZERO, ZERO, WORK, N )
+         CALL SLASET( 'F', N, 1+2*NB, ZERO, ZERO, WORK, N )
       ELSE
          NB = 1
       END IF
@@ -387,7 +386,7 @@
 *
       UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL AB_SLABAD( UNFL, OVFL )
+      CALL SLABAD( UNFL, OVFL )
       ULP = SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
@@ -496,8 +495,7 @@
 *
 *                    1-by-1 diagonal block
 *
-                     CALL AB_SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J )
-     $,
+                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
@@ -514,19 +512,19 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL AB_SSCAL( KI, SCALE, WORK( 1+IV*N ), 1 )
+     $                  CALL SSCAL( KI, SCALE, WORK( 1+IV*N ), 1 )
                      WORK( J+IV*N ) = X( 1, 1 )
 *
 *                    Update right-hand side
 *
-                     CALL AB_SAXPY( J-1, -X( 1, 1 ), T( 1, J ), 1,
+                     CALL SAXPY( J-1, -X( 1, 1 ), T( 1, J ), 1,
      $                           WORK( 1+IV*N ), 1 )
 *
                   ELSE
 *
 *                    2-by-2 diagonal block
 *
-                     CALL AB_SLALN2( .FALSE., 2, 1, SMIN, ONE,
+                     CALL SLALN2( .FALSE., 2, 1, SMIN, ONE,
      $                            T( J-1, J-1 ), LDT, ONE, ONE,
      $                            WORK( J-1+IV*N ), N, WR, ZERO, X, 2,
      $                            SCALE, XNORM, IERR )
@@ -546,15 +544,15 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL AB_SSCAL( KI, SCALE, WORK( 1+IV*N ), 1 )
+     $                  CALL SSCAL( KI, SCALE, WORK( 1+IV*N ), 1 )
                      WORK( J-1+IV*N ) = X( 1, 1 )
                      WORK( J  +IV*N ) = X( 2, 1 )
 *
 *                    Update right-hand side
 *
-                     CALL AB_SAXPY( J-2, -X( 1, 1 ), T( 1, J-1 ), 1,
+                     CALL SAXPY( J-2, -X( 1, 1 ), T( 1, J-1 ), 1,
      $                           WORK( 1+IV*N ), 1 )
-                     CALL AB_SAXPY( J-2, -X( 2, 1 ), T( 1, J ), 1,
+                     CALL SAXPY( J-2, -X( 2, 1 ), T( 1, J ), 1,
      $                           WORK( 1+IV*N ), 1 )
                   END IF
    60          CONTINUE
@@ -564,12 +562,11 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VR and normalize.
-                  CALL AB_SCOPY( KI, WORK( 1 + IV*N ), 1, VR( 1, IS ), 1
-     $ )
+                  CALL SCOPY( KI, WORK( 1 + IV*N ), 1, VR( 1, IS ), 1 )
 *
-                  II = AB_ISAMAX( KI, VR( 1, IS ), 1 )
+                  II = ISAMAX( KI, VR( 1, IS ), 1 )
                   REMAX = ONE / ABS( VR( II, IS ) )
-                  CALL AB_SSCAL( KI, REMAX, VR( 1, IS ), 1 )
+                  CALL SSCAL( KI, REMAX, VR( 1, IS ), 1 )
 *
                   DO 70 K = KI + 1, N
                      VR( K, IS ) = ZERO
@@ -579,13 +576,13 @@
 *                 ------------------------------
 *                 version 1: back-transform each vector with GEMV, Q*x.
                   IF( KI.GT.1 )
-     $               CALL AB_SGEMV( 'N', N, KI-1, ONE, VR, LDVR,
+     $               CALL SGEMV( 'N', N, KI-1, ONE, VR, LDVR,
      $                           WORK( 1 + IV*N ), 1, WORK( KI + IV*N ),
      $                           VR( 1, KI ), 1 )
 *
-                  II = AB_ISAMAX( N, VR( 1, KI ), 1 )
+                  II = ISAMAX( N, VR( 1, KI ), 1 )
                   REMAX = ONE / ABS( VR( II, KI ) )
-                  CALL AB_SSCAL( N, REMAX, VR( 1, KI ), 1 )
+                  CALL SSCAL( N, REMAX, VR( 1, KI ), 1 )
 *
                ELSE
 *                 ------------------------------
@@ -644,8 +641,7 @@
 *
 *                    1-by-1 diagonal block
 *
-                     CALL AB_SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J )
-     $,
+                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+(IV-1)*N ), N,
      $                            WR, WI, X, 2, SCALE, XNORM, IERR )
 *
@@ -663,26 +659,24 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL AB_SSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 
-     $)
-                        CALL AB_SSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 
-     $)
+                        CALL SSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 )
+                        CALL SSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 )
                      END IF
                      WORK( J+(IV-1)*N ) = X( 1, 1 )
                      WORK( J+(IV  )*N ) = X( 1, 2 )
 *
 *                    Update the right-hand side
 *
-                     CALL AB_SAXPY( J-1, -X( 1, 1 ), T( 1, J ), 1,
+                     CALL SAXPY( J-1, -X( 1, 1 ), T( 1, J ), 1,
      $                           WORK( 1+(IV-1)*N ), 1 )
-                     CALL AB_SAXPY( J-1, -X( 1, 2 ), T( 1, J ), 1,
+                     CALL SAXPY( J-1, -X( 1, 2 ), T( 1, J ), 1,
      $                           WORK( 1+(IV  )*N ), 1 )
 *
                   ELSE
 *
 *                    2-by-2 diagonal block
 *
-                     CALL AB_SLALN2( .FALSE., 2, 2, SMIN, ONE,
+                     CALL SLALN2( .FALSE., 2, 2, SMIN, ONE,
      $                            T( J-1, J-1 ), LDT, ONE, ONE,
      $                            WORK( J-1+(IV-1)*N ), N, WR, WI, X, 2,
      $                            SCALE, XNORM, IERR )
@@ -705,10 +699,8 @@
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL AB_SSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 
-     $)
-                        CALL AB_SSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 
-     $)
+                        CALL SSCAL( KI, SCALE, WORK( 1+(IV-1)*N ), 1 )
+                        CALL SSCAL( KI, SCALE, WORK( 1+(IV  )*N ), 1 )
                      END IF
                      WORK( J-1+(IV-1)*N ) = X( 1, 1 )
                      WORK( J  +(IV-1)*N ) = X( 2, 1 )
@@ -717,13 +709,13 @@
 *
 *                    Update the right-hand side
 *
-                     CALL AB_SAXPY( J-2, -X( 1, 1 ), T( 1, J-1 ), 1,
+                     CALL SAXPY( J-2, -X( 1, 1 ), T( 1, J-1 ), 1,
      $                           WORK( 1+(IV-1)*N   ), 1 )
-                     CALL AB_SAXPY( J-2, -X( 2, 1 ), T( 1, J ), 1,
+                     CALL SAXPY( J-2, -X( 2, 1 ), T( 1, J ), 1,
      $                           WORK( 1+(IV-1)*N   ), 1 )
-                     CALL AB_SAXPY( J-2, -X( 1, 2 ), T( 1, J-1 ), 1,
+                     CALL SAXPY( J-2, -X( 1, 2 ), T( 1, J-1 ), 1,
      $                           WORK( 1+(IV  )*N ), 1 )
-                     CALL AB_SAXPY( J-2, -X( 2, 2 ), T( 1, J ), 1,
+                     CALL SAXPY( J-2, -X( 2, 2 ), T( 1, J ), 1,
      $                           WORK( 1+(IV  )*N ), 1 )
                   END IF
    90          CONTINUE
@@ -733,10 +725,8 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VR and normalize.
-                  CALL AB_SCOPY( KI, WORK( 1+(IV-1)*N ), 1, VR(1,IS-1), 
-     $1 )
-                  CALL AB_SCOPY( KI, WORK( 1+(IV  )*N ), 1, VR(1,IS  ), 
-     $1 )
+                  CALL SCOPY( KI, WORK( 1+(IV-1)*N ), 1, VR(1,IS-1), 1 )
+                  CALL SCOPY( KI, WORK( 1+(IV  )*N ), 1, VR(1,IS  ), 1 )
 *
                   EMAX = ZERO
                   DO 100 K = 1, KI
@@ -744,8 +734,8 @@
      $                                 ABS( VR( K, IS   ) ) )
   100             CONTINUE
                   REMAX = ONE / EMAX
-                  CALL AB_SSCAL( KI, REMAX, VR( 1, IS-1 ), 1 )
-                  CALL AB_SSCAL( KI, REMAX, VR( 1, IS   ), 1 )
+                  CALL SSCAL( KI, REMAX, VR( 1, IS-1 ), 1 )
+                  CALL SSCAL( KI, REMAX, VR( 1, IS   ), 1 )
 *
                   DO 110 K = KI + 1, N
                      VR( K, IS-1 ) = ZERO
@@ -756,17 +746,15 @@
 *                 ------------------------------
 *                 version 1: back-transform each vector with GEMV, Q*x.
                   IF( KI.GT.2 ) THEN
-                     CALL AB_SGEMV( 'N', N, KI-2, ONE, VR, LDVR,
+                     CALL SGEMV( 'N', N, KI-2, ONE, VR, LDVR,
      $                           WORK( 1    + (IV-1)*N ), 1,
      $                           WORK( KI-1 + (IV-1)*N ), VR(1,KI-1), 1)
-                     CALL AB_SGEMV( 'N', N, KI-2, ONE, VR, LDVR,
+                     CALL SGEMV( 'N', N, KI-2, ONE, VR, LDVR,
      $                           WORK( 1  + (IV)*N ), 1,
      $                           WORK( KI + (IV)*N ), VR( 1, KI ), 1 )
                   ELSE
-                     CALL AB_SSCAL( N, WORK(KI-1+(IV-1)*N), VR(1,KI-1), 
-     $1)
-                     CALL AB_SSCAL( N, WORK(KI  +(IV  )*N), VR(1,KI  ), 
-     $1)
+                     CALL SSCAL( N, WORK(KI-1+(IV-1)*N), VR(1,KI-1), 1)
+                     CALL SSCAL( N, WORK(KI  +(IV  )*N), VR(1,KI  ), 1)
                   END IF
 *
                   EMAX = ZERO
@@ -775,8 +763,8 @@
      $                                 ABS( VR( K, KI   ) ) )
   120             CONTINUE
                   REMAX = ONE / EMAX
-                  CALL AB_SSCAL( N, REMAX, VR( 1, KI-1 ), 1 )
-                  CALL AB_SSCAL( N, REMAX, VR( 1, KI   ), 1 )
+                  CALL SSCAL( N, REMAX, VR( 1, KI-1 ), 1 )
+                  CALL SSCAL( N, REMAX, VR( 1, KI   ), 1 )
 *
                ELSE
 *                 ------------------------------
@@ -807,7 +795,7 @@
 *              When the number of vectors stored reaches NB-1 or NB,
 *              or if this was last vector, do the GEMM
                IF( (IV.LE.2) .OR. (KI2.EQ.1) ) THEN
-                  CALL AB_SGEMM( 'N', 'N', N, NB-IV+1, KI2+NB-IV, ONE,
+                  CALL SGEMM( 'N', 'N', N, NB-IV+1, KI2+NB-IV, ONE,
      $                        VR, LDVR,
      $                        WORK( 1 + (IV)*N    ), N,
      $                        ZERO,
@@ -816,7 +804,7 @@
                   DO K = IV, NB
                      IF( ISCOMPLEX(K).EQ.0 ) THEN
 *                       real eigenvector
-                        II = AB_ISAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
+                        II = ISAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
                         REMAX = ONE / ABS( WORK( II + (NB+K)*N ) )
                      ELSE IF( ISCOMPLEX(K).EQ.1 ) THEN
 *                       first eigenvector of conjugate pair
@@ -831,9 +819,9 @@
 *                       second eigenvector of conjugate pair
 *                       reuse same REMAX as previous K
                      END IF
-                     CALL AB_SSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
+                     CALL SSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
                   END DO
-                  CALL AB_SLACPY( 'F', N, NB-IV+1,
+                  CALL SLACPY( 'F', N, NB-IV+1,
      $                         WORK( 1 + (NB+IV)*N ), N,
      $                         VR( 1, KI2 ), LDVR )
                   IV = NB
@@ -934,27 +922,25 @@
 *
                      IF( WORK( J ).GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL AB_SSCAL( N-KI+1, REC, WORK( KI+IV*N ), 1 )
+                        CALL SSCAL( N-KI+1, REC, WORK( KI+IV*N ), 1 )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J+IV*N ) = WORK( J+IV*N ) -
-     $                                AB_SDOT( J-KI-1, T( KI+1, J ), 1,
+     $                                SDOT( J-KI-1, T( KI+1, J ), 1,
      $                                      WORK( KI+1+IV*N ), 1 )
 *
 *                    Solve [ T(J,J) - WR ]**T * X = WORK
 *
-                     CALL AB_SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J )
-     $,
+                     CALL SLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL AB_SSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1
-     $ )
+     $                  CALL SSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1 )
                      WORK( J+IV*N ) = X( 1, 1 )
                      VMAX = MAX( ABS( WORK( J+IV*N ) ), VMAX )
                      VCRIT = BIGNUM / VMAX
@@ -969,33 +955,31 @@
                      BETA = MAX( WORK( J ), WORK( J+1 ) )
                      IF( BETA.GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL AB_SSCAL( N-KI+1, REC, WORK( KI+IV*N ), 1 )
+                        CALL SSCAL( N-KI+1, REC, WORK( KI+IV*N ), 1 )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J+IV*N ) = WORK( J+IV*N ) -
-     $                                AB_SDOT( J-KI-1, T( KI+1, J ), 1,
+     $                                SDOT( J-KI-1, T( KI+1, J ), 1,
      $                                      WORK( KI+1+IV*N ), 1 )
 *
                      WORK( J+1+IV*N ) = WORK( J+1+IV*N ) -
-     $                                  AB_SDOT( J-KI-1, T( KI+1, J+1 ),
-     $ 1,
+     $                                  SDOT( J-KI-1, T( KI+1, J+1 ), 1,
      $                                        WORK( KI+1+IV*N ), 1 )
 *
 *                    Solve
 *                    [ T(J,J)-WR   T(J,J+1)      ]**T * X = SCALE*( WORK1 )
 *                    [ T(J+1,J)    T(J+1,J+1)-WR ]                ( WORK2 )
 *
-                     CALL AB_SLALN2( .TRUE., 2, 1, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .TRUE., 2, 1, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            ZERO, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE )
-     $                  CALL AB_SSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1
-     $ )
+     $                  CALL SSCAL( N-KI+1, SCALE, WORK( KI+IV*N ), 1 )
                      WORK( J  +IV*N ) = X( 1, 1 )
                      WORK( J+1+IV*N ) = X( 2, 1 )
 *
@@ -1011,12 +995,12 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VL and normalize.
-                  CALL AB_SCOPY( N-KI+1, WORK( KI + IV*N ), 1,
+                  CALL SCOPY( N-KI+1, WORK( KI + IV*N ), 1,
      $                                VL( KI, IS ), 1 )
 *
-                  II = AB_ISAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
+                  II = ISAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
                   REMAX = ONE / ABS( VL( II, IS ) )
-                  CALL AB_SSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
+                  CALL SSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
 *
                   DO 180 K = 1, KI - 1
                      VL( K, IS ) = ZERO
@@ -1026,14 +1010,14 @@
 *                 ------------------------------
 *                 version 1: back-transform each vector with GEMV, Q*x.
                   IF( KI.LT.N )
-     $               CALL AB_SGEMV( 'N', N, N-KI, ONE,
+     $               CALL SGEMV( 'N', N, N-KI, ONE,
      $                           VL( 1, KI+1 ), LDVL,
      $                           WORK( KI+1 + IV*N ), 1,
      $                           WORK( KI   + IV*N ), VL( 1, KI ), 1 )
 *
-                  II = AB_ISAMAX( N, VL( 1, KI ), 1 )
+                  II = ISAMAX( N, VL( 1, KI ), 1 )
                   REMAX = ONE / ABS( VL( II, KI ) )
-                  CALL AB_SSCAL( N, REMAX, VL( 1, KI ), 1 )
+                  CALL SSCAL( N, REMAX, VL( 1, KI ), 1 )
 *
                ELSE
 *                 ------------------------------
@@ -1101,37 +1085,30 @@
 *
                      IF( WORK( J ).GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL AB_SSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1
-     $ )
-                        CALL AB_SSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1
-     $ )
+                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1 )
+                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1 )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J+(IV  )*N ) = WORK( J+(IV)*N ) -
-     $                                  AB_SDOT( J-KI-2, T( KI+2, J ), 1
-     $,
+     $                                  SDOT( J-KI-2, T( KI+2, J ), 1,
      $                                        WORK( KI+2+(IV)*N ), 1 )
                      WORK( J+(IV+1)*N ) = WORK( J+(IV+1)*N ) -
-     $                                  AB_SDOT( J-KI-2, T( KI+2, J ), 1
-     $,
+     $                                  SDOT( J-KI-2, T( KI+2, J ), 1,
      $                                        WORK( KI+2+(IV+1)*N ), 1 )
 *
 *                    Solve [ T(J,J)-(WR-i*WI) ]*(X11+i*X12)= WK+I*WK2
 *
-                     CALL AB_SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J )
-     $,
+                     CALL SLALN2( .FALSE., 1, 2, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            -WI, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL AB_SSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N),
-     $ 1)
-                        CALL AB_SSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N),
-     $ 1)
+                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N), 1)
+                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N), 1)
                      END IF
                      WORK( J+(IV  )*N ) = X( 1, 1 )
                      WORK( J+(IV+1)*N ) = X( 1, 2 )
@@ -1149,47 +1126,41 @@
                      BETA = MAX( WORK( J ), WORK( J+1 ) )
                      IF( BETA.GT.VCRIT ) THEN
                         REC = ONE / VMAX
-                        CALL AB_SSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1
-     $ )
-                        CALL AB_SSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1
-     $ )
+                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV  )*N), 1 )
+                        CALL SSCAL( N-KI+1, REC, WORK(KI+(IV+1)*N), 1 )
                         VMAX = ONE
                         VCRIT = BIGNUM
                      END IF
 *
                      WORK( J  +(IV  )*N ) = WORK( J+(IV)*N ) -
-     $                                AB_SDOT( J-KI-2, T( KI+2, J ), 1,
+     $                                SDOT( J-KI-2, T( KI+2, J ), 1,
      $                                      WORK( KI+2+(IV)*N ), 1 )
 *
                      WORK( J  +(IV+1)*N ) = WORK( J+(IV+1)*N ) -
-     $                                AB_SDOT( J-KI-2, T( KI+2, J ), 1,
+     $                                SDOT( J-KI-2, T( KI+2, J ), 1,
      $                                      WORK( KI+2+(IV+1)*N ), 1 )
 *
                      WORK( J+1+(IV  )*N ) = WORK( J+1+(IV)*N ) -
-     $                                AB_SDOT( J-KI-2, T( KI+2, J+1 ), 1
-     $,
+     $                                SDOT( J-KI-2, T( KI+2, J+1 ), 1,
      $                                      WORK( KI+2+(IV)*N ), 1 )
 *
                      WORK( J+1+(IV+1)*N ) = WORK( J+1+(IV+1)*N ) -
-     $                                AB_SDOT( J-KI-2, T( KI+2, J+1 ), 1
-     $,
+     $                                SDOT( J-KI-2, T( KI+2, J+1 ), 1,
      $                                      WORK( KI+2+(IV+1)*N ), 1 )
 *
 *                    Solve 2-by-2 complex linear equation
 *                    [ (T(j,j)   T(j,j+1)  )**T - (wr-i*wi)*I ]*X = SCALE*B
 *                    [ (T(j+1,j) T(j+1,j+1))                  ]
 *
-                     CALL AB_SLALN2( .TRUE., 2, 2, SMIN, ONE, T( J, J ),
+                     CALL SLALN2( .TRUE., 2, 2, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+IV*N ), N, WR,
      $                            -WI, X, 2, SCALE, XNORM, IERR )
 *
 *                    Scale if necessary
 *
                      IF( SCALE.NE.ONE ) THEN
-                        CALL AB_SSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N),
-     $ 1)
-                        CALL AB_SSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N),
-     $ 1)
+                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV  )*N), 1)
+                        CALL SSCAL( N-KI+1, SCALE, WORK(KI+(IV+1)*N), 1)
                      END IF
                      WORK( J  +(IV  )*N ) = X( 1, 1 )
                      WORK( J  +(IV+1)*N ) = X( 1, 2 )
@@ -1208,9 +1179,9 @@
                IF( .NOT.OVER ) THEN
 *                 ------------------------------
 *                 no back-transform: copy x to VL and normalize.
-                  CALL AB_SCOPY( N-KI+1, WORK( KI + (IV  )*N ), 1,
+                  CALL SCOPY( N-KI+1, WORK( KI + (IV  )*N ), 1,
      $                        VL( KI, IS   ), 1 )
-                  CALL AB_SCOPY( N-KI+1, WORK( KI + (IV+1)*N ), 1,
+                  CALL SCOPY( N-KI+1, WORK( KI + (IV+1)*N ), 1,
      $                        VL( KI, IS+1 ), 1 )
 *
                   EMAX = ZERO
@@ -1219,8 +1190,8 @@
      $                                 ABS( VL( K, IS+1 ) ) )
   220             CONTINUE
                   REMAX = ONE / EMAX
-                  CALL AB_SSCAL( N-KI+1, REMAX, VL( KI, IS   ), 1 )
-                  CALL AB_SSCAL( N-KI+1, REMAX, VL( KI, IS+1 ), 1 )
+                  CALL SSCAL( N-KI+1, REMAX, VL( KI, IS   ), 1 )
+                  CALL SSCAL( N-KI+1, REMAX, VL( KI, IS+1 ), 1 )
 *
                   DO 230 K = 1, KI - 1
                      VL( K, IS   ) = ZERO
@@ -1231,21 +1202,19 @@
 *                 ------------------------------
 *                 version 1: back-transform each vector with GEMV, Q*x.
                   IF( KI.LT.N-1 ) THEN
-                     CALL AB_SGEMV( 'N', N, N-KI-1, ONE,
+                     CALL SGEMV( 'N', N, N-KI-1, ONE,
      $                           VL( 1, KI+2 ), LDVL,
      $                           WORK( KI+2 + (IV)*N ), 1,
      $                           WORK( KI   + (IV)*N ),
      $                           VL( 1, KI ), 1 )
-                     CALL AB_SGEMV( 'N', N, N-KI-1, ONE,
+                     CALL SGEMV( 'N', N, N-KI-1, ONE,
      $                           VL( 1, KI+2 ), LDVL,
      $                           WORK( KI+2 + (IV+1)*N ), 1,
      $                           WORK( KI+1 + (IV+1)*N ),
      $                           VL( 1, KI+1 ), 1 )
                   ELSE
-                     CALL AB_SSCAL( N, WORK(KI+  (IV  )*N), VL(1, KI  ),
-     $ 1)
-                     CALL AB_SSCAL( N, WORK(KI+1+(IV+1)*N), VL(1, KI+1),
-     $ 1)
+                     CALL SSCAL( N, WORK(KI+  (IV  )*N), VL(1, KI  ), 1)
+                     CALL SSCAL( N, WORK(KI+1+(IV+1)*N), VL(1, KI+1), 1)
                   END IF
 *
                   EMAX = ZERO
@@ -1254,8 +1223,8 @@
      $                                 ABS( VL( K, KI+1 ) ) )
   240             CONTINUE
                   REMAX = ONE / EMAX
-                  CALL AB_SSCAL( N, REMAX, VL( 1, KI   ), 1 )
-                  CALL AB_SSCAL( N, REMAX, VL( 1, KI+1 ), 1 )
+                  CALL SSCAL( N, REMAX, VL( 1, KI   ), 1 )
+                  CALL SSCAL( N, REMAX, VL( 1, KI+1 ), 1 )
 *
                ELSE
 *                 ------------------------------
@@ -1287,7 +1256,7 @@
 *              When the number of vectors stored reaches NB-1 or NB,
 *              or if this was last vector, do the GEMM
                IF( (IV.GE.NB-1) .OR. (KI2.EQ.N) ) THEN
-                  CALL AB_SGEMM( 'N', 'N', N, IV, N-KI2+IV, ONE,
+                  CALL SGEMM( 'N', 'N', N, IV, N-KI2+IV, ONE,
      $                        VL( 1, KI2-IV+1 ), LDVL,
      $                        WORK( KI2-IV+1 + (1)*N ), N,
      $                        ZERO,
@@ -1296,7 +1265,7 @@
                   DO K = 1, IV
                      IF( ISCOMPLEX(K).EQ.0) THEN
 *                       real eigenvector
-                        II = AB_ISAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
+                        II = ISAMAX( N, WORK( 1 + (NB+K)*N ), 1 )
                         REMAX = ONE / ABS( WORK( II + (NB+K)*N ) )
                      ELSE IF( ISCOMPLEX(K).EQ.1) THEN
 *                       first eigenvector of conjugate pair
@@ -1311,9 +1280,9 @@
 *                       second eigenvector of conjugate pair
 *                       reuse same REMAX as previous K
                      END IF
-                     CALL AB_SSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
+                     CALL SSCAL( N, REMAX, WORK( 1 + (NB+K)*N ), 1 )
                   END DO
-                  CALL AB_SLACPY( 'F', N, IV,
+                  CALL SLACPY( 'F', N, IV,
      $                         WORK( 1 + (NB+1)*N ), N,
      $                         VL( 1, KI2-IV+1 ), LDVL )
                   IV = 1
@@ -1330,6 +1299,6 @@
 *
       RETURN
 *
-*     End of AB_STREVC3
+*     End of STREVC3
 *
       END

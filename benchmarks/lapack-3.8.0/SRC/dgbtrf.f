@@ -1,4 +1,4 @@
-*> \brief \b AB_DGBTRF
+*> \brief \b DGBTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGBTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGBTRF.f">
+*> Download DGBTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbtrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGBTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbtrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGBTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbtrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+*       SUBROUTINE DGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, KL, KU, LDAB, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGBTRF computes an LU factorization of a real m-by-n band matrix A
+*> DGBTRF computes an LU factorization of a real m-by-n band matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> This is the blocked version of the algorithm, calling Level 3 BLAS.
@@ -142,7 +142,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+      SUBROUTINE DGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -175,13 +175,12 @@
      $                   WORK31( LDWORK, NBMAX )
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX, AB_ILAENV
-      EXTERNAL           AB_IDAMAX, AB_ILAENV
+      INTEGER            IDAMAX, ILAENV
+      EXTERNAL           IDAMAX, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DGBTF2, AB_DGEMM, AB_DGER, AB_DLAS
-     $WP, AB_DSCAL,
-     $                   AB_DSWAP, AB_DTRSM, AB_XERBLA
+      EXTERNAL           DCOPY, DGBTF2, DGEMM, DGER, DLASWP, DSCAL,
+     $                   DSWAP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -208,7 +207,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGBTRF', -INFO )
+         CALL XERBLA( 'DGBTRF', -INFO )
          RETURN
       END IF
 *
@@ -219,7 +218,7 @@
 *
 *     Determine the block size for this environment
 *
-      NB = AB_ILAENV( 1, 'AB_DGBTRF', ' ', M, N, KL, KU )
+      NB = ILAENV( 1, 'DGBTRF', ' ', M, N, KL, KU )
 *
 *     The block size must not exceed the limit set by the size of the
 *     local arrays WORK13 and WORK31.
@@ -230,7 +229,7 @@
 *
 *        Use unblocked code
 *
-         CALL AB_DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+         CALL DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
       ELSE
 *
 *        Use blocked code
@@ -302,7 +301,7 @@
 *              subdiagonal elements in the current column.
 *
                KM = MIN( KL, M-JJ )
-               JP = AB_IDAMAX( KM+1, AB( KV+1, JJ ), 1 )
+               JP = IDAMAX( KM+1, AB( KV+1, JJ ), 1 )
                IPIV( JJ ) = JP + JJ - J
                IF( AB( KV+JP, JJ ).NE.ZERO ) THEN
                   JU = MAX( JU, MIN( JJ+KU+JP-1, N ) )
@@ -312,24 +311,23 @@
 *
                      IF( JP+JJ-1.LT.J+KL ) THEN
 *
-                        CALL AB_DSWAP( JB, AB( KV+1+JJ-J, J ), LDAB-1,
+                        CALL DSWAP( JB, AB( KV+1+JJ-J, J ), LDAB-1,
      $                              AB( KV+JP+JJ-J, J ), LDAB-1 )
                      ELSE
 *
 *                       The interchange affects columns J to JJ-1 of A31
 *                       which are stored in the work array WORK31
 *
-                        CALL AB_DSWAP( JJ-J, AB( KV+1+JJ-J, J ), LDAB-1,
+                        CALL DSWAP( JJ-J, AB( KV+1+JJ-J, J ), LDAB-1,
      $                              WORK31( JP+JJ-J-KL, 1 ), LDWORK )
-                        CALL AB_DSWAP( J+JB-JJ, AB( KV+1, JJ ), LDAB-1,
+                        CALL DSWAP( J+JB-JJ, AB( KV+1, JJ ), LDAB-1,
      $                              AB( KV+JP, JJ ), LDAB-1 )
                      END IF
                   END IF
 *
 *                 Compute multipliers
 *
-                  CALL AB_DSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2, JJ 
-     $),
+                  CALL DSCAL( KM, ONE / AB( KV+1, JJ ), AB( KV+2, JJ ),
      $                        1 )
 *
 *                 Update trailing submatrix within the band and within
@@ -338,7 +336,7 @@
 *
                   JM = MIN( JU, J+JB-1 )
                   IF( JM.GT.JJ )
-     $               CALL AB_DGER( KM, JM-JJ, -ONE, AB( KV+2, JJ ), 1,
+     $               CALL DGER( KM, JM-JJ, -ONE, AB( KV+2, JJ ), 1,
      $                          AB( KV, JJ+1 ), LDAB-1,
      $                          AB( KV+1, JJ+1 ), LDAB-1 )
                ELSE
@@ -354,7 +352,7 @@
 *
                NW = MIN( JJ-J+1, I3 )
                IF( NW.GT.0 )
-     $            CALL AB_DCOPY( NW, AB( KV+KL+1-JJ+J, JJ ), 1,
+     $            CALL DCOPY( NW, AB( KV+KL+1-JJ+J, JJ ), 1,
      $                        WORK31( 1, JJ-J+1 ), 1 )
    80       CONTINUE
             IF( J+JB.LE.N ) THEN
@@ -364,10 +362,10 @@
                J2 = MIN( JU-J+1, KV ) - JB
                J3 = MAX( 0, JU-J-KV+1 )
 *
-*              Use AB_DLASWP to apply the row interchanges to A12, A22, and
+*              Use DLASWP to apply the row interchanges to A12, A22, and
 *              A32.
 *
-               CALL AB_DLASWP( J2, AB( KV+1-JB, J+JB ), LDAB-1, 1, JB,
+               CALL DLASWP( J2, AB( KV+1-JB, J+JB ), LDAB-1, 1, JB,
      $                      IPIV( J ), 1 )
 *
 *              Adjust the pivot indices.
@@ -398,8 +396,7 @@
 *
 *                 Update A12
 *
-                  CALL AB_DTRSM( 'Left', 'Lower', 'No transpose', 'Unit'
-     $,
+                  CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
      $                        JB, J2, ONE, AB( KV+1, J ), LDAB-1,
      $                        AB( KV+1-JB, J+JB ), LDAB-1 )
 *
@@ -407,8 +404,7 @@
 *
 *                    Update A22
 *
-                     CALL AB_DGEMM( 'No transpose', 'No transpose', I2, 
-     $J2,
+                     CALL DGEMM( 'No transpose', 'No transpose', I2, J2,
      $                           JB, -ONE, AB( KV+1+JB, J ), LDAB-1,
      $                           AB( KV+1-JB, J+JB ), LDAB-1, ONE,
      $                           AB( KV+1, J+JB ), LDAB-1 )
@@ -418,8 +414,7 @@
 *
 *                    Update A32
 *
-                     CALL AB_DGEMM( 'No transpose', 'No transpose', I3, 
-     $J2,
+                     CALL DGEMM( 'No transpose', 'No transpose', I3, J2,
      $                           JB, -ONE, WORK31, LDWORK,
      $                           AB( KV+1-JB, J+JB ), LDAB-1, ONE,
      $                           AB( KV+KL+1-JB, J+JB ), LDAB-1 )
@@ -439,8 +434,7 @@
 *
 *                 Update A13 in the work array
 *
-                  CALL AB_DTRSM( 'Left', 'Lower', 'No transpose', 'Unit'
-     $,
+                  CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
      $                        JB, J3, ONE, AB( KV+1, J ), LDAB-1,
      $                        WORK13, LDWORK )
 *
@@ -448,8 +442,7 @@
 *
 *                    Update A23
 *
-                     CALL AB_DGEMM( 'No transpose', 'No transpose', I2, 
-     $J3,
+                     CALL DGEMM( 'No transpose', 'No transpose', I2, J3,
      $                           JB, -ONE, AB( KV+1+JB, J ), LDAB-1,
      $                           WORK13, LDWORK, ONE, AB( 1+JB, J+KV ),
      $                           LDAB-1 )
@@ -459,8 +452,7 @@
 *
 *                    Update A33
 *
-                     CALL AB_DGEMM( 'No transpose', 'No transpose', I3, 
-     $J3,
+                     CALL DGEMM( 'No transpose', 'No transpose', I3, J3,
      $                           JB, -ONE, WORK31, LDWORK, WORK13,
      $                           LDWORK, ONE, AB( 1+KL, J+KV ), LDAB-1 )
                   END IF
@@ -496,13 +488,13 @@
 *
 *                    The interchange does not affect A31
 *
-                     CALL AB_DSWAP( JJ-J, AB( KV+1+JJ-J, J ), LDAB-1,
+                     CALL DSWAP( JJ-J, AB( KV+1+JJ-J, J ), LDAB-1,
      $                           AB( KV+JP+JJ-J, J ), LDAB-1 )
                   ELSE
 *
 *                    The interchange does affect A31
 *
-                     CALL AB_DSWAP( JJ-J, AB( KV+1+JJ-J, J ), LDAB-1,
+                     CALL DSWAP( JJ-J, AB( KV+1+JJ-J, J ), LDAB-1,
      $                           WORK31( JP+JJ-J-KL, 1 ), LDWORK )
                   END IF
                END IF
@@ -511,7 +503,7 @@
 *
                NW = MIN( I3, JJ-J+1 )
                IF( NW.GT.0 )
-     $            CALL AB_DCOPY( NW, WORK31( 1, JJ-J+1 ), 1,
+     $            CALL DCOPY( NW, WORK31( 1, JJ-J+1 ), 1,
      $                        AB( KV+KL+1-JJ+J, JJ ), 1 )
   170       CONTINUE
   180    CONTINUE
@@ -519,6 +511,6 @@
 *
       RETURN
 *
-*     End of AB_DGBTRF
+*     End of DGBTRF
 *
       END

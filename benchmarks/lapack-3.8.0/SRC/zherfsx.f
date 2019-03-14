@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHERFSX
+*> \brief \b ZHERFSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHERFSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHERfsx.f">
+*> Download ZHERFSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zherfsx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHERfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zherfsx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHERfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zherfsx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE ZHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
 *                           ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
 *                           WORK, RWORK, INFO )
@@ -43,7 +43,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZHERFSX improves the computed solution to a system of linear
+*>    ZHERFSX improves the computed solution to a system of linear
 *>    equations when the coefficient matrix is Hermitian indefinite, and
 *>    provides error bounds and backward error estimates for the
 *>    solution.  In addition to normwise error bound, the code provides
@@ -123,7 +123,7 @@
 *>     The factored form of the matrix A.  AF contains the block
 *>     diagonal matrix D and the multipliers used to obtain the
 *>     factor U or L from the factorization A = U*D*U**T or A =
-*>     L*D*L**T as computed by AB_DSYTRF.
+*>     L*D*L**T as computed by DSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -136,7 +136,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     Details of the interchanges and the block structure of D
-*>     as determined by AB_DSYTRF.
+*>     as determined by DSYTRF.
 *> \endverbatim
 *>
 *> \param[in,out] S
@@ -170,7 +170,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX*16 array, dimension (LDX,NRHS)
-*>     On entry, the solution matrix X, as computed by AB_DGETRS.
+*>     On entry, the solution matrix X, as computed by DGETRS.
 *>     On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -396,8 +396,7 @@
 *> \ingroup complex16HEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPI
-     $V,
+      SUBROUTINE ZHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $                    S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
@@ -456,19 +455,17 @@
       DOUBLE PRECISION   RTHRESH, UNSTABLE_THRESH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZHECON, AB_ZLA_HERFSX_EXTENDED
+      EXTERNAL           XERBLA, ZHECON, ZLA_HERFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT, TRANSFER
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, AB_ILAPREC
-      EXTERNAL           DLAMCH, AB_ZLANHE, AB_ZLA_HERCOND_X, AB_ZLA_HER
-     $COND_C
-      DOUBLE PRECISION   DLAMCH, AB_ZLANHE, AB_ZLA_HERCOND_X, AB_ZLA_HER
-     $COND_C
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAPREC
+      EXTERNAL           LSAME, ILAPREC
+      EXTERNAL           DLAMCH, ZLANHE, ZLA_HERCOND_X, ZLA_HERCOND_C
+      DOUBLE PRECISION   DLAMCH, ZLANHE, ZLA_HERCOND_X, ZLA_HERCOND_C
+      LOGICAL            LSAME
+      INTEGER            ILAPREC
 *     ..
 *     .. Executable Statements ..
 *
@@ -518,14 +515,13 @@
          N_NORMS = 2
       END IF
 *
-      RCEQU = AB_LSAME( EQUED, 'Y' )
+      RCEQU = LSAME( EQUED, 'Y' )
 *
 *     Test input parameters.
 *
-      IF (.NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF (.NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
         INFO = -1
-      ELSE IF( .NOT.RCEQU .AND. .NOT.AB_LSAME( EQUED, 'N' ) ) THEN
+      ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
       ELSE IF( N.LT.0 ) THEN
         INFO = -3
@@ -541,7 +537,7 @@
         INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_ZHERFSX', -INFO )
+        CALL XERBLA( 'ZHERFSX', -INFO )
         RETURN
       END IF
 *
@@ -590,17 +586,17 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = AB_ZLANHE( NORM, UPLO, N, A, LDA, RWORK )
-      CALL AB_ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
+      ANORM = ZLANHE( NORM, UPLO, N, A, LDA, RWORK )
+      CALL ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
      $     INFO )
 *
 *     Perform refinement on each right-hand side
 *
       IF ( REF_TYPE .NE. 0 ) THEN
 
-         PREC_TYPE = AB_ILAPREC( 'E' )
+         PREC_TYPE = ILAPREC( 'E' )
 
-         CALL AB_ZLA_HERFSX_EXTENDED( PREC_TYPE, UPLO,  N,
+         CALL ZLA_HERFSX_EXTENDED( PREC_TYPE, UPLO,  N,
      $        NRHS, A, LDA, AF, LDAF, IPIV, RCEQU, S, B,
      $        LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $        WORK, RWORK, WORK(N+1),
@@ -615,12 +611,10 @@
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( RCEQU ) THEN
-            RCOND_TMP = AB_ZLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPI
-     $V,
+            RCOND_TMP = ZLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
      $           S, .TRUE., INFO, WORK, RWORK )
          ELSE
-            RCOND_TMP = AB_ZLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPI
-     $V,
+            RCOND_TMP = ZLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
      $           S, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS
@@ -665,7 +659,7 @@
          DO J = 1, NRHS
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
-               RCOND_TMP = AB_ZLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF,
+               RCOND_TMP = ZLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF,
      $         IPIV, X( 1, J ), INFO, WORK, RWORK )
             ELSE
                RCOND_TMP = 0.0D+0
@@ -701,6 +695,6 @@
 *
       RETURN
 *
-*     End of AB_ZHERFSX
+*     End of ZHERFSX
 *
       END

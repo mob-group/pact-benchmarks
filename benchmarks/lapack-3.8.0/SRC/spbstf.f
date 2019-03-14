@@ -1,4 +1,4 @@
-*> \brief \b AB_SPBSTF
+*> \brief \b SPBSTF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPBSTF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPBSTF.f">
+*> Download SPBSTF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbstf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPBSTF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spbstf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPBSTF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbstf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+*       SUBROUTINE SPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> AB_SPBSTF computes a split Cholesky factorization of a real
+*> SPBSTF computes a split Cholesky factorization of a real
 *> symmetric positive definite band matrix A.
 *>
-*> This routine is designed to be used in conjunction with AB_SSBGST.
+*> This routine is designed to be used in conjunction with SSBGST.
 *>
 *> The factorization has the form  A = S**T*S  where S is a band matrix
 *> of the same bandwidth as A and the following structure:
@@ -150,7 +150,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+      SUBROUTINE SPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -177,11 +177,11 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL, AB_SSYR, AB_XERBLA
+      EXTERNAL           SSCAL, SSYR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -191,8 +191,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -202,7 +202,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPBSTF', -INFO )
+         CALL XERBLA( 'SPBSTF', -INFO )
          RETURN
       END IF
 *
@@ -235,8 +235,8 @@
 *           Compute elements j-km:j-1 of the j-th column and update the
 *           the leading submatrix within the band.
 *
-            CALL AB_SSCAL( KM, ONE / AJJ, AB( KD+1-KM, J ), 1 )
-            CALL AB_SSYR( 'Upper', KM, -ONE, AB( KD+1-KM, J ), 1,
+            CALL SSCAL( KM, ONE / AJJ, AB( KD+1-KM, J ), 1 )
+            CALL SSYR( 'Upper', KM, -ONE, AB( KD+1-KM, J ), 1,
      $                 AB( KD+1, J-KM ), KLD )
    10    CONTINUE
 *
@@ -257,8 +257,8 @@
 *           trailing submatrix within the band.
 *
             IF( KM.GT.0 ) THEN
-               CALL AB_SSCAL( KM, ONE / AJJ, AB( KD, J+1 ), KLD )
-               CALL AB_SSYR( 'Upper', KM, -ONE, AB( KD, J+1 ), KLD,
+               CALL SSCAL( KM, ONE / AJJ, AB( KD, J+1 ), KLD )
+               CALL SSYR( 'Upper', KM, -ONE, AB( KD, J+1 ), KLD,
      $                    AB( KD+1, J+1 ), KLD )
             END IF
    20    CONTINUE
@@ -280,8 +280,8 @@
 *           Compute elements j-km:j-1 of the j-th row and update the
 *           trailing submatrix within the band.
 *
-            CALL AB_SSCAL( KM, ONE / AJJ, AB( KM+1, J-KM ), KLD )
-            CALL AB_SSYR( 'Lower', KM, -ONE, AB( KM+1, J-KM ), KLD,
+            CALL SSCAL( KM, ONE / AJJ, AB( KM+1, J-KM ), KLD )
+            CALL SSYR( 'Lower', KM, -ONE, AB( KM+1, J-KM ), KLD,
      $                 AB( 1, J-KM ), KLD )
    30    CONTINUE
 *
@@ -302,8 +302,8 @@
 *           trailing submatrix within the band.
 *
             IF( KM.GT.0 ) THEN
-               CALL AB_SSCAL( KM, ONE / AJJ, AB( 2, J ), 1 )
-               CALL AB_SSYR( 'Lower', KM, -ONE, AB( 2, J ), 1,
+               CALL SSCAL( KM, ONE / AJJ, AB( 2, J ), 1 )
+               CALL SSYR( 'Lower', KM, -ONE, AB( 2, J ), 1,
      $                    AB( 1, J+1 ), KLD )
             END IF
    40    CONTINUE
@@ -314,6 +314,6 @@
       INFO = J
       RETURN
 *
-*     End of AB_SPBSTF
+*     End of SPBSTF
 *
       END

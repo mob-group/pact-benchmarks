@@ -1,4 +1,4 @@
-*> \brief <b> AB_DSBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> DSBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSBEVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSBEVd.f">
+*> Download DSBEVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbevd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSBEVd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbevd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSBEVd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbevd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+*       SUBROUTINE DSBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
 *                          LWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSBEVD computes all the eigenvalues and, optionally, eigenvectors of
+*> DSBEVD computes all the eigenvalues and, optionally, eigenvectors of
 *> a real symmetric band matrix A. If eigenvectors are desired, it uses
 *> a divide and conquer algorithm.
 *>
@@ -144,7 +144,7 @@
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by AB_XERBLA.
+*>          LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -164,7 +164,7 @@
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by AB_XERBLA.
+*>          LWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -190,8 +190,7 @@
 *> \ingroup doubleOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_DSBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK
-     $,
+      SUBROUTINE DSBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
      $                   LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -222,14 +221,13 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANSB
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANSB
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANSB
+      EXTERNAL           LSAME, DLAMCH, DLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DLACPY, AB_DLASCL, AB_DSBTRD, AB_D
-     $SCAL, AB_DSTEDC,
-     $                   AB_DSTERF, AB_XERBLA
+      EXTERNAL           DGEMM, DLACPY, DLASCL, DSBTRD, DSCAL, DSTEDC,
+     $                   DSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -238,8 +236,8 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
@@ -255,9 +253,9 @@
             LWMIN = 2*N
          END IF
       END IF
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -281,7 +279,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSBEVD', -INFO )
+         CALL XERBLA( 'DSBEVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -310,7 +308,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_DLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
+      ANRM = DLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -321,46 +319,42 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
       END IF
 *
-*     Call AB_DSBTRD to reduce symmetric band matrix to tridiagonal form.
+*     Call DSBTRD to reduce symmetric band matrix to tridiagonal form.
 *
       INDE = 1
       INDWRK = INDE + N
       INDWK2 = INDWRK + N*N
       LLWRK2 = LWORK - INDWK2 + 1
-      CALL AB_DSBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, WORK( INDE ), Z, L
-     $DZ,
+      CALL DSBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, WORK( INDE ), Z, LDZ,
      $             WORK( INDWRK ), IINFO )
 *
-*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, call AB_SSTEDC.
+*     For eigenvalues only, call DSTERF.  For eigenvectors, call SSTEDC.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_DSTERF( N, W, WORK( INDE ), INFO )
+         CALL DSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL AB_DSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
+         CALL DSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, IWORK, LIWORK, INFO )
-         CALL AB_DGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), 
-     $N,
+         CALL DGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), N,
      $               ZERO, WORK( INDWK2 ), N )
-         CALL AB_DLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
+         CALL DLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
 *
       IF( ISCALE.EQ.1 )
-     $   CALL AB_DSCAL( N, ONE / SIGMA, W, 1 )
+     $   CALL DSCAL( N, ONE / SIGMA, W, 1 )
 *
       WORK( 1 ) = LWMIN
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of AB_DSBEVD
+*     End of DSBEVD
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAT2C converts a double complex triangular matrix to a complex triangular matrix.
+*> \brief \b ZLAT2C converts a double complex triangular matrix to a complex triangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAT2C + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAT2C.f">
+*> Download ZLAT2C + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlat2c.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAT2C.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlat2c.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAT2C.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlat2c.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAT2C( UPLO, N, A, LDA, SA, LDSA, INFO )
+*       SUBROUTINE ZLAT2C( UPLO, N, A, LDA, SA, LDSA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,11 +35,11 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAT2C converts a COMPLEX*16 triangular matrix, SA, to a COMPLEX
+*> ZLAT2C converts a COMPLEX*16 triangular matrix, SA, to a COMPLEX
 *> triangular matrix, A.
 *>
 *> RMAX is the overflow for the SINGLE PRECISION arithmetic
-*> AB_ZLAT2C checks that all the entries of A are between -RMAX and
+*> ZLAT2C checks that all the entries of A are between -RMAX and
 *> RMAX. If not the conversion is aborted and a flag is raised.
 *>
 *> This is an auxiliary routine so there is no argument checking.
@@ -109,7 +109,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAT2C( UPLO, N, A, LDA, SA, LDSA, INFO )
+      SUBROUTINE ZLAT2C( UPLO, N, A, LDA, SA, LDSA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,13 +137,13 @@
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
-      LOGICAL            AB_LSAME
-      EXTERNAL           SLAMCH, AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           SLAMCH, LSAME
 *     ..
 *     .. Executable Statements ..
 *
       RMAX = SLAMCH( 'O' )
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J
@@ -175,6 +175,6 @@
 *
       RETURN
 *
-*     End of AB_ZLAT2C
+*     End of ZLAT2C
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SPTTS2 solves a tridiagonal system of the form AX=B using the L D LH factorization computed by AB_SPTTRF.
+*> \brief \b SPTTS2 solves a tridiagonal system of the form AX=B using the L D LH factorization computed by spttrf.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPTTS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPTTS2.f">
+*> Download SPTTS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sptts2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPTTS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sptts2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPTTS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sptts2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPTTS2( N, NRHS, D, E, B, LDB )
+*       SUBROUTINE SPTTS2( N, NRHS, D, E, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDB, N, NRHS
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SPTTS2 solves a tridiagonal system of the form
+*> SPTTS2 solves a tridiagonal system of the form
 *>    A * X = B
-*> using the L*D*L**T factorization of A computed by AB_SPTTRF.  D is a
+*> using the L*D*L**T factorization of A computed by SPTTRF.  D is a
 *> diagonal matrix specified in the vector D, L is a unit bidiagonal
 *> matrix whose subdiagonal is specified in the vector E, and X and B
 *> are N by NRHS matrices.
@@ -100,7 +100,7 @@
 *> \ingroup realPTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPTTS2( N, NRHS, D, E, B, LDB )
+      SUBROUTINE SPTTS2( N, NRHS, D, E, B, LDB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -120,7 +120,7 @@
       INTEGER            I, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL
+      EXTERNAL           SSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -128,7 +128,7 @@
 *
       IF( N.LE.1 ) THEN
          IF( N.EQ.1 )
-     $      CALL AB_SSCAL( NRHS, 1. / D( 1 ), B, LDB )
+     $      CALL SSCAL( NRHS, 1. / D( 1 ), B, LDB )
          RETURN
       END IF
 *
@@ -153,6 +153,6 @@
 *
       RETURN
 *
-*     End of AB_SPTTS2
+*     End of SPTTS2
 *
       END

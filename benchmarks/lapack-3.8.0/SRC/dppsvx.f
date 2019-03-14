@@ -1,4 +1,4 @@
-*> \brief <b> AB_DPPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
+*> \brief <b> DPPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DPPSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPPSVx.f">
+*> Download DPPSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dppsvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPPSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dppsvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPPSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dppsvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPPSVX( FACT, UPLO, N, NRHS, AP, AFP, EQUED, S, B, LDB,
+*       SUBROUTINE DPPSVX( FACT, UPLO, N, NRHS, AP, AFP, EQUED, S, B, LDB,
 *                          X, LDX, RCOND, FERR, BERR, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPPSVX uses the Cholesky factorization A = U**T*U or A = L*L**T to
+*> DPPSVX uses the Cholesky factorization A = U**T*U or A = L*L**T to
 *> compute the solution to a real system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric positive definite matrix stored in
@@ -308,8 +308,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DPPSVX( FACT, UPLO, N, NRHS, AP, AFP, EQUED, S, B, L
-     $DB,
+      SUBROUTINE DPPSVX( FACT, UPLO, N, NRHS, AP, AFP, EQUED, S, B, LDB,
      $                   X, LDX, RCOND, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.1) --
@@ -340,14 +339,13 @@
       DOUBLE PRECISION   AMAX, ANORM, BIGNUM, SCOND, SMAX, SMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANSP
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANSP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANSP
+      EXTERNAL           LSAME, DLAMCH, DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DLAQSP, AB_DPPCON, AB_D
-     $PPEQU, AB_DPPRFS,
-     $                   AB_DPPTRF, AB_DPPTRS, AB_XERBLA
+      EXTERNAL           DCOPY, DLACPY, DLAQSP, DPPCON, DPPEQU, DPPRFS,
+     $                   DPPTRF, DPPTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -355,33 +353,31 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      EQUIL = AB_LSAME( FACT, 'E' )
+      NOFACT = LSAME( FACT, 'N' )
+      EQUIL = LSAME( FACT, 'E' )
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = AB_LSAME( EQUED, 'Y' )
+         RCEQU = LSAME( EQUED, 'Y' )
          SMLNUM = DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.AB_LSAME( FACT, 'F' ) 
-     $)
+      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L'
-     $ ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       ELSE IF( NRHS.LT.0 ) THEN
          INFO = -4
-      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
-     $         ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
+     $         ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -7
       ELSE
          IF( RCEQU ) THEN
@@ -409,7 +405,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DPPSVX', -INFO )
+         CALL XERBLA( 'DPPSVX', -INFO )
          RETURN
       END IF
 *
@@ -417,13 +413,13 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL AB_DPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFEQU )
+         CALL DPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
 *
-            CALL AB_DLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
-            RCEQU = AB_LSAME( EQUED, 'Y' )
+            CALL DLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+            RCEQU = LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
@@ -441,8 +437,8 @@
 *
 *        Compute the Cholesky factorization A = U**T * U or A = L * L**T.
 *
-         CALL AB_DCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
-         CALL AB_DPPTRF( UPLO, N, AFP, INFO )
+         CALL DCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
+         CALL DPPTRF( UPLO, N, AFP, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -454,22 +450,21 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = AB_DLANSP( 'I', UPLO, N, AP, WORK )
+      ANORM = DLANSP( 'I', UPLO, N, AP, WORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL AB_DPPCON( UPLO, N, AFP, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL DPPCON( UPLO, N, AFP, ANORM, RCOND, WORK, IWORK, INFO )
 *
 *     Compute the solution matrix X.
 *
-      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_DPPTRS( UPLO, N, NRHS, AFP, X, LDX, INFO )
+      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL DPPTRS( UPLO, N, NRHS, AFP, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL AB_DPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR, BERR
-     $,
+      CALL DPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR, BERR,
      $             WORK, IWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original
@@ -493,6 +488,6 @@
 *
       RETURN
 *
-*     End of AB_DPPSVX
+*     End of DPPSVX
 *
       END

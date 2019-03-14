@@ -1,4 +1,4 @@
-*> \brief <b> AB_SGELSY solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> SGELSY solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGELSY + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGELSy.f">
+*> Download SGELSY + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelsy.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGELSy.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelsy.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGELSy.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelsy.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
+*       SUBROUTINE SGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGELSY computes the minimum-norm solution to a real linear least
+*> SGELSY computes the minimum-norm solution to a real linear least
 *> squares problem:
 *>     minimize || A * X - B ||
 *> using a complete orthogonal factorization of A.  A is an M-by-N
@@ -165,13 +165,13 @@
 *>          The block algorithm requires that:
 *>             LWORK >= MAX( MN+2*N+NB*(N+1), 2*MN+NB*NRHS ),
 *>          where NB is an upper bound on the blocksize returned
-*>          by AB_ILAENV for the routines AB_SGEQP3, AB_STZRZF, AB_STZRQF, AB_SORMQR,
-*>          and AB_SORMRZ.
+*>          by ILAENV for the routines SGEQP3, STZRZF, STZRQF, SORMQR,
+*>          and SORMRZ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -201,8 +201,7 @@
 *>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
 *>
 *  =====================================================================
-      SUBROUTINE AB_SGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RAN
-     $K,
+      SUBROUTINE SGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -235,15 +234,13 @@
      $                   SMAXPR, SMIN, SMINPR, SMLNUM, WSIZE
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           AB_ILAENV, SLAMCH, AB_SLANGE
+      INTEGER            ILAENV
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           ILAENV, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEQP3, AB_SLABAD, AB_SLAIC1, AB_S
-     $LASCL, AB_SLASET,
-     $                   AB_SORMQR, AB_SORMRZ, AB_STRSM, AB_STZRZF, AB_X
-     $ERBLA
+      EXTERNAL           SCOPY, SGEQP3, SLABAD, SLAIC1, SLASCL, SLASET,
+     $                   SORMQR, SORMRZ, STRSM, STZRZF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -277,10 +274,10 @@
             LWKMIN = 1
             LWKOPT = 1
          ELSE
-            NB1 = AB_ILAENV( 1, 'AB_SGEQRF', ' ', M, N, -1, -1 )
-            NB2 = AB_ILAENV( 1, 'AB_SGERQF', ' ', M, N, -1, -1 )
-            NB3 = AB_ILAENV( 1, 'AB_SORMQR', ' ', M, N, NRHS, -1 )
-            NB4 = AB_ILAENV( 1, 'AB_SORMRQ', ' ', M, N, NRHS, -1 )
+            NB1 = ILAENV( 1, 'SGEQRF', ' ', M, N, -1, -1 )
+            NB2 = ILAENV( 1, 'SGERQF', ' ', M, N, -1, -1 )
+            NB3 = ILAENV( 1, 'SORMQR', ' ', M, N, NRHS, -1 )
+            NB4 = ILAENV( 1, 'SORMRQ', ' ', M, N, NRHS, -1 )
             NB = MAX( NB1, NB2, NB3, NB4 )
             LWKMIN = MN + MAX( 2*MN, N + 1, MN + NRHS )
             LWKOPT = MAX( LWKMIN,
@@ -294,7 +291,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGELSY', -INFO )
+         CALL XERBLA( 'SGELSY', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -311,55 +308,53 @@
 *
       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max entries outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_SLANGE( 'M', M, N, A, LDA, WORK )
+      ANRM = SLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL AB_SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          RANK = 0
          GO TO 70
       END IF
 *
-      BNRM = AB_SLANGE( 'M', M, NRHS, B, LDB, WORK )
+      BNRM = SLANGE( 'M', M, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO 
-     $)
+         CALL SLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO 
-     $)
+         CALL SLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
          IBSCL = 2
       END IF
 *
 *     Compute QR factorization with column pivoting of A:
 *        A * P = Q * R
 *
-      CALL AB_SGEQP3( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ),
+      CALL SGEQP3( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ),
      $             LWORK-MN, INFO )
       WSIZE = MN + WORK( MN+1 )
 *
@@ -374,7 +369,7 @@
       SMIN = SMAX
       IF( ABS( A( 1, 1 ) ).EQ.ZERO ) THEN
          RANK = 0
-         CALL AB_SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL SLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          GO TO 70
       ELSE
          RANK = 1
@@ -383,9 +378,9 @@
    10 CONTINUE
       IF( RANK.LT.MN ) THEN
          I = RANK + 1
-         CALL AB_SLAIC1( IMIN, RANK, WORK( ISMIN ), SMIN, A( 1, I ),
+         CALL SLAIC1( IMIN, RANK, WORK( ISMIN ), SMIN, A( 1, I ),
      $                A( I, I ), SMINPR, S1, C1 )
-         CALL AB_SLAIC1( IMAX, RANK, WORK( ISMAX ), SMAX, A( 1, I ),
+         CALL SLAIC1( IMAX, RANK, WORK( ISMAX ), SMAX, A( 1, I ),
      $                A( I, I ), SMAXPR, S2, C2 )
 *
          IF( SMAXPR*RCOND.LE.SMINPR ) THEN
@@ -411,7 +406,7 @@
 *     [R11,R12] = [ T11, 0 ] * Y
 *
       IF( RANK.LT.N )
-     $   CALL AB_STZRZF( RANK, N, A, LDA, WORK( MN+1 ), WORK( 2*MN+1 ),
+     $   CALL STZRZF( RANK, N, A, LDA, WORK( MN+1 ), WORK( 2*MN+1 ),
      $                LWORK-2*MN, INFO )
 *
 *     workspace: 2*MN.
@@ -419,8 +414,7 @@
 *
 *     B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-      CALL AB_SORMQR( 'Left', 'Transpose', M, NRHS, MN, A, LDA, WORK( 1 
-     $),
+      CALL SORMQR( 'Left', 'Transpose', M, NRHS, MN, A, LDA, WORK( 1 ),
      $             B, LDB, WORK( 2*MN+1 ), LWORK-2*MN, INFO )
       WSIZE = MAX( WSIZE, 2*MN+WORK( 2*MN+1 ) )
 *
@@ -428,7 +422,7 @@
 *
 *     B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS)
 *
-      CALL AB_STRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', RANK,
+      CALL STRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', RANK,
      $            NRHS, ONE, A, LDA, B, LDB )
 *
       DO 40 J = 1, NRHS
@@ -440,7 +434,7 @@
 *     B(1:N,1:NRHS) := Y**T * B(1:N,1:NRHS)
 *
       IF( RANK.LT.N ) THEN
-         CALL AB_SORMRZ( 'Left', 'Transpose', N, NRHS, RANK, N-RANK, A,
+         CALL SORMRZ( 'Left', 'Transpose', N, NRHS, RANK, N-RANK, A,
      $                LDA, WORK( MN+1 ), B, LDB, WORK( 2*MN+1 ),
      $                LWORK-2*MN, INFO )
       END IF
@@ -453,7 +447,7 @@
          DO 50 I = 1, N
             WORK( JPVT( I ) ) = B( I, J )
    50    CONTINUE
-         CALL AB_SCOPY( N, WORK( 1 ), 1, B( 1, J ), 1 )
+         CALL SCOPY( N, WORK( 1 ), 1, B( 1, J ), 1 )
    60 CONTINUE
 *
 *     workspace: N.
@@ -461,22 +455,18 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO 
-     $)
-         CALL AB_SLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
+         CALL SLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO 
-     $)
-         CALL AB_SLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
+         CALL SLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL SLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO 
-     $)
+         CALL SLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO 
-     $)
+         CALL SLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
       END IF
 *
    70 CONTINUE
@@ -484,6 +474,6 @@
 *
       RETURN
 *
-*     End of AB_SGELSY
+*     End of SGELSY
 *
       END

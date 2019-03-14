@@ -1,4 +1,4 @@
-*> \brief \b AB_DTZRQF
+*> \brief \b DTZRQF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DTZRQF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTZRQF.f">
+*> Download DTZRQF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtzrqf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTZRQF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtzrqf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTZRQF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtzrqf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTZRQF( M, N, A, LDA, TAU, INFO )
+*       SUBROUTINE DTZRQF( M, N, A, LDA, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine AB_DTZRZF.
+*> This routine is deprecated and has been replaced by routine DTZRZF.
 *>
-*> AB_DTZRQF reduces the M-by-N ( M<=N ) real upper trapezoidal matrix A
+*> DTZRQF reduces the M-by-N ( M<=N ) real upper trapezoidal matrix A
 *> to upper triangular form by means of orthogonal transformations.
 *>
 *> The upper trapezoidal matrix A is factored as
@@ -136,7 +136,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DTZRQF( M, N, A, LDA, TAU, INFO )
+      SUBROUTINE DTZRQF( M, N, A, LDA, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,8 +163,7 @@
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGEMV, AB_DGER, AB_DLARF
-     $G, AB_XERBLA
+      EXTERNAL           DAXPY, DCOPY, DGEMV, DGER, DLARFG, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -179,7 +178,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTZRQF', -INFO )
+         CALL XERBLA( 'DTZRQF', -INFO )
          RETURN
       END IF
 *
@@ -198,8 +197,7 @@
 *           Use a Householder reflection to zero the kth row of A.
 *           First set up the reflection.
 *
-            CALL AB_DLARFG( N-M+1, A( K, K ), A( K, M1 ), LDA, TAU( K ) 
-     $)
+            CALL DLARFG( N-M+1, A( K, K ), A( K, M1 ), LDA, TAU( K ) )
 *
             IF( ( TAU( K ).NE.ZERO ) .AND. ( K.GT.1 ) ) THEN
 *
@@ -210,19 +208,18 @@
 *              the  kth column  of  A.  Also  let  B  denote  the  first
 *              ( k - 1 ) rows of the last ( n - m ) columns of A.
 *
-               CALL AB_DCOPY( K-1, A( 1, K ), 1, TAU, 1 )
+               CALL DCOPY( K-1, A( 1, K ), 1, TAU, 1 )
 *
 *              Form   w = a( k ) + B*z( k )  in TAU.
 *
-               CALL AB_DGEMV( 'No transpose', K-1, N-M, ONE, A( 1, M1 ),
+               CALL DGEMV( 'No transpose', K-1, N-M, ONE, A( 1, M1 ),
      $                     LDA, A( K, M1 ), LDA, ONE, TAU, 1 )
 *
 *              Now form  a( k ) := a( k ) - tau*w
 *              and       B      := B      - tau*w*z( k )**T.
 *
-               CALL AB_DAXPY( K-1, -TAU( K ), TAU, 1, A( 1, K ), 1 )
-               CALL AB_DGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ), LD
-     $A,
+               CALL DAXPY( K-1, -TAU( K ), TAU, 1, A( 1, K ), 1 )
+               CALL DGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ), LDA,
      $                    A( 1, M1 ), LDA )
             END IF
    20    CONTINUE
@@ -230,6 +227,6 @@
 *
       RETURN
 *
-*     End of AB_DTZRQF
+*     End of DTZRQF
 *
       END

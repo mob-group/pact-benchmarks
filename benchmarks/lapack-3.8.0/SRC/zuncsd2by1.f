@@ -1,4 +1,4 @@
-*> \brief \b AB_ZUNCSD2BY1
+*> \brief \b ZUNCSD2BY1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZUNCSD2BY1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNCSD2BY1.f">
+*> Download ZUNCSD2BY1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zuncsd2by1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNCSD2BY1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zuncsd2by1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNCSD2BY1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zuncsd2by1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZUNCSD2BY1( JOBU1, JOBU2, JOBV1T, M, P, Q, X11, LDX11,
+*       SUBROUTINE ZUNCSD2BY1( JOBU1, JOBU2, JOBV1T, M, P, Q, X11, LDX11,
 *                              X21, LDX21, THETA, U1, LDU1, U2, LDU2, V1T,
 *                              LDV1T, WORK, LWORK, RWORK, LRWORK, IWORK,
 *                              INFO )
@@ -43,7 +43,7 @@
 *>
 *>\verbatim
 *>
-*> AB_ZUNCSD2BY1 computes the CS decomposition of an M-by-Q matrix X with
+*> ZUNCSD2BY1 computes the CS decomposition of an M-by-Q matrix X with
 *> orthonormal columns that has been partitioned into a 2-by-1 block
 *> structure:
 *>
@@ -191,7 +191,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the work array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -213,7 +213,7 @@
 *>          If LRWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the RWORK array, returns
 *>          this value as the first entry of the work array, and no error
-*>          message related to LRWORK is issued by AB_XERBLA.
+*>          message related to LRWORK is issued by XERBLA.
 *> \endverbatim
 *
 *> \param[out] IWORK
@@ -226,7 +226,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  AB_ZBBCSD did not converge. See the description of WORK
+*>          > 0:  ZBBCSD did not converge. See the description of WORK
 *>                above for details.
 *> \endverbatim
 *
@@ -249,8 +249,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZUNCSD2BY1( JOBU1, JOBU2, JOBV1T, M, P, Q, X11, LDX1
-     $1,
+      SUBROUTINE ZUNCSD2BY1( JOBU1, JOBU2, JOBV1T, M, P, Q, X11, LDX11,
      $                       X21, LDX21, THETA, U1, LDU1, U2, LDU2, V1T,
      $                       LDV1T, WORK, LWORK, RWORK, LRWORK, IWORK,
      $                       INFO )
@@ -294,15 +293,13 @@
       COMPLEX*16         CDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZBBCSD, AB_ZCOPY, AB_ZLACPY, AB_ZLAPMR, AB_Z
-     $LAPMT, AB_ZUNBDB1,
-     $                   AB_ZUNBDB2, AB_ZUNBDB3, AB_ZUNBDB4, AB_ZUNGLQ, 
-     $AB_ZUNGQR,
-     $                   AB_XERBLA
+      EXTERNAL           ZBBCSD, ZCOPY, ZLACPY, ZLAPMR, ZLAPMT, ZUNBDB1,
+     $                   ZUNBDB2, ZUNBDB3, ZUNBDB4, ZUNGLQ, ZUNGQR,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          INT, MAX, MIN
@@ -312,9 +309,9 @@
 *     Test input arguments
 *
       INFO = 0
-      WANTU1 = AB_LSAME( JOBU1, 'Y' )
-      WANTU2 = AB_LSAME( JOBU2, 'Y' )
-      WANTV1T = AB_LSAME( JOBV1T, 'Y' )
+      WANTU1 = LSAME( JOBU1, 'Y' )
+      WANTU2 = LSAME( JOBU2, 'Y' )
+      WANTV1T = LSAME( JOBV1T, 'Y' )
       LQUERY = LWORK .EQ. -1
 *
       IF( M .LT. 0 ) THEN
@@ -347,7 +344,7 @@
 *     | TAUP2 (MAX(1,M-P))                      |
 *     | TAUQ1 (MAX(1,Q))                        |
 *     |-----------------------------------------|
-*     | AB_ZUNBDB WORK | AB_ZUNGQR WORK | AB_ZUNGLQ WORK |
+*     | ZUNBDB WORK | ZUNGQR WORK | ZUNGLQ WORK |
 *     |             |             |             |
 *     |             |             |             |
 *     |             |             |             |
@@ -367,7 +364,7 @@
 *     | B21E (R-1)       |
 *     | B22D (R)         |
 *     | B22E (R-1)       |
-*     | AB_ZBBCSD RWORK     |
+*     | ZBBCSD RWORK     |
 *     |------------------|
 *
       IF( INFO .EQ. 0 ) THEN
@@ -392,118 +389,110 @@
          LORGLQMIN = 1
          LORGLQOPT = 1
          IF( R .EQ. Q ) THEN
-            CALL AB_ZUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM
-     $,
+            CALL ZUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM,
      $                    CDUM, CDUM, CDUM, WORK, -1, CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL AB_ZUNGQR( P, P, Q, U1, LDU1, CDUM, WORK(1), -1,
+               CALL ZUNGQR( P, P, Q, U1, LDU1, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             ENDIF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL AB_ZUNGQR( M-P, M-P, Q, U2, LDU2, CDUM, WORK(1), -1,
+               CALL ZUNGQR( M-P, M-P, Q, U2, LDU2, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL AB_ZUNGLQ( Q-1, Q-1, Q-1, V1T, LDV1T,
+               CALL ZUNGLQ( Q-1, Q-1, Q-1, V1T, LDV1T,
      $                      CDUM, WORK(1), -1, CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q-1 )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
-            CALL AB_ZBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THE
-     $TA,
+            CALL ZBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THETA,
      $                   DUM, U1, LDU1, U2, LDU2, V1T, LDV1T, CDUM, 1,
      $                   DUM, DUM, DUM, DUM, DUM, DUM, DUM, DUM,
      $                   RWORK(1), -1, CHILDINFO )
             LBBCSD = INT( RWORK(1) )
          ELSE IF( R .EQ. P ) THEN
-            CALL AB_ZUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM
-     $,
+            CALL ZUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM,
      $                    CDUM, CDUM, CDUM, WORK(1), -1, CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL AB_ZUNGQR( P-1, P-1, P-1, U1(2,2), LDU1, CDUM, WORK(
-     $1),
+               CALL ZUNGQR( P-1, P-1, P-1, U1(2,2), LDU1, CDUM, WORK(1),
      $                      -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P-1 )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL AB_ZUNGQR( M-P, M-P, Q, U2, LDU2, CDUM, WORK(1), -1,
+               CALL ZUNGQR( M-P, M-P, Q, U2, LDU2, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL AB_ZUNGLQ( Q, Q, R, V1T, LDV1T, CDUM, WORK(1), -1,
+               CALL ZUNGLQ( Q, Q, R, V1T, LDV1T, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
-            CALL AB_ZBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THE
-     $TA,
+            CALL ZBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THETA,
      $                   DUM, V1T, LDV1T, CDUM, 1, U1, LDU1, U2, LDU2,
      $                   DUM, DUM, DUM, DUM, DUM, DUM, DUM, DUM,
      $                   RWORK(1), -1, CHILDINFO )
             LBBCSD = INT( RWORK(1) )
          ELSE IF( R .EQ. M-P ) THEN
-            CALL AB_ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM
-     $,
+            CALL ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM,
      $                    CDUM, CDUM, CDUM, WORK(1), -1, CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL AB_ZUNGQR( P, P, Q, U1, LDU1, CDUM, WORK(1), -1,
+               CALL ZUNGQR( P, P, Q, U1, LDU1, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL AB_ZUNGQR( M-P-1, M-P-1, M-P-1, U2(2,2), LDU2, CDUM,
+               CALL ZUNGQR( M-P-1, M-P-1, M-P-1, U2(2,2), LDU2, CDUM,
      $                      WORK(1), -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P-1 )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL AB_ZUNGLQ( Q, Q, R, V1T, LDV1T, CDUM, WORK(1), -1,
+               CALL ZUNGLQ( Q, Q, R, V1T, LDV1T, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
-            CALL AB_ZBBCSD( 'N', JOBV1T, JOBU2, JOBU1, 'T', M, M-Q, M-P,
+            CALL ZBBCSD( 'N', JOBV1T, JOBU2, JOBU1, 'T', M, M-Q, M-P,
      $                   THETA, DUM, CDUM, 1, V1T, LDV1T, U2, LDU2, U1,
      $                   LDU1, DUM, DUM, DUM, DUM, DUM, DUM, DUM, DUM,
      $                   RWORK(1), -1, CHILDINFO )
             LBBCSD = INT( RWORK(1) )
          ELSE
-            CALL AB_ZUNBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM
-     $,
+            CALL ZUNBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA, DUM,
      $                    CDUM, CDUM, CDUM, CDUM, WORK(1), -1, CHILDINFO
      $                  )
             LORBDB = M + INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL AB_ZUNGQR( P, P, M-Q, U1, LDU1, CDUM, WORK(1), -1,
+               CALL ZUNGQR( P, P, M-Q, U1, LDU1, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL AB_ZUNGQR( M-P, M-P, M-Q, U2, LDU2, CDUM, WORK(1), -
-     $1,
+               CALL ZUNGQR( M-P, M-P, M-Q, U2, LDU2, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL AB_ZUNGLQ( Q, Q, Q, V1T, LDV1T, CDUM, WORK(1), -1,
+               CALL ZUNGLQ( Q, Q, Q, V1T, LDV1T, CDUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
-            CALL AB_ZBBCSD( JOBU2, JOBU1, 'N', JOBV1T, 'N', M, M-P, M-Q,
+            CALL ZBBCSD( JOBU2, JOBU1, 'N', JOBV1T, 'N', M, M-P, M-Q,
      $                   THETA, DUM, U2, LDU2, U1, LDU1, CDUM, 1, V1T,
      $                   LDV1T, DUM, DUM, DUM, DUM, DUM, DUM, DUM, DUM,
      $                   RWORK(1), -1, CHILDINFO )
@@ -524,7 +513,7 @@
          END IF
       END IF
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'AB_ZUNCSD2BY1', -INFO )
+         CALL XERBLA( 'ZUNCSD2BY1', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -541,21 +530,20 @@
 *
 *        Simultaneously bidiagonalize X11 and X21
 *
-         CALL AB_ZUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+         CALL ZUNBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA,
      $                 RWORK(IPHI), WORK(ITAUP1), WORK(ITAUP2),
      $                 WORK(ITAUQ1), WORK(IORBDB), LORBDB, CHILDINFO )
 *
 *        Accumulate Householder reflectors
 *
          IF( WANTU1 .AND. P .GT. 0 ) THEN
-            CALL AB_ZLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL AB_ZUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR
-     $),
+            CALL ZLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
+            CALL ZUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
      $                   LORGQR, CHILDINFO )
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL AB_ZLACPY( 'L', M-P, Q, X21, LDX21, U2, LDU2 )
-            CALL AB_ZUNGQR( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
+            CALL ZLACPY( 'L', M-P, Q, X21, LDX21, U2, LDU2 )
+            CALL ZUNGQR( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
      $                   WORK(IORGQR), LORGQR, CHILDINFO )
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
@@ -564,16 +552,15 @@
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL AB_ZLACPY( 'U', Q-1, Q-1, X21(1,2), LDX21, V1T(2,2),
+            CALL ZLACPY( 'U', Q-1, Q-1, X21(1,2), LDX21, V1T(2,2),
      $                   LDV1T )
-            CALL AB_ZUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1)
-     $,
+            CALL ZUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQ, CHILDINFO )
          END IF
 *
 *        Simultaneously diagonalize X11 and X21.
 *
-         CALL AB_ZBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THETA,
+         CALL ZBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THETA,
      $                RWORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T, CDUM,
      $                1, RWORK(IB11D), RWORK(IB11E), RWORK(IB12D),
      $                RWORK(IB12E), RWORK(IB21D), RWORK(IB21E),
@@ -590,7 +577,7 @@
             DO I = Q + 1, M - P
                IWORK(I) = I - Q
             END DO
-            CALL AB_ZLAPMT( .FALSE., M-P, M-P, U2, LDU2, IWORK )
+            CALL ZLAPMT( .FALSE., M-P, M-P, U2, LDU2, IWORK )
          END IF
       ELSE IF( R .EQ. P ) THEN
 *
@@ -598,7 +585,7 @@
 *
 *        Simultaneously bidiagonalize X11 and X21
 *
-         CALL AB_ZUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+         CALL ZUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA,
      $                 RWORK(IPHI), WORK(ITAUP1), WORK(ITAUP2),
      $                 WORK(ITAUQ1), WORK(IORBDB), LORBDB, CHILDINFO )
 *
@@ -610,25 +597,24 @@
                U1(1,J) = ZERO
                U1(J,1) = ZERO
             END DO
-            CALL AB_ZLACPY( 'L', P-1, P-1, X11(2,1), LDX11, U1(2,2), LDU
-     $1 )
-            CALL AB_ZUNGQR( P-1, P-1, P-1, U1(2,2), LDU1, WORK(ITAUP1),
+            CALL ZLACPY( 'L', P-1, P-1, X11(2,1), LDX11, U1(2,2), LDU1 )
+            CALL ZUNGQR( P-1, P-1, P-1, U1(2,2), LDU1, WORK(ITAUP1),
      $                   WORK(IORGQR), LORGQR, CHILDINFO )
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL AB_ZLACPY( 'L', M-P, Q, X21, LDX21, U2, LDU2 )
-            CALL AB_ZUNGQR( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
+            CALL ZLACPY( 'L', M-P, Q, X21, LDX21, U2, LDU2 )
+            CALL ZUNGQR( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
      $                   WORK(IORGQR), LORGQR, CHILDINFO )
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
-            CALL AB_ZLACPY( 'U', P, Q, X11, LDX11, V1T, LDV1T )
-            CALL AB_ZUNGLQ( Q, Q, R, V1T, LDV1T, WORK(ITAUQ1),
+            CALL ZLACPY( 'U', P, Q, X11, LDX11, V1T, LDV1T )
+            CALL ZUNGLQ( Q, Q, R, V1T, LDV1T, WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQ, CHILDINFO )
          END IF
 *
 *        Simultaneously diagonalize X11 and X21.
 *
-         CALL AB_ZBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THETA,
+         CALL ZBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THETA,
      $                RWORK(IPHI), V1T, LDV1T, CDUM, 1, U1, LDU1, U2,
      $                LDU2, RWORK(IB11D), RWORK(IB11E), RWORK(IB12D),
      $                RWORK(IB12E), RWORK(IB21D), RWORK(IB21E),
@@ -645,7 +631,7 @@
             DO I = Q + 1, M - P
                IWORK(I) = I - Q
             END DO
-            CALL AB_ZLAPMT( .FALSE., M-P, M-P, U2, LDU2, IWORK )
+            CALL ZLAPMT( .FALSE., M-P, M-P, U2, LDU2, IWORK )
          END IF
       ELSE IF( R .EQ. M-P ) THEN
 *
@@ -653,16 +639,15 @@
 *
 *        Simultaneously bidiagonalize X11 and X21
 *
-         CALL AB_ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+         CALL ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
      $                 RWORK(IPHI), WORK(ITAUP1), WORK(ITAUP2),
      $                 WORK(ITAUQ1), WORK(IORBDB), LORBDB, CHILDINFO )
 *
 *        Accumulate Householder reflectors
 *
          IF( WANTU1 .AND. P .GT. 0 ) THEN
-            CALL AB_ZLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL AB_ZUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR
-     $),
+            CALL ZLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
+            CALL ZUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
      $                   LORGQR, CHILDINFO )
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
@@ -671,20 +656,20 @@
                U2(1,J) = ZERO
                U2(J,1) = ZERO
             END DO
-            CALL AB_ZLACPY( 'L', M-P-1, M-P-1, X21(2,1), LDX21, U2(2,2),
+            CALL ZLACPY( 'L', M-P-1, M-P-1, X21(2,1), LDX21, U2(2,2),
      $                   LDU2 )
-            CALL AB_ZUNGQR( M-P-1, M-P-1, M-P-1, U2(2,2), LDU2,
+            CALL ZUNGQR( M-P-1, M-P-1, M-P-1, U2(2,2), LDU2,
      $                   WORK(ITAUP2), WORK(IORGQR), LORGQR, CHILDINFO )
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
-            CALL AB_ZLACPY( 'U', M-P, Q, X21, LDX21, V1T, LDV1T )
-            CALL AB_ZUNGLQ( Q, Q, R, V1T, LDV1T, WORK(ITAUQ1),
+            CALL ZLACPY( 'U', M-P, Q, X21, LDX21, V1T, LDV1T )
+            CALL ZUNGLQ( Q, Q, R, V1T, LDV1T, WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQ, CHILDINFO )
          END IF
 *
 *        Simultaneously diagonalize X11 and X21.
 *
-         CALL AB_ZBBCSD( 'N', JOBV1T, JOBU2, JOBU1, 'T', M, M-Q, M-P,
+         CALL ZBBCSD( 'N', JOBV1T, JOBU2, JOBU1, 'T', M, M-Q, M-P,
      $                THETA, RWORK(IPHI), CDUM, 1, V1T, LDV1T, U2, LDU2,
      $                U1, LDU1, RWORK(IB11D), RWORK(IB11E),
      $                RWORK(IB12D), RWORK(IB12E), RWORK(IB21D),
@@ -702,10 +687,10 @@
                IWORK(I) = I - R
             END DO
             IF( WANTU1 ) THEN
-               CALL AB_ZLAPMT( .FALSE., P, Q, U1, LDU1, IWORK )
+               CALL ZLAPMT( .FALSE., P, Q, U1, LDU1, IWORK )
             END IF
             IF( WANTV1T ) THEN
-               CALL AB_ZLAPMR( .FALSE., Q, Q, V1T, LDV1T, IWORK )
+               CALL ZLAPMR( .FALSE., Q, Q, V1T, LDV1T, IWORK )
             END IF
          END IF
       ELSE
@@ -714,7 +699,7 @@
 *
 *        Simultaneously bidiagonalize X11 and X21
 *
-         CALL AB_ZUNBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+         CALL ZUNBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA,
      $                 RWORK(IPHI), WORK(ITAUP1), WORK(ITAUP2),
      $                 WORK(ITAUQ1), WORK(IORBDB), WORK(IORBDB+M),
      $                 LORBDB-M, CHILDINFO )
@@ -722,39 +707,38 @@
 *        Accumulate Householder reflectors
 *
          IF( WANTU1 .AND. P .GT. 0 ) THEN
-            CALL AB_ZCOPY( P, WORK(IORBDB), 1, U1, 1 )
+            CALL ZCOPY( P, WORK(IORBDB), 1, U1, 1 )
             DO J = 2, P
                U1(1,J) = ZERO
             END DO
-            CALL AB_ZLACPY( 'L', P-1, M-Q-1, X11(2,1), LDX11, U1(2,2),
+            CALL ZLACPY( 'L', P-1, M-Q-1, X11(2,1), LDX11, U1(2,2),
      $                   LDU1 )
-            CALL AB_ZUNGQR( P, P, M-Q, U1, LDU1, WORK(ITAUP1),
+            CALL ZUNGQR( P, P, M-Q, U1, LDU1, WORK(ITAUP1),
      $                   WORK(IORGQR), LORGQR, CHILDINFO )
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL AB_ZCOPY( M-P, WORK(IORBDB+P), 1, U2, 1 )
+            CALL ZCOPY( M-P, WORK(IORBDB+P), 1, U2, 1 )
             DO J = 2, M-P
                U2(1,J) = ZERO
             END DO
-            CALL AB_ZLACPY( 'L', M-P-1, M-Q-1, X21(2,1), LDX21, U2(2,2),
+            CALL ZLACPY( 'L', M-P-1, M-Q-1, X21(2,1), LDX21, U2(2,2),
      $                   LDU2 )
-            CALL AB_ZUNGQR( M-P, M-P, M-Q, U2, LDU2, WORK(ITAUP2),
+            CALL ZUNGQR( M-P, M-P, M-Q, U2, LDU2, WORK(ITAUP2),
      $                   WORK(IORGQR), LORGQR, CHILDINFO )
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
-            CALL AB_ZLACPY( 'U', M-Q, Q, X21, LDX21, V1T, LDV1T )
-            CALL AB_ZLACPY( 'U', P-(M-Q), Q-(M-Q), X11(M-Q+1,M-Q+1), LDX
-     $11,
+            CALL ZLACPY( 'U', M-Q, Q, X21, LDX21, V1T, LDV1T )
+            CALL ZLACPY( 'U', P-(M-Q), Q-(M-Q), X11(M-Q+1,M-Q+1), LDX11,
      $                   V1T(M-Q+1,M-Q+1), LDV1T )
-            CALL AB_ZLACPY( 'U', -P+Q, Q-P, X21(M-Q+1,P+1), LDX21,
+            CALL ZLACPY( 'U', -P+Q, Q-P, X21(M-Q+1,P+1), LDX21,
      $                   V1T(P+1,P+1), LDV1T )
-            CALL AB_ZUNGLQ( Q, Q, Q, V1T, LDV1T, WORK(ITAUQ1),
+            CALL ZUNGLQ( Q, Q, Q, V1T, LDV1T, WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQ, CHILDINFO )
          END IF
 *
 *        Simultaneously diagonalize X11 and X21.
 *
-         CALL AB_ZBBCSD( JOBU2, JOBU1, 'N', JOBV1T, 'N', M, M-P, M-Q,
+         CALL ZBBCSD( JOBU2, JOBU1, 'N', JOBV1T, 'N', M, M-P, M-Q,
      $                THETA, RWORK(IPHI), U2, LDU2, U1, LDU1, CDUM, 1,
      $                V1T, LDV1T, RWORK(IB11D), RWORK(IB11E),
      $                RWORK(IB12D), RWORK(IB12E), RWORK(IB21D),
@@ -772,17 +756,17 @@
                IWORK(I) = I - R
             END DO
             IF( WANTU1 ) THEN
-               CALL AB_ZLAPMT( .FALSE., P, P, U1, LDU1, IWORK )
+               CALL ZLAPMT( .FALSE., P, P, U1, LDU1, IWORK )
             END IF
             IF( WANTV1T ) THEN
-               CALL AB_ZLAPMR( .FALSE., P, Q, V1T, LDV1T, IWORK )
+               CALL ZLAPMR( .FALSE., P, Q, V1T, LDV1T, IWORK )
             END IF
          END IF
       END IF
 *
       RETURN
 *
-*     End of AB_ZUNCSD2BY1
+*     End of ZUNCSD2BY1
 *
       END
 

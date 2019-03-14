@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSYCONV
+*> \brief \b ZSYCONV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZSYCONV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSYCONv.f">
+*> Download ZSYCONV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsyconv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSYCONv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsyconv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSYCONv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyconv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSYCONV( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
+*       SUBROUTINE ZSYCONV( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSYCONV converts A given by AB_ZHETRF into L and D or vice-versa.
+*> ZSYCONV converts A given by ZHETRF into L and D or vice-versa.
 *> Get nondiagonal elements of D (returned in workspace) and
 *> apply or reverse permutation done in TRF.
 *> \endverbatim
@@ -69,7 +69,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_ZSYTRF.
+*>          obtain the factor U or L as computed by ZSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_ZSYTRF.
+*>          as determined by ZSYTRF.
 *> \endverbatim
 *>
 *> \param[out] E
@@ -112,7 +112,7 @@
 *> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSYCONV( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
+      SUBROUTINE ZSYCONV( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,11 +135,11 @@
       PARAMETER          ( ZERO = (0.0D+0,0.0D+0) )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     .. Local Scalars ..
       LOGICAL            UPPER, CONVERT
       INTEGER            I, IP, J
@@ -148,11 +148,11 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      CONVERT = AB_LSAME( WAY, 'C' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      CONVERT = LSAME( WAY, 'C' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.CONVERT .AND. .NOT.AB_LSAME( WAY, 'R' ) ) THEN
+      ELSE IF( .NOT.CONVERT .AND. .NOT.LSAME( WAY, 'R' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -161,7 +161,7 @@
 
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZSYCONV', -INFO )
+         CALL XERBLA( 'ZSYCONV', -INFO )
          RETURN
       END IF
 *
@@ -361,6 +361,6 @@
 *
       RETURN
 *
-*     End of AB_ZSYCONV
+*     End of ZSYCONV
 *
       END

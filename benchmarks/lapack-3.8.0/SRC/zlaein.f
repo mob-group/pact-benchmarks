@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
+*> \brief \b ZLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAEIN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAEIN.f">
+*> Download ZLAEIN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaein.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAEIN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaein.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAEIN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaein.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
+*       SUBROUTINE ZLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
 *                          EPS3, SMLNUM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAEIN uses inverse iteration to find a right or left eigenvector
+*> ZLAEIN uses inverse iteration to find a right or left eigenvector
 *> corresponding to the eigenvalue W of a complex upper Hessenberg
 *> matrix H.
 *> \endverbatim
@@ -146,8 +146,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWO
-     $RK,
+      SUBROUTINE ZLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
      $                   EPS3, SMLNUM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -181,13 +180,13 @@
       COMPLEX*16         CDUM, EI, EJ, TEMP, X
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DZASUM, AB_DZNRM2
-      COMPLEX*16         AB_ZLADIV
-      EXTERNAL           AB_IZAMAX, AB_DZASUM, AB_DZNRM2, AB_ZLADIV
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DZASUM, DZNRM2
+      COMPLEX*16         ZLADIV
+      EXTERNAL           IZAMAX, DZASUM, DZNRM2, ZLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZDSCAL, AB_ZLATRS
+      EXTERNAL           ZDSCAL, ZLATRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, SQRT
@@ -230,9 +229,8 @@
 *
 *        Scale supplied initial vector.
 *
-         VNORM = AB_DZNRM2( N, V, 1 )
-         CALL AB_ZDSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), V, 1 
-     $)
+         VNORM = DZNRM2( N, V, 1 )
+         CALL ZDSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), V, 1 )
       END IF
 *
       IF( RIGHTV ) THEN
@@ -246,7 +244,7 @@
 *
 *              Interchange rows and eliminate.
 *
-               X = AB_ZLADIV( B( I, I ), EI )
+               X = ZLADIV( B( I, I ), EI )
                B( I, I ) = EI
                DO 40 J = I + 1, N
                   TEMP = B( I+1, J )
@@ -259,7 +257,7 @@
 *
                IF( B( I, I ).EQ.ZERO )
      $            B( I, I ) = EPS3
-               X = AB_ZLADIV( EI, B( I, I ) )
+               X = ZLADIV( EI, B( I, I ) )
                IF( X.NE.ZERO ) THEN
                   DO 50 J = I + 1, N
                      B( I+1, J ) = B( I+1, J ) - X*B( I, J )
@@ -283,7 +281,7 @@
 *
 *              Interchange columns and eliminate.
 *
-               X = AB_ZLADIV( B( J, J ), EJ )
+               X = ZLADIV( B( J, J ), EJ )
                B( J, J ) = EJ
                DO 70 I = 1, J - 1
                   TEMP = B( I, J-1 )
@@ -296,7 +294,7 @@
 *
                IF( B( J, J ).EQ.ZERO )
      $            B( J, J ) = EPS3
-               X = AB_ZLADIV( EJ, B( J, J ) )
+               X = ZLADIV( EJ, B( J, J ) )
                IF( X.NE.ZERO ) THEN
                   DO 80 I = 1, J - 1
                      B( I, J-1 ) = B( I, J-1 ) - X*B( I, J )
@@ -318,14 +316,13 @@
 *          or U**H *x = scale*v for a left eigenvector,
 *        overwriting x on v.
 *
-         CALL AB_ZLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB, V
-     $,
+         CALL ZLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB, V,
      $                SCALE, RWORK, IERR )
          NORMIN = 'Y'
 *
 *        Test for sufficient growth in the norm of v.
 *
-         VNORM = AB_DZASUM( N, V, 1 )
+         VNORM = DZASUM( N, V, 1 )
          IF( VNORM.GE.GROWTO*SCALE )
      $      GO TO 120
 *
@@ -347,11 +344,11 @@
 *
 *     Normalize eigenvector.
 *
-      I = AB_IZAMAX( N, V, 1 )
-      CALL AB_ZDSCAL( N, ONE / CABS1( V( I ) ), V, 1 )
+      I = IZAMAX( N, V, 1 )
+      CALL ZDSCAL( N, ONE / CABS1( V( I ) ), V, 1 )
 *
       RETURN
 *
-*     End of AB_ZLAEIN
+*     End of ZLAEIN
 *
       END

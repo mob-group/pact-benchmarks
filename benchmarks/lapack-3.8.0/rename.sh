@@ -1,6 +1,6 @@
 #!/bin/bash
 
-files=($(find SRC BLAS/SRC -name '*.f'))
+files=($(find -name '*.f'))
 
 subroutines=($(ag --nobreak --no-heading '^\h*subroutine' ${files[@]} | \
   tr -s ' ' | cut -d' ' -f3 | cut -d '(' -f1 | sort -u))
@@ -15,7 +15,7 @@ ntot=$(($nsubs * $nfiles))
 
 comm=""
 for sub in ${subroutines[@]}; do
-  comm+="s/([^_csdz])$sub/\1AB_$sub/Ig;"
+  comm+="s/ $sub/ AB_$sub/Ig;"
 done
 
 function rename_one() {
@@ -24,7 +24,7 @@ function rename_one() {
   mv "$f.tmp" "$f"
 }
 
-sed -r -i "$comm" "${files[@]}"
+sed -i "$comm" "${files[@]}"
 
 for f in "${files[@]}"; do
   rename_one "$f"

@@ -1,4 +1,4 @@
-*> \brief \b AB_CLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
+*> \brief \b CLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLADIV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLADIV.f">
+*> Download CLADIV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cladiv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLADIV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cladiv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLADIV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cladiv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       COMPLEX FUNCTION AB_CLADIV( X, Y )
+*       COMPLEX FUNCTION CLADIV( X, Y )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX            X, Y
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLADIV := X / Y, where X and Y are complex.  The computation of X / Y
+*> CLADIV := X / Y, where X and Y are complex.  The computation of X / Y
 *> will not overflow on an intermediary step unless the results
 *> overflows.
 *> \endverbatim
@@ -62,7 +62,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      COMPLEX FUNCTION AB_CLADIV( X, Y )
+      COMPLEX FUNCTION CLADIV( X, Y )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -79,19 +79,19 @@
       REAL               ZI, ZR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLADIV
+      EXTERNAL           SLADIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, CMPLX, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      CALL AB_SLADIV( REAL( X ), AIMAG( X ), REAL( Y ), AIMAG( Y ), ZR,
+      CALL SLADIV( REAL( X ), AIMAG( X ), REAL( Y ), AIMAG( Y ), ZR,
      $             ZI )
-      AB_CLADIV = CMPLX( ZR, ZI )
+      CLADIV = CMPLX( ZR, ZI )
 *
       RETURN
 *
-*     End of AB_CLADIV
+*     End of CLADIV
 *
       END

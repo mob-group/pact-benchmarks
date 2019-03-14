@@ -1,4 +1,4 @@
-*> \brief <b> AB_CGEESX computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
+*> \brief <b> CGEESX computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGEESX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEESx.f">
+*> Download CGEESX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeesx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEESx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeesx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEESx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeesx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM, W,
+*       SUBROUTINE CGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM, W,
 *                          VS, LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK,
 *                          BWORK, INFO )
 *
@@ -43,7 +43,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGEESX computes for an N-by-N complex nonsymmetric matrix A, the
+*> CGEESX computes for an N-by-N complex nonsymmetric matrix A, the
 *> eigenvalues, the Schur form T, and, optionally, the matrix of Schur
 *> vectors Z.  This gives the Schur factorization A = Z*T*(Z**H).
 *>
@@ -188,7 +188,7 @@
 *>          only calculates upper bound on the optimal size of the
 *>          array WORK, returns this value as the first entry of the WORK
 *>          array, and no error message related to LWORK is issued by
-*>          AB_XERBLA.
+*>          XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -235,8 +235,7 @@
 *> \ingroup complexGEeigen
 *
 *  =====================================================================
-      SUBROUTINE AB_CGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM,
-     $ W,
+      SUBROUTINE CGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM, W,
      $                   VS, LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK,
      $                   BWORK, INFO )
 *
@@ -271,22 +270,20 @@
      $                   WANTSV, WANTVS
       INTEGER            HSWORK, I, IBAL, ICOND, IERR, IEVAL, IHI, ILO,
      $                   ITAU, IWRK, LWRK, MAXWRK, MINWRK
-      REAL               ANRM, BIGNUM, AB_CSCALE, EPS, SMLNUM
+      REAL               ANRM, BIGNUM, CSCALE, EPS, SMLNUM
 *     ..
 *     .. Local Arrays ..
       REAL               DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CGEBAK, AB_CGEBAL, AB_CGEHRD, AB_C
-     $HSEQR, AB_CLACPY,
-     $                   AB_CLASCL, AB_CTRSEN, AB_CUNGHR, AB_SLABAD, AB_
-     $SLASCL, AB_XERBLA
+      EXTERNAL           CCOPY, CGEBAK, CGEBAL, CGEHRD, CHSEQR, CLACPY,
+     $                   CLASCL, CTRSEN, CUNGHR, SLABAD, SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      REAL               AB_CLANGE, SLAMCH
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_CLANGE, SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -296,18 +293,17 @@
 *     Test the input arguments
 *
       INFO = 0
-      WANTVS = AB_LSAME( JOBVS, 'V' )
-      WANTST = AB_LSAME( SORT, 'S' )
-      WANTSN = AB_LSAME( SENSE, 'N' )
-      WANTSE = AB_LSAME( SENSE, 'E' )
-      WANTSV = AB_LSAME( SENSE, 'V' )
-      WANTSB = AB_LSAME( SENSE, 'B' )
+      WANTVS = LSAME( JOBVS, 'V' )
+      WANTST = LSAME( SORT, 'S' )
+      WANTSN = LSAME( SENSE, 'N' )
+      WANTSE = LSAME( SENSE, 'E' )
+      WANTSV = LSAME( SENSE, 'V' )
+      WANTSB = LSAME( SENSE, 'B' )
       LQUERY = ( LWORK.EQ.-1 )
 *
-      IF( ( .NOT.WANTVS ) .AND. ( .NOT.AB_LSAME( JOBVS, 'N' ) ) ) THEN
+      IF( ( .NOT.WANTVS ) .AND. ( .NOT.LSAME( JOBVS, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.AB_LSAME( SORT, 'N' ) ) ) TH
-     $EN
+      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( WANTSN .OR. WANTSE .OR. WANTSV .OR. WANTSB ) .OR.
      $         ( .NOT.WANTST .AND. .NOT.WANTSN ) ) THEN
@@ -326,12 +322,12 @@
 *       code, as well as the preferred amount for good performance.
 *       CWorkspace refers to complex workspace, and RWorkspace to real
 *       workspace. NB refers to the optimal block size for the
-*       immediately following subroutine, as returned by AB_ILAENV.
-*       HSWORK refers to the workspace preferred by AB_CHSEQR, as
+*       immediately following subroutine, as returned by ILAENV.
+*       HSWORK refers to the workspace preferred by CHSEQR, as
 *       calculated below. HSWORK is computed assuming ILO=1 and IHI=N,
 *       the worst case.
 *       If SENSE = 'E', 'V' or 'B', then the amount of workspace needed
-*       depends on SDIM, which is computed by the routine AB_CTRSEN later
+*       depends on SDIM, which is computed by the routine CTRSEN later
 *       in the code.)
 *
       IF( INFO.EQ.0 ) THEN
@@ -339,18 +335,17 @@
             MINWRK = 1
             LWRK = 1
          ELSE
-            MAXWRK = N + N*AB_ILAENV( 1, 'AB_CGEHRD', ' ', N, 1, N, 0 )
+            MAXWRK = N + N*ILAENV( 1, 'CGEHRD', ' ', N, 1, N, 0 )
             MINWRK = 2*N
 *
-            CALL AB_CHSEQR( 'S', JOBVS, N, 1, N, A, LDA, W, VS, LDVS,
+            CALL CHSEQR( 'S', JOBVS, N, 1, N, A, LDA, W, VS, LDVS,
      $             WORK, -1, IEVAL )
             HSWORK = WORK( 1 )
 *
             IF( .NOT.WANTVS ) THEN
                MAXWRK = MAX( MAXWRK, HSWORK )
             ELSE
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*AB_ILAENV( 1, 'AB_CUN
-     $GHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'CUNGHR',
      $                       ' ', N, 1, N, -1 ) )
                MAXWRK = MAX( MAXWRK, HSWORK )
             END IF
@@ -366,7 +361,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGEESX', -INFO )
+         CALL XERBLA( 'CGEESX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -384,24 +379,23 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_CLANGE( 'M', N, N, A, LDA, DUM )
+      ANRM = CLANGE( 'M', N, N, A, LDA, DUM )
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.
-         AB_CSCALE = SMLNUM
+         CSCALE = SMLNUM
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
-         AB_CSCALE = BIGNUM
+         CSCALE = BIGNUM
       END IF
       IF( SCALEA )
-     $   CALL AB_CLASCL( 'G', 0, 0, ANRM, AB_CSCALE, N, N, A, LDA, IERR 
-     $)
+     $   CALL CLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
 *
 *
 *     Permute the matrix to make it more nearly triangular
@@ -409,7 +403,7 @@
 *     (RWorkspace: need N)
 *
       IBAL = 1
-      CALL AB_CGEBAL( 'P', N, A, LDA, ILO, IHI, RWORK( IBAL ), IERR )
+      CALL CGEBAL( 'P', N, A, LDA, ILO, IHI, RWORK( IBAL ), IERR )
 *
 *     Reduce to upper Hessenberg form
 *     (CWorkspace: need 2*N, prefer N+N*NB)
@@ -417,21 +411,20 @@
 *
       ITAU = 1
       IWRK = N + ITAU
-      CALL AB_CGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
+      CALL CGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
      $             LWORK-IWRK+1, IERR )
 *
       IF( WANTVS ) THEN
 *
 *        Copy Householder vectors to VS
 *
-         CALL AB_CLACPY( 'L', N, N, A, LDA, VS, LDVS )
+         CALL CLACPY( 'L', N, N, A, LDA, VS, LDVS )
 *
 *        Generate unitary matrix in VS
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_CUNGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ), WORK( IWRK
-     $ ),
+         CALL CUNGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ), WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
       END IF
 *
@@ -442,7 +435,7 @@
 *     (RWorkspace: none)
 *
       IWRK = ITAU
-      CALL AB_CHSEQR( 'S', JOBVS, N, ILO, IHI, A, LDA, W, VS, LDVS,
+      CALL CHSEQR( 'S', JOBVS, N, ILO, IHI, A, LDA, W, VS, LDVS,
      $             WORK( IWRK ), LWORK-IWRK+1, IEVAL )
       IF( IEVAL.GT.0 )
      $   INFO = IEVAL
@@ -451,8 +444,7 @@
 *
       IF( WANTST .AND. INFO.EQ.0 ) THEN
          IF( SCALEA )
-     $      CALL AB_CLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N, 1, W, N, IERR
-     $ )
+     $      CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, N, 1, W, N, IERR )
          DO 10 I = 1, N
             BWORK( I ) = SELECT( W( I ) )
    10    CONTINUE
@@ -463,8 +455,7 @@
 *                     otherwise, need none )
 *        (RWorkspace: none)
 *
-         CALL AB_CTRSEN( SENSE, JOBVS, BWORK, N, A, LDA, VS, LDVS, W, SD
-     $IM,
+         CALL CTRSEN( SENSE, JOBVS, BWORK, N, A, LDA, VS, LDVS, W, SDIM,
      $                RCONDE, RCONDV, WORK( IWRK ), LWORK-IWRK+1,
      $                ICOND )
          IF( .NOT.WANTSN )
@@ -483,8 +474,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL AB_CGEBAK( 'P', 'R', N, ILO, IHI, RWORK( IBAL ), N, VS, LD
-     $VS,
+         CALL CGEBAK( 'P', 'R', N, ILO, IHI, RWORK( IBAL ), N, VS, LDVS,
      $                IERR )
       END IF
 *
@@ -492,13 +482,11 @@
 *
 *        Undo scaling for the Schur form of A
 *
-         CALL AB_CLASCL( 'U', 0, 0, AB_CSCALE, ANRM, N, N, A, LDA, IERR 
-     $)
-         CALL AB_CCOPY( N, A, LDA+1, W, 1 )
+         CALL CLASCL( 'U', 0, 0, CSCALE, ANRM, N, N, A, LDA, IERR )
+         CALL CCOPY( N, A, LDA+1, W, 1 )
          IF( ( WANTSV .OR. WANTSB ) .AND. INFO.EQ.0 ) THEN
             DUM( 1 ) = RCONDV
-            CALL AB_SLASCL( 'G', 0, 0, AB_CSCALE, ANRM, 1, 1, DUM, 1, IE
-     $RR )
+            CALL SLASCL( 'G', 0, 0, CSCALE, ANRM, 1, 1, DUM, 1, IERR )
             RCONDV = DUM( 1 )
          END IF
       END IF
@@ -506,6 +494,6 @@
       WORK( 1 ) = MAXWRK
       RETURN
 *
-*     End of AB_CGEESX
+*     End of CGEESX
 *
       END

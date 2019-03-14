@@ -1,6 +1,6 @@
-*> \brief <b> AB_SSBEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> SSBEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
-*  @generated from AB_DSBEVx_2stage.f, fortran d -> s, Sat Nov  5 23:58:06 2016
+*  @generated from dsbevx_2stage.f, fortran d -> s, Sat Nov  5 23:58:06 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSBEVX_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSBEVx_2stage.f">
+*> Download SSBEVX_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssbevx_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSBEVx_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssbevx_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSBEVx_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbevx_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q,
+*       SUBROUTINE SSBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q,
 *                                 LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
 *                                 LDZ, WORK, LWORK, IWORK, IFAIL, INFO )
 *
@@ -43,7 +43,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSBEVX_2STAGE computes selected eigenvalues and, optionally, eigenvectors
+*> SSBEVX_2STAGE computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric band matrix A using the 2stage technique for
 *> the reduction to tridiagonal. Eigenvalues and eigenvectors can
 *> be selected by specifying either a range of values or a range of
@@ -247,7 +247,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -318,8 +318,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_SSBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q
-     $,
+      SUBROUTINE SSBEVX_2STAGE( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q,
      $                          LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
      $                          LDZ, WORK, LWORK, IWORK, IFAIL, INFO )
 *
@@ -359,17 +358,15 @@
      $                   SIGMA, SMLNUM, TMP1, VLL, VUU
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV2STAGE
-      REAL               SLAMCH, AB_SLANSB
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANSB, AB_ILAENV2STAGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      REAL               SLAMCH, SLANSB
+      EXTERNAL           LSAME, SLAMCH, SLANSB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEMV, AB_SLACPY, AB_SLASCL, AB_SS
-     $CAL,
-     $                   AB_SSTEBZ, AB_SSTEIN, AB_SSTEQR, AB_SSTERF, AB_
-     $SSWAP, AB_XERBLA,
-     $                   AB_SSYTRD_SB2ST
+      EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL, SSCAL,
+     $                   SSTEBZ, SSTEIN, SSTEQR, SSTERF, SSWAP, XERBLA,
+     $                   SSYTRD_SB2ST
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -378,19 +375,19 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -422,11 +419,11 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            IB    = AB_ILAENV2STAGE( 2, 'AB_SSYTRD_SB2ST', JOBZ,
+            IB    = ILAENV2STAGE( 2, 'SSYTRD_SB2ST', JOBZ,
      $                            N, KD, -1, -1 )
-            LHTRD = AB_ILAENV2STAGE( 3, 'AB_SSYTRD_SB2ST', JOBZ,
+            LHTRD = ILAENV2STAGE( 3, 'SSYTRD_SB2ST', JOBZ,
      $                            N, KD, IB, -1 )
-            LWTRD = AB_ILAENV2STAGE( 4, 'AB_SSYTRD_SB2ST', JOBZ,
+            LWTRD = ILAENV2STAGE( 4, 'SSYTRD_SB2ST', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = 2*N + LHTRD + LWTRD
             WORK( 1 )  = LWMIN
@@ -437,7 +434,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSBEVX_2STAGE ', -INFO )
+         CALL XERBLA( 'SSBEVX_2STAGE ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -488,7 +485,7 @@
          VLL = ZERO
          VUU = ZERO
       END IF
-      ANRM = AB_SLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
+      ANRM = SLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / ANRM
@@ -498,11 +495,9 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL SLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL SLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
          IF( ABSTOL.GT.0 )
      $      ABSTLL = ABSTOL*SIGMA
@@ -512,7 +507,7 @@
          END IF
       END IF
 *
-*     Call AB_SSYTRD_SB2ST to reduce symmetric band matrix to tridiagonal form.
+*     Call SSYTRD_SB2ST to reduce symmetric band matrix to tridiagonal form.
 *
       INDD    = 1
       INDE    = INDD + N
@@ -520,14 +515,13 @@
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL AB_SSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, WORK( INDD
-     $ ),
+      CALL SSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, WORK( INDD ),
      $                    WORK( INDE ), WORK( INDHOUS ), LHTRD, 
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
 *     If all eigenvalues are desired and ABSTOL is less than or equal
-*     to zero, then call AB_SSTERF or AB_SSTEQR.  If this fails for some
-*     eigenvalue, then try AB_SSTEBZ.
+*     to zero, then call SSTERF or SSTEQR.  If this fails for some
+*     eigenvalue, then try SSTEBZ.
 *
       TEST = .FALSE.
       IF (INDEIG) THEN
@@ -536,15 +530,15 @@
          END IF
       END IF
       IF ((ALLEIG .OR. TEST) .AND. (ABSTOL.LE.ZERO)) THEN
-         CALL AB_SCOPY( N, WORK( INDD ), 1, W, 1 )
+         CALL SCOPY( N, WORK( INDD ), 1, W, 1 )
          INDEE = INDWRK + 2*N
          IF( .NOT.WANTZ ) THEN
-            CALL AB_SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
-            CALL AB_SSTERF( N, W, WORK( INDEE ), INFO )
+            CALL SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
+            CALL SSTERF( N, W, WORK( INDEE ), INFO )
          ELSE
-            CALL AB_SLACPY( 'A', N, N, Q, LDQ, Z, LDZ )
-            CALL AB_SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
-            CALL AB_SSTEQR( JOBZ, N, W, WORK( INDEE ), Z, LDZ,
+            CALL SLACPY( 'A', N, N, Q, LDQ, Z, LDZ )
+            CALL SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
+            CALL SSTEQR( JOBZ, N, W, WORK( INDEE ), Z, LDZ,
      $                   WORK( INDWRK ), INFO )
             IF( INFO.EQ.0 ) THEN
                DO 10 I = 1, N
@@ -559,7 +553,7 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call AB_SSTEBZ and, if eigenvectors are desired, AB_SSTEIN.
+*     Otherwise, call SSTEBZ and, if eigenvectors are desired, SSTEIN.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -569,22 +563,22 @@
       INDIBL = 1
       INDISP = INDIBL + N
       INDIWO = INDISP + N
-      CALL AB_SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
+      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), WORK( INDWRK ),
      $             IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL AB_SSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
+         CALL SSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
      $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
 *
 *        Apply orthogonal matrix used in reduction to tridiagonal
-*        form to eigenvectors returned by AB_SSTEIN.
+*        form to eigenvectors returned by SSTEIN.
 *
          DO 20 J = 1, M
-            CALL AB_SCOPY( N, Z( 1, J ), 1, WORK( 1 ), 1 )
-            CALL AB_SGEMV( 'N', N, N, ONE, Q, LDQ, WORK, 1, ZERO,
+            CALL SCOPY( N, Z( 1, J ), 1, WORK( 1 ), 1 )
+            CALL SGEMV( 'N', N, N, ONE, Q, LDQ, WORK, 1, ZERO,
      $                  Z( 1, J ), 1 )
    20    CONTINUE
       END IF
@@ -598,7 +592,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -621,7 +615,7 @@
                IWORK( INDIBL+I-1 ) = IWORK( INDIBL+J-1 )
                W( J ) = TMP1
                IWORK( INDIBL+J-1 ) = ITMP1
-               CALL AB_SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
                IF( INFO.NE.0 ) THEN
                   ITMP1 = IFAIL( I )
                   IFAIL( I ) = IFAIL( J )
@@ -637,6 +631,6 @@
 *
       RETURN
 *
-*     End of AB_SSBEVX_2STAGE
+*     End of SSBEVX_2STAGE
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAED4 used by AB_SSTEDC. Finds a single root of the secular equation.
+*> \brief \b SLAED4 used by sstedc. Finds a single root of the secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAED4 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED4.f">
+*> Download SLAED4 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed4.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed4.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed4.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
+*       SUBROUTINE SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            I, INFO, N
@@ -83,9 +83,9 @@
 *> \verbatim
 *>          DELTA is REAL array, dimension (N)
 *>         If N .GT. 2, DELTA contains (D(j) - lambda_I) in its  j-th
-*>         component.  If N = 1, then DELTA(1) = 1. If N = 2, see AB_SLAED5
+*>         component.  If N = 1, then DELTA(1) = 1. If N = 2, see SLAED5
 *>         for detail. The vector DELTA contains the information necessary
-*>         to construct the eigenvectors by AB_SLAED3 and AB_SLAED9.
+*>         to construct the eigenvectors by SLAED3 and SLAED9.
 *> \endverbatim
 *>
 *> \param[in] RHO
@@ -143,7 +143,7 @@
 *>     at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
+      SUBROUTINE SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -183,7 +183,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLAED5, AB_SLAED6
+      EXTERNAL           SLAED5, SLAED6
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -205,7 +205,7 @@
          RETURN
       END IF
       IF( N.EQ.2 ) THEN
-         CALL AB_SLAED5( I, D, Z, DELTA, RHO, DLAM )
+         CALL SLAED5( I, D, Z, DELTA, RHO, DLAM )
          RETURN
       END IF
 *
@@ -666,7 +666,7 @@
                ZZ( 3 ) = Z( IIP1 )*Z( IIP1 )
             END IF
             ZZ( 2 ) = Z( II )*Z( II )
-            CALL AB_SLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, ETA,
+            CALL SLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, ETA,
      $                   INFO )
             IF( INFO.NE.0 )
      $         GO TO 250
@@ -832,8 +832,7 @@
                      ZZ( 3 ) = Z( IIP1 )*Z( IIP1 )
                   END IF
                END IF
-               CALL AB_SLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, E
-     $TA,
+               CALL SLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, ETA,
      $                      INFO )
                IF( INFO.NE.0 )
      $            GO TO 250
@@ -913,6 +912,6 @@
 *
       RETURN
 *
-*     End of AB_SLAED4
+*     End of SLAED4
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> AB_CGTSV computes the solution to system of linear equations A * X = B for GT matrices </b>
+*> \brief <b> CGTSV computes the solution to system of linear equations A * X = B for GT matrices </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGTSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGTSV.f">
+*> Download CGTSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgtsv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGTSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgtsv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGTSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtsv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
+*       SUBROUTINE CGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDB, N, NRHS
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGTSV  solves the equation
+*> CGTSV  solves the equation
 *>
 *>    A*X = B,
 *>
@@ -122,7 +122,7 @@
 *> \ingroup complexGTsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_CGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
+      SUBROUTINE CGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -150,7 +150,7 @@
       INTRINSIC          ABS, AIMAG, MAX, REAL
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -169,7 +169,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGTSV ', -INFO )
+         CALL XERBLA( 'CGTSV ', -INFO )
          RETURN
       END IF
 *
@@ -239,6 +239,6 @@
 *
       RETURN
 *
-*     End of AB_CGTSV
+*     End of CGTSV
 *
       END

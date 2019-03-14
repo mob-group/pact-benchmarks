@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDOTC
+*> \brief \b ZDOTC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       COMPLEX*16 FUNCTION AB_ZDOTC(N,ZX,INCX,ZY,INCY)
+*       COMPLEX*16 FUNCTION ZDOTC(N,ZX,INCX,ZY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,8 +23,8 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDOTC forms the dot product of two complex vectors
-*>      AB_ZDOTC = X^H * Y
+*> ZDOTC forms the dot product of two complex vectors
+*>      ZDOTC = X^H * Y
 *>
 *> \endverbatim
 *
@@ -81,7 +81,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      COMPLEX*16 FUNCTION AB_ZDOTC(N,ZX,INCX,ZY,INCY)
+      COMPLEX*16 FUNCTION ZDOTC(N,ZX,INCX,ZY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -105,7 +105,7 @@
       INTRINSIC DCONJG
 *     ..
       ZTEMP = (0.0d0,0.0d0)
-      AB_ZDOTC = (0.0d0,0.0d0)
+      ZDOTC = (0.0d0,0.0d0)
       IF (N.LE.0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
@@ -129,6 +129,6 @@
             IY = IY + INCY
          END DO
       END IF
-      AB_ZDOTC = ZTEMP
+      ZDOTC = ZTEMP
       RETURN
       END

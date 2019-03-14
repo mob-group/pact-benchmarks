@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPTTRS
+*> \brief \b ZPTTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZPTTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPTTRS.f">
+*> Download ZPTTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpttrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPTTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpttrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPTTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpttrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPTTRS( UPLO, N, NRHS, D, E, B, LDB, INFO )
+*       SUBROUTINE ZPTTRS( UPLO, N, NRHS, D, E, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPTTRS solves a tridiagonal system of the form
+*> ZPTTRS solves a tridiagonal system of the form
 *>    A * X = B
-*> using the factorization A = U**H *D* U or A = L*D*L**H computed by AB_ZPTTRF.
+*> using the factorization A = U**H *D* U or A = L*D*L**H computed by ZPTTRF.
 *> D is a diagonal matrix specified in the vector D, U (or L) is a unit
 *> bidiagonal matrix whose superdiagonal (subdiagonal) is specified in
 *> the vector E, and X and B are N by NRHS matrices.
@@ -119,7 +119,7 @@
 *> \ingroup complex16PTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPTTRS( UPLO, N, NRHS, D, E, B, LDB, INFO )
+      SUBROUTINE ZPTTRS( UPLO, N, NRHS, D, E, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,11 +142,11 @@
       INTEGER            IUPLO, J, JB, NB
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZPTTS2
+      EXTERNAL           XERBLA, ZPTTS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -167,7 +167,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZPTTRS', -INFO )
+         CALL XERBLA( 'ZPTTRS', -INFO )
          RETURN
       END IF
 *
@@ -181,8 +181,7 @@
       IF( NRHS.EQ.1 ) THEN
          NB = 1
       ELSE
-         NB = MAX( 1, AB_ILAENV( 1, 'AB_ZPTTRS', UPLO, N, NRHS, -1, -1 )
-     $ )
+         NB = MAX( 1, ILAENV( 1, 'ZPTTRS', UPLO, N, NRHS, -1, -1 ) )
       END IF
 *
 *     Decode UPLO
@@ -194,16 +193,16 @@
       END IF
 *
       IF( NB.GE.NRHS ) THEN
-         CALL AB_ZPTTS2( IUPLO, N, NRHS, D, E, B, LDB )
+         CALL ZPTTS2( IUPLO, N, NRHS, D, E, B, LDB )
       ELSE
          DO 10 J = 1, NRHS, NB
             JB = MIN( NRHS-J+1, NB )
-            CALL AB_ZPTTS2( IUPLO, N, JB, D, E, B( 1, J ), LDB )
+            CALL ZPTTS2( IUPLO, N, JB, D, E, B( 1, J ), LDB )
    10    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_ZPTTRS
+*     End of ZPTTRS
 *
       END

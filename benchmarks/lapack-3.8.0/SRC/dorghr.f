@@ -1,4 +1,4 @@
-*> \brief \b AB_DORGHR
+*> \brief \b DORGHR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DORGHR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORGHR.f">
+*> Download DORGHR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorghr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORGHR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorghr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORGHR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorghr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DORGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE DORGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IHI, ILO, INFO, LDA, LWORK, N
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DORGHR generates a real orthogonal matrix Q which is defined as the
+*> DORGHR generates a real orthogonal matrix Q which is defined as the
 *> product of IHI-ILO elementary reflectors of order N, as returned by
-*> AB_DGEHRD:
+*> DGEHRD:
 *>
 *> Q = H(ilo) H(ilo+1) . . . H(ihi-1).
 *> \endverbatim
@@ -59,7 +59,7 @@
 *>          IHI is INTEGER
 *>
 *>          ILO and IHI must have the same values as in the previous call
-*>          of AB_DGEHRD. Q is equal to the unit matrix except in the
+*>          of DGEHRD. Q is equal to the unit matrix except in the
 *>          submatrix Q(ilo+1:ihi,ilo+1:ihi).
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
 *> \endverbatim
@@ -68,7 +68,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the vectors which define the elementary reflectors,
-*>          as returned by AB_DGEHRD.
+*>          as returned by DGEHRD.
 *>          On exit, the N-by-N orthogonal matrix Q.
 *> \endverbatim
 *>
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (N-1)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_DGEHRD.
+*>          reflector H(i), as returned by DGEHRD.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -101,7 +101,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -124,8 +124,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DORGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO 
-     $)
+      SUBROUTINE DORGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -150,11 +149,11 @@
       INTEGER            I, IINFO, J, LWKOPT, NB, NH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DORGQR, AB_XERBLA
+      EXTERNAL           DORGQR, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -179,13 +178,13 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = AB_ILAENV( 1, 'AB_DORGQR', ' ', NH, NH, NH, -1 )
+         NB = ILAENV( 1, 'DORGQR', ' ', NH, NH, NH, -1 )
          LWKOPT = MAX( 1, NH )*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DORGHR', -INFO )
+         CALL XERBLA( 'DORGHR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -230,12 +229,12 @@
 *
 *        Generate Q(ilo+1:ihi,ilo+1:ihi)
 *
-         CALL AB_DORGQR( NH, NH, NH, A( ILO+1, ILO+1 ), LDA, TAU( ILO ),
+         CALL DORGQR( NH, NH, NH, A( ILO+1, ILO+1 ), LDA, TAU( ILO ),
      $                WORK, LWORK, IINFO )
       END IF
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_DORGHR
+*     End of DORGHR
 *
       END

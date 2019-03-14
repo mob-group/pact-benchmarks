@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAISNAN tests input for NaN by comparing two arguments for inequality.
+*> \brief \b SLAISNAN tests input for NaN by comparing two arguments for inequality.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAISNAN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAISNAN.f">
+*> Download SLAISNAN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaisnan.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAISNAN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaisnan.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAISNAN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaisnan.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       LOGICAL FUNCTION AB_SLAISNAN( SIN1, SIN2 )
+*       LOGICAL FUNCTION SLAISNAN( SIN1, SIN2 )
 *
 *       .. Scalar Arguments ..
 *       REAL, INTENT(IN) :: SIN1, SIN2
@@ -31,9 +31,9 @@
 *> \verbatim
 *>
 *> This routine is not for general use.  It exists solely to avoid
-*> over-optimization in AB_SISNAN.
+*> over-optimization in SISNAN.
 *>
-*> AB_SLAISNAN checks for NaNs by comparing its two arguments for
+*> SLAISNAN checks for NaNs by comparing its two arguments for
 *> inequality.  NaN is the only floating-point value where NaN != NaN
 *> returns .TRUE.  To check for NaNs, pass the same variable as both
 *> arguments.
@@ -72,7 +72,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      LOGICAL FUNCTION AB_SLAISNAN( SIN1, SIN2 )
+      LOGICAL FUNCTION SLAISNAN( SIN1, SIN2 )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -86,6 +86,6 @@
 *  =====================================================================
 *
 *  .. Executable Statements ..
-      AB_SLAISNAN = (SIN1.NE.SIN2)
+      SLAISNAN = (SIN1.NE.SIN2)
       RETURN
       END

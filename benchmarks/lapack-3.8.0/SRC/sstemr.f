@@ -1,4 +1,4 @@
-*> \brief \b AB_SSTEMR
+*> \brief \b SSTEMR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSTEMR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSTEMR.f">
+*> Download SSTEMR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstemr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSTEMR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sstemr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSTEMR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstemr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+*       SUBROUTINE SSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
 *                          M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
 *                          IWORK, LIWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSTEMR computes selected eigenvalues and, optionally, eigenvectors
+*> SSTEMR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T. Any such unreduced matrix has
 *> a well defined set of pairwise different real eigenvalues, the corresponding
 *> real eigenvectors are pairwise orthogonal.
@@ -86,7 +86,7 @@
 *>   UC Berkeley, May 1997.
 *>
 *> Further Details
-*> 1.AB_SSTEMR works only on machines which follow IEEE-754
+*> 1.SSTEMR works only on machines which follow IEEE-754
 *> floating-point standard in their handling of infinities and NaNs.
 *> This permits the use of efficient inner loops avoiding a check for
 *> zero divisors.
@@ -217,7 +217,7 @@
 *>          routine calculates the number of columns of the array Z that
 *>          are needed to hold the eigenvectors.
 *>          This value is returned as the first entry of the Z array, and
-*>          no error message related to NZC is issued by AB_XERBLA.
+*>          no error message related to NZC is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] ISUPPZ
@@ -261,7 +261,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -279,7 +279,7 @@
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and
-*>          no error message related to LIWORK is issued by AB_XERBLA.
+*>          no error message related to LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -288,11 +288,11 @@
 *>          On exit, INFO
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = 1X, internal error in AB_SLARRE,
-*>                if INFO = 2X, internal error in AB_SLARRV.
+*>          > 0:  if INFO = 1X, internal error in SLARRE,
+*>                if INFO = 2X, internal error in SLARRV.
 *>                Here, the digit X = ABS( IINFO ) < 10, where IINFO is
-*>                the nonzero error code returned by AB_SLARRE or
-*>                AB_SLARRV, respectively.
+*>                the nonzero error code returned by SLARRE or
+*>                SLARRV, respectively.
 *> \endverbatim
 *
 *  Authors:
@@ -317,7 +317,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_SSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+      SUBROUTINE SSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                   M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
 *
@@ -359,15 +359,13 @@
 *     ..
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANST
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANST
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLANST
+      EXTERNAL           LSAME, SLAMCH, SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SLAE2, AB_SLAEV2, AB_SLARRC, AB_SL
-     $ARRE, AB_SLARRJ,
-     $                   AB_SLARRR, AB_SLARRV, AB_SLASRT, AB_SSCAL, AB_S
-     $SWAP, AB_XERBLA
+      EXTERNAL           SCOPY, SLAE2, SLAEV2, SLARRC, SLARRE, SLARRJ,
+     $                   SLARRR, SLARRV, SLASRT, SSCAL, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -376,17 +374,17 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
 *
       LQUERY = ( ( LWORK.EQ.-1 ).OR.( LIWORK.EQ.-1 ) )
       ZQUERY = ( NZC.EQ.-1 )
 
-*     AB_SSTEMR needs WORK of size 6*N, IWORK of size 3*N.
-*     In addition, AB_SLARRE needs WORK of size 6*N, IWORK of size 5*N.
-*     Furthermore, AB_SLARRV needs WORK of size 12*N, IWORK of size 7*N.
+*     SSTEMR needs WORK of size 6*N, IWORK of size 3*N.
+*     In addition, SLARRE needs WORK of size 6*N, IWORK of size 5*N.
+*     Furthermore, SLARRV needs WORK of size 12*N, IWORK of size 7*N.
       IF( WANTZ ) THEN
          LWMIN = 18*N
          LIWMIN = 10*N
@@ -405,7 +403,7 @@
       IF( VALEIG ) THEN
 *        We do not reference VL, VU in the cases RANGE = 'I','A'
 *        The interval (WL, WU] contains all the wanted eigenvalues.
-*        It is either given by the user or computed in AB_SLARRE.
+*        It is either given by the user or computed in SLARRE.
          WL = VL
          WU = VU
       ELSEIF( INDEIG ) THEN
@@ -415,7 +413,7 @@
       ENDIF
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
@@ -451,7 +449,7 @@
          IF( WANTZ .AND. ALLEIG ) THEN
             NZCMIN = N
          ELSE IF( WANTZ .AND. VALEIG ) THEN
-            CALL AB_SLARRC( 'T', N, VL, VU, D, E, SAFMIN,
+            CALL SLARRC( 'T', N, VL, VU, D, E, SAFMIN,
      $                            NZCMIN, ITMP, ITMP2, INFO )
          ELSE IF( WANTZ .AND. INDEIG ) THEN
             NZCMIN = IIU-IIL+1
@@ -468,7 +466,7 @@
 
       IF( INFO.NE.0 ) THEN
 *
-         CALL AB_XERBLA( 'AB_SSTEMR', -INFO )
+         CALL XERBLA( 'SSTEMR', -INFO )
 *
          RETURN
       ELSE IF( LQUERY .OR. ZQUERY ) THEN
@@ -501,9 +499,9 @@
 *
       IF( N.EQ.2 ) THEN
          IF( .NOT.WANTZ ) THEN
-            CALL AB_SLAE2( D(1), E(1), D(2), R1, R2 )
+            CALL SLAE2( D(1), E(1), D(2), R1, R2 )
          ELSE IF( WANTZ.AND.(.NOT.ZQUERY) ) THEN
-            CALL AB_SLAEV2( D(1), E(1), D(2), R1, R2, CS, SN )
+            CALL SLAEV2( D(1), E(1), D(2), R1, R2, CS, SN )
          END IF
          IF( ALLEIG.OR.
      $      (VALEIG.AND.(R2.GT.WL).AND.
@@ -571,20 +569,20 @@
 *
 *        Scale matrix to allowable range, if necessary.
 *        The allowable range is related to the PIVMIN parameter; see the
-*        comments in AB_SLARRD.  The preference for scaling small values
+*        comments in SLARRD.  The preference for scaling small values
 *        up is heuristic; we expect users' matrices not to be close to the
 *        RMAX threshold.
 *
          SCALE = ONE
-         TNRM = AB_SLANST( 'M', N, D, E )
+         TNRM = SLANST( 'M', N, D, E )
          IF( TNRM.GT.ZERO .AND. TNRM.LT.RMIN ) THEN
             SCALE = RMIN / TNRM
          ELSE IF( TNRM.GT.RMAX ) THEN
             SCALE = RMAX / TNRM
          END IF
          IF( SCALE.NE.ONE ) THEN
-            CALL AB_SSCAL( N, SCALE, D, 1 )
-            CALL AB_SSCAL( N-1, SCALE, E, 1 )
+            CALL SSCAL( N, SCALE, D, 1 )
+            CALL SSCAL( N-1, SCALE, E, 1 )
             TNRM = TNRM*SCALE
             IF( VALEIG ) THEN
 *              If eigenvalues in interval have to be found,
@@ -597,14 +595,14 @@
 *        Compute the desired eigenvalues of the tridiagonal after splitting
 *        into smaller subblocks if the corresponding off-diagonal elements
 *        are small
-*        THRESH is the splitting parameter for AB_SLARRE
+*        THRESH is the splitting parameter for SLARRE
 *        A negative THRESH forces the old splitting criterion based on the
 *        size of the off-diagonal. A positive THRESH switches to splitting
 *        which preserves relative accuracy.
 *
          IF( TRYRAC ) THEN
 *           Test whether the matrix warrants the more expensive relative approach.
-            CALL AB_SLARRR( N, D, E, IINFO )
+            CALL SLARRR( N, D, E, IINFO )
          ELSE
 *           The user does not care about relative accurately eigenvalues
             IINFO = -1
@@ -620,7 +618,7 @@
 *
          IF( TRYRAC ) THEN
 *           Copy original diagonal, needed to guarantee relative accuracy
-            CALL AB_SCOPY(N,D,1,WORK(INDD),1)
+            CALL SCOPY(N,D,1,WORK(INDD),1)
          ENDIF
 *        Store the squares of the offdiagonal values of T
          DO 5 J = 1, N-1
@@ -629,18 +627,18 @@
 
 *        Set the tolerance parameters for bisection
          IF( .NOT.WANTZ ) THEN
-*           AB_SLARRE computes the eigenvalues to full precision.
+*           SLARRE computes the eigenvalues to full precision.
             RTOL1 = FOUR * EPS
             RTOL2 = FOUR * EPS
          ELSE
-*           AB_SLARRE computes the eigenvalues to less than full precision.
-*           AB_SLARRV will refine the eigenvalue approximations, and we can
-*           need less accurate initial bisection in AB_SLARRE.
-*           Note: these settings do only affect the subset case and AB_SLARRE
+*           SLARRE computes the eigenvalues to less than full precision.
+*           SLARRV will refine the eigenvalue approximations, and we can
+*           need less accurate initial bisection in SLARRE.
+*           Note: these settings do only affect the subset case and SLARRE
             RTOL1 = MAX( SQRT(EPS)*5.0E-2, FOUR * EPS )
             RTOL2 = MAX( SQRT(EPS)*5.0E-3, FOUR * EPS )
          ENDIF
-         CALL AB_SLARRE( RANGE, N, WL, WU, IIL, IIU, D, E,
+         CALL SLARRE( RANGE, N, WL, WU, IIL, IIU, D, E,
      $             WORK(INDE2), RTOL1, RTOL2, THRESH, NSPLIT,
      $             IWORK( IINSPL ), M, W, WORK( INDERR ),
      $             WORK( INDGP ), IWORK( IINDBL ),
@@ -650,7 +648,7 @@
             INFO = 10 + ABS( IINFO )
             RETURN
          END IF
-*        Note that if RANGE .NE. 'V', AB_SLARRE computes bounds on the desired
+*        Note that if RANGE .NE. 'V', SLARRE computes bounds on the desired
 *        part of the spectrum. All desired eigenvalues are contained in
 *        (WL,WU]
 
@@ -660,7 +658,7 @@
 *           Compute the desired eigenvectors corresponding to the computed
 *           eigenvalues
 *
-            CALL AB_SLARRV( N, WL, WU, D, E,
+            CALL SLARRV( N, WL, WU, D, E,
      $                PIVMIN, IWORK( IINSPL ), M,
      $                1, M, MINRGP, RTOL1, RTOL2,
      $                W, WORK( INDERR ), WORK( INDGP ), IWORK( IINDBL ),
@@ -671,10 +669,10 @@
                RETURN
             END IF
          ELSE
-*           AB_SLARRE computes eigenvalues of the (shifted) root representation
-*           AB_SLARRV returns the eigenvalues of the unshifted matrix.
+*           SLARRE computes eigenvalues of the (shifted) root representation
+*           SLARRV returns the eigenvalues of the unshifted matrix.
 *           However, if the eigenvectors are not desired by the user, we need
-*           to apply the corresponding shifts from AB_SLARRE to obtain the
+*           to apply the corresponding shifts from SLARRE to obtain the
 *           eigenvalues of the original matrix.
             DO 20 J = 1, M
                ITMP = IWORK( IINDBL+J-1 )
@@ -709,7 +707,7 @@
                IFIRST = IWORK(IINDW+WBEGIN-1)
                ILAST = IWORK(IINDW+WEND-1)
                RTOL2 = FOUR * EPS
-               CALL AB_SLARRJ( IN,
+               CALL SLARRJ( IN,
      $                   WORK(INDD+IBEGIN-1), WORK(INDE2+IBEGIN-1),
      $                   IFIRST, ILAST, RTOL2, OFFSET, W(WBEGIN),
      $                   WORK( INDERR+WBEGIN-1 ),
@@ -723,7 +721,7 @@
 *        If matrix was scaled, then rescale eigenvalues appropriately.
 *
          IF( SCALE.NE.ONE ) THEN
-            CALL AB_SSCAL( M, ONE / SCALE, W, 1 )
+            CALL SSCAL( M, ONE / SCALE, W, 1 )
          END IF
       END IF
 *
@@ -732,7 +730,7 @@
 *
       IF( NSPLIT.GT.1 .OR. N.EQ.2 ) THEN
          IF( .NOT. WANTZ ) THEN
-            CALL AB_SLASRT( 'I', M, W, IINFO )
+            CALL SLASRT( 'I', M, W, IINFO )
             IF( IINFO.NE.0 ) THEN
                INFO = 3
                RETURN
@@ -751,7 +749,7 @@
                   W( I ) = W( J )
                   W( J ) = TMP
                   IF( WANTZ ) THEN
-                     CALL AB_SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+                     CALL SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
                      ITMP = ISUPPZ( 2*I-1 )
                      ISUPPZ( 2*I-1 ) = ISUPPZ( 2*J-1 )
                      ISUPPZ( 2*J-1 ) = ITMP
@@ -769,6 +767,6 @@
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of AB_SSTEMR
+*     End of SSTEMR
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SLASDQ computes the SVD of a real bidiagonal matrix with diagonal d and off-diagonal e. Used by AB_SBDSDC.
+*> \brief \b SLASDQ computes the SVD of a real bidiagonal matrix with diagonal d and off-diagonal e. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLASDQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASDQ.f">
+*> Download SLASDQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasdq.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASDQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasdq.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASDQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasdq.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLASDQ( UPLO, SQRE, N, NCVT, NRU, NCC, D, E, VT, LDVT,
+*       SUBROUTINE SLASDQ( UPLO, SQRE, N, NCVT, NRU, NCC, D, E, VT, LDVT,
 *                          U, LDU, C, LDC, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLASDQ computes the singular value decomposition (SVD) of a real
+*> SLASDQ computes the singular value decomposition (SVD) of a real
 *> (upper or lower) bidiagonal matrix with diagonal D and offdiagonal
 *> E, accumulating the transformations if desired. Letting B denote
 *> the input bidiagonal matrix, the algorithm computes orthogonal
@@ -208,8 +208,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLASDQ( UPLO, SQRE, N, NCVT, NRU, NCC, D, E, VT, LDV
-     $T,
+      SUBROUTINE SLASDQ( UPLO, SQRE, N, NCVT, NRU, NCC, D, E, VT, LDVT,
      $                   U, LDU, C, LDC, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -238,12 +237,11 @@
       REAL               CS, R, SMIN, SN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SBDSQR, AB_SLARTG, AB_SLASR, AB_SSWAP, AB_XE
-     $RBLA
+      EXTERNAL           SBDSQR, SLARTG, SLASR, SSWAP, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -254,9 +252,9 @@
 *
       INFO = 0
       IUPLO = 0
-      IF( AB_LSAME( UPLO, 'U' ) )
+      IF( LSAME( UPLO, 'U' ) )
      $   IUPLO = 1
-      IF( AB_LSAME( UPLO, 'L' ) )
+      IF( LSAME( UPLO, 'L' ) )
      $   IUPLO = 2
       IF( IUPLO.EQ.0 ) THEN
          INFO = -1
@@ -280,7 +278,7 @@
          INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLASDQ', -INFO )
+         CALL XERBLA( 'SLASDQ', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 )
@@ -297,7 +295,7 @@
 *
       IF( ( IUPLO.EQ.1 ) .AND. ( SQRE1.EQ.1 ) ) THEN
          DO 10 I = 1, N - 1
-            CALL AB_SLARTG( D( I ), E( I ), CS, SN, R )
+            CALL SLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
             E( I ) = SN*D( I+1 )
             D( I+1 ) = CS*D( I+1 )
@@ -306,7 +304,7 @@
                WORK( N+I ) = SN
             END IF
    10    CONTINUE
-         CALL AB_SLARTG( D( N ), E( N ), CS, SN, R )
+         CALL SLARTG( D( N ), E( N ), CS, SN, R )
          D( N ) = R
          E( N ) = ZERO
          IF( ROTATE ) THEN
@@ -319,7 +317,7 @@
 *        Update singular vectors if desired.
 *
          IF( NCVT.GT.0 )
-     $      CALL AB_SLASR( 'L', 'V', 'F', NP1, NCVT, WORK( 1 ),
+     $      CALL SLASR( 'L', 'V', 'F', NP1, NCVT, WORK( 1 ),
      $                  WORK( NP1 ), VT, LDVT )
       END IF
 *
@@ -328,7 +326,7 @@
 *
       IF( IUPLO.EQ.2 ) THEN
          DO 20 I = 1, N - 1
-            CALL AB_SLARTG( D( I ), E( I ), CS, SN, R )
+            CALL SLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
             E( I ) = SN*D( I+1 )
             D( I+1 ) = CS*D( I+1 )
@@ -342,7 +340,7 @@
 *        rotation is needed.
 *
          IF( SQRE1.EQ.1 ) THEN
-            CALL AB_SLARTG( D( N ), E( N ), CS, SN, R )
+            CALL SLARTG( D( N ), E( N ), CS, SN, R )
             D( N ) = R
             IF( ROTATE ) THEN
                WORK( N ) = CS
@@ -354,28 +352,28 @@
 *
          IF( NRU.GT.0 ) THEN
             IF( SQRE1.EQ.0 ) THEN
-               CALL AB_SLASR( 'R', 'V', 'F', NRU, N, WORK( 1 ),
+               CALL SLASR( 'R', 'V', 'F', NRU, N, WORK( 1 ),
      $                     WORK( NP1 ), U, LDU )
             ELSE
-               CALL AB_SLASR( 'R', 'V', 'F', NRU, NP1, WORK( 1 ),
+               CALL SLASR( 'R', 'V', 'F', NRU, NP1, WORK( 1 ),
      $                     WORK( NP1 ), U, LDU )
             END IF
          END IF
          IF( NCC.GT.0 ) THEN
             IF( SQRE1.EQ.0 ) THEN
-               CALL AB_SLASR( 'L', 'V', 'F', N, NCC, WORK( 1 ),
+               CALL SLASR( 'L', 'V', 'F', N, NCC, WORK( 1 ),
      $                     WORK( NP1 ), C, LDC )
             ELSE
-               CALL AB_SLASR( 'L', 'V', 'F', NP1, NCC, WORK( 1 ),
+               CALL SLASR( 'L', 'V', 'F', NP1, NCC, WORK( 1 ),
      $                     WORK( NP1 ), C, LDC )
             END IF
          END IF
       END IF
 *
-*     Call AB_SBDSQR to compute the SVD of the reduced real
+*     Call SBDSQR to compute the SVD of the reduced real
 *     N-by-N upper bidiagonal matrix.
 *
-      CALL AB_SBDSQR( 'U', N, NCVT, NRU, NCC, D, E, VT, LDVT, U, LDU, C,
+      CALL SBDSQR( 'U', N, NCVT, NRU, NCC, D, E, VT, LDVT, U, LDU, C,
      $             LDC, WORK, INFO )
 *
 *     Sort the singular values into ascending order (insertion sort on
@@ -400,17 +398,16 @@
             D( ISUB ) = D( I )
             D( I ) = SMIN
             IF( NCVT.GT.0 )
-     $         CALL AB_SSWAP( NCVT, VT( ISUB, 1 ), LDVT, VT( I, 1 ), LDV
-     $T )
+     $         CALL SSWAP( NCVT, VT( ISUB, 1 ), LDVT, VT( I, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL AB_SSWAP( NRU, U( 1, ISUB ), 1, U( 1, I ), 1 )
+     $         CALL SSWAP( NRU, U( 1, ISUB ), 1, U( 1, I ), 1 )
             IF( NCC.GT.0 )
-     $         CALL AB_SSWAP( NCC, C( ISUB, 1 ), LDC, C( I, 1 ), LDC )
+     $         CALL SSWAP( NCC, C( ISUB, 1 ), LDC, C( I, 1 ), LDC )
          END IF
    40 CONTINUE
 *
       RETURN
 *
-*     End of AB_SLASDQ
+*     End of SLASDQ
 *
       END

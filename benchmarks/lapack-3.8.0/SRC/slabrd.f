@@ -1,4 +1,4 @@
-*> \brief \b AB_SLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form.
+*> \brief \b SLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLABRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLABRD.f">
+*> Download SLABRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slabrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLABRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slabrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLABRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slabrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
+*       SUBROUTINE SLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
 *                          LDY )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLABRD reduces the first NB rows and columns of a real general
+*> SLABRD reduces the first NB rows and columns of a real general
 *> m by n matrix A to upper or lower bidiagonal form by an orthogonal
 *> transformation Q**T * A * P, and returns the matrices X and Y which
 *> are needed to apply the transformation to the unreduced part of A.
@@ -43,7 +43,7 @@
 *> If m >= n, A is reduced to upper bidiagonal form; if m < n, to lower
 *> bidiagonal form.
 *>
-*> This is an auxiliary routine called by AB_SGEBRD
+*> This is an auxiliary routine called by SGEBRD
 *> \endverbatim
 *
 *  Arguments:
@@ -207,8 +207,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, 
-     $Y,
+      SUBROUTINE SLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
      $                   LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -234,7 +233,7 @@
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMV, AB_SLARFG, AB_SSCAL
+      EXTERNAL           SGEMV, SLARFG, SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -254,14 +253,14 @@
 *
 *           Update A(i:m,i)
 *
-            CALL AB_SGEMV( 'No transpose', M-I+1, I-1, -ONE, A( I, 1 ),
+            CALL SGEMV( 'No transpose', M-I+1, I-1, -ONE, A( I, 1 ),
      $                  LDA, Y( I, 1 ), LDY, ONE, A( I, I ), 1 )
-            CALL AB_SGEMV( 'No transpose', M-I+1, I-1, -ONE, X( I, 1 ),
+            CALL SGEMV( 'No transpose', M-I+1, I-1, -ONE, X( I, 1 ),
      $                  LDX, A( 1, I ), 1, ONE, A( I, I ), 1 )
 *
 *           Generate reflection Q(i) to annihilate A(i+1:m,i)
 *
-            CALL AB_SLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
+            CALL SLARFG( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
      $                   TAUQ( I ) )
             D( I ) = A( I, I )
             IF( I.LT.N ) THEN
@@ -269,52 +268,45 @@
 *
 *              Compute Y(i+1:n,i)
 *
-               CALL AB_SGEMV( 'Transpose', M-I+1, N-I, ONE, A( I, I+1 ),
+               CALL SGEMV( 'Transpose', M-I+1, N-I, ONE, A( I, I+1 ),
      $                     LDA, A( I, I ), 1, ZERO, Y( I+1, I ), 1 )
-               CALL AB_SGEMV( 'Transpose', M-I+1, I-1, ONE, A( I, 1 ), L
-     $DA,
+               CALL SGEMV( 'Transpose', M-I+1, I-1, ONE, A( I, 1 ), LDA,
      $                     A( I, I ), 1, ZERO, Y( 1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 
-     $),
+               CALL SGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 ),
      $                     LDY, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL AB_SGEMV( 'Transpose', M-I+1, I-1, ONE, X( I, 1 ), L
-     $DX,
+               CALL SGEMV( 'Transpose', M-I+1, I-1, ONE, X( I, 1 ), LDX,
      $                     A( I, I ), 1, ZERO, Y( 1, I ), 1 )
-               CALL AB_SGEMV( 'Transpose', I-1, N-I, -ONE, A( 1, I+1 ),
+               CALL SGEMV( 'Transpose', I-1, N-I, -ONE, A( 1, I+1 ),
      $                     LDA, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL AB_SSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
+               CALL SSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
 *
 *              Update A(i,i+1:n)
 *
-               CALL AB_SGEMV( 'No transpose', N-I, I, -ONE, Y( I+1, 1 ),
+               CALL SGEMV( 'No transpose', N-I, I, -ONE, Y( I+1, 1 ),
      $                     LDY, A( I, 1 ), LDA, ONE, A( I, I+1 ), LDA )
-               CALL AB_SGEMV( 'Transpose', I-1, N-I, -ONE, A( 1, I+1 ),
+               CALL SGEMV( 'Transpose', I-1, N-I, -ONE, A( 1, I+1 ),
      $                     LDA, X( I, 1 ), LDX, ONE, A( I, I+1 ), LDA )
 *
 *              Generate reflection P(i) to annihilate A(i,i+2:n)
 *
-               CALL AB_SLARFG( N-I, A( I, I+1 ), A( I, MIN( I+2, N ) ),
+               CALL SLARFG( N-I, A( I, I+1 ), A( I, MIN( I+2, N ) ),
      $                      LDA, TAUP( I ) )
                E( I ) = A( I, I+1 )
                A( I, I+1 ) = ONE
 *
 *              Compute X(i+1:m,i)
 *
-               CALL AB_SGEMV( 'No transpose', M-I, N-I, ONE, A( I+1, I+1
-     $ ),
+               CALL SGEMV( 'No transpose', M-I, N-I, ONE, A( I+1, I+1 ),
      $                     LDA, A( I, I+1 ), LDA, ZERO, X( I+1, I ), 1 )
-               CALL AB_SGEMV( 'Transpose', N-I, I, ONE, Y( I+1, 1 ), LDY
-     $,
+               CALL SGEMV( 'Transpose', N-I, I, ONE, Y( I+1, 1 ), LDY,
      $                     A( I, I+1 ), LDA, ZERO, X( 1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', M-I, I, -ONE, A( I+1, 1 ),
+               CALL SGEMV( 'No transpose', M-I, I, -ONE, A( I+1, 1 ),
      $                     LDA, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 )
-     $,
+               CALL SGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
      $                     LDA, A( I, I+1 ), LDA, ZERO, X( 1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 
-     $),
+               CALL SGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 ),
      $                     LDX, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL AB_SSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
+               CALL SSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
             END IF
    10    CONTINUE
       ELSE
@@ -325,16 +317,14 @@
 *
 *           Update A(i,i:n)
 *
-            CALL AB_SGEMV( 'No transpose', N-I+1, I-1, -ONE, Y( I, 1 ),
+            CALL SGEMV( 'No transpose', N-I+1, I-1, -ONE, Y( I, 1 ),
      $                  LDY, A( I, 1 ), LDA, ONE, A( I, I ), LDA )
-            CALL AB_SGEMV( 'Transpose', I-1, N-I+1, -ONE, A( 1, I ), LDA
-     $,
+            CALL SGEMV( 'Transpose', I-1, N-I+1, -ONE, A( 1, I ), LDA,
      $                  X( I, 1 ), LDX, ONE, A( I, I ), LDA )
 *
 *           Generate reflection P(i) to annihilate A(i,i+1:n)
 *
-            CALL AB_SLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ), LDA
-     $,
+            CALL SLARFG( N-I+1, A( I, I ), A( I, MIN( I+1, N ) ), LDA,
      $                   TAUP( I ) )
             D( I ) = A( I, I )
             IF( I.LT.M ) THEN
@@ -342,61 +332,50 @@
 *
 *              Compute X(i+1:m,i)
 *
-               CALL AB_SGEMV( 'No transpose', M-I, N-I+1, ONE, A( I+1, I
-     $ ),
+               CALL SGEMV( 'No transpose', M-I, N-I+1, ONE, A( I+1, I ),
      $                     LDA, A( I, I ), LDA, ZERO, X( I+1, I ), 1 )
-               CALL AB_SGEMV( 'Transpose', N-I+1, I-1, ONE, Y( I, 1 ), L
-     $DY,
+               CALL SGEMV( 'Transpose', N-I+1, I-1, ONE, Y( I, 1 ), LDY,
      $                     A( I, I ), LDA, ZERO, X( 1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 
-     $),
+               CALL SGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 ),
      $                     LDA, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', I-1, N-I+1, ONE, A( 1, I )
-     $,
+               CALL SGEMV( 'No transpose', I-1, N-I+1, ONE, A( 1, I ),
      $                     LDA, A( I, I ), LDA, ZERO, X( 1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 
-     $),
+               CALL SGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 ),
      $                     LDX, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL AB_SSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
+               CALL SSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
 *
 *              Update A(i+1:m,i)
 *
-               CALL AB_SGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 
-     $),
+               CALL SGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 ),
      $                     LDA, Y( I, 1 ), LDY, ONE, A( I+1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', M-I, I, -ONE, X( I+1, 1 ),
+               CALL SGEMV( 'No transpose', M-I, I, -ONE, X( I+1, 1 ),
      $                     LDX, A( 1, I ), 1, ONE, A( I+1, I ), 1 )
 *
 *              Generate reflection Q(i) to annihilate A(i+2:m,i)
 *
-               CALL AB_SLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I ), 
-     $1,
+               CALL SLARFG( M-I, A( I+1, I ), A( MIN( I+2, M ), I ), 1,
      $                      TAUQ( I ) )
                E( I ) = A( I+1, I )
                A( I+1, I ) = ONE
 *
 *              Compute Y(i+1:n,i)
 *
-               CALL AB_SGEMV( 'Transpose', M-I, N-I, ONE, A( I+1, I+1 ),
+               CALL SGEMV( 'Transpose', M-I, N-I, ONE, A( I+1, I+1 ),
      $                     LDA, A( I+1, I ), 1, ZERO, Y( I+1, I ), 1 )
-               CALL AB_SGEMV( 'Transpose', M-I, I-1, ONE, A( I+1, 1 ), L
-     $DA,
+               CALL SGEMV( 'Transpose', M-I, I-1, ONE, A( I+1, 1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, Y( 1, I ), 1 )
-               CALL AB_SGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 
-     $),
+               CALL SGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 ),
      $                     LDY, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL AB_SGEMV( 'Transpose', M-I, I, ONE, X( I+1, 1 ), LDX
-     $,
+               CALL SGEMV( 'Transpose', M-I, I, ONE, X( I+1, 1 ), LDX,
      $                     A( I+1, I ), 1, ZERO, Y( 1, I ), 1 )
-               CALL AB_SGEMV( 'Transpose', I, N-I, -ONE, A( 1, I+1 ), LD
-     $A,
+               CALL SGEMV( 'Transpose', I, N-I, -ONE, A( 1, I+1 ), LDA,
      $                     Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL AB_SSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
+               CALL SSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
             END IF
    20    CONTINUE
       END IF
       RETURN
 *
-*     End of AB_SLABRD
+*     End of SLABRD
 *
       END

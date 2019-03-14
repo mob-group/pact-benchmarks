@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLATRS solves a triangular system of equations with the scale factor set to prevent overflow.
+*> \brief \b ZLATRS solves a triangular system of equations with the scale factor set to prevent overflow.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLATRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLATRS.f">
+*> Download ZLATRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLATRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLATRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
+*       SUBROUTINE ZLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
 *                          CNORM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLATRS solves one of the triangular systems
+*> ZLATRS solves one of the triangular systems
 *>
 *>    A * x = s*b,  A**T * x = s*b,  or  A**H * x = s*b,
 *>
@@ -47,7 +47,7 @@
 *> scaling factor, usually less than or equal to 1, chosen so that the
 *> components of x will be less than the overflow threshold.  If the
 *> unscaled problem will not cause overflow, the Level 2 BLAS routine
-*> AB_ZTRSV is called. If the matrix A is singular (A(j,j) = 0 for some j),
+*> ZTRSV is called. If the matrix A is singular (A(j,j) = 0 for some j),
 *> then s is set to 0 and a non-trivial solution to A*x = 0 is returned.
 *> \endverbatim
 *
@@ -168,7 +168,7 @@
 *>
 *> \verbatim
 *>
-*>  A rough bound on x is computed; if that is less than overflow, AB_ZTRSV
+*>  A rough bound on x is computed; if that is less than overflow, ZTRSV
 *>  is called, otherwise, specific code is used which checks for possible
 *>  overflow or divide-by-zero at every operation.
 *>
@@ -201,7 +201,7 @@
 *>     |x(j)| <= ( G(0) / |A(j,j)| ) product ( 1 + CNORM(i) / |A(i,i)| )
 *>                                   1<=i< j
 *>
-*>  Since |x(j)| <= M(j), we use the Level 2 BLAS routine AB_ZTRSV if the
+*>  Since |x(j)| <= M(j), we use the Level 2 BLAS routine ZTRSV if the
 *>  reciprocal of the largest M(j), j=1,..,n, is larger than
 *>  max(underflow, 1/overflow).
 *>
@@ -231,13 +231,12 @@
 *>            <= M(0) * product ( ( 1 + CNORM(i) ) / |A(i,i)| )
 *>                      1<=i<=j
 *>
-*>  and we can safely call AB_ZTRSV if 1/M(n) and 1/G(n) are both greater
+*>  and we can safely call ZTRSV if 1/M(n) and 1/G(n) are both greater
 *>  than max(underflow, 1/overflow).
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCA
-     $LE,
+      SUBROUTINE ZLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
      $                   CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
@@ -270,17 +269,15 @@
       COMPLEX*16         CSUMJ, TJJS, USCAL, ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX, AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DZASUM
-      COMPLEX*16         AB_ZDOTC, AB_ZDOTU, AB_ZLADIV
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_IZAMAX, DLAMCH, AB_DZAS
-     $UM, AB_ZDOTC,
-     $                   AB_ZDOTU, AB_ZLADIV
+      LOGICAL            LSAME
+      INTEGER            IDAMAX, IZAMAX
+      DOUBLE PRECISION   DLAMCH, DZASUM
+      COMPLEX*16         ZDOTC, ZDOTU, ZLADIV
+      EXTERNAL           LSAME, IDAMAX, IZAMAX, DLAMCH, DZASUM, ZDOTC,
+     $                   ZDOTU, ZLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSCAL, AB_XERBLA, AB_ZAXPY, AB_ZDSCAL, AB_ZT
-     $RSV, AB_DLABAD
+      EXTERNAL           DSCAL, XERBLA, ZAXPY, ZDSCAL, ZTRSV, DLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN
@@ -296,21 +293,21 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      NOUNIT = AB_LSAME( DIAG, 'N' )
+      UPPER = LSAME( UPLO, 'U' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      NOUNIT = LSAME( DIAG, 'N' )
 *
 *     Test the input parameters.
 *
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.AB_LSAME( NORMIN, 'Y' ) .AND. .NOT.
-     $         AB_LSAME( NORMIN, 'N' ) ) THEN
+      ELSE IF( .NOT.LSAME( NORMIN, 'Y' ) .AND. .NOT.
+     $         LSAME( NORMIN, 'N' ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -318,7 +315,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLATRS', -INFO )
+         CALL XERBLA( 'ZLATRS', -INFO )
          RETURN
       END IF
 *
@@ -331,12 +328,12 @@
 *
       SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM / DLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       SCALE = ONE
 *
-      IF( AB_LSAME( NORMIN, 'N' ) ) THEN
+      IF( LSAME( NORMIN, 'N' ) ) THEN
 *
 *        Compute the 1-norm of each column, not including the diagonal.
 *
@@ -345,14 +342,14 @@
 *           A is upper triangular.
 *
             DO 10 J = 1, N
-               CNORM( J ) = AB_DZASUM( J-1, A( 1, J ), 1 )
+               CNORM( J ) = DZASUM( J-1, A( 1, J ), 1 )
    10       CONTINUE
          ELSE
 *
 *           A is lower triangular.
 *
             DO 20 J = 1, N - 1
-               CNORM( J ) = AB_DZASUM( N-J, A( J+1, J ), 1 )
+               CNORM( J ) = DZASUM( N-J, A( J+1, J ), 1 )
    20       CONTINUE
             CNORM( N ) = ZERO
          END IF
@@ -361,17 +358,17 @@
 *     Scale the column norms by TSCAL if the maximum element in CNORM is
 *     greater than BIGNUM/2.
 *
-      IMAX = AB_IDAMAX( N, CNORM, 1 )
+      IMAX = IDAMAX( N, CNORM, 1 )
       TMAX = CNORM( IMAX )
       IF( TMAX.LE.BIGNUM*HALF ) THEN
          TSCAL = ONE
       ELSE
          TSCAL = HALF / ( SMLNUM*TMAX )
-         CALL AB_DSCAL( N, TSCAL, CNORM, 1 )
+         CALL DSCAL( N, TSCAL, CNORM, 1 )
       END IF
 *
 *     Compute a bound on the computed solution vector to see if the
-*     Level 2 BLAS routine AB_ZTRSV can be used.
+*     Level 2 BLAS routine ZTRSV can be used.
 *
       XMAX = ZERO
       DO 30 J = 1, N
@@ -548,7 +545,7 @@
 *        Use the Level 2 BLAS solve if the reciprocal of the bound on
 *        elements of X is not too small.
 *
-         CALL AB_ZTRSV( UPLO, TRANS, DIAG, N, A, LDA, X, 1 )
+         CALL ZTRSV( UPLO, TRANS, DIAG, N, A, LDA, X, 1 )
       ELSE
 *
 *        Use a Level 1 BLAS solve, scaling intermediate results.
@@ -559,7 +556,7 @@
 *           BIGNUM in absolute value.
 *
             SCALE = ( BIGNUM*HALF ) / XMAX
-            CALL AB_ZDSCAL( N, SCALE, X, 1 )
+            CALL ZDSCAL( N, SCALE, X, 1 )
             XMAX = BIGNUM
          ELSE
             XMAX = XMAX*TWO
@@ -592,12 +589,12 @@
 *                          Scale x by 1/b(j).
 *
                         REC = ONE / XJ
-                        CALL AB_ZDSCAL( N, REC, X, 1 )
+                        CALL ZDSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
                   END IF
-                  X( J ) = AB_ZLADIV( X( J ), TJJS )
+                  X( J ) = ZLADIV( X( J ), TJJS )
                   XJ = CABS1( X( J ) )
                ELSE IF( TJJ.GT.ZERO ) THEN
 *
@@ -616,11 +613,11 @@
 *
                         REC = REC / CNORM( J )
                      END IF
-                     CALL AB_ZDSCAL( N, REC, X, 1 )
+                     CALL ZDSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                      XMAX = XMAX*REC
                   END IF
-                  X( J ) = AB_ZLADIV( X( J ), TJJS )
+                  X( J ) = ZLADIV( X( J ), TJJS )
                   XJ = CABS1( X( J ) )
                ELSE
 *
@@ -647,14 +644,14 @@
 *                    Scale x by 1/(2*abs(x(j))).
 *
                      REC = REC*HALF
-                     CALL AB_ZDSCAL( N, REC, X, 1 )
+                     CALL ZDSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                   END IF
                ELSE IF( XJ*CNORM( J ).GT.( BIGNUM-XMAX ) ) THEN
 *
 *                 Scale x by 1/2.
 *
-                  CALL AB_ZDSCAL( N, HALF, X, 1 )
+                  CALL ZDSCAL( N, HALF, X, 1 )
                   SCALE = SCALE*HALF
                END IF
 *
@@ -664,9 +661,9 @@
 *                    Compute the update
 *                       x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j)
 *
-                     CALL AB_ZAXPY( J-1, -X( J )*TSCAL, A( 1, J ), 1, X,
+                     CALL ZAXPY( J-1, -X( J )*TSCAL, A( 1, J ), 1, X,
      $                           1 )
-                     I = AB_IZAMAX( J-1, X, 1 )
+                     I = IZAMAX( J-1, X, 1 )
                      XMAX = CABS1( X( I ) )
                   END IF
                ELSE
@@ -675,15 +672,15 @@
 *                    Compute the update
 *                       x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j)
 *
-                     CALL AB_ZAXPY( N-J, -X( J )*TSCAL, A( J+1, J ), 1,
+                     CALL ZAXPY( N-J, -X( J )*TSCAL, A( J+1, J ), 1,
      $                           X( J+1 ), 1 )
-                     I = J + AB_IZAMAX( N-J, X( J+1 ), 1 )
+                     I = J + IZAMAX( N-J, X( J+1 ), 1 )
                      XMAX = CABS1( X( I ) )
                   END IF
                END IF
   120       CONTINUE
 *
-         ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
+         ELSE IF( LSAME( TRANS, 'T' ) ) THEN
 *
 *           Solve A**T * x = b
 *
@@ -711,10 +708,10 @@
 *                       Divide by A(j,j) when scaling x if A(j,j) > 1.
 *
                      REC = MIN( ONE, REC*TJJ )
-                     USCAL = AB_ZLADIV( USCAL, TJJS )
+                     USCAL = ZLADIV( USCAL, TJJS )
                   END IF
                   IF( REC.LT.ONE ) THEN
-                     CALL AB_ZDSCAL( N, REC, X, 1 )
+                     CALL ZDSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                      XMAX = XMAX*REC
                   END IF
@@ -724,13 +721,12 @@
                IF( USCAL.EQ.DCMPLX( ONE ) ) THEN
 *
 *                 If the scaling needed for A in the dot product is 1,
-*                 call AB_ZDOTU to perform the dot product.
+*                 call ZDOTU to perform the dot product.
 *
                   IF( UPPER ) THEN
-                     CSUMJ = AB_ZDOTU( J-1, A( 1, J ), 1, X, 1 )
+                     CSUMJ = ZDOTU( J-1, A( 1, J ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     CSUMJ = AB_ZDOTU( N-J, A( J+1, J ), 1, X( J+1 ), 1 
-     $)
+                     CSUMJ = ZDOTU( N-J, A( J+1, J ), 1, X( J+1 ), 1 )
                   END IF
                ELSE
 *
@@ -775,12 +771,12 @@
 *                             Scale X by 1/abs(x(j)).
 *
                            REC = ONE / XJ
-                           CALL AB_ZDSCAL( N, REC, X, 1 )
+                           CALL ZDSCAL( N, REC, X, 1 )
                            SCALE = SCALE*REC
                            XMAX = XMAX*REC
                         END IF
                      END IF
-                     X( J ) = AB_ZLADIV( X( J ), TJJS )
+                     X( J ) = ZLADIV( X( J ), TJJS )
                   ELSE IF( TJJ.GT.ZERO ) THEN
 *
 *                       0 < abs(A(j,j)) <= SMLNUM:
@@ -790,11 +786,11 @@
 *                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM.
 *
                         REC = ( TJJ*BIGNUM ) / XJ
-                        CALL AB_ZDSCAL( N, REC, X, 1 )
+                        CALL ZDSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
-                     X( J ) = AB_ZLADIV( X( J ), TJJS )
+                     X( J ) = ZLADIV( X( J ), TJJS )
                   ELSE
 *
 *                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and
@@ -813,7 +809,7 @@
 *                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot
 *                 product has already been divided by 1/A(j,j).
 *
-                  X( J ) = AB_ZLADIV( X( J ), TJJS ) - CSUMJ
+                  X( J ) = ZLADIV( X( J ), TJJS ) - CSUMJ
                END IF
                XMAX = MAX( XMAX, CABS1( X( J ) ) )
   170       CONTINUE
@@ -846,10 +842,10 @@
 *                       Divide by A(j,j) when scaling x if A(j,j) > 1.
 *
                      REC = MIN( ONE, REC*TJJ )
-                     USCAL = AB_ZLADIV( USCAL, TJJS )
+                     USCAL = ZLADIV( USCAL, TJJS )
                   END IF
                   IF( REC.LT.ONE ) THEN
-                     CALL AB_ZDSCAL( N, REC, X, 1 )
+                     CALL ZDSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                      XMAX = XMAX*REC
                   END IF
@@ -859,13 +855,12 @@
                IF( USCAL.EQ.DCMPLX( ONE ) ) THEN
 *
 *                 If the scaling needed for A in the dot product is 1,
-*                 call AB_ZDOTC to perform the dot product.
+*                 call ZDOTC to perform the dot product.
 *
                   IF( UPPER ) THEN
-                     CSUMJ = AB_ZDOTC( J-1, A( 1, J ), 1, X, 1 )
+                     CSUMJ = ZDOTC( J-1, A( 1, J ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     CSUMJ = AB_ZDOTC( N-J, A( J+1, J ), 1, X( J+1 ), 1 
-     $)
+                     CSUMJ = ZDOTC( N-J, A( J+1, J ), 1, X( J+1 ), 1 )
                   END IF
                ELSE
 *
@@ -912,12 +907,12 @@
 *                             Scale X by 1/abs(x(j)).
 *
                            REC = ONE / XJ
-                           CALL AB_ZDSCAL( N, REC, X, 1 )
+                           CALL ZDSCAL( N, REC, X, 1 )
                            SCALE = SCALE*REC
                            XMAX = XMAX*REC
                         END IF
                      END IF
-                     X( J ) = AB_ZLADIV( X( J ), TJJS )
+                     X( J ) = ZLADIV( X( J ), TJJS )
                   ELSE IF( TJJ.GT.ZERO ) THEN
 *
 *                       0 < abs(A(j,j)) <= SMLNUM:
@@ -927,11 +922,11 @@
 *                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM.
 *
                         REC = ( TJJ*BIGNUM ) / XJ
-                        CALL AB_ZDSCAL( N, REC, X, 1 )
+                        CALL ZDSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
-                     X( J ) = AB_ZLADIV( X( J ), TJJS )
+                     X( J ) = ZLADIV( X( J ), TJJS )
                   ELSE
 *
 *                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and
@@ -950,7 +945,7 @@
 *                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot
 *                 product has already been divided by 1/A(j,j).
 *
-                  X( J ) = AB_ZLADIV( X( J ), TJJS ) - CSUMJ
+                  X( J ) = ZLADIV( X( J ), TJJS ) - CSUMJ
                END IF
                XMAX = MAX( XMAX, CABS1( X( J ) ) )
   220       CONTINUE
@@ -961,11 +956,11 @@
 *     Scale the column norms by 1/TSCAL for return.
 *
       IF( TSCAL.NE.ONE ) THEN
-         CALL AB_DSCAL( N, ONE / TSCAL, CNORM, 1 )
+         CALL DSCAL( N, ONE / TSCAL, CNORM, 1 )
       END IF
 *
       RETURN
 *
-*     End of AB_ZLATRS
+*     End of ZLATRS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAHEF_AA
+*> \brief \b ZLAHEF_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAHEF_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAHEF_aa.f">
+*> Download ZLAHEF_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahef_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAHEF_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlahef_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAHEF_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahef_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
+*       SUBROUTINE ZLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
 *                             H, LDH, WORK )
 *
 *       .. Scalar Arguments ..
@@ -66,7 +66,7 @@
 *>          J1 is INTEGER
 *>          The location of the first row, or column, of the panel
 *>          within the submatrix of A, passed to this routine, e.g.,
-*>          when called by AB_ZHETRF_AA, for the first panel, J1 is 1,
+*>          when called by ZHETRF_AA, for the first panel, J1 is 1,
 *>          while for the remaining panels, J1 is 2.
 *> \endverbatim
 *>
@@ -141,7 +141,7 @@
 *> \ingroup complex16HEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
+      SUBROUTINE ZLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
      $                      H, LDH, WORK )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -170,14 +170,13 @@
       COMPLEX*16   PIV, ALPHA
 *     ..
 *     .. External Functions ..
-      LOGICAL      AB_LSAME
-      INTEGER      AB_IZAMAX, AB_ILAENV
-      EXTERNAL     AB_LSAME, AB_ILAENV, AB_IZAMAX
+      LOGICAL      LSAME
+      INTEGER      IZAMAX, ILAENV
+      EXTERNAL     LSAME, ILAENV, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     AB_ZGEMM, AB_ZGEMV, AB_ZAXPY, AB_ZLACGV, AB_ZCOPY, AB
-     $_ZSCAL, AB_ZSWAP,
-     $             AB_ZLASET, AB_XERBLA
+      EXTERNAL     ZGEMM, ZGEMV, ZAXPY, ZLACGV, ZCOPY, ZSCAL, ZSWAP,
+     $             ZLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    DBLE, DCONJG, MAX
@@ -191,7 +190,7 @@
 *
       K1 = (2-J1)+1
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        .....................................................
 *        Factorize A as U**T*D*U using the upper triangle of A
@@ -202,7 +201,7 @@
      $      GO TO 20
 *
 *        K is the column to be factorized
-*         when being called from AB_ZHETRF_AA,
+*         when being called from ZHETRF_AA,
 *         > for the first block column, J1 is 1, hence J1+J-1 is J,
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
@@ -227,17 +226,17 @@
 *         > for the rest of the columns, K is J+1, skipping only the
 *           first column
 *
-            CALL AB_ZLACGV( J-K1, A( 1, J ), 1 )
-            CALL AB_ZGEMV( 'No transpose', MJ, J-K1,
+            CALL ZLACGV( J-K1, A( 1, J ), 1 )
+            CALL ZGEMV( 'No transpose', MJ, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( 1, J ), 1,
      $                  ONE, H( J, J ), 1 )
-            CALL AB_ZLACGV( J-K1, A( 1, J ), 1 )
+            CALL ZLACGV( J-K1, A( 1, J ), 1 )
          END IF
 *
 *        Copy H(i:n, i) into WORK
 *
-         CALL AB_ZCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL ZCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -245,7 +244,7 @@
 *            where A(J-1, J) stores T(J-1, J) and A(J-2, J:N) stores U(J-1, J:N)
 *
             ALPHA = -DCONJG( A( K-1, J ) )
-            CALL AB_ZAXPY( MJ, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
+            CALL ZAXPY( MJ, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
@@ -259,13 +258,13 @@
 *
             IF( K.GT.1 ) THEN
                ALPHA = -A( K, J )
-               CALL AB_ZAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA,
+               CALL ZAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA,
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
 *           Find max(|WORK(2:n)|)
 *
-            I2 = AB_IZAMAX( M-J, WORK( 2 ), 1 ) + 1
+            I2 = IZAMAX( M-J, WORK( 2 ), 1 ) + 1
             PIV = WORK( I2 )
 *
 *           Apply hermitian pivot
@@ -282,14 +281,14 @@
 *
                I1 = I1+J-1
                I2 = I2+J-1
-               CALL AB_ZSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA,
+               CALL ZSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA,
      $                              A( J1+I1, I2 ), 1 )
-               CALL AB_ZLACGV( I2-I1, A( J1+I1-1, I1+1 ), LDA )
-               CALL AB_ZLACGV( I2-I1-1, A( J1+I1, I2 ), 1 )
+               CALL ZLACGV( I2-I1, A( J1+I1-1, I1+1 ), LDA )
+               CALL ZLACGV( I2-I1-1, A( J1+I1, I2 ), 1 )
 *
 *              Swap A(I1, I2+1:N) with A(I2, I2+1:N)
 *
-               CALL AB_ZSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA,
+               CALL ZSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA,
      $                           A( J1+I2-1, I2+1 ), LDA )
 *
 *              Swap A(I1, I1) with A(I2,I2)
@@ -300,7 +299,7 @@
 *
 *              Swap H(I1, 1:J1) with H(I2, 1:J1)
 *
-               CALL AB_ZSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
+               CALL ZSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
                IPIV( I1 ) = I2
 *
                IF( I1.GT.(K1-1) ) THEN
@@ -308,7 +307,7 @@
 *                 Swap L(1:I1-1, I1) with L(1:I1-1, I2),
 *                  skipping the first column
 *
-                  CALL AB_ZSWAP( I1-K1+1, A( 1, I1 ), 1,
+                  CALL ZSWAP( I1-K1+1, A( 1, I1 ), 1,
      $                                 A( 1, I2 ), 1 )
                END IF
             ELSE
@@ -323,7 +322,7 @@
 *
 *              Copy A(J+1:N, J+1) into H(J:N, J),
 *
-               CALL AB_ZCOPY( M-J, A( K+1, J+1 ), LDA,
+               CALL ZCOPY( M-J, A( K+1, J+1 ), LDA,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
@@ -332,10 +331,10 @@
 *
             IF( A( K, J+1 ).NE.ZERO ) THEN
                ALPHA = ONE / A( K, J+1 )
-               CALL AB_ZCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
-               CALL AB_ZSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+               CALL ZCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
+               CALL ZSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
             ELSE
-               CALL AB_ZLASET( 'Full', 1, M-J-1, ZERO, ZERO,
+               CALL ZLASET( 'Full', 1, M-J-1, ZERO, ZERO,
      $                      A( K, J+2 ), LDA)
             END IF
          END IF
@@ -354,7 +353,7 @@
      $      GO TO 40
 *
 *        K is the column to be factorized
-*         when being called from AB_ZHETRF_AA,
+*         when being called from ZHETRF_AA,
 *         > for the first block column, J1 is 1, hence J1+J-1 is J,
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
@@ -379,17 +378,17 @@
 *         > for the rest of the columns, K is J+1, skipping only the
 *           first column
 *
-            CALL AB_ZLACGV( J-K1, A( J, 1 ), LDA )
-            CALL AB_ZGEMV( 'No transpose', MJ, J-K1,
+            CALL ZLACGV( J-K1, A( J, 1 ), LDA )
+            CALL ZGEMV( 'No transpose', MJ, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( J, 1 ), LDA,
      $                  ONE, H( J, J ), 1 )
-            CALL AB_ZLACGV( J-K1, A( J, 1 ), LDA )
+            CALL ZLACGV( J-K1, A( J, 1 ), LDA )
          END IF
 *
 *        Copy H(J:N, J) into WORK
 *
-         CALL AB_ZCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL ZCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -397,7 +396,7 @@
 *            where A(J-1, J) = T(J-1, J) and A(J, J-2) = L(J, J-1)
 *
             ALPHA = -DCONJG( A( J, K-1 ) )
-            CALL AB_ZAXPY( MJ, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
+            CALL ZAXPY( MJ, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
@@ -411,13 +410,13 @@
 *
             IF( K.GT.1 ) THEN
                ALPHA = -A( J, K )
-               CALL AB_ZAXPY( M-J, ALPHA, A( J+1, K-1 ), 1,
+               CALL ZAXPY( M-J, ALPHA, A( J+1, K-1 ), 1,
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
 *           Find max(|WORK(2:n)|)
 *
-            I2 = AB_IZAMAX( M-J, WORK( 2 ), 1 ) + 1
+            I2 = IZAMAX( M-J, WORK( 2 ), 1 ) + 1
             PIV = WORK( I2 )
 *
 *           Apply hermitian pivot
@@ -434,14 +433,14 @@
 *
                I1 = I1+J-1
                I2 = I2+J-1
-               CALL AB_ZSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1,
+               CALL ZSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1,
      $                              A( I2, J1+I1 ), LDA )
-               CALL AB_ZLACGV( I2-I1, A( I1+1, J1+I1-1 ), 1 )
-               CALL AB_ZLACGV( I2-I1-1, A( I2, J1+I1 ), LDA )
+               CALL ZLACGV( I2-I1, A( I1+1, J1+I1-1 ), 1 )
+               CALL ZLACGV( I2-I1-1, A( I2, J1+I1 ), LDA )
 *
 *              Swap A(I2+1:N, I1) with A(I2+1:N, I2)
 *
-               CALL AB_ZSWAP( M-I2, A( I2+1, J1+I1-1 ), 1,
+               CALL ZSWAP( M-I2, A( I2+1, J1+I1-1 ), 1,
      $                           A( I2+1, J1+I2-1 ), 1 )
 *
 *              Swap A(I1, I1) with A(I2, I2)
@@ -452,7 +451,7 @@
 *
 *              Swap H(I1, I1:J1) with H(I2, I2:J1)
 *
-               CALL AB_ZSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
+               CALL ZSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
                IPIV( I1 ) = I2
 *
                IF( I1.GT.(K1-1) ) THEN
@@ -460,7 +459,7 @@
 *                 Swap L(1:I1-1, I1) with L(1:I1-1, I2),
 *                  skipping the first column
 *
-                  CALL AB_ZSWAP( I1-K1+1, A( I1, 1 ), LDA,
+                  CALL ZSWAP( I1-K1+1, A( I1, 1 ), LDA,
      $                                 A( I2, 1 ), LDA )
                END IF
             ELSE
@@ -475,7 +474,7 @@
 *
 *              Copy A(J+1:N, J+1) into H(J+1:N, J),
 *
-               CALL AB_ZCOPY( M-J, A( J+1, K+1 ), 1,
+               CALL ZCOPY( M-J, A( J+1, K+1 ), 1,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
@@ -484,10 +483,10 @@
 *
             IF( A( J+1, K ).NE.ZERO ) THEN
                ALPHA = ONE / A( J+1, K )
-               CALL AB_ZCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
-               CALL AB_ZSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+               CALL ZCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
+               CALL ZSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
             ELSE
-               CALL AB_ZLASET( 'Full', M-J-1, 1, ZERO, ZERO,
+               CALL ZLASET( 'Full', M-J-1, 1, ZERO, ZERO,
      $                      A( J+2, K ), LDA )
             END IF
          END IF
@@ -497,6 +496,6 @@
       END IF
       RETURN
 *
-*     End of AB_ZLAHEF_AA
+*     End of ZLAHEF_AA
 *
       END

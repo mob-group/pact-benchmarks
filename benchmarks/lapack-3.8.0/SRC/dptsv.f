@@ -1,4 +1,4 @@
-*> \brief <b> AB_DPTSV computes the solution to system of linear equations A * X = B for PT matrices</b>
+*> \brief <b> DPTSV computes the solution to system of linear equations A * X = B for PT matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DPTSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPTSV.f">
+*> Download DPTSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dptsv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPTSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dptsv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPTSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dptsv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPTSV( N, NRHS, D, E, B, LDB, INFO )
+*       SUBROUTINE DPTSV( N, NRHS, D, E, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDB, N, NRHS
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPTSV computes the solution to a real system of linear equations
+*> DPTSV computes the solution to a real system of linear equations
 *> A*X = B, where A is an N-by-N symmetric positive definite tridiagonal
 *> matrix, and X and B are N-by-NRHS matrices.
 *>
@@ -112,7 +112,7 @@
 *> \ingroup doublePTsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_DPTSV( N, NRHS, D, E, B, LDB, INFO )
+      SUBROUTINE DPTSV( N, NRHS, D, E, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,7 +129,7 @@
 *  =====================================================================
 *
 *     .. External Subroutines ..
-      EXTERNAL           AB_DPTTRF, AB_DPTTRS, AB_XERBLA
+      EXTERNAL           DPTTRF, DPTTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -147,21 +147,21 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DPTSV ', -INFO )
+         CALL XERBLA( 'DPTSV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the L*D*L**T (or U**T*D*U) factorization of A.
 *
-      CALL AB_DPTTRF( N, D, E, INFO )
+      CALL DPTTRF( N, D, E, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL AB_DPTTRS( N, NRHS, D, E, B, LDB, INFO )
+         CALL DPTTRS( N, NRHS, D, E, B, LDB, INFO )
       END IF
       RETURN
 *
-*     End of AB_DPTSV
+*     End of DPTSV
 *
       END

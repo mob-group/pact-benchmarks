@@ -1,4 +1,4 @@
-*> \brief \b AB_STRTI2 computes the inverse of a triangular matrix (unblocked algorithm).
+*> \brief \b STRTI2 computes the inverse of a triangular matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STRTI2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STRTI2.f">
+*> Download STRTI2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strti2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STRTI2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/strti2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STRTI2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strti2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STRTI2( UPLO, DIAG, N, A, LDA, INFO )
+*       SUBROUTINE STRTI2( UPLO, DIAG, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STRTI2 computes the inverse of a real upper or lower triangular
+*> STRTI2 computes the inverse of a real upper or lower triangular
 *> matrix.
 *>
 *> This is the Level 2 BLAS version of the algorithm.
@@ -108,7 +108,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_STRTI2( UPLO, DIAG, N, A, LDA, INFO )
+      SUBROUTINE STRTI2( UPLO, DIAG, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,11 +135,11 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL, AB_STRMV, AB_XERBLA
+      EXTERNAL           SSCAL, STRMV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -149,11 +149,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOUNIT = AB_LSAME( DIAG, 'N' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      NOUNIT = LSAME( DIAG, 'N' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -161,7 +161,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STRTI2', -INFO )
+         CALL XERBLA( 'STRTI2', -INFO )
          RETURN
       END IF
 *
@@ -179,9 +179,9 @@
 *
 *           Compute elements 1:j-1 of j-th column.
 *
-            CALL AB_STRMV( 'Upper', 'No transpose', DIAG, J-1, A, LDA,
+            CALL STRMV( 'Upper', 'No transpose', DIAG, J-1, A, LDA,
      $                  A( 1, J ), 1 )
-            CALL AB_SSCAL( J-1, AJJ, A( 1, J ), 1 )
+            CALL SSCAL( J-1, AJJ, A( 1, J ), 1 )
    10    CONTINUE
       ELSE
 *
@@ -198,15 +198,15 @@
 *
 *              Compute elements j+1:n of j-th column.
 *
-               CALL AB_STRMV( 'Lower', 'No transpose', DIAG, N-J,
+               CALL STRMV( 'Lower', 'No transpose', DIAG, N-J,
      $                     A( J+1, J+1 ), LDA, A( J+1, J ), 1 )
-               CALL AB_SSCAL( N-J, AJJ, A( J+1, J ), 1 )
+               CALL SSCAL( N-J, AJJ, A( J+1, J ), 1 )
             END IF
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_STRTI2
+*     End of STRTI2
 *
       END

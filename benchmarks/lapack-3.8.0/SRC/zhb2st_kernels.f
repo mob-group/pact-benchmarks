@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHB2ST_KERNELS
+*> \brief \b ZHB2ST_KERNELS
 *
 *  @precisions fortran z -> s d c
 *      
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download AB_ZHB2ST_KERNELS + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHB2ST_KERNELS.f"> 
+*> Download ZHB2ST_KERNELS + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhb2st_kernels.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHB2ST_KERNELS.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhb2st_kernels.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHB2ST_KERNELS.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhb2st_kernels.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE  AB_ZHB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
+*       SUBROUTINE  ZHB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
 *                                   ST, ED, SWEEP, N, NB, IB,
 *                                   A, LDA, V, TAU, LDVT, WORK)
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHB2ST_KERNELS is an internal routine used by the AB_ZHETRD_HB2ST
+*> ZHB2ST_KERNELS is an internal routine used by the ZHETRD_HB2ST
 *> subroutine.
 *> \endverbatim
 *
@@ -164,7 +164,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE  AB_ZHB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
+      SUBROUTINE  ZHB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
      $                            ST, ED, SWEEP, N, NB, IB,
      $                            A, LDA, V, TAU, LDVT, WORK)
 *
@@ -199,19 +199,19 @@
       COMPLEX*16         CTMP 
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLARFG, AB_ZLARFX, AB_ZLARFY
+      EXTERNAL           ZLARFG, ZLARFX, ZLARFY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MOD
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     ..
 *     .. Executable Statements ..
 *      
       AJETER = IB + LDVT
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
 
       IF( UPPER ) THEN
           DPOS    = 2 * NB + 1
@@ -243,12 +243,12 @@
                   A( OFDPOS-I, ST+I ) = ZERO  
    10         CONTINUE
               CTMP = DCONJG( A( OFDPOS, ST ) )
-              CALL AB_ZLARFG( LM, CTMP, V( VPOS+1 ), 1, 
+              CALL ZLARFG( LM, CTMP, V( VPOS+1 ), 1, 
      $                                       TAU( TAUPOS ) )
               A( OFDPOS, ST ) = CTMP
 *
               LM = ED - ST + 1
-              CALL AB_ZLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL ZLARFY( UPLO, LM, V( VPOS ), 1,
      $                     DCONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
           ENDIF
@@ -256,7 +256,7 @@
           IF( TTYPE.EQ.3 ) THEN
 *
               LM = ED - ST + 1
-              CALL AB_ZLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL ZLARFY( UPLO, LM, V( VPOS ), 1,
      $                     DCONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
           ENDIF
@@ -267,7 +267,7 @@
               LN = ED-ST+1
               LM = J2-J1+1
               IF( LM.GT.0) THEN
-                  CALL AB_ZLARFX( 'Left', LN, LM, V( VPOS ),
+                  CALL ZLARFX( 'Left', LN, LM, V( VPOS ),
      $                         DCONJG( TAU( TAUPOS ) ),
      $                         A( DPOS-NB, J1 ), LDA-1, WORK)
 *
@@ -286,11 +286,10 @@
                       A( DPOS-NB-I, J1+I ) = ZERO
    30             CONTINUE
                   CTMP = DCONJG( A( DPOS-NB, J1 ) )
-                  CALL AB_ZLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUPOS 
-     $) )
+                  CALL ZLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUPOS ) )
                   A( DPOS-NB, J1 ) = CTMP
 *                 
-                  CALL AB_ZLARFX( 'Right', LN-1, LM, V( VPOS ),
+                  CALL ZLARFX( 'Right', LN-1, LM, V( VPOS ),
      $                         TAU( TAUPOS ),
      $                         A( DPOS-NB+1, J1 ), LDA-1, WORK)
               ENDIF
@@ -316,12 +315,12 @@
                   V( VPOS+I )         = A( OFDPOS+I, ST-1 )
                   A( OFDPOS+I, ST-1 ) = ZERO  
    20         CONTINUE
-              CALL AB_ZLARFG( LM, A( OFDPOS, ST-1 ), V( VPOS+1 ), 1, 
+              CALL ZLARFG( LM, A( OFDPOS, ST-1 ), V( VPOS+1 ), 1, 
      $                                       TAU( TAUPOS ) )
 *
               LM = ED - ST + 1
 *
-              CALL AB_ZLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL ZLARFY( UPLO, LM, V( VPOS ), 1,
      $                     DCONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
 
@@ -330,7 +329,7 @@
           IF( TTYPE.EQ.3 ) THEN
               LM = ED - ST + 1
 *
-              CALL AB_ZLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL ZLARFY( UPLO, LM, V( VPOS ), 1,
      $                     DCONJG( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
 
@@ -343,7 +342,7 @@
               LM = J2-J1+1
 *
               IF( LM.GT.0) THEN
-                  CALL AB_ZLARFX( 'Right', LM, LN, V( VPOS ), 
+                  CALL ZLARFX( 'Right', LM, LN, V( VPOS ), 
      $                         TAU( TAUPOS ), A( DPOS+NB, ST ),
      $                         LDA-1, WORK)
 *
@@ -360,10 +359,10 @@
                       V( VPOS+I )        = A( DPOS+NB+I, ST )
                       A( DPOS+NB+I, ST ) = ZERO
    40             CONTINUE
-                  CALL AB_ZLARFG( LM, A( DPOS+NB, ST ), V( VPOS+1 ), 1, 
+                  CALL ZLARFG( LM, A( DPOS+NB, ST ), V( VPOS+1 ), 1, 
      $                                        TAU( TAUPOS ) )
 *
-                  CALL AB_ZLARFX( 'Left', LM, LN-1, V( VPOS ), 
+                  CALL ZLARFX( 'Left', LM, LN-1, V( VPOS ), 
      $                         DCONJG( TAU( TAUPOS ) ),
      $                         A( DPOS+NB-1, ST+1 ), LDA-1, WORK)
              
@@ -373,6 +372,6 @@
 *
       RETURN
 *
-*     END OF AB_ZHB2ST_KERNELS
+*     END OF ZHB2ST_KERNELS
 *
       END      

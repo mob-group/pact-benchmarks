@@ -1,4 +1,4 @@
-*> \brief \b AB_DGETRF
+*> \brief \b DGETRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGETRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGETRF.f">
+*> Download DGETRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgetrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGETRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgetrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGETRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgetrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGETRF( M, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGETRF computes an LU factorization of a general M-by-N matrix A
+*> DGETRF computes an LU factorization of a general M-by-N matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> The factorization has the form
@@ -106,7 +106,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DGETRF( M, N, A, LDA, IPIV, INFO )
+      SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,12 +131,11 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DGETRF2, AB_DLASWP, AB_DTRSM, AB_X
-     $ERBLA
+      EXTERNAL           DGEMM, DGETRF2, DLASWP, DTRSM, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -154,7 +153,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGETRF', -INFO )
+         CALL XERBLA( 'DGETRF', -INFO )
          RETURN
       END IF
 *
@@ -165,12 +164,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_DGETRF', ' ', M, N, -1, -1 )
+      NB = ILAENV( 1, 'DGETRF', ' ', M, N, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.MIN( M, N ) ) THEN
 *
 *        Use unblocked code.
 *
-         CALL AB_DGETRF2( M, N, A, LDA, IPIV, INFO )
+         CALL DGETRF2( M, N, A, LDA, IPIV, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -181,8 +180,7 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL AB_DGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO
-     $ )
+            CALL DGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
 *
 *           Adjust INFO and the pivot indices.
 *
@@ -194,27 +192,25 @@
 *
 *           Apply interchanges to columns 1:J-1.
 *
-            CALL AB_DLASWP( J-1, A, LDA, J, J+JB-1, IPIV, 1 )
+            CALL DLASWP( J-1, A, LDA, J, J+JB-1, IPIV, 1 )
 *
             IF( J+JB.LE.N ) THEN
 *
 *              Apply interchanges to columns J+JB:N.
 *
-               CALL AB_DLASWP( N-J-JB+1, A( 1, J+JB ), LDA, J, J+JB-1,
+               CALL DLASWP( N-J-JB+1, A( 1, J+JB ), LDA, J, J+JB-1,
      $                      IPIV, 1 )
 *
 *              Compute block row of U.
 *
-               CALL AB_DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', J
-     $B,
+               CALL DTRSM( 'Left', 'Lower', 'No transpose', 'Unit', JB,
      $                     N-J-JB+1, ONE, A( J, J ), LDA, A( J, J+JB ),
      $                     LDA )
                IF( J+JB.LE.M ) THEN
 *
 *                 Update trailing submatrix.
 *
-                  CALL AB_DGEMM( 'No transpose', 'No transpose', M-J-JB+
-     $1,
+                  CALL DGEMM( 'No transpose', 'No transpose', M-J-JB+1,
      $                        N-J-JB+1, JB, -ONE, A( J+JB, J ), LDA,
      $                        A( J, J+JB ), LDA, ONE, A( J+JB, J+JB ),
      $                        LDA )
@@ -224,6 +220,6 @@
       END IF
       RETURN
 *
-*     End of AB_DGETRF
+*     End of DGETRF
 *
       END

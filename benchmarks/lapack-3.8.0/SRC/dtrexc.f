@@ -1,4 +1,4 @@
-*> \brief \b AB_DTREXC
+*> \brief \b DTREXC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DTREXC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTREXC.f">
+*> Download DTREXC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrexc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTREXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrexc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTREXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrexc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, WORK,
+*       SUBROUTINE DTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DTREXC reorders the real Schur factorization of a real matrix
+*> DTREXC reorders the real Schur factorization of a real matrix
 *> A = Q*T*Q**T, so that the diagonal block of T with row index IFST is
 *> moved to row ILST.
 *>
@@ -43,7 +43,7 @@
 *> transformation Z**T*T*Z, and optionally the matrix Q of Schur vectors
 *> is updated by postmultiplying it with Z.
 *>
-*> T must be in Schur canonical form (as returned by AB_DHSEQR), that is,
+*> T must be in Schur canonical form (as returned by DHSEQR), that is,
 *> block upper triangular with 1-by-1 and 2-by-2 diagonal blocks; each
 *> 2-by-2 diagonal block has its diagonal elements equal and its
 *> off-diagonal elements of opposite sign.
@@ -145,7 +145,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, WORK,
+      SUBROUTINE DTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -172,11 +172,11 @@
       INTEGER            HERE, NBF, NBL, NBNEXT
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAEXC, AB_XERBLA
+      EXTERNAL           DLAEXC, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -186,8 +186,8 @@
 *     Decode and test the input arguments.
 *
       INFO = 0
-      WANTQ = AB_LSAME( COMPQ, 'V' )
-      IF( .NOT.WANTQ .AND. .NOT.AB_LSAME( COMPQ, 'N' ) ) THEN
+      WANTQ = LSAME( COMPQ, 'V' )
+      IF( .NOT.WANTQ .AND. .NOT.LSAME( COMPQ, 'N' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -201,7 +201,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTREXC', -INFO )
+         CALL XERBLA( 'DTREXC', -INFO )
          RETURN
       END IF
 *
@@ -263,7 +263,7 @@
                IF( T( HERE+NBF+1, HERE+NBF ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, NBF, NBNEXT,
+            CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, NBF, NBNEXT,
      $                   WORK, INFO )
             IF( INFO.NE.0 ) THEN
                ILST = HERE
@@ -288,7 +288,7 @@
                IF( T( HERE+3, HERE+2 ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE+1, 1, NBNEXT,
+            CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE+1, 1, NBNEXT,
      $                   WORK, INFO )
             IF( INFO.NE.0 ) THEN
                ILST = HERE
@@ -298,8 +298,7 @@
 *
 *              Swap two 1 by 1 blocks, no problems possible
 *
-               CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, NBNEXT
-     $,
+               CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, NBNEXT,
      $                      WORK, INFO )
                HERE = HERE + 1
             ELSE
@@ -312,7 +311,7 @@
 *
 *                 2 by 2 Block did not split
 *
-                  CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1,
+                  CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1,
      $                         NBNEXT, WORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -323,10 +322,9 @@
 *
 *                 2 by 2 Block did split
 *
-                  CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, 1,
+                  CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, 1,
      $                         WORK, INFO )
-                  CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE+1, 1, 1
-     $,
+                  CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE+1, 1, 1,
      $                         WORK, INFO )
                   HERE = HERE + 2
                END IF
@@ -351,8 +349,7 @@
                IF( T( HERE-1, HERE-2 ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-NBNEXT, NBNEX
-     $T,
+            CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-NBNEXT, NBNEXT,
      $                   NBF, WORK, INFO )
             IF( INFO.NE.0 ) THEN
                ILST = HERE
@@ -377,8 +374,7 @@
                IF( T( HERE-1, HERE-2 ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-NBNEXT, NBNEX
-     $T,
+            CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-NBNEXT, NBNEXT,
      $                   1, WORK, INFO )
             IF( INFO.NE.0 ) THEN
                ILST = HERE
@@ -388,8 +384,7 @@
 *
 *              Swap two 1 by 1 blocks, no problems possible
 *
-               CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, NBNEXT, 1
-     $,
+               CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, NBNEXT, 1,
      $                      WORK, INFO )
                HERE = HERE - 1
             ELSE
@@ -402,8 +397,7 @@
 *
 *                 2 by 2 Block did not split
 *
-                  CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-1, 2, 1
-     $,
+                  CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-1, 2, 1,
      $                         WORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -414,10 +408,9 @@
 *
 *                 2 by 2 Block did split
 *
-                  CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, 1,
+                  CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE, 1, 1,
      $                         WORK, INFO )
-                  CALL AB_DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-1, 1, 1
-     $,
+                  CALL DLAEXC( WANTQ, N, T, LDT, Q, LDQ, HERE-1, 1, 1,
      $                         WORK, INFO )
                   HERE = HERE - 2
                END IF
@@ -430,6 +423,6 @@
 *
       RETURN
 *
-*     End of AB_DTREXC
+*     End of DTREXC
 *
       END

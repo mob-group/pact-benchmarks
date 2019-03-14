@@ -1,4 +1,4 @@
-*> \brief <b> AB_CGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*> \brief <b> CGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGEGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEGV.f">
+*> Download CGEGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgegv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgegv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgegv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
+*       SUBROUTINE CGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
 *                         VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,9 +38,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine AB_CGGEV.
+*> This routine is deprecated and has been replaced by routine CGGEV.
 *>
-*> AB_CGEGV computes the eigenvalues and, optionally, the left and/or right
+*> CGEGV computes the eigenvalues and, optionally, the left and/or right
 *> eigenvectors of a complex matrix pair (A,B).
 *> Given two square matrices A and B,
 *> the generalized nonsymmetric eigenvalue problem (GNEP) is to find the
@@ -99,7 +99,7 @@
 *>          contains the Schur form of A from the generalized Schur
 *>          factorization of the pair (A,B) after balancing.  If no
 *>          eigenvectors were computed, then only the diagonal elements
-*>          of the Schur form will be correct.  See AB_CGGHRD and AB_CHGEQZ
+*>          of the Schur form will be correct.  See CGGHRD and CHGEQZ
 *>          for details.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *>          upper triangular matrix obtained from B in the generalized
 *>          Schur factorization of the pair (A,B) after balancing.
 *>          If no eigenvectors were computed, then only the diagonal
-*>          elements of B will be correct.  See AB_CGGHRD and AB_CHGEQZ for
+*>          elements of B will be correct.  See CGGHRD and CHGEQZ for
 *>          details.
 *> \endverbatim
 *>
@@ -195,15 +195,15 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.  LWORK >= max(1,2*N).
 *>          For good performance, LWORK must generally be larger.
-*>          To compute the optimal value of LWORK, call AB_ILAENV to get
-*>          blocksizes (for AB_CGEQRF, AB_CUNMQR, and AB_CUNGQR.)  Then compute:
-*>          NB  -- MAX of the blocksizes for AB_CGEQRF, AB_CUNMQR, and AB_CUNGQR;
+*>          To compute the optimal value of LWORK, call ILAENV to get
+*>          blocksizes (for CGEQRF, CUNMQR, and CUNGQR.)  Then compute:
+*>          NB  -- MAX of the blocksizes for CGEQRF, CUNMQR, and CUNGQR;
 *>          The optimal LWORK is  MAX( 2*N, N*(NB+1) ).
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -221,17 +221,17 @@
 *>                calculated, but ALPHA(j) and BETA(j) should be
 *>                correct for j=INFO+1,...,N.
 *>          > N:  errors that usually indicate LAPACK problems:
-*>                =N+1: error return from AB_CGGBAL
-*>                =N+2: error return from AB_CGEQRF
-*>                =N+3: error return from AB_CUNMQR
-*>                =N+4: error return from AB_CUNGQR
-*>                =N+5: error return from AB_CGGHRD
-*>                =N+6: error return from AB_CHGEQZ (other than failed
+*>                =N+1: error return from CGGBAL
+*>                =N+2: error return from CGEQRF
+*>                =N+3: error return from CUNMQR
+*>                =N+4: error return from CUNGQR
+*>                =N+5: error return from CGGHRD
+*>                =N+6: error return from CHGEQZ (other than failed
 *>                                               iteration)
-*>                =N+7: error return from AB_CTGEVC
-*>                =N+8: error return from AB_CGGBAK (computing VL)
-*>                =N+9: error return from AB_CGGBAK (computing VR)
-*>                =N+10: error return from AB_CLASCL (various calls)
+*>                =N+7: error return from CTGEVC
+*>                =N+8: error return from CGGBAK (computing VL)
+*>                =N+9: error return from CGGBAK (computing VR)
+*>                =N+10: error return from CLASCL (various calls)
 *> \endverbatim
 *
 *  Authors:
@@ -254,7 +254,7 @@
 *>  Balancing
 *>  ---------
 *>
-*>  This driver calls AB_CGGBAL to both permute and scale rows and columns
+*>  This driver calls CGGBAL to both permute and scale rows and columns
 *>  of A and B.  The permutations PL and PR are chosen so that PL*A*PR
 *>  and PL*B*R will be upper triangular except for the diagonal blocks
 *>  A(i:j,i:j) and B(i:j,i:j), with i and j as close together as
@@ -263,7 +263,7 @@
 *>  one (except for the elements that start out zero.)
 *>
 *>  After the eigenvalues and eigenvectors of the balanced matrices
-*>  have been computed, AB_CGGBAK transforms the eigenvectors back to what
+*>  have been computed, CGGBAK transforms the eigenvectors back to what
 *>  they would have been (in perfect arithmetic) if they had not been
 *>  balanced.
 *>
@@ -279,7 +279,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
+      SUBROUTINE CGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
      $                  VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -322,16 +322,14 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEQRF, AB_CGGBAK, AB_CGGBAL, AB_CGGHRD, AB_
-     $CHGEQZ, AB_CLACPY,
-     $                   AB_CLASCL, AB_CLASET, AB_CTGEVC, AB_CUNGQR, AB_
-     $CUNMQR, AB_XERBLA
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHRD, CHGEQZ, CLACPY,
+     $                   CLASCL, CLASET, CTGEVC, CUNGQR, CUNMQR, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      REAL               AB_CLANGE, SLAMCH
-      EXTERNAL           AB_ILAENV, AB_LSAME, AB_CLANGE, SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           ILAENV, LSAME, CLANGE, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, INT, MAX, REAL
@@ -346,10 +344,10 @@
 *
 *     Decode the input arguments
 *
-      IF( AB_LSAME( JOBVL, 'N' ) ) THEN
+      IF( LSAME( JOBVL, 'N' ) ) THEN
          IJOBVL = 1
          ILVL = .FALSE.
-      ELSE IF( AB_LSAME( JOBVL, 'V' ) ) THEN
+      ELSE IF( LSAME( JOBVL, 'V' ) ) THEN
          IJOBVL = 2
          ILVL = .TRUE.
       ELSE
@@ -357,10 +355,10 @@
          ILVL = .FALSE.
       END IF
 *
-      IF( AB_LSAME( JOBVR, 'N' ) ) THEN
+      IF( LSAME( JOBVR, 'N' ) ) THEN
          IJOBVR = 1
          ILVR = .FALSE.
-      ELSE IF( AB_LSAME( JOBVR, 'V' ) ) THEN
+      ELSE IF( LSAME( JOBVR, 'V' ) ) THEN
          IJOBVR = 2
          ILVR = .TRUE.
       ELSE
@@ -395,16 +393,16 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB1 = AB_ILAENV( 1, 'AB_CGEQRF', ' ', N, N, -1, -1 )
-         NB2 = AB_ILAENV( 1, 'AB_CUNMQR', ' ', N, N, N, -1 )
-         NB3 = AB_ILAENV( 1, 'AB_CUNGQR', ' ', N, N, N, -1 )
+         NB1 = ILAENV( 1, 'CGEQRF', ' ', N, N, -1, -1 )
+         NB2 = ILAENV( 1, 'CUNMQR', ' ', N, N, N, -1 )
+         NB3 = ILAENV( 1, 'CUNGQR', ' ', N, N, N, -1 )
          NB = MAX( NB1, NB2, NB3 )
          LOPT = MAX( 2*N, N*(NB+1) )
          WORK( 1 ) = LOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGEGV ', -INFO )
+         CALL XERBLA( 'CGEGV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -424,7 +422,7 @@
 *
 *     Scale A
 *
-      ANRM = AB_CLANGE( 'M', N, N, A, LDA, RWORK )
+      ANRM = CLANGE( 'M', N, N, A, LDA, RWORK )
       ANRM1 = ANRM
       ANRM2 = ONE
       IF( ANRM.LT.ONE ) THEN
@@ -435,7 +433,7 @@
       END IF
 *
       IF( ANRM.GT.ZERO ) THEN
-         CALL AB_CLASCL( 'G', -1, -1, ANRM, ONE, N, N, A, LDA, IINFO )
+         CALL CLASCL( 'G', -1, -1, ANRM, ONE, N, N, A, LDA, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 10
             RETURN
@@ -444,7 +442,7 @@
 *
 *     Scale B
 *
-      BNRM = AB_CLANGE( 'M', N, N, B, LDB, RWORK )
+      BNRM = CLANGE( 'M', N, N, B, LDB, RWORK )
       BNRM1 = BNRM
       BNRM2 = ONE
       IF( BNRM.LT.ONE ) THEN
@@ -455,7 +453,7 @@
       END IF
 *
       IF( BNRM.GT.ZERO ) THEN
-         CALL AB_CLASCL( 'G', -1, -1, BNRM, ONE, N, N, B, LDB, IINFO )
+         CALL CLASCL( 'G', -1, -1, BNRM, ONE, N, N, B, LDB, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 10
             RETURN
@@ -468,7 +466,7 @@
       ILEFT = 1
       IRIGHT = N + 1
       IRWORK = IRIGHT + N
-      CALL AB_CGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, RWORK( ILEFT ),
+      CALL CGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, RWORK( ILEFT ),
      $             RWORK( IRIGHT ), RWORK( IRWORK ), IINFO )
       IF( IINFO.NE.0 ) THEN
          INFO = N + 1
@@ -485,7 +483,7 @@
       END IF
       ITAU = 1
       IWORK = ITAU + IROWS
-      CALL AB_CGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
+      CALL CGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
      $             WORK( IWORK ), LWORK+1-IWORK, IINFO )
       IF( IINFO.GE.0 )
      $   LWKOPT = MAX( LWKOPT, INT( WORK( IWORK ) )+IWORK-1 )
@@ -494,7 +492,7 @@
          GO TO 80
       END IF
 *
-      CALL AB_CUNMQR( 'L', 'C', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
+      CALL CUNMQR( 'L', 'C', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
      $             WORK( ITAU ), A( ILO, ILO ), LDA, WORK( IWORK ),
      $             LWORK+1-IWORK, IINFO )
       IF( IINFO.GE.0 )
@@ -505,10 +503,10 @@
       END IF
 *
       IF( ILVL ) THEN
-         CALL AB_CLASET( 'Full', N, N, CZERO, CONE, VL, LDVL )
-         CALL AB_CLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
+         CALL CLASET( 'Full', N, N, CZERO, CONE, VL, LDVL )
+         CALL CLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
      $                VL( ILO+1, ILO ), LDVL )
-         CALL AB_CUNGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
+         CALL CUNGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
      $                WORK( ITAU ), WORK( IWORK ), LWORK+1-IWORK,
      $                IINFO )
          IF( IINFO.GE.0 )
@@ -520,7 +518,7 @@
       END IF
 *
       IF( ILVR )
-     $   CALL AB_CLASET( 'Full', N, N, CZERO, CONE, VR, LDVR )
+     $   CALL CLASET( 'Full', N, N, CZERO, CONE, VR, LDVR )
 *
 *     Reduce to generalized Hessenberg form
 *
@@ -528,10 +526,10 @@
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
-         CALL AB_CGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
+         CALL CGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
      $                LDVL, VR, LDVR, IINFO )
       ELSE
-         CALL AB_CGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
+         CALL CGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
      $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR, IINFO )
       END IF
       IF( IINFO.NE.0 ) THEN
@@ -547,7 +545,7 @@
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL AB_CHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL CHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VL, LDVL, VR, LDVR, WORK( IWORK ),
      $             LWORK+1-IWORK, RWORK( IRWORK ), IINFO )
       IF( IINFO.GE.0 )
@@ -577,8 +575,7 @@
             CHTEMP = 'R'
          END IF
 *
-         CALL AB_CTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDV
-     $L,
+         CALL CTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
      $                VR, LDVR, N, IN, WORK( IWORK ), RWORK( IRWORK ),
      $                IINFO )
          IF( IINFO.NE.0 ) THEN
@@ -589,7 +586,7 @@
 *        Undo balancing on VL and VR, rescale
 *
          IF( ILVL ) THEN
-            CALL AB_CGGBAK( 'P', 'L', N, ILO, IHI, RWORK( ILEFT ),
+            CALL CGGBAK( 'P', 'L', N, ILO, IHI, RWORK( ILEFT ),
      $                   RWORK( IRIGHT ), N, VL, LDVL, IINFO )
             IF( IINFO.NE.0 ) THEN
                INFO = N + 8
@@ -609,7 +606,7 @@
    30       CONTINUE
          END IF
          IF( ILVR ) THEN
-            CALL AB_CGGBAK( 'P', 'R', N, ILO, IHI, RWORK( ILEFT ),
+            CALL CGGBAK( 'P', 'R', N, ILO, IHI, RWORK( ILEFT ),
      $                   RWORK( IRIGHT ), N, VR, LDVR, IINFO )
             IF( IINFO.NE.0 ) THEN
                INFO = N + 9
@@ -704,6 +701,6 @@
 *
       RETURN
 *
-*     End of AB_CGEGV
+*     End of CGEGV
 *
       END

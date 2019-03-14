@@ -1,5 +1,4 @@
-C> \brief \b AB_SPOTRF VARIANT: right looking block version of the algor
-     $ithm, calling Level 3 BLAS.
+C> \brief \b SPOTRF VARIANT: right looking block version of the algorithm, calling Level 3 BLAS.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -9,7 +8,7 @@ C> \brief \b AB_SPOTRF VARIANT: right looking block version of the algor
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOTRF ( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE SPOTRF ( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +24,7 @@ C> \brief \b AB_SPOTRF VARIANT: right looking block version of the algor
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> AB_SPOTRF computes the Cholesky factorization of a real symmetric
+C> SPOTRF computes the Cholesky factorization of a real symmetric
 C> positive definite matrix A.
 C>
 C> The factorization has the form
@@ -33,8 +32,7 @@ C>    A = U**T * U,  if UPLO = 'U', or
 C>    A = L  * L**T,  if UPLO = 'L',
 C> where U is an upper triangular matrix and L is lower triangular.
 C>
-C> This is the right looking block version of the algorithm, calling Lev
-     $el 3 BLAS.
+C> This is the right looking block version of the algorithm, calling Level 3 BLAS.
 C>
 C>\endverbatim
 *
@@ -57,8 +55,7 @@ C>
 C> \param[in,out] A
 C> \verbatim
 C>          A is REAL array, dimension (LDA,N)
-C>          On entry, the symmetric matrix A.  If UPLO = 'U', the leadin
-     $g
+C>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
 C>          N-by-N upper triangular part of A contains the upper
 C>          triangular part of the matrix A, and the strictly lower
 C>          triangular part of A is not referenced.  If UPLO = 'L', the
@@ -101,7 +98,7 @@ C> \date December 2016
 C> \ingroup variantsPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOTRF ( UPLO, N, A, LDA, INFO )
+      SUBROUTINE SPOTRF ( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,13 +124,12 @@ C> \ingroup variantsPOcomputational
       INTEGER            J, JB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SPOTF2, AB_SSYRK, AB_STRSM, AB_XER
-     $BLA
+      EXTERNAL           SGEMM, SPOTF2, SSYRK, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -143,8 +139,8 @@ C> \ingroup variantsPOcomputational
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -152,7 +148,7 @@ C> \ingroup variantsPOcomputational
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPOTRF', -INFO )
+         CALL XERBLA( 'SPOTRF', -INFO )
          RETURN
       END IF
 *
@@ -163,12 +159,12 @@ C> \ingroup variantsPOcomputational
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_SPOTRF', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'SPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code.
 *
-         CALL AB_SPOTF2( UPLO, N, A, LDA, INFO )
+         CALL SPOTF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -184,7 +180,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL AB_SPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL SPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30
@@ -193,12 +189,10 @@ C> \ingroup variantsPOcomputational
 *
 *                 Updating the trailing submatrix.
 *
-                  CALL AB_STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit
-     $',
+                  CALL STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit',
      $                        JB, N-J-JB+1, ONE, A( J, J ), LDA,
      $                        A( J, J+JB ), LDA )
-                  CALL AB_SSYRK( 'Upper', 'Transpose', N-J-JB+1, JB, -ON
-     $E,
+                  CALL SSYRK( 'Upper', 'Transpose', N-J-JB+1, JB, -ONE,
      $                        A( J, J+JB ), LDA,
      $                        ONE, A( J+JB, J+JB ), LDA )
                END IF
@@ -215,7 +209,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL AB_SPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL SPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30
@@ -224,12 +218,11 @@ C> \ingroup variantsPOcomputational
 *
 *                Updating the trailing submatrix.
 *
-                 CALL AB_STRSM( 'Right', 'Lower', 'Transpose', 'Non-unit
-     $',
+                 CALL STRSM( 'Right', 'Lower', 'Transpose', 'Non-unit',
      $                       N-J-JB+1, JB, ONE, A( J, J ), LDA,
      $                       A( J+JB, J ), LDA )
 
-                 CALL AB_SSYRK( 'Lower', 'No Transpose', N-J-JB+1, JB,
+                 CALL SSYRK( 'Lower', 'No Transpose', N-J-JB+1, JB,
      $                       -ONE, A( J+JB, J ), LDA,
      $                       ONE, A( J+JB, J+JB ), LDA )
                END IF
@@ -244,6 +237,6 @@ C> \ingroup variantsPOcomputational
    40 CONTINUE
       RETURN
 *
-*     End of AB_SPOTRF
+*     End of SPOTRF
 *
       END

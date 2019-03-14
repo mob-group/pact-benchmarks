@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARFGP generates an elementary reflector (Householder matrix) with non-negative beta.
+*> \brief \b DLARFGP generates an elementary reflector (Householder matrix) with non-negative beta.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLARFGP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARFgp.f">
+*> Download DLARFGP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarfgp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARFgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarfgp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARFgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfgp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARFGP( N, ALPHA, X, INCX, TAU )
+*       SUBROUTINE DLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLARFGP generates a real elementary reflector H of order n, such
+*> DLARFGP generates a real elementary reflector H of order n, such
 *> that
 *>
 *>       H * ( alpha ) = ( beta ),   H**T * H = I.
@@ -102,7 +102,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLARFGP( N, ALPHA, X, INCX, TAU )
+      SUBROUTINE DLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,14 +128,14 @@
       DOUBLE PRECISION   BETA, BIGNUM, SAVEALPHA, SMLNUM, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2, AB_DNRM2
-      EXTERNAL           DLAMCH, AB_DLAPY2, AB_DNRM2
+      DOUBLE PRECISION   DLAMCH, DLAPY2, DNRM2
+      EXTERNAL           DLAMCH, DLAPY2, DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSCAL
+      EXTERNAL           DSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -144,7 +144,7 @@
          RETURN
       END IF
 *
-      XNORM = AB_DNRM2( N-1, X, INCX )
+      XNORM = DNRM2( N-1, X, INCX )
 *
       IF( XNORM.EQ.ZERO ) THEN
 *
@@ -168,7 +168,7 @@
 *
 *        general case
 *
-         BETA = SIGN( AB_DLAPY2( ALPHA, XNORM ), ALPHA )
+         BETA = SIGN( DLAPY2( ALPHA, XNORM ), ALPHA )
          SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'E' )
          KNT = 0
          IF( ABS( BETA ).LT.SMLNUM ) THEN
@@ -178,7 +178,7 @@
             BIGNUM = ONE / SMLNUM
    10       CONTINUE
             KNT = KNT + 1
-            CALL AB_DSCAL( N-1, BIGNUM, X, INCX )
+            CALL DSCAL( N-1, BIGNUM, X, INCX )
             BETA = BETA*BIGNUM
             ALPHA = ALPHA*BIGNUM
             IF( (ABS( BETA ).LT.SMLNUM) .AND. (KNT .LT. 20) )
@@ -186,8 +186,8 @@
 *
 *           New BETA is at most 1, at least SMLNUM
 *
-            XNORM = AB_DNRM2( N-1, X, INCX )
-            BETA = SIGN( AB_DLAPY2( ALPHA, XNORM ), ALPHA )
+            XNORM = DNRM2( N-1, X, INCX )
+            BETA = SIGN( DLAPY2( ALPHA, XNORM ), ALPHA )
          END IF
          SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
@@ -223,7 +223,7 @@
 *
 *           This is the general case.
 *
-            CALL AB_DSCAL( N-1, ONE / ALPHA, X, INCX )
+            CALL DSCAL( N-1, ONE / ALPHA, X, INCX )
 *
          END IF
 *
@@ -237,6 +237,6 @@
 *
       RETURN
 *
-*     End of AB_DLARFGP
+*     End of DLARFGP
 *
       END

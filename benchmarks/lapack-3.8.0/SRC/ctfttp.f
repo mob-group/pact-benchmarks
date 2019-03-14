@@ -1,4 +1,4 @@
-*> \brief \b AB_CTFTTP copies a triangular matrix from the rectangular full packed format (TF) to the standard packed format (TP).
+*> \brief \b CTFTTP copies a triangular matrix from the rectangular full packed format (TF) to the standard packed format (TP).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CTFTTP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTFTTP.f">
+*> Download CTFTTP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctfttp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTFTTP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctfttp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTFTTP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfttp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTFTTP( TRANSR, UPLO, N, ARF, AP, INFO )
+*       SUBROUTINE CTFTTP( TRANSR, UPLO, N, ARF, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CTFTTP copies a triangular matrix A from rectangular full packed
+*> CTFTTP copies a triangular matrix A from rectangular full packed
 *> format (TF) to standard packed format (TP).
 *> \endverbatim
 *
@@ -206,7 +206,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CTFTTP( TRANSR, UPLO, N, ARF, AP, INFO )
+      SUBROUTINE CTFTTP( TRANSR, UPLO, N, ARF, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -232,11 +232,11 @@
       INTEGER            IJP, JP, LDA, JS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG
@@ -248,17 +248,17 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'C' ) ) THEN
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CTFTTP', -INFO )
+         CALL XERBLA( 'CTFTTP', -INFO )
          RETURN
       END IF
 *
@@ -538,6 +538,6 @@
 *
       RETURN
 *
-*     End of AB_CTFTTP
+*     End of CTFTTP
 *
       END

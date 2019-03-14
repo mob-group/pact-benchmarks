@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSYSWAPR
+*> \brief \b ZSYSWAPR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZSYSWAPR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSYSWAPR.f">
+*> Download ZSYSWAPR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsyswapr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSYSWAPR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsyswapr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSYSWAPR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyswapr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSYSWAPR( UPLO, N, A, LDA, I1, I2)
+*       SUBROUTINE ZSYSWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *       .. Scalar Arguments ..
 *       CHARACTER        UPLO
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSYSWAPR applies an elementary permutation on the rows and the columns of
+*> ZSYSWAPR applies an elementary permutation on the rows and the columns of
 *> a symmetric matrix.
 *> \endverbatim
 *
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the NB diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_ZSYTRF.
+*>          used to obtain the factor U or L as computed by ZSYTRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -100,7 +100,7 @@
 *> \ingroup complex16SYauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSYSWAPR( UPLO, N, A, LDA, I1, I2)
+      SUBROUTINE ZSYSWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,21 +123,21 @@
       COMPLEX*16         TMP
 *
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZSWAP
+      EXTERNAL           ZSWAP
 *     ..
 *     .. Executable Statements ..
 *
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF (UPPER) THEN
 *
 *         UPPER
 *         first swap
 *          - swap column I1 and I2 from I1 to I1-1
-         CALL AB_ZSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
+         CALL ZSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
 *
 *          second swap :
 *          - swap A(I1,I1) and A(I2,I2)
@@ -165,7 +165,7 @@
 *         LOWER
 *         first swap
 *          - swap row I1 and I2 from I1 to I1-1
-         CALL AB_ZSWAP( I1-1, A(I1,1), LDA, A(I2,1), LDA )
+         CALL ZSWAP( I1-1, A(I1,1), LDA, A(I2,1), LDA )
 *
 *         second swap :
 *          - swap A(I1,I1) and A(I2,I2)
@@ -189,5 +189,5 @@
           END DO
 *
       ENDIF
-      END SUBROUTINE AB_ZSYSWAPR
+      END SUBROUTINE ZSYSWAPR
 

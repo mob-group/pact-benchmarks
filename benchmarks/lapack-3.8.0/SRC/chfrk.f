@@ -1,4 +1,4 @@
-*> \brief \b AB_CHFRK performs a Hermitian rank-k operation for matrix in RFP format.
+*> \brief \b CHFRK performs a Hermitian rank-k operation for matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHFRK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHFRK.f">
+*> Download CHFRK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chfrk.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHFRK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chfrk.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHFRK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chfrk.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
+*       SUBROUTINE CHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
 *                         C )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> Level 3 BLAS like routine for C in RFP Format.
 *>
-*> AB_CHFRK performs one of the Hermitian rank--k operations
+*> CHFRK performs one of the Hermitian rank--k operations
 *>
 *>    C := alpha*A*A**H + beta*C,
 *>
@@ -165,8 +165,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BET
-     $A,
+      SUBROUTINE CHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
      $                  C )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -198,11 +197,11 @@
       COMPLEX            CALPHA, CBETA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CHERK, AB_XERBLA
+      EXTERNAL           CGEMM, CHERK, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, CMPLX
@@ -213,9 +212,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      NOTRANS = AB_LSAME( TRANS, 'N' )
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      NOTRANS = LSAME( TRANS, 'N' )
 *
       IF( NOTRANS ) THEN
          NROWA = N
@@ -223,11 +222,11 @@
          NROWA = K
       END IF
 *
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'C' ) ) THEN
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOTRANS .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRANS .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -237,14 +236,14 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHFRK ', -INFO )
+         CALL XERBLA( 'CHFRK ', -INFO )
          RETURN
       END IF
 *
 *     Quick return if possible.
 *
 *     The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not
-*     done (it is in AB_CHERK for example) and left in the general case.
+*     done (it is in CHERK for example) and left in the general case.
 *
       IF( ( N.EQ.0 ) .OR. ( ( ( ALPHA.EQ.ZERO ) .OR. ( K.EQ.0 ) ) .AND.
      $    ( BETA.EQ.ONE ) ) )RETURN
@@ -293,26 +292,22 @@
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL AB_CHERK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL AB_CHERK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ), L
-     $DA,
+                  CALL CHERK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
      $                        BETA, C( N+1 ), N )
-                  CALL AB_CGEMM( 'N', 'C', N2, N1, K, CALPHA, A( N1+1, 1
-     $ ),
+                  CALL CGEMM( 'N', 'C', N2, N1, K, CALPHA, A( N1+1, 1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( N1+1 ), N )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'C'
 *
-                  CALL AB_CHERK( 'L', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'L', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL AB_CHERK( 'U', 'C', N2, K, ALPHA, A( 1, N1+1 ), L
-     $DA,
+                  CALL CHERK( 'U', 'C', N2, K, ALPHA, A( 1, N1+1 ), LDA,
      $                        BETA, C( N+1 ), N )
-                  CALL AB_CGEMM( 'C', 'N', N2, N1, K, CALPHA, A( 1, N1+1
-     $ ),
+                  CALL CGEMM( 'C', 'N', N2, N1, K, CALPHA, A( 1, N1+1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( N1+1 ), N )
 *
                END IF
@@ -325,24 +320,22 @@
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL AB_CHERK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL AB_CHERK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ), LDA
-     $,
+                  CALL CHERK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ), LDA,
      $                        BETA, C( N1+1 ), N )
-                  CALL AB_CGEMM( 'N', 'C', N1, N2, K, CALPHA, A( 1, 1 ),
+                  CALL CGEMM( 'N', 'C', N1, N2, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( N2, 1 ), LDA, CBETA, C( 1 ), N )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'C'
 *
-                  CALL AB_CHERK( 'L', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'L', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL AB_CHERK( 'U', 'C', N2, K, ALPHA, A( 1, N2 ), LDA
-     $,
+                  CALL CHERK( 'U', 'C', N2, K, ALPHA, A( 1, N2 ), LDA,
      $                        BETA, C( N1+1 ), N )
-                  CALL AB_CGEMM( 'C', 'N', N1, N2, K, CALPHA, A( 1, 1 ),
+                  CALL CGEMM( 'C', 'N', N1, N2, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N2 ), LDA, CBETA, C( 1 ), N )
 *
                END IF
@@ -361,12 +354,11 @@
 *
 *                 N is odd, TRANSR = 'C', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL AB_CHERK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL AB_CHERK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), L
-     $DA,
+                  CALL CHERK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
      $                        BETA, C( 2 ), N1 )
-                  CALL AB_CGEMM( 'N', 'C', N1, N2, K, CALPHA, A( 1, 1 ),
+                  CALL CGEMM( 'N', 'C', N1, N2, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( N1+1, 1 ), LDA, CBETA,
      $                        C( N1*N1+1 ), N1 )
 *
@@ -374,12 +366,11 @@
 *
 *                 N is odd, TRANSR = 'C', UPLO = 'L', and TRANS = 'C'
 *
-                  CALL AB_CHERK( 'U', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'U', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL AB_CHERK( 'L', 'C', N2, K, ALPHA, A( 1, N1+1 ), L
-     $DA,
+                  CALL CHERK( 'L', 'C', N2, K, ALPHA, A( 1, N1+1 ), LDA,
      $                        BETA, C( 2 ), N1 )
-                  CALL AB_CGEMM( 'C', 'N', N1, N2, K, CALPHA, A( 1, 1 ),
+                  CALL CGEMM( 'C', 'N', N1, N2, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N1+1 ), LDA, CBETA,
      $                        C( N1*N1+1 ), N1 )
 *
@@ -393,26 +384,22 @@
 *
 *                 N is odd, TRANSR = 'C', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL AB_CHERK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL AB_CHERK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), L
-     $DA,
+                  CALL CHERK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL AB_CGEMM( 'N', 'C', N2, N1, K, CALPHA, A( N1+1, 1
-     $ ),
+                  CALL CGEMM( 'N', 'C', N2, N1, K, CALPHA, A( N1+1, 1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( 1 ), N2 )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'C', UPLO = 'U', and TRANS = 'C'
 *
-                  CALL AB_CHERK( 'U', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'U', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL AB_CHERK( 'L', 'C', N2, K, ALPHA, A( 1, N1+1 ), L
-     $DA,
+                  CALL CHERK( 'L', 'C', N2, K, ALPHA, A( 1, N1+1 ), LDA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL AB_CGEMM( 'C', 'N', N2, N1, K, CALPHA, A( 1, N1+1
-     $ ),
+                  CALL CGEMM( 'C', 'N', N2, N1, K, CALPHA, A( 1, N1+1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( 1 ), N2 )
 *
                END IF
@@ -437,13 +424,11 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL AB_CHERK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL AB_CHERK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), L
-     $DA,
+                  CALL CHERK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL AB_CGEMM( 'N', 'C', NK, NK, K, CALPHA, A( NK+1, 1
-     $ ),
+                  CALL CGEMM( 'N', 'C', NK, NK, K, CALPHA, A( NK+1, 1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -451,13 +436,11 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'C'
 *
-                  CALL AB_CHERK( 'L', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'L', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL AB_CHERK( 'U', 'C', NK, K, ALPHA, A( 1, NK+1 ), L
-     $DA,
+                  CALL CHERK( 'U', 'C', NK, K, ALPHA, A( 1, NK+1 ), LDA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL AB_CGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, NK+1
-     $ ),
+                  CALL CGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, NK+1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -471,12 +454,11 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL AB_CHERK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL AB_CHERK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), L
-     $DA,
+                  CALL CHERK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
      $                        BETA, C( NK+1 ), N+1 )
-                  CALL AB_CGEMM( 'N', 'C', NK, NK, K, CALPHA, A( 1, 1 ),
+                  CALL CGEMM( 'N', 'C', NK, NK, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, CBETA, C( 1 ),
      $                        N+1 )
 *
@@ -484,12 +466,11 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'C'
 *
-                  CALL AB_CHERK( 'L', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'L', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL AB_CHERK( 'U', 'C', NK, K, ALPHA, A( 1, NK+1 ), L
-     $DA,
+                  CALL CHERK( 'U', 'C', NK, K, ALPHA, A( 1, NK+1 ), LDA,
      $                        BETA, C( NK+1 ), N+1 )
-                  CALL AB_CGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, 1 ),
+                  CALL CGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, CBETA, C( 1 ),
      $                        N+1 )
 *
@@ -509,12 +490,11 @@
 *
 *                 N is even, TRANSR = 'C', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL AB_CHERK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL AB_CHERK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), L
-     $DA,
+                  CALL CHERK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
      $                        BETA, C( 1 ), NK )
-                  CALL AB_CGEMM( 'N', 'C', NK, NK, K, CALPHA, A( 1, 1 ),
+                  CALL CGEMM( 'N', 'C', NK, NK, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, CBETA,
      $                        C( ( ( NK+1 )*NK )+1 ), NK )
 *
@@ -522,12 +502,11 @@
 *
 *                 N is even, TRANSR = 'C', UPLO = 'L', and TRANS = 'C'
 *
-                  CALL AB_CHERK( 'U', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'U', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL AB_CHERK( 'L', 'C', NK, K, ALPHA, A( 1, NK+1 ), L
-     $DA,
+                  CALL CHERK( 'L', 'C', NK, K, ALPHA, A( 1, NK+1 ), LDA,
      $                        BETA, C( 1 ), NK )
-                  CALL AB_CGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, 1 ),
+                  CALL CGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, CBETA,
      $                        C( ( ( NK+1 )*NK )+1 ), NK )
 *
@@ -541,26 +520,22 @@
 *
 *                 N is even, TRANSR = 'C', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL AB_CHERK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL AB_CHERK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), L
-     $DA,
+                  CALL CHERK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL AB_CGEMM( 'N', 'C', NK, NK, K, CALPHA, A( NK+1, 1
-     $ ),
+                  CALL CGEMM( 'N', 'C', NK, NK, K, CALPHA, A( NK+1, 1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( 1 ), NK )
 *
                ELSE
 *
 *                 N is even, TRANSR = 'C', UPLO = 'U', and TRANS = 'C'
 *
-                  CALL AB_CHERK( 'U', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL CHERK( 'U', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL AB_CHERK( 'L', 'C', NK, K, ALPHA, A( 1, NK+1 ), L
-     $DA,
+                  CALL CHERK( 'L', 'C', NK, K, ALPHA, A( 1, NK+1 ), LDA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL AB_CGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, NK+1
-     $ ),
+                  CALL CGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, NK+1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( 1 ), NK )
 *
                END IF
@@ -573,6 +548,6 @@
 *
       RETURN
 *
-*     End of AB_CHFRK
+*     End of CHFRK
 *
       END

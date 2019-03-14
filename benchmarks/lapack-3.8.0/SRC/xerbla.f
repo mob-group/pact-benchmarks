@@ -1,4 +1,4 @@
-*> \brief \b AB_XERBLA
+*> \brief \b XERBLA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_XERBLA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_XERBLA.f">
+*> Download XERBLA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/xerbla.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_XERBLA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/xerbla.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_XERBLA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/xerbla.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_XERBLA( SRNAME, INFO )
+*       SUBROUTINE XERBLA( SRNAME, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*(*)      SRNAME
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> AB_XERBLA  is an error handler for the LAPACK routines.
+*> XERBLA  is an error handler for the LAPACK routines.
 *> It is called by an LAPACK routine if an input parameter has an
 *> invalid value.  A message is printed and execution stops.
 *>
@@ -45,7 +45,7 @@
 *> \param[in] SRNAME
 *> \verbatim
 *>          SRNAME is CHARACTER*(*)
-*>          The name of the routine which called AB_XERBLA.
+*>          The name of the routine which called XERBLA.
 *> \endverbatim
 *>
 *> \param[in] INFO
@@ -68,7 +68,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_XERBLA( SRNAME, INFO )
+      SUBROUTINE XERBLA( SRNAME, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -94,6 +94,6 @@
  9999 FORMAT( ' ** On entry to ', A, ' parameter number ', I2, ' had ',
      $      'an illegal value' )
 *
-*     End of AB_XERBLA
+*     End of XERBLA
 *
       END

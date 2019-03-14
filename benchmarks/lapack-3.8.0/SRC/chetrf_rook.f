@@ -1,4 +1,4 @@
-*> \brief \b AB_CHETRF_ROOK computes the factorization of a complex Hermitian indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (blocked algorithm, calling Level 3 BLAS).
+*> \brief \b CHETRF_ROOK computes the factorization of a complex Hermitian indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (blocked algorithm, calling Level 3 BLAS).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHETRF_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHETRF_rook.f">
+*> Download CHETRF_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHETRF_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrf_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHETRF_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHETRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE CHETRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHETRF_ROOK computes the factorization of a comlex Hermitian matrix A
+*> CHETRF_ROOK computes the factorization of a comlex Hermitian matrix A
 *> using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
 *> The form of the factorization is
 *>
@@ -123,12 +123,12 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >=1.  For best performance
-*>          LWORK >= N*NB, where NB is the block size returned by AB_ILAENV.
+*>          LWORK >= N*NB, where NB is the block size returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -210,8 +210,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_CHETRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INF
-     $O )
+      SUBROUTINE CHETRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.6.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -234,12 +233,12 @@
       INTEGER            IINFO, IWS, J, K, KB, LDWORK, LWKOPT, NB, NBMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLAHEF_ROOK, AB_CHETF2_ROOK, AB_XERBLA
+      EXTERNAL           CLAHEF_ROOK, CHETF2_ROOK, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -249,9 +248,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -265,13 +264,13 @@
 *
 *        Determine the block size
 *
-         NB = AB_ILAENV( 1, 'AB_CHETRF_ROOK', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'CHETRF_ROOK', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 1, N*NB )
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHETRF_ROOK', -INFO )
+         CALL XERBLA( 'CHETRF_ROOK', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -283,7 +282,7 @@
          IWS = LDWORK*NB
          IF( LWORK.LT.IWS ) THEN
             NB = MAX( LWORK / LDWORK, 1 )
-            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_CHETRF_ROOK',
+            NBMIN = MAX( 2, ILAENV( 2, 'CHETRF_ROOK',
      $                              UPLO, N, -1, -1, -1 ) )
          END IF
       ELSE
@@ -297,7 +296,7 @@
 *        Factorize A as U*D*U**T using the upper triangle of A
 *
 *        K is the main loop index, decreasing from N to 1 in steps of
-*        KB, where KB is the number of columns factorized by AB_CLAHEF_ROOK;
+*        KB, where KB is the number of columns factorized by CLAHEF_ROOK;
 *        KB is either NB or NB-1, or K for the last block
 *
          K = N
@@ -313,13 +312,13 @@
 *           Factorize columns k-kb+1:k of A and use blocked code to
 *           update columns 1:k-kb
 *
-            CALL AB_CLAHEF_ROOK( UPLO, K, NB, KB, A, LDA,
+            CALL CLAHEF_ROOK( UPLO, K, NB, KB, A, LDA,
      $                        IPIV, WORK, LDWORK, IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns 1:k of A
 *
-            CALL AB_CHETF2_ROOK( UPLO, K, A, LDA, IPIV, IINFO )
+            CALL CHETF2_ROOK( UPLO, K, A, LDA, IPIV, IINFO )
             KB = K
          END IF
 *
@@ -340,7 +339,7 @@
 *        Factorize A as L*D*L**T using the lower triangle of A
 *
 *        K is the main loop index, increasing from 1 to N in steps of
-*        KB, where KB is the number of columns factorized by AB_CLAHEF_ROOK;
+*        KB, where KB is the number of columns factorized by CLAHEF_ROOK;
 *        KB is either NB or NB-1, or N-K+1 for the last block
 *
          K = 1
@@ -356,13 +355,13 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL AB_CLAHEF_ROOK( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
+            CALL CLAHEF_ROOK( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
      $                        IPIV( K ), WORK, LDWORK, IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns k:n of A
 *
-            CALL AB_CHETF2_ROOK( UPLO, N-K+1, A( K, K ), LDA, IPIV( K ),
+            CALL CHETF2_ROOK( UPLO, N-K+1, A( K, K ), LDA, IPIV( K ),
      $                        IINFO )
             KB = N - K + 1
          END IF
@@ -393,6 +392,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_CHETRF_ROOK
+*     End of CHETRF_ROOK
 *
       END

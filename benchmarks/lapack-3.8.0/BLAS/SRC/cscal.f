@@ -1,4 +1,4 @@
-*> \brief \b AB_CSCAL
+*> \brief \b CSCAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSCAL(N,CA,CX,INCX)
+*       SUBROUTINE CSCAL(N,CA,CX,INCX)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX CA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_CSCAL scales a vector by a constant.
+*>    CSCAL scales a vector by a constant.
 *> \endverbatim
 *
 *  Arguments:
@@ -76,7 +76,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CSCAL(N,CA,CX,INCX)
+      SUBROUTINE CSCAL(N,CA,CX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

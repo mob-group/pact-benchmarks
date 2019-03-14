@@ -1,4 +1,4 @@
-*> \brief \b AB_DPSTRF computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix.
+*> \brief \b DPSTRF computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix.
 *
 *
 *  =========== DOCUMENTATION ===========
@@ -7,19 +7,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DPSTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPSTRF.f">
+*> Download DPSTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpstrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPSTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpstrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPSTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpstrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+*       SUBROUTINE DPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   TOL
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPSTRF computes the Cholesky factorization with complete
+*> DPSTRF computes the Cholesky factorization with complete
 *> pivoting of a real symmetric positive semidefinite matrix A.
 *>
 *> The factorization has the form
@@ -140,8 +140,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO 
-     $)
+      SUBROUTINE DPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -171,13 +170,12 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      INTEGER            AB_ILAENV
-      LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           DLAMCH, AB_ILAENV, AB_LSAME, AB_DISNAN
+      INTEGER            ILAENV
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           DLAMCH, ILAENV, LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DPSTF2, AB_DSCAL, AB_DSWAP, AB_DSY
-     $RK, AB_XERBLA
+      EXTERNAL           DGEMV, DPSTF2, DSCAL, DSWAP, DSYRK, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT, MAXLOC
@@ -187,8 +185,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -196,7 +194,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DPSTRF', -INFO )
+         CALL XERBLA( 'DPSTRF', -INFO )
          RETURN
       END IF
 *
@@ -207,12 +205,12 @@
 *
 *     Get block size
 *
-      NB = AB_ILAENV( 1, 'AB_DPOTRF', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'DPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL AB_DPSTF2( UPLO, N, A( 1, 1 ), LDA, PIV, RANK, TOL, WORK,
+         CALL DPSTF2( UPLO, N, A( 1, 1 ), LDA, PIV, RANK, TOL, WORK,
      $                INFO )
          GO TO 200
 *
@@ -234,7 +232,7 @@
                AJJ = A( PVT, PVT )
             END IF
          END DO
-         IF( AJJ.LE.ZERO.OR.AB_DISNAN( AJJ ) ) THEN
+         IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
             RANK = 0
             INFO = 1
             GO TO 200
@@ -285,7 +283,7 @@
                      ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                      PVT = ITEMP + J - 1
                      AJJ = WORK( N+PVT )
-                     IF( AJJ.LE.DSTOP.OR.AB_DISNAN( AJJ ) ) THEN
+                     IF( AJJ.LE.DSTOP.OR.DISNAN( AJJ ) ) THEN
                         A( J, J ) = AJJ
                         GO TO 190
                      END IF
@@ -296,11 +294,11 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL AB_DSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
+                     CALL DSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
                      IF( PVT.LT.N )
-     $                  CALL AB_DSWAP( N-PVT, A( J, PVT+1 ), LDA,
+     $                  CALL DSWAP( N-PVT, A( J, PVT+1 ), LDA,
      $                              A( PVT, PVT+1 ), LDA )
-                     CALL AB_DSWAP( PVT-J-1, A( J, J+1 ), LDA,
+                     CALL DSWAP( PVT-J-1, A( J, J+1 ), LDA,
      $                           A( J+1, PVT ), 1 )
 *
 *                    Swap dot products and PIV
@@ -319,11 +317,10 @@
 *                 Compute elements J+1:N of row J.
 *
                   IF( J.LT.N ) THEN
-                     CALL AB_DGEMV( 'Trans', J-K, N-J, -ONE, A( K, J+1 )
-     $,
+                     CALL DGEMV( 'Trans', J-K, N-J, -ONE, A( K, J+1 ),
      $                           LDA, A( K, J ), 1, ONE, A( J, J+1 ),
      $                           LDA )
-                     CALL AB_DSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
+                     CALL DSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
                   END IF
 *
   130          CONTINUE
@@ -331,7 +328,7 @@
 *              Update trailing matrix, J already incremented
 *
                IF( K+JB.LE.N ) THEN
-                  CALL AB_DSYRK( 'Upper', 'Trans', N-J+1, JB, -ONE,
+                  CALL DSYRK( 'Upper', 'Trans', N-J+1, JB, -ONE,
      $                        A( K, J ), LDA, ONE, A( J, J ), LDA )
                END IF
 *
@@ -373,7 +370,7 @@
                      ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                      PVT = ITEMP + J - 1
                      AJJ = WORK( N+PVT )
-                     IF( AJJ.LE.DSTOP.OR.AB_DISNAN( AJJ ) ) THEN
+                     IF( AJJ.LE.DSTOP.OR.DISNAN( AJJ ) ) THEN
                         A( J, J ) = AJJ
                         GO TO 190
                      END IF
@@ -384,13 +381,11 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL AB_DSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LD
-     $A )
+                     CALL DSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
                      IF( PVT.LT.N )
-     $                  CALL AB_DSWAP( N-PVT, A( PVT+1, J ), 1,
+     $                  CALL DSWAP( N-PVT, A( PVT+1, J ), 1,
      $                              A( PVT+1, PVT ), 1 )
-                     CALL AB_DSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT, J+1
-     $ ),
+                     CALL DSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT, J+1 ),
      $                           LDA )
 *
 *                    Swap dot products and PIV
@@ -409,10 +404,10 @@
 *                 Compute elements J+1:N of column J.
 *
                   IF( J.LT.N ) THEN
-                     CALL AB_DGEMV( 'No Trans', N-J, J-K, -ONE,
+                     CALL DGEMV( 'No Trans', N-J, J-K, -ONE,
      $                           A( J+1, K ), LDA, A( J, K ), LDA, ONE,
      $                           A( J+1, J ), 1 )
-                     CALL AB_DSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
+                     CALL DSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
                   END IF
 *
   170          CONTINUE
@@ -420,7 +415,7 @@
 *              Update trailing matrix, J already incremented
 *
                IF( K+JB.LE.N ) THEN
-                  CALL AB_DSYRK( 'Lower', 'No Trans', N-J+1, JB, -ONE,
+                  CALL DSYRK( 'Lower', 'No Trans', N-J+1, JB, -ONE,
      $                        A( J, K ), LDA, ONE, A( J, J ), LDA )
                END IF
 *
@@ -445,6 +440,6 @@
   200 CONTINUE
       RETURN
 *
-*     End of AB_DPSTRF
+*     End of DPSTRF
 *
       END

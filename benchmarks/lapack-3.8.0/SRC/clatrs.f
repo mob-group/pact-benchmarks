@@ -1,4 +1,4 @@
-*> \brief \b AB_CLATRS solves a triangular system of equations with the scale factor set to prevent overflow.
+*> \brief \b CLATRS solves a triangular system of equations with the scale factor set to prevent overflow.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLATRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLATRS.f">
+*> Download CLATRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLATRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clatrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLATRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
+*       SUBROUTINE CLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
 *                          CNORM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLATRS solves one of the triangular systems
+*> CLATRS solves one of the triangular systems
 *>
 *>    A * x = s*b,  A**T * x = s*b,  or  A**H * x = s*b,
 *>
@@ -47,7 +47,7 @@
 *> scaling factor, usually less than or equal to 1, chosen so that the
 *> components of x will be less than the overflow threshold.  If the
 *> unscaled problem will not cause overflow, the Level 2 BLAS routine
-*> AB_CTRSV is called. If the matrix A is singular (A(j,j) = 0 for some j),
+*> CTRSV is called. If the matrix A is singular (A(j,j) = 0 for some j),
 *> then s is set to 0 and a non-trivial solution to A*x = 0 is returned.
 *> \endverbatim
 *
@@ -168,7 +168,7 @@
 *>
 *> \verbatim
 *>
-*>  A rough bound on x is computed; if that is less than overflow, AB_CTRSV
+*>  A rough bound on x is computed; if that is less than overflow, CTRSV
 *>  is called, otherwise, specific code is used which checks for possible
 *>  overflow or divide-by-zero at every operation.
 *>
@@ -201,7 +201,7 @@
 *>     |x(j)| <= ( G(0) / |A(j,j)| ) product ( 1 + CNORM(i) / |A(i,i)| )
 *>                                   1<=i< j
 *>
-*>  Since |x(j)| <= M(j), we use the Level 2 BLAS routine AB_CTRSV if the
+*>  Since |x(j)| <= M(j), we use the Level 2 BLAS routine CTRSV if the
 *>  reciprocal of the largest M(j), j=1,..,n, is larger than
 *>  max(underflow, 1/overflow).
 *>
@@ -231,13 +231,12 @@
 *>            <= M(0) * product ( ( 1 + CNORM(i) ) / |A(i,i)| )
 *>                      1<=i<=j
 *>
-*>  and we can safely call AB_CTRSV if 1/M(n) and 1/G(n) are both greater
+*>  and we can safely call CTRSV if 1/M(n) and 1/G(n) are both greater
 *>  than max(underflow, 1/overflow).
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCA
-     $LE,
+      SUBROUTINE CLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,
      $                   CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -270,17 +269,15 @@
       COMPLEX            CSUMJ, TJJS, USCAL, ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ICAMAX, AB_ISAMAX
-      REAL               AB_SCASUM, SLAMCH
-      COMPLEX            AB_CDOTC, AB_CDOTU, AB_CLADIV
-      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_ISAMAX, AB_SCASUM, SLAM
-     $CH, AB_CDOTC,
-     $                   AB_CDOTU, AB_CLADIV
+      LOGICAL            LSAME
+      INTEGER            ICAMAX, ISAMAX
+      REAL               SCASUM, SLAMCH
+      COMPLEX            CDOTC, CDOTU, CLADIV
+      EXTERNAL           LSAME, ICAMAX, ISAMAX, SCASUM, SLAMCH, CDOTC,
+     $                   CDOTU, CLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CSSCAL, AB_CTRSV, AB_SLABAD, AB_SS
-     $CAL, AB_XERBLA
+      EXTERNAL           CAXPY, CSSCAL, CTRSV, SLABAD, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, MIN, REAL
@@ -296,21 +293,21 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      NOUNIT = AB_LSAME( DIAG, 'N' )
+      UPPER = LSAME( UPLO, 'U' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      NOUNIT = LSAME( DIAG, 'N' )
 *
 *     Test the input parameters.
 *
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.AB_LSAME( NORMIN, 'Y' ) .AND. .NOT.
-     $         AB_LSAME( NORMIN, 'N' ) ) THEN
+      ELSE IF( .NOT.LSAME( NORMIN, 'Y' ) .AND. .NOT.
+     $         LSAME( NORMIN, 'N' ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -318,7 +315,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLATRS', -INFO )
+         CALL XERBLA( 'CLATRS', -INFO )
          RETURN
       END IF
 *
@@ -331,12 +328,12 @@
 *
       SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM / SLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       SCALE = ONE
 *
-      IF( AB_LSAME( NORMIN, 'N' ) ) THEN
+      IF( LSAME( NORMIN, 'N' ) ) THEN
 *
 *        Compute the 1-norm of each column, not including the diagonal.
 *
@@ -345,14 +342,14 @@
 *           A is upper triangular.
 *
             DO 10 J = 1, N
-               CNORM( J ) = AB_SCASUM( J-1, A( 1, J ), 1 )
+               CNORM( J ) = SCASUM( J-1, A( 1, J ), 1 )
    10       CONTINUE
          ELSE
 *
 *           A is lower triangular.
 *
             DO 20 J = 1, N - 1
-               CNORM( J ) = AB_SCASUM( N-J, A( J+1, J ), 1 )
+               CNORM( J ) = SCASUM( N-J, A( J+1, J ), 1 )
    20       CONTINUE
             CNORM( N ) = ZERO
          END IF
@@ -361,17 +358,17 @@
 *     Scale the column norms by TSCAL if the maximum element in CNORM is
 *     greater than BIGNUM/2.
 *
-      IMAX = AB_ISAMAX( N, CNORM, 1 )
+      IMAX = ISAMAX( N, CNORM, 1 )
       TMAX = CNORM( IMAX )
       IF( TMAX.LE.BIGNUM*HALF ) THEN
          TSCAL = ONE
       ELSE
          TSCAL = HALF / ( SMLNUM*TMAX )
-         CALL AB_SSCAL( N, TSCAL, CNORM, 1 )
+         CALL SSCAL( N, TSCAL, CNORM, 1 )
       END IF
 *
 *     Compute a bound on the computed solution vector to see if the
-*     Level 2 BLAS routine AB_CTRSV can be used.
+*     Level 2 BLAS routine CTRSV can be used.
 *
       XMAX = ZERO
       DO 30 J = 1, N
@@ -548,7 +545,7 @@
 *        Use the Level 2 BLAS solve if the reciprocal of the bound on
 *        elements of X is not too small.
 *
-         CALL AB_CTRSV( UPLO, TRANS, DIAG, N, A, LDA, X, 1 )
+         CALL CTRSV( UPLO, TRANS, DIAG, N, A, LDA, X, 1 )
       ELSE
 *
 *        Use a Level 1 BLAS solve, scaling intermediate results.
@@ -559,7 +556,7 @@
 *           BIGNUM in absolute value.
 *
             SCALE = ( BIGNUM*HALF ) / XMAX
-            CALL AB_CSSCAL( N, SCALE, X, 1 )
+            CALL CSSCAL( N, SCALE, X, 1 )
             XMAX = BIGNUM
          ELSE
             XMAX = XMAX*TWO
@@ -592,12 +589,12 @@
 *                          Scale x by 1/b(j).
 *
                            REC = ONE / XJ
-                           CALL AB_CSSCAL( N, REC, X, 1 )
+                           CALL CSSCAL( N, REC, X, 1 )
                            SCALE = SCALE*REC
                            XMAX = XMAX*REC
                         END IF
                      END IF
-                     X( J ) = AB_CLADIV( X( J ), TJJS )
+                     X( J ) = CLADIV( X( J ), TJJS )
                      XJ = CABS1( X( J ) )
                   ELSE IF( TJJ.GT.ZERO ) THEN
 *
@@ -616,11 +613,11 @@
 *
                            REC = REC / CNORM( J )
                         END IF
-                        CALL AB_CSSCAL( N, REC, X, 1 )
+                        CALL CSSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
-                     X( J ) = AB_CLADIV( X( J ), TJJS )
+                     X( J ) = CLADIV( X( J ), TJJS )
                      XJ = CABS1( X( J ) )
                   ELSE
 *
@@ -647,14 +644,14 @@
 *                    Scale x by 1/(2*abs(x(j))).
 *
                      REC = REC*HALF
-                     CALL AB_CSSCAL( N, REC, X, 1 )
+                     CALL CSSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                   END IF
                ELSE IF( XJ*CNORM( J ).GT.( BIGNUM-XMAX ) ) THEN
 *
 *                 Scale x by 1/2.
 *
-                  CALL AB_CSSCAL( N, HALF, X, 1 )
+                  CALL CSSCAL( N, HALF, X, 1 )
                   SCALE = SCALE*HALF
                END IF
 *
@@ -664,9 +661,9 @@
 *                    Compute the update
 *                       x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j)
 *
-                     CALL AB_CAXPY( J-1, -X( J )*TSCAL, A( 1, J ), 1, X,
+                     CALL CAXPY( J-1, -X( J )*TSCAL, A( 1, J ), 1, X,
      $                           1 )
-                     I = AB_ICAMAX( J-1, X, 1 )
+                     I = ICAMAX( J-1, X, 1 )
                      XMAX = CABS1( X( I ) )
                   END IF
                ELSE
@@ -675,15 +672,15 @@
 *                    Compute the update
 *                       x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j)
 *
-                     CALL AB_CAXPY( N-J, -X( J )*TSCAL, A( J+1, J ), 1,
+                     CALL CAXPY( N-J, -X( J )*TSCAL, A( J+1, J ), 1,
      $                           X( J+1 ), 1 )
-                     I = J + AB_ICAMAX( N-J, X( J+1 ), 1 )
+                     I = J + ICAMAX( N-J, X( J+1 ), 1 )
                      XMAX = CABS1( X( I ) )
                   END IF
                END IF
   110       CONTINUE
 *
-         ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
+         ELSE IF( LSAME( TRANS, 'T' ) ) THEN
 *
 *           Solve A**T * x = b
 *
@@ -711,10 +708,10 @@
 *                       Divide by A(j,j) when scaling x if A(j,j) > 1.
 *
                         REC = MIN( ONE, REC*TJJ )
-                        USCAL = AB_CLADIV( USCAL, TJJS )
+                        USCAL = CLADIV( USCAL, TJJS )
                      END IF
                   IF( REC.LT.ONE ) THEN
-                     CALL AB_CSSCAL( N, REC, X, 1 )
+                     CALL CSSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                      XMAX = XMAX*REC
                   END IF
@@ -724,13 +721,12 @@
                IF( USCAL.EQ.CMPLX( ONE ) ) THEN
 *
 *                 If the scaling needed for A in the dot product is 1,
-*                 call AB_CDOTU to perform the dot product.
+*                 call CDOTU to perform the dot product.
 *
                   IF( UPPER ) THEN
-                     CSUMJ = AB_CDOTU( J-1, A( 1, J ), 1, X, 1 )
+                     CSUMJ = CDOTU( J-1, A( 1, J ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     CSUMJ = AB_CDOTU( N-J, A( J+1, J ), 1, X( J+1 ), 1 
-     $)
+                     CSUMJ = CDOTU( N-J, A( J+1, J ), 1, X( J+1 ), 1 )
                   END IF
                ELSE
 *
@@ -775,12 +771,12 @@
 *                             Scale X by 1/abs(x(j)).
 *
                               REC = ONE / XJ
-                              CALL AB_CSSCAL( N, REC, X, 1 )
+                              CALL CSSCAL( N, REC, X, 1 )
                               SCALE = SCALE*REC
                               XMAX = XMAX*REC
                            END IF
                         END IF
-                        X( J ) = AB_CLADIV( X( J ), TJJS )
+                        X( J ) = CLADIV( X( J ), TJJS )
                      ELSE IF( TJJ.GT.ZERO ) THEN
 *
 *                       0 < abs(A(j,j)) <= SMLNUM:
@@ -790,11 +786,11 @@
 *                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM.
 *
                            REC = ( TJJ*BIGNUM ) / XJ
-                           CALL AB_CSSCAL( N, REC, X, 1 )
+                           CALL CSSCAL( N, REC, X, 1 )
                            SCALE = SCALE*REC
                            XMAX = XMAX*REC
                         END IF
-                        X( J ) = AB_CLADIV( X( J ), TJJS )
+                        X( J ) = CLADIV( X( J ), TJJS )
                      ELSE
 *
 *                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and
@@ -813,7 +809,7 @@
 *                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot
 *                 product has already been divided by 1/A(j,j).
 *
-                  X( J ) = AB_CLADIV( X( J ), TJJS ) - CSUMJ
+                  X( J ) = CLADIV( X( J ), TJJS ) - CSUMJ
                END IF
                XMAX = MAX( XMAX, CABS1( X( J ) ) )
   150       CONTINUE
@@ -846,10 +842,10 @@
 *                       Divide by A(j,j) when scaling x if A(j,j) > 1.
 *
                         REC = MIN( ONE, REC*TJJ )
-                        USCAL = AB_CLADIV( USCAL, TJJS )
+                        USCAL = CLADIV( USCAL, TJJS )
                      END IF
                   IF( REC.LT.ONE ) THEN
-                     CALL AB_CSSCAL( N, REC, X, 1 )
+                     CALL CSSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                      XMAX = XMAX*REC
                   END IF
@@ -859,13 +855,12 @@
                IF( USCAL.EQ.CMPLX( ONE ) ) THEN
 *
 *                 If the scaling needed for A in the dot product is 1,
-*                 call AB_CDOTC to perform the dot product.
+*                 call CDOTC to perform the dot product.
 *
                   IF( UPPER ) THEN
-                     CSUMJ = AB_CDOTC( J-1, A( 1, J ), 1, X, 1 )
+                     CSUMJ = CDOTC( J-1, A( 1, J ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     CSUMJ = AB_CDOTC( N-J, A( J+1, J ), 1, X( J+1 ), 1 
-     $)
+                     CSUMJ = CDOTC( N-J, A( J+1, J ), 1, X( J+1 ), 1 )
                   END IF
                ELSE
 *
@@ -912,12 +907,12 @@
 *                             Scale X by 1/abs(x(j)).
 *
                               REC = ONE / XJ
-                              CALL AB_CSSCAL( N, REC, X, 1 )
+                              CALL CSSCAL( N, REC, X, 1 )
                               SCALE = SCALE*REC
                               XMAX = XMAX*REC
                            END IF
                         END IF
-                        X( J ) = AB_CLADIV( X( J ), TJJS )
+                        X( J ) = CLADIV( X( J ), TJJS )
                      ELSE IF( TJJ.GT.ZERO ) THEN
 *
 *                       0 < abs(A(j,j)) <= SMLNUM:
@@ -927,11 +922,11 @@
 *                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM.
 *
                            REC = ( TJJ*BIGNUM ) / XJ
-                           CALL AB_CSSCAL( N, REC, X, 1 )
+                           CALL CSSCAL( N, REC, X, 1 )
                            SCALE = SCALE*REC
                            XMAX = XMAX*REC
                         END IF
-                        X( J ) = AB_CLADIV( X( J ), TJJS )
+                        X( J ) = CLADIV( X( J ), TJJS )
                      ELSE
 *
 *                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and
@@ -950,7 +945,7 @@
 *                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot
 *                 product has already been divided by 1/A(j,j).
 *
-                  X( J ) = AB_CLADIV( X( J ), TJJS ) - CSUMJ
+                  X( J ) = CLADIV( X( J ), TJJS ) - CSUMJ
                END IF
                XMAX = MAX( XMAX, CABS1( X( J ) ) )
   190       CONTINUE
@@ -961,11 +956,11 @@
 *     Scale the column norms by 1/TSCAL for return.
 *
       IF( TSCAL.NE.ONE ) THEN
-         CALL AB_SSCAL( N, ONE / TSCAL, CNORM, 1 )
+         CALL SSCAL( N, ONE / TSCAL, CNORM, 1 )
       END IF
 *
       RETURN
 *
-*     End of AB_CLATRS
+*     End of CLATRS
 *
       END

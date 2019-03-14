@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAQGE scales a general rectangular matrix, using row and column scaling factors computed by AB_SGEEQU.
+*> \brief \b DLAQGE scales a general rectangular matrix, using row and column scaling factors computed by sgeequ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAQGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAQGE.f">
+*> Download DLAQGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqge.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAQGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqge.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAQGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqge.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+*       SUBROUTINE DLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                          EQUED )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAQGE equilibrates a general M by N matrix A using the row and
+*> DLAQGE equilibrates a general M by N matrix A using the row and
 *> column scaling factors in the vectors R and C.
 *> \endverbatim
 *
@@ -139,7 +139,7 @@
 *> \ingroup doubleGEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+      SUBROUTINE DLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $                   EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -231,6 +231,6 @@
 *
       RETURN
 *
-*     End of AB_DLAQGE
+*     End of DLAQGE
 *
       END

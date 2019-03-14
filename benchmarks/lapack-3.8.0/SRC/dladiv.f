@@ -1,4 +1,4 @@
-*> \brief \b AB_DLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
+*> \brief \b DLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLADIV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLADIV.f">
+*> Download DLADIV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dladiv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLADIV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dladiv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLADIV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dladiv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLADIV( A, B, C, D, P, Q )
+*       SUBROUTINE DLADIV( A, B, C, D, P, Q )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   A, B, C, D, P, Q
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLADIV performs complex division in  real arithmetic
+*> DLADIV performs complex division in  real arithmetic
 *>
 *>                       a + i*b
 *>            p + i*q = ---------
@@ -89,7 +89,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLADIV( A, B, C, D, P, Q )
+      SUBROUTINE DLADIV( A, B, C, D, P, Q )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,7 +118,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLADIV1
+      EXTERNAL           DLADIV1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -159,9 +159,9 @@
          S  = S * BE
       END IF
       IF( ABS( D ).LE.ABS( C ) ) THEN
-         CALL AB_DLADIV1(AA, BB, CC, DD, P, Q)
+         CALL DLADIV1(AA, BB, CC, DD, P, Q)
       ELSE
-         CALL AB_DLADIV1(BB, AA, DD, CC, P, Q)
+         CALL DLADIV1(BB, AA, DD, CC, P, Q)
          Q = -Q
       END IF
       P = P * S
@@ -169,14 +169,14 @@
 *
       RETURN
 *
-*     End of AB_DLADIV
+*     End of DLADIV
 *
       END
 
 *> \ingroup doubleOTHERauxiliary
 
 
-      SUBROUTINE AB_DLADIV1( A, B, C, D, P, Q )
+      SUBROUTINE DLADIV1( A, B, C, D, P, Q )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -197,26 +197,26 @@
       DOUBLE PRECISION   R, T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLADIV2
-      EXTERNAL           AB_DLADIV2
+      DOUBLE PRECISION   DLADIV2
+      EXTERNAL           DLADIV2
 *     ..
 *     .. Executable Statements ..
 *
       R = D / C
       T = ONE / (C + D * R)
-      P = AB_DLADIV2(A, B, C, D, R, T)
+      P = DLADIV2(A, B, C, D, R, T)
       A = -A
-      Q = AB_DLADIV2(B, A, C, D, R, T)
+      Q = DLADIV2(B, A, C, D, R, T)
 *
       RETURN
 *
-*     End of AB_DLADIV1
+*     End of DLADIV1
 *
       END
 
 *> \ingroup doubleOTHERauxiliary
 
-      DOUBLE PRECISION FUNCTION AB_DLADIV2( A, B, C, D, R, T )
+      DOUBLE PRECISION FUNCTION DLADIV2( A, B, C, D, R, T )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -241,16 +241,16 @@
       IF( R.NE.ZERO ) THEN
          BR = B * R
          IF( BR.NE.ZERO ) THEN
-            AB_DLADIV2 = (A + BR) * T
+            DLADIV2 = (A + BR) * T
          ELSE
-            AB_DLADIV2 = A * T + (B * T) * R
+            DLADIV2 = A * T + (B * T) * R
          END IF
       ELSE
-         AB_DLADIV2 = (A + D * (B / C)) * T
+         DLADIV2 = (A + D * (B / C)) * T
       END IF
 *
       RETURN
 *
-*     End of AB_DLADIV12
+*     End of DLADIV12
 *
       END

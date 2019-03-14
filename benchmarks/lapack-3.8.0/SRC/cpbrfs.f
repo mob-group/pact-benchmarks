@@ -1,4 +1,4 @@
-*> \brief \b AB_CPBRFS
+*> \brief \b CPBRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPBRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPBRFS.f">
+*> Download CPBRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbrfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPBRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbrfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPBRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbrfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
+*       SUBROUTINE CPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
 *                          LDB, X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPBRFS improves the computed solution to a system of linear
+*> CPBRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is Hermitian positive definite
 *> and banded, and provides error bounds and backward error estimates
 *> for the solution.
@@ -94,7 +94,7 @@
 *>          AFB is COMPLEX array, dimension (LDAFB,N)
 *>          The triangular factor U or L from the Cholesky factorization
 *>          A = U**H*U or A = L*L**H of the band matrix A as computed by
-*>          AB_CPBTRF, in the same storage format as A (see AB).
+*>          CPBTRF, in the same storage format as A (see AB).
 *> \endverbatim
 *>
 *> \param[in] LDAFB
@@ -118,7 +118,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_CPBTRS.
+*>          On entry, the solution matrix X, as computed by CPBTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -186,7 +186,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
+      SUBROUTINE CPBRFS( UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB, B,
      $                   LDB, X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -228,16 +228,15 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CHBMV, AB_CLACN2, AB_CPB
-     $TRS, AB_XERBLA
+      EXTERNAL           CAXPY, CCOPY, CHBMV, CLACN2, CPBTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -250,8 +249,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -269,7 +268,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPBRFS', -INFO )
+         CALL XERBLA( 'CPBRFS', -INFO )
          RETURN
       END IF
 *
@@ -303,8 +302,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL AB_CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL AB_CHBMV( UPLO, N, KD, -ONE, AB, LDAB, X( 1, J ), 1, ONE,
+         CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL CHBMV( UPLO, N, KD, -ONE, AB, LDAB, X( 1, J ), 1, ONE,
      $               WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -369,8 +368,8 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
-            CALL AB_CAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
+            CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
+            CALL CAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -394,7 +393,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_CLACN2 to estimate the infinity-norm of the matrix
+*        Use CLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -409,14 +408,13 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL AB_CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**H).
 *
-               CALL AB_CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO
-     $ )
+               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -427,8 +425,7 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL AB_CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO
-     $ )
+               CALL CPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
             END IF
             GO TO 100
          END IF
@@ -446,6 +443,6 @@
 *
       RETURN
 *
-*     End of AB_CPBRFS
+*     End of CPBRFS
 *
       END

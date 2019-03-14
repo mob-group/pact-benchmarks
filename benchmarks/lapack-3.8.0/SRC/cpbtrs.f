@@ -1,4 +1,4 @@
-*> \brief \b AB_CPBTRS
+*> \brief \b CPBTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPBTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPBTRS.f">
+*> Download CPBTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbtrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPBTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbtrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPBTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbtrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+*       SUBROUTINE CPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CPBTRS solves a system of linear equations A*X = B with a Hermitian
+*> CPBTRS solves a system of linear equations A*X = B with a Hermitian
 *> positive definite band matrix A using the Cholesky factorization
-*> A = U**H*U or A = L*L**H computed by AB_CPBTRF.
+*> A = U**H*U or A = L*L**H computed by CPBTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -119,7 +119,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+      SUBROUTINE CPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,11 +141,11 @@
       INTEGER            J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CTBSV, AB_XERBLA
+      EXTERNAL           CTBSV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -155,8 +155,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -170,7 +170,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPBTRS', -INFO )
+         CALL XERBLA( 'CPBTRS', -INFO )
          RETURN
       END IF
 *
@@ -187,14 +187,12 @@
 *
 *           Solve U**H *X = B, overwriting B with X.
 *
-            CALL AB_CTBSV( 'Upper', 'Conjugate transpose', 'Non-unit', N
-     $,
+            CALL CTBSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
      $                  KD, AB, LDAB, B( 1, J ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL AB_CTBSV( 'Upper', 'No transpose', 'Non-unit', N, KD, A
-     $B,
+            CALL CTBSV( 'Upper', 'No transpose', 'Non-unit', N, KD, AB,
      $                  LDAB, B( 1, J ), 1 )
    10    CONTINUE
       ELSE
@@ -205,20 +203,18 @@
 *
 *           Solve L*X = B, overwriting B with X.
 *
-            CALL AB_CTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, A
-     $B,
+            CALL CTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, AB,
      $                  LDAB, B( 1, J ), 1 )
 *
 *           Solve L**H *X = B, overwriting B with X.
 *
-            CALL AB_CTBSV( 'Lower', 'Conjugate transpose', 'Non-unit', N
-     $,
+            CALL CTBSV( 'Lower', 'Conjugate transpose', 'Non-unit', N,
      $                  KD, AB, LDAB, B( 1, J ), 1 )
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_CPBTRS
+*     End of CPBTRS
 *
       END

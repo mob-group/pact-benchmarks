@@ -1,4 +1,4 @@
-*> \brief <b> AB_SSPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> SSPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSPEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSPEV.f">
+*> Download SSPEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspev.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSPEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sspev.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSPEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspev.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
+*       SUBROUTINE SSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBZ, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSPEV computes all the eigenvalues and, optionally, eigenvectors of a
+*> SSPEV computes all the eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A in packed storage.
 *> \endverbatim
 *
@@ -128,7 +128,7 @@
 *> \ingroup realOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_SSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
+      SUBROUTINE SSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -156,13 +156,12 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANSP
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANSP
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLANSP
+      EXTERNAL           LSAME, SLAMCH, SLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SOPGTR, AB_SSCAL, AB_SSPTRD, AB_SSTEQR, AB_S
-     $STERF, AB_XERBLA
+      EXTERNAL           SOPGTR, SSCAL, SSPTRD, SSTEQR, SSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -171,13 +170,12 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
+      WANTZ = LSAME( JOBZ, 'V' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( AB_LSAME( UPLO, 'U' ) .OR. AB_LSAME( UPLO, 'L' ) )
-     $ )
+      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -187,7 +185,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSPEV ', -INFO )
+         CALL XERBLA( 'SSPEV ', -INFO )
          RETURN
       END IF
 *
@@ -214,7 +212,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_SLANSP( 'M', UPLO, N, AP, WORK )
+      ANRM = SLANSP( 'M', UPLO, N, AP, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -224,27 +222,25 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL AB_SSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
+         CALL SSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
       END IF
 *
-*     Call AB_SSPTRD to reduce symmetric packed matrix to tridiagonal form.
+*     Call SSPTRD to reduce symmetric packed matrix to tridiagonal form.
 *
       INDE = 1
       INDTAU = INDE + N
-      CALL AB_SSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINF
-     $O )
+      CALL SSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINFO )
 *
-*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, first call
-*     AB_SOPGTR to generate the orthogonal matrix, then call AB_SSTEQR.
+*     For eigenvalues only, call SSTERF.  For eigenvectors, first call
+*     SOPGTR to generate the orthogonal matrix, then call SSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
+         CALL SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
          INDWRK = INDTAU + N
-         CALL AB_SOPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
+         CALL SOPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
      $                WORK( INDWRK ), IINFO )
-         CALL AB_SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDTAU 
-     $),
+         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDTAU ),
      $                INFO )
       END IF
 *
@@ -256,11 +252,11 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
       RETURN
 *
-*     End of AB_SSPEV
+*     End of SSPEV
 *
       END

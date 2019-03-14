@@ -1,4 +1,4 @@
-*> \brief \b AB_SPFTRS
+*> \brief \b SPFTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPFTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPFTRS.f">
+*> Download SPFTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spftrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPFTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spftrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPFTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spftrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
+*       SUBROUTINE SPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SPFTRS solves a system of linear equations A*X = B with a symmetric
+*> SPFTRS solves a system of linear equations A*X = B with a symmetric
 *> positive definite matrix A using the Cholesky factorization
-*> A = U**T*U or A = L*L**T computed by AB_SPFTRF.
+*> A = U**T*U or A = L*L**T computed by SPFTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -73,7 +73,7 @@
 *> \verbatim
 *>          A is REAL array, dimension ( N*(N+1)/2 )
 *>          The triangular factor U or L from the Cholesky factorization
-*>          of RFP A = U**H*U or RFP A = L*L**T, as computed by AB_SPFTRF.
+*>          of RFP A = U**H*U or RFP A = L*L**T, as computed by SPFTRF.
 *>          See note below for more details about RFP A.
 *> \endverbatim
 *>
@@ -197,7 +197,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
+      SUBROUTINE SPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -222,11 +222,11 @@
       LOGICAL            LOWER, NORMALTRANSR
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_STFSM
+      EXTERNAL           XERBLA, STFSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -236,11 +236,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'T' ) ) THEN
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'T' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -250,7 +250,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPFTRS', -INFO )
+         CALL XERBLA( 'SPFTRS', -INFO )
          RETURN
       END IF
 *
@@ -262,19 +262,19 @@
 *     start execution: there are two triangular solves
 *
       IF( LOWER ) THEN
-         CALL AB_STFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
+         CALL STFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
      $               LDB )
-         CALL AB_STFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
+         CALL STFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
      $               LDB )
       ELSE
-         CALL AB_STFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
+         CALL STFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
      $               LDB )
-         CALL AB_STFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
+         CALL STFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
      $               LDB )
       END IF
 *
       RETURN
 *
-*     End of AB_SPFTRS
+*     End of SPFTRS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAGTF computes an LU factorization of a matrix T-λI, where T is a general tridiagonal matrix, and λ a scalar, using partial pivoting with row interchanges.
+*> \brief \b SLAGTF computes an LU factorization of a matrix T-λI, where T is a general tridiagonal matrix, and λ a scalar, using partial pivoting with row interchanges.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAGTF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAGTF.f">
+*> Download SLAGTF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagtf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAGTF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagtf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAGTF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagtf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAGTF( N, A, LAMBDA, B, C, TOL, D, IN, INFO )
+*       SUBROUTINE SLAGTF( N, A, LAMBDA, B, C, TOL, D, IN, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAGTF factorizes the matrix (T - lambda*I), where T is an n by n
+*> SLAGTF factorizes the matrix (T - lambda*I), where T is an n by n
 *> tridiagonal matrix and lambda is a scalar, as
 *>
 *>    T - lambda*I = PLU,
@@ -48,8 +48,8 @@
 *> The factorization is obtained by Gaussian elimination with partial
 *> pivoting and implicit row scaling.
 *>
-*> The parameter LAMBDA is included in the routine so that AB_SLAGTF may
-*> be used, in conjunction with AB_SLAGTS, to obtain eigenvectors of T by
+*> The parameter LAMBDA is included in the routine so that SLAGTF may
+*> be used, in conjunction with SLAGTS, to obtain eigenvectors of T by
 *> inverse iteration.
 *> \endverbatim
 *
@@ -154,7 +154,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAGTF( N, A, LAMBDA, B, C, TOL, D, IN, INFO )
+      SUBROUTINE SLAGTF( N, A, LAMBDA, B, C, TOL, D, IN, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,14 +188,14 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Executable Statements ..
 *
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_SLAGTF', -INFO )
+         CALL XERBLA( 'SLAGTF', -INFO )
          RETURN
       END IF
 *
@@ -261,6 +261,6 @@
 *
       RETURN
 *
-*     End of AB_SLAGTF
+*     End of SLAGTF
 *
       END

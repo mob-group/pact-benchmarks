@@ -1,4 +1,4 @@
-*> \brief \b AB_SSPGST
+*> \brief \b SSPGST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSPGST + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSPGST.f">
+*> Download SSPGST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspgst.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSPGST.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sspgst.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSPGST.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspgst.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+*       SUBROUTINE SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSPGST reduces a real symmetric-definite generalized eigenproblem
+*> SSPGST reduces a real symmetric-definite generalized eigenproblem
 *> to standard form, using packed storage.
 *>
 *> If ITYPE = 1, the problem is A*x = lambda*B*x,
@@ -43,7 +43,7 @@
 *> If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**T or L**T*A*L.
 *>
-*> B must have been previously factorized as U**T*U or L*L**T by AB_SPPTRF.
+*> B must have been previously factorized as U**T*U or L*L**T by SPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -88,7 +88,7 @@
 *> \verbatim
 *>          BP is REAL array, dimension (N*(N+1)/2)
 *>          The triangular factor from the Cholesky factorization of B,
-*>          stored in the same format as A, as returned by AB_SPPTRF.
+*>          stored in the same format as A, as returned by SPPTRF.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -111,7 +111,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      SUBROUTINE SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,30 +138,29 @@
       REAL               AJJ, AKK, BJJ, BKK, CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SSCAL, AB_SSPMV, AB_SSPR2, AB_STPM
-     $V, AB_STPSV,
-     $                   AB_XERBLA
+      EXTERNAL           SAXPY, SSCAL, SSPMV, SSPR2, STPMV, STPSV,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SDOT
-      EXTERNAL           AB_LSAME, AB_SDOT
+      LOGICAL            LSAME
+      REAL               SDOT
+      EXTERNAL           LSAME, SDOT
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSPGST', -INFO )
+         CALL XERBLA( 'SSPGST', -INFO )
          RETURN
       END IF
 *
@@ -180,13 +179,12 @@
 *              Compute the j-th column of the upper triangle of A
 *
                BJJ = BP( JJ )
-               CALL AB_STPSV( UPLO, 'Transpose', 'Nonunit', J, BP,
+               CALL STPSV( UPLO, 'Transpose', 'Nonunit', J, BP,
      $                     AP( J1 ), 1 )
-               CALL AB_SSPMV( UPLO, J-1, -ONE, AP, BP( J1 ), 1, ONE,
+               CALL SSPMV( UPLO, J-1, -ONE, AP, BP( J1 ), 1, ONE,
      $                     AP( J1 ), 1 )
-               CALL AB_SSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
-               AP( JJ ) = ( AP( JJ )-AB_SDOT( J-1, AP( J1 ), 1, BP( J1 )
-     $,
+               CALL SSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
+               AP( JJ ) = ( AP( JJ )-SDOT( J-1, AP( J1 ), 1, BP( J1 ),
      $                    1 ) ) / BJJ
    10       CONTINUE
          ELSE
@@ -206,13 +204,13 @@
                AKK = AKK / BKK**2
                AP( KK ) = AKK
                IF( K.LT.N ) THEN
-                  CALL AB_SSCAL( N-K, ONE / BKK, AP( KK+1 ), 1 )
+                  CALL SSCAL( N-K, ONE / BKK, AP( KK+1 ), 1 )
                   CT = -HALF*AKK
-                  CALL AB_SAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
-                  CALL AB_SSPR2( UPLO, N-K, -ONE, AP( KK+1 ), 1,
+                  CALL SAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
+                  CALL SSPR2( UPLO, N-K, -ONE, AP( KK+1 ), 1,
      $                        BP( KK+1 ), 1, AP( K1K1 ) )
-                  CALL AB_SAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
-                  CALL AB_STPSV( UPLO, 'No transpose', 'Non-unit', N-K,
+                  CALL SAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
+                  CALL STPSV( UPLO, 'No transpose', 'Non-unit', N-K,
      $                        BP( K1K1 ), AP( KK+1 ), 1 )
                END IF
                KK = K1K1
@@ -234,14 +232,14 @@
 *
                AKK = AP( KK )
                BKK = BP( KK )
-               CALL AB_STPMV( UPLO, 'No transpose', 'Non-unit', K-1, BP,
+               CALL STPMV( UPLO, 'No transpose', 'Non-unit', K-1, BP,
      $                     AP( K1 ), 1 )
                CT = HALF*AKK
-               CALL AB_SAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
-               CALL AB_SSPR2( UPLO, K-1, ONE, AP( K1 ), 1, BP( K1 ), 1,
+               CALL SAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
+               CALL SSPR2( UPLO, K-1, ONE, AP( K1 ), 1, BP( K1 ), 1,
      $                     AP )
-               CALL AB_SAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
-               CALL AB_SSCAL( K-1, BKK, AP( K1 ), 1 )
+               CALL SAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
+               CALL SSCAL( K-1, BKK, AP( K1 ), 1 )
                AP( KK ) = AKK*BKK**2
    30       CONTINUE
          ELSE
@@ -258,12 +256,12 @@
 *
                AJJ = AP( JJ )
                BJJ = BP( JJ )
-               AP( JJ ) = AJJ*BJJ + AB_SDOT( N-J, AP( JJ+1 ), 1,
+               AP( JJ ) = AJJ*BJJ + SDOT( N-J, AP( JJ+1 ), 1,
      $                    BP( JJ+1 ), 1 )
-               CALL AB_SSCAL( N-J, BJJ, AP( JJ+1 ), 1 )
-               CALL AB_SSPMV( UPLO, N-J, ONE, AP( J1J1 ), BP( JJ+1 ), 1,
+               CALL SSCAL( N-J, BJJ, AP( JJ+1 ), 1 )
+               CALL SSPMV( UPLO, N-J, ONE, AP( J1J1 ), BP( JJ+1 ), 1,
      $                     ONE, AP( JJ+1 ), 1 )
-               CALL AB_STPMV( UPLO, 'Transpose', 'Non-unit', N-J+1,
+               CALL STPMV( UPLO, 'Transpose', 'Non-unit', N-J+1,
      $                     BP( JJ ), AP( JJ ), 1 )
                JJ = J1J1
    40       CONTINUE
@@ -271,6 +269,6 @@
       END IF
       RETURN
 *
-*     End of AB_SSPGST
+*     End of SSPGST
 *
       END

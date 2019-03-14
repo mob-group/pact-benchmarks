@@ -1,4 +1,4 @@
-*> \brief <b> AB_CSYSVXX computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> CSYSVXX computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CSYSVXX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSYSVxx.f">
+*> Download CSYSVXX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csysvxx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSYSVxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csysvxx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSYSVxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysvxx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE CSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
 *                           N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
 *                           NPARAMS, PARAMS, WORK, RWORK, INFO )
@@ -44,25 +44,25 @@
 *>
 *> \verbatim
 *>
-*>    AB_CSYSVXX uses the diagonal pivoting factorization to compute the
+*>    CSYSVXX uses the diagonal pivoting factorization to compute the
 *>    solution to a complex system of linear equations A * X = B, where
 *>    A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *>    matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
-*>    are returned. AB_CSYSVXX will return a solution with a tiny
+*>    are returned. CSYSVXX will return a solution with a tiny
 *>    guaranteed error (O(eps) where eps is the working machine
 *>    precision) unless the matrix is very ill-conditioned, in which
 *>    case a warning is returned. Relevant condition numbers also are
 *>    calculated and returned.
 *>
-*>    AB_CSYSVXX accepts user-provided factorizations and equilibration
+*>    CSYSVXX accepts user-provided factorizations and equilibration
 *>    factors; see the definitions of the FACT and EQUED options.
 *>    Solving with refinement and using a factorization from a previous
-*>    AB_CSYSVXX call will also produce a solution with either O(eps)
+*>    CSYSVXX call will also produce a solution with either O(eps)
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
-*>    differ from what AB_CSYSVXX would itself produce.
+*>    differ from what CSYSVXX would itself produce.
 *> \endverbatim
 *
 *> \par Description:
@@ -185,7 +185,7 @@
 *>     If FACT = 'F', then AF is an input argument and on entry
 *>     contains the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
-*>     U*D*U**T or A = L*D*L**T as computed by AB_SSYTRF.
+*>     U*D*U**T or A = L*D*L**T as computed by SSYTRF.
 *>
 *>     If FACT = 'N', then AF is an output argument and on exit
 *>     returns the block diagonal matrix D and the multipliers
@@ -204,7 +204,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>     If FACT = 'F', then IPIV is an input argument and on entry
 *>     contains details of the interchanges and the block
-*>     structure of D, as determined by AB_SSYTRF.  If IPIV(k) > 0,
+*>     structure of D, as determined by SSYTRF.  If IPIV(k) > 0,
 *>     then rows and columns k and IPIV(k) were interchanged and
 *>     D(k,k) is a 1-by-1 diagonal block.  If UPLO = 'U' and
 *>     IPIV(k) = IPIV(k-1) < 0, then rows and columns k-1 and
@@ -215,7 +215,7 @@
 *>
 *>     If FACT = 'N', then IPIV is an output argument and on exit
 *>     contains details of the interchanges and the block
-*>     structure of D, as determined by AB_SSYTRF.
+*>     structure of D, as determined by SSYTRF.
 *> \endverbatim
 *>
 *> \param[in,out] EQUED
@@ -504,8 +504,7 @@
 *> \ingroup complexSYsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_CSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV
-     $,
+      SUBROUTINE CSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $                    EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, RWORK, INFO )
@@ -550,13 +549,13 @@
       REAL               AMAX, BIGNUM, SMIN, SMAX, SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, SLAMCH, AB_CLA_SYRPVGRW
-      LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_CLA_SYRPVGRW
+      EXTERNAL           LSAME, SLAMCH, CLA_SYRPVGRW
+      LOGICAL            LSAME
+      REAL               SLAMCH, CLA_SYRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CSYEQUB, AB_CSYTRF, AB_CSYTRS, AB_CLACPY,
-     $                   AB_CLAQSY, AB_XERBLA, AB_CLASCL2, AB_CSYRFSX
+      EXTERNAL           CSYEQUB, CSYTRF, CSYTRS, CLACPY,
+     $                   CLAQSY, XERBLA, CLASCL2, CSYRFSX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -564,30 +563,30 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      EQUIL = AB_LSAME( FACT, 'E' )
+      NOFACT = LSAME( FACT, 'N' )
+      EQUIL = LSAME( FACT, 'E' )
       SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = AB_LSAME( EQUED, 'Y' )
+         RCEQU = LSAME( EQUED, 'Y' )
       ENDIF
 *
 *     Default is failure.  If an input parameter is wrong or
 *     factorization fails, make everything look horrible.  Only the
-*     pivot growth is set here, the rest is initialized in AB_CSYRFSX.
+*     pivot growth is set here, the rest is initialized in CSYRFSX.
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until AB_CSYRFSX.
+*     Test the input parameters.  PARAMS is not tested until CSYRFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
-     $     AB_LSAME( FACT, 'F' ) ) THEN
+     $     LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME(UPLO, 'U') .AND.
-     $         .NOT.AB_LSAME(UPLO, 'L') ) THEN
+      ELSE IF( .NOT.LSAME(UPLO, 'U') .AND.
+     $         .NOT.LSAME(UPLO, 'L') ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -597,8 +596,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
-     $        ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
+     $        ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -10
       ELSE
          IF ( RCEQU ) THEN
@@ -626,7 +625,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CSYSVXX', -INFO )
+         CALL XERBLA( 'CSYSVXX', -INFO )
          RETURN
       END IF
 *
@@ -634,29 +633,27 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL AB_CSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU 
-     $)
+         CALL CSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
 *
-            CALL AB_CLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
-            RCEQU = AB_LSAME( EQUED, 'Y' )
+            CALL CLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+            RCEQU = LSAME( EQUED, 'Y' )
          END IF
 
       END IF
 *
 *     Scale the right hand-side.
 *
-      IF( RCEQU ) CALL AB_CLASCL2( N, NRHS, S, B, LDB )
+      IF( RCEQU ) CALL CLASCL2( N, NRHS, S, B, LDB )
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
 *        Compute the LDL^T or UDU^T factorization of A.
 *
-         CALL AB_CLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL AB_CSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO
-     $ )
+         CALL CLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL CSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -667,7 +664,7 @@
 *           leading rank-deficient INFO columns of A.
 *
             IF ( N.GT.0 )
-     $           RPVGRW = AB_CLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF,
+     $           RPVGRW = CLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF,
      $           LDAF, IPIV, RWORK )
             RETURN
          END IF
@@ -676,29 +673,29 @@
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
       IF ( N.GT.0 )
-     $     RPVGRW = AB_CLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
+     $     RPVGRW = CLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
      $     IPIV, RWORK )
 *
 *     Compute the solution matrix X.
 *
-      CALL AB_CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_CSYTRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
+      CALL CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL CSYTRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL AB_CSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      CALL CSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $     S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $     ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, RWORK, INFO )
 *
 *     Scale solutions.
 *
       IF ( RCEQU ) THEN
-         CALL AB_CLASCL2 (N, NRHS, S, X, LDX )
+         CALL CLASCL2 (N, NRHS, S, X, LDX )
       END IF
 *
       RETURN
 *
-*     End of AB_CSYSVXX
+*     End of CSYSVXX
 *
       END

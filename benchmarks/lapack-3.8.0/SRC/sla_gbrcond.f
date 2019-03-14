@@ -1,4 +1,4 @@
-*> \brief \b AB_SLA_GBRCOND estimates the Skeel condition number for a general banded matrix.
+*> \brief \b SLA_GBRCOND estimates the Skeel condition number for a general banded matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLA_GBRCOND + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLA_GBRCOND.f">
+*> Download SLA_GBRCOND + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gbrcond.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLA_GBRCOND.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_gbrcond.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLA_GBRCOND.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gbrcond.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION AB_SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB, LDAFB,
+*       REAL FUNCTION SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB, LDAFB,
 *                                  IPIV, CMODE, C, INFO, WORK, IWORK )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_SLA_GBRCOND Estimates the Skeel condition number of  op(A) * op2(C)
+*>    SLA_GBRCOND Estimates the Skeel condition number of  op(A) * op2(C)
 *>    where op2 is determined by CMODE as follows
 *>    CMODE =  1    op2(C) = C
 *>    CMODE =  0    op2(C) = I
@@ -98,7 +98,7 @@
 *> \verbatim
 *>          AFB is REAL array, dimension (LDAFB,N)
 *>     Details of the LU factorization of the band matrix A, as
-*>     computed by AB_SGBTRF.  U is stored as an upper triangular
+*>     computed by SGBTRF.  U is stored as an upper triangular
 *>     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
 *>     and the multipliers used during the factorization are stored
 *>     in rows KL+KU+2 to 2*KL+KU+1.
@@ -114,7 +114,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     The pivot indices from the factorization A = P*L*U
-*>     as computed by AB_SGBTRF; row i of the matrix was interchanged
+*>     as computed by SGBTRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *> \endverbatim
 *>
@@ -165,8 +165,7 @@
 *> \ingroup realGBcomputational
 *
 *  =====================================================================
-      REAL FUNCTION AB_SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB, LDA
-     $FB,
+      REAL FUNCTION SLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB, LDAFB,
      $                           IPIV, CMODE, C, INFO, WORK, IWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -195,23 +194,23 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLACN2, AB_SGBTRS, AB_XERBLA
+      EXTERNAL           SLACN2, SGBTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      AB_SLA_GBRCOND = 0.0
+      SLA_GBRCOND = 0.0
 *
       INFO = 0
-      NOTRANS = AB_LSAME( TRANS, 'N' )
-      IF ( .NOT. NOTRANS .AND. .NOT. AB_LSAME(TRANS, 'T')
-     $     .AND. .NOT. AB_LSAME(TRANS, 'C') ) THEN
+      NOTRANS = LSAME( TRANS, 'N' )
+      IF ( .NOT. NOTRANS .AND. .NOT. LSAME(TRANS, 'T')
+     $     .AND. .NOT. LSAME(TRANS, 'C') ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -225,11 +224,11 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLA_GBRCOND', -INFO )
+         CALL XERBLA( 'SLA_GBRCOND', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 ) THEN
-         AB_SLA_GBRCOND = 1.0
+         SLA_GBRCOND = 1.0
          RETURN
       END IF
 *
@@ -282,7 +281,7 @@
 
       KASE = 0
    10 CONTINUE
-      CALL AB_SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -293,11 +292,10 @@
             END DO
 
             IF ( NOTRANS ) THEN
-               CALL AB_SGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
+               CALL SGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             ELSE
-               CALL AB_SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IP
-     $IV,
+               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
      $              WORK, N, INFO )
             END IF
 *
@@ -327,11 +325,10 @@
             END IF
 
             IF ( NOTRANS ) THEN
-               CALL AB_SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IP
-     $IV,
+               CALL SGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
      $              WORK, N, INFO )
             ELSE
-               CALL AB_SGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
+               CALL SGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             END IF
 *
@@ -347,7 +344,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0 )
-     $   AB_SLA_GBRCOND = ( 1.0 / AINVNM )
+     $   SLA_GBRCOND = ( 1.0 / AINVNM )
 *
       RETURN
 *

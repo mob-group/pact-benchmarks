@@ -1,4 +1,4 @@
-*> \brief \b AB_CLACRT performs a linear transformation of a pair of complex vectors.
+*> \brief \b CLACRT performs a linear transformation of a pair of complex vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLACRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLACRT.f">
+*> Download CLACRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clacrt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLACRT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clacrt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLACRT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clacrt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLACRT( N, CX, INCX, CY, INCY, C, S )
+*       SUBROUTINE CLACRT( N, CX, INCX, CY, INCY, C, S )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, INCY, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLACRT performs the operation
+*> CLACRT performs the operation
 *>
 *>    (  c  s )( x )  ==> ( x )
 *>    ( -s  c )( y )      ( y )
@@ -103,7 +103,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLACRT( N, CX, INCX, CY, INCY, C, S )
+      SUBROUTINE CLACRT( N, CX, INCX, CY, INCY, C, S )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

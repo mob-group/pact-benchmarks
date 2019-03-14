@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTRSNA
+*> \brief \b ZTRSNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZTRSNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTRSNA.f">
+*> Download ZTRSNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrsna.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTRSNA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrsna.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTRSNA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrsna.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+*       SUBROUTINE ZTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
 *                          LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
 *                          INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTRSNA estimates reciprocal condition numbers for specified
+*> ZTRSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or right eigenvectors of a complex upper triangular
 *> matrix T (or of any matrix Q*T*Q**H with Q unitary).
 *> \endverbatim
@@ -99,7 +99,7 @@
 *>          (or of any Q*T*Q**H with Q unitary), corresponding to the
 *>          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
 *>          must be stored in consecutive columns of VL, as returned by
-*>          AB_ZHSEIN or AB_ZTREVC.
+*>          ZHSEIN or ZTREVC.
 *>          If JOB = 'V', VL is not referenced.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *>          (or of any Q*T*Q**H with Q unitary), corresponding to the
 *>          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
 *>          must be stored in consecutive columns of VR, as returned by
-*>          AB_ZHSEIN or AB_ZTREVC.
+*>          ZHSEIN or ZTREVC.
 *>          If JOB = 'V', VR is not referenced.
 *> \endverbatim
 *>
@@ -245,8 +245,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR
-     $,
+      SUBROUTINE ZTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
      $                   INFO )
 *
@@ -285,17 +284,15 @@
       COMPLEX*16         DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DZNRM2
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_IZAMAX, DLAMCH, AB_DZNRM2, AB_ZDOT
-     $C
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH, DZNRM2
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, IZAMAX, DLAMCH, DZNRM2, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZDRSCL, AB_ZLACN2, AB_ZLACPY, AB_
-     $ZLATRS, AB_ZTREXC,
-     $                   AB_DLABAD
+      EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLACPY, ZLATRS, ZTREXC,
+     $                   DLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -310,11 +307,11 @@
 *
 *     Decode and test the input parameters
 *
-      WANTBH = AB_LSAME( JOB, 'B' )
-      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTSP = AB_LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTBH = LSAME( JOB, 'B' )
+      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTSP = LSAME( JOB, 'V' ) .OR. WANTBH
 *
-      SOMCON = AB_LSAME( HOWMNY, 'S' )
+      SOMCON = LSAME( HOWMNY, 'S' )
 *
 *     Set M to the number of eigenpairs for which condition numbers are
 *     to be computed.
@@ -332,7 +329,7 @@
       INFO = 0
       IF( .NOT.WANTS .AND. .NOT.WANTSP ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
+      ELSE IF( .NOT.LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -348,7 +345,7 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTRSNA', -INFO )
+         CALL XERBLA( 'ZTRSNA', -INFO )
          RETURN
       END IF
 *
@@ -374,7 +371,7 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
       KS = 1
       DO 50 K = 1, N
@@ -389,9 +386,9 @@
 *           Compute the reciprocal condition number of the k-th
 *           eigenvalue.
 *
-            PROD = AB_ZDOTC( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
-            RNRM = AB_DZNRM2( N, VR( 1, KS ), 1 )
-            LNRM = AB_DZNRM2( N, VL( 1, KS ), 1 )
+            PROD = ZDOTC( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
+            RNRM = DZNRM2( N, VR( 1, KS ), 1 )
+            LNRM = DZNRM2( N, VL( 1, KS ), 1 )
             S( KS ) = ABS( PROD ) / ( RNRM*LNRM )
 *
          END IF
@@ -404,9 +401,8 @@
 *           Copy the matrix T to the array WORK and swap the k-th
 *           diagonal element to the (1,1) position.
 *
-            CALL AB_ZLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
-            CALL AB_ZTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1, IER
-     $R )
+            CALL ZLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
+            CALL ZTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1, IERR )
 *
 *           Form  C = T22 - lambda*I in WORK(2:N,2:N).
 *
@@ -422,22 +418,21 @@
             KASE = 0
             NORMIN = 'N'
    30       CONTINUE
-            CALL AB_ZLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE, ISAVE 
-     $)
+            CALL ZLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE, ISAVE )
 *
             IF( KASE.NE.0 ) THEN
                IF( KASE.EQ.1 ) THEN
 *
 *                 Solve C**H*x = scale*b
 *
-                  CALL AB_ZLATRS( 'Upper', 'Conjugate transpose',
+                  CALL ZLATRS( 'Upper', 'Conjugate transpose',
      $                         'Nonunit', NORMIN, N-1, WORK( 2, 2 ),
      $                         LDWORK, WORK, SCALE, RWORK, IERR )
                ELSE
 *
 *                 Solve C*x = scale*b
 *
-                  CALL AB_ZLATRS( 'Upper', 'No transpose', 'Nonunit',
+                  CALL ZLATRS( 'Upper', 'No transpose', 'Nonunit',
      $                         NORMIN, N-1, WORK( 2, 2 ), LDWORK, WORK,
      $                         SCALE, RWORK, IERR )
                END IF
@@ -447,11 +442,11 @@
 *                 Multiply by 1/SCALE if doing so will not cause
 *                 overflow.
 *
-                  IX = AB_IZAMAX( N-1, WORK, 1 )
+                  IX = IZAMAX( N-1, WORK, 1 )
                   XNORM = CABS1( WORK( IX, 1 ) )
                   IF( SCALE.LT.XNORM*SMLNUM .OR. SCALE.EQ.ZERO )
      $               GO TO 40
-                  CALL AB_ZDRSCL( N, SCALE, WORK, 1 )
+                  CALL ZDRSCL( N, SCALE, WORK, 1 )
                END IF
                GO TO 30
             END IF
@@ -464,6 +459,6 @@
    50 CONTINUE
       RETURN
 *
-*     End of AB_ZTRSNA
+*     End of ZTRSNA
 *
       END

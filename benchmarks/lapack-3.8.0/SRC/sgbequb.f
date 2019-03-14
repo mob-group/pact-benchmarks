@@ -1,4 +1,4 @@
-*> \brief \b AB_SGBEQUB
+*> \brief \b SGBEQUB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGBEQUB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGBEQUb.f">
+*> Download SGBEQUB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgbequb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGBEQUb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgbequb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGBEQUb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbequb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGBEQUB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+*       SUBROUTINE SGBEQUB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                           AMAX, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGBEQUB computes row and column scalings intended to equilibrate an
+*> SGBEQUB computes row and column scalings intended to equilibrate an
 *> M-by-N matrix A and reduce its condition number.  R returns the row
 *> scale factors and C the column scale factors, chosen to try to make
 *> the largest element in each row and column of the matrix B with
@@ -47,7 +47,7 @@
 *> of these scaling factors is not guaranteed to reduce the condition
 *> number of A but works well in practice.
 *>
-*> This routine differs from AB_SGEEQU by restricting the scaling factors
+*> This routine differs from SGEEQU by restricting the scaling factors
 *> to a power of the radix.  Barring over- and underflow, scaling by
 *> these factors introduces no additional rounding errors.  However, the
 *> scaled entries' magnitudes are no longer approximately 1 but lie
@@ -157,8 +157,7 @@
 *> \ingroup realGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SGBEQUB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCN
-     $D,
+      SUBROUTINE SGBEQUB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
      $                    AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -189,7 +188,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, LOG
@@ -211,7 +210,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGBEQUB', -INFO )
+         CALL XERBLA( 'SGBEQUB', -INFO )
          RETURN
       END IF
 *
@@ -336,6 +335,6 @@
 *
       RETURN
 *
-*     End of AB_SGBEQUB
+*     End of SGBEQUB
 *
       END

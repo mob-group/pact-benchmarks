@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTGSEN
+*> \brief \b ZTGSEN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZTGSEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTGSEN.f">
+*> Download ZTGSEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsen.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTGSEN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgsen.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTGSEN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsen.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LDB,
+*       SUBROUTINE ZTGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LDB,
 *                          ALPHA, BETA, Q, LDQ, Z, LDZ, M, PL, PR, DIF,
 *                          WORK, LWORK, IWORK, LIWORK, INFO )
 *
@@ -42,7 +42,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTGSEN reorders the generalized Schur decomposition of a complex
+*> ZTGSEN reorders the generalized Schur decomposition of a complex
 *> matrix pair (A, B) (in terms of an unitary equivalence trans-
 *> formation Q**H * (A, B) * Z), so that a selected cluster of eigenvalues
 *> appears in the leading diagonal blocks of the pair (A,B). The leading
@@ -51,7 +51,7 @@
 *> generalized Schur canonical form, that is, A and B are both upper
 *> triangular.
 *>
-*> AB_ZTGSEN also computes the generalized eigenvalues
+*> ZTGSEN also computes the generalized eigenvalues
 *>
 *>          w(j)= ALPHA(j) / BETA(j)
 *>
@@ -227,7 +227,7 @@
 *>          If IJOB = 2 or 4, DIF(1:2) are F-norm-based upper bounds on
 *>          Difu and Difl. If IJOB = 3 or 5, DIF(1:2) are 1-norm-based
 *>          estimates of Difu and Difl, computed using reversed
-*>          communication with AB_ZLACN2.
+*>          communication with ZLACN2.
 *>          If M = 0 or N, DIF(1:2) = F-norm([A, B]).
 *>          If IJOB = 0 or 1, DIF is not referenced.
 *> \endverbatim
@@ -248,7 +248,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -267,7 +267,7 @@
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and
-*>          no error message related to LIWORK is issued by AB_XERBLA.
+*>          no error message related to LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -299,7 +299,7 @@
 *>
 *> \verbatim
 *>
-*>  AB_ZTGSEN first collects the selected eigenvalues by computing unitary
+*>  ZTGSEN first collects the selected eigenvalues by computing unitary
 *>  U and W that move them to the top left corner of (A, B). In other
 *>  words, the selected eigenvalues are the eigenvalues of (A11, B11) in
 *>
@@ -394,9 +394,9 @@
 *>  for more information.
 *>
 *>  Note that if the default method for computing the Frobenius-norm-
-*>  based estimate DIF is not wanted (see AB_ZLATDF), then the parameter
-*>  IDIFJB (see below) should be changed from 3 to 4 (routine AB_ZLATDF
-*>  (IJOB = 2 will be used)). See AB_ZTGSYL for more details.
+*>  based estimate DIF is not wanted (see ZLATDF), then the parameter
+*>  IDIFJB (see below) should be changed from 3 to 4 (routine ZLATDF
+*>  (IJOB = 2 will be used)). See ZTGSYL for more details.
 *> \endverbatim
 *
 *> \par Contributors:
@@ -429,8 +429,7 @@
 *>      1996.
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZTGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LD
-     $B,
+      SUBROUTINE ZTGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LDB,
      $                   ALPHA, BETA, Q, LDQ, Z, LDZ, M, PL, PR, DIF,
      $                   WORK, LWORK, IWORK, LIWORK, INFO )
 *
@@ -465,16 +464,15 @@
       LOGICAL            LQUERY, SWAP, WANTD, WANTD1, WANTD2, WANTP
       INTEGER            I, IERR, IJB, K, KASE, KS, LIWMIN, LWMIN, MN2,
      $                   N1, N2
-      DOUBLE PRECISION   AB_DSCALE, DSUM, RAB_DSCAL, SAFMIN
+      DOUBLE PRECISION   DSCALE, DSUM, RDSCAL, SAFMIN
       COMPLEX*16         TEMP1, TEMP2
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZLACN2, AB_ZLACPY, AB_ZLASSQ, AB_
-     $ZSCAL, AB_ZTGEXC,
-     $                   AB_ZTGSYL
+      EXTERNAL           XERBLA, ZLACN2, ZLACPY, ZLASSQ, ZSCAL, ZTGEXC,
+     $                   ZTGSYL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, DCONJG, MAX, SQRT
@@ -505,7 +503,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTGSEN', -INFO )
+         CALL XERBLA( 'ZTGSEN', -INFO )
          RETURN
       END IF
 *
@@ -555,7 +553,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTGSEN', -INFO )
+         CALL XERBLA( 'ZTGSEN', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -569,13 +567,13 @@
             PR = ONE
          END IF
          IF( WANTD ) THEN
-            AB_DSCALE = ZERO
+            DSCALE = ZERO
             DSUM = ONE
             DO 20 I = 1, N
-               CALL AB_ZLASSQ( N, A( 1, I ), 1, AB_DSCALE, DSUM )
-               CALL AB_ZLASSQ( N, B( 1, I ), 1, AB_DSCALE, DSUM )
+               CALL ZLASSQ( N, A( 1, I ), 1, DSCALE, DSUM )
+               CALL ZLASSQ( N, B( 1, I ), 1, DSCALE, DSUM )
    20       CONTINUE
-            DIF( 1 ) = AB_DSCALE*SQRT( DSUM )
+            DIF( 1 ) = DSCALE*SQRT( DSUM )
             DIF( 2 ) = DIF( 1 )
          END IF
          GO TO 70
@@ -597,8 +595,7 @@
 *           and Z that will swap adjacent diagonal blocks in (A, B).
 *
             IF( K.NE.KS )
-     $         CALL AB_ZTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, 
-     $Z,
+     $         CALL ZTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                      LDZ, K, KS, IERR )
 *
             IF( IERR.GT.0 ) THEN
@@ -627,38 +624,35 @@
          N1 = M
          N2 = N - M
          I = N1 + 1
-         CALL AB_ZLACPY( 'Full', N1, N2, A( 1, I ), LDA, WORK, N1 )
-         CALL AB_ZLACPY( 'Full', N1, N2, B( 1, I ), LDB, WORK( N1*N2+1 )
-     $,
+         CALL ZLACPY( 'Full', N1, N2, A( 1, I ), LDA, WORK, N1 )
+         CALL ZLACPY( 'Full', N1, N2, B( 1, I ), LDB, WORK( N1*N2+1 ),
      $                N1 )
          IJB = 0
-         CALL AB_ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
+         CALL ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
      $                N1, B, LDB, B( I, I ), LDB, WORK( N1*N2+1 ), N1,
-     $                AB_DSCALE, DIF( 1 ), WORK( N1*N2*2+1 ),
+     $                DSCALE, DIF( 1 ), WORK( N1*N2*2+1 ),
      $                LWORK-2*N1*N2, IWORK, IERR )
 *
 *        Estimate the reciprocal of norms of "projections" onto
 *        left and right eigenspaces
 *
-         RAB_DSCAL = ZERO
+         RDSCAL = ZERO
          DSUM = ONE
-         CALL AB_ZLASSQ( N1*N2, WORK, 1, RAB_DSCAL, DSUM )
-         PL = RAB_DSCAL*SQRT( DSUM )
+         CALL ZLASSQ( N1*N2, WORK, 1, RDSCAL, DSUM )
+         PL = RDSCAL*SQRT( DSUM )
          IF( PL.EQ.ZERO ) THEN
             PL = ONE
          ELSE
-            PL = AB_DSCALE / ( SQRT( AB_DSCALE*AB_DSCALE / PL+PL )*SQRT(
-     $ PL ) )
+            PL = DSCALE / ( SQRT( DSCALE*DSCALE / PL+PL )*SQRT( PL ) )
          END IF
-         RAB_DSCAL = ZERO
+         RDSCAL = ZERO
          DSUM = ONE
-         CALL AB_ZLASSQ( N1*N2, WORK( N1*N2+1 ), 1, RAB_DSCAL, DSUM )
-         PR = RAB_DSCAL*SQRT( DSUM )
+         CALL ZLASSQ( N1*N2, WORK( N1*N2+1 ), 1, RDSCAL, DSUM )
+         PR = RDSCAL*SQRT( DSUM )
          IF( PR.EQ.ZERO ) THEN
             PR = ONE
          ELSE
-            PR = AB_DSCALE / ( SQRT( AB_DSCALE*AB_DSCALE / PR+PR )*SQRT(
-     $ PR ) )
+            PR = DSCALE / ( SQRT( DSCALE*DSCALE / PR+PR )*SQRT( PR ) )
          END IF
       END IF
       IF( WANTD ) THEN
@@ -673,23 +667,21 @@
 *
 *           Frobenius norm-based Difu estimate.
 *
-            CALL AB_ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WO
-     $RK,
+            CALL ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA, WORK,
      $                   N1, B, LDB, B( I, I ), LDB, WORK( N1*N2+1 ),
-     $                   N1, AB_DSCALE, DIF( 1 ), WORK( N1*N2*2+1 ),
+     $                   N1, DSCALE, DIF( 1 ), WORK( N1*N2*2+1 ),
      $                   LWORK-2*N1*N2, IWORK, IERR )
 *
 *           Frobenius norm-based Difl estimate.
 *
-            CALL AB_ZTGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA, WO
-     $RK,
+            CALL ZTGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA, WORK,
      $                   N2, B( I, I ), LDB, B, LDB, WORK( N1*N2+1 ),
-     $                   N2, AB_DSCALE, DIF( 2 ), WORK( N1*N2*2+1 ),
+     $                   N2, DSCALE, DIF( 2 ), WORK( N1*N2*2+1 ),
      $                   LWORK-2*N1*N2, IWORK, IERR )
          ELSE
 *
 *           Compute 1-norm-based estimates of Difu and Difl using
-*           reversed communication with AB_ZLACN2. In each step a
+*           reversed communication with ZLACN2. In each step a
 *           generalized Sylvester equation or a transposed variant
 *           is solved.
 *
@@ -703,64 +695,60 @@
 *           1-norm-based estimate of Difu.
 *
    40       CONTINUE
-            CALL AB_ZLACN2( MN2, WORK( MN2+1 ), WORK, DIF( 1 ), KASE,
+            CALL ZLACN2( MN2, WORK( MN2+1 ), WORK, DIF( 1 ), KASE,
      $                   ISAVE )
             IF( KASE.NE.0 ) THEN
                IF( KASE.EQ.1 ) THEN
 *
 *                 Solve generalized Sylvester equation
 *
-                  CALL AB_ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), L
-     $DA,
+                  CALL ZTGSYL( 'N', IJB, N1, N2, A, LDA, A( I, I ), LDA,
      $                         WORK, N1, B, LDB, B( I, I ), LDB,
-     $                         WORK( N1*N2+1 ), N1, AB_DSCALE, DIF( 1 ),
+     $                         WORK( N1*N2+1 ), N1, DSCALE, DIF( 1 ),
      $                         WORK( N1*N2*2+1 ), LWORK-2*N1*N2, IWORK,
      $                         IERR )
                ELSE
 *
 *                 Solve the transposed variant.
 *
-                  CALL AB_ZTGSYL( 'C', IJB, N1, N2, A, LDA, A( I, I ), L
-     $DA,
+                  CALL ZTGSYL( 'C', IJB, N1, N2, A, LDA, A( I, I ), LDA,
      $                         WORK, N1, B, LDB, B( I, I ), LDB,
-     $                         WORK( N1*N2+1 ), N1, AB_DSCALE, DIF( 1 ),
+     $                         WORK( N1*N2+1 ), N1, DSCALE, DIF( 1 ),
      $                         WORK( N1*N2*2+1 ), LWORK-2*N1*N2, IWORK,
      $                         IERR )
                END IF
                GO TO 40
             END IF
-            DIF( 1 ) = AB_DSCALE / DIF( 1 )
+            DIF( 1 ) = DSCALE / DIF( 1 )
 *
 *           1-norm-based estimate of Difl.
 *
    50       CONTINUE
-            CALL AB_ZLACN2( MN2, WORK( MN2+1 ), WORK, DIF( 2 ), KASE,
+            CALL ZLACN2( MN2, WORK( MN2+1 ), WORK, DIF( 2 ), KASE,
      $                   ISAVE )
             IF( KASE.NE.0 ) THEN
                IF( KASE.EQ.1 ) THEN
 *
 *                 Solve generalized Sylvester equation
 *
-                  CALL AB_ZTGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, L
-     $DA,
+                  CALL ZTGSYL( 'N', IJB, N2, N1, A( I, I ), LDA, A, LDA,
      $                         WORK, N2, B( I, I ), LDB, B, LDB,
-     $                         WORK( N1*N2+1 ), N2, AB_DSCALE, DIF( 2 ),
+     $                         WORK( N1*N2+1 ), N2, DSCALE, DIF( 2 ),
      $                         WORK( N1*N2*2+1 ), LWORK-2*N1*N2, IWORK,
      $                         IERR )
                ELSE
 *
 *                 Solve the transposed variant.
 *
-                  CALL AB_ZTGSYL( 'C', IJB, N2, N1, A( I, I ), LDA, A, L
-     $DA,
+                  CALL ZTGSYL( 'C', IJB, N2, N1, A( I, I ), LDA, A, LDA,
      $                         WORK, N2, B, LDB, B( I, I ), LDB,
-     $                         WORK( N1*N2+1 ), N2, AB_DSCALE, DIF( 2 ),
+     $                         WORK( N1*N2+1 ), N2, DSCALE, DIF( 2 ),
      $                         WORK( N1*N2*2+1 ), LWORK-2*N1*N2, IWORK,
      $                         IERR )
                END IF
                GO TO 50
             END IF
-            DIF( 2 ) = AB_DSCALE / DIF( 2 )
+            DIF( 2 ) = DSCALE / DIF( 2 )
          END IF
       END IF
 *
@@ -769,15 +757,15 @@
 *     eigenvalues of reordered pair (A, B)
 *
       DO 60 K = 1, N
-         AB_DSCALE = ABS( B( K, K ) )
-         IF( AB_DSCALE.GT.SAFMIN ) THEN
-            TEMP1 = DCONJG( B( K, K ) / AB_DSCALE )
-            TEMP2 = B( K, K ) / AB_DSCALE
-            B( K, K ) = AB_DSCALE
-            CALL AB_ZSCAL( N-K, TEMP1, B( K, K+1 ), LDB )
-            CALL AB_ZSCAL( N-K+1, TEMP1, A( K, K ), LDA )
+         DSCALE = ABS( B( K, K ) )
+         IF( DSCALE.GT.SAFMIN ) THEN
+            TEMP1 = DCONJG( B( K, K ) / DSCALE )
+            TEMP2 = B( K, K ) / DSCALE
+            B( K, K ) = DSCALE
+            CALL ZSCAL( N-K, TEMP1, B( K, K+1 ), LDB )
+            CALL ZSCAL( N-K+1, TEMP1, A( K, K ), LDA )
             IF( WANTQ )
-     $         CALL AB_ZSCAL( N, TEMP2, Q( 1, K ), 1 )
+     $         CALL ZSCAL( N, TEMP2, Q( 1, K ), 1 )
          ELSE
             B( K, K ) = DCMPLX( ZERO, ZERO )
          END IF
@@ -794,6 +782,6 @@
 *
       RETURN
 *
-*     End of AB_ZTGSEN
+*     End of ZTGSEN
 *
       END

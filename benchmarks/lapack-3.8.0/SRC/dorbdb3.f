@@ -1,4 +1,4 @@
-*> \brief \b AB_DORBDB3
+*> \brief \b DORBDB3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DORBDB3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORBDB3.f">
+*> Download DORBDB3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorbdb3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORBDB3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorbdb3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORBDB3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorbdb3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+*       SUBROUTINE DORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
 *                           TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *>\verbatim
 *>
-*> AB_DORBDB3 simultaneously bidiagonalizes the blocks of a tall and skinny
+*> DORBDB3 simultaneously bidiagonalizes the blocks of a tall and skinny
 *> matrix X with orthonomal columns:
 *>
 *>                            [ B11 ]
@@ -46,7 +46,7 @@
 *>                            [  0  ]
 *>
 *> X11 is P-by-Q, and X21 is (M-P)-by-Q. M-P must be no larger than P,
-*> Q, or M-Q. Routines AB_DORBDB1, AB_DORBDB2, and AB_DORBDB4 handle cases in
+*> Q, or M-Q. Routines DORBDB1, DORBDB2, and DORBDB4 handle cases in
 *> which M-P is not the minimum dimension.
 *>
 *> The orthogonal matrices P1, P2, and Q1 are P-by-P, (M-P)-by-(M-P),
@@ -154,7 +154,7 @@
 *>           If LWORK = -1, then a workspace query is assumed; the routine
 *>           only calculates the optimal size of the WORK array, returns
 *>           this value as the first entry of the WORK array, and no error
-*>           message related to LWORK is issued by AB_XERBLA.
+*>           message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -187,8 +187,8 @@
 *>  with a sine or cosine of a PHI. See [1] or DORCSD for details.
 *>
 *>  P1, P2, and Q1 are represented as products of elementary reflectors.
-*>  See AB_DORCSD2BY1 for details on generating P1, P2, and Q1 using AB_DORGQR
-*>  and AB_DORGLQ.
+*>  See DORCSD2BY1 for details on generating P1, P2, and Q1 using DORGQR
+*>  and DORGLQ.
 *> \endverbatim
 *
 *> \par References:
@@ -198,8 +198,7 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE AB_DORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI
-     $,
+      SUBROUTINE DORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -229,12 +228,11 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLARF, AB_DLARFGP, AB_DORBDB5, AB_DROT, AB_X
-     $ERBLA
+      EXTERNAL           DLARF, DLARFGP, DORBDB5, DROT, XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DNRM2
-      EXTERNAL           AB_DNRM2
+      DOUBLE PRECISION   DNRM2
+      EXTERNAL           DNRM2
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          ATAN2, COS, MAX, SIN, SQRT
@@ -273,7 +271,7 @@
          END IF
       END IF
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'AB_DORBDB3', -INFO )
+         CALL XERBLA( 'DORBDB3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -284,38 +282,35 @@
       DO I = 1, M-P
 *
          IF( I .GT. 1 ) THEN
-            CALL AB_DROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX11, C, 
-     $S )
+            CALL DROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX11, C, S )
          END IF
 *
-         CALL AB_DLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
+         CALL DLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          S = X21(I,I)
          X21(I,I) = ONE
-         CALL AB_DLARF( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+         CALL DLARF( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
      $               X11(I,I), LDX11, WORK(ILARF) )
-         CALL AB_DLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+         CALL DLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
      $               X21(I+1,I), LDX21, WORK(ILARF) )
-         C = SQRT( AB_DNRM2( P-I+1, X11(I,I), 1 )**2
-     $           + AB_DNRM2( M-P-I, X21(I+1,I), 1 )**2 )
+         C = SQRT( DNRM2( P-I+1, X11(I,I), 1 )**2
+     $           + DNRM2( M-P-I, X21(I+1,I), 1 )**2 )
          THETA(I) = ATAN2( S, C )
 *
-         CALL AB_DORBDB5( P-I+1, M-P-I, Q-I, X11(I,I), 1, X21(I+1,I), 1,
+         CALL DORBDB5( P-I+1, M-P-I, Q-I, X11(I,I), 1, X21(I+1,I), 1,
      $                 X11(I,I+1), LDX11, X21(I+1,I+1), LDX21,
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
-         CALL AB_DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
+         CALL DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          IF( I .LT. M-P ) THEN
-            CALL AB_DLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1, TAUP2(I) 
-     $)
+            CALL DLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1, TAUP2(I) )
             PHI(I) = ATAN2( X21(I+1,I), X11(I,I) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
             X21(I+1,I) = ONE
-            CALL AB_DLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1, TAUP2(I),
+            CALL DLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1, TAUP2(I),
      $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
          END IF
          X11(I,I) = ONE
-         CALL AB_DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+
-     $1),
+         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+1),
      $               LDX11, WORK(ILARF) )
 *
       END DO
@@ -323,16 +318,15 @@
 *     Reduce the bottom-right portion of X11 to the identity matrix
 *
       DO I = M-P + 1, Q
-         CALL AB_DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
+         CALL DLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          X11(I,I) = ONE
-         CALL AB_DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+
-     $1),
+         CALL DLARF( 'L', P-I+1, Q-I, X11(I,I), 1, TAUP1(I), X11(I,I+1),
      $               LDX11, WORK(ILARF) )
       END DO
 *
       RETURN
 *
-*     End of AB_DORBDB3
+*     End of DORBDB3
 *
       END
 

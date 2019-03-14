@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
+*       SUBROUTINE ZLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
 *                           LWORK, INFO)
 *
 *       .. Scalar Arguments ..
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLATSQR computes a blocked Tall-Skinny QR factorization of
+*> SLATSQR computes a blocked Tall-Skinny QR factorization of
 *> an M-by-N matrix A, where M >= N:
 *> A = Q * R .
 *> \endverbatim
@@ -95,7 +95,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -146,7 +146,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
+      SUBROUTINE ZLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
      $                    LWORK, INFO)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -169,10 +169,10 @@
       INTEGER    I, II, KK, CTR
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     .. EXTERNAL SUBROUTINES ..
-      EXTERNAL    AB_ZGEQRT, AB_ZTPQRT, AB_XERBLA
+      EXTERNAL    ZGEQRT, ZTPQRT, XERBLA
 *     .. INTRINSIC FUNCTIONS ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
@@ -203,7 +203,7 @@
         WORK(1) = NB*N
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_ZLATSQR', -INFO )
+        CALL XERBLA( 'ZLATSQR', -INFO )
         RETURN
       ELSE IF (LQUERY) THEN
        RETURN
@@ -218,7 +218,7 @@
 *     The QR Decomposition
 *
        IF ((MB.LE.N).OR.(MB.GE.M)) THEN
-         CALL AB_ZGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO)
+         CALL ZGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO)
          RETURN
        END IF
        KK = MOD((M-N),(MB-N))
@@ -226,14 +226,14 @@
 *
 *      Compute the QR factorization of the first block A(1:MB,1:N)
 *
-       CALL AB_ZGEQRT( MB, N, NB, A(1,1), LDA, T, LDT, WORK, INFO )
+       CALL ZGEQRT( MB, N, NB, A(1,1), LDA, T, LDT, WORK, INFO )
        CTR = 1
 *
        DO I = MB+1, II-MB+N ,  (MB-N)
 *
 *      Compute the QR factorization of the current block A(I:I+MB-N,1:N)
 *
-         CALL AB_ZTPQRT( MB-N, N, 0, NB, A(1,1), LDA, A( I, 1 ), LDA,
+         CALL ZTPQRT( MB-N, N, 0, NB, A(1,1), LDA, A( I, 1 ), LDA,
      $                 T(1, CTR * N + 1),
      $                  LDT, WORK, INFO )
          CTR = CTR + 1
@@ -242,7 +242,7 @@
 *      Compute the QR factorization of the last block A(II:M,1:N)
 *
        IF (II.LE.M) THEN
-         CALL AB_ZTPQRT( KK, N, 0, NB, A(1,1), LDA, A( II, 1 ), LDA,
+         CALL ZTPQRT( KK, N, 0, NB, A(1,1), LDA, A( II, 1 ), LDA,
      $                 T(1,CTR * N + 1), LDT,
      $                  WORK, INFO )
        END IF
@@ -250,6 +250,6 @@
       work( 1 ) = N*NB
       RETURN
 *
-*     End of AB_ZLATSQR
+*     End of ZLATSQR
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSYTRS_ROOK
+*> \brief \b ZSYTRS_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZSYTRS_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSYTRS_rook.f">
+*> Download ZSYTRS_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytrs_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSYTRS_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytrs_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSYTRS_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrs_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE ZSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSYTRS_ROOK solves a system of linear equations A*X = B with
+*> ZSYTRS_ROOK solves a system of linear equations A*X = B with
 *> a complex symmetric matrix A using the factorization A = U*D*U**T or
-*> A = L*D*L**T computed by AB_ZSYTRF_ROOK.
+*> A = L*D*L**T computed by ZSYTRF_ROOK.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_ZSYTRF_ROOK.
+*>          obtain the factor U or L as computed by ZSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_ZSYTRF_ROOK.
+*>          as determined by ZSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -133,7 +133,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE ZSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                        INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -162,12 +162,11 @@
       COMPLEX*16         AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMV, AB_ZGERU, AB_ZSCAL, AB_ZSWAP, AB_XERB
-     $LA
+      EXTERNAL           ZGEMV, ZGERU, ZSCAL, ZSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -175,8 +174,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -188,7 +187,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZSYTRS_ROOK', -INFO )
+         CALL XERBLA( 'ZSYTRS_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -222,18 +221,17 @@
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL AB_ZGERU( K-1, NRHS, -CONE, A( 1, K ), 1, B( K, 1 ), LD
-     $B,
+            CALL ZGERU( K-1, NRHS, -CONE, A( 1, K ), 1, B( K, 1 ), LDB,
      $                 B( 1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
 *
-            CALL AB_ZSCAL( NRHS, CONE / A( K, K ), B( K, 1 ), LDB )
+            CALL ZSCAL( NRHS, CONE / A( K, K ), B( K, 1 ), LDB )
             K = K - 1
          ELSE
 *
@@ -243,20 +241,19 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K-1 )
             IF( KP.NE.K-1 )
-     $         CALL AB_ZSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in columns K-1 and K of A.
 *
             IF( K.GT.2 ) THEN
-               CALL AB_ZGERU( K-2, NRHS,-CONE, A( 1, K ), 1, B( K, 1 ),
+               CALL ZGERU( K-2, NRHS,-CONE, A( 1, K ), 1, B( K, 1 ),
      $                    LDB, B( 1, 1 ), LDB )
-               CALL AB_ZGERU( K-2, NRHS,-CONE, A( 1, K-1 ), 1, B( K-1, 1
-     $ ),
+               CALL ZGERU( K-2, NRHS,-CONE, A( 1, K-1 ), 1, B( K-1, 1 ),
      $                    LDB, B( 1, 1 ), LDB )
             END IF
 *
@@ -299,14 +296,14 @@
 *           stored in column K of A.
 *
             IF( K.GT.1 )
-     $         CALL AB_ZGEMV( 'Transpose', K-1, NRHS, -CONE, B,
+     $         CALL ZGEMV( 'Transpose', K-1, NRHS, -CONE, B,
      $                     LDB, A( 1, K ), 1, CONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 1
          ELSE
 *
@@ -316,9 +313,9 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_ZGEMV( 'Transpose', K-1, NRHS, -CONE, B,
+               CALL ZGEMV( 'Transpose', K-1, NRHS, -CONE, B,
      $                     LDB, A( 1, K ), 1, CONE, B( K, 1 ), LDB )
-               CALL AB_ZGEMV( 'Transpose', K-1, NRHS, -CONE, B,
+               CALL ZGEMV( 'Transpose', K-1, NRHS, -CONE, B,
      $                     LDB, A( 1, K+1 ), 1, CONE, B( K+1, 1 ), LDB )
             END IF
 *
@@ -326,11 +323,11 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K+1 )
             IF( KP.NE.K+1 )
-     $         CALL AB_ZSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
 *
             K = K + 2
          END IF
@@ -363,19 +360,18 @@
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(L(K)), where L(K) is the transformation
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL AB_ZGERU( N-K, NRHS, -CONE, A( K+1, K ), 1, B( K, 1 
-     $),
+     $         CALL ZGERU( N-K, NRHS, -CONE, A( K+1, K ), 1, B( K, 1 ),
      $                    LDB, B( K+1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
 *
-            CALL AB_ZSCAL( NRHS, CONE / A( K, K ), B( K, 1 ), LDB )
+            CALL ZSCAL( NRHS, CONE / A( K, K ), B( K, 1 ), LDB )
             K = K + 1
          ELSE
 *
@@ -385,20 +381,19 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K+1 )
             IF( KP.NE.K+1 )
-     $         CALL AB_ZSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(L(K)), where L(K) is the transformation
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL AB_ZGERU( N-K-1, NRHS,-CONE, A( K+2, K ), 1, B( K, 1
-     $ ),
+               CALL ZGERU( N-K-1, NRHS,-CONE, A( K+2, K ), 1, B( K, 1 ),
      $                    LDB, B( K+2, 1 ), LDB )
-               CALL AB_ZGERU( N-K-1, NRHS,-CONE, A( K+2, K+1 ), 1,
+               CALL ZGERU( N-K-1, NRHS,-CONE, A( K+2, K+1 ), 1,
      $                    B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )
             END IF
 *
@@ -441,15 +436,14 @@
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL AB_ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 )
-     $,
+     $         CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K ), 1, CONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 1
          ELSE
 *
@@ -459,11 +453,9 @@
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN
-               CALL AB_ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 )
-     $,
+               CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K ), 1, CONE, B( K, 1 ), LDB )
-               CALL AB_ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 )
-     $,
+               CALL ZGEMV( 'Transpose', N-K, NRHS, -CONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K-1 ), 1, CONE, B( K-1, 1 ),
      $                     LDB )
             END IF
@@ -472,11 +464,11 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K-1 )
             IF( KP.NE.K-1 )
-     $         CALL AB_ZSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL ZSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
 *
             K = K - 2
          END IF
@@ -487,6 +479,6 @@
 *
       RETURN
 *
-*     End of AB_ZSYTRS_ROOK
+*     End of ZSYTRS_ROOK
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ILATRANS
+*> \brief \b ILATRANS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ILATRANS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ILATRANS.f">
+*> Download ILATRANS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilatrans.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ILATRANS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilatrans.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ILATRANS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilatrans.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION AB_ILATRANS( TRANS )
+*       INTEGER FUNCTION ILATRANS( TRANS )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
@@ -34,8 +34,8 @@
 *> transposition operation to the relevant BLAST-specified integer
 *> constant.
 *>
-*> AB_ILATRANS returns an INTEGER.  If AB_ILATRANS < 0, then the input is not
-*> a character indicating a transposition operator.  Otherwise AB_ILATRANS
+*> ILATRANS returns an INTEGER.  If ILATRANS < 0, then the input is not
+*> a character indicating a transposition operator.  Otherwise ILATRANS
 *> returns the constant value corresponding to TRANS.
 *> \endverbatim
 *
@@ -56,7 +56,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      INTEGER FUNCTION AB_ILATRANS( TRANS )
+      INTEGER FUNCTION ILATRANS( TRANS )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -75,21 +75,21 @@
      $     BLAS_CONJ_TRANS = 113 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Executable Statements ..
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
-         AB_ILATRANS = BLAS_NO_TRANS
-      ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
-         AB_ILATRANS = BLAS_TRANS
-      ELSE IF( AB_LSAME( TRANS, 'C' ) ) THEN
-         AB_ILATRANS = BLAS_CONJ_TRANS
+      IF( LSAME( TRANS, 'N' ) ) THEN
+         ILATRANS = BLAS_NO_TRANS
+      ELSE IF( LSAME( TRANS, 'T' ) ) THEN
+         ILATRANS = BLAS_TRANS
+      ELSE IF( LSAME( TRANS, 'C' ) ) THEN
+         ILATRANS = BLAS_CONJ_TRANS
       ELSE
-         AB_ILATRANS = -1
+         ILATRANS = -1
       END IF
       RETURN
 *
-*     End of AB_ILATRANS
+*     End of ILATRANS
 *
       END

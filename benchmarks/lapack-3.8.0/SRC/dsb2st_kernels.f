@@ -1,6 +1,6 @@
-*> \brief \b AB_DSB2ST_KERNELS
+*> \brief \b DSB2ST_KERNELS
 *
-*  @generated from AB_ZHB2ST_KERNELS.f, fortran z -> d, Wed Dec  7 08:22:39 2016
+*  @generated from zhb2st_kernels.f, fortran z -> d, Wed Dec  7 08:22:39 2016
 *      
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download AB_DSB2ST_KERNELS + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSB2ST_KERNELS.f"> 
+*> Download DSB2ST_KERNELS + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsb2st_kernels.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSB2ST_KERNELS.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsb2st_kernels.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSB2ST_KERNELS.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsb2st_kernels.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE  AB_DSB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
+*       SUBROUTINE  DSB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
 *                                   ST, ED, SWEEP, N, NB, IB,
 *                                   A, LDA, V, TAU, LDVT, WORK)
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSB2ST_KERNELS is an internal routine used by the AB_DSYTRD_SB2ST
+*> DSB2ST_KERNELS is an internal routine used by the DSYTRD_SB2ST
 *> subroutine.
 *> \endverbatim
 *
@@ -164,7 +164,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE  AB_DSB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
+      SUBROUTINE  DSB2ST_KERNELS( UPLO, WANTZ, TTYPE, 
      $                            ST, ED, SWEEP, N, NB, IB,
      $                            A, LDA, V, TAU, LDVT, WORK)
 *
@@ -199,19 +199,19 @@
       DOUBLE PRECISION   CTMP 
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLARFG, AB_DLARFX, AB_DLARFY
+      EXTERNAL           DLARFG, DLARFX, DLARFY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     ..
 *     .. Executable Statements ..
 *      
       AJETER = IB + LDVT
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
 
       IF( UPPER ) THEN
           DPOS    = 2 * NB + 1
@@ -243,12 +243,12 @@
                   A( OFDPOS-I, ST+I ) = ZERO  
    10         CONTINUE
               CTMP = ( A( OFDPOS, ST ) )
-              CALL AB_DLARFG( LM, CTMP, V( VPOS+1 ), 1, 
+              CALL DLARFG( LM, CTMP, V( VPOS+1 ), 1, 
      $                                       TAU( TAUPOS ) )
               A( OFDPOS, ST ) = CTMP
 *
               LM = ED - ST + 1
-              CALL AB_DLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL DLARFY( UPLO, LM, V( VPOS ), 1,
      $                     ( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
           ENDIF
@@ -256,7 +256,7 @@
           IF( TTYPE.EQ.3 ) THEN
 *
               LM = ED - ST + 1
-              CALL AB_DLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL DLARFY( UPLO, LM, V( VPOS ), 1,
      $                     ( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
           ENDIF
@@ -267,7 +267,7 @@
               LN = ED-ST+1
               LM = J2-J1+1
               IF( LM.GT.0) THEN
-                  CALL AB_DLARFX( 'Left', LN, LM, V( VPOS ),
+                  CALL DLARFX( 'Left', LN, LM, V( VPOS ),
      $                         ( TAU( TAUPOS ) ),
      $                         A( DPOS-NB, J1 ), LDA-1, WORK)
 *
@@ -286,11 +286,10 @@
                       A( DPOS-NB-I, J1+I ) = ZERO
    30             CONTINUE
                   CTMP = ( A( DPOS-NB, J1 ) )
-                  CALL AB_DLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUPOS 
-     $) )
+                  CALL DLARFG( LM, CTMP, V( VPOS+1 ), 1, TAU( TAUPOS ) )
                   A( DPOS-NB, J1 ) = CTMP
 *                 
-                  CALL AB_DLARFX( 'Right', LN-1, LM, V( VPOS ),
+                  CALL DLARFX( 'Right', LN-1, LM, V( VPOS ),
      $                         TAU( TAUPOS ),
      $                         A( DPOS-NB+1, J1 ), LDA-1, WORK)
               ENDIF
@@ -316,12 +315,12 @@
                   V( VPOS+I )         = A( OFDPOS+I, ST-1 )
                   A( OFDPOS+I, ST-1 ) = ZERO  
    20         CONTINUE
-              CALL AB_DLARFG( LM, A( OFDPOS, ST-1 ), V( VPOS+1 ), 1, 
+              CALL DLARFG( LM, A( OFDPOS, ST-1 ), V( VPOS+1 ), 1, 
      $                                       TAU( TAUPOS ) )
 *
               LM = ED - ST + 1
 *
-              CALL AB_DLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL DLARFY( UPLO, LM, V( VPOS ), 1,
      $                     ( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
 
@@ -330,7 +329,7 @@
           IF( TTYPE.EQ.3 ) THEN
               LM = ED - ST + 1
 *
-              CALL AB_DLARFY( UPLO, LM, V( VPOS ), 1,
+              CALL DLARFY( UPLO, LM, V( VPOS ), 1,
      $                     ( TAU( TAUPOS ) ),
      $                     A( DPOS, ST ), LDA-1, WORK)
 
@@ -343,7 +342,7 @@
               LM = J2-J1+1
 *
               IF( LM.GT.0) THEN
-                  CALL AB_DLARFX( 'Right', LM, LN, V( VPOS ), 
+                  CALL DLARFX( 'Right', LM, LN, V( VPOS ), 
      $                         TAU( TAUPOS ), A( DPOS+NB, ST ),
      $                         LDA-1, WORK)
 *
@@ -360,10 +359,10 @@
                       V( VPOS+I )        = A( DPOS+NB+I, ST )
                       A( DPOS+NB+I, ST ) = ZERO
    40             CONTINUE
-                  CALL AB_DLARFG( LM, A( DPOS+NB, ST ), V( VPOS+1 ), 1, 
+                  CALL DLARFG( LM, A( DPOS+NB, ST ), V( VPOS+1 ), 1, 
      $                                        TAU( TAUPOS ) )
 *
-                  CALL AB_DLARFX( 'Left', LM, LN-1, V( VPOS ), 
+                  CALL DLARFX( 'Left', LM, LN-1, V( VPOS ), 
      $                         ( TAU( TAUPOS ) ),
      $                         A( DPOS+NB-1, ST+1 ), LDA-1, WORK)
              
@@ -373,6 +372,6 @@
 *
       RETURN
 *
-*     END OF AB_DSB2ST_KERNELS
+*     END OF DSB2ST_KERNELS
 *
       END      

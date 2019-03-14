@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHERK
+*> \brief \b ZHERK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHERK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+*       SUBROUTINE ZHERK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHERK  performs one of the hermitian rank k operations
+*> ZHERK  performs one of the hermitian rank k operations
 *>
 *>    C := alpha*A*A**H + beta*C,
 *>
@@ -171,7 +171,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZHERK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
+      SUBROUTINE ZHERK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
 *
 *  -- Reference BLAS level3 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -190,11 +190,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE,DCMPLX,DCONJG,MAX
@@ -212,18 +212,18 @@
 *
 *     Test the input parameters.
 *
-      IF (AB_LSAME(TRANS,'N')) THEN
+      IF (LSAME(TRANS,'N')) THEN
           NROWA = N
       ELSE
           NROWA = K
       END IF
-      UPPER = AB_LSAME(UPLO,'U')
+      UPPER = LSAME(UPLO,'U')
 *
       INFO = 0
-      IF ((.NOT.UPPER) .AND. (.NOT.AB_LSAME(UPLO,'L'))) THEN
+      IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
           INFO = 1
-      ELSE IF ((.NOT.AB_LSAME(TRANS,'N')) .AND.
-     +         (.NOT.AB_LSAME(TRANS,'C'))) THEN
+      ELSE IF ((.NOT.LSAME(TRANS,'N')) .AND.
+     +         (.NOT.LSAME(TRANS,'C'))) THEN
           INFO = 2
       ELSE IF (N.LT.0) THEN
           INFO = 3
@@ -235,7 +235,7 @@
           INFO = 10
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_ZHERK ',INFO)
+          CALL XERBLA('ZHERK ',INFO)
           RETURN
       END IF
 *
@@ -283,7 +283,7 @@
 *
 *     Start the operations.
 *
-      IF (AB_LSAME(TRANS,'N')) THEN
+      IF (LSAME(TRANS,'N')) THEN
 *
 *        Form  C := alpha*A*A**H + beta*C.
 *
@@ -391,6 +391,6 @@
 *
       RETURN
 *
-*     End of AB_ZHERK .
+*     End of ZHERK .
 *
       END

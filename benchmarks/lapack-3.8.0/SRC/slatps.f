@@ -1,4 +1,4 @@
-*> \brief \b AB_SLATPS solves a triangular system of equations with the matrix held in packed storage.
+*> \brief \b SLATPS solves a triangular system of equations with the matrix held in packed storage.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLATPS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLATPS.f">
+*> Download SLATPS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatps.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLATPS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slatps.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLATPS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatps.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLATPS( UPLO, TRANS, DIAG, NORMIN, N, AP, X, SCALE,
+*       SUBROUTINE SLATPS( UPLO, TRANS, DIAG, NORMIN, N, AP, X, SCALE,
 *                          CNORM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLATPS solves one of the triangular systems
+*> SLATPS solves one of the triangular systems
 *>
 *>    A *x = s*b  or  A**T*x = s*b
 *>
@@ -46,7 +46,7 @@
 *> factor, usually less than or equal to 1, chosen so that the
 *> components of x will be less than the overflow threshold.  If the
 *> unscaled problem will not cause overflow, the Level 2 BLAS routine
-*> AB_STPSV is called. If the matrix A is singular (A(j,j) = 0 for some j),
+*> STPSV is called. If the matrix A is singular (A(j,j) = 0 for some j),
 *> then s is set to 0 and a non-trivial solution to A*x = 0 is returned.
 *> \endverbatim
 *
@@ -158,7 +158,7 @@
 *>
 *> \verbatim
 *>
-*>  A rough bound on x is computed; if that is less than overflow, AB_STPSV
+*>  A rough bound on x is computed; if that is less than overflow, STPSV
 *>  is called, otherwise, specific code is used which checks for possible
 *>  overflow or divide-by-zero at every operation.
 *>
@@ -191,7 +191,7 @@
 *>     |x(j)| <= ( G(0) / |A(j,j)| ) product ( 1 + CNORM(i) / |A(i,i)| )
 *>                                   1<=i< j
 *>
-*>  Since |x(j)| <= M(j), we use the Level 2 BLAS routine AB_STPSV if the
+*>  Since |x(j)| <= M(j), we use the Level 2 BLAS routine STPSV if the
 *>  reciprocal of the largest M(j), j=1,..,n, is larger than
 *>  max(underflow, 1/overflow).
 *>
@@ -221,12 +221,12 @@
 *>            <= M(0) * product ( ( 1 + CNORM(i) ) / |A(i,i)| )
 *>                      1<=i<=j
 *>
-*>  and we can safely call AB_STPSV if 1/M(n) and 1/G(n) are both greater
+*>  and we can safely call STPSV if 1/M(n) and 1/G(n) are both greater
 *>  than max(underflow, 1/overflow).
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLATPS( UPLO, TRANS, DIAG, NORMIN, N, AP, X, SCALE,
+      SUBROUTINE SLATPS( UPLO, TRANS, DIAG, NORMIN, N, AP, X, SCALE,
      $                   CNORM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -256,13 +256,13 @@
      $                   TMAX, TSCAL, USCAL, XBND, XJ, XMAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX
-      REAL               AB_SASUM, AB_SDOT, SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SASUM, AB_SDOT, SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ISAMAX
+      REAL               SASUM, SDOT, SLAMCH
+      EXTERNAL           LSAME, ISAMAX, SASUM, SDOT, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SSCAL, AB_STPSV, AB_XERBLA
+      EXTERNAL           SAXPY, SSCAL, STPSV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -270,27 +270,27 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      NOUNIT = AB_LSAME( DIAG, 'N' )
+      UPPER = LSAME( UPLO, 'U' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      NOUNIT = LSAME( DIAG, 'N' )
 *
 *     Test the input parameters.
 *
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.AB_LSAME( NORMIN, 'Y' ) .AND. .NOT.
-     $         AB_LSAME( NORMIN, 'N' ) ) THEN
+      ELSE IF( .NOT.LSAME( NORMIN, 'Y' ) .AND. .NOT.
+     $         LSAME( NORMIN, 'N' ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLATPS', -INFO )
+         CALL XERBLA( 'SLATPS', -INFO )
          RETURN
       END IF
 *
@@ -305,7 +305,7 @@
       BIGNUM = ONE / SMLNUM
       SCALE = ONE
 *
-      IF( AB_LSAME( NORMIN, 'N' ) ) THEN
+      IF( LSAME( NORMIN, 'N' ) ) THEN
 *
 *        Compute the 1-norm of each column, not including the diagonal.
 *
@@ -315,7 +315,7 @@
 *
             IP = 1
             DO 10 J = 1, N
-               CNORM( J ) = AB_SASUM( J-1, AP( IP ), 1 )
+               CNORM( J ) = SASUM( J-1, AP( IP ), 1 )
                IP = IP + J
    10       CONTINUE
          ELSE
@@ -324,7 +324,7 @@
 *
             IP = 1
             DO 20 J = 1, N - 1
-               CNORM( J ) = AB_SASUM( N-J, AP( IP+1 ), 1 )
+               CNORM( J ) = SASUM( N-J, AP( IP+1 ), 1 )
                IP = IP + N - J + 1
    20       CONTINUE
             CNORM( N ) = ZERO
@@ -334,19 +334,19 @@
 *     Scale the column norms by TSCAL if the maximum element in CNORM is
 *     greater than BIGNUM.
 *
-      IMAX = AB_ISAMAX( N, CNORM, 1 )
+      IMAX = ISAMAX( N, CNORM, 1 )
       TMAX = CNORM( IMAX )
       IF( TMAX.LE.BIGNUM ) THEN
          TSCAL = ONE
       ELSE
          TSCAL = ONE / ( SMLNUM*TMAX )
-         CALL AB_SSCAL( N, TSCAL, CNORM, 1 )
+         CALL SSCAL( N, TSCAL, CNORM, 1 )
       END IF
 *
 *     Compute a bound on the computed solution vector to see if the
-*     Level 2 BLAS routine AB_STPSV can be used.
+*     Level 2 BLAS routine STPSV can be used.
 *
-      J = AB_ISAMAX( N, X, 1 )
+      J = ISAMAX( N, X, 1 )
       XMAX = ABS( X( J ) )
       XBND = XMAX
       IF( NOTRAN ) THEN
@@ -505,7 +505,7 @@
 *        Use the Level 2 BLAS solve if the reciprocal of the bound on
 *        elements of X is not too small.
 *
-         CALL AB_STPSV( UPLO, TRANS, DIAG, N, AP, X, 1 )
+         CALL STPSV( UPLO, TRANS, DIAG, N, AP, X, 1 )
       ELSE
 *
 *        Use a Level 1 BLAS solve, scaling intermediate results.
@@ -516,7 +516,7 @@
 *           BIGNUM in absolute value.
 *
             SCALE = BIGNUM / XMAX
-            CALL AB_SSCAL( N, SCALE, X, 1 )
+            CALL SSCAL( N, SCALE, X, 1 )
             XMAX = BIGNUM
          END IF
 *
@@ -548,7 +548,7 @@
 *                          Scale x by 1/b(j).
 *
                            REC = ONE / XJ
-                           CALL AB_SSCAL( N, REC, X, 1 )
+                           CALL SSCAL( N, REC, X, 1 )
                            SCALE = SCALE*REC
                            XMAX = XMAX*REC
                         END IF
@@ -572,7 +572,7 @@
 *
                            REC = REC / CNORM( J )
                         END IF
-                        CALL AB_SSCAL( N, REC, X, 1 )
+                        CALL SSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
@@ -603,14 +603,14 @@
 *                    Scale x by 1/(2*abs(x(j))).
 *
                      REC = REC*HALF
-                     CALL AB_SSCAL( N, REC, X, 1 )
+                     CALL SSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                   END IF
                ELSE IF( XJ*CNORM( J ).GT.( BIGNUM-XMAX ) ) THEN
 *
 *                 Scale x by 1/2.
 *
-                  CALL AB_SSCAL( N, HALF, X, 1 )
+                  CALL SSCAL( N, HALF, X, 1 )
                   SCALE = SCALE*HALF
                END IF
 *
@@ -620,10 +620,9 @@
 *                    Compute the update
 *                       x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j)
 *
-                     CALL AB_SAXPY( J-1, -X( J )*TSCAL, AP( IP-J+1 ), 1,
-     $ X,
+                     CALL SAXPY( J-1, -X( J )*TSCAL, AP( IP-J+1 ), 1, X,
      $                           1 )
-                     I = AB_ISAMAX( J-1, X, 1 )
+                     I = ISAMAX( J-1, X, 1 )
                      XMAX = ABS( X( I ) )
                   END IF
                   IP = IP - J
@@ -633,9 +632,9 @@
 *                    Compute the update
 *                       x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j)
 *
-                     CALL AB_SAXPY( N-J, -X( J )*TSCAL, AP( IP+1 ), 1,
+                     CALL SAXPY( N-J, -X( J )*TSCAL, AP( IP+1 ), 1,
      $                           X( J+1 ), 1 )
-                     I = J + AB_ISAMAX( N-J, X( J+1 ), 1 )
+                     I = J + ISAMAX( N-J, X( J+1 ), 1 )
                      XMAX = ABS( X( I ) )
                   END IF
                   IP = IP + N - J + 1
@@ -675,7 +674,7 @@
                         USCAL = USCAL / TJJS
                      END IF
                   IF( REC.LT.ONE ) THEN
-                     CALL AB_SSCAL( N, REC, X, 1 )
+                     CALL SSCAL( N, REC, X, 1 )
                      SCALE = SCALE*REC
                      XMAX = XMAX*REC
                   END IF
@@ -685,12 +684,12 @@
                IF( USCAL.EQ.ONE ) THEN
 *
 *                 If the scaling needed for A in the dot product is 1,
-*                 call AB_SDOT to perform the dot product.
+*                 call SDOT to perform the dot product.
 *
                   IF( UPPER ) THEN
-                     SUMJ = AB_SDOT( J-1, AP( IP-J+1 ), 1, X, 1 )
+                     SUMJ = SDOT( J-1, AP( IP-J+1 ), 1, X, 1 )
                   ELSE IF( J.LT.N ) THEN
-                     SUMJ = AB_SDOT( N-J, AP( IP+1 ), 1, X( J+1 ), 1 )
+                     SUMJ = SDOT( N-J, AP( IP+1 ), 1, X( J+1 ), 1 )
                   END IF
                ELSE
 *
@@ -735,7 +734,7 @@
 *                             Scale X by 1/abs(x(j)).
 *
                               REC = ONE / XJ
-                              CALL AB_SSCAL( N, REC, X, 1 )
+                              CALL SSCAL( N, REC, X, 1 )
                               SCALE = SCALE*REC
                               XMAX = XMAX*REC
                            END IF
@@ -750,7 +749,7 @@
 *                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM.
 *
                            REC = ( TJJ*BIGNUM ) / XJ
-                           CALL AB_SSCAL( N, REC, X, 1 )
+                           CALL SSCAL( N, REC, X, 1 )
                            SCALE = SCALE*REC
                            XMAX = XMAX*REC
                         END IF
@@ -786,11 +785,11 @@
 *     Scale the column norms by 1/TSCAL for return.
 *
       IF( TSCAL.NE.ONE ) THEN
-         CALL AB_SSCAL( N, ONE / TSCAL, CNORM, 1 )
+         CALL SSCAL( N, ONE / TSCAL, CNORM, 1 )
       END IF
 *
       RETURN
 *
-*     End of AB_SLATPS
+*     End of SLATPS
 *
       END

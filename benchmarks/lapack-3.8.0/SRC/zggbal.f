@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGGBAL
+*> \brief \b ZGGBAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGGBAL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGGBAL.f">
+*> Download ZGGBAL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggbal.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGGBAL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggbal.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGGBAL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggbal.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+*       SUBROUTINE ZGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
 *                          RSCALE, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGGBAL balances a pair of general complex matrices (A,B).  This
+*> ZGGBAL balances a pair of general complex matrices (A,B).  This
 *> involves, first, permuting A and B by similarity transformations to
 *> isolate eigenvalues in the first 1 to ILO$-$1 and last IHI+1 to N
 *> elements on the diagonal; and second, applying a diagonal similarity
@@ -174,7 +174,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+      SUBROUTINE ZGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
      $                   RSCALE, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -211,14 +211,13 @@
       COMPLEX*16         CDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DDOT, DLAMCH
-      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DDOT, DLAMCH
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DDOT, DLAMCH
+      EXTERNAL           LSAME, IZAMAX, DDOT, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DSCAL, AB_XERBLA, AB_ZDSCAL, AB_ZS
-     $WAP
+      EXTERNAL           DAXPY, DSCAL, XERBLA, ZDSCAL, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, INT, LOG10, MAX, MIN, SIGN
@@ -234,10 +233,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.AB_LSAME( JOB, 'P' ) .AND
-     $.
-     $    .NOT.AB_LSAME( JOB, 'S' ) .AND. .NOT.AB_LSAME( JOB, 'B' ) ) TH
-     $EN
+      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
+     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -247,7 +244,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGGBAL', -INFO )
+         CALL XERBLA( 'ZGGBAL', -INFO )
          RETURN
       END IF
 *
@@ -267,7 +264,7 @@
          RETURN
       END IF
 *
-      IF( AB_LSAME( JOB, 'N' ) ) THEN
+      IF( LSAME( JOB, 'N' ) ) THEN
          ILO = 1
          IHI = N
          DO 10 I = 1, N
@@ -279,7 +276,7 @@
 *
       K = 1
       L = N
-      IF( AB_LSAME( JOB, 'S' ) )
+      IF( LSAME( JOB, 'S' ) )
      $   GO TO 190
 *
       GO TO 30
@@ -355,8 +352,8 @@
       LSCALE( M ) = I
       IF( I.EQ.M )
      $   GO TO 170
-      CALL AB_ZSWAP( N-K+1, A( I, K ), LDA, A( M, K ), LDA )
-      CALL AB_ZSWAP( N-K+1, B( I, K ), LDB, B( M, K ), LDB )
+      CALL ZSWAP( N-K+1, A( I, K ), LDA, A( M, K ), LDA )
+      CALL ZSWAP( N-K+1, B( I, K ), LDB, B( M, K ), LDB )
 *
 *     Permute columns M and J
 *
@@ -364,8 +361,8 @@
       RSCALE( M ) = J
       IF( J.EQ.M )
      $   GO TO 180
-      CALL AB_ZSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
-      CALL AB_ZSWAP( L, B( 1, J ), 1, B( 1, M ), 1 )
+      CALL ZSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
+      CALL ZSWAP( L, B( 1, J ), 1, B( 1, M ), 1 )
 *
   180 CONTINUE
       GO TO ( 20, 90 )IFLOW
@@ -374,7 +371,7 @@
       ILO = K
       IHI = L
 *
-      IF( AB_LSAME( JOB, 'P' ) ) THEN
+      IF( LSAME( JOB, 'P' ) ) THEN
          DO 195 I = ILO, IHI
             LSCALE( I ) = ONE
             RSCALE( I ) = ONE
@@ -435,8 +432,8 @@
 *
   250 CONTINUE
 *
-      GAMMA = AB_DDOT( NR, WORK( ILO+4*N ), 1, WORK( ILO+4*N ), 1 ) +
-     $        AB_DDOT( NR, WORK( ILO+5*N ), 1, WORK( ILO+5*N ), 1 )
+      GAMMA = DDOT( NR, WORK( ILO+4*N ), 1, WORK( ILO+4*N ), 1 ) +
+     $        DDOT( NR, WORK( ILO+5*N ), 1, WORK( ILO+5*N ), 1 )
 *
       EW = ZERO
       EWC = ZERO
@@ -453,11 +450,11 @@
       T = COEF5*( EWC-THREE*EW )
       TC = COEF5*( EW-THREE*EWC )
 *
-      CALL AB_DSCAL( NR, BETA, WORK( ILO ), 1 )
-      CALL AB_DSCAL( NR, BETA, WORK( ILO+N ), 1 )
+      CALL DSCAL( NR, BETA, WORK( ILO ), 1 )
+      CALL DSCAL( NR, BETA, WORK( ILO+N ), 1 )
 *
-      CALL AB_DAXPY( NR, COEF, WORK( ILO+4*N ), 1, WORK( ILO+N ), 1 )
-      CALL AB_DAXPY( NR, COEF, WORK( ILO+5*N ), 1, WORK( ILO ), 1 )
+      CALL DAXPY( NR, COEF, WORK( ILO+4*N ), 1, WORK( ILO+N ), 1 )
+      CALL DAXPY( NR, COEF, WORK( ILO+5*N ), 1, WORK( ILO ), 1 )
 *
       DO 270 I = ILO, IHI
          WORK( I ) = WORK( I ) + TC
@@ -500,8 +497,8 @@
          WORK( J+3*N ) = DBLE( KOUNT )*WORK( J ) + SUM
   330 CONTINUE
 *
-      SUM = AB_DDOT( NR, WORK( ILO+N ), 1, WORK( ILO+2*N ), 1 ) +
-     $      AB_DDOT( NR, WORK( ILO ), 1, WORK( ILO+3*N ), 1 )
+      SUM = DDOT( NR, WORK( ILO+N ), 1, WORK( ILO+2*N ), 1 ) +
+     $      DDOT( NR, WORK( ILO ), 1, WORK( ILO+3*N ), 1 )
       ALPHA = GAMMA / SUM
 *
 *     Determine correction to current iteration
@@ -520,10 +517,8 @@
       IF( CMAX.LT.HALF )
      $   GO TO 350
 *
-      CALL AB_DAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ), 1 
-     $)
-      CALL AB_DAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ), 1 
-     $)
+      CALL DAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ), 1 )
+      CALL DAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ), 1 )
 *
       PGAMMA = GAMMA
       IT = IT + 1
@@ -538,17 +533,17 @@
       LSFMIN = INT( LOG10( SFMIN ) / BASL+ONE )
       LSFMAX = INT( LOG10( SFMAX ) / BASL )
       DO 360 I = ILO, IHI
-         IRAB = AB_IZAMAX( N-ILO+1, A( I, ILO ), LDA )
+         IRAB = IZAMAX( N-ILO+1, A( I, ILO ), LDA )
          RAB = ABS( A( I, IRAB+ILO-1 ) )
-         IRAB = AB_IZAMAX( N-ILO+1, B( I, ILO ), LDB )
+         IRAB = IZAMAX( N-ILO+1, B( I, ILO ), LDB )
          RAB = MAX( RAB, ABS( B( I, IRAB+ILO-1 ) ) )
          LRAB = INT( LOG10( RAB+SFMIN ) / BASL+ONE )
          IR = INT(LSCALE( I ) + SIGN( HALF, LSCALE( I ) ))
          IR = MIN( MAX( IR, LSFMIN ), LSFMAX, LSFMAX-LRAB )
          LSCALE( I ) = SCLFAC**IR
-         ICAB = AB_IZAMAX( IHI, A( 1, I ), 1 )
+         ICAB = IZAMAX( IHI, A( 1, I ), 1 )
          CAB = ABS( A( ICAB, I ) )
-         ICAB = AB_IZAMAX( IHI, B( 1, I ), 1 )
+         ICAB = IZAMAX( IHI, B( 1, I ), 1 )
          CAB = MAX( CAB, ABS( B( ICAB, I ) ) )
          LCAB = INT( LOG10( CAB+SFMIN ) / BASL+ONE )
          JC = INT(RSCALE( I ) + SIGN( HALF, RSCALE( I ) ))
@@ -559,19 +554,19 @@
 *     Row scaling of matrices A and B
 *
       DO 370 I = ILO, IHI
-         CALL AB_ZDSCAL( N-ILO+1, LSCALE( I ), A( I, ILO ), LDA )
-         CALL AB_ZDSCAL( N-ILO+1, LSCALE( I ), B( I, ILO ), LDB )
+         CALL ZDSCAL( N-ILO+1, LSCALE( I ), A( I, ILO ), LDA )
+         CALL ZDSCAL( N-ILO+1, LSCALE( I ), B( I, ILO ), LDB )
   370 CONTINUE
 *
 *     Column scaling of matrices A and B
 *
       DO 380 J = ILO, IHI
-         CALL AB_ZDSCAL( IHI, RSCALE( J ), A( 1, J ), 1 )
-         CALL AB_ZDSCAL( IHI, RSCALE( J ), B( 1, J ), 1 )
+         CALL ZDSCAL( IHI, RSCALE( J ), A( 1, J ), 1 )
+         CALL ZDSCAL( IHI, RSCALE( J ), B( 1, J ), 1 )
   380 CONTINUE
 *
       RETURN
 *
-*     End of AB_ZGGBAL
+*     End of ZGGBAL
 *
       END

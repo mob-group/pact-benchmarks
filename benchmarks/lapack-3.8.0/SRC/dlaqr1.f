@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H and specified shifts.
+*> \brief \b DLAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H and specified shifts.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAQR1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAQR1.f">
+*> Download DLAQR1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqr1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAQR1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqr1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAQR1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqr1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
+*       SUBROUTINE DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   SI1, SI2, SR1, SR2
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*>      Given a 2-by-2 or 3-by-3 matrix H, AB_DLAQR1 sets v to a
+*>      Given a 2-by-2 or 3-by-3 matrix H, DLAQR1 sets v to a
 *>      scalar multiple of the first column of the product
 *>
 *>      (*)  K = (H - (sr1 + i*si1)*I)*(H - (sr2 + i*si2)*I)
@@ -119,7 +119,7 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
+      SUBROUTINE DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

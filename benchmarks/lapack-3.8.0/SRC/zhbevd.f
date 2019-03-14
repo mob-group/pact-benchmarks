@@ -1,4 +1,4 @@
-*> \brief <b> AB_ZHBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> ZHBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHBEVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHBEVd.f">
+*> Download ZHBEVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhbevd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHBEVd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhbevd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHBEVd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbevd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+*       SUBROUTINE ZHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
 *                          LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHBEVD computes all the eigenvalues and, optionally, eigenvectors of
+*> ZHBEVD computes all the eigenvalues and, optionally, eigenvectors of
 *> a complex Hermitian band matrix A.  If eigenvectors are desired, it
 *> uses a divide and conquer algorithm.
 *>
@@ -143,7 +143,7 @@
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -166,7 +166,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -186,7 +186,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -212,8 +212,7 @@
 *> \ingroup complex16OTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK
-     $,
+      SUBROUTINE ZHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -248,14 +247,13 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_ZLANHB
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANHB
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANHB
+      EXTERNAL           LSAME, DLAMCH, ZLANHB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSCAL, AB_DSTERF, AB_XERBLA, AB_ZGEMM, AB_ZH
-     $BTRD, AB_ZLACPY,
-     $                   AB_ZLASCL, AB_ZSTEDC
+      EXTERNAL           DSCAL, DSTERF, XERBLA, ZGEMM, ZHBTRD, ZLACPY,
+     $                   ZLASCL, ZSTEDC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -264,8 +262,8 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 .OR. LRWORK.EQ.-1 )
 *
       INFO = 0
@@ -284,9 +282,9 @@
             LIWMIN = 1
          END IF
       END IF
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -313,7 +311,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHBEVD', -INFO )
+         CALL XERBLA( 'ZHBEVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -342,7 +340,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_ZLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
+      ANRM = ZLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -353,36 +351,33 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_ZLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL ZLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_ZLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL ZLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
       END IF
 *
-*     Call AB_ZHBTRD to reduce Hermitian band matrix to tridiagonal form.
+*     Call ZHBTRD to reduce Hermitian band matrix to tridiagonal form.
 *
       INDE = 1
       INDWRK = INDE + N
       INDWK2 = 1 + N*N
       LLWK2 = LWORK - INDWK2 + 1
       LLRWK = LRWORK - INDWRK + 1
-      CALL AB_ZHBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, RWORK( INDE ), Z,
+      CALL ZHBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, RWORK( INDE ), Z,
      $             LDZ, WORK, IINFO )
 *
-*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, call AB_ZSTEDC.
+*     For eigenvalues only, call DSTERF.  For eigenvectors, call ZSTEDC.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_DSTERF( N, W, RWORK( INDE ), INFO )
+         CALL DSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL AB_ZSTEDC( 'I', N, W, RWORK( INDE ), WORK, N, WORK( INDWK2
-     $ ),
+         CALL ZSTEDC( 'I', N, W, RWORK( INDE ), WORK, N, WORK( INDWK2 ),
      $                LLWK2, RWORK( INDWRK ), LLRWK, IWORK, LIWORK,
      $                INFO )
-         CALL AB_ZGEMM( 'N', 'N', N, N, N, CONE, Z, LDZ, WORK, N, CZERO,
+         CALL ZGEMM( 'N', 'N', N, N, N, CONE, Z, LDZ, WORK, N, CZERO,
      $               WORK( INDWK2 ), N )
-         CALL AB_ZLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
+         CALL ZLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
@@ -393,7 +388,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
       WORK( 1 ) = LWMIN
@@ -401,6 +396,6 @@
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of AB_ZHBEVD
+*     End of ZHBEVD
 *
       END

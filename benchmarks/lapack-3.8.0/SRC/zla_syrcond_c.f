@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLA_SYRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for symmetric indefinite matrices.
+*> \brief \b ZLA_SYRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for symmetric indefinite matrices.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLA_SYRCOND_C + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLA_SYRCOND_C.f">
+*> Download ZLA_SYRCOND_C + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_syrcond_c.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLA_SYRCOND_C.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_syrcond_c.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLA_SYRCOND_C.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_syrcond_c.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_ZLA_SYRCOND_C( UPLO, N, A, LDA, AF,
+*       DOUBLE PRECISION FUNCTION ZLA_SYRCOND_C( UPLO, N, A, LDA, AF,
 *                                                LDAF, IPIV, C, CAPPLY,
 *                                                INFO, WORK, RWORK )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZLA_SYRCOND_C Computes the infinity norm condition number of
+*>    ZLA_SYRCOND_C Computes the infinity norm condition number of
 *>    op(A) * inv(diag(C)) where C is a DOUBLE PRECISION vector.
 *> \endverbatim
 *
@@ -76,7 +76,7 @@
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDAF,N)
 *>     The block diagonal matrix D and the multipliers used to
-*>     obtain the factor U or L as computed by AB_ZSYTRF.
+*>     obtain the factor U or L as computed by ZSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -89,7 +89,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     Details of the interchanges and the block structure of D
-*>     as determined by AB_ZSYTRF.
+*>     as determined by ZSYTRF.
 *> \endverbatim
 *>
 *> \param[in] C
@@ -136,7 +136,7 @@
 *> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_ZLA_SYRCOND_C( UPLO, N, A, LDA, AF,
+      DOUBLE PRECISION FUNCTION ZLA_SYRCOND_C( UPLO, N, A, LDA, AF,
      $                                         LDAF, IPIV, C, CAPPLY,
      $                                         INFO, WORK, RWORK )
 *
@@ -169,11 +169,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLACN2, AB_ZSYTRS, AB_XERBLA
+      EXTERNAL           ZLACN2, ZSYTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -186,11 +186,11 @@
 *     ..
 *     .. Executable Statements ..
 *
-      AB_ZLA_SYRCOND_C = 0.0D+0
+      ZLA_SYRCOND_C = 0.0D+0
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -200,11 +200,11 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLA_SYRCOND_C', -INFO )
+         CALL XERBLA( 'ZLA_SYRCOND_C', -INFO )
          RETURN
       END IF
       UP = .FALSE.
-      IF ( AB_LSAME( UPLO, 'U' ) ) UP = .TRUE.
+      IF ( LSAME( UPLO, 'U' ) ) UP = .TRUE.
 *
 *     Compute norm of op(A)*op2(C).
 *
@@ -256,7 +256,7 @@
 *     Quick return if possible.
 *
       IF( N.EQ.0 ) THEN
-         AB_ZLA_SYRCOND_C = 1.0D+0
+         ZLA_SYRCOND_C = 1.0D+0
          RETURN
       ELSE IF( ANORM .EQ. 0.0D+0 ) THEN
          RETURN
@@ -268,7 +268,7 @@
 *
       KASE = 0
    10 CONTINUE
-      CALL AB_ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -279,10 +279,10 @@
             END DO
 *
             IF ( UP ) THEN
-               CALL AB_ZSYTRS( 'U', N, 1, AF, LDAF, IPIV,
+               CALL ZSYTRS( 'U', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL AB_ZSYTRS( 'L', N, 1, AF, LDAF, IPIV,
+               CALL ZSYTRS( 'L', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ENDIF
 *
@@ -304,10 +304,10 @@
             END IF
 *
             IF ( UP ) THEN
-               CALL AB_ZSYTRS( 'U', N, 1, AF, LDAF, IPIV,
+               CALL ZSYTRS( 'U', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL AB_ZSYTRS( 'L', N, 1, AF, LDAF, IPIV,
+               CALL ZSYTRS( 'L', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             END IF
 *
@@ -323,7 +323,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0D+0 )
-     $   AB_ZLA_SYRCOND_C = 1.0D+0 / AINVNM
+     $   ZLA_SYRCOND_C = 1.0D+0 / AINVNM
 *
       RETURN
 *

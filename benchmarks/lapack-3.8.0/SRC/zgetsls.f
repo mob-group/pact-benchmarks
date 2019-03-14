@@ -1,7 +1,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+*       SUBROUTINE ZGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
 *     $                     WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGETSLS solves overdetermined or underdetermined complex linear systems
+*> ZGETSLS solves overdetermined or underdetermined complex linear systems
 *> involving an M-by-N matrix A, using a tall skinny QR or short wide LQ
 *> factorization of A.  It is assumed that A has full rank.
 *>
@@ -81,7 +81,7 @@
 *>          On entry, the M-by-N matrix A.
 *>          On exit,
 *>          A is overwritten by details of its QR or LQ
-*>          factorization as returned by AB_ZGEQR or AB_ZGELQ.
+*>          factorization as returned by ZGEQR or ZGELQ.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -157,7 +157,7 @@
 *> \ingroup complex16GEsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+      SUBROUTINE ZGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
      $                    WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.1) --
@@ -191,15 +191,14 @@
       COMPLEX*16         TQ( 5 ), WORKQ( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLABAD, DLAMCH, AB_ZLAN
-     $GE
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           LSAME, ILAENV, DLABAD, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEQR, AB_ZGEMQR, AB_ZLASCL, AB_ZLASET,
-     $                   AB_ZTRTRS, AB_XERBLA, AB_ZGELQ, AB_ZGEMLQ
+      EXTERNAL           ZGEQR, ZGEMQR, ZLASCL, ZLASET,
+     $                   ZTRTRS, XERBLA, ZGELQ, ZGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN, INT
@@ -212,11 +211,11 @@
       MINMN = MIN( M, N )
       MAXMN = MAX( M, N )
       MNK   = MAX( MINMN, NRHS )
-      TRAN  = AB_LSAME( TRANS, 'C' )
+      TRAN  = LSAME( TRANS, 'C' )
 *
       LQUERY = ( LWORK.EQ.-1 .OR. LWORK.EQ.-2 )
-      IF( .NOT.( AB_LSAME( TRANS, 'N' ) .OR.
-     $    AB_LSAME( TRANS, 'C' ) ) ) THEN
+      IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
+     $    LSAME( TRANS, 'C' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -235,31 +234,31 @@
 *     Determine the block size and minimum LWORK
 *
        IF( M.GE.N ) THEN
-         CALL AB_ZGEQR( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
+         CALL ZGEQR( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
          TSZO = INT( TQ( 1 ) )
          LWO  = INT( WORKQ( 1 ) )
-         CALL AB_ZGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
+         CALL ZGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
          LWO  = MAX( LWO, INT( WORKQ( 1 ) ) )
-         CALL AB_ZGEQR( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
+         CALL ZGEQR( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
          TSZM = INT( TQ( 1 ) )
          LWM  = INT( WORKQ( 1 ) )
-         CALL AB_ZGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
+         CALL ZGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
      $                TSZM, B, LDB, WORKQ, -1, INFO2 )
          LWM = MAX( LWM, INT( WORKQ( 1 ) ) )
          WSIZEO = TSZO + LWO
          WSIZEM = TSZM + LWM
        ELSE
-         CALL AB_ZGELQ( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
+         CALL ZGELQ( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
          TSZO = INT( TQ( 1 ) )
          LWO  = INT( WORKQ( 1 ) )
-         CALL AB_ZGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
+         CALL ZGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
          LWO  = MAX( LWO, INT( WORKQ( 1 ) ) )
-         CALL AB_ZGELQ( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
+         CALL ZGELQ( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
          TSZM = INT( TQ( 1 ) )
          LWM  = INT( WORKQ( 1 ) )
-         CALL AB_ZGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
+         CALL ZGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
          LWM  = MAX( LWM, INT( WORKQ( 1 ) ) )
          WSIZEO = TSZO + LWO
@@ -273,7 +272,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_ZGETSLS', -INFO )
+        CALL XERBLA( 'ZGETSLS', -INFO )
         WORK( 1 ) = DBLE( WSIZEO )
         RETURN
       END IF
@@ -293,7 +292,7 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-           CALL AB_ZLASET( 'FULL', MAX( M, N ), NRHS, CZERO, CZERO,
+           CALL ZLASET( 'FULL', MAX( M, N ), NRHS, CZERO, CZERO,
      $                  B, LDB )
            RETURN
       END IF
@@ -302,29 +301,29 @@
 *
        SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
        BIGNUM = ONE / SMLNUM
-       CALL AB_DLABAD( SMLNUM, BIGNUM )
+       CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_ZLANGE( 'M', M, N, A, LDA, DUM )
+      ANRM = ZLANGE( 'M', M, N, A, LDA, DUM )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL AB_ZLASET( 'F', MAXMN, NRHS, CZERO, CZERO, B, LDB )
+         CALL ZLASET( 'F', MAXMN, NRHS, CZERO, CZERO, B, LDB )
          GO TO 50
       END IF
 *
@@ -332,20 +331,20 @@
       IF ( TRAN ) THEN
         BROW = N
       END IF
-      BNRM = AB_ZLANGE( 'M', BROW, NRHS, B, LDB, DUM )
+      BNRM = ZLANGE( 'M', BROW, NRHS, B, LDB, DUM )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
+         CALL ZLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
+         CALL ZLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 2
       END IF
@@ -354,7 +353,7 @@
 *
 *        compute QR factorization of A
 *
-        CALL AB_ZGEQR( M, N, A, LDA, WORK( LW2+1 ), LW1,
+        CALL ZGEQR( M, N, A, LDA, WORK( LW2+1 ), LW1,
      $              WORK( 1 ), LW2, INFO )
         IF ( .NOT.TRAN ) THEN
 *
@@ -362,13 +361,13 @@
 *
 *           B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-          CALL AB_ZGEMQR( 'L' , 'C', M, NRHS, N, A, LDA,
+          CALL ZGEMQR( 'L' , 'C', M, NRHS, N, A, LDA,
      $                 WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                 INFO )
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
-          CALL AB_ZTRTRS( 'U', 'N', 'N', N, NRHS,
+          CALL ZTRTRS( 'U', 'N', 'N', N, NRHS,
      $                  A, LDA, B, LDB, INFO )
           IF( INFO.GT.0 ) THEN
             RETURN
@@ -380,7 +379,7 @@
 *
 *           B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS)
 *
-            CALL AB_ZTRTRS( 'U', 'C', 'N', N, NRHS,
+            CALL ZTRTRS( 'U', 'C', 'N', N, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -397,7 +396,7 @@
 *
 *           B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS)
 *
-            CALL AB_ZGEMQR( 'L', 'N', M, NRHS, N, A, LDA,
+            CALL ZGEMQR( 'L', 'N', M, NRHS, N, A, LDA,
      $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
@@ -409,7 +408,7 @@
 *
 *        Compute LQ factorization of A
 *
-         CALL AB_ZGELQ( M, N, A, LDA, WORK( LW2+1 ), LW1,
+         CALL ZGELQ( M, N, A, LDA, WORK( LW2+1 ), LW1,
      $               WORK( 1 ), LW2, INFO )
 *
 *        workspace at least M, optimally M*NB.
@@ -420,7 +419,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS)
 *
-            CALL AB_ZTRTRS( 'L', 'N', 'N', M, NRHS,
+            CALL ZTRTRS( 'L', 'N', 'N', M, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -437,7 +436,7 @@
 *
 *           B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS)
 *
-            CALL AB_ZGEMLQ( 'L', 'C', N, NRHS, M, A, LDA,
+            CALL ZGEMLQ( 'L', 'C', N, NRHS, M, A, LDA,
      $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
@@ -451,7 +450,7 @@
 *
 *           B(1:N,1:NRHS) := Q * B(1:N,1:NRHS)
 *
-            CALL AB_ZGEMLQ( 'L', 'N', N, NRHS, M, A, LDA,
+            CALL ZGEMLQ( 'L', 'N', N, NRHS, M, A, LDA,
      $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
@@ -459,7 +458,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS)
 *
-            CALL AB_ZTRTRS( 'L', 'C', 'N', M, NRHS,
+            CALL ZTRTRS( 'L', 'C', 'N', M, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -475,17 +474,17 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-        CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
+        CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
      $               INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-        CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
+        CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-        CALL AB_ZLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
+        CALL ZLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $               INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-        CALL AB_ZLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
+        CALL ZLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $               INFO )
       END IF
 *
@@ -493,6 +492,6 @@
       WORK( 1 ) = DBLE( TSZO + LWO )
       RETURN
 *
-*     End of AB_ZGETSLS
+*     End of ZGETSLS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SPSTF2 computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix.
+*> \brief \b SPSTF2 computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPSTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPSTF2.f">
+*> Download SPSTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spstf2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPSTF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spstf2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPSTF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spstf2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+*       SUBROUTINE SPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       REAL               TOL
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPSTF2 computes the Cholesky factorization with complete
+*> SPSTF2 computes the Cholesky factorization with complete
 *> pivoting of a real symmetric positive semidefinite matrix A.
 *>
 *> The factorization has the form
@@ -139,8 +139,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO 
-     $)
+      SUBROUTINE SPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -170,11 +169,11 @@
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
-      LOGICAL            AB_LSAME, AB_SISNAN
-      EXTERNAL           SLAMCH, AB_LSAME, AB_SISNAN
+      LOGICAL            LSAME, SISNAN
+      EXTERNAL           SLAMCH, LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMV, AB_SSCAL, AB_SSWAP, AB_XERBLA
+      EXTERNAL           SGEMV, SSCAL, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT, MAXLOC
@@ -184,8 +183,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -193,7 +192,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPSTF2', -INFO )
+         CALL XERBLA( 'SPSTF2', -INFO )
          RETURN
       END IF
 *
@@ -218,7 +217,7 @@
             AJJ = A( PVT, PVT )
          END IF
       END DO
-      IF( AJJ.LE.ZERO.OR.AB_SISNAN( AJJ ) ) THEN
+      IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
          RANK = 0
          INFO = 1
          GO TO 170
@@ -261,7 +260,7 @@
                ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                PVT = ITEMP + J - 1
                AJJ = WORK( N+PVT )
-               IF( AJJ.LE.SSTOP.OR.AB_SISNAN( AJJ ) ) THEN
+               IF( AJJ.LE.SSTOP.OR.SISNAN( AJJ ) ) THEN
                   A( J, J ) = AJJ
                   GO TO 160
                END IF
@@ -272,12 +271,11 @@
 *              Pivot OK, so can now swap pivot rows and columns
 *
                A( PVT, PVT ) = A( J, J )
-               CALL AB_SSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
+               CALL SSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
                IF( PVT.LT.N )
-     $            CALL AB_SSWAP( N-PVT, A( J, PVT+1 ), LDA,
+     $            CALL SSWAP( N-PVT, A( J, PVT+1 ), LDA,
      $                        A( PVT, PVT+1 ), LDA )
-               CALL AB_SSWAP( PVT-J-1, A( J, J+1 ), LDA, A( J+1, PVT ), 
-     $1 )
+               CALL SSWAP( PVT-J-1, A( J, J+1 ), LDA, A( J+1, PVT ), 1 )
 *
 *              Swap dot products and PIV
 *
@@ -295,9 +293,9 @@
 *           Compute elements J+1:N of row J
 *
             IF( J.LT.N ) THEN
-               CALL AB_SGEMV( 'Trans', J-1, N-J, -ONE, A( 1, J+1 ), LDA,
+               CALL SGEMV( 'Trans', J-1, N-J, -ONE, A( 1, J+1 ), LDA,
      $                     A( 1, J ), 1, ONE, A( J, J+1 ), LDA )
-               CALL AB_SSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
+               CALL SSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
             END IF
 *
   130    CONTINUE
@@ -325,7 +323,7 @@
                ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                PVT = ITEMP + J - 1
                AJJ = WORK( N+PVT )
-               IF( AJJ.LE.SSTOP.OR.AB_SISNAN( AJJ ) ) THEN
+               IF( AJJ.LE.SSTOP.OR.SISNAN( AJJ ) ) THEN
                   A( J, J ) = AJJ
                   GO TO 160
                END IF
@@ -336,13 +334,11 @@
 *              Pivot OK, so can now swap pivot rows and columns
 *
                A( PVT, PVT ) = A( J, J )
-               CALL AB_SSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
+               CALL SSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
                IF( PVT.LT.N )
-     $            CALL AB_SSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1, PVT 
-     $),
+     $            CALL SSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1, PVT ),
      $                        1 )
-               CALL AB_SSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT, J+1 ), LD
-     $A )
+               CALL SSWAP( PVT-J-1, A( J+1, J ), 1, A( PVT, J+1 ), LDA )
 *
 *              Swap dot products and PIV
 *
@@ -360,10 +356,9 @@
 *           Compute elements J+1:N of column J
 *
             IF( J.LT.N ) THEN
-               CALL AB_SGEMV( 'No Trans', N-J, J-1, -ONE, A( J+1, 1 ), L
-     $DA,
+               CALL SGEMV( 'No Trans', N-J, J-1, -ONE, A( J+1, 1 ), LDA,
      $                     A( J, 1 ), LDA, ONE, A( J+1, J ), 1 )
-               CALL AB_SSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
+               CALL SSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
             END IF
 *
   150    CONTINUE
@@ -386,6 +381,6 @@
   170 CONTINUE
       RETURN
 *
-*     End of AB_SPSTF2
+*     End of SPSTF2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTZRQF
+*> \brief \b ZTZRQF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZTZRQF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTZRQF.f">
+*> Download ZTZRQF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztzrqf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTZRQF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztzrqf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTZRQF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztzrqf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTZRQF( M, N, A, LDA, TAU, INFO )
+*       SUBROUTINE ZTZRQF( M, N, A, LDA, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine AB_ZTZRZF.
+*> This routine is deprecated and has been replaced by routine ZTZRZF.
 *>
-*> AB_ZTZRQF reduces the M-by-N ( M<=N ) complex upper trapezoidal matrix A
+*> ZTZRQF reduces the M-by-N ( M<=N ) complex upper trapezoidal matrix A
 *> to upper triangular form by means of unitary transformations.
 *>
 *> The upper trapezoidal matrix A is factored as
@@ -136,7 +136,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZTZRQF( M, N, A, LDA, TAU, INFO )
+      SUBROUTINE ZTZRQF( M, N, A, LDA, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -165,9 +165,8 @@
       INTRINSIC          DCONJG, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZCOPY, AB_ZGEMV, AB_ZGE
-     $RC, AB_ZLACGV,
-     $                   AB_ZLARFG
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGEMV, ZGERC, ZLACGV,
+     $                   ZLARFG
 *     ..
 *     .. Executable Statements ..
 *
@@ -182,7 +181,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTZRQF', -INFO )
+         CALL XERBLA( 'ZTZRQF', -INFO )
          RETURN
       END IF
 *
@@ -202,9 +201,9 @@
 *           First set up the reflection.
 *
             A( K, K ) = DCONJG( A( K, K ) )
-            CALL AB_ZLACGV( N-M, A( K, M1 ), LDA )
+            CALL ZLACGV( N-M, A( K, M1 ), LDA )
             ALPHA = A( K, K )
-            CALL AB_ZLARFG( N-M+1, ALPHA, A( K, M1 ), LDA, TAU( K ) )
+            CALL ZLARFG( N-M+1, ALPHA, A( K, M1 ), LDA, TAU( K ) )
             A( K, K ) = ALPHA
             TAU( K ) = DCONJG( TAU( K ) )
 *
@@ -217,21 +216,19 @@
 *              the  kth column  of  A.  Also  let  B  denote  the  first
 *              ( k - 1 ) rows of the last ( n - m ) columns of A.
 *
-               CALL AB_ZCOPY( K-1, A( 1, K ), 1, TAU, 1 )
+               CALL ZCOPY( K-1, A( 1, K ), 1, TAU, 1 )
 *
 *              Form   w = a( k ) + B*z( k )  in TAU.
 *
-               CALL AB_ZGEMV( 'No transpose', K-1, N-M, CONE, A( 1, M1 )
-     $,
+               CALL ZGEMV( 'No transpose', K-1, N-M, CONE, A( 1, M1 ),
      $                     LDA, A( K, M1 ), LDA, CONE, TAU, 1 )
 *
 *              Now form  a( k ) := a( k ) - conjg(tau)*w
 *              and       B      := B      - conjg(tau)*w*z( k )**H.
 *
-               CALL AB_ZAXPY( K-1, -DCONJG( TAU( K ) ), TAU, 1, A( 1, K 
-     $),
+               CALL ZAXPY( K-1, -DCONJG( TAU( K ) ), TAU, 1, A( 1, K ),
      $                     1 )
-               CALL AB_ZGERC( K-1, N-M, -DCONJG( TAU( K ) ), TAU, 1,
+               CALL ZGERC( K-1, N-M, -DCONJG( TAU( K ) ), TAU, 1,
      $                     A( K, M1 ), LDA, A( 1, M1 ), LDA )
             END IF
    20    CONTINUE
@@ -239,6 +236,6 @@
 *
       RETURN
 *
-*     End of AB_ZTZRQF
+*     End of ZTZRQF
 *
       END

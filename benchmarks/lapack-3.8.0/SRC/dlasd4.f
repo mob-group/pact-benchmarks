@@ -1,4 +1,4 @@
-*> \brief \b AB_DLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by AB_DBDSDC.
+*> \brief \b DLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by dbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLASD4 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASD4.f">
+*> Download DLASD4 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd4.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASD4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd4.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASD4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd4.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
+*       SUBROUTINE DLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            I, INFO, N
@@ -151,7 +151,7 @@
 *>     at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
+      SUBROUTINE DLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,7 +188,7 @@
       DOUBLE PRECISION   DD( 3 ), ZZ( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAED6, AB_DLASD5
+      EXTERNAL           DLAED6, DLASD5
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -215,7 +215,7 @@
          RETURN
       END IF
       IF( N.EQ.2 ) THEN
-         CALL AB_DLASD5( I, D, Z, DELTA, RHO, SIGMA, WORK )
+         CALL DLASD5( I, D, Z, DELTA, RHO, SIGMA, WORK )
          RETURN
       END IF
 *
@@ -699,11 +699,11 @@
             DD( 1 ) = DTIIM
             DD( 2 ) = DELTA( II )*WORK( II )
             DD( 3 ) = DTIIP
-            CALL AB_DLAED6( NITER, ORGATI, C, DD, ZZ, W, ETA, INFO )
+            CALL DLAED6( NITER, ORGATI, C, DD, ZZ, W, ETA, INFO )
 *
             IF( INFO.NE.0 ) THEN
 *
-*              If INFO is not 0, i.e., AB_DLAED6 failed, switch back
+*              If INFO is not 0, i.e., DLAED6 failed, switch back
 *              to 2 pole interpolation.
 *
                SWTCH3 = .FALSE.
@@ -918,11 +918,11 @@
                DD( 1 ) = DTIIM
                DD( 2 ) = DELTA( II )*WORK( II )
                DD( 3 ) = DTIIP
-               CALL AB_DLAED6( NITER, ORGATI, C, DD, ZZ, W, ETA, INFO )
+               CALL DLAED6( NITER, ORGATI, C, DD, ZZ, W, ETA, INFO )
 *
                IF( INFO.NE.0 ) THEN
 *
-*                 If INFO is not 0, i.e., AB_DLAED6 failed, switch
+*                 If INFO is not 0, i.e., DLAED6 failed, switch
 *                 back to two pole interpolation
 *
                   SWTCH3 = .FALSE.
@@ -1056,6 +1056,6 @@
   240 CONTINUE
       RETURN
 *
-*     End of AB_DLASD4
+*     End of DLASD4
 *
       END

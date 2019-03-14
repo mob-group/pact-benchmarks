@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRSCL multiplies a vector by the reciprocal of a real scalar.
+*> \brief \b ZDRSCL multiplies a vector by the reciprocal of a real scalar.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZDRSCL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZDRSCL.f">
+*> Download ZDRSCL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zdrscl.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZDRSCL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zdrscl.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZDRSCL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zdrscl.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRSCL( N, SA, SX, INCX )
+*       SUBROUTINE ZDRSCL( N, SA, SX, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDRSCL multiplies an n-element complex vector x by the real scalar
+*> ZDRSCL multiplies an n-element complex vector x by the real scalar
 *> 1/a.  This is done without overflow or underflow as long as
 *> the final result x/a does not overflow or underflow.
 *> \endverbatim
@@ -82,7 +82,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRSCL( N, SA, SX, INCX )
+      SUBROUTINE ZDRSCL( N, SA, SX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -112,7 +112,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_ZDSCAL
+      EXTERNAL           DLABAD, ZDSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -128,7 +128,7 @@
 *
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Initialize the denominator to SA and the numerator to 1.
 *
@@ -162,13 +162,13 @@
 *
 *     Scale the vector X by MUL
 *
-      CALL AB_ZDSCAL( N, MUL, SX, INCX )
+      CALL ZDSCAL( N, MUL, SX, INCX )
 *
       IF( .NOT.DONE )
      $   GO TO 10
 *
       RETURN
 *
-*     End of AB_ZDRSCL
+*     End of ZDRSCL
 *
       END

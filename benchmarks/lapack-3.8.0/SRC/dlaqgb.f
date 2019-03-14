@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAQGB scales a general band matrix, using row and column scaling factors computed by AB_SGBEQU.
+*> \brief \b DLAQGB scales a general band matrix, using row and column scaling factors computed by sgbequ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAQGB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAQGB.f">
+*> Download DLAQGB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqgb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAQGB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqgb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAQGB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqgb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+*       SUBROUTINE DLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                          AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAQGB equilibrates a general M by N band matrix A with KL
+*> DLAQGB equilibrates a general M by N band matrix A with KL
 *> subdiagonals and KU superdiagonals using the row and scaling factors
 *> in the vectors R and C.
 *> \endverbatim
@@ -156,8 +156,7 @@
 *> \ingroup doubleGBauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND
-     $,
+      SUBROUTINE DLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
      $                   AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -252,6 +251,6 @@
 *
       RETURN
 *
-*     End of AB_DLAQGB
+*     End of DLAQGB
 *
       END

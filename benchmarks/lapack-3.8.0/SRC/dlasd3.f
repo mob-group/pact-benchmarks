@@ -1,4 +1,4 @@
-*> \brief \b AB_DLASD3 finds all square roots of the roots of the secular equation, as defined by the values in D and Z, and then updates the singular vectors by matrix multiplication. Used by AB_SBDSDC.
+*> \brief \b DLASD3 finds all square roots of the roots of the secular equation, as defined by the values in D and Z, and then updates the singular vectors by matrix multiplication. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLASD3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASD3.f">
+*> Download DLASD3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASD3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASD3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
+*       SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
 *                          LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
 *                          INFO )
 *
@@ -39,9 +39,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DLASD3 finds all the square roots of the roots of the secular
+*> DLASD3 finds all the square roots of the roots of the secular
 *> equation, as defined by the values in D and Z.  It makes the
-*> appropriate calls to AB_DLASD4 and then updates the singular
+*> appropriate calls to DLASD4 and then updates the singular
 *> vectors by matrix multiplication.
 *>
 *> This code makes very mild assumptions about floating point
@@ -51,7 +51,7 @@
 *> It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
 *>
-*> AB_DLASD3 is called from AB_DLASD1.
+*> DLASD3 is called from DLASD1.
 *> \endverbatim
 *
 *  Arguments:
@@ -173,7 +173,7 @@
 *>         and the third is dense. The first column of U and the row of
 *>         VT are treated separately, however.
 *>
-*>         The rows of the singular vectors found by AB_DLASD4
+*>         The rows of the singular vectors found by DLASD4
 *>         must be likewise permuted before the matrix multiplies can
 *>         take place.
 *> \endverbatim
@@ -220,8 +220,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, 
-     $U2,
+      SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
      $                   LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
      $                   INFO )
 *
@@ -253,12 +252,11 @@
       DOUBLE PRECISION   RHO, TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMC3, AB_DNRM2
-      EXTERNAL           DLAMC3, AB_DNRM2
+      DOUBLE PRECISION   DLAMC3, DNRM2
+      EXTERNAL           DLAMC3, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DGEMM, AB_DLACPY, AB_DLASCL, AB_DL
-     $ASD4, AB_XERBLA
+      EXTERNAL           DCOPY, DGEMM, DLACPY, DLASCL, DLASD4, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN, SQRT
@@ -296,7 +294,7 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLASD3', -INFO )
+         CALL XERBLA( 'DLASD3', -INFO )
          RETURN
       END IF
 *
@@ -304,9 +302,9 @@
 *
       IF( K.EQ.1 ) THEN
          D( 1 ) = ABS( Z( 1 ) )
-         CALL AB_DCOPY( M, VT2( 1, 1 ), LDVT2, VT( 1, 1 ), LDVT )
+         CALL DCOPY( M, VT2( 1, 1 ), LDVT2, VT( 1, 1 ), LDVT )
          IF( Z( 1 ).GT.ZERO ) THEN
-            CALL AB_DCOPY( N, U2( 1, 1 ), 1, U( 1, 1 ), 1 )
+            CALL DCOPY( N, U2( 1, 1 ), 1, U( 1, 1 ), 1 )
          ELSE
             DO 10 I = 1, N
                U( I, 1 ) = -U2( I, 1 )
@@ -338,18 +336,18 @@
 *
 *     Keep a copy of Z.
 *
-      CALL AB_DCOPY( K, Z, 1, Q, 1 )
+      CALL DCOPY( K, Z, 1, Q, 1 )
 *
 *     Normalize Z.
 *
-      RHO = AB_DNRM2( K, Z, 1 )
-      CALL AB_DLASCL( 'G', 0, 0, RHO, ONE, K, 1, Z, K, INFO )
+      RHO = DNRM2( K, Z, 1 )
+      CALL DLASCL( 'G', 0, 0, RHO, ONE, K, 1, Z, K, INFO )
       RHO = RHO*RHO
 *
 *     Find the new singular values.
 *
       DO 30 J = 1, K
-         CALL AB_DLASD4( K, J, DSIGMA, Z, U( 1, J ), RHO, D( J ),
+         CALL DLASD4( K, J, DSIGMA, Z, U( 1, J ), RHO, D( J ),
      $                VT( 1, J ), INFO )
 *
 *        If the zero finder fails, report the convergence failure.
@@ -386,7 +384,7 @@
             VT( J, I ) = Z( J ) / U( J, I ) / VT( J, I )
             U( J, I ) = DSIGMA( J )*VT( J, I )
    70    CONTINUE
-         TEMP = AB_DNRM2( K, U( 1, I ), 1 )
+         TEMP = DNRM2( K, U( 1, I ), 1 )
          Q( 1, I ) = U( 1, I ) / TEMP
          DO 80 J = 2, K
             JC = IDXC( J )
@@ -397,40 +395,36 @@
 *     Update the left singular vector matrix.
 *
       IF( K.EQ.2 ) THEN
-         CALL AB_DGEMM( 'N', 'N', N, K, K, ONE, U2, LDU2, Q, LDQ, ZERO, 
-     $U,
+         CALL DGEMM( 'N', 'N', N, K, K, ONE, U2, LDU2, Q, LDQ, ZERO, U,
      $               LDU )
          GO TO 100
       END IF
       IF( CTOT( 1 ).GT.0 ) THEN
-         CALL AB_DGEMM( 'N', 'N', NL, K, CTOT( 1 ), ONE, U2( 1, 2 ), LDU
-     $2,
+         CALL DGEMM( 'N', 'N', NL, K, CTOT( 1 ), ONE, U2( 1, 2 ), LDU2,
      $               Q( 2, 1 ), LDQ, ZERO, U( 1, 1 ), LDU )
          IF( CTOT( 3 ).GT.0 ) THEN
             KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
-            CALL AB_DGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1, KTEMP
-     $ ),
+            CALL DGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1, KTEMP ),
      $                  LDU2, Q( KTEMP, 1 ), LDQ, ONE, U( 1, 1 ), LDU )
          END IF
       ELSE IF( CTOT( 3 ).GT.0 ) THEN
          KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
-         CALL AB_DGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1, KTEMP ),
+         CALL DGEMM( 'N', 'N', NL, K, CTOT( 3 ), ONE, U2( 1, KTEMP ),
      $               LDU2, Q( KTEMP, 1 ), LDQ, ZERO, U( 1, 1 ), LDU )
       ELSE
-         CALL AB_DLACPY( 'F', NL, K, U2, LDU2, U, LDU )
+         CALL DLACPY( 'F', NL, K, U2, LDU2, U, LDU )
       END IF
-      CALL AB_DCOPY( K, Q( 1, 1 ), LDQ, U( NLP1, 1 ), LDU )
+      CALL DCOPY( K, Q( 1, 1 ), LDQ, U( NLP1, 1 ), LDU )
       KTEMP = 2 + CTOT( 1 )
       CTEMP = CTOT( 2 ) + CTOT( 3 )
-      CALL AB_DGEMM( 'N', 'N', NR, K, CTEMP, ONE, U2( NLP2, KTEMP ), LDU
-     $2,
+      CALL DGEMM( 'N', 'N', NR, K, CTEMP, ONE, U2( NLP2, KTEMP ), LDU2,
      $            Q( KTEMP, 1 ), LDQ, ZERO, U( NLP2, 1 ), LDU )
 *
 *     Generate the right singular vectors.
 *
   100 CONTINUE
       DO 120 I = 1, K
-         TEMP = AB_DNRM2( K, VT( 1, I ), 1 )
+         TEMP = DNRM2( K, VT( 1, I ), 1 )
          Q( I, 1 ) = VT( 1, I ) / TEMP
          DO 110 J = 2, K
             JC = IDXC( J )
@@ -441,18 +435,16 @@
 *     Update the right singular vector matrix.
 *
       IF( K.EQ.2 ) THEN
-         CALL AB_DGEMM( 'N', 'N', K, M, K, ONE, Q, LDQ, VT2, LDVT2, ZERO
-     $,
+         CALL DGEMM( 'N', 'N', K, M, K, ONE, Q, LDQ, VT2, LDVT2, ZERO,
      $               VT, LDVT )
          RETURN
       END IF
       KTEMP = 1 + CTOT( 1 )
-      CALL AB_DGEMM( 'N', 'N', K, NLP1, KTEMP, ONE, Q( 1, 1 ), LDQ,
+      CALL DGEMM( 'N', 'N', K, NLP1, KTEMP, ONE, Q( 1, 1 ), LDQ,
      $            VT2( 1, 1 ), LDVT2, ZERO, VT( 1, 1 ), LDVT )
       KTEMP = 2 + CTOT( 1 ) + CTOT( 2 )
       IF( KTEMP.LE.LDVT2 )
-     $   CALL AB_DGEMM( 'N', 'N', K, NLP1, CTOT( 3 ), ONE, Q( 1, KTEMP )
-     $,
+     $   CALL DGEMM( 'N', 'N', K, NLP1, CTOT( 3 ), ONE, Q( 1, KTEMP ),
      $               LDQ, VT2( KTEMP, 1 ), LDVT2, ONE, VT( 1, 1 ),
      $               LDVT )
 *
@@ -467,11 +459,11 @@
   140    CONTINUE
       END IF
       CTEMP = 1 + CTOT( 2 ) + CTOT( 3 )
-      CALL AB_DGEMM( 'N', 'N', K, NRP1, CTEMP, ONE, Q( 1, KTEMP ), LDQ,
+      CALL DGEMM( 'N', 'N', K, NRP1, CTEMP, ONE, Q( 1, KTEMP ), LDQ,
      $            VT2( KTEMP, NLP2 ), LDVT2, ZERO, VT( 1, NLP2 ), LDVT )
 *
       RETURN
 *
-*     End of AB_DLASD3
+*     End of DLASD3
 *
       END

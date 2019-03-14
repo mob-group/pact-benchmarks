@@ -1,4 +1,4 @@
-*> \brief \b AB_SLASR applies a sequence of plane rotations to a general rectangular matrix.
+*> \brief \b SLASR applies a sequence of plane rotations to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLASR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASR.f">
+*> Download SLASR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLASR( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
+*       SUBROUTINE SLASR( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, PIVOT, SIDE
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLASR applies a sequence of plane rotations to a real matrix A,
+*> SLASR applies a sequence of plane rotations to a real matrix A,
 *> from either the left or the right.
 *>
 *> When SIDE = 'L', the transformation takes the form
@@ -197,7 +197,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLASR( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
+      SUBROUTINE SLASR( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -223,11 +223,11 @@
       REAL               CTEMP, STEMP, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -237,14 +237,12 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.( AB_LSAME( SIDE, 'L' ) .OR. AB_LSAME( SIDE, 'R' ) ) ) TH
-     $EN
+      IF( .NOT.( LSAME( SIDE, 'L' ) .OR. LSAME( SIDE, 'R' ) ) ) THEN
          INFO = 1
-      ELSE IF( .NOT.( AB_LSAME( PIVOT, 'V' ) .OR. AB_LSAME( PIVOT,
-     $         'T' ) .OR. AB_LSAME( PIVOT, 'B' ) ) ) THEN
+      ELSE IF( .NOT.( LSAME( PIVOT, 'V' ) .OR. LSAME( PIVOT,
+     $         'T' ) .OR. LSAME( PIVOT, 'B' ) ) ) THEN
          INFO = 2
-      ELSE IF( .NOT.( AB_LSAME( DIRECT, 'F' ) .OR. AB_LSAME( DIRECT, 'B'
-     $ ) ) )
+      ELSE IF( .NOT.( LSAME( DIRECT, 'F' ) .OR. LSAME( DIRECT, 'B' ) ) )
      $          THEN
          INFO = 3
       ELSE IF( M.LT.0 ) THEN
@@ -255,7 +253,7 @@
          INFO = 9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLASR ', INFO )
+         CALL XERBLA( 'SLASR ', INFO )
          RETURN
       END IF
 *
@@ -263,12 +261,12 @@
 *
       IF( ( M.EQ.0 ) .OR. ( N.EQ.0 ) )
      $   RETURN
-      IF( AB_LSAME( SIDE, 'L' ) ) THEN
+      IF( LSAME( SIDE, 'L' ) ) THEN
 *
 *        Form  P * A
 *
-         IF( AB_LSAME( PIVOT, 'V' ) ) THEN
-            IF( AB_LSAME( DIRECT, 'F' ) ) THEN
+         IF( LSAME( PIVOT, 'V' ) ) THEN
+            IF( LSAME( DIRECT, 'F' ) ) THEN
                DO 20 J = 1, M - 1
                   CTEMP = C( J )
                   STEMP = S( J )
@@ -280,7 +278,7 @@
    10                CONTINUE
                   END IF
    20          CONTINUE
-            ELSE IF( AB_LSAME( DIRECT, 'B' ) ) THEN
+            ELSE IF( LSAME( DIRECT, 'B' ) ) THEN
                DO 40 J = M - 1, 1, -1
                   CTEMP = C( J )
                   STEMP = S( J )
@@ -293,8 +291,8 @@
                   END IF
    40          CONTINUE
             END IF
-         ELSE IF( AB_LSAME( PIVOT, 'T' ) ) THEN
-            IF( AB_LSAME( DIRECT, 'F' ) ) THEN
+         ELSE IF( LSAME( PIVOT, 'T' ) ) THEN
+            IF( LSAME( DIRECT, 'F' ) ) THEN
                DO 60 J = 2, M
                   CTEMP = C( J-1 )
                   STEMP = S( J-1 )
@@ -306,7 +304,7 @@
    50                CONTINUE
                   END IF
    60          CONTINUE
-            ELSE IF( AB_LSAME( DIRECT, 'B' ) ) THEN
+            ELSE IF( LSAME( DIRECT, 'B' ) ) THEN
                DO 80 J = M, 2, -1
                   CTEMP = C( J-1 )
                   STEMP = S( J-1 )
@@ -319,8 +317,8 @@
                   END IF
    80          CONTINUE
             END IF
-         ELSE IF( AB_LSAME( PIVOT, 'B' ) ) THEN
-            IF( AB_LSAME( DIRECT, 'F' ) ) THEN
+         ELSE IF( LSAME( PIVOT, 'B' ) ) THEN
+            IF( LSAME( DIRECT, 'F' ) ) THEN
                DO 100 J = 1, M - 1
                   CTEMP = C( J )
                   STEMP = S( J )
@@ -332,7 +330,7 @@
    90                CONTINUE
                   END IF
   100          CONTINUE
-            ELSE IF( AB_LSAME( DIRECT, 'B' ) ) THEN
+            ELSE IF( LSAME( DIRECT, 'B' ) ) THEN
                DO 120 J = M - 1, 1, -1
                   CTEMP = C( J )
                   STEMP = S( J )
@@ -346,12 +344,12 @@
   120          CONTINUE
             END IF
          END IF
-      ELSE IF( AB_LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( LSAME( SIDE, 'R' ) ) THEN
 *
 *        Form A * P**T
 *
-         IF( AB_LSAME( PIVOT, 'V' ) ) THEN
-            IF( AB_LSAME( DIRECT, 'F' ) ) THEN
+         IF( LSAME( PIVOT, 'V' ) ) THEN
+            IF( LSAME( DIRECT, 'F' ) ) THEN
                DO 140 J = 1, N - 1
                   CTEMP = C( J )
                   STEMP = S( J )
@@ -363,7 +361,7 @@
   130                CONTINUE
                   END IF
   140          CONTINUE
-            ELSE IF( AB_LSAME( DIRECT, 'B' ) ) THEN
+            ELSE IF( LSAME( DIRECT, 'B' ) ) THEN
                DO 160 J = N - 1, 1, -1
                   CTEMP = C( J )
                   STEMP = S( J )
@@ -376,8 +374,8 @@
                   END IF
   160          CONTINUE
             END IF
-         ELSE IF( AB_LSAME( PIVOT, 'T' ) ) THEN
-            IF( AB_LSAME( DIRECT, 'F' ) ) THEN
+         ELSE IF( LSAME( PIVOT, 'T' ) ) THEN
+            IF( LSAME( DIRECT, 'F' ) ) THEN
                DO 180 J = 2, N
                   CTEMP = C( J-1 )
                   STEMP = S( J-1 )
@@ -389,7 +387,7 @@
   170                CONTINUE
                   END IF
   180          CONTINUE
-            ELSE IF( AB_LSAME( DIRECT, 'B' ) ) THEN
+            ELSE IF( LSAME( DIRECT, 'B' ) ) THEN
                DO 200 J = N, 2, -1
                   CTEMP = C( J-1 )
                   STEMP = S( J-1 )
@@ -402,8 +400,8 @@
                   END IF
   200          CONTINUE
             END IF
-         ELSE IF( AB_LSAME( PIVOT, 'B' ) ) THEN
-            IF( AB_LSAME( DIRECT, 'F' ) ) THEN
+         ELSE IF( LSAME( PIVOT, 'B' ) ) THEN
+            IF( LSAME( DIRECT, 'F' ) ) THEN
                DO 220 J = 1, N - 1
                   CTEMP = C( J )
                   STEMP = S( J )
@@ -415,7 +413,7 @@
   210                CONTINUE
                   END IF
   220          CONTINUE
-            ELSE IF( AB_LSAME( DIRECT, 'B' ) ) THEN
+            ELSE IF( LSAME( DIRECT, 'B' ) ) THEN
                DO 240 J = N - 1, 1, -1
                   CTEMP = C( J )
                   STEMP = S( J )
@@ -433,6 +431,6 @@
 *
       RETURN
 *
-*     End of AB_SLASR
+*     End of SLASR
 *
       END

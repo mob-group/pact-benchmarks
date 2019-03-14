@@ -1,4 +1,4 @@
-*> \brief <b> AB_CHBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> CHBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHBEVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHBEVd.f">
+*> Download CHBEVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chbevd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHBEVd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chbevd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHBEVd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbevd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+*       SUBROUTINE CHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
 *                          LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHBEVD computes all the eigenvalues and, optionally, eigenvectors of
+*> CHBEVD computes all the eigenvalues and, optionally, eigenvectors of
 *> a complex Hermitian band matrix A.  If eigenvectors are desired, it
 *> uses a divide and conquer algorithm.
 *>
@@ -143,7 +143,7 @@
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -166,7 +166,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -186,7 +186,7 @@
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
 *>          of the WORK, RWORK and IWORK arrays, and no error message
-*>          related to LWORK or LRWORK or LIWORK is issued by AB_XERBLA.
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -212,8 +212,7 @@
 *> \ingroup complexOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_CHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK
-     $,
+      SUBROUTINE CHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -248,14 +247,13 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANHB, SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANHB, SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANHB, SLAMCH
+      EXTERNAL           LSAME, CLANHB, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CHBTRD, AB_CLACPY, AB_CLASCL, AB_C
-     $STEDC, AB_SSCAL,
-     $                   AB_SSTERF, AB_XERBLA
+      EXTERNAL           CGEMM, CHBTRD, CLACPY, CLASCL, CSTEDC, SSCAL,
+     $                   SSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -264,8 +262,8 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 .OR. LRWORK.EQ.-1 )
 *
       INFO = 0
@@ -284,9 +282,9 @@
             LIWMIN = 1
          END IF
       END IF
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -313,7 +311,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHBEVD', -INFO )
+         CALL XERBLA( 'CHBEVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -342,7 +340,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_CLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
+      ANRM = CLANHB( 'M', UPLO, N, KD, AB, LDAB, RWORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -353,36 +351,33 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL CLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL CLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
       END IF
 *
-*     Call AB_CHBTRD to reduce Hermitian band matrix to tridiagonal form.
+*     Call CHBTRD to reduce Hermitian band matrix to tridiagonal form.
 *
       INDE = 1
       INDWRK = INDE + N
       INDWK2 = 1 + N*N
       LLWK2 = LWORK - INDWK2 + 1
       LLRWK = LRWORK - INDWRK + 1
-      CALL AB_CHBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, RWORK( INDE ), Z,
+      CALL CHBTRD( JOBZ, UPLO, N, KD, AB, LDAB, W, RWORK( INDE ), Z,
      $             LDZ, WORK, IINFO )
 *
-*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, call AB_CSTEDC.
+*     For eigenvalues only, call SSTERF.  For eigenvectors, call CSTEDC.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_SSTERF( N, W, RWORK( INDE ), INFO )
+         CALL SSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL AB_CSTEDC( 'I', N, W, RWORK( INDE ), WORK, N, WORK( INDWK2
-     $ ),
+         CALL CSTEDC( 'I', N, W, RWORK( INDE ), WORK, N, WORK( INDWK2 ),
      $                LLWK2, RWORK( INDWRK ), LLRWK, IWORK, LIWORK,
      $                INFO )
-         CALL AB_CGEMM( 'N', 'N', N, N, N, CONE, Z, LDZ, WORK, N, CZERO,
+         CALL CGEMM( 'N', 'N', N, N, N, CONE, Z, LDZ, WORK, N, CZERO,
      $               WORK( INDWK2 ), N )
-         CALL AB_CLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
+         CALL CLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
@@ -393,7 +388,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
       WORK( 1 ) = LWMIN
@@ -401,6 +396,6 @@
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of AB_CHBEVD
+*     End of CHBEVD
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAED3 used by AB_SSTEDC. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is tridiagonal.
+*> \brief \b DLAED3 used by sstedc. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAED3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAED3.f">
+*> Download DLAED3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAED3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAED3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
+*       SUBROUTINE DLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
 *                          CTOT, W, S, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAED3 finds the roots of the secular equation, as defined by the
+*> DLAED3 finds the roots of the secular equation, as defined by the
 *> values in D, W, and RHO, between 1 and K.  It makes the
-*> appropriate calls to AB_DLAED4 and then updates the eigenvectors by
+*> appropriate calls to DLAED4 and then updates the eigenvectors by
 *> multiplying the matrix of eigenvectors of the pair of eigensystems
 *> being combined by the matrix of eigenvectors of the K-by-K system
 *> which is solved here.
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          K is INTEGER
 *>          The number of terms in the rational function to be solved by
-*>          AB_DLAED4.  K >= 0.
+*>          DLAED4.  K >= 0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -125,8 +125,8 @@
 *> \verbatim
 *>          INDX is INTEGER array, dimension (N)
 *>          The permutation used to arrange the columns of the deflated
-*>          Q matrix into three groups (see AB_DLAED2).
-*>          The rows of the eigenvectors found by AB_DLAED4 must be likewise
+*>          Q matrix into three groups (see DLAED2).
+*>          The rows of the eigenvectors found by DLAED4 must be likewise
 *>          permuted before the matrix multiply can take place.
 *> \endverbatim
 *>
@@ -182,7 +182,7 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
+      SUBROUTINE DLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
      $                   CTOT, W, S, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -211,12 +211,11 @@
       DOUBLE PRECISION   TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMC3, AB_DNRM2
-      EXTERNAL           DLAMC3, AB_DNRM2
+      DOUBLE PRECISION   DLAMC3, DNRM2
+      EXTERNAL           DLAMC3, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DGEMM, AB_DLACPY, AB_DLAED4, AB_DL
-     $ASET, AB_XERBLA
+      EXTERNAL           DCOPY, DGEMM, DLACPY, DLAED4, DLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -235,7 +234,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLAED3', -INFO )
+         CALL XERBLA( 'DLAED3', -INFO )
          RETURN
       END IF
 *
@@ -266,7 +265,7 @@
    10 CONTINUE
 *
       DO 20 J = 1, K
-         CALL AB_DLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
+         CALL DLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
 *
 *        If the zero finder fails, the computation is terminated.
 *
@@ -290,11 +289,11 @@
 *
 *     Compute updated W.
 *
-      CALL AB_DCOPY( K, W, 1, S, 1 )
+      CALL DCOPY( K, W, 1, S, 1 )
 *
 *     Initialize W(I) = Q(I,I)
 *
-      CALL AB_DCOPY( K, Q, LDQ+1, W, 1 )
+      CALL DCOPY( K, Q, LDQ+1, W, 1 )
       DO 60 J = 1, K
          DO 40 I = 1, J - 1
             W( I ) = W( I )*( Q( I, J ) / ( DLAMDA( I )-DLAMDA( J ) ) )
@@ -313,7 +312,7 @@
          DO 80 I = 1, K
             S( I ) = W( I ) / Q( I, J )
    80    CONTINUE
-         TEMP = AB_DNRM2( K, S, 1 )
+         TEMP = DNRM2( K, S, 1 )
          DO 90 I = 1, K
             II = INDX( I )
             Q( I, J ) = S( II ) / TEMP
@@ -328,29 +327,27 @@
       N12 = CTOT( 1 ) + CTOT( 2 )
       N23 = CTOT( 2 ) + CTOT( 3 )
 *
-      CALL AB_DLACPY( 'A', N23, K, Q( CTOT( 1 )+1, 1 ), LDQ, S, N23 )
+      CALL DLACPY( 'A', N23, K, Q( CTOT( 1 )+1, 1 ), LDQ, S, N23 )
       IQ2 = N1*N12 + 1
       IF( N23.NE.0 ) THEN
-         CALL AB_DGEMM( 'N', 'N', N2, K, N23, ONE, Q2( IQ2 ), N2, S, N23
-     $,
+         CALL DGEMM( 'N', 'N', N2, K, N23, ONE, Q2( IQ2 ), N2, S, N23,
      $               ZERO, Q( N1+1, 1 ), LDQ )
       ELSE
-         CALL AB_DLASET( 'A', N2, K, ZERO, ZERO, Q( N1+1, 1 ), LDQ )
+         CALL DLASET( 'A', N2, K, ZERO, ZERO, Q( N1+1, 1 ), LDQ )
       END IF
 *
-      CALL AB_DLACPY( 'A', N12, K, Q, LDQ, S, N12 )
+      CALL DLACPY( 'A', N12, K, Q, LDQ, S, N12 )
       IF( N12.NE.0 ) THEN
-         CALL AB_DGEMM( 'N', 'N', N1, K, N12, ONE, Q2, N1, S, N12, ZERO,
-     $ Q,
+         CALL DGEMM( 'N', 'N', N1, K, N12, ONE, Q2, N1, S, N12, ZERO, Q,
      $               LDQ )
       ELSE
-         CALL AB_DLASET( 'A', N1, K, ZERO, ZERO, Q( 1, 1 ), LDQ )
+         CALL DLASET( 'A', N1, K, ZERO, ZERO, Q( 1, 1 ), LDQ )
       END IF
 *
 *
   120 CONTINUE
       RETURN
 *
-*     End of AB_DLAED3
+*     End of DLAED3
 *
       END

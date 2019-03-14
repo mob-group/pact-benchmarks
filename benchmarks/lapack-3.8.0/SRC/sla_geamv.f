@@ -1,4 +1,4 @@
-*> \brief \b AB_SLA_GEAMV computes a matrix-vector product using a general matrix to calculate error bounds.
+*> \brief \b SLA_GEAMV computes a matrix-vector product using a general matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLA_GEAMV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLA_GEAMV.f">
+*> Download SLA_GEAMV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_geamv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLA_GEAMV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_geamv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLA_GEAMV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_geamv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+*       SUBROUTINE SLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
 *                              Y, INCY )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLA_GEAMV  performs one of the matrix-vector operations
+*> SLA_GEAMV  performs one of the matrix-vector operations
 *>
 *>         y := alpha*abs(A)*abs(x) + beta*abs(y),
 *>    or   y := alpha*abs(A)**T*abs(x) + beta*abs(y),
@@ -171,8 +171,7 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BET
-     $A,
+      SUBROUTINE SLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
      $                       Y, INCY )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -200,12 +199,12 @@
       INTEGER            I, INFO, IY, J, JX, KX, KY, LENX, LENY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, SLAMCH
+      EXTERNAL           XERBLA, SLAMCH
       REAL               SLAMCH
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_ILATRANS
-      INTEGER            AB_ILATRANS
+      EXTERNAL           ILATRANS
+      INTEGER            ILATRANS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, ABS, SIGN
@@ -215,9 +214,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF     ( .NOT.( ( TRANS.EQ.AB_ILATRANS( 'N' ) )
-     $           .OR. ( TRANS.EQ.AB_ILATRANS( 'T' ) )
-     $           .OR. ( TRANS.EQ.AB_ILATRANS( 'C' )) ) ) THEN
+      IF     ( .NOT.( ( TRANS.EQ.ILATRANS( 'N' ) )
+     $           .OR. ( TRANS.EQ.ILATRANS( 'T' ) )
+     $           .OR. ( TRANS.EQ.ILATRANS( 'C' )) ) ) THEN
          INFO = 1
       ELSE IF( M.LT.0 )THEN
          INFO = 2
@@ -231,7 +230,7 @@
          INFO = 11
       END IF
       IF( INFO.NE.0 )THEN
-         CALL AB_XERBLA( 'AB_SLA_GEAMV ', INFO )
+         CALL XERBLA( 'SLA_GEAMV ', INFO )
          RETURN
       END IF
 *
@@ -244,7 +243,7 @@
 *     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 *     up the start points in  X  and  Y.
 *
-      IF( TRANS.EQ.AB_ILATRANS( 'N' ) )THEN
+      IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
          LENX = N
          LENY = M
       ELSE
@@ -276,7 +275,7 @@
 *
       IY = KY
       IF ( INCX.EQ.1 ) THEN
-         IF( TRANS.EQ.AB_ILATRANS( 'N' ) )THEN
+         IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
             DO I = 1, LENY
                IF ( BETA .EQ. ZERO ) THEN
                   SYMB_ZERO = .TRUE.
@@ -330,7 +329,7 @@
             END DO
          END IF
       ELSE
-         IF( TRANS.EQ.AB_ILATRANS( 'N' ) )THEN
+         IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
             DO I = 1, LENY
                IF ( BETA .EQ. ZERO ) THEN
                   SYMB_ZERO = .TRUE.
@@ -392,6 +391,6 @@
 *
       RETURN
 *
-*     End of AB_SLA_GEAMV
+*     End of SLA_GEAMV
 *
       END

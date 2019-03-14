@@ -1,4 +1,4 @@
-*> \brief \b AB_CLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to real tridiagonal form by an unitary similarity transformation.
+*> \brief \b CLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to real tridiagonal form by an unitary similarity transformation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLATRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLATRD.f">
+*> Download CLATRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLATRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clatrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLATRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
+*       SUBROUTINE CLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,17 +35,17 @@
 *>
 *> \verbatim
 *>
-*> AB_CLATRD reduces NB rows and columns of a complex Hermitian matrix A to
+*> CLATRD reduces NB rows and columns of a complex Hermitian matrix A to
 *> Hermitian tridiagonal form by a unitary similarity
 *> transformation Q**H * A * Q, and returns the matrices V and W which are
 *> needed to apply the transformation to the unreduced part of A.
 *>
-*> If UPLO = 'U', AB_CLATRD reduces the last NB rows and columns of a
+*> If UPLO = 'U', CLATRD reduces the last NB rows and columns of a
 *> matrix, of which the upper triangle is supplied;
-*> if UPLO = 'L', AB_CLATRD reduces the first NB rows and columns of a
+*> if UPLO = 'L', CLATRD reduces the first NB rows and columns of a
 *> matrix, of which the lower triangle is supplied.
 *>
-*> This is an auxiliary routine called by AB_CHETRD.
+*> This is an auxiliary routine called by CHETRD.
 *> \endverbatim
 *
 *  Arguments:
@@ -197,7 +197,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
+      SUBROUTINE CLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -226,13 +226,12 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CGEMV, AB_CHEMV, AB_CLACGV, AB_CLA
-     $RFG, AB_CSCAL
+      EXTERNAL           CAXPY, CGEMV, CHEMV, CLACGV, CLARFG, CSCAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_CDOTC
+      LOGICAL            LSAME
+      COMPLEX            CDOTC
+      EXTERNAL           LSAME, CDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, REAL
@@ -244,7 +243,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Reduce last NB columns of upper triangle
 *
@@ -255,15 +254,14 @@
 *              Update A(1:i,i)
 *
                A( I, I ) = REAL( A( I, I ) )
-               CALL AB_CLACGV( N-I, W( I, IW+1 ), LDW )
-               CALL AB_CGEMV( 'No transpose', I, N-I, -ONE, A( 1, I+1 ),
+               CALL CLACGV( N-I, W( I, IW+1 ), LDW )
+               CALL CGEMV( 'No transpose', I, N-I, -ONE, A( 1, I+1 ),
      $                     LDA, W( I, IW+1 ), LDW, ONE, A( 1, I ), 1 )
-               CALL AB_CLACGV( N-I, W( I, IW+1 ), LDW )
-               CALL AB_CLACGV( N-I, A( I, I+1 ), LDA )
-               CALL AB_CGEMV( 'No transpose', I, N-I, -ONE, W( 1, IW+1 )
-     $,
+               CALL CLACGV( N-I, W( I, IW+1 ), LDW )
+               CALL CLACGV( N-I, A( I, I+1 ), LDA )
+               CALL CGEMV( 'No transpose', I, N-I, -ONE, W( 1, IW+1 ),
      $                     LDW, A( I, I+1 ), LDA, ONE, A( 1, I ), 1 )
-               CALL AB_CLACGV( N-I, A( I, I+1 ), LDA )
+               CALL CLACGV( N-I, A( I, I+1 ), LDA )
                A( I, I ) = REAL( A( I, I ) )
             END IF
             IF( I.GT.1 ) THEN
@@ -272,32 +270,32 @@
 *              A(1:i-2,i)
 *
                ALPHA = A( I-1, I )
-               CALL AB_CLARFG( I-1, ALPHA, A( 1, I ), 1, TAU( I-1 ) )
+               CALL CLARFG( I-1, ALPHA, A( 1, I ), 1, TAU( I-1 ) )
                E( I-1 ) = ALPHA
                A( I-1, I ) = ONE
 *
 *              Compute W(1:i-1,i)
 *
-               CALL AB_CHEMV( 'Upper', I-1, ONE, A, LDA, A( 1, I ), 1,
+               CALL CHEMV( 'Upper', I-1, ONE, A, LDA, A( 1, I ), 1,
      $                     ZERO, W( 1, IW ), 1 )
                IF( I.LT.N ) THEN
-                  CALL AB_CGEMV( 'Conjugate transpose', I-1, N-I, ONE,
+                  CALL CGEMV( 'Conjugate transpose', I-1, N-I, ONE,
      $                        W( 1, IW+1 ), LDW, A( 1, I ), 1, ZERO,
      $                        W( I+1, IW ), 1 )
-                  CALL AB_CGEMV( 'No transpose', I-1, N-I, -ONE,
+                  CALL CGEMV( 'No transpose', I-1, N-I, -ONE,
      $                        A( 1, I+1 ), LDA, W( I+1, IW ), 1, ONE,
      $                        W( 1, IW ), 1 )
-                  CALL AB_CGEMV( 'Conjugate transpose', I-1, N-I, ONE,
+                  CALL CGEMV( 'Conjugate transpose', I-1, N-I, ONE,
      $                        A( 1, I+1 ), LDA, A( 1, I ), 1, ZERO,
      $                        W( I+1, IW ), 1 )
-                  CALL AB_CGEMV( 'No transpose', I-1, N-I, -ONE,
+                  CALL CGEMV( 'No transpose', I-1, N-I, -ONE,
      $                        W( 1, IW+1 ), LDW, W( I+1, IW ), 1, ONE,
      $                        W( 1, IW ), 1 )
                END IF
-               CALL AB_CSCAL( I-1, TAU( I-1 ), W( 1, IW ), 1 )
-               ALPHA = -HALF*TAU( I-1 )*AB_CDOTC( I-1, W( 1, IW ), 1,
+               CALL CSCAL( I-1, TAU( I-1 ), W( 1, IW ), 1 )
+               ALPHA = -HALF*TAU( I-1 )*CDOTC( I-1, W( 1, IW ), 1,
      $                 A( 1, I ), 1 )
-               CALL AB_CAXPY( I-1, ALPHA, A( 1, I ), 1, W( 1, IW ), 1 )
+               CALL CAXPY( I-1, ALPHA, A( 1, I ), 1, W( 1, IW ), 1 )
             END IF
 *
    10    CONTINUE
@@ -310,14 +308,14 @@
 *           Update A(i:n,i)
 *
             A( I, I ) = REAL( A( I, I ) )
-            CALL AB_CLACGV( I-1, W( I, 1 ), LDW )
-            CALL AB_CGEMV( 'No transpose', N-I+1, I-1, -ONE, A( I, 1 ),
+            CALL CLACGV( I-1, W( I, 1 ), LDW )
+            CALL CGEMV( 'No transpose', N-I+1, I-1, -ONE, A( I, 1 ),
      $                  LDA, W( I, 1 ), LDW, ONE, A( I, I ), 1 )
-            CALL AB_CLACGV( I-1, W( I, 1 ), LDW )
-            CALL AB_CLACGV( I-1, A( I, 1 ), LDA )
-            CALL AB_CGEMV( 'No transpose', N-I+1, I-1, -ONE, W( I, 1 ),
+            CALL CLACGV( I-1, W( I, 1 ), LDW )
+            CALL CLACGV( I-1, A( I, 1 ), LDA )
+            CALL CGEMV( 'No transpose', N-I+1, I-1, -ONE, W( I, 1 ),
      $                  LDW, A( I, 1 ), LDA, ONE, A( I, I ), 1 )
-            CALL AB_CLACGV( I-1, A( I, 1 ), LDA )
+            CALL CLACGV( I-1, A( I, 1 ), LDA )
             A( I, I ) = REAL( A( I, I ) )
             IF( I.LT.N ) THEN
 *
@@ -325,32 +323,29 @@
 *              A(i+2:n,i)
 *
                ALPHA = A( I+1, I )
-               CALL AB_CLARFG( N-I, ALPHA, A( MIN( I+2, N ), I ), 1,
+               CALL CLARFG( N-I, ALPHA, A( MIN( I+2, N ), I ), 1,
      $                      TAU( I ) )
                E( I ) = ALPHA
                A( I+1, I ) = ONE
 *
 *              Compute W(i+1:n,i)
 *
-               CALL AB_CHEMV( 'Lower', N-I, ONE, A( I+1, I+1 ), LDA,
+               CALL CHEMV( 'Lower', N-I, ONE, A( I+1, I+1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, W( I+1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
+               CALL CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
      $                     W( I+1, 1 ), LDW, A( I+1, I ), 1, ZERO,
      $                     W( 1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1, 1 
-     $),
+               CALL CGEMV( 'No transpose', N-I, I-1, -ONE, A( I+1, 1 ),
      $                     LDA, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
+               CALL CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
      $                     A( I+1, 1 ), LDA, A( I+1, I ), 1, ZERO,
      $                     W( 1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1, 1 
-     $),
+               CALL CGEMV( 'No transpose', N-I, I-1, -ONE, W( I+1, 1 ),
      $                     LDW, W( 1, I ), 1, ONE, W( I+1, I ), 1 )
-               CALL AB_CSCAL( N-I, TAU( I ), W( I+1, I ), 1 )
-               ALPHA = -HALF*TAU( I )*AB_CDOTC( N-I, W( I+1, I ), 1,
+               CALL CSCAL( N-I, TAU( I ), W( I+1, I ), 1 )
+               ALPHA = -HALF*TAU( I )*CDOTC( N-I, W( I+1, I ), 1,
      $                 A( I+1, I ), 1 )
-               CALL AB_CAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ), 1
-     $ )
+               CALL CAXPY( N-I, ALPHA, A( I+1, I ), 1, W( I+1, I ), 1 )
             END IF
 *
    20    CONTINUE
@@ -358,6 +353,6 @@
 *
       RETURN
 *
-*     End of AB_CLATRD
+*     End of CLATRD
 *
       END

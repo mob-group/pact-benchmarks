@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHPGVX
+*> \brief \b ZHPGVX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHPGVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHPGVx.f">
+*> Download ZHPGVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpgvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHPGVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpgvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHPGVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
+*       SUBROUTINE ZHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
 *                          IL, IU, ABSTOL, M, W, Z, LDZ, WORK, RWORK,
 *                          IWORK, IFAIL, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHPGVX computes selected eigenvalues and, optionally, eigenvectors
+*> ZHPGVX computes selected eigenvalues and, optionally, eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.  Here A and
 *> B are assumed to be Hermitian, stored in packed format, and B is also
@@ -245,8 +245,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_ZPPTRF or AB_ZHPEVX returned an error code:
-*>             <= N:  if INFO = i, AB_ZHPEVX failed to converge;
+*>          > 0:  ZPPTRF or ZHPEVX returned an error code:
+*>             <= N:  if INFO = i, ZHPEVX failed to converge;
 *>                    i eigenvectors failed to converge.  Their indices
 *>                    are stored in array IFAIL.
 *>             > N:   if INFO = N + i, for 1 <= i <= n, then the leading
@@ -273,7 +273,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
+      SUBROUTINE ZHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
      $                   IL, IU, ABSTOL, M, W, Z, LDZ, WORK, RWORK,
      $                   IWORK, IFAIL, INFO )
 *
@@ -301,12 +301,11 @@
       INTEGER            J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZHPEVX, AB_ZHPGST, AB_ZPPTRF, AB_
-     $ZTPMV, AB_ZTPSV
+      EXTERNAL           XERBLA, ZHPEVX, ZHPGST, ZPPTRF, ZTPMV, ZTPSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -315,20 +314,20 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -352,7 +351,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHPGVX', -INFO )
+         CALL XERBLA( 'ZHPGVX', -INFO )
          RETURN
       END IF
 *
@@ -363,7 +362,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL AB_ZPPTRF( UPLO, N, BP, INFO )
+      CALL ZPPTRF( UPLO, N, BP, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -371,9 +370,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL AB_ZHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL, 
-     $M,
+      CALL ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      CALL ZHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL, M,
      $             W, Z, LDZ, WORK, RWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN
@@ -394,7 +392,7 @@
             END IF
 *
             DO 10 J = 1, M
-               CALL AB_ZTPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL ZTPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    10       CONTINUE
 *
@@ -410,7 +408,7 @@
             END IF
 *
             DO 20 J = 1, M
-               CALL AB_ZTPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL ZTPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    20       CONTINUE
          END IF
@@ -418,6 +416,6 @@
 *
       RETURN
 *
-*     End of AB_ZHPGVX
+*     End of ZHPGVX
 *
       END

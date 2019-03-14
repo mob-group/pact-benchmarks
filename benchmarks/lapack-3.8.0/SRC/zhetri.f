@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHETRI
+*> \brief \b ZHETRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHETRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHETRI.f">
+*> Download ZHETRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetri.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHETRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetri.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHETRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetri.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+*       SUBROUTINE ZHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHETRI computes the inverse of a complex Hermitian indefinite matrix
+*> ZHETRI computes the inverse of a complex Hermitian indefinite matrix
 *> A using the factorization A = U*D*U**H or A = L*D*L**H computed by
-*> AB_ZHETRF.
+*> ZHETRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the block diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_ZHETRF.
+*>          used to obtain the factor U or L as computed by ZHETRF.
 *>
 *>          On exit, if INFO = 0, the (Hermitian) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_ZHETRF.
+*>          as determined by ZHETRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -112,7 +112,7 @@
 *> \ingroup complex16HEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      SUBROUTINE ZHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -143,12 +143,12 @@
       COMPLEX*16         AKKP1, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_ZDOTC
+      LOGICAL            LSAME
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZCOPY, AB_ZHEMV, AB_ZSWAP
+      EXTERNAL           XERBLA, ZCOPY, ZHEMV, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX
@@ -158,8 +158,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -167,7 +167,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHETRI', -INFO )
+         CALL XERBLA( 'ZHETRI', -INFO )
          RETURN
       END IF
 *
@@ -223,11 +223,10 @@
 *           Compute column K of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL AB_ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
+               CALL ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - DBLE( AB_ZDOTC( K-1, WORK, 1, A( 
-     $1,
+               A( K, K ) = A( K, K ) - DBLE( ZDOTC( K-1, WORK, 1, A( 1,
      $                     K ), 1 ) )
             END IF
             KSTEP = 1
@@ -249,21 +248,18 @@
 *           Compute columns K and K+1 of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL AB_ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
+               CALL ZCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - DBLE( AB_ZDOTC( K-1, WORK, 1, A( 
-     $1,
+               A( K, K ) = A( K, K ) - DBLE( ZDOTC( K-1, WORK, 1, A( 1,
      $                     K ), 1 ) )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       AB_ZDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ), 1
-     $ )
-               CALL AB_ZCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
-               CALL AB_ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
+     $                       ZDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
+               CALL ZCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
+               CALL ZHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
                A( K+1, K+1 ) = A( K+1, K+1 ) -
-     $                         DBLE( AB_ZDOTC( K-1, WORK, 1, A( 1, K+1 )
-     $,
+     $                         DBLE( ZDOTC( K-1, WORK, 1, A( 1, K+1 ),
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -275,7 +271,7 @@
 *           Interchange rows and columns K and KP in the leading
 *           submatrix A(1:k+1,1:k+1)
 *
-            CALL AB_ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+            CALL ZSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
             DO 40 J = KP + 1, K - 1
                TEMP = DCONJG( A( J, K ) )
                A( J, K ) = DCONJG( A( KP, J ) )
@@ -322,11 +318,10 @@
 *           Compute column K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL AB_ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL AB_ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK
-     $,
+               CALL ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
      $                     1, ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - DBLE( AB_ZDOTC( N-K, WORK, 1,
+               A( K, K ) = A( K, K ) - DBLE( ZDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
             END IF
             KSTEP = 1
@@ -348,23 +343,19 @@
 *           Compute columns K-1 and K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL AB_ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL AB_ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK
-     $,
+               CALL ZCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
      $                     1, ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - DBLE( AB_ZDOTC( N-K, WORK, 1,
+               A( K, K ) = A( K, K ) - DBLE( ZDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       AB_ZDOTC( N-K, A( K+1, K ), 1, A( K+1, K-1 
-     $),
+     $                       ZDOTC( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
      $                       1 )
-               CALL AB_ZCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL AB_ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK
-     $,
+               CALL ZCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
+               CALL ZHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
      $                     1, ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         DBLE( AB_ZDOTC( N-K, WORK, 1, A( K+1, K-1
-     $ ),
+     $                         DBLE( ZDOTC( N-K, WORK, 1, A( K+1, K-1 ),
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -377,7 +368,7 @@
 *           submatrix A(k-1:n,k-1:n)
 *
             IF( KP.LT.N )
-     $         CALL AB_ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+     $         CALL ZSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
             DO 70 J = K + 1, KP - 1
                TEMP = DCONJG( A( J, K ) )
                A( J, K ) = DCONJG( A( KP, J ) )
@@ -401,6 +392,6 @@
 *
       RETURN
 *
-*     End of AB_ZHETRI
+*     End of ZHETRI
 *
       END

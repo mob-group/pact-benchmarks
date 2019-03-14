@@ -1,4 +1,4 @@
-*> \brief \b AB_SDSDOT
+*> \brief \b SDSDOT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION AB_SDSDOT(N,SB,SX,INCX,SY,INCY)
+*       REAL FUNCTION SDSDOT(N,SB,SX,INCX,SY,INCY)
 *
 *       .. Scalar Arguments ..
 *       REAL SB
@@ -27,7 +27,7 @@
 *    precision accumulation.
 *
 *    Returns S.P. result with dot product accumulated in D.P.
-*    AB_SDSDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
+*    SDSDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
 *    where LX = 1 if INCX .GE. 0, else LX = 1+(1-N)*INCX, and LY is
 *    defined in a similar way using INCY.
 *> \endverbatim
@@ -106,15 +106,15 @@
 *    =====================================================================
 *
 *       .. Local Scalars ..
-*       DOUBLE PRECISION AB_DSDOT
+*       DOUBLE PRECISION DSDOT
 *       INTEGER I,KX,KY,NS
 *       ..
 *       .. Intrinsic Functions ..
 *       INTRINSIC DBLE
 *       ..
-*       AB_DSDOT = SB
+*       DSDOT = SB
 *       IF (N.LE.0) THEN
-*          AB_SDSDOT = AB_DSDOT
+*          SDSDOT = DSDOT
 *          RETURN
 *       END IF
 *       IF (INCX.EQ.INCY .AND. INCX.GT.0) THEN
@@ -123,7 +123,7 @@
 *
 *          NS = N*INCX
 *          DO I = 1,NS,INCX
-*             AB_DSDOT = AB_DSDOT + DBLE(SX(I))*DBLE(SY(I))
+*             DSDOT = DSDOT + DBLE(SX(I))*DBLE(SY(I))
 *          END DO
 *       ELSE
 *
@@ -134,12 +134,12 @@
 *          IF (INCX.LT.0) KX = 1 + (1-N)*INCX
 *          IF (INCY.LT.0) KY = 1 + (1-N)*INCY
 *          DO I = 1,N
-*             AB_DSDOT = AB_DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
+*             DSDOT = DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
 *             KX = KX + INCX
 *             KY = KY + INCY
 *          END DO
 *       END IF
-*       AB_SDSDOT = AB_DSDOT
+*       SDSDOT = DSDOT
 *       RETURN
 *       END
 *
@@ -162,7 +162,7 @@
 *> \ingroup single_blas_level1
 *
 *  =====================================================================
-      REAL FUNCTION AB_SDSDOT(N,SB,SX,INCX,SY,INCY)
+      REAL FUNCTION SDSDOT(N,SB,SX,INCX,SY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -184,7 +184,7 @@
 *  precision accumulation.
 *
 *  Returns S.P. result with dot product accumulated in D.P.
-*  AB_SDSDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
+*  SDSDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
 *  where LX = 1 if INCX .GE. 0, else LX = 1+(1-N)*INCX, and LY is
 *  defined in a similar way using INCY.
 *
@@ -214,7 +214,7 @@
 *  INCY   (input) INTEGER
 *         storage spacing between elements of SY
 *
-*  AB_SDSDOT (output) REAL
+*  SDSDOT (output) REAL
 *         single precision dot product (SB if N .LE. 0)
 *
 *  Further Details
@@ -241,15 +241,15 @@
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      DOUBLE PRECISION AB_DSDOT
+      DOUBLE PRECISION DSDOT
       INTEGER I,KX,KY,NS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE
 *     ..
-      AB_DSDOT = SB
+      DSDOT = SB
       IF (N.LE.0) THEN
-         AB_SDSDOT = AB_DSDOT
+         SDSDOT = DSDOT
          RETURN
       END IF
       IF (INCX.EQ.INCY .AND. INCX.GT.0) THEN
@@ -258,7 +258,7 @@
 *
          NS = N*INCX
          DO I = 1,NS,INCX
-            AB_DSDOT = AB_DSDOT + DBLE(SX(I))*DBLE(SY(I))
+            DSDOT = DSDOT + DBLE(SX(I))*DBLE(SY(I))
          END DO
       ELSE
 *
@@ -269,11 +269,11 @@
          IF (INCX.LT.0) KX = 1 + (1-N)*INCX
          IF (INCY.LT.0) KY = 1 + (1-N)*INCY
          DO I = 1,N
-            AB_DSDOT = AB_DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
+            DSDOT = DSDOT + DBLE(SX(KX))*DBLE(SY(KY))
             KX = KX + INCX
             KY = KY + INCY
          END DO
       END IF
-      AB_SDSDOT = AB_DSDOT
+      SDSDOT = DSDOT
       RETURN
       END

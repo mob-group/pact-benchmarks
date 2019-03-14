@@ -1,4 +1,4 @@
-*> \brief \b AB_CLA_GERFSX_EXTENDED
+*> \brief \b CLA_GERFSX_EXTENDED
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLA_GERFSX_EXTENDED + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLA_GERFSX_EXTENDED.f">
+*> Download CLA_GERFSX_EXTENDED + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gerfsx_extended.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLA_GERFSX_EXTENDED.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_gerfsx_extended.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLA_GERFSX_EXTENDED.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gerfsx_extended.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
+*       SUBROUTINE CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
 *                                       LDA, AF, LDAF, IPIV, COLEQU, C, B,
 *                                       LDB, Y, LDY, BERR_OUT, N_NORMS,
 *                                       ERRS_N, ERRS_C, RES, AYB, DY,
@@ -47,10 +47,10 @@
 *> \verbatim
 *>
 *>
-*> AB_CLA_GERFSX_EXTENDED improves the computed solution to a system of
+*> CLA_GERFSX_EXTENDED improves the computed solution to a system of
 *> linear equations by performing extra-precise iterative refinement
 *> and provides error bounds and backward error estimates for the solution.
-*> This subroutine is called by AB_CGERFSX to perform iterative refinement.
+*> This subroutine is called by CGERFSX to perform iterative refinement.
 *> In addition to normwise error bound, the code provides maximum
 *> componentwise error bound if possible. See comments for ERRS_N
 *> and ERRS_C for details of the error bounds. Note that this
@@ -65,7 +65,7 @@
 *> \verbatim
 *>          PREC_TYPE is INTEGER
 *>     Specifies the intermediate precision to be used in refinement.
-*>     The value is defined by AB_ILAPREC(P) where P is a CHARACTER and
+*>     The value is defined by ILAPREC(P) where P is a CHARACTER and
 *>     P    = 'S':  Single
 *>          = 'D':  Double
 *>          = 'I':  Indigenous
@@ -76,7 +76,7 @@
 *> \verbatim
 *>          TRANS_TYPE is INTEGER
 *>     Specifies the transposition operation on A.
-*>     The value is defined by AB_ILATRANS(T) where T is a CHARACTER and
+*>     The value is defined by ILATRANS(T) where T is a CHARACTER and
 *>     T    = 'N':  No transpose
 *>          = 'T':  Transpose
 *>          = 'C':  Conjugate transpose
@@ -112,7 +112,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDAF,N)
 *>     The factors L and U from the factorization
-*>     A = P*L*U as computed by AB_CGETRF.
+*>     A = P*L*U as computed by CGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -125,7 +125,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     The pivot indices from the factorization A = P*L*U
-*>     as computed by AB_CGETRF; row i of the matrix was interchanged
+*>     as computed by CGETRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *> \endverbatim
 *>
@@ -165,7 +165,7 @@
 *> \param[in,out] Y
 *> \verbatim
 *>          Y is COMPLEX array, dimension (LDY,NRHS)
-*>     On entry, the solution matrix X, as computed by AB_CGETRS.
+*>     On entry, the solution matrix X, as computed by CGETRS.
 *>     On exit, the improved solution matrix Y.
 *> \endverbatim
 *>
@@ -182,7 +182,7 @@
 *>     error for right-hand-side j from the formula
 *>         max(i) ( abs(RES(i)) / ( abs(op(A_s))*abs(Y) + abs(B_s) )(i) )
 *>     where abs(Z) is the componentwise absolute value of the matrix
-*>     or vector Z. This is computed by AB_CLA_LIN_BERR.
+*>     or vector Z. This is computed by CLA_LIN_BERR.
 *> \endverbatim
 *>
 *> \param[in] N_NORMS
@@ -373,7 +373,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>       = 0:  Successful exit.
-*>       < 0:  if INFO = -i, the ith argument to AB_CGETRS had an illegal
+*>       < 0:  if INFO = -i, the ith argument to CGETRS had an illegal
 *>             value
 *> \endverbatim
 *
@@ -390,8 +390,7 @@
 *> \ingroup complexGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS,
-     $ A,
+      SUBROUTINE CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
      $                                LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $                                LDB, Y, LDY, BERR_OUT, N_NORMS,
      $                                ERRS_N, ERRS_C, RES, AYB, DY,
@@ -458,13 +457,11 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CGETRS, AB_CGEMV, BLAS_C
-     $GEMV_X,
-     $                   BLAS_CGEMV2_X, AB_CLA_GEAMV, AB_CLA_WWADDW, SLA
-     $MCH,
-     $                   AB_CHLA_TRANSTYPE, AB_CLA_LIN_BERR
+      EXTERNAL           CAXPY, CCOPY, CGETRS, CGEMV, BLAS_CGEMV_X,
+     $                   BLAS_CGEMV2_X, CLA_GEAMV, CLA_WWADDW, SLAMCH,
+     $                   CHLA_TRANSTYPE, CLA_LIN_BERR
       REAL               SLAMCH
-      CHARACTER          AB_CHLA_TRANSTYPE
+      CHARACTER          CHLA_TRANSTYPE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -478,7 +475,7 @@
 *     .. Executable Statements ..
 *
       IF ( INFO.NE.0 ) RETURN
-      TRANS = AB_CHLA_TRANSTYPE(TRANS_TYPE)
+      TRANS = CHLA_TRANSTYPE(TRANS_TYPE)
       EPS = SLAMCH( 'Epsilon' )
       HUGEVAL = SLAMCH( 'Overflow' )
 *     Force HUGEVAL to Inf
@@ -514,9 +511,9 @@
 *         Compute residual RES = B_s - op(A_s) * Y,
 *             op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
-            CALL AB_CCOPY( N, B( 1, J ), 1, RES, 1 )
+            CALL CCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL AB_CGEMV( TRANS, N, N, (-1.0E+0,0.0E+0), A, LDA,
+               CALL CGEMV( TRANS, N, N, (-1.0E+0,0.0E+0), A, LDA,
      $              Y( 1, J ), 1, (1.0E+0,0.0E+0), RES, 1)
             ELSE IF (Y_PREC_STATE .EQ. EXTRA_RESIDUAL) THEN
                CALL BLAS_CGEMV_X( TRANS_TYPE, N, N, (-1.0E+0,0.0E+0), A,
@@ -529,8 +526,8 @@
             END IF
 
 !         XXX: RES is no longer needed.
-            CALL AB_CCOPY( N, RES, 1, DY, 1 )
-            CALL AB_CGETRS( TRANS, N, 1, AF, LDAF, IPIV, DY, N, INFO )
+            CALL CCOPY( N, RES, 1, DY, 1 )
+            CALL CGETRS( TRANS, N, 1, AF, LDAF, IPIV, DY, N, INFO )
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.
 *
@@ -646,9 +643,9 @@
 *           Update soluton.
 *
             IF ( Y_PREC_STATE .LT. EXTRA_Y ) THEN
-               CALL AB_CAXPY( N, (1.0E+0,0.0E+0), DY, 1, Y(1,J), 1 )
+               CALL CAXPY( N, (1.0E+0,0.0E+0), DY, 1, Y(1,J), 1 )
             ELSE
-               CALL AB_CLA_WWADDW( N, Y( 1, J ), Y_TAIL, DY )
+               CALL CLA_WWADDW( N, Y( 1, J ), Y_TAIL, DY )
             END IF
 
          END DO
@@ -678,9 +675,8 @@
 *        Compute residual RES = B_s - op(A_s) * Y,
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
-         CALL AB_CCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL AB_CGEMV( TRANS, N, N, (-1.0E+0,0.0E+0), A, LDA, Y(1,J), 1
-     $,
+         CALL CCOPY( N, B( 1, J ), 1, RES, 1 )
+         CALL CGEMV( TRANS, N, N, (-1.0E+0,0.0E+0), A, LDA, Y(1,J), 1,
      $        (1.0E+0,0.0E+0), RES, 1 )
 
          DO I = 1, N
@@ -689,10 +685,10 @@
 *
 *     Compute abs(op(A_s))*abs(Y) + abs(B_s).
 *
-         CALL AB_CLA_GEAMV ( TRANS_TYPE, N, N, 1.0E+0,
+         CALL CLA_GEAMV ( TRANS_TYPE, N, N, 1.0E+0,
      $        A, LDA, Y(1, J), 1, 1.0E+0, AYB, 1 )
 
-         CALL AB_CLA_LIN_BERR ( N, N, 1, RES, AYB, BERR_OUT( J ) )
+         CALL CLA_LIN_BERR ( N, N, 1, RES, AYB, BERR_OUT( J ) )
 *
 *     End of loop for each RHS.
 *

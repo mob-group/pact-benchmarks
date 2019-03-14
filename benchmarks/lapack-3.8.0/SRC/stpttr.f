@@ -1,4 +1,4 @@
-*> \brief \b AB_STPTTR copies a triangular matrix from the standard packed format (TP) to the standard full format (TR).
+*> \brief \b STPTTR copies a triangular matrix from the standard packed format (TP) to the standard full format (TR).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STPTTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STPTTR.f">
+*> Download STPTTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpttr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STPTTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpttr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STPTTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpttr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STPTTR( UPLO, N, AP, A, LDA, INFO )
+*       SUBROUTINE STPTTR( UPLO, N, AP, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STPTTR copies a triangular matrix A from standard packed format (TP)
+*> STPTTR copies a triangular matrix A from standard packed format (TP)
 *> to standard full format (TR).
 *> \endverbatim
 *
@@ -102,7 +102,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_STPTTR( UPLO, N, AP, A, LDA, INFO )
+      SUBROUTINE STPTTR( UPLO, N, AP, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,19 +126,19 @@
       INTEGER            I, J, K
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      LOWER = AB_LSAME( UPLO, 'L' )
-      IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      LOWER = LSAME( UPLO, 'L' )
+      IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -146,7 +146,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STPTTR', -INFO )
+         CALL XERBLA( 'STPTTR', -INFO )
          RETURN
       END IF
 *
@@ -171,6 +171,6 @@
 *
       RETURN
 *
-*     End of AB_STPTTR
+*     End of STPTTR
 *
       END

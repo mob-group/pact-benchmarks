@@ -1,4 +1,4 @@
-*> \brief <b> AB_DSYSV_ROOK computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> DSYSV_ROOK computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSYSV_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYSV_rook.f">
+*> Download DSYSV_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsysv_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYSV_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsysv_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYSV_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysv_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSYSV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE DSYSV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                         LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSYSV_ROOK computes the solution to a real system of linear
+*> DSYSV_ROOK computes the solution to a real system of linear
 *> equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
@@ -49,12 +49,12 @@
 *> triangular matrices, and D is symmetric and block diagonal with
 *> 1-by-1 and 2-by-2 diagonal blocks.
 *>
-*> AB_DSYTRF_ROOK is called to compute the factorization of a real
+*> DSYTRF_ROOK is called to compute the factorization of a real
 *> symmetric matrix A using the bounded Bunch-Kaufman ("rook") diagonal
 *> pivoting method.
 *>
 *> The factored form of A is then used to solve the system
-*> of equations A * X = B by calling AB_DSYTRS_ROOK.
+*> of equations A * X = B by calling DSYTRS_ROOK.
 *> \endverbatim
 *
 *  Arguments:
@@ -95,7 +95,7 @@
 *>          On exit, if INFO = 0, the block diagonal matrix D and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*D*U**T or A = L*D*L**T as computed by
-*>          AB_DSYTRF_ROOK.
+*>          DSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -108,7 +108,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D,
-*>          as determined by AB_DSYTRF_ROOK.
+*>          as determined by DSYTRF_ROOK.
 *>
 *>          If UPLO = 'U':
 *>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
@@ -153,14 +153,14 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= 1, and for best performance
 *>          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
-*>          AB_DSYTRF_ROOK.
+*>          DSYTRF_ROOK.
 *>
 *>          TRS will be done with Level 2 BLAS
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -201,8 +201,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_DSYSV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WOR
-     $K,
+      SUBROUTINE DSYSV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                  LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -226,11 +225,11 @@
       INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_DSYTRF_ROOK, AB_DSYTRS_ROOK
+      EXTERNAL           XERBLA, DSYTRF_ROOK, DSYTRS_ROOK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -241,8 +240,7 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -260,14 +258,14 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            CALL AB_DSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
+            CALL DSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
             LWKOPT = WORK(1)
          END IF
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSYSV_ROOK ', -INFO )
+         CALL XERBLA( 'DSYSV_ROOK ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -275,15 +273,14 @@
 *
 *     Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
-      CALL AB_DSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL DSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
 *        Solve with TRS_ROOK ( Use Level 2 BLAS)
 *
-         CALL AB_DSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO 
-     $)
+         CALL DSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
       END IF
 *
@@ -291,6 +288,6 @@
 *
       RETURN
 *
-*     End of AB_DSYSV_ROOK
+*     End of DSYSV_ROOK
 *
       END

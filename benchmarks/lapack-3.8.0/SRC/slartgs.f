@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARTGS generates a plane rotation designed to introduce a bulge in implicit QR iteration for the bidiagonal SVD problem.
+*> \brief \b SLARTGS generates a plane rotation designed to introduce a bulge in implicit QR iteration for the bidiagonal SVD problem.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARTGS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARTGs.f">
+*> Download SLARTGS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartgs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARTGs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartgs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARTGs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartgs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARTGS( X, Y, SIGMA, CS, SN )
+*       SUBROUTINE SLARTGS( X, Y, SIGMA, CS, SN )
 *
 *       .. Scalar Arguments ..
 *       REAL                    CS, SIGMA, SN, X, Y
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARTGS generates a plane rotation designed to introduce a bulge in
+*> SLARTGS generates a plane rotation designed to introduce a bulge in
 *> Golub-Reinsch-style implicit QR iteration for the bidiagonal SVD
 *> problem. X and Y are the top-row entries, and SIGMA is the shift.
 *> The computed CS and SN define a plane rotation satisfying
@@ -88,7 +88,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARTGS( X, Y, SIGMA, CS, SN )
+      SUBROUTINE SLARTGS( X, Y, SIGMA, CS, SN )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -109,7 +109,7 @@
       REAL                    R, S, THRESH, W, Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLARTGP
+      EXTERNAL           SLARTGP
 *     ..
 *     .. External Functions ..
       REAL                    SLAMCH
@@ -147,15 +147,15 @@
       END IF
 *
 *     Generate the rotation.
-*     CALL AB_SLARTGP( Z, W, CS, SN, R ) might seem more natural;
+*     CALL SLARTGP( Z, W, CS, SN, R ) might seem more natural;
 *     reordering the arguments ensures that if Z = 0 then the rotation
 *     is by PI/2.
 *
-      CALL AB_SLARTGP( W, Z, SN, CS, R )
+      CALL SLARTGP( W, Z, SN, CS, R )
 *
       RETURN
 *
-*     End AB_SLARTGS
+*     End SLARTGS
 *
       END
 

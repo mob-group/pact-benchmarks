@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTREVC
+*> \brief \b ZTREVC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZTREVC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTREVC.f">
+*> Download ZTREVC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrevc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTREVC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrevc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTREVC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrevc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+*       SUBROUTINE ZTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
 *                          LDVR, MM, M, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,10 +38,10 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTREVC computes some or all of the right and/or left eigenvectors of
+*> ZTREVC computes some or all of the right and/or left eigenvectors of
 *> a complex upper triangular matrix T.
 *> Matrices of this type are produced by the Schur factorization of
-*> a complex general matrix:  A = Q*T*Q**H, as computed by AB_ZHSEQR.
+*> a complex general matrix:  A = Q*T*Q**H, as computed by ZHSEQR.
 *>
 *> The right eigenvector x and the left eigenvector y of T corresponding
 *> to an eigenvalue w are defined by:
@@ -115,7 +115,7 @@
 *>          VL is COMPLEX*16 array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Q of
-*>          Schur vectors returned by AB_ZHSEQR).
+*>          Schur vectors returned by ZHSEQR).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -138,7 +138,7 @@
 *>          VR is COMPLEX*16 array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Q of
-*>          Schur vectors returned by AB_ZHSEQR).
+*>          Schur vectors returned by ZHSEQR).
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of T;
 *>          if HOWMNY = 'B', the matrix Q*X;
@@ -215,8 +215,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, V
-     $R,
+      SUBROUTINE ZTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
      $                   LDVR, MM, M, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -251,14 +250,13 @@
       COMPLEX*16         CDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DZASUM
-      EXTERNAL           AB_LSAME, AB_IZAMAX, DLAMCH, AB_DZASUM
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH, DZASUM
+      EXTERNAL           LSAME, IZAMAX, DLAMCH, DZASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZCOPY, AB_ZDSCAL, AB_ZGEMV, AB_ZL
-     $ATRS, AB_DLABAD
+      EXTERNAL           XERBLA, ZCOPY, ZDSCAL, ZGEMV, ZLATRS, DLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX
@@ -273,13 +271,13 @@
 *
 *     Decode and test the input parameters
 *
-      BOTHV = AB_LSAME( SIDE, 'B' )
-      RIGHTV = AB_LSAME( SIDE, 'R' ) .OR. BOTHV
-      LEFTV = AB_LSAME( SIDE, 'L' ) .OR. BOTHV
+      BOTHV = LSAME( SIDE, 'B' )
+      RIGHTV = LSAME( SIDE, 'R' ) .OR. BOTHV
+      LEFTV = LSAME( SIDE, 'L' ) .OR. BOTHV
 *
-      ALLV = AB_LSAME( HOWMNY, 'A' )
-      OVER = AB_LSAME( HOWMNY, 'B' )
-      SOMEV = AB_LSAME( HOWMNY, 'S' )
+      ALLV = LSAME( HOWMNY, 'A' )
+      OVER = LSAME( HOWMNY, 'B' )
+      SOMEV = LSAME( HOWMNY, 'S' )
 *
 *     Set M to the number of columns required to store the selected
 *     eigenvectors.
@@ -311,7 +309,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTREVC', -INFO )
+         CALL XERBLA( 'ZTREVC', -INFO )
          RETURN
       END IF
 *
@@ -324,7 +322,7 @@
 *
       UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL AB_DLABAD( UNFL, OVFL )
+      CALL DLABAD( UNFL, OVFL )
       ULP = DLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *
@@ -339,7 +337,7 @@
 *
       RWORK( 1 ) = ZERO
       DO 30 J = 2, N
-         RWORK( J ) = AB_DZASUM( J-1, T( 1, J ), 1 )
+         RWORK( J ) = DZASUM( J-1, T( 1, J ), 1 )
    30 CONTINUE
 *
       IF( RIGHTV ) THEN
@@ -373,7 +371,7 @@
    50       CONTINUE
 *
             IF( KI.GT.1 ) THEN
-               CALL AB_ZLATRS( 'Upper', 'No transpose', 'Non-unit', 'Y',
+               CALL ZLATRS( 'Upper', 'No transpose', 'Non-unit', 'Y',
      $                      KI-1, T, LDT, WORK( 1 ), SCALE, RWORK,
      $                      INFO )
                WORK( KI ) = SCALE
@@ -382,24 +380,23 @@
 *           Copy the vector x or Q*x to VR and normalize.
 *
             IF( .NOT.OVER ) THEN
-               CALL AB_ZCOPY( KI, WORK( 1 ), 1, VR( 1, IS ), 1 )
+               CALL ZCOPY( KI, WORK( 1 ), 1, VR( 1, IS ), 1 )
 *
-               II = AB_IZAMAX( KI, VR( 1, IS ), 1 )
+               II = IZAMAX( KI, VR( 1, IS ), 1 )
                REMAX = ONE / CABS1( VR( II, IS ) )
-               CALL AB_ZDSCAL( KI, REMAX, VR( 1, IS ), 1 )
+               CALL ZDSCAL( KI, REMAX, VR( 1, IS ), 1 )
 *
                DO 60 K = KI + 1, N
                   VR( K, IS ) = CMZERO
    60          CONTINUE
             ELSE
                IF( KI.GT.1 )
-     $            CALL AB_ZGEMV( 'N', N, KI-1, CMONE, VR, LDVR, WORK( 1 
-     $),
+     $            CALL ZGEMV( 'N', N, KI-1, CMONE, VR, LDVR, WORK( 1 ),
      $                        1, DCMPLX( SCALE ), VR( 1, KI ), 1 )
 *
-               II = AB_IZAMAX( N, VR( 1, KI ), 1 )
+               II = IZAMAX( N, VR( 1, KI ), 1 )
                REMAX = ONE / CABS1( VR( II, KI ) )
-               CALL AB_ZDSCAL( N, REMAX, VR( 1, KI ), 1 )
+               CALL ZDSCAL( N, REMAX, VR( 1, KI ), 1 )
             END IF
 *
 *           Set back the original diagonal elements of T.
@@ -443,8 +440,7 @@
   100       CONTINUE
 *
             IF( KI.LT.N ) THEN
-               CALL AB_ZLATRS( 'Upper', 'Conjugate transpose', 'Non-unit
-     $',
+               CALL ZLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                      'Y', N-KI, T( KI+1, KI+1 ), LDT,
      $                      WORK( KI+1 ), SCALE, RWORK, INFO )
                WORK( KI ) = SCALE
@@ -453,25 +449,24 @@
 *           Copy the vector x or Q*x to VL and normalize.
 *
             IF( .NOT.OVER ) THEN
-               CALL AB_ZCOPY( N-KI+1, WORK( KI ), 1, VL( KI, IS ), 1 )
+               CALL ZCOPY( N-KI+1, WORK( KI ), 1, VL( KI, IS ), 1 )
 *
-               II = AB_IZAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
+               II = IZAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1
                REMAX = ONE / CABS1( VL( II, IS ) )
-               CALL AB_ZDSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
+               CALL ZDSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 )
 *
                DO 110 K = 1, KI - 1
                   VL( K, IS ) = CMZERO
   110          CONTINUE
             ELSE
                IF( KI.LT.N )
-     $            CALL AB_ZGEMV( 'N', N, N-KI, CMONE, VL( 1, KI+1 ), LDV
-     $L,
+     $            CALL ZGEMV( 'N', N, N-KI, CMONE, VL( 1, KI+1 ), LDVL,
      $                        WORK( KI+1 ), 1, DCMPLX( SCALE ),
      $                        VL( 1, KI ), 1 )
 *
-               II = AB_IZAMAX( N, VL( 1, KI ), 1 )
+               II = IZAMAX( N, VL( 1, KI ), 1 )
                REMAX = ONE / CABS1( VL( II, KI ) )
-               CALL AB_ZDSCAL( N, REMAX, VL( 1, KI ), 1 )
+               CALL ZDSCAL( N, REMAX, VL( 1, KI ), 1 )
             END IF
 *
 *           Set back the original diagonal elements of T.
@@ -486,6 +481,6 @@
 *
       RETURN
 *
-*     End of AB_ZTREVC
+*     End of ZTREVC
 *
       END

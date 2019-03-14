@@ -1,4 +1,4 @@
-*> \brief <b> AB_CHPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
+*> \brief <b> CHPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHPSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHPSVx.f">
+*> Download CHPSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpsvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHPSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpsvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHPSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpsvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+*       SUBROUTINE CHPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
 *                          LDX, RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHPSVX uses the diagonal pivoting factorization A = U*D*U**H or
+*> CHPSVX uses the diagonal pivoting factorization A = U*D*U**H or
 *> A = L*D*L**H to compute the solution to a complex system of linear
 *> equations A * X = B, where A is an N-by-N Hermitian matrix stored
 *> in packed format and X and B are N-by-NRHS matrices.
@@ -128,13 +128,13 @@
 *>          If FACT = 'F', then AFP is an input argument and on entry
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**H or A = L*D*L**H as computed by AB_CHPTRF, stored as
+*>          A = U*D*U**H or A = L*D*L**H as computed by CHPTRF, stored as
 *>          a packed triangular matrix in the same storage format as A.
 *>
 *>          If FACT = 'N', then AFP is an output argument and on exit
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**H or A = L*D*L**H as computed by AB_CHPTRF, stored as
+*>          A = U*D*U**H or A = L*D*L**H as computed by CHPTRF, stored as
 *>          a packed triangular matrix in the same storage format as A.
 *> \endverbatim
 *>
@@ -143,7 +143,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by AB_CHPTRF.
+*>          of D, as determined by CHPTRF.
 *>          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
 *>          interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and
@@ -154,7 +154,7 @@
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by AB_CHPTRF.
+*>          of D, as determined by CHPTRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -274,8 +274,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CHPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, 
-     $X,
+      SUBROUTINE CHPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
      $                   LDX, RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -306,14 +305,13 @@
       REAL               ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANHP, SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANHP, SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANHP, SLAMCH
+      EXTERNAL           LSAME, CLANHP, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CHPCON, AB_CHPRFS, AB_CHPTRF, AB_C
-     $HPTRS, AB_CLACPY,
-     $                   AB_XERBLA
+      EXTERNAL           CCOPY, CHPCON, CHPRFS, CHPTRF, CHPTRS, CLACPY,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -323,11 +321,10 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
+      NOFACT = LSAME( FACT, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L'
-     $ ) )
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -340,7 +337,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHPSVX', -INFO )
+         CALL XERBLA( 'CHPSVX', -INFO )
          RETURN
       END IF
 *
@@ -348,8 +345,8 @@
 *
 *        Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
-         CALL AB_CCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
-         CALL AB_CHPTRF( UPLO, N, AFP, IPIV, INFO )
+         CALL CCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
+         CALL CHPTRF( UPLO, N, AFP, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -361,22 +358,21 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = AB_CLANHP( 'I', UPLO, N, AP, RWORK )
+      ANORM = CLANHP( 'I', UPLO, N, AP, RWORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL AB_CHPCON( UPLO, N, AFP, IPIV, ANORM, RCOND, WORK, INFO )
+      CALL CHPCON( UPLO, N, AFP, IPIV, ANORM, RCOND, WORK, INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL AB_CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_CHPTRS( UPLO, N, NRHS, AFP, IPIV, X, LDX, INFO )
+      CALL CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL CHPTRS( UPLO, N, NRHS, AFP, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL AB_CHPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX, FERR
-     $,
+      CALL CHPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX, FERR,
      $             BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
@@ -386,6 +382,6 @@
 *
       RETURN
 *
-*     End of AB_CHPSVX
+*     End of CHPSVX
 *
       END

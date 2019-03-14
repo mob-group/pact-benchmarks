@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSPMV computes a matrix-vector product for complex vectors using a complex symmetric packed matrix
+*> \brief \b ZSPMV computes a matrix-vector product for complex vectors using a complex symmetric packed matrix
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZSPMV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSPMV.f">
+*> Download ZSPMV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zspmv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSPMV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zspmv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSPMV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspmv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSPMV( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
+*       SUBROUTINE ZSPMV( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSPMV  performs the matrix-vector operation
+*> ZSPMV  performs the matrix-vector operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -149,7 +149,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSPMV( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
+      SUBROUTINE ZSPMV( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -178,19 +178,18 @@
       COMPLEX*16         TEMP1, TEMP2
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = 1
       ELSE IF( N.LT.0 ) THEN
          INFO = 2
@@ -200,7 +199,7 @@
          INFO = 9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZSPMV ', INFO )
+         CALL XERBLA( 'ZSPMV ', INFO )
          RETURN
       END IF
 *
@@ -256,7 +255,7 @@
       IF( ALPHA.EQ.ZERO )
      $   RETURN
       KK = 1
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Form  y  when AP contains the upper triangle.
 *
@@ -336,6 +335,6 @@
 *
       RETURN
 *
-*     End of AB_ZSPMV
+*     End of ZSPMV
 *
       END

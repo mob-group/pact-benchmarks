@@ -1,4 +1,4 @@
-*> \brief \b AB_DGECON
+*> \brief \b DGECON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGECON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGECON.f">
+*> Download DGECON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgecon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGECON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgecon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGECON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgecon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+*       SUBROUTINE DGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DGECON estimates the reciprocal of the condition number of a general
+*> DGECON estimates the reciprocal of the condition number of a general
 *> real matrix A, in either the 1-norm or the infinity-norm, using
-*> the LU factorization computed by AB_DGETRF.
+*> the LU factorization computed by DGETRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as
@@ -68,7 +68,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          The factors L and U from the factorization A = P*L*U
-*>          as computed by AB_DGETRF.
+*>          as computed by DGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -121,7 +121,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+      SUBROUTINE DGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -155,13 +155,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, AB_IDAMAX, DLAMCH
+      EXTERNAL           LSAME, IDAMAX, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLACN2, AB_DLATRS, AB_DRSCL, AB_XERBLA
+      EXTERNAL           DLACN2, DLATRS, DRSCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -171,8 +171,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
-      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
+      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
+      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -182,7 +182,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGECON', -INFO )
+         CALL XERBLA( 'DGECON', -INFO )
          RETURN
       END IF
 *
@@ -209,32 +209,29 @@
       END IF
       KASE = 0
    10 CONTINUE
-      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.KASE1 ) THEN
 *
 *           Multiply by inv(L).
 *
-            CALL AB_DLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, 
-     $A,
+            CALL DLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, A,
      $                   LDA, WORK, SL, WORK( 2*N+1 ), INFO )
 *
 *           Multiply by inv(U).
 *
-            CALL AB_DLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
-     $ N,
+            CALL DLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
      $                   A, LDA, WORK, SU, WORK( 3*N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(U**T).
 *
-            CALL AB_DLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
-     $ A,
+            CALL DLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N, A,
      $                   LDA, WORK, SU, WORK( 3*N+1 ), INFO )
 *
 *           Multiply by inv(L**T).
 *
-            CALL AB_DLATRS( 'Lower', 'Transpose', 'Unit', NORMIN, N, A,
+            CALL DLATRS( 'Lower', 'Transpose', 'Unit', NORMIN, N, A,
      $                   LDA, WORK, SL, WORK( 2*N+1 ), INFO )
          END IF
 *
@@ -243,10 +240,10 @@
          SCALE = SL*SU
          NORMIN = 'Y'
          IF( SCALE.NE.ONE ) THEN
-            IX = AB_IDAMAX( N, WORK, 1 )
+            IX = IDAMAX( N, WORK, 1 )
             IF( SCALE.LT.ABS( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL AB_DRSCL( N, SCALE, WORK, 1 )
+            CALL DRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -259,6 +256,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of AB_DGECON
+*     End of DGECON
 *
       END

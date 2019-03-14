@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLARGV generates a vector of plane rotations with real cosines and complex sines.
+*> \brief \b ZLARGV generates a vector of plane rotations with real cosines and complex sines.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLARGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLARGV.f">
+*> Download ZLARGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlargv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLARGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlargv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLARGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlargv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLARGV( N, X, INCX, Y, INCY, C, INCC )
+*       SUBROUTINE ZLARGV( N, X, INCX, Y, INCY, C, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, INCY, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLARGV generates a vector of complex plane rotations with real
+*> ZLARGV generates a vector of complex plane rotations with real
 *> cosines, determined by elements of the complex vectors x and y.
 *> For i = 1,2,...,n
 *>
@@ -43,8 +43,8 @@
 *>
 *>    where c(i)**2 + ABS(s(i))**2 = 1
 *>
-*> The following conventions are used (these are the same as in AB_ZLARTG,
-*> but differ from the BLAS1 routine AB_ZROTG):
+*> The following conventions are used (these are the same as in ZLARTG,
+*> but differ from the BLAS1 routine ZROTG):
 *>    If y(i)=0, then c(i)=1 and s(i)=0.
 *>    If x(i)=0, then c(i)=0 and s(i) is chosen so that r(i) is real.
 *> \endverbatim
@@ -120,7 +120,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLARGV( N, X, INCX, Y, INCY, C, INCC )
+      SUBROUTINE ZLARGV( N, X, INCX, Y, INCY, C, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,8 +152,8 @@
       COMPLEX*16         F, FF, FS, G, GS, R, SN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2
-      EXTERNAL           DLAMCH, AB_DLAPY2
+      DOUBLE PRECISION   DLAMCH, DLAPY2
+      EXTERNAL           DLAMCH, DLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, INT, LOG,
@@ -189,7 +189,7 @@
          F = X( IX )
          G = Y( IY )
 *
-*        Use identical algorithm as in AB_ZLARTG
+*        Use identical algorithm as in ZLARTG
 *
          SCALE = MAX( ABS1( F ), ABS1( G ) )
          FS = F
@@ -226,14 +226,14 @@
 *
             IF( F.EQ.CZERO ) THEN
                CS = ZERO
-               R = AB_DLAPY2( DBLE( G ), DIMAG( G ) )
+               R = DLAPY2( DBLE( G ), DIMAG( G ) )
 *              Do complex/real division explicitly with two real
 *              divisions
-               D = AB_DLAPY2( DBLE( GS ), DIMAG( GS ) )
+               D = DLAPY2( DBLE( GS ), DIMAG( GS ) )
                SN = DCMPLX( DBLE( GS ) / D, -DIMAG( GS ) / D )
                GO TO 50
             END IF
-            F2S = AB_DLAPY2( DBLE( FS ), DIMAG( FS ) )
+            F2S = DLAPY2( DBLE( FS ), DIMAG( FS ) )
 *           G2 and G2S are accurate
 *           G2 is at least SAFMIN, and G2S is at least SAFMN2
             G2S = SQRT( G2 )
@@ -248,12 +248,12 @@
 *           Make sure abs(FF) = 1
 *           Do complex/real division explicitly with 2 real divisions
             IF( ABS1( F ).GT.ONE ) THEN
-               D = AB_DLAPY2( DBLE( F ), DIMAG( F ) )
+               D = DLAPY2( DBLE( F ), DIMAG( F ) )
                FF = DCMPLX( DBLE( F ) / D, DIMAG( F ) / D )
             ELSE
                DR = SAFMX2*DBLE( F )
                DI = SAFMX2*DIMAG( F )
-               D = AB_DLAPY2( DR, DI )
+               D = DLAPY2( DR, DI )
                FF = DCMPLX( DR / D, DI / D )
             END IF
             SN = FF*DCMPLX( DBLE( GS ) / G2S, -DIMAG( GS ) / G2S )
@@ -295,6 +295,6 @@
    60 CONTINUE
       RETURN
 *
-*     End of AB_ZLARGV
+*     End of ZLARGV
 *
       END

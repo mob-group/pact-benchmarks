@@ -1,4 +1,4 @@
-*> \brief \b AB_CLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors.
+*> \brief \b CLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLARTV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARTV.f">
+*> Download CLARTV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clartv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARTV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clartv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARTV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clartv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+*       SUBROUTINE CLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, INCY, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLARTV applies a vector of complex plane rotations with real cosines
+*> CLARTV applies a vector of complex plane rotations with real cosines
 *> to elements of the complex vectors x and y. For i = 1,2,...,n
 *>
 *>    ( x(i) ) := (        c(i)   s(i) ) ( x(i) )
@@ -105,7 +105,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+      SUBROUTINE CLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -145,6 +145,6 @@
    10 CONTINUE
       RETURN
 *
-*     End of AB_CLARTV
+*     End of CLARTV
 *
       END

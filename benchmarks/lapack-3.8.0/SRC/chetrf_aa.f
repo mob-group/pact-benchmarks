@@ -1,4 +1,4 @@
-*> \brief \b AB_CHETRF_AA
+*> \brief \b CHETRF_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHETRF_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHETRF_aa.f">
+*> Download CHETRF_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHETRF_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrf_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHETRF_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER    UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHETRF_AA computes the factorization of a complex hermitian matrix A
+*> CHETRF_AA computes the factorization of a complex hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**H  or  A = L*T*L**H
@@ -107,7 +107,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -130,7 +130,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
+      SUBROUTINE CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -160,13 +160,12 @@
       COMPLEX      ALPHA
 *     ..
 *     .. External Functions ..
-      LOGICAL      AB_LSAME
-      INTEGER      AB_ILAENV
-      EXTERNAL     AB_LSAME, AB_ILAENV
+      LOGICAL      LSAME
+      INTEGER      ILAENV
+      EXTERNAL     LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     AB_CLAHEF_AA, AB_CGEMM, AB_CCOPY, AB_CSWAP, AB_CSCAL,
-     $ AB_XERBLA
+      EXTERNAL     CLAHEF_AA, CGEMM, CCOPY, CSWAP, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    REAL, CONJG, MAX
@@ -175,14 +174,14 @@
 *
 *     Determine the block size
 *
-      NB = AB_ILAENV( 1, 'AB_CHETRF_AA', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'CHETRF_AA', UPLO, N, -1, -1, -1 )
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -198,7 +197,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CHETRF_AA', -INFO )
+         CALL XERBLA( 'CHETRF_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -229,10 +228,10 @@
 *
 *        copy first row A(1, 1:N) into H(1:n) (stored in WORK(1:N))
 *
-         CALL AB_CCOPY( N, A( 1, 1 ), LDA, WORK( 1 ), 1 )
+         CALL CCOPY( N, A( 1, 1 ), LDA, WORK( 1 ), 1 )
 *
 *        J is the main loop index, increasing from 1 to N in steps of
-*        JB, where JB is the number of columns factorized by AB_CLAHEF;
+*        JB, where JB is the number of columns factorized by CLAHEF;
 *        JB is either NB, or N-J+1 for the last block
 *
          J = 0
@@ -253,7 +252,7 @@
 *
 *        Panel factorization
 *
-         CALL AB_CLAHEF_AA( UPLO, 2-K1, N-J, JB,
+         CALL CLAHEF_AA( UPLO, 2-K1, N-J, JB,
      $                      A( MAX(1, J), J+1 ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
 *
@@ -262,7 +261,7 @@
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL AB_CSWAP( J1-K1-2, A( 1, J2 ), 1,
+               CALL CSWAP( J1-K1-2, A( 1, J2 ), 1,
      $                              A( 1, IPIV(J2) ), 1 )
             END IF
          END DO
@@ -282,9 +281,9 @@
 *
                ALPHA = CONJG( A( J, J+1 ) )
                A( J, J+1 ) = ONE
-               CALL AB_CCOPY( N-J, A( J-1, J+1 ), LDA,
+               CALL CCOPY( N-J, A( J-1, J+1 ), LDA,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
-               CALL AB_CSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
+               CALL CSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
 *
 *              K1 identifies if the previous column of the panel has been
 *               explicitly stored, e.g., K1=0 and K2=1 for the first panel,
@@ -309,11 +308,11 @@
                DO J2 = J+1, N, NB
                   NJ = MIN( NB, N-J2+1 )
 *
-*                 Update (J2, J2) diagonal block with AB_CGEMV
+*                 Update (J2, J2) diagonal block with CGEMV
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL AB_CGEMM( 'Conjugate transpose', 'Transpose',
+                     CALL CGEMM( 'Conjugate transpose', 'Transpose',
      $                            1, MJ, JB+1,
      $                           -ONE, A( J1-K2, J3 ), LDA,
      $                                 WORK( (J3-J1+1)+K1*N ), N,
@@ -321,9 +320,9 @@
                      J3 = J3 + 1
                   END DO
 *
-*                 Update off-diagonal block of J2-th block row with AB_CGEMM
+*                 Update off-diagonal block of J2-th block row with CGEMM
 *
-                  CALL AB_CGEMM( 'Conjugate transpose', 'Transpose',
+                  CALL CGEMM( 'Conjugate transpose', 'Transpose',
      $                        NJ, N-J3+1, JB+1,
      $                       -ONE, A( J1-K2, J2 ), LDA,
      $                             WORK( (J3-J1+1)+K1*N ), N,
@@ -337,7 +336,7 @@
 *
 *           WORK(J+1, 1) stores H(J+1, 1)
 *
-            CALL AB_CCOPY( N-J, A( J+1, J+1 ), LDA, WORK( 1 ), 1 )
+            CALL CCOPY( N-J, A( J+1, J+1 ), LDA, WORK( 1 ), 1 )
          END IF
          GO TO 10
       ELSE
@@ -349,10 +348,10 @@
 *        copy first column A(1:N, 1) into H(1:N, 1)
 *         (stored in WORK(1:N))
 *
-         CALL AB_CCOPY( N, A( 1, 1 ), 1, WORK( 1 ), 1 )
+         CALL CCOPY( N, A( 1, 1 ), 1, WORK( 1 ), 1 )
 *
 *        J is the main loop index, increasing from 1 to N in steps of
-*        JB, where JB is the number of columns factorized by AB_CLAHEF;
+*        JB, where JB is the number of columns factorized by CLAHEF;
 *        JB is either NB, or N-J+1 for the last block
 *
          J = 0
@@ -373,7 +372,7 @@
 *
 *        Panel factorization
 *
-         CALL AB_CLAHEF_AA( UPLO, 2-K1, N-J, JB,
+         CALL CLAHEF_AA( UPLO, 2-K1, N-J, JB,
      $                      A( J+1, MAX(1, J) ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
 *
@@ -382,7 +381,7 @@
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL AB_CSWAP( J1-K1-2, A( J2, 1 ), LDA,
+               CALL CSWAP( J1-K1-2, A( J2, 1 ), LDA,
      $                              A( IPIV(J2), 1 ), LDA )
             END IF
          END DO
@@ -402,9 +401,9 @@
 *
                ALPHA = CONJG( A( J+1, J ) )
                A( J+1, J ) = ONE
-               CALL AB_CCOPY( N-J, A( J+1, J-1 ), 1,
+               CALL CCOPY( N-J, A( J+1, J-1 ), 1,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
-               CALL AB_CSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
+               CALL CSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
 *
 *              K1 identifies if the previous column of the panel has been
 *               explicitly stored, e.g., K1=0 and K2=1 for the first panel,
@@ -429,12 +428,11 @@
                DO J2 = J+1, N, NB
                   NJ = MIN( NB, N-J2+1 )
 *
-*                 Update (J2, J2) diagonal block with AB_CGEMV
+*                 Update (J2, J2) diagonal block with CGEMV
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL AB_CGEMM( 'No transpose', 'Conjugate transpose
-     $',
+                     CALL CGEMM( 'No transpose', 'Conjugate transpose',
      $                           MJ, 1, JB+1,
      $                          -ONE, WORK( (J3-J1+1)+K1*N ), N,
      $                                A( J3, J1-K2 ), LDA,
@@ -442,9 +440,9 @@
                      J3 = J3 + 1
                   END DO
 *
-*                 Update off-diagonal block of J2-th block column with AB_CGEMM
+*                 Update off-diagonal block of J2-th block column with CGEMM
 *
-                  CALL AB_CGEMM( 'No transpose', 'Conjugate transpose',
+                  CALL CGEMM( 'No transpose', 'Conjugate transpose',
      $                        N-J3+1, NJ, JB+1,
      $                       -ONE, WORK( (J3-J1+1)+K1*N ), N,
      $                             A( J2, J1-K2 ), LDA,
@@ -458,7 +456,7 @@
 *
 *           WORK(J+1, 1) stores H(J+1, 1)
 *
-            CALL AB_CCOPY( N-J, A( J+1, J+1 ), 1, WORK( 1 ), 1 )
+            CALL CCOPY( N-J, A( J+1, J+1 ), 1, WORK( 1 ), 1 )
          END IF
          GO TO 11
       END IF
@@ -466,6 +464,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of AB_CHETRF_AA
+*     End of CHETRF_AA
 *
       END

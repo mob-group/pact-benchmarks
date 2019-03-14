@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAPLL measures the linear dependence of two vectors.
+*> \brief \b SLAPLL measures the linear dependence of two vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAPLL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAPLL.f">
+*> Download SLAPLL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slapll.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAPLL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slapll.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAPLL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slapll.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAPLL( N, X, INCX, Y, INCY, SSMIN )
+*       SUBROUTINE SLAPLL( N, X, INCX, Y, INCY, SSMIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, INCY, N
@@ -100,7 +100,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAPLL( N, X, INCX, Y, INCY, SSMIN )
+      SUBROUTINE SLAPLL( N, X, INCX, Y, INCY, SSMIN )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -125,11 +125,11 @@
       REAL               A11, A12, A22, C, SSMAX, TAU
 *     ..
 *     .. External Functions ..
-      REAL               AB_SDOT
-      EXTERNAL           AB_SDOT
+      REAL               SDOT
+      EXTERNAL           SDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SLARFG, AB_SLAS2
+      EXTERNAL           SAXPY, SLARFG, SLAS2
 *     ..
 *     .. Executable Statements ..
 *
@@ -142,24 +142,24 @@
 *
 *     Compute the QR factorization of the N-by-2 matrix ( X Y )
 *
-      CALL AB_SLARFG( N, X( 1 ), X( 1+INCX ), INCX, TAU )
+      CALL SLARFG( N, X( 1 ), X( 1+INCX ), INCX, TAU )
       A11 = X( 1 )
       X( 1 ) = ONE
 *
-      C = -TAU*AB_SDOT( N, X, INCX, Y, INCY )
-      CALL AB_SAXPY( N, C, X, INCX, Y, INCY )
+      C = -TAU*SDOT( N, X, INCX, Y, INCY )
+      CALL SAXPY( N, C, X, INCX, Y, INCY )
 *
-      CALL AB_SLARFG( N-1, Y( 1+INCY ), Y( 1+2*INCY ), INCY, TAU )
+      CALL SLARFG( N-1, Y( 1+INCY ), Y( 1+2*INCY ), INCY, TAU )
 *
       A12 = Y( 1 )
       A22 = Y( 1+INCY )
 *
 *     Compute the SVD of 2-by-2 Upper triangular matrix.
 *
-      CALL AB_SLAS2( A11, A12, A22, SSMIN, SSMAX )
+      CALL SLAS2( A11, A12, A22, SSMIN, SSMAX )
 *
       RETURN
 *
-*     End of AB_SLAPLL
+*     End of SLAPLL
 *
       END

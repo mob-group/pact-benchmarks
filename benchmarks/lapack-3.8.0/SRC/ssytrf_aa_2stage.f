@@ -1,4 +1,4 @@
-*> \brief \b AB_SSYTRF_AA_2STAGE
+*> \brief \b SSYTRF_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSYTRF_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYTRF_aa_2stage.f">
+*> Download SSYTRF_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrf_aa_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYTRF_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrf_aa_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYTRF_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrf_aa_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE AB_SSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
+*      SUBROUTINE SSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
 *                                   IPIV2, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSYTRF_AA_2STAGE computes the factorization of a real symmetric matrix A
+*> SSYTRF_AA_2STAGE computes the factorization of a real symmetric matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**T  or  A = L*T*L**T
@@ -99,7 +99,7 @@
 *>          If LTB = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of LTB, 
 *>          returns this value as the first entry of TB, and
-*>          no error message related to LTB is issued by AB_XERBLA.
+*>          no error message related to LTB is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IPIV
@@ -131,7 +131,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the WORK array,
 *>          returns this value as the first entry of the WORK array, and
-*>          no error message related to LWORK is issued by AB_XERBLA.
+*>          no error message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -155,7 +155,7 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
+      SUBROUTINE SSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
      $                             IPIV2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -186,14 +186,14 @@
       REAL               PIV
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_SCOPY, SLACGV, AB_SLACPY,
-     $                   AB_SLASET, AB_SGBTRF, AB_SGEMM,  AB_SGETRF, 
-     $                   AB_SSYGST, AB_SSWAP, AB_STRSM 
+      EXTERNAL           XERBLA, SCOPY, SLACGV, SLACPY,
+     $                   SLASET, SGBTRF, SGEMM,  SGETRF, 
+     $                   SSYGST, SSWAP, STRSM 
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX
@@ -203,10 +203,10 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       WQUERY = ( LWORK.EQ.-1 )
       TQUERY = ( LTB.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -219,13 +219,13 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSYTRF_AA_2STAGE', -INFO )
+         CALL XERBLA( 'SSYTRF_AA_2STAGE', -INFO )
          RETURN
       END IF
 *
 *     Answer the query
 *
-      NB = AB_ILAENV( 1, 'AB_SSYTRF_AA_2STAGE', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'SSYTRF_AA_2STAGE', UPLO, N, -1, -1, -1 )
       IF( INFO.EQ.0 ) THEN
          IF( TQUERY ) THEN
             TB( 1 ) = (3*NB+1)*N
@@ -289,7 +289,7 @@
                   ELSE
                      JB = 2*NB
                   END IF
-                  CALL AB_SGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL SGEMM( 'NoTranspose', 'NoTranspose',
      $                    NB, KB, JB,
      $                    ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
      $                         A( (I-1)*NB+1, J*NB+1 ), LDA,
@@ -301,7 +301,7 @@
                   ELSE
                      JB = 3*NB
                   END IF
-                  CALL AB_SGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL SGEMM( 'NoTranspose', 'NoTranspose',
      $                    NB, KB, JB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
@@ -312,29 +312,29 @@
 *         
 *           Compute T(J,J)
 *     
-            CALL AB_SLACPY( 'Upper', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
+            CALL SLACPY( 'Upper', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
      $                   TB( TD+1 + (J*NB)*LDTB ), LDTB-1 ) 
             IF( J.GT.1 ) THEN
 *              T(J,J) = U(1:J,J)'*H(1:J)             
-               CALL AB_SGEMM( 'Transpose', 'NoTranspose',
+               CALL SGEMM( 'Transpose', 'NoTranspose',
      $                 KB, KB, (J-1)*NB,
      $                -ONE, A( 1, J*NB+1 ), LDA,
      $                      WORK( NB+1 ), N,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
 *              T(J,J) += U(J,J)'*T(J,J-1)*U(J-1,J)
-               CALL AB_SGEMM( 'Transpose', 'NoTranspose',
+               CALL SGEMM( 'Transpose', 'NoTranspose',
      $                 KB, NB, KB,
      $                 ONE,  A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                       TB( TD+NB+1 + ((J-1)*NB)*LDTB ), LDTB-1,
      $                 ZERO, WORK( 1 ), N )
-               CALL AB_SGEMM( 'NoTranspose', 'NoTranspose',
+               CALL SGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, KB, NB,
      $                -ONE, WORK( 1 ), N,
      $                      A( (J-2)*NB+1, J*NB+1 ), LDA,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
             END IF
             IF( J.GT.0 ) THEN 
-               CALL AB_SSYGST( 1, 'Upper', KB, 
+               CALL SSYGST( 1, 'Upper', KB, 
      $                      TB( TD+1 + (J*NB)*LDTB ), LDTB-1, 
      $                      A( (J-1)*NB+1, J*NB+1 ), LDA, IINFO )
             END IF
@@ -354,13 +354,13 @@
 *                 Compute H(J,J)
 *
                   IF( J.EQ.1 ) THEN
-                     CALL AB_SGEMM( 'NoTranspose', 'NoTranspose',
+                     CALL SGEMM( 'NoTranspose', 'NoTranspose',
      $                       KB, KB, KB,
      $                       ONE,  TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                             A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                       ZERO, WORK( J*NB+1 ), N )
                   ELSE
-                     CALL AB_SGEMM( 'NoTranspose', 'NoTranspose',
+                     CALL SGEMM( 'NoTranspose', 'NoTranspose',
      $                      KB, KB, NB+KB,
      $                      ONE, TB( TD+NB+1 + ((J-1)*NB)*LDTB ),
      $                         LDTB-1,
@@ -370,24 +370,24 @@
 *
 *                 Update with the previous column
 *
-                  CALL AB_SGEMM( 'Transpose', 'NoTranspose',
+                  CALL SGEMM( 'Transpose', 'NoTranspose',
      $                    NB, N-(J+1)*NB, J*NB,
      $                    -ONE, WORK( NB+1 ), N,
      $                          A( 1, (J+1)*NB+1 ), LDA,
      $                     ONE, A( J*NB+1, (J+1)*NB+1 ), LDA )
                END IF
 *
-*              Copy panel to workspace to call AB_SGETRF
+*              Copy panel to workspace to call SGETRF
 *
                DO K = 1, NB
-                   CALL AB_SCOPY( N-(J+1)*NB,
+                   CALL SCOPY( N-(J+1)*NB,
      $                         A( J*NB+K, (J+1)*NB+1 ), LDA,
      $                         WORK( 1+(K-1)*N ), 1 )
                END DO
 *
 *              Factorize panel
 *
-               CALL AB_SGETRF( N-(J+1)*NB, NB, 
+               CALL SGETRF( N-(J+1)*NB, NB, 
      $                      WORK, N,
      $                      IPIV( (J+1)*NB+1 ), IINFO )
 c               IF (IINFO.NE.0 .AND. INFO.EQ.0) THEN
@@ -397,7 +397,7 @@ c               END IF
 *              Copy panel back
 *
                DO K = 1, NB
-                   CALL AB_SCOPY( N-(J+1)*NB,
+                   CALL SCOPY( N-(J+1)*NB,
      $                         WORK( 1+(K-1)*N ), 1,
      $                         A( J*NB+K, (J+1)*NB+1 ), LDA )
                END DO
@@ -405,13 +405,13 @@ c               END IF
 *              Compute T(J+1, J), zero out for GEMM update
 *     
                KB = MIN(NB, N-(J+1)*NB)
-               CALL AB_SLASET( 'Full', KB, NB, ZERO, ZERO, 
+               CALL SLASET( 'Full', KB, NB, ZERO, ZERO, 
      $                      TB( TD+NB+1 + (J*NB)*LDTB), LDTB-1 )
-               CALL AB_SLACPY( 'Upper', KB, NB,
+               CALL SLACPY( 'Upper', KB, NB,
      $                      WORK, N,
      $                      TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                IF( J.GT.0 ) THEN 
-                  CALL AB_STRSM( 'R', 'U', 'N', 'U', KB, NB, ONE,
+                  CALL STRSM( 'R', 'U', 'N', 'U', KB, NB, ONE,
      $                        A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                        TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                END IF
@@ -425,7 +425,7 @@ c               END IF
      $                  = TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB )
                   END DO
                END DO
-               CALL AB_SLASET( 'Lower', KB, NB, ZERO, ONE, 
+               CALL SLASET( 'Lower', KB, NB, ZERO, ONE, 
      $                      A( J*NB+1, (J+1)*NB+1), LDA )
 *              
 *              Apply pivots to trailing submatrix of A
@@ -438,13 +438,13 @@ c               END IF
                   I2 = IPIV( (J+1)*NB+K )
                   IF( I1.NE.I2 ) THEN 
 *                    > Apply pivots to previous columns of L
-                     CALL AB_SSWAP( K-1, A( (J+1)*NB+1, I1 ), 1, 
+                     CALL SSWAP( K-1, A( (J+1)*NB+1, I1 ), 1, 
      $                                A( (J+1)*NB+1, I2 ), 1 )
 *                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)               
-                     CALL AB_SSWAP( I2-I1-1, A( I1, I1+1 ), LDA,
+                     CALL SSWAP( I2-I1-1, A( I1, I1+1 ), LDA,
      $                                    A( I1+1, I2 ), 1 )
 *                    > Swap A(I2+1:M, I1) with A(I2+1:M, I2)
-                     CALL AB_SSWAP( N-I2, A( I1, I2+1 ), LDA,
+                     CALL SSWAP( N-I2, A( I1, I2+1 ), LDA,
      $                                 A( I2, I2+1 ), LDA ) 
 *                    > Swap A(I1, I1) with A(I2, I2)
                      PIV = A( I1, I1 )
@@ -452,7 +452,7 @@ c               END IF
                      A( I2, I2 ) = PIV
 *                    > Apply pivots to previous columns of L
                      IF( J.GT.0 ) THEN
-                        CALL AB_SSWAP( J*NB, A( 1, I1 ), 1,
+                        CALL SSWAP( J*NB, A( 1, I1 ), 1,
      $                                    A( 1, I2 ), 1 )
                      END IF
                   ENDIF   
@@ -478,7 +478,7 @@ c               END IF
                   ELSE
                      JB = 2*NB
                   END IF
-                  CALL AB_SGEMM( 'NoTranspose', 'Transpose',
+                  CALL SGEMM( 'NoTranspose', 'Transpose',
      $                    NB, KB, JB,
      $                    ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
      $                         A( J*NB+1, (I-1)*NB+1 ), LDA,
@@ -490,7 +490,7 @@ c               END IF
                   ELSE
                      JB = 3*NB
                   END IF
-                  CALL AB_SGEMM( 'NoTranspose', 'Transpose',
+                  CALL SGEMM( 'NoTranspose', 'Transpose',
      $                    NB, KB, JB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
@@ -501,29 +501,29 @@ c               END IF
 *         
 *           Compute T(J,J)
 *     
-            CALL AB_SLACPY( 'Lower', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
+            CALL SLACPY( 'Lower', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
      $                   TB( TD+1 + (J*NB)*LDTB ), LDTB-1 ) 
             IF( J.GT.1 ) THEN
 *              T(J,J) = L(J,1:J)*H(1:J)             
-               CALL AB_SGEMM( 'NoTranspose', 'NoTranspose',
+               CALL SGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, KB, (J-1)*NB,
      $                -ONE, A( J*NB+1, 1 ), LDA,
      $                      WORK( NB+1 ), N,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
 *              T(J,J) += L(J,J)*T(J,J-1)*L(J,J-1)'
-               CALL AB_SGEMM( 'NoTranspose', 'NoTranspose',
+               CALL SGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, NB, KB,
      $                 ONE,  A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                       TB( TD+NB+1 + ((J-1)*NB)*LDTB ), LDTB-1,
      $                 ZERO, WORK( 1 ), N )
-               CALL AB_SGEMM( 'NoTranspose', 'Transpose',
+               CALL SGEMM( 'NoTranspose', 'Transpose',
      $                 KB, KB, NB,
      $                -ONE, WORK( 1 ), N,
      $                      A( J*NB+1, (J-2)*NB+1 ), LDA,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
             END IF
             IF( J.GT.0 ) THEN 
-               CALL AB_SSYGST( 1, 'Lower', KB, 
+               CALL SSYGST( 1, 'Lower', KB, 
      $                      TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                      A( J*NB+1, (J-1)*NB+1 ), LDA, IINFO )
             END IF
@@ -543,13 +543,13 @@ c               END IF
 *                 Compute H(J,J)
 *
                   IF( J.EQ.1 ) THEN
-                     CALL AB_SGEMM( 'NoTranspose', 'Transpose',
+                     CALL SGEMM( 'NoTranspose', 'Transpose',
      $                       KB, KB, KB,
      $                       ONE,  TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                             A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                       ZERO, WORK( J*NB+1 ), N )
                   ELSE
-                     CALL AB_SGEMM( 'NoTranspose', 'Transpose',
+                     CALL SGEMM( 'NoTranspose', 'Transpose',
      $                      KB, KB, NB+KB,
      $                      ONE, TB( TD+NB+1 + ((J-1)*NB)*LDTB ),
      $                         LDTB-1,
@@ -559,7 +559,7 @@ c               END IF
 *
 *                 Update with the previous column
 *
-                  CALL AB_SGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL SGEMM( 'NoTranspose', 'NoTranspose',
      $                    N-(J+1)*NB, NB, J*NB,
      $                    -ONE, A( (J+1)*NB+1, 1 ), LDA,
      $                          WORK( NB+1 ), N,
@@ -568,7 +568,7 @@ c               END IF
 *
 *              Factorize panel
 *
-               CALL AB_SGETRF( N-(J+1)*NB, NB, 
+               CALL SGETRF( N-(J+1)*NB, NB, 
      $                      A( (J+1)*NB+1, J*NB+1 ), LDA,
      $                      IPIV( (J+1)*NB+1 ), IINFO )
 c               IF (IINFO.NE.0 .AND. INFO.EQ.0) THEN
@@ -578,13 +578,13 @@ c               END IF
 *              Compute T(J+1, J), zero out for GEMM update
 *     
                KB = MIN(NB, N-(J+1)*NB)
-               CALL AB_SLASET( 'Full', KB, NB, ZERO, ZERO, 
+               CALL SLASET( 'Full', KB, NB, ZERO, ZERO, 
      $                      TB( TD+NB+1 + (J*NB)*LDTB), LDTB-1 )
-               CALL AB_SLACPY( 'Upper', KB, NB,
+               CALL SLACPY( 'Upper', KB, NB,
      $                      A( (J+1)*NB+1, J*NB+1 ), LDA,
      $                      TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                IF( J.GT.0 ) THEN 
-                  CALL AB_STRSM( 'R', 'L', 'T', 'U', KB, NB, ONE,
+                  CALL STRSM( 'R', 'L', 'T', 'U', KB, NB, ONE,
      $                        A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                        TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                END IF
@@ -598,7 +598,7 @@ c               END IF
      $                  TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB )
                   END DO
                END DO
-               CALL AB_SLASET( 'Upper', KB, NB, ZERO, ONE, 
+               CALL SLASET( 'Upper', KB, NB, ZERO, ONE, 
      $                      A( (J+1)*NB+1, J*NB+1), LDA )
 *              
 *              Apply pivots to trailing submatrix of A
@@ -611,13 +611,13 @@ c               END IF
                   I2 = IPIV( (J+1)*NB+K )
                   IF( I1.NE.I2 ) THEN 
 *                    > Apply pivots to previous columns of L
-                     CALL AB_SSWAP( K-1, A( I1, (J+1)*NB+1 ), LDA, 
+                     CALL SSWAP( K-1, A( I1, (J+1)*NB+1 ), LDA, 
      $                                A( I2, (J+1)*NB+1 ), LDA )
 *                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)               
-                     CALL AB_SSWAP( I2-I1-1, A( I1+1, I1 ), 1,
+                     CALL SSWAP( I2-I1-1, A( I1+1, I1 ), 1,
      $                                    A( I2, I1+1 ), LDA )
 *                    > Swap A(I2+1:M, I1) with A(I2+1:M, I2)
-                     CALL AB_SSWAP( N-I2, A( I2+1, I1 ), 1,
+                     CALL SSWAP( N-I2, A( I2+1, I1 ), 1,
      $                                 A( I2+1, I2 ), 1 ) 
 *                    > Swap A(I1, I1) with A(I2, I2)
                      PIV = A( I1, I1 )
@@ -625,7 +625,7 @@ c               END IF
                      A( I2, I2 ) = PIV
 *                    > Apply pivots to previous columns of L
                      IF( J.GT.0 ) THEN
-                        CALL AB_SSWAP( J*NB, A( I1, 1 ), LDA,
+                        CALL SSWAP( J*NB, A( I1, 1 ), LDA,
      $                                    A( I2, 1 ), LDA )
                      END IF
                   ENDIF   
@@ -633,15 +633,15 @@ c               END IF
 *         
 *              Apply pivots to previous columns of L
 *         
-c               CALL AB_SLASWP( J*NB, A( 1, 1 ), LDA, 
+c               CALL SLASWP( J*NB, A( 1, 1 ), LDA, 
 c     $                     (J+1)*NB+1, (J+1)*NB+KB, IPIV, 1 )
             END IF
          END DO
       END IF
 *
 *     Factor the band matrix
-      CALL AB_SGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
+      CALL SGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
 *
-*     End of AB_SSYTRF_AA_2STAGE
+*     End of SSYTRF_AA_2STAGE
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLANHF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a Hermitian matrix in RFP format.
+*> \brief \b ZLANHF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a Hermitian matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLANHF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLANHF.f">
+*> Download ZLANHF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlanhf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLANHF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlanhf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLANHF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlanhf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_ZLANHF( NORM, TRANSR, UPLO, N, A, WORK )
+*       DOUBLE PRECISION FUNCTION ZLANHF( NORM, TRANSR, UPLO, N, A, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM, TRANSR, UPLO
@@ -35,15 +35,15 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLANHF  returns the value of the one norm,  or the Frobenius norm, or
+*> ZLANHF  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> complex Hermitian matrix A in RFP format.
 *> \endverbatim
 *>
-*> \return AB_ZLANHF
+*> \return ZLANHF
 *> \verbatim
 *>
-*>    AB_ZLANHF = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    ZLANHF = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -63,7 +63,7 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER
-*>            Specifies the value to be returned in AB_ZLANHF as described
+*>            Specifies the value to be returned in ZLANHF as described
 *>            above.
 *> \endverbatim
 *>
@@ -92,7 +92,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>            The order of the matrix A.  N >= 0.  When N = 0, AB_ZLANHF is
+*>            The order of the matrix A.  N >= 0.  When N = 0, ZLANHF is
 *>            set to zero.
 *> \endverbatim
 *>
@@ -244,8 +244,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_ZLANHF( NORM, TRANSR, UPLO, N, A, WOR
-     $K )
+      DOUBLE PRECISION FUNCTION ZLANHF( NORM, TRANSR, UPLO, N, A, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -272,11 +271,11 @@
       DOUBLE PRECISION   SCALE, S, VALUE, AA, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           AB_LSAME, AB_DISNAN
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASSQ
+      EXTERNAL           ZLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, SQRT
@@ -284,10 +283,10 @@
 *     .. Executable Statements ..
 *
       IF( N.EQ.0 ) THEN
-         AB_ZLANHF = ZERO
+         ZLANHF = ZERO
          RETURN
       ELSE IF( N.EQ.1 ) THEN
-         AB_ZLANHF = ABS(DBLE(A(0)))
+         ZLANHF = ABS(DBLE(A(0)))
          RETURN
       END IF
 *
@@ -300,13 +299,13 @@
 *     set ifm = 0 when form='C' or 'c' and 1 otherwise
 *
       IFM = 1
-      IF( AB_LSAME( TRANSR, 'C' ) )
+      IF( LSAME( TRANSR, 'C' ) )
      $   IFM = 0
 *
 *     set ilu = 0 when uplo='U or 'u' and 1 otherwise
 *
       ILU = 1
-      IF( AB_LSAME( UPLO, 'U' ) )
+      IF( LSAME( UPLO, 'U' ) )
      $   ILU = 0
 *
 *     set lda = (n+1)/2 when ifm = 0
@@ -325,7 +324,7 @@
          LDA = ( N+1 ) / 2
       END IF
 *
-      IF( AB_LSAME( NORM, 'M' ) ) THEN
+      IF( LSAME( NORM, 'M' ) ) THEN
 *
 *       Find max(abs(A(i,j))).
 *
@@ -340,32 +339,32 @@
                   J = 0
 *                 -> L(0,0)
                   TEMP = ABS( DBLE( A( J+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                 VALUE = TEMP
                   DO I = 1, N - 1
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                   DO J = 1, K - 1
                      DO I = 0, J - 2
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                      I = J - 1
 *                    L(k+j,k+j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      I = J
 *                    -> L(j,j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      DO I = J + 1, N - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
@@ -374,34 +373,34 @@
                   DO J = 0, K - 2
                      DO I = 0, K + J - 2
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                      I = K + J - 1
 *                    -> U(i,i)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      I = I + 1
 *                    =k+j; i -> U(j,j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      DO I = K + J + 1, N - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
                   DO I = 0, N - 2
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
 *                    j=k-1
                   END DO
 *                 i=n-1 -> U(n-1,n-1)
                   TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                 VALUE = TEMP
                END IF
             ELSE
@@ -411,40 +410,40 @@
                   DO J = 0, K - 2
                      DO I = 0, J - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                      I = J
 *                    L(i,i)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      I = J + 1
 *                    L(j+k,j+k)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      DO I = J + 2, K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
                   J = K - 1
                   DO I = 0, K - 2
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                   I = K - 1
 *                 -> L(i,i) is at A(i,j)
                   TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   DO J = K, N - 1
                      DO I = 0, K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
@@ -453,39 +452,39 @@
                   DO J = 0, K - 2
                      DO I = 0, K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
                   J = K - 1
 *                 -> U(j,j) is at A(0,j)
                   TEMP = ABS( DBLE( A( 0+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   DO I = 1, K - 1
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                   DO J = K, N - 1
                      DO I = 0, J - K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                      I = J - K
 *                    -> U(i,i) at A(i,j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      I = J - K + 1
 *                    U(j,j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      DO I = J - K + 2, K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
@@ -500,35 +499,35 @@
                   J = 0
 *                 -> L(k,k) & j=1 -> L(0,0)
                   TEMP = ABS( DBLE( A( J+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                 VALUE = TEMP
                   TEMP = ABS( DBLE( A( J+1+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                 VALUE = TEMP
                   DO I = 2, N
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                   DO J = 1, K - 1
                      DO I = 0, J - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                      I = J
 *                    L(k+j,k+j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      I = J + 1
 *                    -> L(j,j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      DO I = J + 2, N
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
@@ -537,39 +536,39 @@
                   DO J = 0, K - 2
                      DO I = 0, K + J - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                      I = K + J
 *                    -> U(i,i)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      I = I + 1
 *                    =k+j+1; i -> U(j,j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      DO I = K + J + 2, N
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
                   DO I = 0, N - 2
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
 *                    j=k-1
                   END DO
 *                 i=n-1 -> U(n-1,n-1)
                   TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   I = N
 *                 -> U(k-1,k-1)
                   TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                END IF
             ELSE
@@ -579,50 +578,50 @@
                   J = 0
 *                 -> L(k,k) at A(0,0)
                   TEMP = ABS( DBLE( A( J+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   DO I = 1, K - 1
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                   DO J = 1, K - 1
                      DO I = 0, J - 2
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                      I = J - 1
 *                    L(i,i)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      I = J
 *                    L(j+k,j+k)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      DO I = J + 1, K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
                   J = K
                   DO I = 0, K - 2
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                   I = K - 1
 *                 -> L(i,i) is at A(i,j)
                   TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                 VALUE = TEMP
                   DO J = K + 1, N
                      DO I = 0, K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
@@ -631,58 +630,57 @@
                   DO J = 0, K - 1
                      DO I = 0, K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
                   J = K
 *                 -> U(j,j) is at A(0,j)
                   TEMP = ABS( DBLE( A( 0+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                 VALUE = TEMP
                   DO I = 1, K - 1
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                   DO J = K + 1, N - 1
                      DO I = 0, J - K - 2
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                      I = J - K - 1
 *                    -> U(i,i) at A(i,j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      I = J - K
 *                    U(j,j)
                      TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                      DO I = J - K + 1, K - 1
                         TEMP = ABS( A( I+J*LDA ) )
-                        IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                        IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                       VALUE = TEMP
                      END DO
                   END DO
                   J = N
                   DO I = 0, K - 2
                      TEMP = ABS( A( I+J*LDA ) )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                   I = K - 1
 *                 U(k,k) at A(i,j)
                   TEMP = ABS( DBLE( A( I+J*LDA ) ) )
-                  IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                  IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                 VALUE = TEMP
                END IF
             END IF
          END IF
-      ELSE IF( ( AB_LSAME( NORM, 'I' ) ) .OR. ( AB_LSAME( NORM, 'O' ) ) 
-     $.OR.
+      ELSE IF( ( LSAME( NORM, 'I' ) ) .OR. ( LSAME( NORM, 'O' ) ) .OR.
      $         ( NORM.EQ.'1' ) ) THEN
 *
 *       Find normI(A) ( = norm1(A), since A is Hermitian).
@@ -728,7 +726,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                ELSE
@@ -770,7 +768,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END IF
@@ -809,7 +807,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                ELSE
@@ -847,7 +845,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END IF
@@ -914,7 +912,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                ELSE
@@ -979,7 +977,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END IF
@@ -1053,7 +1051,7 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                ELSE
@@ -1128,14 +1126,13 @@
                   VALUE = WORK( 0 )
                   DO I = 1, N-1
                      TEMP = WORK( I )
-                     IF( VALUE .LT. TEMP .OR. AB_DISNAN( TEMP ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) )
      $                    VALUE = TEMP
                   END DO
                END IF
             END IF
          END IF
-      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' ) ) 
-     $) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *       Find normF(A).
 *
@@ -1149,12 +1146,11 @@
                IF( ILU.EQ.0 ) THEN
 *                 A is upper
                   DO J = 0, K - 3
-                     CALL AB_ZLASSQ( K-J-2, A( K+J+1+J*LDA ), 1, SCALE, 
-     $S )
+                     CALL ZLASSQ( K-J-2, A( K+J+1+J*LDA ), 1, SCALE, S )
 *                    L at A(k,0)
                   END DO
                   DO J = 0, K - 1
-                     CALL AB_ZLASSQ( K+J-1, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL ZLASSQ( K+J-1, A( 0+J*LDA ), 1, SCALE, S )
 *                    trap U at A(0,0)
                   END DO
                   S = S + S
@@ -1197,13 +1193,11 @@
                ELSE
 *                 ilu=1 & A is lower
                   DO J = 0, K - 1
-                     CALL AB_ZLASSQ( N-J-1, A( J+1+J*LDA ), 1, SCALE, S 
-     $)
+                     CALL ZLASSQ( N-J-1, A( J+1+J*LDA ), 1, SCALE, S )
 *                    trap L at A(0,0)
                   END DO
                   DO J = 1, K - 2
-                     CALL AB_ZLASSQ( J, A( 0+( 1+J )*LDA ), 1, SCALE, S 
-     $)
+                     CALL ZLASSQ( J, A( 0+( 1+J )*LDA ), 1, SCALE, S )
 *                    U at A(0,1)
                   END DO
                   S = S + S
@@ -1249,16 +1243,15 @@
                IF( ILU.EQ.0 ) THEN
 *                 A**H is upper
                   DO J = 1, K - 2
-                     CALL AB_ZLASSQ( J, A( 0+( K+J )*LDA ), 1, SCALE, S 
-     $)
+                     CALL ZLASSQ( J, A( 0+( K+J )*LDA ), 1, SCALE, S )
 *                    U at A(0,k)
                   END DO
                   DO J = 0, K - 2
-                     CALL AB_ZLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL ZLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
 *                    k by k-1 rect. at A(0,0)
                   END DO
                   DO J = 0, K - 2
-                     CALL AB_ZLASSQ( K-J-1, A( J+1+( J+K-1 )*LDA ), 1,
+                     CALL ZLASSQ( K-J-1, A( J+1+( J+K-1 )*LDA ), 1,
      $                            SCALE, S )
 *                    L at A(0,k-1)
                   END DO
@@ -1304,16 +1297,15 @@
                ELSE
 *                 A**H is lower
                   DO J = 1, K - 1
-                     CALL AB_ZLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL ZLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
 *                    U at A(0,0)
                   END DO
                   DO J = K, N - 1
-                     CALL AB_ZLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL ZLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
 *                    k by k-1 rect. at A(0,k)
                   END DO
                   DO J = 0, K - 3
-                     CALL AB_ZLASSQ( K-J-2, A( J+2+J*LDA ), 1, SCALE, S 
-     $)
+                     CALL ZLASSQ( K-J-2, A( J+2+J*LDA ), 1, SCALE, S )
 *                    L at A(1,0)
                   END DO
                   S = S + S
@@ -1363,12 +1355,11 @@
                IF( ILU.EQ.0 ) THEN
 *                 A is upper
                   DO J = 0, K - 2
-                     CALL AB_ZLASSQ( K-J-1, A( K+J+2+J*LDA ), 1, SCALE, 
-     $S )
+                     CALL ZLASSQ( K-J-1, A( K+J+2+J*LDA ), 1, SCALE, S )
 *                 L at A(k+1,0)
                   END DO
                   DO J = 0, K - 1
-                     CALL AB_ZLASSQ( K+J, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL ZLASSQ( K+J, A( 0+J*LDA ), 1, SCALE, S )
 *                 trap U at A(0,0)
                   END DO
                   S = S + S
@@ -1401,12 +1392,11 @@
                ELSE
 *                 ilu=1 & A is lower
                   DO J = 0, K - 1
-                     CALL AB_ZLASSQ( N-J-1, A( J+2+J*LDA ), 1, SCALE, S 
-     $)
+                     CALL ZLASSQ( N-J-1, A( J+2+J*LDA ), 1, SCALE, S )
 *                    trap L at A(1,0)
                   END DO
                   DO J = 1, K - 1
-                     CALL AB_ZLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL ZLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
 *                    U at A(0,0)
                   END DO
                   S = S + S
@@ -1442,17 +1432,15 @@
                IF( ILU.EQ.0 ) THEN
 *                 A**H is upper
                   DO J = 1, K - 1
-                     CALL AB_ZLASSQ( J, A( 0+( K+1+J )*LDA ), 1, SCALE, 
-     $S )
+                     CALL ZLASSQ( J, A( 0+( K+1+J )*LDA ), 1, SCALE, S )
 *                 U at A(0,k+1)
                   END DO
                   DO J = 0, K - 1
-                     CALL AB_ZLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL ZLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
 *                 k by k rect. at A(0,0)
                   END DO
                   DO J = 0, K - 2
-                     CALL AB_ZLASSQ( K-J-1, A( J+1+( J+K )*LDA ), 1, SCA
-     $LE,
+                     CALL ZLASSQ( K-J-1, A( J+1+( J+K )*LDA ), 1, SCALE,
      $                            S )
 *                 L at A(0,k)
                   END DO
@@ -1510,17 +1498,15 @@
                ELSE
 *                 A**H is lower
                   DO J = 1, K - 1
-                     CALL AB_ZLASSQ( J, A( 0+( J+1 )*LDA ), 1, SCALE, S 
-     $)
+                     CALL ZLASSQ( J, A( 0+( J+1 )*LDA ), 1, SCALE, S )
 *                 U at A(0,1)
                   END DO
                   DO J = K + 1, N
-                     CALL AB_ZLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
+                     CALL ZLASSQ( K, A( 0+J*LDA ), 1, SCALE, S )
 *                 k by k rect. at A(0,k+1)
                   END DO
                   DO J = 0, K - 2
-                     CALL AB_ZLASSQ( K-J-1, A( J+1+J*LDA ), 1, SCALE, S 
-     $)
+                     CALL ZLASSQ( K-J-1, A( J+1+J*LDA ), 1, SCALE, S )
 *                 L at A(0,0)
                   END DO
                   S = S + S
@@ -1579,9 +1565,9 @@
          VALUE = SCALE*SQRT( S )
       END IF
 *
-      AB_ZLANHF = VALUE
+      ZLANHF = VALUE
       RETURN
 *
-*     End of AB_ZLANHF
+*     End of ZLANHF
 *
       END

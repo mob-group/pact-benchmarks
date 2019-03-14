@@ -1,4 +1,4 @@
-*> \brief \b AB_DGTTRS
+*> \brief \b DGTTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGTTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGTTRS.f">
+*> Download DGTTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgttrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGTTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgttrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGTTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgttrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
+*       SUBROUTINE DGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DGTTRS solves one of the systems of equations
+*> DGTTRS solves one of the systems of equations
 *>    A*X = B  or  A**T*X = B,
 *> with a tridiagonal matrix A using the LU factorization computed
-*> by AB_DGTTRF.
+*> by DGTTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -135,8 +135,7 @@
 *> \ingroup doubleGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB
-     $,
+      SUBROUTINE DGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -160,11 +159,11 @@
       INTEGER            ITRANS, J, JB, NB
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGTTS2, AB_XERBLA
+      EXTERNAL           DGTTS2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -184,7 +183,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGTTRS', -INFO )
+         CALL XERBLA( 'DGTTRS', -INFO )
          RETURN
       END IF
 *
@@ -206,21 +205,19 @@
       IF( NRHS.EQ.1 ) THEN
          NB = 1
       ELSE
-         NB = MAX( 1, AB_ILAENV( 1, 'AB_DGTTRS', TRANS, N, NRHS, -1, -1 
-     $) )
+         NB = MAX( 1, ILAENV( 1, 'DGTTRS', TRANS, N, NRHS, -1, -1 ) )
       END IF
 *
       IF( NB.GE.NRHS ) THEN
-         CALL AB_DGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
+         CALL DGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
       ELSE
          DO 10 J = 1, NRHS, NB
             JB = MIN( NRHS-J+1, NB )
-            CALL AB_DGTTS2( ITRANS, N, JB, DL, D, DU, DU2, IPIV, B( 1, J
-     $ ),
+            CALL DGTTS2( ITRANS, N, JB, DL, D, DU, DU2, IPIV, B( 1, J ),
      $                   LDB )
    10    CONTINUE
       END IF
 *
-*     End of AB_DGTTRS
+*     End of DGTTRS
 *
       END

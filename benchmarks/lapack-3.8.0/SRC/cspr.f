@@ -1,4 +1,4 @@
-*> \brief \b AB_CSPR performs the symmetrical rank-1 update of a complex symmetric packed matrix.
+*> \brief \b CSPR performs the symmetrical rank-1 update of a complex symmetric packed matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CSPR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSPR.f">
+*> Download CSPR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cspr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSPR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cspr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSPR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cspr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSPR( UPLO, N, ALPHA, X, INCX, AP )
+*       SUBROUTINE CSPR( UPLO, N, ALPHA, X, INCX, AP )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSPR    performs the symmetric rank 1 operation
+*> CSPR    performs the symmetric rank 1 operation
 *>
 *>    A := alpha*x*x**H + A,
 *>
@@ -130,7 +130,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CSPR( UPLO, N, ALPHA, X, INCX, AP )
+      SUBROUTINE CSPR( UPLO, N, ALPHA, X, INCX, AP )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -157,19 +157,18 @@
       COMPLEX            TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = 1
       ELSE IF( N.LT.0 ) THEN
          INFO = 2
@@ -177,7 +176,7 @@
          INFO = 5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CSPR  ', INFO )
+         CALL XERBLA( 'CSPR  ', INFO )
          RETURN
       END IF
 *
@@ -198,7 +197,7 @@
 *     are accessed sequentially with one pass through AP.
 *
       KK = 1
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Form  A  when upper triangle is stored in AP.
 *
@@ -276,6 +275,6 @@
 *
       RETURN
 *
-*     End of AB_CSPR
+*     End of CSPR
 *
       END

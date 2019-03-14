@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAQTR solves a real quasi-triangular system of equations, or a complex quasi-triangular system of special form, in real arithmetic.
+*> \brief \b SLAQTR solves a real quasi-triangular system of equations, or a complex quasi-triangular system of special form, in real arithmetic.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAQTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAQTR.f">
+*> Download SLAQTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqtr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAQTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqtr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAQTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqtr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WORK,
+*       SUBROUTINE SLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAQTR solves the real quasi-triangular system
+*> SLAQTR solves the real quasi-triangular system
 *>
 *>              op(T)*p = scale*c,               if LREAL = .TRUE.
 *>
@@ -61,7 +61,7 @@
 *>               [ d ]                  [ q ]
 *>
 *> This subroutine is designed for the condition number estimation
-*> in routine AB_STRSNA.
+*> in routine STRSNA.
 *> \endverbatim
 *
 *  Arguments:
@@ -144,7 +144,7 @@
 *>               1: the some diagonal 1 by 1 block has been perturbed by
 *>                  a small number SMIN to keep nonsingularity.
 *>               2: the some diagonal 2 by 2 block has been perturbed by
-*>                  a small number in AB_SLALN2 to keep nonsingularity.
+*>                  a small number in SLALN2 to keep nonsingularity.
 *>          NOTE: In the interests of speed, this routine does not
 *>                check the inputs for errors.
 *> \endverbatim
@@ -162,8 +162,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WOR
-     $K,
+      SUBROUTINE SLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WORK,
      $                   INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -196,12 +195,12 @@
       REAL               D( 2, 2 ), V( 2, 2 )
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SASUM, AB_SDOT, SLAMCH, AB_SLANGE
-      EXTERNAL           AB_ISAMAX, AB_SASUM, AB_SDOT, SLAMCH, AB_SLANGE
+      INTEGER            ISAMAX
+      REAL               SASUM, SDOT, SLAMCH, SLANGE
+      EXTERNAL           ISAMAX, SASUM, SDOT, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SLADIV, AB_SLALN2, AB_SSCAL
+      EXTERNAL           SAXPY, SLADIV, SLALN2, SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -224,9 +223,9 @@
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
 *
-      XNORM = AB_SLANGE( 'M', N, N, T, LDT, D )
+      XNORM = SLANGE( 'M', N, N, T, LDT, D )
       IF( .NOT.LREAL )
-     $   XNORM = MAX( XNORM, ABS( W ), AB_SLANGE( 'M', N, 1, B, N, D ) )
+     $   XNORM = MAX( XNORM, ABS( W ), SLANGE( 'M', N, 1, B, N, D ) )
       SMIN = MAX( SMLNUM, EPS*XNORM )
 *
 *     Compute 1-norm of each column of strictly upper triangular
@@ -234,7 +233,7 @@
 *
       WORK( 1 ) = ZERO
       DO 10 J = 2, N
-         WORK( J ) = AB_SASUM( J-1, T( 1, J ), 1 )
+         WORK( J ) = SASUM( J-1, T( 1, J ), 1 )
    10 CONTINUE
 *
       IF( .NOT.LREAL ) THEN
@@ -247,13 +246,13 @@
       N1 = N
       IF( .NOT.LREAL )
      $   N1 = N2
-      K = AB_ISAMAX( N1, X, 1 )
+      K = ISAMAX( N1, X, 1 )
       XMAX = ABS( X( K ) )
       SCALE = ONE
 *
       IF( XMAX.GT.BIGNUM ) THEN
          SCALE = BIGNUM / XMAX
-         CALL AB_SSCAL( N1, SCALE, X, 1 )
+         CALL SSCAL( N1, SCALE, X, 1 )
          XMAX = BIGNUM
       END IF
 *
@@ -299,7 +298,7 @@
                   IF( TJJ.LT.ONE ) THEN
                      IF( XJ.GT.BIGNUM*TJJ ) THEN
                         REC = ONE / XJ
-                        CALL AB_SSCAL( N, REC, X, 1 )
+                        CALL SSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
@@ -313,14 +312,13 @@
                   IF( XJ.GT.ONE ) THEN
                      REC = ONE / XJ
                      IF( WORK( J1 ).GT.( BIGNUM-XMAX )*REC ) THEN
-                        CALL AB_SSCAL( N, REC, X, 1 )
+                        CALL SSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                      END IF
                   END IF
                   IF( J1.GT.1 ) THEN
-                     CALL AB_SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 
-     $)
-                     K = AB_ISAMAX( J1-1, X, 1 )
+                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
+                     K = ISAMAX( J1-1, X, 1 )
                      XMAX = ABS( X( K ) )
                   END IF
 *
@@ -333,14 +331,14 @@
 *
                   D( 1, 1 ) = X( J1 )
                   D( 2, 1 ) = X( J2 )
-                  CALL AB_SLALN2( .FALSE., 2, 1, SMIN, ONE, T( J1, J1 ),
+                  CALL SLALN2( .FALSE., 2, 1, SMIN, ONE, T( J1, J1 ),
      $                         LDT, ONE, ONE, D, 2, ZERO, ZERO, V, 2,
      $                         SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
      $               INFO = 2
 *
                   IF( SCALOC.NE.ONE ) THEN
-                     CALL AB_SSCAL( N, SCALOC, X, 1 )
+                     CALL SSCAL( N, SCALOC, X, 1 )
                      SCALE = SCALE*SCALOC
                   END IF
                   X( J1 ) = V( 1, 1 )
@@ -354,7 +352,7 @@
                      REC = ONE / XJ
                      IF( MAX( WORK( J1 ), WORK( J2 ) ).GT.
      $                   ( BIGNUM-XMAX )*REC ) THEN
-                        CALL AB_SSCAL( N, REC, X, 1 )
+                        CALL SSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                      END IF
                   END IF
@@ -362,11 +360,9 @@
 *                 Update right-hand side
 *
                   IF( J1.GT.1 ) THEN
-                     CALL AB_SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 
-     $)
-                     CALL AB_SAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X, 1 
-     $)
-                     K = AB_ISAMAX( J1-1, X, 1 )
+                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
+                     CALL SAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X, 1 )
+                     K = ISAMAX( J1-1, X, 1 )
                      XMAX = ABS( X( K ) )
                   END IF
 *
@@ -403,14 +399,13 @@
                   IF( XMAX.GT.ONE ) THEN
                      REC = ONE / XMAX
                      IF( WORK( J1 ).GT.( BIGNUM-XJ )*REC ) THEN
-                        CALL AB_SSCAL( N, REC, X, 1 )
+                        CALL SSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
                   END IF
 *
-                  X( J1 ) = X( J1 ) - AB_SDOT( J1-1, T( 1, J1 ), 1, X, 1
-     $ )
+                  X( J1 ) = X( J1 ) - SDOT( J1-1, T( 1, J1 ), 1, X, 1 )
 *
                   XJ = ABS( X( J1 ) )
                   TJJ = ABS( T( J1, J1 ) )
@@ -424,7 +419,7 @@
                   IF( TJJ.LT.ONE ) THEN
                      IF( XJ.GT.BIGNUM*TJJ ) THEN
                         REC = ONE / XJ
-                        CALL AB_SSCAL( N, REC, X, 1 )
+                        CALL SSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
@@ -444,25 +439,25 @@
                      REC = ONE / XMAX
                      IF( MAX( WORK( J2 ), WORK( J1 ) ).GT.( BIGNUM-XJ )*
      $                   REC ) THEN
-                        CALL AB_SSCAL( N, REC, X, 1 )
+                        CALL SSCAL( N, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
                   END IF
 *
-                  D( 1, 1 ) = X( J1 ) - AB_SDOT( J1-1, T( 1, J1 ), 1, X,
+                  D( 1, 1 ) = X( J1 ) - SDOT( J1-1, T( 1, J1 ), 1, X,
      $                        1 )
-                  D( 2, 1 ) = X( J2 ) - AB_SDOT( J1-1, T( 1, J2 ), 1, X,
+                  D( 2, 1 ) = X( J2 ) - SDOT( J1-1, T( 1, J2 ), 1, X,
      $                        1 )
 *
-                  CALL AB_SLALN2( .TRUE., 2, 1, SMIN, ONE, T( J1, J1 ),
+                  CALL SLALN2( .TRUE., 2, 1, SMIN, ONE, T( J1, J1 ),
      $                         LDT, ONE, ONE, D, 2, ZERO, ZERO, V, 2,
      $                         SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
      $               INFO = 2
 *
                   IF( SCALOC.NE.ONE ) THEN
-                     CALL AB_SSCAL( N, SCALOC, X, 1 )
+                     CALL SSCAL( N, SCALOC, X, 1 )
                      SCALE = SCALE*SCALOC
                   END IF
                   X( J1 ) = V( 1, 1 )
@@ -518,12 +513,12 @@
                   IF( TJJ.LT.ONE ) THEN
                      IF( XJ.GT.BIGNUM*TJJ ) THEN
                         REC = ONE / XJ
-                        CALL AB_SSCAL( N2, REC, X, 1 )
+                        CALL SSCAL( N2, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
                   END IF
-                  CALL AB_SLADIV( X( J1 ), X( N+J1 ), TMP, Z, SR, SI )
+                  CALL SLADIV( X( J1 ), X( N+J1 ), TMP, Z, SR, SI )
                   X( J1 ) = SR
                   X( N+J1 ) = SI
                   XJ = ABS( X( J1 ) ) + ABS( X( N+J1 ) )
@@ -534,15 +529,14 @@
                   IF( XJ.GT.ONE ) THEN
                      REC = ONE / XJ
                      IF( WORK( J1 ).GT.( BIGNUM-XMAX )*REC ) THEN
-                        CALL AB_SSCAL( N2, REC, X, 1 )
+                        CALL SSCAL( N2, REC, X, 1 )
                         SCALE = SCALE*REC
                      END IF
                   END IF
 *
                   IF( J1.GT.1 ) THEN
-                     CALL AB_SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 
-     $)
-                     CALL AB_SAXPY( J1-1, -X( N+J1 ), T( 1, J1 ), 1,
+                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
+                     CALL SAXPY( J1-1, -X( N+J1 ), T( 1, J1 ), 1,
      $                           X( N+1 ), 1 )
 *
                      X( 1 ) = X( 1 ) + B( J1 )*X( N+J1 )
@@ -563,15 +557,14 @@
                   D( 2, 1 ) = X( J2 )
                   D( 1, 2 ) = X( N+J1 )
                   D( 2, 2 ) = X( N+J2 )
-                  CALL AB_SLALN2( .FALSE., 2, 2, SMINW, ONE, T( J1, J1 )
-     $,
+                  CALL SLALN2( .FALSE., 2, 2, SMINW, ONE, T( J1, J1 ),
      $                         LDT, ONE, ONE, D, 2, ZERO, -W, V, 2,
      $                         SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
      $               INFO = 2
 *
                   IF( SCALOC.NE.ONE ) THEN
-                     CALL AB_SSCAL( 2*N, SCALOC, X, 1 )
+                     CALL SSCAL( 2*N, SCALOC, X, 1 )
                      SCALE = SCALOC*SCALE
                   END IF
                   X( J1 ) = V( 1, 1 )
@@ -588,7 +581,7 @@
                      REC = ONE / XJ
                      IF( MAX( WORK( J1 ), WORK( J2 ) ).GT.
      $                   ( BIGNUM-XMAX )*REC ) THEN
-                        CALL AB_SSCAL( N2, REC, X, 1 )
+                        CALL SSCAL( N2, REC, X, 1 )
                         SCALE = SCALE*REC
                      END IF
                   END IF
@@ -596,14 +589,12 @@
 *                 Update the right-hand side.
 *
                   IF( J1.GT.1 ) THEN
-                     CALL AB_SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 
-     $)
-                     CALL AB_SAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X, 1 
-     $)
+                     CALL SAXPY( J1-1, -X( J1 ), T( 1, J1 ), 1, X, 1 )
+                     CALL SAXPY( J1-1, -X( J2 ), T( 1, J2 ), 1, X, 1 )
 *
-                     CALL AB_SAXPY( J1-1, -X( N+J1 ), T( 1, J1 ), 1,
+                     CALL SAXPY( J1-1, -X( N+J1 ), T( 1, J1 ), 1,
      $                           X( N+1 ), 1 )
-                     CALL AB_SAXPY( J1-1, -X( N+J2 ), T( 1, J2 ), 1,
+                     CALL SAXPY( J1-1, -X( N+J2 ), T( 1, J2 ), 1,
      $                           X( N+1 ), 1 )
 *
                      X( 1 ) = X( 1 ) + B( J1 )*X( N+J1 ) +
@@ -650,15 +641,14 @@
                   IF( XMAX.GT.ONE ) THEN
                      REC = ONE / XMAX
                      IF( WORK( J1 ).GT.( BIGNUM-XJ )*REC ) THEN
-                        CALL AB_SSCAL( N2, REC, X, 1 )
+                        CALL SSCAL( N2, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
                   END IF
 *
-                  X( J1 ) = X( J1 ) - AB_SDOT( J1-1, T( 1, J1 ), 1, X, 1
-     $ )
-                  X( N+J1 ) = X( N+J1 ) - AB_SDOT( J1-1, T( 1, J1 ), 1,
+                  X( J1 ) = X( J1 ) - SDOT( J1-1, T( 1, J1 ), 1, X, 1 )
+                  X( N+J1 ) = X( N+J1 ) - SDOT( J1-1, T( 1, J1 ), 1,
      $                        X( N+1 ), 1 )
                   IF( J1.GT.1 ) THEN
                      X( J1 ) = X( J1 ) - B( J1 )*X( N+1 )
@@ -684,12 +674,12 @@
                   IF( TJJ.LT.ONE ) THEN
                      IF( XJ.GT.BIGNUM*TJJ ) THEN
                         REC = ONE / XJ
-                        CALL AB_SSCAL( N2, REC, X, 1 )
+                        CALL SSCAL( N2, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
                   END IF
-                  CALL AB_SLADIV( X( J1 ), X( N+J1 ), TMP, -Z, SR, SI )
+                  CALL SLADIV( X( J1 ), X( N+J1 ), TMP, -Z, SR, SI )
                   X( J1 ) = SR
                   X( J1+N ) = SI
                   XMAX = MAX( ABS( X( J1 ) )+ABS( X( J1+N ) ), XMAX )
@@ -707,33 +697,33 @@
                      REC = ONE / XMAX
                      IF( MAX( WORK( J1 ), WORK( J2 ) ).GT.
      $                   ( BIGNUM-XJ ) / XMAX ) THEN
-                        CALL AB_SSCAL( N2, REC, X, 1 )
+                        CALL SSCAL( N2, REC, X, 1 )
                         SCALE = SCALE*REC
                         XMAX = XMAX*REC
                      END IF
                   END IF
 *
-                  D( 1, 1 ) = X( J1 ) - AB_SDOT( J1-1, T( 1, J1 ), 1, X,
+                  D( 1, 1 ) = X( J1 ) - SDOT( J1-1, T( 1, J1 ), 1, X,
      $                        1 )
-                  D( 2, 1 ) = X( J2 ) - AB_SDOT( J1-1, T( 1, J2 ), 1, X,
+                  D( 2, 1 ) = X( J2 ) - SDOT( J1-1, T( 1, J2 ), 1, X,
      $                        1 )
-                  D( 1, 2 ) = X( N+J1 ) - AB_SDOT( J1-1, T( 1, J1 ), 1,
+                  D( 1, 2 ) = X( N+J1 ) - SDOT( J1-1, T( 1, J1 ), 1,
      $                        X( N+1 ), 1 )
-                  D( 2, 2 ) = X( N+J2 ) - AB_SDOT( J1-1, T( 1, J2 ), 1,
+                  D( 2, 2 ) = X( N+J2 ) - SDOT( J1-1, T( 1, J2 ), 1,
      $                        X( N+1 ), 1 )
                   D( 1, 1 ) = D( 1, 1 ) - B( J1 )*X( N+1 )
                   D( 2, 1 ) = D( 2, 1 ) - B( J2 )*X( N+1 )
                   D( 1, 2 ) = D( 1, 2 ) + B( J1 )*X( 1 )
                   D( 2, 2 ) = D( 2, 2 ) + B( J2 )*X( 1 )
 *
-                  CALL AB_SLALN2( .TRUE., 2, 2, SMINW, ONE, T( J1, J1 ),
+                  CALL SLALN2( .TRUE., 2, 2, SMINW, ONE, T( J1, J1 ),
      $                         LDT, ONE, ONE, D, 2, ZERO, W, V, 2,
      $                         SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
      $               INFO = 2
 *
                   IF( SCALOC.NE.ONE ) THEN
-                     CALL AB_SSCAL( N2, SCALOC, X, 1 )
+                     CALL SSCAL( N2, SCALOC, X, 1 )
                      SCALE = SCALOC*SCALE
                   END IF
                   X( J1 ) = V( 1, 1 )
@@ -753,6 +743,6 @@
 *
       RETURN
 *
-*     End of AB_SLAQTR
+*     End of SLAQTR
 *
       END

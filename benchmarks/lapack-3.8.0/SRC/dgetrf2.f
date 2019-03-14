@@ -1,4 +1,4 @@
-*> \brief \b AB_DGETRF2
+*> \brief \b DGETRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE AB_DGETRF2( M, N, A, LDA, IPIV, INFO )
+*       RECURSIVE SUBROUTINE DGETRF2( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGETRF2 computes an LU factorization of a general M-by-N matrix A
+*> DGETRF2 computes an LU factorization of a general M-by-N matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> The factorization has the form
@@ -111,7 +111,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE AB_DGETRF2( M, N, A, LDA, IPIV, INFO )
+      RECURSIVE SUBROUTINE DGETRF2( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,12 +138,11 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      INTEGER            AB_IDAMAX
-      EXTERNAL           DLAMCH, AB_IDAMAX
+      INTEGER            IDAMAX
+      EXTERNAL           DLAMCH, IDAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DSCAL, AB_DLASWP, AB_DTRSM, AB_XER
-     $BLA
+      EXTERNAL           DGEMM, DSCAL, DLASWP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -161,7 +160,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGETRF2', -INFO )
+         CALL XERBLA( 'DGETRF2', -INFO )
          RETURN
       END IF
 *
@@ -190,7 +189,7 @@
 *
 *        Find pivot and test for singularity
 *
-         I = AB_IDAMAX( M, A( 1, 1 ), 1 )
+         I = IDAMAX( M, A( 1, 1 ), 1 )
          IPIV( 1 ) = I
          IF( A( I, 1 ).NE.ZERO ) THEN
 *
@@ -205,7 +204,7 @@
 *           Compute elements 2:M of the column
 *
             IF( ABS(A( 1, 1 )) .GE. SFMIN ) THEN
-               CALL AB_DSCAL( M-1, ONE / A( 1, 1 ), A( 2, 1 ), 1 )
+               CALL DSCAL( M-1, ONE / A( 1, 1 ), A( 2, 1 ), 1 )
             ELSE
                DO 10 I = 1, M-1
                   A( 1+I, 1 ) = A( 1+I, 1 ) / A( 1, 1 )
@@ -227,7 +226,7 @@
 *        Factor [ --- ]
 *               [ A21 ]
 *
-         CALL AB_DGETRF2( M, N1, A, LDA, IPIV, IINFO )
+         CALL DGETRF2( M, N1, A, LDA, IPIV, IINFO )
 
          IF ( INFO.EQ.0 .AND. IINFO.GT.0 )
      $      INFO = IINFO
@@ -236,21 +235,21 @@
 *        Apply interchanges to [ --- ]
 *                              [ A22 ]
 *
-         CALL AB_DLASWP( N2, A( 1, N1+1 ), LDA, 1, N1, IPIV, 1 )
+         CALL DLASWP( N2, A( 1, N1+1 ), LDA, 1, N1, IPIV, 1 )
 *
 *        Solve A12
 *
-         CALL AB_DTRSM( 'L', 'L', 'N', 'U', N1, N2, ONE, A, LDA,
+         CALL DTRSM( 'L', 'L', 'N', 'U', N1, N2, ONE, A, LDA,
      $               A( 1, N1+1 ), LDA )
 *
 *        Update A22
 *
-         CALL AB_DGEMM( 'N', 'N', M-N1, N2, N1, -ONE, A( N1+1, 1 ), LDA,
+         CALL DGEMM( 'N', 'N', M-N1, N2, N1, -ONE, A( N1+1, 1 ), LDA,
      $               A( 1, N1+1 ), LDA, ONE, A( N1+1, N1+1 ), LDA )
 *
 *        Factor A22
 *
-         CALL AB_DGETRF2( M-N1, N2, A( N1+1, N1+1 ), LDA, IPIV( N1+1 ),
+         CALL DGETRF2( M-N1, N2, A( N1+1, N1+1 ), LDA, IPIV( N1+1 ),
      $                 IINFO )
 *
 *        Adjust INFO and the pivot indices
@@ -263,11 +262,11 @@
 *
 *        Apply interchanges to A21
 *
-         CALL AB_DLASWP( N1, A( 1, 1 ), LDA, N1+1, MIN( M, N), IPIV, 1 )
+         CALL DLASWP( N1, A( 1, 1 ), LDA, N1+1, MIN( M, N), IPIV, 1 )
 *
       END IF
       RETURN
 *
-*     End of AB_DGETRF2
+*     End of DGETRF2
 *
       END

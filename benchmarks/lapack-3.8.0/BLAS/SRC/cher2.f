@@ -1,4 +1,4 @@
-*> \brief \b AB_CHER2
+*> \brief \b CHER2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHER2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+*       SUBROUTINE CHER2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX ALPHA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHER2  performs the hermitian rank 2 operation
+*> CHER2  performs the hermitian rank 2 operation
 *>
 *>    A := alpha*x*y**H + conjg( alpha )*y*x**H + A,
 *>
@@ -148,7 +148,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CHER2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+      SUBROUTINE CHER2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -175,11 +175,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG,MAX,REAL
@@ -188,7 +188,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
+      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -200,7 +200,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_CHER2 ',INFO)
+          CALL XERBLA('CHER2 ',INFO)
           RETURN
       END IF
 *
@@ -230,7 +230,7 @@
 *     accessed sequentially with one pass through the triangular part
 *     of A.
 *
-      IF (AB_LSAME(UPLO,'U')) THEN
+      IF (LSAME(UPLO,'U')) THEN
 *
 *        Form  A  when A is stored in the upper triangle.
 *
@@ -312,6 +312,6 @@
 *
       RETURN
 *
-*     End of AB_CHER2 .
+*     End of CHER2 .
 *
       END

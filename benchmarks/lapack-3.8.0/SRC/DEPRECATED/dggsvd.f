@@ -1,4 +1,4 @@
-*> \brief <b> AB_DGGSVD computes the singular value decomposition (SVD) for OTHER matrices</b>
+*> \brief <b> DGGSVD computes the singular value decomposition (SVD) for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGGSVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGGSVD.f">
+*> Download DGGSVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggsvd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGGSVD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggsvd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGGSVD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggsvd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
+*       SUBROUTINE DGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
 *                          LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
 *                          IWORK, INFO )
 *
@@ -39,9 +39,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine AB_DGGSVD3.
+*> This routine is deprecated and has been replaced by routine DGGSVD3.
 *>
-*> AB_DGGSVD computes the generalized singular value decomposition (GSVD)
+*> DGGSVD computes the generalized singular value decomposition (GSVD)
 *> of an M-by-N real matrix A and P-by-N real matrix B:
 *>
 *>       U**T*A*Q = D1*( 0 R ),    V**T*B*Q = D2*( 0 R )
@@ -294,7 +294,7 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, the Jacobi-type procedure failed to
-*>                converge.  For further details, see subroutine AB_DTGSJA.
+*>                converge.  For further details, see subroutine DTGSJA.
 *> \endverbatim
 *
 *> \par Internal Parameters:
@@ -330,7 +330,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
+      SUBROUTINE DGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
      $                   LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
      $                   IWORK, INFO )
 *
@@ -358,12 +358,12 @@
       DOUBLE PRECISION   ANORM, BNORM, SMAX, TEMP, TOLA, TOLB, ULP, UNFL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANGE
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           LSAME, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DGGSVP, AB_DTGSJA, AB_XERBLA
+      EXTERNAL           DCOPY, DGGSVP, DTGSJA, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -372,16 +372,16 @@
 *
 *     Test the input parameters
 *
-      WANTU = AB_LSAME( JOBU, 'U' )
-      WANTV = AB_LSAME( JOBV, 'V' )
-      WANTQ = AB_LSAME( JOBQ, 'Q' )
+      WANTU = LSAME( JOBU, 'U' )
+      WANTV = LSAME( JOBV, 'V' )
+      WANTQ = LSAME( JOBQ, 'Q' )
 *
       INFO = 0
-      IF( .NOT.( WANTU .OR. AB_LSAME( JOBU, 'N' ) ) ) THEN
+      IF( .NOT.( WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTV .OR. AB_LSAME( JOBV, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTV .OR. LSAME( JOBV, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( WANTQ .OR. AB_LSAME( JOBQ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTQ .OR. LSAME( JOBQ, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -401,14 +401,14 @@
          INFO = -20
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGGSVD', -INFO )
+         CALL XERBLA( 'DGGSVD', -INFO )
          RETURN
       END IF
 *
 *     Compute the Frobenius norm of matrices A and B
 *
-      ANORM = AB_DLANGE( '1', M, N, A, LDA, WORK )
-      BNORM = AB_DLANGE( '1', P, N, B, LDB, WORK )
+      ANORM = DLANGE( '1', M, N, A, LDA, WORK )
+      BNORM = DLANGE( '1', P, N, B, LDB, WORK )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrices A and B.
@@ -420,20 +420,20 @@
 *
 *     Preprocessing
 *
-      CALL AB_DGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+      CALL DGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
      $             TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, WORK,
      $             WORK( N+1 ), INFO )
 *
 *     Compute the GSVD of two upper "triangular" matrices
 *
-      CALL AB_DTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B, LDB,
+      CALL DTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B, LDB,
      $             TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
      $             WORK, NCYCLE, INFO )
 *
 *     Sort the singular values and store the pivot indices in IWORK
 *     Copy ALPHA to WORK, then sort ALPHA in WORK
 *
-      CALL AB_DCOPY( N, ALPHA, 1, WORK, 1 )
+      CALL DCOPY( N, ALPHA, 1, WORK, 1 )
       IBND = MIN( L, M-K )
       DO 20 I = 1, IBND
 *
@@ -459,6 +459,6 @@
 *
       RETURN
 *
-*     End of AB_DGGSVD
+*     End of DGGSVD
 *
       END

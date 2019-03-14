@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGETRF2
+*> \brief \b ZGETRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE AB_ZGETRF2( M, N, A, LDA, IPIV, INFO )
+*       RECURSIVE SUBROUTINE ZGETRF2( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGETRF2 computes an LU factorization of a general M-by-N matrix A
+*> ZGETRF2 computes an LU factorization of a general M-by-N matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> The factorization has the form
@@ -111,7 +111,7 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE AB_ZGETRF2( M, N, A, LDA, IPIV, INFO )
+      RECURSIVE SUBROUTINE ZGETRF2( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -140,12 +140,11 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      INTEGER            AB_IZAMAX
-      EXTERNAL           DLAMCH, AB_IZAMAX
+      INTEGER            IZAMAX
+      EXTERNAL           DLAMCH, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM, AB_ZSCAL, AB_ZLASWP, AB_ZTRSM, AB_XER
-     $BLA
+      EXTERNAL           ZGEMM, ZSCAL, ZLASWP, ZTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -163,7 +162,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGETRF2', -INFO )
+         CALL XERBLA( 'ZGETRF2', -INFO )
          RETURN
       END IF
 *
@@ -192,7 +191,7 @@
 *
 *        Find pivot and test for singularity
 *
-         I = AB_IZAMAX( M, A( 1, 1 ), 1 )
+         I = IZAMAX( M, A( 1, 1 ), 1 )
          IPIV( 1 ) = I
          IF( A( I, 1 ).NE.ZERO ) THEN
 *
@@ -207,7 +206,7 @@
 *           Compute elements 2:M of the column
 *
             IF( ABS(A( 1, 1 )) .GE. SFMIN ) THEN
-               CALL AB_ZSCAL( M-1, ONE / A( 1, 1 ), A( 2, 1 ), 1 )
+               CALL ZSCAL( M-1, ONE / A( 1, 1 ), A( 2, 1 ), 1 )
             ELSE
                DO 10 I = 1, M-1
                   A( 1+I, 1 ) = A( 1+I, 1 ) / A( 1, 1 )
@@ -229,7 +228,7 @@
 *        Factor [ --- ]
 *               [ A21 ]
 *
-         CALL AB_ZGETRF2( M, N1, A, LDA, IPIV, IINFO )
+         CALL ZGETRF2( M, N1, A, LDA, IPIV, IINFO )
 
          IF ( INFO.EQ.0 .AND. IINFO.GT.0 )
      $      INFO = IINFO
@@ -238,21 +237,21 @@
 *        Apply interchanges to [ --- ]
 *                              [ A22 ]
 *
-         CALL AB_ZLASWP( N2, A( 1, N1+1 ), LDA, 1, N1, IPIV, 1 )
+         CALL ZLASWP( N2, A( 1, N1+1 ), LDA, 1, N1, IPIV, 1 )
 *
 *        Solve A12
 *
-         CALL AB_ZTRSM( 'L', 'L', 'N', 'U', N1, N2, ONE, A, LDA,
+         CALL ZTRSM( 'L', 'L', 'N', 'U', N1, N2, ONE, A, LDA,
      $               A( 1, N1+1 ), LDA )
 *
 *        Update A22
 *
-         CALL AB_ZGEMM( 'N', 'N', M-N1, N2, N1, -ONE, A( N1+1, 1 ), LDA,
+         CALL ZGEMM( 'N', 'N', M-N1, N2, N1, -ONE, A( N1+1, 1 ), LDA,
      $               A( 1, N1+1 ), LDA, ONE, A( N1+1, N1+1 ), LDA )
 *
 *        Factor A22
 *
-         CALL AB_ZGETRF2( M-N1, N2, A( N1+1, N1+1 ), LDA, IPIV( N1+1 ),
+         CALL ZGETRF2( M-N1, N2, A( N1+1, N1+1 ), LDA, IPIV( N1+1 ),
      $                 IINFO )
 *
 *        Adjust INFO and the pivot indices
@@ -265,11 +264,11 @@
 *
 *        Apply interchanges to A21
 *
-         CALL AB_ZLASWP( N1, A( 1, 1 ), LDA, N1+1, MIN( M, N), IPIV, 1 )
+         CALL ZLASWP( N1, A( 1, 1 ), LDA, N1+1, MIN( M, N), IPIV, 1 )
 *
       END IF
       RETURN
 *
-*     End of AB_ZGETRF2
+*     End of ZGETRF2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CSYCONVF
+*> \brief \b CSYCONVF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CSYCONVF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSYCONvf.f">
+*> Download CSYCONVF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyconvf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSYCONvf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyconvf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSYCONvf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyconvf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
+*       SUBROUTINE CSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY
@@ -35,24 +35,24 @@
 *>
 *> \verbatim
 *> If parameter WAY = 'C':
-*> AB_CSYCONVF converts the factorization output format used in
-*> AB_CSYTRF provided on entry in parameter A into the factorization
-*> output format used in AB_CSYTRF_RK (or AB_CSYTRF_BK) that is stored
+*> CSYCONVF converts the factorization output format used in
+*> CSYTRF provided on entry in parameter A into the factorization
+*> output format used in CSYTRF_RK (or CSYTRF_BK) that is stored
 *> on exit in parameters A and E. It also coverts in place details of
-*> the intechanges stored in IPIV from the format used in AB_CSYTRF into
-*> the format used in AB_CSYTRF_RK (or AB_CSYTRF_BK).
+*> the intechanges stored in IPIV from the format used in CSYTRF into
+*> the format used in CSYTRF_RK (or CSYTRF_BK).
 *>
 *> If parameter WAY = 'R':
-*> AB_CSYCONVF performs the conversion in reverse direction, i.e.
-*> converts the factorization output format used in AB_CSYTRF_RK
-*> (or AB_CSYTRF_BK) provided on entry in parameters A and E into
-*> the factorization output format used in AB_CSYTRF that is stored
+*> CSYCONVF performs the conversion in reverse direction, i.e.
+*> converts the factorization output format used in CSYTRF_RK
+*> (or CSYTRF_BK) provided on entry in parameters A and E into
+*> the factorization output format used in CSYTRF that is stored
 *> on exit in parameter A. It also coverts in place details of
-*> the intechanges stored in IPIV from the format used in AB_CSYTRF_RK
-*> (or AB_CSYTRF_BK) into the format used in AB_CSYTRF.
+*> the intechanges stored in IPIV from the format used in CSYTRF_RK
+*> (or CSYTRF_BK) into the format used in CSYTRF.
 *>
-*> AB_CSYCONVF can also convert in Hermitian matrix case, i.e. between
-*> formats used in AB_CHETRF and AB_CHETRF_RK (or AB_CHETRF_BK).
+*> CSYCONVF can also convert in Hermitian matrix case, i.e. between
+*> formats used in CHETRF and CHETRF_RK (or CHETRF_BK).
 *> \endverbatim
 *
 *  Arguments:
@@ -87,7 +87,7 @@
 *>          1) If WAY ='C':
 *>
 *>          On entry, contains factorization details in format used in
-*>          AB_CSYTRF:
+*>          CSYTRF:
 *>            a) all elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A and on superdiagonal
 *>               (or subdiagonal) of A, and
@@ -97,7 +97,7 @@
 *>               in the superdiagonal part of A.
 *>
 *>          On exit, contains factorization details in format used in
-*>          AB_CSYTRF_RK or AB_CSYTRF_BK:
+*>          CSYTRF_RK or CSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -108,7 +108,7 @@
 *>          2) If WAY = 'R':
 *>
 *>          On entry, contains factorization details in format used in
-*>          AB_CSYTRF_RK or AB_CSYTRF_BK:
+*>          CSYTRF_RK or CSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -117,7 +117,7 @@
 *>               If UPLO = 'L': factor L in the subdiagonal part of A.
 *>
 *>          On exit, contains factorization details in format used in
-*>          AB_CSYTRF:
+*>          CSYTRF:
 *>            a) all elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A and on superdiagonal
 *>               (or subdiagonal) of A, and
@@ -164,17 +164,17 @@
 *>
 *>          1) If WAY ='C':
 *>          On entry, details of the interchanges and the block
-*>          structure of D in the format used in AB_CSYTRF.
+*>          structure of D in the format used in CSYTRF.
 *>          On exit, details of the interchanges and the block
-*>          structure of D in the format used in AB_CSYTRF_RK
-*>          ( or AB_CSYTRF_BK).
+*>          structure of D in the format used in CSYTRF_RK
+*>          ( or CSYTRF_BK).
 *>
 *>          1) If WAY ='R':
 *>          On entry, details of the interchanges and the block
-*>          structure of D in the format used in AB_CSYTRF_RK
-*>          ( or AB_CSYTRF_BK).
+*>          structure of D in the format used in CSYTRF_RK
+*>          ( or CSYTRF_BK).
 *>          On exit, details of the interchanges and the block
-*>          structure of D in the format used in AB_CSYTRF.
+*>          structure of D in the format used in CSYTRF.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -207,7 +207,7 @@
 *>
 *> \endverbatim
 *  =====================================================================
-      SUBROUTINE AB_CSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
+      SUBROUTINE CSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -230,11 +230,11 @@
       PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ) )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *
 *     .. External Subroutines ..
-      EXTERNAL           AB_CSWAP, AB_XERBLA
+      EXTERNAL           CSWAP, XERBLA
 *     .. Local Scalars ..
       LOGICAL            UPPER, CONVERT
       INTEGER            I, IP
@@ -242,11 +242,11 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      CONVERT = AB_LSAME( WAY, 'C' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      CONVERT = LSAME( WAY, 'C' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.CONVERT .AND. .NOT.AB_LSAME( WAY, 'R' ) ) THEN
+      ELSE IF( .NOT.CONVERT .AND. .NOT.LSAME( WAY, 'R' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -255,7 +255,7 @@
 
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CSYCONVF', -INFO )
+         CALL XERBLA( 'CSYCONVF', -INFO )
          RETURN
       END IF
 *
@@ -308,7 +308,7 @@
                   IP = IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL AB_CSWAP( N-I, A( I, I+1 ), LDA,
+                        CALL CSWAP( N-I, A( I, I+1 ), LDA,
      $                              A( IP, I+1 ), LDA )
                      END IF
                   END IF
@@ -322,7 +322,7 @@
                   IP = -IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.(I-1) ) THEN
-                        CALL AB_CSWAP( N-I, A( I-1, I+1 ), LDA,
+                        CALL CSWAP( N-I, A( I-1, I+1 ), LDA,
      $                              A( IP, I+1 ), LDA )
                      END IF
                   END IF
@@ -361,7 +361,7 @@
                   IP = IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL AB_CSWAP( N-I, A( IP, I+1 ), LDA,
+                        CALL CSWAP( N-I, A( IP, I+1 ), LDA,
      $                              A( I, I+1 ), LDA )
                      END IF
                   END IF
@@ -376,7 +376,7 @@
                   IP = -IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.(I-1) ) THEN
-                        CALL AB_CSWAP( N-I, A( IP, I+1 ), LDA,
+                        CALL CSWAP( N-I, A( IP, I+1 ), LDA,
      $                              A( I-1, I+1 ), LDA )
                      END IF
                   END IF
@@ -452,7 +452,7 @@
                   IP = IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL AB_CSWAP( I-1, A( I, 1 ), LDA,
+                        CALL CSWAP( I-1, A( I, 1 ), LDA,
      $                              A( IP, 1 ), LDA )
                      END IF
                   END IF
@@ -466,7 +466,7 @@
                   IP = -IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.(I+1) ) THEN
-                        CALL AB_CSWAP( I-1, A( I+1, 1 ), LDA,
+                        CALL CSWAP( I-1, A( I+1, 1 ), LDA,
      $                              A( IP, 1 ), LDA )
                      END IF
                   END IF
@@ -505,7 +505,7 @@
                   IP = IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL AB_CSWAP( I-1, A( IP, 1 ), LDA,
+                        CALL CSWAP( I-1, A( IP, 1 ), LDA,
      $                              A( I, 1 ), LDA )
                      END IF
                   END IF
@@ -520,7 +520,7 @@
                   IP = -IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.(I+1) ) THEN
-                        CALL AB_CSWAP( I-1, A( IP, 1 ), LDA,
+                        CALL CSWAP( I-1, A( IP, 1 ), LDA,
      $                              A( I+1, 1 ), LDA )
                      END IF
                   END IF
@@ -557,6 +557,6 @@
 
       RETURN
 *
-*     End of AB_CSYCONVF
+*     End of CSYCONVF
 *
       END

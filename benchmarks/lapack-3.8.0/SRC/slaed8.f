@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAED8 used by AB_SSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
+*> \brief \b SLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAED8 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED8.f">
+*> Download SLAED8 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed8.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED8.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed8.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED8.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed8.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
+*       SUBROUTINE SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
 *                          CUTPNT, Z, DLAMDA, Q2, LDQ2, W, PERM, GIVPTR,
 *                          GIVCOL, GIVNUM, INDXP, INDX, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAED8 merges the two sets of eigenvalues together into a single
+*> SLAED8 merges the two sets of eigenvalues together into a single
 *> sorted set.  Then it tries to deflate the size of the problem.
 *> There are two ways in which deflation can occur:  when two or more
 *> eigenvalues are close together or if there is a tiny element in the
@@ -121,7 +121,7 @@
 *>         cut which originally split the two submatrices which are now
 *>         being recombined.
 *>         On exit, RHO has been modified to the value required by
-*>         AB_SLAED3.
+*>         SLAED3.
 *> \endverbatim
 *>
 *> \param[in] CUTPNT
@@ -145,7 +145,7 @@
 *> \verbatim
 *>          DLAMDA is REAL array, dimension (N)
 *>         A copy of the first K eigenvalues which will be used by
-*>         AB_SLAED3 to form the secular equation.
+*>         SLAED3 to form the secular equation.
 *> \endverbatim
 *>
 *> \param[out] Q2
@@ -153,7 +153,7 @@
 *>          Q2 is REAL array, dimension (LDQ2,N)
 *>         If ICOMPQ = 0, Q2 is not referenced.  Otherwise,
 *>         a copy of the first K eigenvectors which will be used by
-*>         AB_SLAED7 in a matrix multiply (AB_SGEMM) to update the new
+*>         SLAED7 in a matrix multiply (SGEMM) to update the new
 *>         eigenvectors.
 *> \endverbatim
 *>
@@ -167,7 +167,7 @@
 *> \verbatim
 *>          W is REAL array, dimension (N)
 *>         The first k values of the final deflation-altered z-vector and
-*>         will be passed to AB_SLAED3.
+*>         will be passed to SLAED3.
 *> \endverbatim
 *>
 *> \param[out] PERM
@@ -239,7 +239,7 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
+      SUBROUTINE SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO,
      $                   CUTPNT, Z, DLAMDA, Q2, LDQ2, W, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INDXP, INDX, INFO )
 *
@@ -273,13 +273,12 @@
       REAL               C, EPS, S, T, TAU, TOL
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               SLAMCH, AB_SLAPY2
-      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SLAPY2
+      INTEGER            ISAMAX
+      REAL               SLAMCH, SLAPY2
+      EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SLACPY, AB_SLAMRG, AB_SROT, AB_SSC
-     $AL, AB_XERBLA
+      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -304,7 +303,7 @@
          INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLAED8', -INFO )
+         CALL XERBLA( 'SLAED8', -INFO )
          RETURN
       END IF
 *
@@ -325,7 +324,7 @@
       N1P1 = N1 + 1
 *
       IF( RHO.LT.ZERO ) THEN
-         CALL AB_SSCAL( N2, MONE, Z( N1P1 ), 1 )
+         CALL SSCAL( N2, MONE, Z( N1P1 ), 1 )
       END IF
 *
 *     Normalize z so that norm(z) = 1
@@ -334,7 +333,7 @@
       DO 10 J = 1, N
          INDX( J ) = J
    10 CONTINUE
-      CALL AB_SSCAL( N, T, Z, 1 )
+      CALL SSCAL( N, T, Z, 1 )
       RHO = ABS( TWO*RHO )
 *
 *     Sort the eigenvalues into increasing order
@@ -348,7 +347,7 @@
    30 CONTINUE
       I = 1
       J = CUTPNT + 1
-      CALL AB_SLAMRG( N1, N2, DLAMDA, 1, 1, INDX )
+      CALL SLAMRG( N1, N2, DLAMDA, 1, 1, INDX )
       DO 40 I = 1, N
          D( I ) = DLAMDA( INDX( I ) )
          Z( I ) = W( INDX( I ) )
@@ -356,8 +355,8 @@
 *
 *     Calculate the allowable deflation tolerence
 *
-      IMAX = AB_ISAMAX( N, Z, 1 )
-      JMAX = AB_ISAMAX( N, D, 1 )
+      IMAX = ISAMAX( N, Z, 1 )
+      JMAX = ISAMAX( N, D, 1 )
       EPS = SLAMCH( 'Epsilon' )
       TOL = EIGHT*EPS*ABS( D( JMAX ) )
 *
@@ -374,10 +373,9 @@
          ELSE
             DO 60 J = 1, N
                PERM( J ) = INDXQ( INDX( J ) )
-               CALL AB_SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 
-     $)
+               CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
    60       CONTINUE
-            CALL AB_SLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
+            CALL SLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ),
      $                   LDQ )
          END IF
          RETURN
@@ -425,7 +423,7 @@
 *        Find sqrt(a**2+b**2) without overflow or
 *        destructive underflow.
 *
-         TAU = AB_SLAPY2( C, S )
+         TAU = SLAPY2( C, S )
          T = D( J ) - D( JLAM )
          C = C / TAU
          S = -S / TAU
@@ -444,7 +442,7 @@
             GIVNUM( 1, GIVPTR ) = C
             GIVNUM( 2, GIVPTR ) = S
             IF( ICOMPQ.EQ.1 ) THEN
-               CALL AB_SROT( QSIZ, Q( 1, INDXQ( INDX( JLAM ) ) ), 1,
+               CALL SROT( QSIZ, Q( 1, INDXQ( INDX( JLAM ) ) ), 1,
      $                    Q( 1, INDXQ( INDX( J ) ) ), 1, C, S )
             END IF
             T = D( JLAM )*C*C + D( J )*S*S
@@ -502,7 +500,7 @@
             JP = INDXP( J )
             DLAMDA( J ) = D( JP )
             PERM( J ) = INDXQ( INDX( JP ) )
-            CALL AB_SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
+            CALL SCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
   130    CONTINUE
       END IF
 *
@@ -511,16 +509,16 @@
 *
       IF( K.LT.N ) THEN
          IF( ICOMPQ.EQ.0 ) THEN
-            CALL AB_SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
+            CALL SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
          ELSE
-            CALL AB_SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
-            CALL AB_SLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2,
+            CALL SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
+            CALL SLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2,
      $                   Q( 1, K+1 ), LDQ )
          END IF
       END IF
 *
       RETURN
 *
-*     End of AB_SLAED8
+*     End of SLAED8
 *
       END

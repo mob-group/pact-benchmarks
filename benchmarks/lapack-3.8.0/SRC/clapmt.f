@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAPMT performs a forward or backward permutation of the columns of a matrix.
+*> \brief \b CLAPMT performs a forward or backward permutation of the columns of a matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAPMT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAPMT.f">
+*> Download CLAPMT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clapmt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAPMT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clapmt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAPMT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clapmt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAPMT( FORWRD, M, N, X, LDX, K )
+*       SUBROUTINE CLAPMT( FORWRD, M, N, X, LDX, K )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            FORWRD
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAPMT rearranges the columns of the M by N matrix X as specified
+*> CLAPMT rearranges the columns of the M by N matrix X as specified
 *> by the permutation K(1),K(2),...,K(N) of the integers 1,...,N.
 *> If FORWRD = .TRUE.,  forward permutation:
 *>
@@ -102,7 +102,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAPMT( FORWRD, M, N, X, LDX, K )
+      SUBROUTINE CLAPMT( FORWRD, M, N, X, LDX, K )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -198,6 +198,6 @@
 *
       RETURN
 *
-*     End of AB_CLAPMT
+*     End of CLAPMT
 *
       END

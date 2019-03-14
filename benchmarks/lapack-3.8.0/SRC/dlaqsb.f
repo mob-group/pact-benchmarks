@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by AB_SPBEQU.
+*> \brief \b DLAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by spbequ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAQSB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAQSB.f">
+*> Download DLAQSB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqsb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAQSB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqsb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAQSB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqsb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE DLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAQSB equilibrates a symmetric band matrix A using the scaling
+*> DLAQSB equilibrates a symmetric band matrix A using the scaling
 *> factors in the vector S.
 *> \endverbatim
 *
@@ -138,8 +138,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED
-     $ )
+      SUBROUTINE DLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -166,9 +165,9 @@
       DOUBLE PRECISION   CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -196,7 +195,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored in band format.
 *
@@ -222,6 +221,6 @@
 *
       RETURN
 *
-*     End of AB_DLAQSB
+*     End of DLAQSB
 *
       END

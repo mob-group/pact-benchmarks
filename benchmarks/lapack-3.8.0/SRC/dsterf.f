@@ -1,4 +1,4 @@
-*> \brief \b AB_DSTERF
+*> \brief \b DSTERF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSTERF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSTERF.f">
+*> Download DSTERF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsterf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSTERF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsterf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSTERF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsterf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSTERF( N, D, E, INFO )
+*       SUBROUTINE DSTERF( N, D, E, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSTERF computes all eigenvalues of a symmetric tridiagonal matrix
+*> DSTERF computes all eigenvalues of a symmetric tridiagonal matrix
 *> using the Pal-Walker-Kahan variant of the QL or QR algorithm.
 *> \endverbatim
 *
@@ -84,7 +84,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DSTERF( N, D, E, INFO )
+      SUBROUTINE DSTERF( N, D, E, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,11 +115,11 @@
      $                   SIGMA, SSFMAX, SSFMIN, RMAX
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLANST, AB_DLAPY2
-      EXTERNAL           DLAMCH, AB_DLANST, AB_DLAPY2
+      DOUBLE PRECISION   DLAMCH, DLANST, DLAPY2
+      EXTERNAL           DLAMCH, DLANST, DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAE2, AB_DLASCL, AB_DLASRT, AB_XERBLA
+      EXTERNAL           DLAE2, DLASCL, DLASRT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN, SQRT
@@ -134,7 +134,7 @@
 *
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_DSTERF', -INFO )
+         CALL XERBLA( 'DSTERF', -INFO )
          RETURN
       END IF
       IF( N.LE.1 )
@@ -187,23 +187,21 @@
 *
 *     Scale submatrix in rows and columns L to LEND
 *
-      ANORM = AB_DLANST( 'M', LEND-L+1, D( L ), E( L ) )
+      ANORM = DLANST( 'M', LEND-L+1, D( L ), E( L ) )
       ISCALE = 0
       IF( ANORM.EQ.ZERO )
      $   GO TO 10
       IF( (ANORM.GT.SSFMAX) ) THEN
          ISCALE = 1
-         CALL AB_DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), 
-     $N,
+         CALL DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), N,
      $                INFO )
-         CALL AB_DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
+         CALL DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
      $                INFO )
       ELSE IF( ANORM.LT.SSFMIN ) THEN
          ISCALE = 2
-         CALL AB_DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), 
-     $N,
+         CALL DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), N,
      $                INFO )
-         CALL AB_DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
+         CALL DLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
      $                INFO )
       END IF
 *
@@ -240,12 +238,12 @@
          IF( M.EQ.L )
      $      GO TO 90
 *
-*        If remaining matrix is 2 by 2, use AB_DLAE2 to compute its
+*        If remaining matrix is 2 by 2, use DLAE2 to compute its
 *        eigenvalues.
 *
          IF( M.EQ.L+1 ) THEN
             RTE = SQRT( E( L ) )
-            CALL AB_DLAE2( D( L ), RTE, D( L+1 ), RT1, RT2 )
+            CALL DLAE2( D( L ), RTE, D( L+1 ), RT1, RT2 )
             D( L ) = RT1
             D( L+1 ) = RT2
             E( L ) = ZERO
@@ -263,7 +261,7 @@
 *
          RTE = SQRT( E( L ) )
          SIGMA = ( D( L+1 )-P ) / ( TWO*RTE )
-         R = AB_DLAPY2( SIGMA, ONE )
+         R = DLAPY2( SIGMA, ONE )
          SIGMA = P - ( RTE / ( SIGMA+SIGN( R, SIGMA ) ) )
 *
          C = ONE
@@ -326,12 +324,12 @@
          IF( M.EQ.L )
      $      GO TO 140
 *
-*        If remaining matrix is 2 by 2, use AB_DLAE2 to compute its
+*        If remaining matrix is 2 by 2, use DLAE2 to compute its
 *        eigenvalues.
 *
          IF( M.EQ.L-1 ) THEN
             RTE = SQRT( E( L-1 ) )
-            CALL AB_DLAE2( D( L ), RTE, D( L-1 ), RT1, RT2 )
+            CALL DLAE2( D( L ), RTE, D( L-1 ), RT1, RT2 )
             D( L ) = RT1
             D( L-1 ) = RT2
             E( L-1 ) = ZERO
@@ -349,7 +347,7 @@
 *
          RTE = SQRT( E( L-1 ) )
          SIGMA = ( D( L-1 )-P ) / ( TWO*RTE )
-         R = AB_DLAPY2( SIGMA, ONE )
+         R = DLAPY2( SIGMA, ONE )
          SIGMA = P - ( RTE / ( SIGMA+SIGN( R, SIGMA ) ) )
 *
          C = ONE
@@ -398,10 +396,10 @@
 *
   150 CONTINUE
       IF( ISCALE.EQ.1 )
-     $   CALL AB_DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
+     $   CALL DLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
       IF( ISCALE.EQ.2 )
-     $   CALL AB_DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
+     $   CALL DLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
 *
 *     Check for no convergence to an eigenvalue after a total
@@ -418,11 +416,11 @@
 *     Sort eigenvalues in increasing order.
 *
   170 CONTINUE
-      CALL AB_DLASRT( 'I', N, D, INFO )
+      CALL DLASRT( 'I', N, D, INFO )
 *
   180 CONTINUE
       RETURN
 *
-*     End of AB_DSTERF
+*     End of DSTERF
 *
       END

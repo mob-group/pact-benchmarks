@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARFG generates an elementary reflector (Householder matrix).
+*> \brief \b SLARFG generates an elementary reflector (Householder matrix).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARFG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARFg.f">
+*> Download SLARFG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfg.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARFg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfg.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARFg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfg.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARFG( N, ALPHA, X, INCX, TAU )
+*       SUBROUTINE SLARFG( N, ALPHA, X, INCX, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARFG generates a real elementary reflector H of order n, such
+*> SLARFG generates a real elementary reflector H of order n, such
 *> that
 *>
 *>       H * ( alpha ) = ( beta ),   H**T * H = I.
@@ -104,7 +104,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARFG( N, ALPHA, X, INCX, TAU )
+      SUBROUTINE SLARFG( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,14 +130,14 @@
       REAL               BETA, RSAFMN, SAFMIN, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLAPY2, AB_SNRM2
-      EXTERNAL           SLAMCH, AB_SLAPY2, AB_SNRM2
+      REAL               SLAMCH, SLAPY2, SNRM2
+      EXTERNAL           SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL
+      EXTERNAL           SSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -146,7 +146,7 @@
          RETURN
       END IF
 *
-      XNORM = AB_SNRM2( N-1, X, INCX )
+      XNORM = SNRM2( N-1, X, INCX )
 *
       IF( XNORM.EQ.ZERO ) THEN
 *
@@ -157,7 +157,7 @@
 *
 *        general case
 *
-         BETA = -SIGN( AB_SLAPY2( ALPHA, XNORM ), ALPHA )
+         BETA = -SIGN( SLAPY2( ALPHA, XNORM ), ALPHA )
          SAFMIN = SLAMCH( 'S' ) / SLAMCH( 'E' )
          KNT = 0
          IF( ABS( BETA ).LT.SAFMIN ) THEN
@@ -167,7 +167,7 @@
             RSAFMN = ONE / SAFMIN
    10       CONTINUE
             KNT = KNT + 1
-            CALL AB_SSCAL( N-1, RSAFMN, X, INCX )
+            CALL SSCAL( N-1, RSAFMN, X, INCX )
             BETA = BETA*RSAFMN
             ALPHA = ALPHA*RSAFMN
             IF( (ABS( BETA ).LT.SAFMIN) .AND. (KNT .LT. 20) )
@@ -175,11 +175,11 @@
 *
 *           New BETA is at most 1, at least SAFMIN
 *
-            XNORM = AB_SNRM2( N-1, X, INCX )
-            BETA = -SIGN( AB_SLAPY2( ALPHA, XNORM ), ALPHA )
+            XNORM = SNRM2( N-1, X, INCX )
+            BETA = -SIGN( SLAPY2( ALPHA, XNORM ), ALPHA )
          END IF
          TAU = ( BETA-ALPHA ) / BETA
-         CALL AB_SSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX )
+         CALL SSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX )
 *
 *        If ALPHA is subnormal, it may lose relative accuracy
 *
@@ -191,6 +191,6 @@
 *
       RETURN
 *
-*     End of AB_SLARFG
+*     End of SLARFG
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
+*> \brief \b ZLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLATRZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLATRZ.f">
+*> Download ZLATRZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatrz.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLATRZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatrz.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLATRZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatrz.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATRZ( M, N, L, A, LDA, TAU, WORK )
+*       SUBROUTINE ZLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            L, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLATRZ factors the M-by-(M+L) complex upper trapezoidal matrix
+*> ZLATRZ factors the M-by-(M+L) complex upper trapezoidal matrix
 *> [ A1 A2 ] = [ A(1:M,1:M) A(1:M,N-L+1:N) ] as ( R  0 ) * Z by means
 *> of unitary transformations, where  Z is an (M+L)-by-(M+L) unitary
 *> matrix and, R and A1 are M-by-M upper triangular matrices.
@@ -138,7 +138,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLATRZ( M, N, L, A, LDA, TAU, WORK )
+      SUBROUTINE ZLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,7 +163,7 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLACGV, AB_ZLARFG, AB_ZLARZ
+      EXTERNAL           ZLACGV, ZLARFG, ZLARZ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG
@@ -186,14 +186,14 @@
 *        Generate elementary reflector H(i) to annihilate
 *        [ A(i,i) A(i,n-l+1:n) ]
 *
-         CALL AB_ZLACGV( L, A( I, N-L+1 ), LDA )
+         CALL ZLACGV( L, A( I, N-L+1 ), LDA )
          ALPHA = DCONJG( A( I, I ) )
-         CALL AB_ZLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
+         CALL ZLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
          TAU( I ) = DCONJG( TAU( I ) )
 *
 *        Apply H(i) to A(1:i-1,i:n) from the right
 *
-         CALL AB_ZLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
+         CALL ZLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
      $               DCONJG( TAU( I ) ), A( 1, I ), LDA, WORK )
          A( I, I ) = DCONJG( ALPHA )
 *
@@ -201,6 +201,6 @@
 *
       RETURN
 *
-*     End of AB_ZLATRZ
+*     End of ZLATRZ
 *
       END

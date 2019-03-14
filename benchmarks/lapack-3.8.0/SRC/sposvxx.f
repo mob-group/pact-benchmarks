@@ -1,4 +1,4 @@
-*> \brief <b> AB_SPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b>
+*> \brief <b> SPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPOSVXX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPOSVxx.f">
+*> Download SPOSVXX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sposvxx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPOSVxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sposvxx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPOSVxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposvxx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+*       SUBROUTINE SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
 *                           S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
 *                           N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
 *                           NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -44,25 +44,25 @@
 *>
 *> \verbatim
 *>
-*>    AB_SPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
+*>    SPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
 *>    to compute the solution to a real system of linear equations
 *>    A * X = B, where A is an N-by-N symmetric positive definite matrix
 *>    and X and B are N-by-NRHS matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
-*>    are returned. AB_SPOSVXX will return a solution with a tiny
+*>    are returned. SPOSVXX will return a solution with a tiny
 *>    guaranteed error (O(eps) where eps is the working machine
 *>    precision) unless the matrix is very ill-conditioned, in which
 *>    case a warning is returned. Relevant condition numbers also are
 *>    calculated and returned.
 *>
-*>    AB_SPOSVXX accepts user-provided factorizations and equilibration
+*>    SPOSVXX accepts user-provided factorizations and equilibration
 *>    factors; see the definitions of the FACT and EQUED options.
 *>    Solving with refinement and using a factorization from a previous
-*>    AB_SPOSVXX call will also produce a solution with either O(eps)
+*>    SPOSVXX call will also produce a solution with either O(eps)
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
-*>    differ from what AB_SPOSVXX would itself produce.
+*>    differ from what SPOSVXX would itself produce.
 *> \endverbatim
 *
 *> \par Description:
@@ -492,8 +492,7 @@
 *> \ingroup realPOsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUE
-     $D,
+      SUBROUTINE SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
      $                    S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -539,14 +538,13 @@
      $                   SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLA_PORPVGRW
-      LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLA_PORPVGRW
+      EXTERNAL           LSAME, SLAMCH, SLA_PORPVGRW
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SPOEQUB, AB_SPOTRF, AB_SPOTRS, AB_SLACPY, AB
-     $_SLAQSY,
-     $                   AB_XERBLA, AB_SLASCL2, AB_SPORFSX
+      EXTERNAL           SPOEQUB, SPOTRF, SPOTRS, SLACPY, SLAQSY,
+     $                   XERBLA, SLASCL2, SPORFSX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -554,30 +552,30 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      EQUIL = AB_LSAME( FACT, 'E' )
+      NOFACT = LSAME( FACT, 'N' )
+      EQUIL = LSAME( FACT, 'E' )
       SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = AB_LSAME( EQUED, 'Y' )
+         RCEQU = LSAME( EQUED, 'Y' )
       ENDIF
 *
 *     Default is failure.  If an input parameter is wrong or
 *     factorization fails, make everything look horrible.  Only the
-*     pivot growth is set here, the rest is initialized in AB_SPORFSX.
+*     pivot growth is set here, the rest is initialized in SPORFSX.
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until AB_SPORFSX.
+*     Test the input parameters.  PARAMS is not tested until SPORFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
-     $     AB_LSAME( FACT, 'F' ) ) THEN
+     $     LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND.
-     $         .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -587,8 +585,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
-     $        ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
+     $        ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -9
       ELSE
          IF ( RCEQU ) THEN
@@ -616,7 +614,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPOSVXX', -INFO )
+         CALL XERBLA( 'SPOSVXX', -INFO )
          RETURN
       END IF
 *
@@ -624,26 +622,26 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL AB_SPOEQUB( N, A, LDA, S, SCOND, AMAX, INFEQU )
+         CALL SPOEQUB( N, A, LDA, S, SCOND, AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
 *
-            CALL AB_SLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
-            RCEQU = AB_LSAME( EQUED, 'Y' )
+            CALL SLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+            RCEQU = LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
 *     Scale the right-hand side.
 *
-      IF( RCEQU ) CALL AB_SLASCL2( N, NRHS, S, B, LDB )
+      IF( RCEQU ) CALL SLASCL2( N, NRHS, S, B, LDB )
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
 *        Compute the Cholesky factorization of A.
 *
-         CALL AB_SLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL AB_SPOTRF( UPLO, N, AF, LDAF, INFO )
+         CALL SLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL SPOTRF( UPLO, N, AF, LDAF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -653,25 +651,24 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = AB_SLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF, WORK
-     $ )
+            RPVGRW = SLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF, WORK )
             RETURN
          ENDIF
       END IF
 *
 *     Compute the reciprocal growth factor RPVGRW.
 *
-      RPVGRW = AB_SLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, WORK )
+      RPVGRW = SLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, WORK )
 *
 *     Compute the solution matrix X.
 *
-      CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_SPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
+      CALL SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL SPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL AB_SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
+      CALL SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
      $     S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $     ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK, INFO )
 
@@ -679,11 +676,11 @@
 *     Scale solutions.
 *
       IF ( RCEQU ) THEN
-         CALL AB_SLASCL2 ( N, NRHS, S, X, LDX )
+         CALL SLASCL2 ( N, NRHS, S, X, LDX )
       END IF
 *
       RETURN
 *
-*     End of AB_SPOSVXX
+*     End of SPOSVXX
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZUNMLQ
+*> \brief \b ZUNMLQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZUNMLQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNMLQ.f">
+*> Download ZUNMLQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunmlq.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNMLQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunmlq.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNMLQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmlq.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZUNMLQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+*       SUBROUTINE ZUNMLQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZUNMLQ overwrites the general complex M-by-N matrix C with
+*> ZUNMLQ overwrites the general complex M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
@@ -46,7 +46,7 @@
 *>
 *>       Q = H(k)**H . . . H(2)**H H(1)**H
 *>
-*> as returned by AB_ZGELQF. Q is of order M if SIDE = 'L' and of order N
+*> as returned by ZGELQF. Q is of order M if SIDE = 'L' and of order N
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -95,7 +95,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          AB_ZGELQF in the first k rows of its array argument A.
+*>          ZGELQF in the first k rows of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -108,7 +108,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_ZGELQF.
+*>          reflector H(i), as returned by ZGELQF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -141,7 +141,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -164,7 +164,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZUNMLQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+      SUBROUTINE ZUNMLQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -194,12 +194,12 @@
      $                   LWKOPT, MI, NB, NBMIN, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZLARFB, AB_ZLARFT, AB_ZUNML2
+      EXTERNAL           XERBLA, ZLARFB, ZLARFT, ZUNML2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -209,8 +209,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = AB_LSAME( SIDE, 'L' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      LEFT = LSAME( SIDE, 'L' )
+      NOTRAN = LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q and NW is the minimum dimension of WORK
@@ -222,9 +222,9 @@
          NQ = N
          NW = M
       END IF
-      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -244,15 +244,14 @@
 *
 *        Compute the workspace requirements
 *
-         NB = MIN( NBMAX, AB_ILAENV( 1, 'AB_ZUNMLQ', SIDE // TRANS, M, N
-     $, K,
+         NB = MIN( NBMAX, ILAENV( 1, 'ZUNMLQ', SIDE // TRANS, M, N, K,
      $        -1 ) )
          LWKOPT = MAX( 1, NW )*NB + TSIZE
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZUNMLQ', -INFO )
+         CALL XERBLA( 'ZUNMLQ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -270,8 +269,7 @@
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.NW*NB+TSIZE ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_ZUNMLQ', SIDE // TRANS, M,
-     $ N, K,
+            NBMIN = MAX( 2, ILAENV( 2, 'ZUNMLQ', SIDE // TRANS, M, N, K,
      $              -1 ) )
          END IF
       END IF
@@ -280,8 +278,7 @@
 *
 *        Use unblocked code
 *
-         CALL AB_ZUNML2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK
-     $,
+         CALL ZUNML2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK,
      $                IINFO )
       ELSE
 *
@@ -319,7 +316,7 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i) H(i+1) . . . H(i+ib-1)
 *
-            CALL AB_ZLARFT( 'Forward', 'Rowwise', NQ-I+1, IB, A( I, I ),
+            CALL ZLARFT( 'Forward', 'Rowwise', NQ-I+1, IB, A( I, I ),
      $                   LDA, TAU( I ), WORK( IWT ), LDT )
             IF( LEFT ) THEN
 *
@@ -337,8 +334,7 @@
 *
 *           Apply H or H**H
 *
-            CALL AB_ZLARFB( SIDE, TRANST, 'Forward', 'Rowwise', MI, NI, 
-     $IB,
+            CALL ZLARFB( SIDE, TRANST, 'Forward', 'Rowwise', MI, NI, IB,
      $                   A( I, I ), LDA, WORK( IWT ), LDT,
      $                   C( IC, JC ), LDC, WORK, LDWORK )
    10    CONTINUE
@@ -346,6 +342,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_ZUNMLQ
+*     End of ZUNMLQ
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DTGEVC
+*> \brief \b DTGEVC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DTGEVC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTGEVC.f">
+*> Download DTGEVC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgevc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTGEVC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgevc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTGEVC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgevc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+*       SUBROUTINE DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
 *                          LDVL, VR, LDVR, MM, M, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,14 +38,14 @@
 *>
 *> \verbatim
 *>
-*> AB_DTGEVC computes some or all of the right and/or left eigenvectors of
+*> DTGEVC computes some or all of the right and/or left eigenvectors of
 *> a pair of real matrices (S,P), where S is a quasi-triangular matrix
 *> and P is upper triangular.  Matrix pairs of this type are produced by
 *> the generalized Schur factorization of a matrix pair (A,B):
 *>
 *>    A = Q*S*Z**T,  B = Q*P*Z**T
 *>
-*> as computed by AB_DGGHRD + AB_DHGEQZ.
+*> as computed by DGGHRD + DHGEQZ.
 *>
 *> The right eigenvector x and the left eigenvector y of (S,P)
 *> corresponding to an eigenvalue w are defined by:
@@ -110,7 +110,7 @@
 *> \verbatim
 *>          S is DOUBLE PRECISION array, dimension (LDS,N)
 *>          The upper quasi-triangular matrix S from a generalized Schur
-*>          factorization, as computed by AB_DHGEQZ.
+*>          factorization, as computed by DHGEQZ.
 *> \endverbatim
 *>
 *> \param[in] LDS
@@ -123,7 +123,7 @@
 *> \verbatim
 *>          P is DOUBLE PRECISION array, dimension (LDP,N)
 *>          The upper triangular matrix P from a generalized Schur
-*>          factorization, as computed by AB_DHGEQZ.
+*>          factorization, as computed by DHGEQZ.
 *>          2-by-2 diagonal blocks of P corresponding to 2-by-2 blocks
 *>          of S must be in positive diagonal form.
 *> \endverbatim
@@ -139,7 +139,7 @@
 *>          VL is DOUBLE PRECISION array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the orthogonal matrix Q
-*>          of left Schur vectors returned by AB_DHGEQZ).
+*>          of left Schur vectors returned by DHGEQZ).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -166,7 +166,7 @@
 *>          VR is DOUBLE PRECISION array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Z (usually the orthogonal matrix Z
-*>          of right Schur vectors returned by AB_DHGEQZ).
+*>          of right Schur vectors returned by DHGEQZ).
 *>
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
@@ -292,7 +292,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+      SUBROUTINE DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -335,13 +335,12 @@
      $                   SUMP( 2, 2 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DLABAD, AB_DLACPY, AB_DLAG2, AB_DL
-     $ALN2, AB_XERBLA
+      EXTERNAL           DGEMV, DLABAD, DLACPY, DLAG2, DLALN2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -350,15 +349,15 @@
 *
 *     Decode and Test the input parameters
 *
-      IF( AB_LSAME( HOWMNY, 'A' ) ) THEN
+      IF( LSAME( HOWMNY, 'A' ) ) THEN
          IHWMNY = 1
          ILALL = .TRUE.
          ILBACK = .FALSE.
-      ELSE IF( AB_LSAME( HOWMNY, 'S' ) ) THEN
+      ELSE IF( LSAME( HOWMNY, 'S' ) ) THEN
          IHWMNY = 2
          ILALL = .FALSE.
          ILBACK = .FALSE.
-      ELSE IF( AB_LSAME( HOWMNY, 'B' ) ) THEN
+      ELSE IF( LSAME( HOWMNY, 'B' ) ) THEN
          IHWMNY = 3
          ILALL = .TRUE.
          ILBACK = .TRUE.
@@ -367,15 +366,15 @@
          ILALL = .TRUE.
       END IF
 *
-      IF( AB_LSAME( SIDE, 'R' ) ) THEN
+      IF( LSAME( SIDE, 'R' ) ) THEN
          ISIDE = 1
          COMPL = .FALSE.
          COMPR = .TRUE.
-      ELSE IF( AB_LSAME( SIDE, 'L' ) ) THEN
+      ELSE IF( LSAME( SIDE, 'L' ) ) THEN
          ISIDE = 2
          COMPL = .TRUE.
          COMPR = .FALSE.
-      ELSE IF( AB_LSAME( SIDE, 'B' ) ) THEN
+      ELSE IF( LSAME( SIDE, 'B' ) ) THEN
          ISIDE = 3
          COMPL = .TRUE.
          COMPR = .TRUE.
@@ -396,7 +395,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTGEVC', -INFO )
+         CALL XERBLA( 'DTGEVC', -INFO )
          RETURN
       END IF
 *
@@ -453,7 +452,7 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTGEVC', -INFO )
+         CALL XERBLA( 'DTGEVC', -INFO )
          RETURN
       END IF
 *
@@ -467,7 +466,7 @@
 *
       SAFMIN = DLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
-      CALL AB_DLABAD( SAFMIN, BIG )
+      CALL DLABAD( SAFMIN, BIG )
       ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       SMALL = SAFMIN*N / ULP
       BIG = ONE / SMALL
@@ -623,7 +622,7 @@
 *
 *              Complex eigenvalue
 *
-               CALL AB_DLAG2( S( JE, JE ), LDS, P( JE, JE ), LDP,
+               CALL DLAG2( S( JE, JE ), LDS, P( JE, JE ), LDP,
      $                     SAFMIN*SAFETY, ACOEF, TEMP, BCOEFR, TEMP2,
      $                     BCOEFI )
                BCOEFI = -BCOEFI
@@ -769,8 +768,7 @@
 *              Solve  ( a A - b B )  y = SUM(,)
 *              with scaling and perturbation of the denominator
 *
-               CALL AB_DLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ), L
-     $DS,
+               CALL DLALN2( .TRUE., NA, NW, DMIN, ACOEF, S( J, J ), LDS,
      $                      BDIAG( 1 ), BDIAG( 2 ), SUM, 2, BCOEFR,
      $                      BCOEFI, WORK( 2*N+J ), N, SCALE, TEMP,
      $                      IINFO )
@@ -792,17 +790,15 @@
             IEIG = IEIG + 1
             IF( ILBACK ) THEN
                DO 170 JW = 0, NW - 1
-                  CALL AB_DGEMV( 'N', N, N+1-JE, ONE, VL( 1, JE ), LDVL,
+                  CALL DGEMV( 'N', N, N+1-JE, ONE, VL( 1, JE ), LDVL,
      $                        WORK( ( JW+2 )*N+JE ), 1, ZERO,
      $                        WORK( ( JW+4 )*N+1 ), 1 )
   170          CONTINUE
-               CALL AB_DLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1, JE )
-     $,
+               CALL DLACPY( ' ', N, NW, WORK( 4*N+1 ), N, VL( 1, JE ),
      $                      LDVL )
                IBEG = 1
             ELSE
-               CALL AB_DLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1, IEIG
-     $ ),
+               CALL DLACPY( ' ', N, NW, WORK( 2*N+1 ), N, VL( 1, IEIG ),
      $                      LDVL )
                IBEG = JE
             END IF
@@ -961,8 +957,7 @@
 *
 *              Complex eigenvalue
 *
-               CALL AB_DLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ), LDP
-     $,
+               CALL DLAG2( S( JE-1, JE-1 ), LDS, P( JE-1, JE-1 ), LDP,
      $                     SAFMIN*SAFETY, ACOEF, TEMP, BCOEFR, TEMP2,
      $                     BCOEFI )
                IF( BCOEFI.EQ.ZERO ) THEN
@@ -1063,7 +1058,7 @@
 *
 *              Compute x(j) (and x(j+1), if 2-by-2 block)
 *
-               CALL AB_DLALN2( .FALSE., NA, NW, DMIN, ACOEF, S( J, J ),
+               CALL DLALN2( .FALSE., NA, NW, DMIN, ACOEF, S( J, J ),
      $                      LDS, BDIAG( 1 ), BDIAG( 2 ), WORK( 2*N+J ),
      $                      N, BCOEFR, BCOEFI, SUM, 2, SCALE, TEMP,
      $                      IINFO )
@@ -1211,6 +1206,6 @@
 *
       RETURN
 *
-*     End of AB_DTGEVC
+*     End of DTGEVC
 *
       END

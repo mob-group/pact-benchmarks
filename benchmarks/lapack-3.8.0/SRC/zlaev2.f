@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAEV2 computes the eigenvalues and eigenvectors of a 2-by-2 symmetric/Hermitian matrix.
+*> \brief \b ZLAEV2 computes the eigenvalues and eigenvectors of a 2-by-2 symmetric/Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAEV2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAEV2.f">
+*> Download ZLAEV2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaev2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAEV2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaev2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAEV2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaev2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAEV2( A, B, C, RT1, RT2, CS1, SN1 )
+*       SUBROUTINE ZLAEV2( A, B, C, RT1, RT2, CS1, SN1 )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   CS1, RT1, RT2
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAEV2 computes the eigendecomposition of a 2-by-2 Hermitian matrix
+*> ZLAEV2 computes the eigendecomposition of a 2-by-2 Hermitian matrix
 *>    [  A         B  ]
 *>    [  CONJG(B)  C  ].
 *> On return, RT1 is the eigenvalue of larger absolute value, RT2 is the
@@ -119,7 +119,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLAEV2( A, B, C, RT1, RT2, CS1, SN1 )
+      SUBROUTINE ZLAEV2( A, B, C, RT1, RT2, CS1, SN1 )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,7 +144,7 @@
       COMPLEX*16         W
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAEV2
+      EXTERNAL           DLAEV2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG
@@ -156,10 +156,10 @@
       ELSE
          W = DCONJG( B ) / ABS( B )
       END IF
-      CALL AB_DLAEV2( DBLE( A ), ABS( B ), DBLE( C ), RT1, RT2, CS1, T )
+      CALL DLAEV2( DBLE( A ), ABS( B ), DBLE( C ), RT1, RT2, CS1, T )
       SN1 = W*T
       RETURN
 *
-*     End of AB_ZLAEV2
+*     End of ZLAEV2
 *
       END

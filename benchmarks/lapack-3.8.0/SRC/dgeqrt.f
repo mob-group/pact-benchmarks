@@ -1,4 +1,4 @@
-*> \brief \b AB_DGEQRT
+*> \brief \b DGEQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGEQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEQRt.f">
+*> Download DGEQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqrt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEQRt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqrt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEQRt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqrt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+*       SUBROUTINE DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER INFO, LDA, LDT, M, N, NB
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGEQRT computes a blocked QR factorization of a real M-by-N matrix A
+*> DGEQRT computes a blocked QR factorization of a real M-by-N matrix A
 *> using the compact WY representation of Q.
 *> \endverbatim
 *
@@ -139,7 +139,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+      SUBROUTINE DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,7 +162,7 @@
       PARAMETER( USE_RECURSIVE_QR=.TRUE. )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   AB_DGEQRT2, AB_DGEQRT3, AB_DLARFB, AB_XERBLA
+      EXTERNAL   DGEQRT2, DGEQRT3, DLARFB, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -181,7 +181,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGEQRT', -INFO )
+         CALL XERBLA( 'DGEQRT', -INFO )
          RETURN
       END IF
 *
@@ -198,23 +198,21 @@
 *     Compute the QR factorization of the current block A(I:M,I:I+IB-1)
 *
          IF( USE_RECURSIVE_QR ) THEN
-            CALL AB_DGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO 
-     $)
+            CALL DGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
          ELSE
-            CALL AB_DGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO 
-     $)
+            CALL DGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
          END IF
          IF( I+IB.LE.N ) THEN
 *
 *     Update by applying H**T to A(I:M,I+IB:N) from the left
 *
-            CALL AB_DLARFB( 'L', 'T', 'F', 'C', M-I+1, N-I-IB+1, IB,
+            CALL DLARFB( 'L', 'T', 'F', 'C', M-I+1, N-I-IB+1, IB,
      $                   A( I, I ), LDA, T( 1, I ), LDT,
      $                   A( I, I+IB ), LDA, WORK , N-I-IB+1 )
          END IF
       END DO
       RETURN
 *
-*     End of AB_DGEQRT
+*     End of DGEQRT
 *
       END

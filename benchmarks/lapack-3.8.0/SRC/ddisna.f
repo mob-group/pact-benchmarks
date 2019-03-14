@@ -1,4 +1,4 @@
-*> \brief \b AB_DDISNA
+*> \brief \b DDISNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DDISNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DDISNA.f">
+*> Download DDISNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ddisna.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DDISNA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ddisna.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DDISNA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ddisna.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DDISNA( JOB, M, N, D, SEP, INFO )
+*       SUBROUTINE DDISNA( JOB, M, N, D, SEP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOB
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DDISNA computes the reciprocal condition numbers for the eigenvectors
+*> DDISNA computes the reciprocal condition numbers for the eigenvectors
 *> of a real symmetric or complex Hermitian matrix or for the left or
 *> right singular vectors of a general m-by-n matrix. The reciprocal
 *> condition number is the 'gap' between the corresponding eigenvalue or
@@ -49,7 +49,7 @@
 *> to be smaller than DLAMCH( 'E' )*ANORM in order to limit the size of
 *> the error bound.
 *>
-*> AB_DDISNA may also be used to compute error bounds for eigenvectors of
+*> DDISNA may also be used to compute error bounds for eigenvectors of
 *> the generalized symmetric definite eigenproblem.
 *> \endverbatim
 *
@@ -115,7 +115,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DDISNA( JOB, M, N, D, SEP, INFO )
+      SUBROUTINE DDISNA( JOB, M, N, D, SEP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,24 +142,24 @@
       DOUBLE PRECISION   ANORM, EPS, NEWGAP, OLDGAP, SAFMIN, THRESH
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments
 *
       INFO = 0
-      EIGEN = AB_LSAME( JOB, 'E' )
-      LEFT = AB_LSAME( JOB, 'L' )
-      RIGHT = AB_LSAME( JOB, 'R' )
+      EIGEN = LSAME( JOB, 'E' )
+      LEFT = LSAME( JOB, 'L' )
+      RIGHT = LSAME( JOB, 'R' )
       SING = LEFT .OR. RIGHT
       IF( EIGEN ) THEN
          K = M
@@ -191,7 +191,7 @@
      $      INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DDISNA', -INFO )
+         CALL XERBLA( 'DDISNA', -INFO )
          RETURN
       END IF
 *
@@ -240,6 +240,6 @@
 *
       RETURN
 *
-*     End of AB_DDISNA
+*     End of DDISNA
 *
       END

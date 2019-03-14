@@ -1,4 +1,4 @@
-*> \brief <b> AB_DPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
+*> \brief <b> DPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DPTSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPTSVx.f">
+*> Download DPTSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dptsvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPTSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dptsvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPTSVx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dptsvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+*       SUBROUTINE DPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
 *                          RCOND, FERR, BERR, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPTSVX uses the factorization A = L*D*L**T to compute the solution
+*> DPTSVX uses the factorization A = L*D*L**T to compute the solution
 *> to a real system of linear equations A*X = B, where A is an N-by-N
 *> symmetric positive definite tridiagonal matrix and X and B are
 *> N-by-NRHS matrices.
@@ -225,7 +225,7 @@
 *> \ingroup doublePTsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_DPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+      SUBROUTINE DPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
      $                   RCOND, FERR, BERR, WORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -255,14 +255,13 @@
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANST
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANST
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANST
+      EXTERNAL           LSAME, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DPTCON, AB_DPTRFS, AB_D
-     $PTTRF, AB_DPTTRS,
-     $                   AB_XERBLA
+      EXTERNAL           DCOPY, DLACPY, DPTCON, DPTRFS, DPTTRF, DPTTRS,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -272,8 +271,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
+      NOFACT = LSAME( FACT, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -285,7 +284,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DPTSVX', -INFO )
+         CALL XERBLA( 'DPTSVX', -INFO )
          RETURN
       END IF
 *
@@ -293,10 +292,10 @@
 *
 *        Compute the L*D*L**T (or U**T*D*U) factorization of A.
 *
-         CALL AB_DCOPY( N, D, 1, DF, 1 )
+         CALL DCOPY( N, D, 1, DF, 1 )
          IF( N.GT.1 )
-     $      CALL AB_DCOPY( N-1, E, 1, EF, 1 )
-         CALL AB_DPTTRF( N, DF, EF, INFO )
+     $      CALL DCOPY( N-1, E, 1, EF, 1 )
+         CALL DPTTRF( N, DF, EF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -308,21 +307,21 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = AB_DLANST( '1', N, D, E )
+      ANORM = DLANST( '1', N, D, E )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL AB_DPTCON( N, DF, EF, ANORM, RCOND, WORK, INFO )
+      CALL DPTCON( N, DF, EF, ANORM, RCOND, WORK, INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_DPTTRS( N, NRHS, DF, EF, X, LDX, INFO )
+      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL DPTTRS( N, NRHS, DF, EF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL AB_DPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR, BERR,
+      CALL DPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR, BERR,
      $             WORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
@@ -332,6 +331,6 @@
 *
       RETURN
 *
-*     End of AB_DPTSVX
+*     End of DPTSVX
 *
       END

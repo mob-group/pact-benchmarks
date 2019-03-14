@@ -1,4 +1,4 @@
-*> \brief \b AB_CSYMV computes a matrix-vector product for a complex symmetric matrix.
+*> \brief \b CSYMV computes a matrix-vector product for a complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CSYMV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSYMV.f">
+*> Download CSYMV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csymv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSYMV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csymv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSYMV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csymv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y, INCY )
+*       SUBROUTINE CSYMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y, INCY )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSYMV  performs the matrix-vector  operation
+*> CSYMV  performs the matrix-vector  operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -155,8 +155,7 @@
 *> \ingroup complexSYauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CSYMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y, INC
-     $Y )
+      SUBROUTINE CSYMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y, INCY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -185,11 +184,11 @@
       COMPLEX            TEMP1, TEMP2
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -199,8 +198,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = 1
       ELSE IF( N.LT.0 ) THEN
          INFO = 2
@@ -212,7 +210,7 @@
          INFO = 10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CSYMV ', INFO )
+         CALL XERBLA( 'CSYMV ', INFO )
          RETURN
       END IF
 *
@@ -268,7 +266,7 @@
       END IF
       IF( ALPHA.EQ.ZERO )
      $   RETURN
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Form  y  when A is stored in upper triangle.
 *
@@ -340,6 +338,6 @@
 *
       RETURN
 *
-*     End of AB_CSYMV
+*     End of CSYMV
 *
       END

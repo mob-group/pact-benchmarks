@@ -1,4 +1,4 @@
-*> \brief \b AB_DGEEQUB
+*> \brief \b DGEEQUB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGEEQUB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEEQUb.f">
+*> Download DGEEQUB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeequb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEEQUb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeequb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEEQUb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeequb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+*       SUBROUTINE DGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                           INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGEEQUB computes row and column scalings intended to equilibrate an
+*> DGEEQUB computes row and column scalings intended to equilibrate an
 *> M-by-N matrix A and reduce its condition number.  R returns the row
 *> scale factors and C the column scale factors, chosen to try to make
 *> the largest element in each row and column of the matrix B with
@@ -47,7 +47,7 @@
 *> of these scaling factors is not guaranteed to reduce the condition
 *> number of A but works well in practice.
 *>
-*> This routine differs from AB_DGEEQU by restricting the scaling factors
+*> This routine differs from DGEEQU by restricting the scaling factors
 *> to a power of the radix.  Barring over- and underflow, scaling by
 *> these factors introduces no additional rounding errors.  However, the
 *> scaled entries' magnitudes are no longer approximately 1 but lie
@@ -143,7 +143,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+      SUBROUTINE DGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $                    INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -174,7 +174,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, LOG
@@ -192,7 +192,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGEEQUB', -INFO )
+         CALL XERBLA( 'DGEEQUB', -INFO )
          RETURN
       END IF
 *
@@ -316,6 +316,6 @@
 *
       RETURN
 *
-*     End of AB_DGEEQUB
+*     End of DGEEQUB
 *
       END

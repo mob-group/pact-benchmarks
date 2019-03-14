@@ -1,4 +1,4 @@
-*> \brief \b AB_CLA_PORCOND_X computes the infinity norm condition number of op(A)*diag(x) for Hermitian positive-definite matrices.
+*> \brief \b CLA_PORCOND_X computes the infinity norm condition number of op(A)*diag(x) for Hermitian positive-definite matrices.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLA_PORCOND_X + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLA_PORCOND_X.f">
+*> Download CLA_PORCOND_X + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_porcond_x.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLA_PORCOND_X.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_porcond_x.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLA_PORCOND_X.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_porcond_x.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION AB_CLA_PORCOND_X( UPLO, N, A, LDA, AF, LDAF, X, INFO,
+*       REAL FUNCTION CLA_PORCOND_X( UPLO, N, A, LDA, AF, LDAF, X, INFO,
 *                                    WORK, RWORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_CLA_PORCOND_X Computes the infinity norm condition number of
+*>    CLA_PORCOND_X Computes the infinity norm condition number of
 *>    op(A) * diag(X) where X is a COMPLEX vector.
 *> \endverbatim
 *
@@ -73,7 +73,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDAF,N)
 *>     The triangular factor U or L from the Cholesky factorization
-*>     A = U**H*U or A = L*L**H, as computed by AB_CPOTRF.
+*>     A = U**H*U or A = L*L**H, as computed by CPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -120,8 +120,7 @@
 *> \ingroup complexPOcomputational
 *
 *  =====================================================================
-      REAL FUNCTION AB_CLA_PORCOND_X( UPLO, N, A, LDA, AF, LDAF, X, INFO
-     $,
+      REAL FUNCTION CLA_PORCOND_X( UPLO, N, A, LDA, AF, LDAF, X, INFO,
      $                             WORK, RWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -150,11 +149,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLACN2, AB_CPOTRS, AB_XERBLA
+      EXTERNAL           CLACN2, CPOTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL, AIMAG
@@ -167,11 +166,11 @@
 *     ..
 *     .. Executable Statements ..
 *
-      AB_CLA_PORCOND_X = 0.0E+0
+      CLA_PORCOND_X = 0.0E+0
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF ( N.LT.0 ) THEN
          INFO = -2
@@ -181,11 +180,11 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLA_PORCOND_X', -INFO )
+         CALL XERBLA( 'CLA_PORCOND_X', -INFO )
          RETURN
       END IF
       UP = .FALSE.
-      IF ( AB_LSAME( UPLO, 'U' ) ) UP = .TRUE.
+      IF ( LSAME( UPLO, 'U' ) ) UP = .TRUE.
 *
 *     Compute norm of op(A)*op2(C).
 *
@@ -219,7 +218,7 @@
 *     Quick return if possible.
 *
       IF( N.EQ.0 ) THEN
-         AB_CLA_PORCOND_X = 1.0E+0
+         CLA_PORCOND_X = 1.0E+0
          RETURN
       ELSE IF( ANORM .EQ. 0.0E+0 ) THEN
          RETURN
@@ -231,7 +230,7 @@
 *
       KASE = 0
    10 CONTINUE
-      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -242,10 +241,10 @@
             END DO
 *
             IF ( UP ) THEN
-               CALL AB_CPOTRS( 'U', N, 1, AF, LDAF,
+               CALL CPOTRS( 'U', N, 1, AF, LDAF,
      $            WORK, N, INFO )
             ELSE
-               CALL AB_CPOTRS( 'L', N, 1, AF, LDAF,
+               CALL CPOTRS( 'L', N, 1, AF, LDAF,
      $            WORK, N, INFO )
             ENDIF
 *
@@ -263,10 +262,10 @@
             END DO
 *
             IF ( UP ) THEN
-               CALL AB_CPOTRS( 'U', N, 1, AF, LDAF,
+               CALL CPOTRS( 'U', N, 1, AF, LDAF,
      $            WORK, N, INFO )
             ELSE
-               CALL AB_CPOTRS( 'L', N, 1, AF, LDAF,
+               CALL CPOTRS( 'L', N, 1, AF, LDAF,
      $            WORK, N, INFO )
             END IF
 *
@@ -282,7 +281,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0E+0 )
-     $   AB_CLA_PORCOND_X = 1.0E+0 / AINVNM
+     $   CLA_PORCOND_X = 1.0E+0 / AINVNM
 *
       RETURN
 *

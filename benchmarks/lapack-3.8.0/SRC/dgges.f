@@ -1,4 +1,4 @@
-*> \brief <b> AB_DGGES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
+*> \brief <b> DGGES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGGES + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGGES.f">
+*> Download DGGES + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgges.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGGES.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgges.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGGES.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgges.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
+*       SUBROUTINE DGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
 *                         SDIM, ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR,
 *                         LDVSR, WORK, LWORK, BWORK, INFO )
 *
@@ -43,7 +43,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGGES computes for a pair of N-by-N real nonsymmetric matrices (A,B),
+*> DGGES computes for a pair of N-by-N real nonsymmetric matrices (A,B),
 *> the generalized eigenvalues, the generalized real Schur form (S,T),
 *> optionally, the left and/or right matrices of Schur vectors (VSL and
 *> VSR). This gives the generalized Schur factorization
@@ -57,7 +57,7 @@
 *> corresponding left and right eigenspaces (deflating subspaces).
 *>
 *> (If only the generalized eigenvalues are needed, use the driver
-*> AB_DGGEV instead, which is faster.)
+*> DGGEV instead, which is faster.)
 *>
 *> A generalized eigenvalue for a pair of matrices (A,B) is a scalar w
 *> or a ratio alpha/beta = w, such that  A - w*B is singular.  It is
@@ -240,7 +240,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] BWORK
@@ -258,13 +258,13 @@
 *>                The QZ iteration failed.  (A,B) are not in Schur
 *>                form, but ALPHAR(j), ALPHAI(j), and BETA(j) should
 *>                be correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other than QZ iteration failed in AB_DHGEQZ.
+*>          > N:  =N+1: other than QZ iteration failed in DHGEQZ.
 *>                =N+2: after reordering, roundoff changed values of
 *>                      some complex eigenvalues so that leading
 *>                      eigenvalues in the Generalized Schur form no
 *>                      longer satisfy SELCTG=.TRUE.  This could also
 *>                      be caused due to scaling.
-*>                =N+3: reordering failed in AB_DTGSEN.
+*>                =N+3: reordering failed in DTGSEN.
 *> \endverbatim
 *
 *  Authors:
@@ -280,8 +280,7 @@
 *> \ingroup doubleGEeigen
 *
 *  =====================================================================
-      SUBROUTINE AB_DGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, L
-     $DB,
+      SUBROUTINE DGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
      $                  SDIM, ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR,
      $                  LDVSR, WORK, LWORK, BWORK, INFO )
 *
@@ -325,17 +324,15 @@
       DOUBLE PRECISION   DIF( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEQRF, AB_DGGBAK, AB_DGGBAL, AB_DGGHRD, AB_
-     $DHGEQZ, AB_DLABAD,
-     $                   AB_DLACPY, AB_DLASCL, AB_DLASET, AB_DORGQR, AB_
-     $DORMQR, AB_DTGSEN,
-     $                   AB_XERBLA
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHRD, DHGEQZ, DLABAD,
+     $                   DLACPY, DLASCL, DLASET, DORGQR, DORMQR, DTGSEN,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_DLANGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -344,10 +341,10 @@
 *
 *     Decode the input arguments
 *
-      IF( AB_LSAME( JOBVSL, 'N' ) ) THEN
+      IF( LSAME( JOBVSL, 'N' ) ) THEN
          IJOBVL = 1
          ILVSL = .FALSE.
-      ELSE IF( AB_LSAME( JOBVSL, 'V' ) ) THEN
+      ELSE IF( LSAME( JOBVSL, 'V' ) ) THEN
          IJOBVL = 2
          ILVSL = .TRUE.
       ELSE
@@ -355,10 +352,10 @@
          ILVSL = .FALSE.
       END IF
 *
-      IF( AB_LSAME( JOBVSR, 'N' ) ) THEN
+      IF( LSAME( JOBVSR, 'N' ) ) THEN
          IJOBVR = 1
          ILVSR = .FALSE.
-      ELSE IF( AB_LSAME( JOBVSR, 'V' ) ) THEN
+      ELSE IF( LSAME( JOBVSR, 'V' ) ) THEN
          IJOBVR = 2
          ILVSR = .TRUE.
       ELSE
@@ -366,7 +363,7 @@
          ILVSR = .FALSE.
       END IF
 *
-      WANTST = AB_LSAME( SORT, 'S' )
+      WANTST = LSAME( SORT, 'S' )
 *
 *     Test the input arguments
 *
@@ -376,8 +373,7 @@
          INFO = -1
       ELSE IF( IJOBVR.LE.0 ) THEN
          INFO = -2
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.AB_LSAME( SORT, 'N' ) ) ) TH
-     $EN
+      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -396,20 +392,18 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by AB_ILAENV.)
+*       following subroutine, as returned by ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          IF( N.GT.0 )THEN
             MINWRK = MAX( 8*N, 6*N + 16 )
             MAXWRK = MINWRK - N +
-     $               N*AB_ILAENV( 1, 'AB_DGEQRF', ' ', N, 1, N, 0 )
+     $               N*ILAENV( 1, 'DGEQRF', ' ', N, 1, N, 0 )
             MAXWRK = MAX( MAXWRK, MINWRK - N +
-     $                    N*AB_ILAENV( 1, 'AB_DORMQR', ' ', N, 1, N, -1 
-     $) )
+     $                    N*ILAENV( 1, 'DORMQR', ' ', N, 1, N, -1 ) )
             IF( ILVSL ) THEN
                MAXWRK = MAX( MAXWRK, MINWRK - N +
-     $                       N*AB_ILAENV( 1, 'AB_DORGQR', ' ', N, 1, N, 
-     $-1 ) )
+     $                       N*ILAENV( 1, 'DORGQR', ' ', N, 1, N, -1 ) )
             END IF
          ELSE
             MINWRK = 1
@@ -422,7 +416,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGGES ', -INFO )
+         CALL XERBLA( 'DGGES ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -440,13 +434,13 @@
       EPS = DLAMCH( 'P' )
       SAFMIN = DLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
-      CALL AB_DLABAD( SAFMIN, SAFMAX )
+      CALL DLABAD( SAFMIN, SAFMAX )
       SMLNUM = SQRT( SAFMIN ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_DLANGE( 'M', N, N, A, LDA, WORK )
+      ANRM = DLANGE( 'M', N, N, A, LDA, WORK )
       ILASCL = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ANRMTO = SMLNUM
@@ -456,11 +450,11 @@
          ILASCL = .TRUE.
       END IF
       IF( ILASCL )
-     $   CALL AB_DLASCL( 'G', 0, 0, ANRM, ANRMTO, N, N, A, LDA, IERR )
+     $   CALL DLASCL( 'G', 0, 0, ANRM, ANRMTO, N, N, A, LDA, IERR )
 *
 *     Scale B if max element outside range [SMLNUM,BIGNUM]
 *
-      BNRM = AB_DLANGE( 'M', N, N, B, LDB, WORK )
+      BNRM = DLANGE( 'M', N, N, B, LDB, WORK )
       ILBSCL = .FALSE.
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
          BNRMTO = SMLNUM
@@ -470,7 +464,7 @@
          ILBSCL = .TRUE.
       END IF
       IF( ILBSCL )
-     $   CALL AB_DLASCL( 'G', 0, 0, BNRM, BNRMTO, N, N, B, LDB, IERR )
+     $   CALL DLASCL( 'G', 0, 0, BNRM, BNRMTO, N, N, B, LDB, IERR )
 *
 *     Permute the matrix to make it more nearly triangular
 *     (Workspace: need 6*N + 2*N space for storing balancing factors)
@@ -478,7 +472,7 @@
       ILEFT = 1
       IRIGHT = N + 1
       IWRK = IRIGHT + N
-      CALL AB_DGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, WORK( ILEFT ),
+      CALL DGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, WORK( ILEFT ),
      $             WORK( IRIGHT ), WORK( IWRK ), IERR )
 *
 *     Reduce B to triangular form (QR decomposition of B)
@@ -488,13 +482,13 @@
       ICOLS = N + 1 - ILO
       ITAU = IWRK
       IWRK = ITAU + IROWS
-      CALL AB_DGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
+      CALL DGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
      $             WORK( IWRK ), LWORK+1-IWRK, IERR )
 *
 *     Apply the orthogonal transformation to matrix A
 *     (Workspace: need N, prefer N*NB)
 *
-      CALL AB_DORMQR( 'L', 'T', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
+      CALL DORMQR( 'L', 'T', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
      $             WORK( ITAU ), A( ILO, ILO ), LDA, WORK( IWRK ),
      $             LWORK+1-IWRK, IERR )
 *
@@ -502,31 +496,31 @@
 *     (Workspace: need N, prefer N*NB)
 *
       IF( ILVSL ) THEN
-         CALL AB_DLASET( 'Full', N, N, ZERO, ONE, VSL, LDVSL )
+         CALL DLASET( 'Full', N, N, ZERO, ONE, VSL, LDVSL )
          IF( IROWS.GT.1 ) THEN
-            CALL AB_DLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
+            CALL DLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
      $                   VSL( ILO+1, ILO ), LDVSL )
          END IF
-         CALL AB_DORGQR( IROWS, IROWS, IROWS, VSL( ILO, ILO ), LDVSL,
+         CALL DORGQR( IROWS, IROWS, IROWS, VSL( ILO, ILO ), LDVSL,
      $                WORK( ITAU ), WORK( IWRK ), LWORK+1-IWRK, IERR )
       END IF
 *
 *     Initialize VSR
 *
       IF( ILVSR )
-     $   CALL AB_DLASET( 'Full', N, N, ZERO, ONE, VSR, LDVSR )
+     $   CALL DLASET( 'Full', N, N, ZERO, ONE, VSR, LDVSR )
 *
 *     Reduce to generalized Hessenberg form
 *     (Workspace: none needed)
 *
-      CALL AB_DGGHRD( JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB, VSL,
+      CALL DGGHRD( JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB, VSL,
      $             LDVSL, VSR, LDVSR, IERR )
 *
 *     Perform QZ algorithm, computing Schur vectors if desired
 *     (Workspace: need N)
 *
       IWRK = ITAU
-      CALL AB_DHGEQZ( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL DHGEQZ( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR,
      $             WORK( IWRK ), LWORK+1-IWRK, IERR )
       IF( IERR.NE.0 ) THEN
@@ -549,14 +543,13 @@
 *        Undo scaling on eigenvalues before SELCTGing
 *
          IF( ILASCL ) THEN
-            CALL AB_DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
+            CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
      $                   IERR )
-            CALL AB_DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
+            CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
      $                   IERR )
          END IF
          IF( ILBSCL )
-     $      CALL AB_DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR
-     $ )
+     $      CALL DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
 *
 *        Select eigenvalues
 *
@@ -564,8 +557,7 @@
             BWORK( I ) = SELCTG( ALPHAR( I ), ALPHAI( I ), BETA( I ) )
    10    CONTINUE
 *
-         CALL AB_DTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB, ALPH
-     $AR,
+         CALL DTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB, ALPHAR,
      $                ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR, SDIM, PVSL,
      $                PVSR, DIF, WORK( IWRK ), LWORK-IWRK+1, IDUM, 1,
      $                IERR )
@@ -578,11 +570,11 @@
 *     (Workspace: none needed)
 *
       IF( ILVSL )
-     $   CALL AB_DGGBAK( 'P', 'L', N, ILO, IHI, WORK( ILEFT ),
+     $   CALL DGGBAK( 'P', 'L', N, ILO, IHI, WORK( ILEFT ),
      $                WORK( IRIGHT ), N, VSL, LDVSL, IERR )
 *
       IF( ILVSR )
-     $   CALL AB_DGGBAK( 'P', 'R', N, ILO, IHI, WORK( ILEFT ),
+     $   CALL DGGBAK( 'P', 'R', N, ILO, IHI, WORK( ILEFT ),
      $                WORK( IRIGHT ), N, VSR, LDVSR, IERR )
 *
 *     Check if unscaling would cause over/underflow, if so, rescale
@@ -628,16 +620,14 @@
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL AB_DLASCL( 'H', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
-         CALL AB_DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR 
-     $)
-         CALL AB_DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR 
-     $)
+         CALL DLASCL( 'H', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL AB_DLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB, IERR )
-         CALL AB_DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+         CALL DLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB, IERR )
+         CALL DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
       END IF
 *
       IF( WANTST ) THEN
@@ -687,6 +677,6 @@
 *
       RETURN
 *
-*     End of AB_DGGES
+*     End of DGGES
 *
       END

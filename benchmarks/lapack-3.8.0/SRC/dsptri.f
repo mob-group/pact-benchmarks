@@ -1,4 +1,4 @@
-*> \brief \b AB_DSPTRI
+*> \brief \b DSPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSPTRI.f">
+*> Download DSPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsptri.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsptri.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsptri.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+*       SUBROUTINE DSPTRI( UPLO, N, AP, IPIV, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DSPTRI computes the inverse of a real symmetric indefinite matrix
+*> DSPTRI computes the inverse of a real symmetric indefinite matrix
 *> A in packed storage using the factorization A = U*D*U**T or
-*> A = L*D*L**T computed by AB_DSPTRF.
+*> A = L*D*L**T computed by DSPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          AP is DOUBLE PRECISION array, dimension (N*(N+1)/2)
 *>          On entry, the block diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_DSPTRF,
+*>          used to obtain the factor U or L as computed by DSPTRF,
 *>          stored as a packed triangular matrix.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
@@ -77,7 +77,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_DSPTRF.
+*>          as determined by DSPTRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -107,7 +107,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DSPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+      SUBROUTINE DSPTRI( UPLO, N, AP, IPIV, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,12 +135,12 @@
       DOUBLE PRECISION   AK, AKKP1, AKP1, D, T, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DDOT
-      EXTERNAL           AB_LSAME, AB_DDOT
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DDOT
+      EXTERNAL           LSAME, DDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DSPMV, AB_DSWAP, AB_XERBLA
+      EXTERNAL           DCOPY, DSPMV, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -150,14 +150,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSPTRI', -INFO )
+         CALL XERBLA( 'DSPTRI', -INFO )
          RETURN
       END IF
 *
@@ -219,12 +219,11 @@
 *           Compute column K of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_DCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL AB_DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC
-     $ ),
+               CALL DCOPY( K-1, AP( KC ), 1, WORK, 1 )
+               CALL DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        AB_DDOT( K-1, WORK, 1, AP( KC ), 1 )
+     $                        DDOT( K-1, WORK, 1, AP( KC ), 1 )
             END IF
             KSTEP = 1
          ELSE
@@ -245,21 +244,19 @@
 *           Compute columns K and K+1 of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_DCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL AB_DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC
-     $ ),
+               CALL DCOPY( K-1, AP( KC ), 1, WORK, 1 )
+               CALL DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO, AP( KC ),
      $                     1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        AB_DDOT( K-1, WORK, 1, AP( KC ), 1 )
+     $                        DDOT( K-1, WORK, 1, AP( KC ), 1 )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            AB_DDOT( K-1, AP( KC ), 1, AP( KCNEXT 
-     $),
+     $                            DDOT( K-1, AP( KC ), 1, AP( KCNEXT ),
      $                            1 )
-               CALL AB_DCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
-               CALL AB_DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
+               CALL DCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
+               CALL DSPMV( UPLO, K-1, -ONE, AP, WORK, 1, ZERO,
      $                     AP( KCNEXT ), 1 )
                AP( KCNEXT+K ) = AP( KCNEXT+K ) -
-     $                          AB_DDOT( K-1, WORK, 1, AP( KCNEXT ), 1 )
+     $                          DDOT( K-1, WORK, 1, AP( KCNEXT ), 1 )
             END IF
             KSTEP = 2
             KCNEXT = KCNEXT + K + 1
@@ -272,7 +269,7 @@
 *           submatrix A(1:k+1,1:k+1)
 *
             KPC = ( KP-1 )*KP / 2 + 1
-            CALL AB_DSWAP( KP-1, AP( KC ), 1, AP( KPC ), 1 )
+            CALL DSWAP( KP-1, AP( KC ), 1, AP( KPC ), 1 )
             KX = KPC + KP - 1
             DO 40 J = KP + 1, K - 1
                KX = KX + J - 1
@@ -324,11 +321,10 @@
 *           Compute column K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL AB_DCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL AB_DSPMV( UPLO, N-K, -ONE, AP( KC+N-K+1 ), WORK, 1,
+               CALL DCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
+               CALL DSPMV( UPLO, N-K, -ONE, AP( KC+N-K+1 ), WORK, 1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - AB_DDOT( N-K, WORK, 1, AP( KC+1 ), 
-     $1 )
+               AP( KC ) = AP( KC ) - DDOT( N-K, WORK, 1, AP( KC+1 ), 1 )
             END IF
             KSTEP = 1
          ELSE
@@ -349,21 +345,18 @@
 *           Compute columns K-1 and K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL AB_DCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL AB_DSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
-     $ 1,
+               CALL DCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
+               CALL DSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - AB_DDOT( N-K, WORK, 1, AP( KC+1 ), 
-     $1 )
+               AP( KC ) = AP( KC ) - DDOT( N-K, WORK, 1, AP( KC+1 ), 1 )
                AP( KCNEXT+1 ) = AP( KCNEXT+1 ) -
-     $                          AB_DDOT( N-K, AP( KC+1 ), 1,
+     $                          DDOT( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
-               CALL AB_DCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL AB_DSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK,
-     $ 1,
+               CALL DCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
+               CALL DSPMV( UPLO, N-K, -ONE, AP( KC+( N-K+1 ) ), WORK, 1,
      $                     ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
-     $                        AB_DDOT( N-K, WORK, 1, AP( KCNEXT+2 ), 1 )
+     $                        DDOT( N-K, WORK, 1, AP( KCNEXT+2 ), 1 )
             END IF
             KSTEP = 2
             KCNEXT = KCNEXT - ( N-K+3 )
@@ -377,7 +370,7 @@
 *
             KPC = NPP - ( N-KP+1 )*( N-KP+2 ) / 2 + 1
             IF( KP.LT.N )
-     $         CALL AB_DSWAP( N-KP, AP( KC+KP-K+1 ), 1, AP( KPC+1 ), 1 )
+     $         CALL DSWAP( N-KP, AP( KC+KP-K+1 ), 1, AP( KPC+1 ), 1 )
             KX = KC + KP - K
             DO 70 J = K + 1, KP - 1
                KX = KX + N - J + 1
@@ -403,6 +396,6 @@
 *
       RETURN
 *
-*     End of AB_DSPTRI
+*     End of DSPTRI
 *
       END

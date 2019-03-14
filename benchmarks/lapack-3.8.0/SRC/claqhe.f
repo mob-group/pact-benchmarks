@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAQHE scales a Hermitian matrix.
+*> \brief \b CLAQHE scales a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAQHE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQHE.f">
+*> Download CLAQHE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqhe.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQHE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqhe.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQHE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqhe.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAQHE equilibrates a Hermitian matrix A using the scaling factors
+*> CLAQHE equilibrates a Hermitian matrix A using the scaling factors
 *> in the vector S.
 *> \endverbatim
 *
@@ -132,7 +132,7 @@
 *> \ingroup complexHEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+      SUBROUTINE CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -160,9 +160,9 @@
       REAL               CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
+      LOGICAL            LSAME
       REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -190,7 +190,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored.
 *
@@ -218,6 +218,6 @@
 *
       RETURN
 *
-*     End of AB_CLAQHE
+*     End of CLAQHE
 *
       END

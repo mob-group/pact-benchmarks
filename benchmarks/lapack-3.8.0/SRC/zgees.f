@@ -1,4 +1,4 @@
-*> \brief <b> AB_ZGEES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
+*> \brief <b> ZGEES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGEES + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGEES.f">
+*> Download ZGEES + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgees.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGEES.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgees.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGEES.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgees.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGEES( JOBVS, SORT, SELECT, N, A, LDA, SDIM, W, VS,
+*       SUBROUTINE ZGEES( JOBVS, SORT, SELECT, N, A, LDA, SDIM, W, VS,
 *                         LDVS, WORK, LWORK, RWORK, BWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGEES computes for an N-by-N complex nonsymmetric matrix A, the
+*> ZGEES computes for an N-by-N complex nonsymmetric matrix A, the
 *> eigenvalues, the Schur form T, and, optionally, the matrix of Schur
 *> vectors Z.  This gives the Schur factorization A = Z*T*(Z**H).
 *>
@@ -146,7 +146,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -194,7 +194,7 @@
 *> \ingroup complex16GEeigen
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGEES( JOBVS, SORT, SELECT, N, A, LDA, SDIM, W, VS,
+      SUBROUTINE ZGEES( JOBVS, SORT, SELECT, N, A, LDA, SDIM, W, VS,
      $                  LDVS, WORK, LWORK, RWORK, BWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -226,22 +226,20 @@
       LOGICAL            LQUERY, SCALEA, WANTST, WANTVS
       INTEGER            HSWORK, I, IBAL, ICOND, IERR, IEVAL, IHI, ILO,
      $                   ITAU, IWRK, MAXWRK, MINWRK
-      DOUBLE PRECISION   ANRM, BIGNUM, AB_CSCALE, EPS, S, SEP, SMLNUM
+      DOUBLE PRECISION   ANRM, BIGNUM, CSCALE, EPS, S, SEP, SMLNUM
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_XERBLA, AB_ZCOPY, AB_ZGEBAK, AB_Z
-     $GEBAL, AB_ZGEHRD,
-     $                   AB_ZHSEQR, AB_ZLACPY, AB_ZLASCL, AB_ZTRSEN, AB_
-     $ZUNGHR
+      EXTERNAL           DLABAD, XERBLA, ZCOPY, ZGEBAK, ZGEBAL, ZGEHRD,
+     $                   ZHSEQR, ZLACPY, ZLASCL, ZTRSEN, ZUNGHR
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_ZLANGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -252,12 +250,11 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      WANTVS = AB_LSAME( JOBVS, 'V' )
-      WANTST = AB_LSAME( SORT, 'S' )
-      IF( ( .NOT.WANTVS ) .AND. ( .NOT.AB_LSAME( JOBVS, 'N' ) ) ) THEN
+      WANTVS = LSAME( JOBVS, 'V' )
+      WANTST = LSAME( SORT, 'S' )
+      IF( ( .NOT.WANTVS ) .AND. ( .NOT.LSAME( JOBVS, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.AB_LSAME( SORT, 'N' ) ) ) TH
-     $EN
+      ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -273,8 +270,8 @@
 *       as well as the preferred amount for good performance.
 *       CWorkspace refers to complex workspace, and RWorkspace to real
 *       workspace. NB refers to the optimal block size for the
-*       immediately following subroutine, as returned by AB_ILAENV.
-*       HSWORK refers to the workspace preferred by AB_ZHSEQR, as
+*       immediately following subroutine, as returned by ILAENV.
+*       HSWORK refers to the workspace preferred by ZHSEQR, as
 *       calculated below. HSWORK is computed assuming ILO=1 and IHI=N,
 *       the worst case.)
 *
@@ -283,18 +280,17 @@
             MINWRK = 1
             MAXWRK = 1
          ELSE
-            MAXWRK = N + N*AB_ILAENV( 1, 'AB_ZGEHRD', ' ', N, 1, N, 0 )
+            MAXWRK = N + N*ILAENV( 1, 'ZGEHRD', ' ', N, 1, N, 0 )
             MINWRK = 2*N
 *
-            CALL AB_ZHSEQR( 'S', JOBVS, N, 1, N, A, LDA, W, VS, LDVS,
+            CALL ZHSEQR( 'S', JOBVS, N, 1, N, A, LDA, W, VS, LDVS,
      $             WORK, -1, IEVAL )
             HSWORK = WORK( 1 )
 *
             IF( .NOT.WANTVS ) THEN
                MAXWRK = MAX( MAXWRK, HSWORK )
             ELSE
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*AB_ILAENV( 1, 'AB_ZUN
-     $GHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'ZUNGHR',
      $                       ' ', N, 1, N, -1 ) )
                MAXWRK = MAX( MAXWRK, HSWORK )
             END IF
@@ -307,7 +303,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGEES ', -INFO )
+         CALL XERBLA( 'ZGEES ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -325,31 +321,30 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_ZLANGE( 'M', N, N, A, LDA, DUM )
+      ANRM = ZLANGE( 'M', N, N, A, LDA, DUM )
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.
-         AB_CSCALE = SMLNUM
+         CSCALE = SMLNUM
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
-         AB_CSCALE = BIGNUM
+         CSCALE = BIGNUM
       END IF
       IF( SCALEA )
-     $   CALL AB_ZLASCL( 'G', 0, 0, ANRM, AB_CSCALE, N, N, A, LDA, IERR 
-     $)
+     $   CALL ZLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
 *
 *     Permute the matrix to make it more nearly triangular
 *     (CWorkspace: none)
 *     (RWorkspace: need N)
 *
       IBAL = 1
-      CALL AB_ZGEBAL( 'P', N, A, LDA, ILO, IHI, RWORK( IBAL ), IERR )
+      CALL ZGEBAL( 'P', N, A, LDA, ILO, IHI, RWORK( IBAL ), IERR )
 *
 *     Reduce to upper Hessenberg form
 *     (CWorkspace: need 2*N, prefer N+N*NB)
@@ -357,21 +352,20 @@
 *
       ITAU = 1
       IWRK = N + ITAU
-      CALL AB_ZGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
+      CALL ZGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
      $             LWORK-IWRK+1, IERR )
 *
       IF( WANTVS ) THEN
 *
 *        Copy Householder vectors to VS
 *
-         CALL AB_ZLACPY( 'L', N, N, A, LDA, VS, LDVS )
+         CALL ZLACPY( 'L', N, N, A, LDA, VS, LDVS )
 *
 *        Generate unitary matrix in VS
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_ZUNGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ), WORK( IWRK
-     $ ),
+         CALL ZUNGHR( N, ILO, IHI, VS, LDVS, WORK( ITAU ), WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
       END IF
 *
@@ -382,7 +376,7 @@
 *     (RWorkspace: none)
 *
       IWRK = ITAU
-      CALL AB_ZHSEQR( 'S', JOBVS, N, ILO, IHI, A, LDA, W, VS, LDVS,
+      CALL ZHSEQR( 'S', JOBVS, N, ILO, IHI, A, LDA, W, VS, LDVS,
      $             WORK( IWRK ), LWORK-IWRK+1, IEVAL )
       IF( IEVAL.GT.0 )
      $   INFO = IEVAL
@@ -391,8 +385,7 @@
 *
       IF( WANTST .AND. INFO.EQ.0 ) THEN
          IF( SCALEA )
-     $      CALL AB_ZLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N, 1, W, N, IERR
-     $ )
+     $      CALL ZLASCL( 'G', 0, 0, CSCALE, ANRM, N, 1, W, N, IERR )
          DO 10 I = 1, N
             BWORK( I ) = SELECT( W( I ) )
    10    CONTINUE
@@ -401,8 +394,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: none)
 *
-         CALL AB_ZTRSEN( 'N', JOBVS, BWORK, N, A, LDA, VS, LDVS, W, SDIM
-     $,
+         CALL ZTRSEN( 'N', JOBVS, BWORK, N, A, LDA, VS, LDVS, W, SDIM,
      $                S, SEP, WORK( IWRK ), LWORK-IWRK+1, ICOND )
       END IF
 *
@@ -412,8 +404,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL AB_ZGEBAK( 'P', 'R', N, ILO, IHI, RWORK( IBAL ), N, VS, LD
-     $VS,
+         CALL ZGEBAK( 'P', 'R', N, ILO, IHI, RWORK( IBAL ), N, VS, LDVS,
      $                IERR )
       END IF
 *
@@ -421,14 +412,13 @@
 *
 *        Undo scaling for the Schur form of A
 *
-         CALL AB_ZLASCL( 'U', 0, 0, AB_CSCALE, ANRM, N, N, A, LDA, IERR 
-     $)
-         CALL AB_ZCOPY( N, A, LDA+1, W, 1 )
+         CALL ZLASCL( 'U', 0, 0, CSCALE, ANRM, N, N, A, LDA, IERR )
+         CALL ZCOPY( N, A, LDA+1, W, 1 )
       END IF
 *
       WORK( 1 ) = MAXWRK
       RETURN
 *
-*     End of AB_ZGEES
+*     End of ZGEES
 *
       END

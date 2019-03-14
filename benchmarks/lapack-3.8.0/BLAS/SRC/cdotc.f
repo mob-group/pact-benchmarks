@@ -1,4 +1,4 @@
-*> \brief \b AB_CDOTC
+*> \brief \b CDOTC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       COMPLEX FUNCTION AB_CDOTC(N,CX,INCX,CY,INCY)
+*       COMPLEX FUNCTION CDOTC(N,CX,INCX,CY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,8 +23,8 @@
 *>
 *> \verbatim
 *>
-*> AB_CDOTC forms the dot product of two complex vectors
-*>      AB_CDOTC = X^H * Y
+*> CDOTC forms the dot product of two complex vectors
+*>      CDOTC = X^H * Y
 *>
 *> \endverbatim
 *
@@ -81,7 +81,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      COMPLEX FUNCTION AB_CDOTC(N,CX,INCX,CY,INCY)
+      COMPLEX FUNCTION CDOTC(N,CX,INCX,CY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -105,7 +105,7 @@
       INTRINSIC CONJG
 *     ..
       CTEMP = (0.0,0.0)
-      AB_CDOTC = (0.0,0.0)
+      CDOTC = (0.0,0.0)
       IF (N.LE.0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
@@ -129,6 +129,6 @@
             IY = IY + INCY
          END DO
       END IF
-      AB_CDOTC = CTEMP
+      CDOTC = CTEMP
       RETURN
       END

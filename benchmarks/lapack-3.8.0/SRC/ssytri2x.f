@@ -1,4 +1,4 @@
-*> \brief \b AB_SSYTRI2X
+*> \brief \b SSYTRI2X
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSYTRI2X + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYTRI2x.f">
+*> Download SSYTRI2X + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytri2x.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYTRI2x.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytri2x.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYTRI2x.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytri2x.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
+*       SUBROUTINE SSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SSYTRI2X computes the inverse of a real symmetric indefinite matrix
+*> SSYTRI2X computes the inverse of a real symmetric indefinite matrix
 *> A using the factorization A = U*D*U**T or A = L*D*L**T computed by
-*> AB_SSYTRF.
+*> SSYTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the NNB diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_SSYTRF.
+*>          used to obtain the factor U or L as computed by SSYTRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the NNB structure of D
-*>          as determined by AB_SSYTRF.
+*>          as determined by SSYTRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -118,7 +118,7 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
+      SUBROUTINE SSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,12 +151,12 @@
       REAL               U11_I_J, U11_IP1_J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSYCONV, AB_XERBLA, AB_STRTRI
-      EXTERNAL           AB_SGEMM, AB_STRMM, AB_SSYSWAPR
+      EXTERNAL           SSYCONV, XERBLA, STRTRI
+      EXTERNAL           SGEMM, STRMM, SSYSWAPR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -166,8 +166,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -179,7 +179,7 @@
 *
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSYTRI2X', -INFO )
+         CALL XERBLA( 'SSYTRI2X', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 )
@@ -188,7 +188,7 @@
 *     Convert A
 *     Workspace got Non-diag elements of D
 *
-      CALL AB_SSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
+      CALL SSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
 *
 *     Check that the diagonal matrix D is nonsingular.
 *
@@ -225,7 +225,7 @@
 *
 *        invA = P * inv(U**T)*inv(D)*inv(U)*P**T.
 *
-        CALL AB_STRTRI( UPLO, 'U', N, A, LDA, INFO )
+        CALL STRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *       inv(D) and inv(D)*inv(U)
 *
@@ -338,7 +338,7 @@
 *
 *       U11**T*invD1*U11->U11
 *
-        CALL AB_STRMM('L','U','T','U',NNB, NNB,
+        CALL STRMM('L','U','T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
 *
          DO I=1,NNB
@@ -349,7 +349,7 @@
 *
 *          U01**T*invD*U01->A(CUT+I,CUT+J)
 *
-         CALL AB_SGEMM('T','N',NNB,NNB,CUT,ONE,A(1,CUT+1),LDA,
+         CALL SGEMM('T','N',NNB,NNB,CUT,ONE,A(1,CUT+1),LDA,
      $              WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
 *
 *        U11 =  U11**T*invD1*U11 + U01**T*invD*U01
@@ -362,7 +362,7 @@
 *
 *        U01 =  U00**T*invD0*U01
 *
-         CALL AB_STRMM('L',UPLO,'T','U',CUT, NNB,
+         CALL STRMM('L',UPLO,'T','U',CUT, NNB,
      $             ONE,A,LDA,WORK,N+NB+1)
 
 *
@@ -384,17 +384,15 @@
             DO WHILE ( I .LE. N )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL AB_SSYSWAPR( UPLO, N, A, LDA, I ,IP
-     $ )
-                 IF (I .GT. IP) CALL AB_SSYSWAPR( UPLO, N, A, LDA, IP ,I
-     $ )
+                 IF (I .LT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, I ,IP )
+                 IF (I .GT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, IP ,I )
                ELSE
                  IP=-IPIV(I)
                  I=I+1
                  IF ( (I-1) .LT. IP)
-     $                  CALL AB_SSYSWAPR( UPLO, N, A, LDA, I-1 ,IP )
+     $                  CALL SSYSWAPR( UPLO, N, A, LDA, I-1 ,IP )
                  IF ( (I-1) .GT. IP)
-     $                  CALL AB_SSYSWAPR( UPLO, N, A, LDA, IP ,I-1 )
+     $                  CALL SSYSWAPR( UPLO, N, A, LDA, IP ,I-1 )
               ENDIF
                I=I+1
             END DO
@@ -404,7 +402,7 @@
 *
 *        invA = P * inv(U**T)*inv(D)*inv(U)*P**T.
 *
-         CALL AB_STRTRI( UPLO, 'U', N, A, LDA, INFO )
+         CALL STRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *       inv(D) and inv(D)*inv(U)
 *
@@ -511,7 +509,7 @@
 *
 *       L11**T*invD1*L11->L11
 *
-        CALL AB_STRMM('L',UPLO,'T','U',NNB, NNB,
+        CALL STRMM('L',UPLO,'T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
 
 *
@@ -525,7 +523,7 @@
 *
 *          L21**T*invD2*L21->A(CUT+I,CUT+J)
 *
-         CALL AB_SGEMM('T','N',NNB,NNB,N-NNB-CUT,ONE,A(CUT+NNB+1,CUT+1)
+         CALL SGEMM('T','N',NNB,NNB,N-NNB-CUT,ONE,A(CUT+NNB+1,CUT+1)
      $             ,LDA,WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
 
 *
@@ -539,7 +537,7 @@
 *
 *        L01 =  L22**T*invD2*L21
 *
-         CALL AB_STRMM('L',UPLO,'T','U', N-NNB-CUT, NNB,
+         CALL STRMM('L',UPLO,'T','U', N-NNB-CUT, NNB,
      $             ONE,A(CUT+NNB+1,CUT+NNB+1),LDA,WORK,N+NB+1)
 *
 *      Update L21
@@ -572,16 +570,12 @@
             DO WHILE ( I .GE. 1 )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL AB_SSYSWAPR( UPLO, N, A, LDA, I ,IP
-     $  )
-                 IF (I .GT. IP) CALL AB_SSYSWAPR( UPLO, N, A, LDA, IP ,I
-     $ )
+                 IF (I .LT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, I ,IP  )
+                 IF (I .GT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, IP ,I )
                ELSE
                  IP=-IPIV(I)
-                 IF ( I .LT. IP) CALL AB_SSYSWAPR( UPLO, N, A, LDA, I ,I
-     $P )
-                 IF ( I .GT. IP) CALL AB_SSYSWAPR( UPLO, N, A, LDA, IP ,
-     $I )
+                 IF ( I .LT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, I ,IP )
+                 IF ( I .GT. IP) CALL SSYSWAPR( UPLO, N, A, LDA, IP ,I )
                  I=I-1
                ENDIF
                I=I-1
@@ -590,7 +584,7 @@
 *
       RETURN
 *
-*     End of AB_SSYTRI2X
+*     End of SSYTRI2X
 *
       END
 

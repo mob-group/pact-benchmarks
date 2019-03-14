@@ -1,4 +1,4 @@
-*> \brief \b AB_CSYR performs the symmetric rank-1 update of a complex symmetric matrix.
+*> \brief \b CSYR performs the symmetric rank-1 update of a complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CSYR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSYR.f">
+*> Download CSYR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSYR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSYR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYR( UPLO, N, ALPHA, X, INCX, A, LDA )
+*       SUBROUTINE CSYR( UPLO, N, ALPHA, X, INCX, A, LDA )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSYR   performs the symmetric rank 1 operation
+*> CSYR   performs the symmetric rank 1 operation
 *>
 *>    A := alpha*x*x**H + A,
 *>
@@ -133,7 +133,7 @@
 *> \ingroup complexSYauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CSYR( UPLO, N, ALPHA, X, INCX, A, LDA )
+      SUBROUTINE CSYR( UPLO, N, ALPHA, X, INCX, A, LDA )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -160,11 +160,11 @@
       COMPLEX            TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -174,8 +174,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = 1
       ELSE IF( N.LT.0 ) THEN
          INFO = 2
@@ -185,7 +184,7 @@
          INFO = 7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CSYR  ', INFO )
+         CALL XERBLA( 'CSYR  ', INFO )
          RETURN
       END IF
 *
@@ -206,7 +205,7 @@
 *     accessed sequentially with one pass through the triangular part
 *     of A.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Form  A  when A is stored in upper triangle.
 *
@@ -264,6 +263,6 @@
 *
       RETURN
 *
-*     End of AB_CSYR
+*     End of CSYR
 *
       END

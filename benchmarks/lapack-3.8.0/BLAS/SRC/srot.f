@@ -1,4 +1,4 @@
-*> \brief \b AB_SROT
+*> \brief \b SROT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SROT(N,SX,INCX,SY,INCY,C,S)
+*       SUBROUTINE SROT(N,SX,INCX,SY,INCY,C,S)
 *
 *       .. Scalar Arguments ..
 *       REAL C,S
@@ -90,7 +90,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SROT(N,SX,INCX,SY,INCY,C,S)
+      SUBROUTINE SROT(N,SX,INCX,SY,INCY,C,S)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

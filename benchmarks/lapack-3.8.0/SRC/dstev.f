@@ -1,4 +1,4 @@
-*> \brief <b> AB_DSTEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> DSTEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSTEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSTEV.f">
+*> Download DSTEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstev.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSTEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstev.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSTEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstev.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
+*       SUBROUTINE DSTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBZ
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSTEV computes all eigenvalues and, optionally, eigenvectors of a
+*> DSTEV computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric tridiagonal matrix A.
 *> \endverbatim
 *
@@ -114,7 +114,7 @@
 *> \ingroup doubleOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_DSTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
+      SUBROUTINE DSTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,12 +142,12 @@
      $                   TNRM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANST
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANST
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANST
+      EXTERNAL           LSAME, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSCAL, AB_DSTEQR, AB_DSTERF, AB_XERBLA
+      EXTERNAL           DSCAL, DSTEQR, DSTERF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -156,10 +156,10 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
+      WANTZ = LSAME( JOBZ, 'V' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -168,7 +168,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSTEV ', -INFO )
+         CALL XERBLA( 'DSTEV ', -INFO )
          RETURN
       END IF
 *
@@ -195,7 +195,7 @@
 *     Scale matrix to allowable range, if necessary.
 *
       ISCALE = 0
-      TNRM = AB_DLANST( 'M', N, D, E )
+      TNRM = DLANST( 'M', N, D, E )
       IF( TNRM.GT.ZERO .AND. TNRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / TNRM
@@ -204,17 +204,17 @@
          SIGMA = RMAX / TNRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL AB_DSCAL( N, SIGMA, D, 1 )
-         CALL AB_DSCAL( N-1, SIGMA, E( 1 ), 1 )
+         CALL DSCAL( N, SIGMA, D, 1 )
+         CALL DSCAL( N-1, SIGMA, E( 1 ), 1 )
       END IF
 *
-*     For eigenvalues only, call AB_DSTERF.  For eigenvalues and
-*     eigenvectors, call AB_DSTEQR.
+*     For eigenvalues only, call DSTERF.  For eigenvalues and
+*     eigenvectors, call DSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_DSTERF( N, D, E, INFO )
+         CALL DSTERF( N, D, E, INFO )
       ELSE
-         CALL AB_DSTEQR( 'I', N, D, E, Z, LDZ, WORK, INFO )
+         CALL DSTEQR( 'I', N, D, E, Z, LDZ, WORK, INFO )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
@@ -225,11 +225,11 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_DSCAL( IMAX, ONE / SIGMA, D, 1 )
+         CALL DSCAL( IMAX, ONE / SIGMA, D, 1 )
       END IF
 *
       RETURN
 *
-*     End of AB_DSTEV
+*     End of DSTEV
 *
       END
