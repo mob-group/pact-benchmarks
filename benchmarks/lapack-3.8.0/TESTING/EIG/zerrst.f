@@ -215,45 +215,45 @@
          CALL CHKXER( 'ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        ZHETRD_HB2ST
+*        AB_zhetrd_hb2st
 *
-         SRNAMT = 'ZHETRD_HB2ST'
+         SRNAMT = 'AB_zhetrd_hb2st'
          INFOT = 1
-         CALL ZHETRD_HB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL ZHETRD_HB2ST( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL ZHETRD_HB2ST( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL ZHETRD_HB2ST( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
 *        ZUNGTR
@@ -974,45 +974,45 @@
          CALL CHKXER( 'ZHBTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        ZHETRD_HB2ST
+*        AB_zhetrd_hb2st
 *
-         SRNAMT = 'ZHETRD_HB2ST'
+         SRNAMT = 'AB_zhetrd_hb2st'
          INFOT = 1
-         CALL ZHETRD_HB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL ZHETRD_HB2ST( 'N', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'N', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL ZHETRD_HB2ST( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL ZHETRD_HB2ST( 'N', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'N', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL ZHETRD_HB2ST( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL ZHETRD_HB2ST( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL ZHETRD_HB2ST( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL ZHETRD_HB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL ZHETRD_HB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_zhetrd_hb2st( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zhetrd_hb2st', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
 *        ZHBEVD

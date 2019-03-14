@@ -93,7 +93,7 @@
 *>     Tests CGGSVD, CGGSVP, CTGSJA, CLAGS2, CLAPLL, and CLAPMT
 *>
 *> CSD (CS decomposition):
-*>     Tests CUNCSD
+*>     Tests AB_cuncsd
 *>
 *> LSE (Constrained Linear Least Squares):
 *>     Tests CGGLSE

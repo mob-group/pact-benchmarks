@@ -51,7 +51,7 @@
 *>
 *> X11 is P-by-Q. Q must be no larger than P, M-P, or M-Q. (If this is
 *> not the case, then X must be transposed and/or permuted. This can be
-*> done in constant time using the TRANS and SIGNS options. See CUNCSD
+*> done in constant time using the TRANS and SIGNS options. See AB_cuncsd
 *> for details.)
 *>
 *> The unitary matrices P1, P2, Q1, and Q2 are P-by-P, (M-P)-by-
@@ -269,10 +269,10 @@
 *>  PHI(Q-1). B11 and B21 are upper bidiagonal, while B21 and B22 are
 *>  lower bidiagonal. Every entry in each bidiagonal band is a product
 *>  of a sine or cosine of a THETA with a sine or cosine of a PHI. See
-*>  [1] or CUNCSD for details.
+*>  [1] or AB_cuncsd for details.
 *>
 *>  P1, P2, Q1, and Q2 are represented as products of elementary
-*>  reflectors. See CUNCSD for details on generating P1, P2, Q1, and Q2
+*>  reflectors. See AB_cuncsd for details on generating P1, P2, Q1, and Q2
 *>  using AB_CUNGQR and AB_CUNGLQ.
 *> \endverbatim
 *

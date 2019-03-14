@@ -184,7 +184,7 @@
 *>  The upper-bidiagonal blocks B11, B21 are represented implicitly by
 *>  angles THETA(1), ..., THETA(Q) and PHI(1), ..., PHI(Q-1). Every entry
 *>  in each bidiagonal band is a product of a sine or cosine of a THETA
-*>  with a sine or cosine of a PHI. See [1] or ZUNCSD for details.
+*>  with a sine or cosine of a PHI. See [1] or AB_zuncsd for details.
 *>
 *>  P1, P2, and Q1 are represented as products of elementary reflectors.
 *>  See AB_ZUNCSD2BY1 for details on generating P1, P2, and Q1 using AB_ZUNGQR

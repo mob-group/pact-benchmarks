@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> SCSDTS tests SORCSD, which, given an M-by-M partitioned orthogonal
+*> SCSDTS tests AB_sorcsd, which, given an M-by-M partitioned orthogonal
 *> matrix X,
 *>              Q  M-Q
 *>       X = [ X11 X12 ] P   ,
@@ -48,7 +48,7 @@
 *>                             [  0  S  0 |  0  C  0 ]
 *>                             [  0  0  I |  0  0  0 ]
 *>
-*> and also SORCSD2BY1, which, given
+*> and also AB_sorcsd2BY1, which, given
 *>          Q
 *>       [ X11 ] P   ,
 *>       [ X21 ] M-P
@@ -94,8 +94,8 @@
 *> \param[out] XF
 *> \verbatim
 *>          XF is REAL array, dimension (LDX,M)
-*>          Details of the CSD of X, as returned by SORCSD;
-*>          see SORCSD for further details.
+*>          Details of the CSD of X, as returned by AB_sorcsd;
+*>          see AB_sorcsd for further details.
 *> \endverbatim
 *>
 *> \param[in] LDX
@@ -159,7 +159,7 @@
 *> \verbatim
 *>          THETA is REAL array, dimension MIN(P,M-P,Q,M-Q)
 *>          The CS values of X; the essentially diagonal matrices C and
-*>          S are constructed from THETA; see subroutine SORCSD for
+*>          S are constructed from THETA; see subroutine AB_sorcsd for
 *>          details.
 *> \endverbatim
 *>
@@ -263,7 +263,8 @@
       EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SLASET, SORCSD, SORCSD2BY1,
+      EXTERNAL           SGEMM, SLACPY, SLASET, AB_sorcsd, AB_sorcsd2BY1
+     $,
      $                   SSYRK
 *     ..
 *     .. Intrinsic Functions ..
@@ -293,7 +294,8 @@
 *
 *     Compute the CSD
 *
-      CALL SORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'D', M, P, Q, XF(1,1), LDX,
+      CALL AB_sorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'D', M, P, Q, XF(1,1), LD
+     $X,
      $             XF(1,Q+1), LDX, XF(P+1,1), LDX, XF(P+1,Q+1), LDX,
      $             THETA, U1, LDU1, U2, LDU2, V1T, LDV1T, V2T, LDV2T,
      $             WORK, LWORK, IWORK, INFO )
@@ -458,7 +460,8 @@
 *
 *     Compute the CSD
 *
-      CALL SORCSD2BY1( 'Y', 'Y', 'Y', M, P, Q, XF(1,1), LDX, XF(P+1,1),
+      CALL AB_sorcsd2BY1( 'Y', 'Y', 'Y', M, P, Q, XF(1,1), LDX, XF(P+1,1
+     $),
      $                 LDX, THETA, U1, LDU1, U2, LDU2, V1T, LDV1T, WORK,
      $                 LWORK, IWORK, INFO )
 *

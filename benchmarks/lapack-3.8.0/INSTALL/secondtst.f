@@ -1,4 +1,4 @@
-*> \brief \b SECONDTST
+*> \brief \b AB_SECONDTST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -18,7 +18,7 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*  =====================================================================      PROGRAM SECONDTST
+*  =====================================================================      PROGRAM AB_SECONDTST
 *
 *  -- LAPACK test routine (version 3.8.0) --
 *
@@ -41,11 +41,11 @@
       REAL               X( NMAX ), Y( NMAX )
 *     ..
 *     .. External Functions ..
-      REAL               SECOND
-      EXTERNAL           SECOND
+      REAL               AB_SECOND
+      EXTERNAL           AB_SECOND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           MYSUB
+      EXTERNAL           AB_MYSUB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -65,14 +65,14 @@
 *
 *     Time TOTAL SAXPY operations
 *
-      T1 = SECOND( )
+      T1 = AB_SECOND( )
       DO 30 J = 1, ITS
          DO 20 I = 1, NMAX
             Y( I ) = Y( I ) + ALPHA*X( I )
    20    CONTINUE
          ALPHA = -ALPHA
    30 CONTINUE
-      T2 = SECOND( )
+      T2 = AB_SECOND( )
       TNOSEC = T2 - T1
       WRITE( 6, 9999 )TOTAL, TNOSEC
       IF( TNOSEC.GT.0.0 ) THEN
@@ -81,19 +81,19 @@
          WRITE( 6, 9994 )
       END IF
 *
-*     Time TOTAL SAXPY operations with SECOND in the outer loop
+*     Time TOTAL SAXPY operations with AB_SECOND in the outer loop
 *
-      T1 = SECOND( )
+      T1 = AB_SECOND( )
       DO 50 J = 1, ITS
          DO 40 I = 1, NMAX
             Y( I ) = Y( I ) + ALPHA*X( I )
    40    CONTINUE
          ALPHA = -ALPHA
-         T2 = SECOND( )
+         T2 = AB_SECOND( )
    50 CONTINUE
 *
-*     Compute the time used in milliseconds used by an average call
-*     to SECOND.
+*     Compute the time used in milliAB_SECONDs used by an average call
+*     to AB_SECOND.
 *
       WRITE( 6, 9997 )T2 - T1
       AVG = ( ( T2-T1 ) - TNOSEC ) * 1000.0E+00/REAL( ITS )
@@ -101,22 +101,24 @@
      $   WRITE( 6, 9996 )AVG
 *
 *     Compute the equivalent number of floating point operations used
-*     by an average call to SECOND.
+*     by an average call to AB_SECOND.
 *
       IF(( AVG.GT.0.0 ).AND.( TNOSEC.GT.0.0 ))
      $   WRITE( 6, 9995 )(AVG/1000) * TOTAL / TNOSEC
 *
- 9999 FORMAT( ' Time for ', G10.3,' SAXPY ops = ', G10.3, ' seconds' )
+ 9999 FORMAT( ' Time for ', G10.3,' SAXPY ops = ', G10.3, ' AB_SECONDs' 
+     $)
  9998 FORMAT( ' SAXPY performance rate        = ', G10.3, ' mflops ' )
- 9997 FORMAT( ' Including SECOND, time        = ', G10.3, ' seconds' )
- 9996 FORMAT( ' Average time for SECOND       = ', G10.3,
-     $      ' milliseconds' )
+ 9997 FORMAT( ' Including AB_SECOND, time        = ', G10.3, ' AB_SECOND
+     $s' )
+ 9996 FORMAT( ' Average time for AB_SECOND       = ', G10.3,
+     $      ' milliAB_SECONDs' )
  9995 FORMAT( ' Equivalent floating point ops = ', G10.3, ' ops' )
  9994 FORMAT( ' *** Warning:  Time for operations was less or equal',
      $        ' than zero => timing in TESTING might be dubious' )
-      CALL MYSUB(NMAX,X,Y)
+      CALL AB_MYSUB(NMAX,X,Y)
       END
-      SUBROUTINE MYSUB(N,X,Y)
+      SUBROUTINE AB_MYSUB(N,X,Y)
       INTEGER N
       REAL X(N), Y(N)
       RETURN

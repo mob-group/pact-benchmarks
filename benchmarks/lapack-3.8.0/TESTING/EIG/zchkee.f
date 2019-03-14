@@ -93,7 +93,7 @@
 *>     Tests ZGGSVD, ZGGSVP, ZTGSJA, ZLAGS2, ZLAPLL, and ZLAPMT
 *>
 *> CSD (CS decomposition):
-*>     Tests ZUNCSD
+*>     Tests AB_zuncsd
 *>
 *> LSE (Constrained Linear Least Squares):
 *>     Tests ZGGLSE

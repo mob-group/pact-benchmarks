@@ -1,4 +1,4 @@
-*> \brief \b SSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric tridiagonal form T
+*> \brief \b AB_ssytrd_sb2st reduces a real symmetric band matrix A to real symmetric tridiagonal form T
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYTRD_SB2ST + dependencies
+*> Download AB_ssytrd_sb2st + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrd_sb2t.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrd_sb2t.f">
@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYTRD_SB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
+*       SUBROUTINE AB_ssytrd_sb2st( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
 *                               D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
 *       #if defined(_OPENMP)
@@ -42,7 +42,7 @@
 *>
 *> \verbatim
 *>
-*> SSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric
+*> AB_ssytrd_sb2st reduces a real symmetric band matrix A to real symmetric
 *> tridiagonal form T by a orthogonal similarity transformation:
 *> Q**T * A * Q = T.
 *> \endverbatim
@@ -227,7 +227,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SSYTRD_SB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
+      SUBROUTINE AB_ssytrd_sb2st( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
      $                         D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
 #if defined(_OPENMP)
@@ -294,9 +294,9 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB     = ILAENV( 18, 'SSYTRD_SB2ST', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV( 19, 'SSYTRD_SB2ST', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV( 20, 'SSYTRD_SB2ST', VECT, N, KD, IB, -1 )
+      IB     = ILAENV( 18, 'AB_ssytrd_sb2st', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV( 19, 'AB_ssytrd_sb2st', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV( 20, 'AB_ssytrd_sb2st', VECT, N, KD, IB, -1 )
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
          INFO = -1
@@ -322,7 +322,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYTRD_SB2ST', -INFO )
+         CALL XERBLA( 'AB_ssytrd_sb2st', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -550,7 +550,7 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of SSYTRD_SB2ST
+*     End of AB_ssytrd_sb2st
 *
       END
       

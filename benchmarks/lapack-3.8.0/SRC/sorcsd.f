@@ -1,4 +1,4 @@
-*> \brief \b SORCSD
+*> \brief \b AB_sorcsd
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SORCSD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorcsd.f">
+*> Download AB_sorcsd + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_sorcsd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorcsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_sorcsd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorcsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_sorcsd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE SORCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
+*       RECURSIVE SUBROUTINE AB_sorcsd( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
 *                                    SIGNS, M, P, Q, X11, LDX11, X12,
 *                                    LDX12, X21, LDX21, X22, LDX22, THETA,
 *                                    U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
@@ -44,7 +44,7 @@
 *>
 *> \verbatim
 *>
-*> SORCSD computes the CS decomposition of an M-by-M partitioned
+*> AB_sorcsd computes the CS decomposition of an M-by-M partitioned
 *> orthogonal matrix X:
 *>
 *>                                 [  I  0  0 |  0  0  0 ]
@@ -294,7 +294,8 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE SORCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
+      RECURSIVE SUBROUTINE AB_sorcsd( JOBU1, JOBU2, JOBV1T, JOBV2T, TRAN
+     $S,
      $                             SIGNS, M, P, Q, X11, LDX11, X12,
      $                             LDX12, X21, LDX21, X22, LDX22, THETA,
      $                             U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
@@ -410,7 +411,8 @@
          ELSE
             SIGNST = 'D'
          END IF
-         CALL SORCSD( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST, M,
+         CALL AB_sorcsd( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST, M
+     $,
      $                Q, P, X11, LDX11, X21, LDX21, X12, LDX12, X22,
      $                LDX22, THETA, V1T, LDV1T, V2T, LDV2T, U1, LDU1,
      $                U2, LDU2, WORK, LWORK, IWORK, INFO )
@@ -426,7 +428,7 @@
          ELSE
             SIGNST = 'D'
          END IF
-         CALL SORCSD( JOBU2, JOBU1, JOBV2T, JOBV1T, TRANS, SIGNST, M,
+         CALL AB_sorcsd( JOBU2, JOBU1, JOBV2T, JOBV1T, TRANS, SIGNST, M,
      $                M-P, M-Q, X22, LDX22, X21, LDX21, X12, LDX12, X11,
      $                LDX11, THETA, U2, LDU2, U1, LDU1, V2T, LDV2T, V1T,
      $                LDV1T, WORK, LWORK, IWORK, INFO )
@@ -494,7 +496,7 @@
 *     Abort if any illegal arguments
 *
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'SORCSD', -INFO )
+         CALL AB_XERBLA( 'AB_sorcsd', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -617,7 +619,7 @@
 *
       RETURN
 *
-*     End SORCSD
+*     End AB_sorcsd
 *
       END
 

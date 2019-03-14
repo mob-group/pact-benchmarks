@@ -28,7 +28,7 @@
 *> DSYEVD_2STAGE, DSYEVR_2STAGE, DSYEVX_2STAGE,
 *> DSYEV_2STAGE, DSBEV_2STAGE, DSBEVD_2STAGE,
 *> DSBEVX_2STAGE, DSYTRD_2STAGE, DSYTRD_SY2SB,
-*> DSYTRD_SB2ST
+*> AB_dsytrd_sb2st
 *> \endverbatim
 *
 *  Arguments:
@@ -102,7 +102,7 @@
      $                   DSYEVD_2STAGE, DSYEVR_2STAGE, DSYEVX_2STAGE,
      $                   DSYEV_2STAGE, DSBEV_2STAGE, DSBEVD_2STAGE,
      $                   DSBEVX_2STAGE, DSYTRD_2STAGE, DSYTRD_SY2SB,
-     $                   DSYTRD_SB2ST
+     $                   AB_dsytrd_sb2st
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -216,45 +216,45 @@
          CALL CHKXER( 'DSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        DSYTRD_SB2ST
+*        AB_dsytrd_sb2st
 *
-         SRNAMT = 'DSYTRD_SB2ST'
+         SRNAMT = 'AB_dsytrd_sb2st'
          INFOT = 1
-         CALL DSYTRD_SB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL DSYTRD_SB2ST( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL DSYTRD_SB2ST( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL DSYTRD_SB2ST( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL DSYTRD_SB2ST( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL DSYTRD_SB2ST( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL DSYTRD_SB2ST( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL DSYTRD_SB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL DSYTRD_SB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
 *        DORGTR
@@ -1089,45 +1089,45 @@
          CALL CHKXER( 'DSBTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        DSYTRD_SB2ST
+*        AB_dsytrd_sb2st
 *
-         SRNAMT = 'DSYTRD_SB2ST'
+         SRNAMT = 'AB_dsytrd_sb2st'
          INFOT = 1
-         CALL DSYTRD_SB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL DSYTRD_SB2ST( 'N', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'N', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL DSYTRD_SB2ST( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL DSYTRD_SB2ST( 'N', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'N', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL DSYTRD_SB2ST( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL DSYTRD_SB2ST( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL DSYTRD_SB2ST( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL DSYTRD_SB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL DSYTRD_SB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_dsytrd_sb2st( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL CHKXER( 'DSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dsytrd_sb2st', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
 *        DSBEVD

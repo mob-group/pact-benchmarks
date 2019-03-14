@@ -1,4 +1,4 @@
-*> \brief \b DSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric tridiagonal form T
+*> \brief \b AB_dsytrd_sb2st reduces a real symmetric band matrix A to real symmetric tridiagonal form T
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYTRD_SB2ST + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrd_sb2st.f">
+*> Download AB_dsytrd_sb2st + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_dsytrd_sb2st.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrd_sb2st.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_dsytrd_sb2st.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrd_sb2st.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_dsytrd_sb2st.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYTRD_SB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
+*       SUBROUTINE AB_dsytrd_sb2st( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
 *                               D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
 *       #if defined(_OPENMP)
@@ -42,7 +42,7 @@
 *>
 *> \verbatim
 *>
-*> DSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric
+*> AB_dsytrd_sb2st reduces a real symmetric band matrix A to real symmetric
 *> tridiagonal form T by a orthogonal similarity transformation:
 *> Q**T * A * Q = T.
 *> \endverbatim
@@ -227,7 +227,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSYTRD_SB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
+      SUBROUTINE AB_dsytrd_sb2st( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
      $                         D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
 #if defined(_OPENMP)
@@ -294,9 +294,9 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB     = ILAENV( 18, 'DSYTRD_SB2ST', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV( 19, 'DSYTRD_SB2ST', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV( 20, 'DSYTRD_SB2ST', VECT, N, KD, IB, -1 )
+      IB     = ILAENV( 18, 'AB_dsytrd_sb2st', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV( 19, 'AB_dsytrd_sb2st', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV( 20, 'AB_dsytrd_sb2st', VECT, N, KD, IB, -1 )
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
          INFO = -1
@@ -322,7 +322,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYTRD_SB2ST', -INFO )
+         CALL XERBLA( 'AB_dsytrd_sb2st', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -550,7 +550,7 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of DSYTRD_SB2ST
+*     End of AB_dsytrd_sb2st
 *
       END
       

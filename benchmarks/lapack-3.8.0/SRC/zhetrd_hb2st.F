@@ -1,4 +1,4 @@
-*> \brief \b ZHETRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric tridiagonal form T
+*> \brief \b AB_zhetrd_hb2st reduces a complex Hermitian band matrix A to real symmetric tridiagonal form T
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHETRD_HB2ST + dependencies
+*> Download AB_zhetrd_hb2st + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhbtrd_hb2st.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhbtrd_hb2st.f">
@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHETRD_HB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
+*       SUBROUTINE AB_zhetrd_hb2st( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
 *                               D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
 *       #if defined(_OPENMP)
@@ -42,7 +42,7 @@
 *>
 *> \verbatim
 *>
-*> ZHETRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric
+*> AB_zhetrd_hb2st reduces a complex Hermitian band matrix A to real symmetric
 *> tridiagonal form T by a unitary similarity transformation:
 *> Q**H * A * Q = T.
 *> \endverbatim
@@ -227,7 +227,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZHETRD_HB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
+      SUBROUTINE AB_zhetrd_hb2st( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
      $                         D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
 *
@@ -297,9 +297,9 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB     = ILAENV( 18, 'ZHETRD_HB2ST', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV( 19, 'ZHETRD_HB2ST', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV( 20, 'ZHETRD_HB2ST', VECT, N, KD, IB, -1 )
+      IB     = ILAENV( 18, 'AB_zhetrd_hb2st', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV( 19, 'AB_zhetrd_hb2st', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV( 20, 'AB_zhetrd_hb2st', VECT, N, KD, IB, -1 )
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
          INFO = -1
@@ -325,7 +325,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHETRD_HB2ST', -INFO )
+         CALL XERBLA( 'AB_zhetrd_hb2st', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -581,7 +581,7 @@ C                 END IF
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of ZHETRD_HB2ST
+*     End of AB_zhetrd_hb2st
 *
       END
       

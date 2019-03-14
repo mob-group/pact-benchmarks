@@ -166,8 +166,8 @@
       INTEGER            IISPEC
 *     ..
 *     .. External Functions ..
-      INTEGER            IPARAM2STAGE
-      EXTERNAL           IPARAM2STAGE
+      INTEGER            AB_iparam2stage
+      EXTERNAL           AB_iparam2stage
 *     ..
 *     .. Executable Statements ..
 *
@@ -183,7 +183,7 @@
 *     2stage eigenvalues and SVD or related subroutines.
 *
       IISPEC = 16 + ISPEC
-      AB_ILAENV2STAGE = IPARAM2STAGE( IISPEC, NAME, OPTS,
+      AB_ILAENV2STAGE = AB_iparam2stage( IISPEC, NAME, OPTS,
      $                             N1, N2, N3, N4 )
       RETURN
 *

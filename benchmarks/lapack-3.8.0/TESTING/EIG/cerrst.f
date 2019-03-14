@@ -28,7 +28,7 @@
 *> CHEEVD_2STAGE, CHEEVR_2STAGE, CHEEVX_2STAGE,
 *> CHEEV_2STAGE, CHBEV_2STAGE, CHBEVD_2STAGE,
 *> CHBEVX_2STAGE, CHETRD_2STAGE, CHETRD_HE2HB,
-*> CHETRD_HB2ST
+*> AB_chetrd_hb2st
 *> \endverbatim
 *
 *  Arguments:
@@ -101,7 +101,7 @@
      $                   CHEEVD_2STAGE, CHEEVR_2STAGE, CHEEVX_2STAGE,
      $                   CHEEV_2STAGE, CHBEV_2STAGE, CHBEVD_2STAGE,
      $                   CHBEVX_2STAGE, CHETRD_2STAGE, CHETRD_HE2HB,
-     $                   CHETRD_HB2ST
+     $                   AB_chetrd_hb2st
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -215,45 +215,45 @@
          CALL CHKXER( 'CHETRD_HE2HB', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        CHETRD_HB2ST
+*        AB_chetrd_hb2st
 *
-         SRNAMT = 'CHETRD_HB2ST'
+         SRNAMT = 'AB_chetrd_hb2st'
          INFOT = 1
-         CALL CHETRD_HB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRD_HB2ST( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRD_HB2ST( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHETRD_HB2ST( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRD_HB2ST( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHETRD_HB2ST( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHETRD_HB2ST( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CHETRD_HB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL CHETRD_HB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
 *        CUNGTR
@@ -974,45 +974,45 @@
          CALL CHKXER( 'CHBTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        CHETRD_HB2ST
+*        AB_chetrd_hb2st
 *
-         SRNAMT = 'CHETRD_HB2ST'
+         SRNAMT = 'AB_chetrd_hb2st'
          INFOT = 1
-         CALL CHETRD_HB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRD_HB2ST( 'N', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'N', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CHETRD_HB2ST( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL CHETRD_HB2ST( 'N', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'N', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL CHETRD_HB2ST( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL CHETRD_HB2ST( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CHETRD_HB2ST( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL CHETRD_HB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL CHETRD_HB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL AB_chetrd_hb2st( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL CHKXER( 'CHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_chetrd_hb2st', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
 *        CHBEVD

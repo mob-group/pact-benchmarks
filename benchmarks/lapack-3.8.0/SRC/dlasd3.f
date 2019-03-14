@@ -253,8 +253,8 @@
       DOUBLE PRECISION   RHO, TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMC3, AB_DNRM2
-      EXTERNAL           DLAMC3, AB_DNRM2
+      DOUBLE PRECISION   AB_dlamc3, AB_DNRM2
+      EXTERNAL           AB_dlamc3, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DGEMM, AB_DLACPY, AB_DLASCL, AB_DL
@@ -333,7 +333,8 @@
 *     this code.
 *
       DO 20 I = 1, K
-         DSIGMA( I ) = DLAMC3( DSIGMA( I ), DSIGMA( I ) ) - DSIGMA( I )
+         DSIGMA( I ) = AB_dlamc3( DSIGMA( I ), DSIGMA( I ) ) - DSIGMA( I
+     $ )
    20 CONTINUE
 *
 *     Keep a copy of Z.

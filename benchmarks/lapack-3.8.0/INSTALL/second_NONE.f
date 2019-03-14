@@ -1,4 +1,4 @@
-*> \brief \b SECOND returns nothing
+*> \brief \b AB_SECOND returns nothing
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      REAL FUNCTION SECOND( )
+*      REAL FUNCTION AB_SECOND( )
 *
 *
 *> \par Purpose:
@@ -16,7 +16,7 @@
 *>
 *> \verbatim
 *>
-*>  SECOND returns nothing instead of returning the user time for a process in seconds.
+*>  AB_SECOND returns nothing instead of returning the user time for a process in AB_SECONDs.
 *>  If you are using that routine, it means that neither EXTERNAL ETIME,
 *>  EXTERNAL ETIME_, INTERNAL ETIME, INTERNAL CPU_TIME is available  on
 *>  your machine.
@@ -35,7 +35,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      REAL FUNCTION SECOND( )
+      REAL FUNCTION AB_SECOND( )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -44,9 +44,9 @@
 *
 * =====================================================================
 *
-      SECOND = 0.0E+0
+      AB_SECOND = 0.0E+0
       RETURN
 *
-*     End of SECOND
+*     End of AB_SECOND
 *
       END

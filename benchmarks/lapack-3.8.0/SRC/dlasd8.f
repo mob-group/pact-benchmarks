@@ -195,8 +195,8 @@
      $ERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DDOT, DLAMC3, AB_DNRM2
-      EXTERNAL           AB_DDOT, DLAMC3, AB_DNRM2
+      DOUBLE PRECISION   AB_DDOT, AB_dlamc3, AB_DNRM2
+      EXTERNAL           AB_DDOT, AB_dlamc3, AB_DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN, SQRT
@@ -249,7 +249,8 @@
 *     this code.
 *
       DO 10 I = 1, K
-         DSIGMA( I ) = DLAMC3( DSIGMA( I ), DSIGMA( I ) ) - DSIGMA( I )
+         DSIGMA( I ) = AB_dlamc3( DSIGMA( I ), DSIGMA( I ) ) - DSIGMA( I
+     $ )
    10 CONTINUE
 *
 *     Book keeping.
@@ -317,11 +318,13 @@
          END IF
          WORK( J ) = -Z( J ) / DIFLJ / ( DSIGMA( J )+DJ )
          DO 60 I = 1, J - 1
-            WORK( I ) = Z( I ) / ( DLAMC3( DSIGMA( I ), DSIGJ )-DIFLJ )
+            WORK( I ) = Z( I ) / ( AB_dlamc3( DSIGMA( I ), DSIGJ )-DIFLJ
+     $ )
      $                   / ( DSIGMA( I )+DJ )
    60    CONTINUE
          DO 70 I = J + 1, K
-            WORK( I ) = Z( I ) / ( DLAMC3( DSIGMA( I ), DSIGJP )+DIFRJ )
+            WORK( I ) = Z( I ) / ( AB_dlamc3( DSIGMA( I ), DSIGJP )+DIFR
+     $J )
      $                   / ( DSIGMA( I )+DJ )
    70    CONTINUE
          TEMP = AB_DNRM2( K, WORK, 1 )

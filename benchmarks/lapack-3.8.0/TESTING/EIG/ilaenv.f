@@ -169,8 +169,8 @@
       INTRINSIC          INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            IEEECK, IPARAM2STAGE
-      EXTERNAL           IEEECK, IPARAM2STAGE
+      INTEGER            IEEECK, AB_iparam2stage
+      EXTERNAL           IEEECK, AB_iparam2stage
 *     ..
 *     .. Arrays in Common ..
       INTEGER            IPARMS( 100 )
@@ -236,7 +236,8 @@ C        ILAENV = 0
          IF( ISPEC.EQ.17 ) THEN
              ILAENV = IPARMS( 1 )
          ELSE
-             ILAENV = IPARAM2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N4 ) 
+             ILAENV = AB_iparam2stage( ISPEC, NAME, OPTS, N1, N2, N3, N4
+     $ ) 
          ENDIF
 *
       ELSE
@@ -263,8 +264,8 @@ C        ILAENV = 0
 *     .. Local variables ..
       INTEGER            IISPEC
 *     .. External Functions ..
-      INTEGER            IPARAM2STAGE
-      EXTERNAL           IPARAM2STAGE
+      INTEGER            AB_iparam2stage
+      EXTERNAL           AB_iparam2stage
 *     ..
 *     .. Arrays in Common ..
       INTEGER            IPARMS( 100 )
@@ -285,7 +286,7 @@ C        ILAENV = 0
              ILAENV2STAGE = IPARMS( 1 )
          ELSE
              IISPEC = 16 + ISPEC
-             ILAENV2STAGE = IPARAM2STAGE( IISPEC, NAME, OPTS,
+             ILAENV2STAGE = AB_iparam2stage( IISPEC, NAME, OPTS,
      $                                    N1, N2, N3, N4 ) 
          ENDIF
 *

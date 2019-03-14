@@ -60,7 +60,7 @@
 *> X is M-by-M, its top-left block is P-by-Q, and Q must be no larger
 *> than P, M-P, or M-Q. (If Q is not the smallest index, then X must be
 *> transposed and/or permuted. This can be done in constant time using
-*> the TRANS and SIGNS options. See CUNCSD for details.)
+*> the TRANS and SIGNS options. See AB_cuncsd for details.)
 *>
 *> The bidiagonal matrices B11, B12, B21, and B22 are represented
 *> implicitly by angles THETA(1:Q) and PHI(1:Q-1).

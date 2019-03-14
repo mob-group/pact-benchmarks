@@ -1,4 +1,4 @@
-*> \brief \b IPARAM2STAGE
+*> \brief \b AB_iparam2stage
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download IPARAM2STAGE + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iparam2stage.F"> 
+*> Download AB_iparam2stage + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_iparam2stage.F"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iparam2stage.F"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_iparam2stage.F"> 
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iparam2stage.F"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_iparam2stage.F"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION IPARAM2STAGE( ISPEC, NAME, OPTS, 
+*       INTEGER FUNCTION AB_iparam2stage( ISPEC, NAME, OPTS, 
 *                                    NI, NBI, IBI, NXI )
 *       #if defined(_OPENMP)
 *           use omp_lib
@@ -49,7 +49,7 @@
 *> \param[in] ISPEC
 *> \verbatim
 *>          ISPEC is integer scalar
-*>              ISPEC specifies which tunable parameter IPARAM2STAGE should
+*>              ISPEC specifies which tunable parameter AB_iparam2stage should
 *>              return.
 *>
 *>              ISPEC=17: the optimal blocksize nb for the reduction to
@@ -152,7 +152,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION IPARAM2STAGE( ISPEC, NAME, OPTS, 
+      INTEGER FUNCTION AB_iparam2stage( ISPEC, NAME, OPTS, 
      $                              NI, NBI, IBI, NXI )
 #if defined(_OPENMP)
       use omp_lib
@@ -188,7 +188,7 @@
 *     Invalid value for ISPEC
 *
       IF( (ISPEC.LT.17).OR.(ISPEC.GT.21) ) THEN
-          IPARAM2STAGE = -1
+          AB_iparam2stage = -1
           RETURN
       ENDIF
 *
@@ -206,7 +206,7 @@
 *
 *        Convert NAME to upper case if the first character is lower case.
 *
-         IPARAM2STAGE = -1
+         AB_iparam2stage = -1
          SUBNAM = NAME
          IC = ICHAR( SUBNAM( 1: 1 ) )
          IZ = ICHAR( 'Z' )
@@ -263,7 +263,7 @@
 *        Invalid value for PRECISION
 *      
          IF( .NOT.( RPREC .OR. CPREC ) ) THEN
-             IPARAM2STAGE = -1
+             AB_iparam2stage = -1
              RETURN
          ENDIF
       ENDIF
@@ -302,8 +302,8 @@
                IB = 16
             ENDIF
          ENDIF
-         IF( ISPEC.EQ.17 ) IPARAM2STAGE = KD
-         IF( ISPEC.EQ.18 ) IPARAM2STAGE = IB
+         IF( ISPEC.EQ.17 ) AB_iparam2stage = KD
+         IF( ISPEC.EQ.18 ) AB_iparam2stage = IB
 *
       ELSE IF ( ISPEC .EQ. 19 ) THEN
 *
@@ -320,9 +320,9 @@
             LHOUS = MAX( 1, 4*NI ) + IBI
          ENDIF
          IF( LHOUS.GE.0 ) THEN
-            IPARAM2STAGE = LHOUS
+            AB_iparam2stage = LHOUS
          ELSE
-            IPARAM2STAGE = -1
+            AB_iparam2stage = -1
          ENDIF
 *
       ELSE IF ( ISPEC .EQ. 20 ) THEN
@@ -372,17 +372,17 @@
          LWORK = MAX ( 1, LWORK )
 
          IF( LWORK.GT.0 ) THEN
-            IPARAM2STAGE = LWORK
+            AB_iparam2stage = LWORK
          ELSE
-            IPARAM2STAGE = -1
+            AB_iparam2stage = -1
          ENDIF
 *
       ELSE IF ( ISPEC .EQ. 21 ) THEN
 *
 *     ISPEC = 21 for future use 
-         IPARAM2STAGE = NXI
+         AB_iparam2stage = NXI
       ENDIF
 *
-*     ==== End of IPARAM2STAGE ====
+*     ==== End of AB_iparam2stage ====
 *
       END

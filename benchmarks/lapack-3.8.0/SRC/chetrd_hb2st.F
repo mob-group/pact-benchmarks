@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETRD_HB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
+*       SUBROUTINE AB_chetrd_hb2st( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
 *                               D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
 *       #if defined(_OPENMP)
@@ -42,7 +42,7 @@
 *>
 *> \verbatim
 *>
-*> CHETRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric
+*> AB_chetrd_hb2st reduces a complex Hermitian band matrix A to real symmetric
 *> tridiagonal form T by a unitary similarity transformation:
 *> Q**H * A * Q = T.
 *> \endverbatim
@@ -227,7 +227,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CHETRD_HB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
+      SUBROUTINE AB_chetrd_hb2st( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
      $                         D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
 *
@@ -297,9 +297,9 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      IB     = ILAENV( 18, 'CHETRD_HB2ST', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV( 19, 'CHETRD_HB2ST', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV( 20, 'CHETRD_HB2ST', VECT, N, KD, IB, -1 )
+      IB     = ILAENV( 18, 'AB_chetrd_hb2st', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV( 19, 'AB_chetrd_hb2st', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV( 20, 'AB_chetrd_hb2st', VECT, N, KD, IB, -1 )
 *
       IF( .NOT.AFTERS1 .AND. .NOT.LSAME( STAGE1, 'N' ) ) THEN
          INFO = -1
@@ -325,7 +325,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETRD_HB2ST', -INFO )
+         CALL XERBLA( 'AB_chetrd_hb2st', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -581,7 +581,7 @@ C                 END IF
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of CHETRD_HB2ST
+*     End of AB_chetrd_hb2st
 *
       END
       

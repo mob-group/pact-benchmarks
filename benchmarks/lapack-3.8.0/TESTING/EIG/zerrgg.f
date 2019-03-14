@@ -24,7 +24,7 @@
 *> ZERRGG tests the error exits for ZGGES, ZGGESX, ZGGEV, ZGGEVX,
 *> ZGGES3, ZGGEV3, ZGGGLM, ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
 *> ZGGSVD3, ZGGSVP3, ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA,
-*> ZTGSNA, ZTGSYL, and ZUNCSD.
+*> ZTGSNA, ZTGSYL, and AB_zuncsd.
 *> \endverbatim
 *
 *  Arguments:
@@ -99,7 +99,7 @@
       EXTERNAL           CHKXER, ZGGES,  ZGGESX, ZGGEV,  ZGGEVX, ZGGGLM,
      $                   ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
      $                   ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA, ZTGSNA,
-     $                   ZTGSYL, ZUNCSD, ZGGES3, ZGGEV3, ZGGHD3,
+     $                   ZTGSYL, AB_zuncsd, ZGGES3, ZGGEV3, ZGGHD3,
      $                   ZGGSVD3, ZGGSVP3
 *     ..
 *     .. Scalars in Common ..
@@ -567,65 +567,65 @@
 *
       ELSE IF( LSAMEN( 3, PATH, 'CSD' ) ) THEN
 *
-*        ZUNCSD
+*        AB_zuncsd
 *
-         SRNAMT = 'ZUNCSD'
+         SRNAMT = 'AB_zuncsd'
          INFOT = 7
-         CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 -1, 0, 0, A, 1, A,
      $                 1, A, 1, A, 1, RS,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, RW, LW, IW, INFO )
-         CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zuncsd', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, -1, 0, A, 1, A,
      $                 1, A, 1, A, 1, RS,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, RW, LW, IW, INFO )
-         CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zuncsd', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, -1, A, 1, A,
      $                 1, A, 1, A, 1, RS,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, RW, LW, IW, INFO )
-         CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zuncsd', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, -1, A,
      $                 1, A, 1, A, 1, RS,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, RW, LW, IW, INFO )
-         CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zuncsd', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, RS,
      $                 A, -1, A, 1, A, 1, A,
      $                 1, W, LW, RW, LW, IW, INFO )
-         CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zuncsd', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, RS,
      $                 A, 1, A, -1, A, 1, A,
      $                 1, W, LW, RW, LW, IW, INFO )
-         CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zuncsd', INFOT, NOUT, LERR, OK )
          INFOT = 24
-         CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, RS,
      $                 A, 1, A, 1, A, -1, A,
      $                 1, W, LW, RW, LW, IW, INFO )
-         CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zuncsd', INFOT, NOUT, LERR, OK )
          INFOT = 26
-         CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, RS,
      $                 A, 1, A, 1, A, 1, A,
      $                 -1, W, LW, RW, LW, IW, INFO )
-         CALL CHKXER( 'ZUNCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_zuncsd', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
 *     Test error exits for the GQR path.

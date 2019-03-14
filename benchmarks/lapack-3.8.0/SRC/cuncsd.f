@@ -1,4 +1,4 @@
-*> \brief \b CUNCSD
+*> \brief \b AB_cuncsd
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CUNCSD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cuncsd.f">
+*> Download AB_cuncsd + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_cuncsd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cuncsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_cuncsd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cuncsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_cuncsd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE CUNCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
+*       RECURSIVE SUBROUTINE AB_cuncsd( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
 *                                    SIGNS, M, P, Q, X11, LDX11, X12,
 *                                    LDX12, X21, LDX21, X22, LDX22, THETA,
 *                                    U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
@@ -46,7 +46,7 @@
 *>
 *> \verbatim
 *>
-*> CUNCSD computes the CS decomposition of an M-by-M partitioned
+*> AB_cuncsd computes the CS decomposition of an M-by-M partitioned
 *> unitary matrix X:
 *>
 *>                                 [  I  0  0 |  0  0  0 ]
@@ -313,7 +313,8 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE CUNCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
+      RECURSIVE SUBROUTINE AB_cuncsd( JOBU1, JOBU2, JOBV1T, JOBV2T, TRAN
+     $S,
      $                             SIGNS, M, P, Q, X11, LDX11, X12,
      $                             LDX12, X21, LDX21, X22, LDX22, THETA,
      $                             U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
@@ -432,7 +433,8 @@
          ELSE
             SIGNST = 'D'
          END IF
-         CALL CUNCSD( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST, M,
+         CALL AB_cuncsd( JOBV1T, JOBV2T, JOBU1, JOBU2, TRANST, SIGNST, M
+     $,
      $                Q, P, X11, LDX11, X21, LDX21, X12, LDX12, X22,
      $                LDX22, THETA, V1T, LDV1T, V2T, LDV2T, U1, LDU1,
      $                U2, LDU2, WORK, LWORK, RWORK, LRWORK, IWORK,
@@ -449,7 +451,7 @@
          ELSE
             SIGNST = 'D'
          END IF
-         CALL CUNCSD( JOBU2, JOBU1, JOBV2T, JOBV1T, TRANS, SIGNST, M,
+         CALL AB_cuncsd( JOBU2, JOBU1, JOBV2T, JOBV1T, TRANS, SIGNST, M,
      $                M-P, M-Q, X22, LDX22, X21, LDX21, X12, LDX12, X11,
      $                LDX11, THETA, U2, LDU2, U1, LDU1, V2T, LDV2T, V1T,
      $                LDV1T, WORK, LWORK, RWORK, LRWORK, IWORK, INFO )
@@ -527,7 +529,7 @@
 *     Abort if any illegal arguments
 *
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'CUNCSD', -INFO )
+         CALL AB_XERBLA( 'AB_cuncsd', -INFO )
          RETURN
       ELSE IF( LQUERY .OR. LRQUERY ) THEN
          RETURN
@@ -659,7 +661,7 @@
 *
       RETURN
 *
-*     End CUNCSD
+*     End AB_cuncsd
 *
       END
 

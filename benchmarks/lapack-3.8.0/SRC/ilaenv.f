@@ -183,8 +183,8 @@
       INTRINSIC          CHAR, ICHAR, INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IEEECK, AB_IPARMQ, IPARAM2STAGE
-      EXTERNAL           AB_IEEECK, AB_IPARMQ, IPARAM2STAGE
+      INTEGER            AB_IEEECK, AB_IPARMQ, AB_iparam2stage
+      EXTERNAL           AB_IEEECK, AB_IPARMQ, AB_iparam2stage
 *     ..
 *     .. Executable Statements ..
 *

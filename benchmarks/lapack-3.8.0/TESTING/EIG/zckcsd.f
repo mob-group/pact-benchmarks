@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> ZCKCSD tests ZUNCSD:
+*> ZCKCSD tests AB_zuncsd:
 *>        the CSD for an M-by-M unitary matrix X partitioned as
 *>        [ X11 X12; X21 X22 ]. X11 is P-by-Q.
 *> \endverbatim

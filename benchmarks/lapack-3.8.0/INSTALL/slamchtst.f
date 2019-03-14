@@ -1,4 +1,4 @@
-*> \brief \b SLAMCHTST
+*> \brief \b AB_SLAMCHTST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -18,7 +18,7 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*  =====================================================================      PROGRAM SLAMCHTST
+*  =====================================================================      PROGRAM AB_SLAMCHTST
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -32,21 +32,21 @@
      $                   T, PREC
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
-      EPS   = SLAMCH( 'Epsilon' )
-      SFMIN = SLAMCH( 'Safe minimum' )
-      BASE  = SLAMCH( 'Base' )
-      PREC  = SLAMCH( 'Precision' )
-      T     = SLAMCH( 'Number of digits in mantissa' )
-      RND   = SLAMCH( 'Rounding mode' )
-      EMIN  = SLAMCH( 'Minimum exponent' )
-      RMIN  = SLAMCH( 'Underflow threshold' )
-      EMAX  = SLAMCH( 'Largest exponent' )
-      RMAX  = SLAMCH( 'Overflow threshold' )
+      EPS   = AB_SLAMCH( 'Epsilon' )
+      SFMIN = AB_SLAMCH( 'Safe minimum' )
+      BASE  = AB_SLAMCH( 'Base' )
+      PREC  = AB_SLAMCH( 'Precision' )
+      T     = AB_SLAMCH( 'Number of digits in mantissa' )
+      RND   = AB_SLAMCH( 'Rounding mode' )
+      EMIN  = AB_SLAMCH( 'Minimum exponent' )
+      RMIN  = AB_SLAMCH( 'Underflow threshold' )
+      EMAX  = AB_SLAMCH( 'Largest exponent' )
+      RMAX  = AB_SLAMCH( 'Overflow threshold' )
 *
       WRITE( 6, * )' Epsilon                      = ', EPS
       WRITE( 6, * )' Safe minimum                 = ', SFMIN

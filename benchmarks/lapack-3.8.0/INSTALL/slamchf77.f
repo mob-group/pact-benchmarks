@@ -1,4 +1,4 @@
-*> \brief \b SLAMCHF77 deprecated
+*> \brief \b AB_SLAMCHF77 deprecated
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      REAL FUNCTION SLAMCH( CMACH )
+*      REAL FUNCTION AB_SLAMCH( CMACH )
 *
 *     .. Scalar Arguments ..
 *      CHARACTER          CMACH
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> SLAMCH determines single precision machine parameters.
+*> AB_SLAMCH determines single precision machine parameters.
 *> \endverbatim
 *
 *  Arguments:
@@ -28,17 +28,17 @@
 *
 *> \param[in] CMACH
 *> \verbatim
-*>          Specifies the value to be returned by SLAMCH:
-*>          = 'E' or 'e',   SLAMCH := eps
-*>          = 'S' or 's ,   SLAMCH := sfmin
-*>          = 'B' or 'b',   SLAMCH := base
-*>          = 'P' or 'p',   SLAMCH := eps*base
-*>          = 'N' or 'n',   SLAMCH := t
-*>          = 'R' or 'r',   SLAMCH := rnd
-*>          = 'M' or 'm',   SLAMCH := emin
-*>          = 'U' or 'u',   SLAMCH := rmin
-*>          = 'L' or 'l',   SLAMCH := emax
-*>          = 'O' or 'o',   SLAMCH := rmax
+*>          Specifies the value to be returned by AB_SLAMCH:
+*>          = 'E' or 'e',   AB_SLAMCH := eps
+*>          = 'S' or 's ,   AB_SLAMCH := sfmin
+*>          = 'B' or 'b',   AB_SLAMCH := base
+*>          = 'P' or 'p',   AB_SLAMCH := eps*base
+*>          = 'N' or 'n',   AB_SLAMCH := t
+*>          = 'R' or 'r',   AB_SLAMCH := rnd
+*>          = 'M' or 'm',   AB_SLAMCH := emin
+*>          = 'U' or 'u',   AB_SLAMCH := rmin
+*>          = 'L' or 'l',   AB_SLAMCH := emax
+*>          = 'O' or 'o',   AB_SLAMCH := rmax
 *>          where
 *>          eps   = relative machine precision
 *>          sfmin = safe minimum, such that 1/sfmin does not overflow
@@ -65,7 +65,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      REAL FUNCTION SLAMCH( CMACH )
+      REAL FUNCTION AB_SLAMCH( CMACH )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -86,11 +86,11 @@
      $                   RND, SFMIN, SMALL, T
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAMC2
+      EXTERNAL           AB_SLAMC2
 *     ..
 *     .. Save statement ..
       SAVE               FIRST, EPS, SFMIN, BASE, T, RND, EMIN, RMIN,
@@ -102,7 +102,7 @@
 *     .. Executable Statements ..
 *
       IF( FIRST ) THEN
-         CALL SLAMC2( BETA, IT, LRND, EPS, IMIN, RMIN, IMAX, RMAX )
+         CALL AB_SLAMC2( BETA, IT, LRND, EPS, IMIN, RMIN, IMAX, RMAX )
          BASE = BETA
          T = IT
          IF( LRND ) THEN
@@ -126,43 +126,43 @@
          END IF
       END IF
 *
-      IF( LSAME( CMACH, 'E' ) ) THEN
+      IF( AB_LSAME( CMACH, 'E' ) ) THEN
          RMACH = EPS
-      ELSE IF( LSAME( CMACH, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'S' ) ) THEN
          RMACH = SFMIN
-      ELSE IF( LSAME( CMACH, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'B' ) ) THEN
          RMACH = BASE
-      ELSE IF( LSAME( CMACH, 'P' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'P' ) ) THEN
          RMACH = PREC
-      ELSE IF( LSAME( CMACH, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'N' ) ) THEN
          RMACH = T
-      ELSE IF( LSAME( CMACH, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'R' ) ) THEN
          RMACH = RND
-      ELSE IF( LSAME( CMACH, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'M' ) ) THEN
          RMACH = EMIN
-      ELSE IF( LSAME( CMACH, 'U' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'U' ) ) THEN
          RMACH = RMIN
-      ELSE IF( LSAME( CMACH, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'L' ) ) THEN
          RMACH = EMAX
-      ELSE IF( LSAME( CMACH, 'O' ) ) THEN
+      ELSE IF( AB_LSAME( CMACH, 'O' ) ) THEN
          RMACH = RMAX
       END IF
 *
-      SLAMCH = RMACH
+      AB_SLAMCH = RMACH
       FIRST  = .FALSE.
       RETURN
 *
-*     End of SLAMCH
+*     End of AB_SLAMCH
 *
       END
 *
 ************************************************************************
 *
-*> \brief \b SLAMC1
+*> \brief \b AB_SLAMC1
 *> \details
 *> \b Purpose:
 *> \verbatim
-*> SLAMC1 determines the machine parameters given by BETA, T, RND, and
+*> AB_SLAMC1 determines the machine parameters given by BETA, T, RND, and
 *> IEEE1.
 *> \endverbatim
 *>
@@ -207,7 +207,7 @@
 *>        Comms. of the ACM, 17, 276-277.
 *> \endverbatim
 *>
-      SUBROUTINE SLAMC1( BETA, T, RND, IEEE1 )
+      SUBROUTINE AB_SLAMC1( BETA, T, RND, IEEE1 )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -225,8 +225,8 @@
       REAL               A, B, C, F, ONE, QTR, SAVEC, T1, T2
 *     ..
 *     .. External Functions ..
-      REAL               SLAMC3
-      EXTERNAL           SLAMC3
+      REAL               AB_SLAMC3
+      EXTERNAL           AB_SLAMC3
 *     ..
 *     .. Save statement ..
       SAVE               FIRST, LIEEE1, LBETA, LRND, LT
@@ -242,7 +242,7 @@
 *        LBETA,  LIEEE1,  LT and  LRND  are the  local values  of  BETA,
 *        IEEE1, T and RND.
 *
-*        Throughout this routine  we use the function  SLAMC3  to ensure
+*        Throughout this routine  we use the function  AB_SLAMC3  to ensure
 *        that relevant values are  stored and not held in registers,  or
 *        are not affected by optimizers.
 *
@@ -258,8 +258,8 @@
    10    CONTINUE
          IF( C.EQ.ONE ) THEN
             A = 2*A
-            C = SLAMC3( A, ONE )
-            C = SLAMC3( C, -A )
+            C = AB_SLAMC3( A, ONE )
+            C = AB_SLAMC3( C, -A )
             GO TO 10
          END IF
 *+       END WHILE
@@ -270,13 +270,13 @@
 *           fl( a + b ) .gt. a.
 *
          B = 1
-         C = SLAMC3( A, B )
+         C = AB_SLAMC3( A, B )
 *
 *+       WHILE( C.EQ.A )LOOP
    20    CONTINUE
          IF( C.EQ.A ) THEN
             B = 2*B
-            C = SLAMC3( A, B )
+            C = AB_SLAMC3( A, B )
             GO TO 20
          END IF
 *+       END WHILE
@@ -288,22 +288,22 @@
 *
          QTR = ONE / 4
          SAVEC = C
-         C = SLAMC3( C, -A )
+         C = AB_SLAMC3( C, -A )
          LBETA = C + QTR
 *
 *        Now determine whether rounding or chopping occurs,  by adding a
 *        bit  less  than  beta/2  and a  bit  more  than  beta/2  to  a.
 *
          B = LBETA
-         F = SLAMC3( B / 2, -B / 100 )
-         C = SLAMC3( F, A )
+         F = AB_SLAMC3( B / 2, -B / 100 )
+         C = AB_SLAMC3( F, A )
          IF( C.EQ.A ) THEN
             LRND = .TRUE.
          ELSE
             LRND = .FALSE.
          END IF
-         F = SLAMC3( B / 2, B / 100 )
-         C = SLAMC3( F, A )
+         F = AB_SLAMC3( B / 2, B / 100 )
+         C = AB_SLAMC3( F, A )
          IF( ( LRND ) .AND. ( C.EQ.A ) )
      $      LRND = .FALSE.
 *
@@ -313,8 +313,8 @@
 *        zero, and SAVEC is odd. Thus adding B/2 to A should not  change
 *        A, but adding B/2 to SAVEC should change SAVEC.
 *
-         T1 = SLAMC3( B / 2, A )
-         T2 = SLAMC3( B / 2, SAVEC )
+         T1 = AB_SLAMC3( B / 2, A )
+         T2 = AB_SLAMC3( B / 2, SAVEC )
          LIEEE1 = ( T1.EQ.A ) .AND. ( T2.GT.SAVEC ) .AND. LRND
 *
 *        Now find  the  mantissa, t.  It should  be the  integer part of
@@ -333,8 +333,8 @@
          IF( C.EQ.ONE ) THEN
             LT = LT + 1
             A = A*LBETA
-            C = SLAMC3( A, ONE )
-            C = SLAMC3( C, -A )
+            C = AB_SLAMC3( A, ONE )
+            C = AB_SLAMC3( C, -A )
             GO TO 30
          END IF
 *+       END WHILE
@@ -348,17 +348,17 @@
       FIRST = .FALSE.
       RETURN
 *
-*     End of SLAMC1
+*     End of AB_SLAMC1
 *
       END
 *
 ************************************************************************
 *
-*> \brief \b SLAMC2
+*> \brief \b AB_SLAMC2
 *> \details
 *> \b Purpose:
 *> \verbatim
-*> SLAMC2 determines the machine parameters specified in its argument
+*> AB_SLAMC2 determines the machine parameters specified in its argument
 *> list.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
@@ -420,7 +420,7 @@
 *>  The computation of  EPS  is based on a routine PARANOIA by
 *>  W. Kahan of the University of California at Berkeley.
 *> \endverbatim
-      SUBROUTINE SLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
+      SUBROUTINE AB_SLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -441,11 +441,11 @@
      $                   SIXTH, SMALL, THIRD, TWO, ZERO
 *     ..
 *     .. External Functions ..
-      REAL               SLAMC3
-      EXTERNAL           SLAMC3
+      REAL               AB_SLAMC3
+      EXTERNAL           AB_SLAMC3
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAMC1, SLAMC4, SLAMC5
+      EXTERNAL           AB_SLAMC1, AB_SLAMC4, AB_SLAMC5
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -467,13 +467,13 @@
 *        LBETA, LT, LRND, LEPS, LEMIN and LRMIN  are the local values of
 *        BETA, T, RND, EPS, EMIN and RMIN.
 *
-*        Throughout this routine  we use the function  SLAMC3  to ensure
+*        Throughout this routine  we use the function  AB_SLAMC3  to ensure
 *        that relevant values are stored  and not held in registers,  or
 *        are not affected by optimizers.
 *
-*        SLAMC1 returns the parameters  LBETA, LT, LRND and LIEEE1.
+*        AB_SLAMC1 returns the parameters  LBETA, LT, LRND and LIEEE1.
 *
-         CALL SLAMC1( LBETA, LT, LRND, LIEEE1 )
+         CALL AB_SLAMC1( LBETA, LT, LRND, LIEEE1 )
 *
 *        Start to find EPS.
 *
@@ -485,10 +485,10 @@
 *
          B = TWO / 3
          HALF = ONE / 2
-         SIXTH = SLAMC3( B, -HALF )
-         THIRD = SLAMC3( SIXTH, SIXTH )
-         B = SLAMC3( THIRD, -HALF )
-         B = SLAMC3( B, SIXTH )
+         SIXTH = AB_SLAMC3( B, -HALF )
+         THIRD = AB_SLAMC3( SIXTH, SIXTH )
+         B = AB_SLAMC3( THIRD, -HALF )
+         B = AB_SLAMC3( B, SIXTH )
          B = ABS( B )
          IF( B.LT.LEPS )
      $      B = LEPS
@@ -499,11 +499,11 @@
    10    CONTINUE
          IF( ( LEPS.GT.B ) .AND. ( B.GT.ZERO ) ) THEN
             LEPS = B
-            C = SLAMC3( HALF*LEPS, ( TWO**5 )*( LEPS**2 ) )
-            C = SLAMC3( HALF, -C )
-            B = SLAMC3( HALF, C )
-            C = SLAMC3( HALF, -B )
-            B = SLAMC3( HALF, C )
+            C = AB_SLAMC3( HALF*LEPS, ( TWO**5 )*( LEPS**2 ) )
+            C = AB_SLAMC3( HALF, -C )
+            B = AB_SLAMC3( HALF, C )
+            C = AB_SLAMC3( HALF, -B )
+            B = AB_SLAMC3( HALF, C )
             GO TO 10
          END IF
 *+       END WHILE
@@ -520,13 +520,13 @@
          RBASE = ONE / LBETA
          SMALL = ONE
          DO 20 I = 1, 3
-            SMALL = SLAMC3( SMALL*RBASE, ZERO )
+            SMALL = AB_SLAMC3( SMALL*RBASE, ZERO )
    20    CONTINUE
-         A = SLAMC3( ONE, SMALL )
-         CALL SLAMC4( NGPMIN, ONE, LBETA )
-         CALL SLAMC4( NGNMIN, -ONE, LBETA )
-         CALL SLAMC4( GPMIN, A, LBETA )
-         CALL SLAMC4( GNMIN, -A, LBETA )
+         A = AB_SLAMC3( ONE, SMALL )
+         CALL AB_SLAMC4( NGPMIN, ONE, LBETA )
+         CALL AB_SLAMC4( NGNMIN, -ONE, LBETA )
+         CALL AB_SLAMC4( GPMIN, A, LBETA )
+         CALL AB_SLAMC4( GNMIN, -A, LBETA )
          IEEE = .FALSE.
 *
          IF( ( NGPMIN.EQ.NGNMIN ) .AND. ( GPMIN.EQ.GNMIN ) ) THEN
@@ -584,7 +584,7 @@
 *
 *        Assume IEEE arithmetic if we found denormalised  numbers above,
 *        or if arithmetic seems to round in the  IEEE style,  determined
-*        in routine SLAMC1. A true IEEE machine should have both  things
+*        in routine AB_SLAMC1. A true IEEE machine should have both  things
 *        true; however, faulty machines may have one or the other.
 *
          IEEE = IEEE .OR. LIEEE1
@@ -595,12 +595,12 @@
 *
          LRMIN = 1
          DO 30 I = 1, 1 - LEMIN
-            LRMIN = SLAMC3( LRMIN*RBASE, ZERO )
+            LRMIN = AB_SLAMC3( LRMIN*RBASE, ZERO )
    30    CONTINUE
 *
-*        Finally, call SLAMC5 to compute EMAX and RMAX.
+*        Finally, call AB_SLAMC5 to compute EMAX and RMAX.
 *
-         CALL SLAMC5( LBETA, LT, LEMIN, IEEE, LEMAX, LRMAX )
+         CALL AB_SLAMC5( LBETA, LT, LEMIN, IEEE, LEMAX, LRMAX )
       END IF
 *
       BETA = LBETA
@@ -619,19 +619,19 @@
      $      ' If, after inspection, the value EMIN looks',
      $      ' acceptable please comment out ',
      $      / ' the IF block as marked within the code of routine',
-     $      ' SLAMC2,', / ' otherwise supply EMIN explicitly.', / )
+     $      ' AB_SLAMC2,', / ' otherwise supply EMIN explicitly.', / )
 *
-*     End of SLAMC2
+*     End of AB_SLAMC2
 *
       END
 *
 ************************************************************************
 *
-*> \brief \b SLAMC3
+*> \brief \b AB_SLAMC3
 *> \details
 *> \b Purpose:
 *> \verbatim
-*> SLAMC3  is intended to force  A  and  B  to be stored prior to doing
+*> AB_SLAMC3  is intended to force  A  and  B  to be stored prior to doing
 *> the addition of  A  and  B ,  for use in situations where optimizers
 *> might hold one of these in a register.
 *> \endverbatim
@@ -643,7 +643,7 @@
 *>          The values A and B.
 *> \endverbatim
 
-      REAL FUNCTION SLAMC3( A, B )
+      REAL FUNCTION AB_SLAMC3( A, B )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -656,21 +656,21 @@
 *
 *     .. Executable Statements ..
 *
-      SLAMC3 = A + B
+      AB_SLAMC3 = A + B
 *
       RETURN
 *
-*     End of SLAMC3
+*     End of AB_SLAMC3
 *
       END
 *
 ************************************************************************
 *
-*> \brief \b SLAMC4
+*> \brief \b AB_SLAMC4
 *> \details
 *> \b Purpose:
 *> \verbatim
-*> SLAMC4 is a service routine for SLAMC2.
+*> AB_SLAMC4 is a service routine for AB_SLAMC2.
 *> \endverbatim
 *>
 *> \param[out] EMIN
@@ -690,7 +690,7 @@
 *>          The base of the machine.
 *> \endverbatim
 *>
-      SUBROUTINE SLAMC4( EMIN, START, BASE )
+      SUBROUTINE AB_SLAMC4( EMIN, START, BASE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -708,8 +708,8 @@
       REAL               A, B1, B2, C1, C2, D1, D2, ONE, RBASE, ZERO
 *     ..
 *     .. External Functions ..
-      REAL               SLAMC3
-      EXTERNAL           SLAMC3
+      REAL               AB_SLAMC3
+      EXTERNAL           AB_SLAMC3
 *     ..
 *     .. Executable Statements ..
 *
@@ -718,7 +718,7 @@
       RBASE = ONE / BASE
       ZERO = 0
       EMIN = 1
-      B1 = SLAMC3( A*RBASE, ZERO )
+      B1 = AB_SLAMC3( A*RBASE, ZERO )
       C1 = A
       C2 = A
       D1 = A
@@ -730,14 +730,14 @@
      $    ( D2.EQ.A ) ) THEN
          EMIN = EMIN - 1
          A = B1
-         B1 = SLAMC3( A / BASE, ZERO )
-         C1 = SLAMC3( B1*BASE, ZERO )
+         B1 = AB_SLAMC3( A / BASE, ZERO )
+         C1 = AB_SLAMC3( B1*BASE, ZERO )
          D1 = ZERO
          DO 20 I = 1, BASE
             D1 = D1 + B1
    20    CONTINUE
-         B2 = SLAMC3( A*RBASE, ZERO )
-         C2 = SLAMC3( B2 / RBASE, ZERO )
+         B2 = AB_SLAMC3( A*RBASE, ZERO )
+         C2 = AB_SLAMC3( B2 / RBASE, ZERO )
          D2 = ZERO
          DO 30 I = 1, BASE
             D2 = D2 + B2
@@ -748,17 +748,17 @@
 *
       RETURN
 *
-*     End of SLAMC4
+*     End of AB_SLAMC4
 *
       END
 *
 ************************************************************************
 *
-*> \brief \b SLAMC5
+*> \brief \b AB_SLAMC5
 *> \details
 *> \b Purpose:
 *> \verbatim
-*> SLAMC5 attempts to compute RMAX, the largest machine floating-point
+*> AB_SLAMC5 attempts to compute RMAX, the largest machine floating-point
 *> number, without overflow.  It assumes that EMAX + abs(EMIN) sum
 *> approximately to a power of 2.  It will fail on machines where this
 *> assumption does not hold, for example, the Cyber 205 (EMIN = -28625,
@@ -798,7 +798,7 @@
 *>          The largest machine floating-point number.
 *> \endverbatim
 *>
-      SUBROUTINE SLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
+      SUBROUTINE AB_SLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -820,8 +820,8 @@
       REAL               OLDY, RECBAS, Y, Z
 *     ..
 *     .. External Functions ..
-      REAL               SLAMC3
-      EXTERNAL           SLAMC3
+      REAL               AB_SLAMC3
+      EXTERNAL           AB_SLAMC3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -905,7 +905,7 @@
          Z = Z*RECBAS
          IF( Y.LT.ONE )
      $      OLDY = Y
-         Y = SLAMC3( Y, Z )
+         Y = AB_SLAMC3( Y, Z )
    20 CONTINUE
       IF( Y.GE.ONE )
      $   Y = OLDY
@@ -913,12 +913,12 @@
 *     Now multiply by BETA**EMAX to get RMAX.
 *
       DO 30 I = 1, EMAX
-         Y = SLAMC3( Y*BETA, ZERO )
+         Y = AB_SLAMC3( Y*BETA, ZERO )
    30 CONTINUE
 *
       RMAX = Y
       RETURN
 *
-*     End of SLAMC5
+*     End of AB_SLAMC5
 *
       END

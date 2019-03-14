@@ -94,7 +94,7 @@
 *>     Tests SGGSVD, SGGSVP, STGSJA, SLAGS2, SLAPLL, and SLAPMT
 *>
 *> CSD (CS decomposition):
-*>     Tests SORCSD
+*>     Tests AB_sorcsd
 *>
 *> LSE (Constrained Linear Least Squares):
 *>     Tests SGGLSE

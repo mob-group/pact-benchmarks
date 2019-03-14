@@ -94,7 +94,7 @@
 *>     Tests DGGSVD, DGGSVP, DTGSJA, DLAGS2, DLAPLL, and DLAPMT
 *>
 *> CSD (CS decomposition):
-*>     Tests DORCSD
+*>     Tests AB_dorcsd
 *>
 *> LSE (Constrained Linear Least Squares):
 *>     Tests DGGLSE

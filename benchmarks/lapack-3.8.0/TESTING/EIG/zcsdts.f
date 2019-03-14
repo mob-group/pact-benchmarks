@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> ZCSDTS tests ZUNCSD, which, given an M-by-M partitioned unitary
+*> ZCSDTS tests AB_zuncsd, which, given an M-by-M partitioned unitary
 *> matrix X,
 *>              Q  M-Q
 *>       X = [ X11 X12 ] P   ,
@@ -48,7 +48,7 @@
 *>                             [  0  S  0 |  0  C  0 ]
 *>                             [  0  0  I |  0  0  0 ]
 *>
-*> and also SORCSD2BY1, which, given
+*> and also AB_sorcsd2BY1, which, given
 *>          Q
 *>       [ X11 ] P   ,
 *>       [ X21 ] M-P
@@ -94,8 +94,8 @@
 *> \param[out] XF
 *> \verbatim
 *>          XF is COMPLEX*16 array, dimension (LDX,M)
-*>          Details of the CSD of X, as returned by ZUNCSD;
-*>          see ZUNCSD for further details.
+*>          Details of the CSD of X, as returned by AB_zuncsd;
+*>          see AB_zuncsd for further details.
 *> \endverbatim
 *>
 *> \param[in] LDX
@@ -159,7 +159,7 @@
 *> \verbatim
 *>          THETA is DOUBLE PRECISION array, dimension MIN(P,M-P,Q,M-Q)
 *>          The CS values of X; the essentially diagonal matrices C and
-*>          S are constructed from THETA; see subroutine ZUNCSD for
+*>          S are constructed from THETA; see subroutine AB_zuncsd for
 *>          details.
 *> \endverbatim
 *>
@@ -263,8 +263,8 @@
       EXTERNAL           DLAMCH, ZLANGE, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZHERK, ZLACPY, ZLASET, ZUNCSD,
-     $                   ZUNCSD2BY1
+      EXTERNAL           ZGEMM, ZHERK, ZLACPY, ZLASET, AB_zuncsd,
+     $                   AB_zuncsd2BY1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          COS, DBLE, DCMPLX, MAX, MIN, REAL, SIN
@@ -293,7 +293,8 @@
 *
 *     Compute the CSD
 *
-      CALL ZUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'D', M, P, Q, XF(1,1), LDX,
+      CALL AB_zuncsd( 'Y', 'Y', 'Y', 'Y', 'N', 'D', M, P, Q, XF(1,1), LD
+     $X,
      $             XF(1,Q+1), LDX, XF(P+1,1), LDX, XF(P+1,Q+1), LDX,
      $             THETA, U1, LDU1, U2, LDU2, V1T, LDV1T, V2T, LDV2T,
      $             WORK, LWORK, RWORK, 17*(R+2), IWORK, INFO )
@@ -459,7 +460,8 @@
 *
 *     Compute the CSD
 *
-      CALL ZUNCSD2BY1( 'Y', 'Y', 'Y', M, P, Q, XF(1,1), LDX, XF(P+1,1),
+      CALL AB_zuncsd2BY1( 'Y', 'Y', 'Y', M, P, Q, XF(1,1), LDX, XF(P+1,1
+     $),
      $             LDX, THETA, U1, LDU1, U2, LDU2, V1T, LDV1T, WORK,
      $             LWORK, RWORK, 17*(R+2), IWORK, INFO )
 *

@@ -178,8 +178,8 @@
       DOUBLE PRECISION   TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMC3, AB_DNRM2
-      EXTERNAL           DLAMC3, AB_DNRM2
+      DOUBLE PRECISION   AB_dlamc3, AB_DNRM2
+      EXTERNAL           AB_dlamc3, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DLAED4, AB_XERBLA
@@ -235,7 +235,8 @@
 *     this code.
 *
       DO 10 I = 1, N
-         DLAMDA( I ) = DLAMC3( DLAMDA( I ), DLAMDA( I ) ) - DLAMDA( I )
+         DLAMDA( I ) = AB_dlamc3( DLAMDA( I ), DLAMDA( I ) ) - DLAMDA( I
+     $ )
    10 CONTINUE
 *
       DO 20 J = KSTART, KSTOP

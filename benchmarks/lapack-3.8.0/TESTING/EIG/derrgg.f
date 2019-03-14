@@ -23,7 +23,7 @@
 *>
 *> DERRGG tests the error exits for DGGES, DGGESX, DGGEV,  DGGEVX,
 *> DGGGLM, DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD3,
-*> DGGSVP3, DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA,
+*> DGGSVP3, DHGEQZ, AB_dorcsd, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA,
 *> DGGES3, DGGEV3, and DTGSYL.
 *> \endverbatim
 *
@@ -97,7 +97,8 @@
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, DGGES, DGGESX, DGGEV, DGGEVX, DGGGLM,
      $                   DGGHRD, DGGLSE, DGGQRF, DGGRQF,
-     $                   DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA,
+     $                   DHGEQZ, AB_dorcsd, DTGEVC, DTGEXC, DTGSEN, DTGS
+     $JA,
      $                   DTGSNA, DTGSYL, DGGHD3, DGGES3, DGGEV3,
      $                   DGGSVD3, DGGSVP3
 *     ..
@@ -539,65 +540,65 @@
 *
       ELSE IF( LSAMEN( 3, PATH, 'CSD' ) ) THEN
 *
-*        DORCSD
+*        AB_dorcsd
 *
-         SRNAMT = 'DORCSD'
+         SRNAMT = 'AB_dorcsd'
          INFOT = 7
-         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_dorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 -1, 0, 0, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dorcsd', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_dorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, -1, 0, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dorcsd', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_dorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, -1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dorcsd', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_dorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, -1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dorcsd', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_dorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, -1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dorcsd', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_dorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, -1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dorcsd', INFOT, NOUT, LERR, OK )
          INFOT = 24
-         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_dorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, -1, A,
      $                 1, W, LW, IW, INFO )
-         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dorcsd', INFOT, NOUT, LERR, OK )
          INFOT = 26
-         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+         CALL AB_dorcsd( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 -1, W, LW, IW, INFO )
-         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'AB_dorcsd', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
 *     Test error exits for the GQR path.

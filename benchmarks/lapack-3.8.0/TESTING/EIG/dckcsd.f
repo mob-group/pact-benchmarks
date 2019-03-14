@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DCKCSD tests DORCSD:
+*> DCKCSD tests AB_dorcsd:
 *>        the CSD for an M-by-M orthogonal matrix X partitioned as
 *>        [ X11 X12; X21 X22 ]. X11 is P-by-Q.
 *> \endverbatim

@@ -302,8 +302,8 @@
      $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMC3, AB_DNRM2
-      EXTERNAL           DLAMC3, AB_DNRM2
+      DOUBLE PRECISION   AB_dlamc3, AB_DNRM2
+      EXTERNAL           AB_dlamc3, AB_DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -396,7 +396,7 @@
                      WORK( I ) = ZERO
                   ELSE
                      WORK( I ) = POLES( I, 2 )*Z( I ) /
-     $                           ( DLAMC3( POLES( I, 2 ), DSIGJ )-
+     $                           ( AB_dlamc3( POLES( I, 2 ), DSIGJ )-
      $                           DIFLJ ) / ( POLES( I, 2 )+DJ )
                   END IF
    30          CONTINUE
@@ -406,7 +406,7 @@
                      WORK( I ) = ZERO
                   ELSE
                      WORK( I ) = POLES( I, 2 )*Z( I ) /
-     $                           ( DLAMC3( POLES( I, 2 ), DSIGJP )+
+     $                           ( AB_dlamc3( POLES( I, 2 ), DSIGJP )+
      $                           DIFRJ ) / ( POLES( I, 2 )+DJ )
                   END IF
    40          CONTINUE
@@ -447,7 +447,8 @@
                   IF( Z( J ).EQ.ZERO ) THEN
                      WORK( I ) = ZERO
                   ELSE
-                     WORK( I ) = Z( J ) / ( DLAMC3( DSIGJ, -POLES( I+1,
+                     WORK( I ) = Z( J ) / ( AB_dlamc3( DSIGJ, -POLES( I+
+     $1,
      $                           2 ) )-DIFR( I, 1 ) ) /
      $                           ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
@@ -456,7 +457,7 @@
                   IF( Z( J ).EQ.ZERO ) THEN
                      WORK( I ) = ZERO
                   ELSE
-                     WORK( I ) = Z( J ) / ( DLAMC3( DSIGJ, -POLES( I,
+                     WORK( I ) = Z( J ) / ( AB_dlamc3( DSIGJ, -POLES( I,
      $                           2 ) )-DIFL( I ) ) /
      $                           ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF

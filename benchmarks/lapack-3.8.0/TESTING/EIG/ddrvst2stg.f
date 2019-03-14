@@ -512,7 +512,7 @@
      $                   DSYEVD_2STAGE, DSYEVR_2STAGE, DSYEVX_2STAGE,
      $                   DSYEV_2STAGE, DSBEV_2STAGE, DSBEVD_2STAGE,
      $                   DSBEVX_2STAGE, DSYTRD_2STAGE, DSYTRD_SY2SB, 
-     $                   DSYTRD_SB2ST, DSYT22, XERBLA
+     $                   AB_dsytrd_sb2st, DSYT22, XERBLA
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT

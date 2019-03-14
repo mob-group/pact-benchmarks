@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> CCKCSD tests CUNCSD:
+*> CCKCSD tests AB_cuncsd:
 *>        the CSD for an M-by-M unitary matrix X partitioned as
 *>        [ X11 X12; X21 X22 ]. X11 is P-by-Q.
 *> \endverbatim

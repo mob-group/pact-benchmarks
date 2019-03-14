@@ -39,18 +39,18 @@
 *> ZHBTRD can use either just the lower or just the upper triangle
 *> of A; ZCHKHBSTG checks both cases.
 *>
-*> ZHETRD_HB2ST factors a Hermitian band matrix A as  U S U* , 
+*> AB_zhetrd_hb2st factors a Hermitian band matrix A as  U S U* , 
 *> where * means conjugate transpose, S is symmetric tridiagonal, and U is
-*> unitary. ZHETRD_HB2ST can use either just the lower or just
+*> unitary. AB_zhetrd_hb2st can use either just the lower or just
 *> the upper triangle of A; ZCHKHBSTG checks both cases.
 *>
 *> DSTEQR factors S as  Z D1 Z'.  
 *> D1 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of DSBTRD "U" (used as reference for DSYTRD_SB2ST)
+*> and from the S resulting of DSBTRD "U" (used as reference for AB_dsytrd_sb2st)
 *> D2 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of DSYTRD_SB2ST "U".
+*> and from the S resulting of AB_dsytrd_sb2st "U".
 *> D3 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of DSYTRD_SB2ST "L".
+*> and from the S resulting of AB_dsytrd_sb2st "L".
 *>
 *> When ZCHKHBSTG is called, a number of matrix "sizes" ("n's"), a number
 *> of bandwidths ("k's"), and a number of matrix "types" are
@@ -72,12 +72,12 @@
 *> (5)     | D1 - D2 | / ( |D1| ulp )      where D1 is computed by
 *>                                         DSBTRD with UPLO='U' and
 *>                                         D2 is computed by
-*>                                         ZHETRD_HB2ST with UPLO='U'
+*>                                         AB_zhetrd_hb2st with UPLO='U'
 *>
 *> (6)     | D1 - D3 | / ( |D1| ulp )      where D1 is computed by
 *>                                         DSBTRD with UPLO='U' and
 *>                                         D3 is computed by
-*>                                         ZHETRD_HB2ST with UPLO='L'
+*>                                         AB_zhetrd_hb2st with UPLO='L'
 *>
 *> The "sizes" are specified by an array NN(1:NSIZES); the value of
 *> each element NN(j) specifies one size.
@@ -373,7 +373,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASUM, XERBLA, ZHBT21, ZHBTRD, ZLACPY, ZLASET,
-     $                   ZLATMR, ZLATMS, ZHETRD_HB2ST, ZSTEQR
+     $                   ZLATMR, ZLATMS, AB_zhetrd_hb2st, ZSTEQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, SQRT
@@ -645,17 +645,17 @@
                CALL ZHBT21( 'Upper', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RWORK, RESULT( 1 ) )
 *
-*              Before converting A into lower for DSBTRD, run DSYTRD_SB2ST 
+*              Before converting A into lower for DSBTRD, run AB_dsytrd_sb2st 
 *              otherwise matrix A will be converted to lower and then need
 *              to be converted back to upper in order to run the upper case 
-*              ofDSYTRD_SB2ST
+*              ofAB_dsytrd_sb2st
 *            
 *              Compute D1 the eigenvalues resulting from the tridiagonal
 *              form using the DSBTRD and used as reference to compare
-*              with the DSYTRD_SB2ST routine
+*              with the AB_dsytrd_sb2st routine
 *            
 *              Compute D1 from the DSBTRD and used as reference for the
-*              DSYTRD_SB2ST
+*              AB_dsytrd_sb2st
 *            
                CALL DCOPY( N, SD, 1, D1, 1 )
                IF( N.GT.0 )
@@ -675,7 +675,7 @@
                   END IF
                END IF
 *            
-*              DSYTRD_SB2ST Upper case is used to compute D2.
+*              AB_dsytrd_sb2st Upper case is used to compute D2.
 *              Note to set SD and SE to zero to be sure not reusing 
 *              the one from above. Compare it with D1 computed 
 *              using the DSBTRD.
@@ -685,10 +685,11 @@
                CALL ZLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH
-               CALL ZHETRD_HB2ST( 'N', 'N', "U", N, K, U, LDU, SD, SE, 
+               CALL AB_zhetrd_hb2st( 'N', 'N', "U", N, K, U, LDU, SD, SE
+     $, 
      $                      WORK, LH, WORK( LH+1 ), LW, IINFO )
 *            
-*              Compute D2 from the DSYTRD_SB2ST Upper case
+*              Compute D2 from the AB_dsytrd_sb2st Upper case
 *            
                CALL DCOPY( N, SD, 1, D2, 1 )
                IF( N.GT.0 )
@@ -748,7 +749,7 @@
                CALL ZHBT21( 'Lower', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RWORK, RESULT( 3 ) )
 *
-*              DSYTRD_SB2ST Lower case is used to compute D3.
+*              AB_dsytrd_sb2st Lower case is used to compute D3.
 *              Note to set SD and SE to zero to be sure not reusing 
 *              the one from above. Compare it with D1 computed 
 *              using the DSBTRD. 
@@ -758,7 +759,8 @@
                CALL ZLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH
-               CALL ZHETRD_HB2ST( 'N', 'N', "L", N, K, U, LDU, SD, SE, 
+               CALL AB_zhetrd_hb2st( 'N', 'N', "L", N, K, U, LDU, SD, SE
+     $, 
      $                      WORK, LH, WORK( LH+1 ), LW, IINFO )
 *           
 *              Compute D3 from the 2-stage Upper case

@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SCKCSD tests SORCSD:
+*> SCKCSD tests AB_sorcsd:
 *>        the CSD for an M-by-M orthogonal matrix X partitioned as
 *>        [ X11 X12; X21 X22 ]. X11 is P-by-Q.
 *> \endverbatim

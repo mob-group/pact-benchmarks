@@ -1,4 +1,4 @@
-*> \brief \b DSECND  Using ETIME
+*> \brief \b AB_DSECND  Using ETIME
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      DOUBLE PRECISION FUNCTION DSECND( )
+*      DOUBLE PRECISION FUNCTION AB_DSECND( )
 *
 *
 *> \par Purpose:
@@ -16,7 +16,7 @@
 *>
 *> \verbatim
 *>
-*>  DSECND returns the user time for a process in seconds.
+*>  AB_DSECND returns the user time for a process in AB_SECONDs.
 *>  This version gets the time from the EXTERNAL system function ETIME.
 *> \endverbatim
 *
@@ -33,7 +33,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DSECND( )
+      DOUBLE PRECISION FUNCTION AB_DSECND( )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -56,9 +56,9 @@
 *     .. Executable Statements ..
 *
       T1 = ETIME( TARRAY )
-      DSECND = TARRAY( 1 )
+      AB_DSECND = TARRAY( 1 )
       RETURN
 *
-*     End of DSECND
+*     End of AB_DSECND
 *
       END

@@ -38,18 +38,18 @@
 *> SSBTRD can use either just the lower or just the upper triangle
 *> of A; SCHKSBSTG checks both cases.
 *>
-*> SSYTRD_SB2ST factors a symmetric band matrix A as  U S U' , 
+*> AB_ssytrd_sb2st factors a symmetric band matrix A as  U S U' , 
 *> where ' means transpose, S is symmetric tridiagonal, and U is
-*> orthogonal. SSYTRD_SB2ST can use either just the lower or just
+*> orthogonal. AB_ssytrd_sb2st can use either just the lower or just
 *> the upper triangle of A; SCHKSBSTG checks both cases.
 *>
 *> SSTEQR factors S as  Z D1 Z'.  
 *> D1 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of SSBTRD "U" (used as reference for SSYTRD_SB2ST)
+*> and from the S resulting of SSBTRD "U" (used as reference for AB_ssytrd_sb2st)
 *> D2 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of SSYTRD_SB2ST "U".
+*> and from the S resulting of AB_ssytrd_sb2st "U".
 *> D3 is the matrix of eigenvalues computed when Z is not computed
-*> and from the S resulting of SSYTRD_SB2ST "L".
+*> and from the S resulting of AB_ssytrd_sb2st "L".
 *>
 *> When SCHKSBSTG is called, a number of matrix "sizes" ("n's"), a number
 *> of bandwidths ("k's"), and a number of matrix "types" are
@@ -71,12 +71,12 @@
 *> (5)     | D1 - D2 | / ( |D1| ulp )      where D1 is computed by
 *>                                         SSBTRD with UPLO='U' and
 *>                                         D2 is computed by
-*>                                         SSYTRD_SB2ST with UPLO='U'
+*>                                         AB_ssytrd_sb2st with UPLO='U'
 *>
 *> (6)     | D1 - D3 | / ( |D1| ulp )      where D1 is computed by
 *>                                         SSBTRD with UPLO='U' and
 *>                                         D3 is computed by
-*>                                         SSYTRD_SB2ST with UPLO='L'
+*>                                         AB_ssytrd_sb2st with UPLO='L'
 *>
 *> The "sizes" are specified by an array NN(1:NSIZES); the value of
 *> each element NN(j) specifies one size.
@@ -363,7 +363,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLACPY, SLASET, SLASUM, SLATMR, SLATMS, SSBT21,
-     $                   SSBTRD, XERBLA, SSYTRD_SB2ST, SSTEQR
+     $                   SSBTRD, XERBLA, AB_ssytrd_sb2st, SSTEQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -635,17 +635,17 @@
                CALL SSBT21( 'Upper', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RESULT( 1 ) )
 *
-*              Before converting A into lower for SSBTRD, run SSYTRD_SB2ST 
+*              Before converting A into lower for SSBTRD, run AB_ssytrd_sb2st 
 *              otherwise matrix A will be converted to lower and then need
 *              to be converted back to upper in order to run the upper case 
-*              ofSSYTRD_SB2ST
+*              ofAB_ssytrd_sb2st
 *            
 *              Compute D1 the eigenvalues resulting from the tridiagonal
 *              form using the SSBTRD and used as reference to compare
-*              with the SSYTRD_SB2ST routine
+*              with the AB_ssytrd_sb2st routine
 *            
 *              Compute D1 from the SSBTRD and used as reference for the
-*              SSYTRD_SB2ST
+*              AB_ssytrd_sb2st
 *            
                CALL SCOPY( N, SD, 1, D1, 1 )
                IF( N.GT.0 )
@@ -665,7 +665,7 @@
                   END IF
                END IF
 *            
-*              SSYTRD_SB2ST Upper case is used to compute D2.
+*              AB_ssytrd_sb2st Upper case is used to compute D2.
 *              Note to set SD and SE to zero to be sure not reusing 
 *              the one from above. Compare it with D1 computed 
 *              using the SSBTRD.
@@ -675,10 +675,11 @@
                CALL SLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH
-               CALL SSYTRD_SB2ST( 'N', 'N', "U", N, K, U, LDU, SD, SE, 
+               CALL AB_ssytrd_sb2st( 'N', 'N', "U", N, K, U, LDU, SD, SE
+     $, 
      $                      WORK, LH, WORK( LH+1 ), LW, IINFO )
 *            
-*              Compute D2 from the SSYTRD_SB2ST Upper case
+*              Compute D2 from the AB_ssytrd_sb2st Upper case
 *            
                CALL SCOPY( N, SD, 1, D2, 1 )
                IF( N.GT.0 )
@@ -738,7 +739,7 @@
                CALL SSBT21( 'Lower', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RESULT( 3 ) )
 *
-*              SSYTRD_SB2ST Lower case is used to compute D3.
+*              AB_ssytrd_sb2st Lower case is used to compute D3.
 *              Note to set SD and SE to zero to be sure not reusing 
 *              the one from above. Compare it with D1 computed 
 *              using the SSBTRD. 
@@ -748,7 +749,8 @@
                CALL SLACPY( ' ', K+1, N, A, LDA, U, LDU )
                LH = MAX(1, 4*N)
                LW = LWORK - LH
-               CALL SSYTRD_SB2ST( 'N', 'N', "L", N, K, U, LDU, SD, SE, 
+               CALL AB_ssytrd_sb2st( 'N', 'N', "L", N, K, U, LDU, SD, SE
+     $, 
      $                      WORK, LH, WORK( LH+1 ), LW, IINFO )
 *           
 *              Compute D3 from the 2-stage Upper case

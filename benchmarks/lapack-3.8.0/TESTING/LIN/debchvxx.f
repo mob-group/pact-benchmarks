@@ -301,8 +301,10 @@
             RINORM = MAX(RINORM, SUMRI)
          END DO
 
-!        invhilb is the inverse *unscaled* Hilbert matrix, so scale its norm
-!        by 1/A(1,1) to make the scaling match A (the scaled Hilbert matrix)
+!        invhilb is the inverse *unscaled* Hilbert matrix, so scale its 
+     $norm
+!        by 1/A(1,1) to make the scaling match A (the scaled Hilbert mat
+     $rix)
          NCOND = ABS(A(1,1)) / RINORM
 
          CONDTHRESH = M * EPS
@@ -347,8 +349,10 @@
                END DO
                RINORM = MAX(RINORM, SUMRI)
             END DO
-!        invhilb is the inverse *unscaled* Hilbert matrix, so scale its norm
-!        by 1/A(1,1) to make the scaling match A (the scaled Hilbert matrix)
+!        invhilb is the inverse *unscaled* Hilbert matrix, so scale its 
+     $norm
+!        by 1/A(1,1) to make the scaling match A (the scaled Hilbert mat
+     $rix)
             CCOND = ABS(A(1,1))/RINORM
 
 !        Forward error bound tests
@@ -448,14 +452,20 @@
 
 c$$$         WRITE(*,*)
 c$$$         WRITE(*,*) 'Normwise Error Bounds'
-c$$$         WRITE(*,*) 'Guaranteed error bound: ',ERRBND(NRHS,nwise_i,bnd_i)
-c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,nwise_i,cond_i)
-c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,nwise_i,rawbnd_i)
+c$$$         WRITE(*,*) 'Guaranteed error bound: ',ERRBND(NRHS,nwise_i,b
+     $nd_i)
+c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,nwis
+     $e_i,cond_i)
+c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,nwise_i,rawbn
+     $d_i)
 c$$$         WRITE(*,*)
 c$$$         WRITE(*,*) 'Componentwise Error Bounds'
-c$$$         WRITE(*,*) 'Guaranteed error bound: ',ERRBND(NRHS,cwise_i,bnd_i)
-c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,cwise_i,cond_i)
-c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,cwise_i,rawbnd_i)
+c$$$         WRITE(*,*) 'Guaranteed error bound: ',ERRBND(NRHS,cwise_i,b
+     $nd_i)
+c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,cwis
+     $e_i,cond_i)
+c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,cwise_i,rawbn
+     $d_i)
 c$$$         print *, 'Info: ', info
 c$$$         WRITE(*,*)
 *         WRITE(*,*) 'TSTRAT: ',TSTRAT

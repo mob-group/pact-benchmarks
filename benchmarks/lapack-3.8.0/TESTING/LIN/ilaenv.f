@@ -256,8 +256,8 @@ C        ILAENV = 0
 *     .. Local variables ..
       INTEGER            IISPEC
 *     .. External Functions ..
-      INTEGER            IPARAM2STAGE
-      EXTERNAL           IPARAM2STAGE
+      INTEGER            AB_iparam2stage
+      EXTERNAL           AB_iparam2stage
 *     ..
 *     .. Arrays in Common ..
       INTEGER            IPARMS( 100 )
@@ -278,7 +278,7 @@ C        ILAENV = 0
              ILAENV2STAGE = IPARMS( 1 )
          ELSE
              IISPEC = 16 + ISPEC
-             ILAENV2STAGE = IPARAM2STAGE( IISPEC, NAME, OPTS,
+             ILAENV2STAGE = AB_iparam2stage( IISPEC, NAME, OPTS,
      $                                    N1, N2, N3, N4 ) 
          ENDIF
 *
