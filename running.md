@@ -37,3 +37,15 @@ sh cuda_8.0.61_375.26_linux-run
 # follow the script
 rm cuda_8.0.61_375.26_linux-run
 ```
+
+Install MKL:
+```
+curl -OL http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/14895/l_mkl_2019.1.144.tgz
+tar xvf l_mkl_2019.1.144.tgz
+cd l_mkl_2019.1.144
+./install.sh
+# follow the script
+cd ..
+rm -rf l_mkl_2019.1.144 l_mkl_2019.1.144.tgz
+source $PACT_BENCH/local/compilers_and_libraries_2019/linux/mkl/bin/mklvars.sh intel64
+```

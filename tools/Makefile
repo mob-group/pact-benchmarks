@@ -5,7 +5,14 @@ MKLLINK=-lgomp -lpthread -lm -ldl
 FC=gfortran
 SHIM_INSTALL ?= $(PACT_BENCH)/local/lib
 
-all: test ftest
+all:
+	@echo "Can't use this Makefile for a default target"
+	@echo "Try mkl-tests, cublas-test"
+	@exit 1
+
+mkl-tests: test ftest
+
+cublas-test:
 
 test: main.o libmklshim.a
 	$(CC) $(CFLAGS) $(MKLFLAGS) $^ -o $@ $(MKLLINK)
