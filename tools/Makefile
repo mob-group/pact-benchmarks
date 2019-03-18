@@ -1,6 +1,10 @@
 CFLAGS=-std=c99
+
 MKLFLAGS=-DMKL_ILP64 -m64 -I${MKLROOT}/include
 MKLLINK=-lgomp -lpthread -lm -ldl
+
+CUDAFLAGS=-I$(PACT_BENCH)/local/include
+CUDALINK=-L$(PACT_BENCH)/local/lib64 -lcuda -lcublas -lcudart -lpthread -ldl
 
 FC=gfortran
 SHIM_INSTALL ?= $(PACT_BENCH)/local/lib
@@ -12,7 +16,8 @@ all:
 
 mkl-tests: test ftest
 
-cublas-test:
+cublas-test: cublas_test.c
+	$(CC) $(CFLAGS) $(CUDAFLAGS) $^ -o $@ $(CUDALINK)
 
 test: main.o libmklshim.a
 	$(CC) $(CFLAGS) $(MKLFLAGS) $^ -o $@ $(MKLLINK)
@@ -34,4 +39,4 @@ install: libmklshim.a
 	cp $^ $(SHIM_INSTALL)
 
 clean:
-	rm -f *.a *.o test ftest
+	rm -f *.a *.o test ftest cublas-test
