@@ -5,12 +5,22 @@ CUDALINK=-L$(PACT_BENCH)/local/lib64 -lcuda -lcublas -lcudart -lpthread -ldl
 
 SHIM_INSTALL ?= $(PACT_BENCH)/local/lib
 
-.PHONY: all
-all: libcudashim.a
+FC=gfortran
+
+.PHONY: all tests clean
+all: tests libcudashim.a
 
 libcudashim.a: shim.o
 	ar cru $@ $^
 	ranlib $@
+
+tests: test ftest
+
+test: test.c libcudashim.a
+	$(CC) $(CFLAGS) $(CUDAFLAGS) $< -o $@ $(CUDALINK) -L. -lcudashim
+
+ftest: ftest.f90 libcudashim.a
+	$(FC) $< -o $@ $(CUDALINK) -L. -lcudashim
 
 %.o : %.c
 	$(CC) $(CFLAGS) $(CUDAFLAGS) -c $^ -o $@
@@ -20,4 +30,4 @@ install: libcudashim.a
 	cp $^ $(SHIM_INSTALL)
 
 clean:
-	rm -f *.a *.o
+	rm -f *.a *.o test ftest
