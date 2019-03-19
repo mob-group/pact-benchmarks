@@ -1,4 +1,4 @@
-# This configuration generated automatically on atocha at Fri 8 Mar 10:16:03 GMT 2019
+# This configuration generated automatically on monaco at Tue 19 Mar 15:04:45 GMT 2019
 # Request modules from user: all
 The following subdirectories are built:
 NWints analyz atomscf bq cafe ccca ccsd cons cphf dangchang ddscf dimqm dntmc dplot drdy driver esp etrans fft gradients hessian mcscf mm moints mp2_grad nwdft nwmd nwpw optim perfm prepar property qhop qmd qmmm rimp2 selci solvation space stepper symmetry tce vib vscf

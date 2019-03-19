@@ -1,5 +1,5 @@
       subroutine util_nwchem_version(nwrev)
       implicit none
       character*(*) nwrev
-      nwrev="79be5299"
+      nwrev="d9ec9d0f"
       end
