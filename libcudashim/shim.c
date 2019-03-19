@@ -63,6 +63,8 @@ void store_pointer(void* host, void* dev)
     }
   }
 
+  cudaFree(pointer_map[next_index * 2 + 1]);
+
   pointer_map[next_index * 2] = host;
   pointer_map[next_index * 2 + 1] = dev;
 
@@ -81,32 +83,34 @@ void* retrieve_pointer(void* host)
   return 0;
 }
 
-#define ALLOC_AND_COPY(T, rows, cols, host) \
-  T *dev##host = 0; \
-  do { \
-    int rows_ = (rows); \
-    int cols_= (cols); \
-    T const* host_ = (host); \
-    \
-    void *retr##host = retrieve_pointer((void *)host_); \
-    if(!retr##host) { \
-      cudaError_t stat##host = cudaMalloc((void **)&dev##host, rows_ * cols_ * sizeof(T)); \
-      \
-      if(stat##host != cudaSuccess) { \
-        ERRC("Alloc " #host, stat##host); \
-      } \
-      \
-      cublasStatus_t blas_stat##host = cublasSetMatrix( \
-        rows_, cols_, sizeof(T), host_, rows_, dev##host, rows_); \
-      \
-      if(blas_stat##host != CUBLAS_STATUS_SUCCESS) { \
-        ERR("Copy " #host); \
-      } \
-      store_pointer((void *)host_, (void *)dev##host); \
-    } else { \
-      dev##host = retr##host; \
-    } \
-  } while(0); \
+#define ALLOC_AND_COPY(T, rows, cols, host)                         \
+  T *dev##host = 0;                                                 \
+  do {                                                              \
+    int rows_ = (rows);                                             \
+    int cols_= (cols);                                              \
+    T const* host_ = (host);                                        \
+                                                                    \
+    void *retr##host = retrieve_pointer((void *)host_);             \
+    if(!retr##host) {                                               \
+      cudaError_t stat##host = cudaMalloc(                          \
+          (void **)&dev##host, rows_ * cols_ * sizeof(T));          \
+                                                                    \
+      if(stat##host != cudaSuccess) {                               \
+        ERRC("Alloc " #host, stat##host);                           \
+      }                                                             \
+                                                                    \
+      cublasStatus_t blas_stat##host = cublasSetMatrix(             \
+        rows_, cols_, sizeof(T), host_, rows_, dev##host, rows_);   \
+                                                                    \
+      if(blas_stat##host != CUBLAS_STATUS_SUCCESS) {                \
+        ERR("Copy " #host);                                         \
+      }                                                             \
+      store_pointer((void *)host_, (void *)dev##host);              \
+    } else {                                                        \
+      printf("RETRIEVE\n");                                         \
+      dev##host = retr##host;                                       \
+    }                                                               \
+  } while(0);                                                       \
   if(!dev##host) { ERR("Badly wrong"); }
 
 void dgemm_(
