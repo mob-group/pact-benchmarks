@@ -107,7 +107,6 @@ void* retrieve_pointer(void* host)
       }                                                             \
       store_pointer((void *)host_, (void *)dev##host);              \
     } else {                                                        \
-      printf("RETRIEVE\n");                                         \
       dev##host = retr##host;                                       \
     }                                                               \
   } while(0);                                                       \
