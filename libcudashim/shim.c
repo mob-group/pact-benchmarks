@@ -42,6 +42,45 @@ static cublasOperation_t str_to_op(char const* str)
   }
 }
 
+static void * pointer_map[8] = { 0 };
+
+void store_pointer(void* host, void* dev)
+{
+  static int next_index = 0;
+
+  for(int i = 0; i < 4; ++i) {
+    void * ex_host = pointer_map[i*2];
+    if(ex_host == host) {
+      cudaFree(pointer_map[i*2+1]);
+
+      pointer_map[i*2] = host;
+      pointer_map[i*2 + 1] = dev;
+      return;
+    } else if(!ex_host) {
+      pointer_map[i*2] = host;
+      pointer_map[i*2 + 1] = dev;
+      return;
+    }
+  }
+
+  pointer_map[next_index * 2] = host;
+  pointer_map[next_index * 2 + 1] = dev;
+
+  next_index = ++next_index % 4;
+}
+
+void* retrieve_pointer(void* host)
+{
+  for(int i = 0; i < 4; ++i) {
+    void * ex_host = pointer_map[i*2];
+    if(ex_host == host) {
+      return pointer_map[i*2 + 1];
+    }
+  }
+
+  return 0;
+}
+
 #define ALLOC_AND_COPY(T, rows, cols, host) \
   T *dev##host = 0; \
   do { \
@@ -49,17 +88,23 @@ static cublasOperation_t str_to_op(char const* str)
     int cols_= (cols); \
     T const* host_ = (host); \
     \
-    cudaError_t stat##host = cudaMalloc((void **)&dev##host, rows_ * cols_ * sizeof(T)); \
-    \
-    if(stat##host != cudaSuccess) { \
-      ERRC("Alloc " #host, stat##host); \
-    } \
-    \
-    cublasStatus_t blas_stat##host = cublasSetMatrix( \
-      rows_, cols_, sizeof(T), host_, rows_, dev##host, rows_); \
-    \
-    if(blas_stat##host != CUBLAS_STATUS_SUCCESS) { \
-      ERR("Copy " #host); \
+    void *retr##host = retrieve_pointer((void *)host_); \
+    if(!retr##host) { \
+      cudaError_t stat##host = cudaMalloc((void **)&dev##host, rows_ * cols_ * sizeof(T)); \
+      \
+      if(stat##host != cudaSuccess) { \
+        ERRC("Alloc " #host, stat##host); \
+      } \
+      \
+      cublasStatus_t blas_stat##host = cublasSetMatrix( \
+        rows_, cols_, sizeof(T), host_, rows_, dev##host, rows_); \
+      \
+      if(blas_stat##host != CUBLAS_STATUS_SUCCESS) { \
+        ERR("Copy " #host); \
+      } \
+      store_pointer((void *)host_, (void *)dev##host); \
+    } else { \
+      dev##host = retr##host; \
     } \
   } while(0); \
   if(!dev##host) { ERR("Badly wrong"); }
