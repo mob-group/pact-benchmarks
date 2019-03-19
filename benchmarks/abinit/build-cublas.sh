@@ -8,4 +8,4 @@
                         -L$PACT_BENCH/local/lib64 -L$PACT_BENCH/local/lib \
                         -llapack -lblas \
                         -lcuda -lcublas -lcudart -lpthread -ldl -lcudashim"
-make -j$(nproc)
+make multi multi_nprocs=$(nproc)

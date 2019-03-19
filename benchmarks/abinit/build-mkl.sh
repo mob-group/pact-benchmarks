@@ -10,4 +10,4 @@
                         ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a \
                         ${MKLROOT}/lib/intel64/libmkl_core.a \
                         -Wl,--end-group -lgomp -lpthread -lm -ldl"
-make -j$(nproc)
+make multi multi_nprocs=$(nproc)
