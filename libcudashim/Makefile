@@ -7,7 +7,7 @@ SHIM_INSTALL ?= $(PACT_BENCH)/local/lib
 
 FC=gfortran
 
-.PHONY: all tests clean
+.PHONY: all tests clean install
 all: tests libcudashim.a
 
 libcudashim.a: shim.o
