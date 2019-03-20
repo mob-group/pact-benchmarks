@@ -49,3 +49,15 @@ cd ..
 rm -rf l_mkl_2019.1.144 l_mkl_2019.1.144.tgz
 source $PACT_BENCH/local/compilers_and_libraries_2019/linux/mkl/bin/mklvars.sh intel64
 ```
+
+Install OpenBLAS:
+```
+cd $PACT_BENCH
+curl -OL https://github.com/xianyi/OpenBLAS/archive/v0.3.5.tar.gz
+tar xvf v0.3.5.tar.gz
+cd OpenBLAS-0.3.5
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=$PACT_BENCH/local ..
+make -j$(nproc)
+```
