@@ -18,20 +18,38 @@ make install
 export PATH=$PACT_BENCH/local/bin:$PATH
 ```
 
+```
+cd $PACT_BENCH
+curl -OL https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.0.tar.bz2
+tar xvf openmpi-4.0.0.tar.bz2
+cd openmpi-4.0.0
+./configure --prefix=$PACT_BENCH/local
+make -j$(nproc)
+make install
+export PATH=$PACT_BENCH/local/bin:$PATH
+```
+
 Get the collected benchmarking code:
 ```
 cd $PACT_BENCH
 git clone git@github.com:Baltoli/locksteps.git
-cd locksteps/benchmarks
-cd lapack-3.8.0
-mkdir build
-cd build
-cmake ..
-make -j$(nproc)
+```
+
+Build the two BLAS implementations:
+```
+versions=("3.8.0" "mkl")
+for v in "${versions[@]}"; do
+  cd "$PACT_BENCH/locksteps/benchmarks/lapack-$v"
+  mkdir build
+  cd build
+  cmake ..
+  make -j$(nproc)
+done
 ```
 
 Install cublas:
 ```
+cd $PACT_BENCH
 curl -OL https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run
 sh cuda_8.0.61_375.26_linux-run
 # follow the script
