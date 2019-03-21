@@ -2,6 +2,9 @@
 
 echo "benchmark,dataset,implementation,time"
 
+machine="$1"
+shift
+
 for impl in "$@"; do
   "./build-$impl.sh" >/dev/null 2>&1
 
