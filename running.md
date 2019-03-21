@@ -78,4 +78,5 @@ mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=$PACT_BENCH/local ..
 make -j$(nproc)
+make install
 ```
