@@ -157,11 +157,17 @@ void zgemm_(
     devB, *ldb, beta, 
     devC, *ldc);
   if(stat != CUBLAS_STATUS_SUCCESS) { 
-    ERRC("DGEMM", stat);
+    ERRC("ZGEMM", stat);
   }
 
+  cudaError_t err = cudaMemcpy(C, devC, *m * *n * sizeof(*C), cudaMemcpyDeviceToHost);
+  if(err != cudaSuccess) {
+    ERRC("ZGEMM copy back", err);
+  }
+  /*
   stat = cublasGetMatrix(*m, *n, sizeof(*C), devC, *m, C, *m);
   if(stat != CUBLAS_STATUS_SUCCESS) { 
-    ERRC("DGEMM copy back", stat);
+    ERRC("ZGEMM copy back", stat);
   }
+  */
 }
