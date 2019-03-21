@@ -20,4 +20,4 @@ for impl in "$@"; do
   cd ..
 done
 
-git clean -fx bench/
+git clean -fx bench/ >/dev/null 2>&1
