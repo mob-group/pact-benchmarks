@@ -24,6 +24,8 @@ void new_table_entry(void *h, void *d, size_t s, page_functions_st fns) {
     }
   }
 
+  // Handle the case where the table is full and we need to delete something
+  // here (by deleting).
   size_t ni = table.next_insert;
 
   table.entries[ni].host = h;
