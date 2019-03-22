@@ -24,6 +24,7 @@ typedef struct page_entry {
 typedef struct page_table {
   page_entry_st *entries;
   size_t size;
+  size_t next_insert;
 } page_table_st;
 
 /**
@@ -35,7 +36,7 @@ typedef struct page_table {
  *    to, we detect that and set the flag.
  *  - creating a table entry.
  */
-void new_table_entry(page_table *tab, void *h, void *d, size_t s);
+void new_table_entry(page_table_st *tab, void *h, void *d, size_t s);
 
 /**
  * Stores the backing data for the default page table.
