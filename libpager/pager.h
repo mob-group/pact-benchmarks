@@ -4,7 +4,20 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#define UNUSED __attribute__((unused))
+
 #define DEFAULT_TABLE_SIZE 8
+
+typedef void (*deleter_ft)(void *);
+typedef void (*copier_ft)(void *, void *, size_t);
+
+typedef struct page_functions {
+  deleter_ft deleter;
+  copier_ft copier;
+} page_functions_st;
+
+page_functions_st heap_functions;
+page_functions_st stack_functions;
 
 /**
  * A single entry in a page table. Stores host and device pointers, the last
@@ -16,6 +29,8 @@ typedef struct page_entry {
   void *device;
   size_t last_size;
   bool written;
+
+  page_functions_st functions;
 } page_entry_st;
 
 /**
@@ -36,16 +51,23 @@ typedef struct page_table {
  *    to, we detect that and set the flag.
  *  - creating a table entry.
  */
-void new_table_entry(page_table_st *tab, void *h, void *d, size_t s);
+void new_table_entry(void *h, void *d, size_t s, page_functions_st fns);
+
+/**
+ * Gets the device pointer for this particular host pointer - if the written
+ * flag has been set then it needs to also do a copy through the table entry's
+ * function pointer table.
+ */
+void *get_table_entry(void *h);
 
 /**
  * Stores the backing data for the default page table.
  */
-page_entry_st default_page_table_data[DEFAULT_TABLE_SIZE];
+page_entry_st table_data[DEFAULT_TABLE_SIZE];
 
 /**
  * The actual default page table.
  */
-page_table_st default_page_table;
+page_table_st table;
 
 #endif

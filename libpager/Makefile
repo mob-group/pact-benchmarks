@@ -2,6 +2,8 @@ INSTALL_DIR ?= $(PACT_BENCH)/local
 
 SRCS=pager.c test.c
 
+CFLAGS:=-g -Wall -Wextra -pedantic -std=c99 $(CFLAGS)
+
 .PHONY: clean install all
 all: test
 
