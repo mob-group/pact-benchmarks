@@ -53,7 +53,6 @@ static void handler(int sig, siginfo_t *si, void *unused) {
 
       table.entries[i].written = true;
       sorted = true;
-      break;
     }
   }
 
