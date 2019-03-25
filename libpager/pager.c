@@ -1,8 +1,14 @@
 #include "pager.h"
 
+#include <stdio.h>
+
+#include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <unistd.h>
+
+struct sigaction sa, old_sigaction;
 
 void do_nothing(UNUSED void *ptr) {}
 
@@ -16,6 +22,60 @@ page_functions_st heap_functions = {.deleter = (deleter_ft)free,
 
 page_functions_st stack_functions = {.deleter = (deleter_ft)do_nothing,
                                      .copier = (copier_ft)memcpy};
+
+static long page_size() { return sysconf(_SC_PAGE_SIZE); }
+
+static void *start_of_page(void *addr) {
+  return (void *)((long)addr & ~(page_size() - 1));
+}
+
+static void *end_of_page(void *addr) {
+  return (void *)((long)start_of_page(addr) + page_size());
+}
+
+static bool in_aligned_extent(void *start, size_t size, void *ptr) {
+  char *sop = (char *)start_of_page(start);
+  char *eop = (char *)end_of_page((char *)start + size);
+  return (char *)ptr >= sop && (char *)ptr < eop;
+}
+
+static void handler(int sig, siginfo_t *si, void *unused) {
+  void *addr = si->si_addr;
+  bool sorted = false;
+
+  for (size_t i = 0; i < table.size; ++i) {
+    void *host_ptr = table.entries[i].host;
+    size_t size = table.entries[i].last_size;
+
+    if (in_aligned_extent(host_ptr, size, addr)) {
+      mprotect(start_of_page(host_ptr), size,
+               PROT_READ | PROT_WRITE | PROT_EXEC);
+
+      table.entries[i].written = true;
+      sorted = true;
+      break;
+    }
+  }
+
+  if (!sorted) {
+    old_sigaction.sa_sigaction(sig, si, unused);
+  }
+}
+
+static void set_handler() {
+  static bool done = false;
+  if (!done) {
+    sa.sa_flags = SA_RESTART | SA_SIGINFO;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_sigaction = handler;
+
+    if (sigaction(SIGSEGV, &sa, &old_sigaction) == -1) {
+      exit(3);
+    }
+
+    done = true;
+  }
+}
 
 void new_table_entry(void *h, void *d, size_t s, page_functions_st fns) {
   // Logic:
@@ -54,6 +114,8 @@ void new_table_entry(void *h, void *d, size_t s, page_functions_st fns) {
   fns.copier(d, h, s);
 
   // mprotect host pointer now
+  mprotect(start_of_page(h), s, PROT_READ | PROT_EXEC);
+  set_handler();
 
   table.next_insert = (table.next_insert + 1) % table.size;
 }
@@ -65,6 +127,9 @@ void *get_table_entry(void *h) {
         table.entries[i].functions.copier(table.entries[i].device, h,
                                           table.entries[i].last_size);
         table.entries[i].written = false;
+
+        mprotect(start_of_page(h), table.entries[i].last_size,
+                 PROT_READ | PROT_EXEC);
       }
       return table.entries[i].device;
     }
