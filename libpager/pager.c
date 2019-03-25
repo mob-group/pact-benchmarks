@@ -12,7 +12,7 @@ struct sigaction sa, old_sigaction;
 
 void do_nothing(UNUSED void *ptr) {}
 
-page_entry_st table_data[DEFAULT_TABLE_SIZE] = {0};
+page_entry_st table_data[DEFAULT_TABLE_SIZE] = {{0}};
 
 page_table_st table = {
     .entries = table_data, .size = DEFAULT_TABLE_SIZE, .next_insert = 0};
