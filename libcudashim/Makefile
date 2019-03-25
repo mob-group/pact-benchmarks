@@ -1,7 +1,7 @@
 CFLAGS=-std=c99
 
 CUDAFLAGS=-I$(PACT_BENCH)/local/include
-CUDALINK=-L$(PACT_BENCH)/local/lib64 -lcuda -lcublas -lcudart -lpthread -ldl
+CUDALINK=-L$(PACT_BENCH)/local/lib -L$(PACT_BENCH)/local/lib64 -lcuda -lcublas -lcudart -lpthread -ldl -lpager
 
 SHIM_INSTALL ?= $(PACT_BENCH)/local/lib
 

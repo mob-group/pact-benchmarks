@@ -1,9 +1,26 @@
+#include <pager/pager.h>
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+static void cuda_deleter(void *ptr)
+{
+  (void)cudaFree(ptr);
+}
+
+static void cuda_copier(void *d, void *h, size_t s)
+{
+  (void)cudaMemcpy(d, h, s, cudaMemcpyHostToDevice);
+}
+
+static page_functions_st cuda_fns = {
+  .deleter = cuda_deleter,
+  .copier = cuda_copier
+};
 
 #define ERR(m) \
   do { \
@@ -42,47 +59,6 @@ static cublasOperation_t str_to_op(char const* str)
   }
 }
 
-static void * pointer_map[8] = { 0 };
-
-void store_pointer(void* host, void* dev)
-{
-  static int next_index = 0;
-
-  for(int i = 0; i < 4; ++i) {
-    void * ex_host = pointer_map[i*2];
-    if(ex_host == host) {
-      cudaFree(pointer_map[i*2+1]);
-
-      pointer_map[i*2] = host;
-      pointer_map[i*2 + 1] = dev;
-      return;
-    } else if(!ex_host) {
-      pointer_map[i*2] = host;
-      pointer_map[i*2 + 1] = dev;
-      return;
-    }
-  }
-
-  cudaFree(pointer_map[next_index * 2 + 1]);
-
-  pointer_map[next_index * 2] = host;
-  pointer_map[next_index * 2 + 1] = dev;
-
-  next_index = ++next_index % 4;
-}
-
-void* retrieve_pointer(void* host)
-{
-  for(int i = 0; i < 4; ++i) {
-    void * ex_host = pointer_map[i*2];
-    if(ex_host == host) {
-      return pointer_map[i*2 + 1];
-    }
-  }
-
-  return 0;
-}
-
 #define ALLOC_AND_COPY(T, rows, cols, host)                         \
   T *dev##host = 0;                                                 \
   do {                                                              \
@@ -90,7 +66,7 @@ void* retrieve_pointer(void* host)
     int cols_= (cols);                                              \
     T const* host_ = (host);                                        \
                                                                     \
-    void *retr##host = retrieve_pointer((void *)host_);             \
+    void *retr##host = get_table_entry((void*)host_);               \
     if(!retr##host) {                                               \
       cudaError_t stat##host = cudaMalloc(                          \
           (void **)&dev##host, rows_ * cols_ * sizeof(T));          \
@@ -105,7 +81,8 @@ void* retrieve_pointer(void* host)
       if(blas_stat##host != CUBLAS_STATUS_SUCCESS) {                \
         ERR("Copy " #host);                                         \
       }                                                             \
-      store_pointer((void *)host_, (void *)dev##host);              \
+      new_table_entry((void *)host_, (void *)dev##host,             \
+                      rows * cols * sizeof(T), cuda_fns);           \
     } else {                                                        \
       dev##host = retr##host;                                       \
     }                                                               \
@@ -164,10 +141,9 @@ void zgemm_(
   if(err != cudaSuccess) {
     ERRC("ZGEMM copy back", err);
   }
-  /*
+
   stat = cublasGetMatrix(*m, *n, sizeof(*C), devC, *m, C, *m);
   if(stat != CUBLAS_STATUS_SUCCESS) { 
     ERRC("ZGEMM copy back", stat);
   }
-  */
 }
