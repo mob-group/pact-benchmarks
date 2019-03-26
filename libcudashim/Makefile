@@ -21,7 +21,7 @@ test: test.cpp libcudashim.a
 	$(CXX) $(CXXFLAGS) $(CUDAFLAGS) $< -o $@ -L. -lcudashim $(CUDALINK)
 
 ftest: ftest.f90 libcudashim.a
-	$(CXX) $< -o $@ $(CUDALINK) -lgfortran -L. -lcudashim
+	$(CXX) $< -o $@ -L. -lcudashim $(CUDALINK) -lgfortran
 
 %.o : %.c
 	$(CC) $(CFLAGS) $(CUDAFLAGS) -c $^ -o $@
