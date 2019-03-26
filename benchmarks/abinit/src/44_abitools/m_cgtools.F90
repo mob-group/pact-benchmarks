@@ -1020,10 +1020,10 @@ subroutine cg_zgemv(trans,nrows,ncols,cgmat,vec,matvec,alpha,beta)
  my_alpha = cg_cone;  if (PRESENT(alpha)) my_alpha = alpha
  my_beta  = cg_czero; if (PRESENT(beta))  my_beta  = beta
 
- call AB_ZGEMM(trans,"N",mm,nn,kk,my_alpha,cgmat,lda,vec,ldb,my_beta,matvec,ldc)
+ !call AB_ZGEMM(trans,"N",mm,nn,kk,my_alpha,cgmat,lda,vec,ldb,my_beta,matvec,ldc)
  ! AB_ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 
- !call AB_ZGEMV(trans,mm,nn,my_alpha,cgmat,lda,vec,1,my_beta,matvec,1)
+ call AB_ZGEMV(trans,mm,nn,my_alpha,cgmat,lda,vec,1,my_beta,matvec,1)
 
 end subroutine cg_zgemv
 !!***
