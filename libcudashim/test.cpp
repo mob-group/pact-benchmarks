@@ -15,17 +15,17 @@ int main() {
   int ldb = k;
   int ldc = m;
 
-  double *a = malloc(sizeof(*a) * lda * k);
+  auto a = new double[lda * k];
   for (int i = 0; i < lda * k; ++i) {
     a[i] = i + 1;
   }
 
-  double *b = malloc(sizeof(*b) * ldb * n);
+  auto b = new double[ldb * n];
   for (int i = 0; i < ldb * n; ++i) {
     b[i] = i + 1;
   }
 
-  double *c = malloc(sizeof(*c) * ldc * n);
+  auto c = new double[ldc * n];
   for (int i = 0; i < ldc * n; ++i) {
     c[i] = 0;
   }
@@ -37,7 +37,7 @@ int main() {
     printf("%f\n", c[i]);
   }
 
-  free(a);
-  free(b);
-  free(c);
+  delete[] a;
+  delete[] b;
+  delete[] c;
 }

@@ -1,7 +1,8 @@
 CFLAGS=-std=c99
+CXXFLAGS=-std=c++11
 
 CUDAFLAGS=-I$(PACT_BENCH)/local/include
-CUDALINK=-L$(PACT_BENCH)/local/lib -L$(PACT_BENCH)/local/lib64 -lcuda -lcublas -lcudart -lpthread -ldl -lpager
+CUDALINK=-L$(PACT_BENCH)/local/lib -L$(PACT_BENCH)/local/lib64 -lcuda -lcublas -lcudart -lpthread -ldl
 
 SHIM_INSTALL ?= $(PACT_BENCH)/local/lib
 
@@ -16,14 +17,17 @@ libcudashim.a: shim.o
 
 tests: test ftest
 
-test: test.c libcudashim.a
-	$(CC) $(CFLAGS) $(CUDAFLAGS) $< -o $@ $(CUDALINK) -L. -lcudashim
+test: test.cpp libcudashim.a
+	$(CXX) $(CXXFLAGS) $(CUDAFLAGS) $< -o $@ -L. -lcudashim $(CUDALINK)
 
 ftest: ftest.f90 libcudashim.a
-	$(FC) $< -o $@ $(CUDALINK) -L. -lcudashim
+	$(CXX) $< -o $@ $(CUDALINK) -lgfortran -L. -lcudashim
 
 %.o : %.c
 	$(CC) $(CFLAGS) $(CUDAFLAGS) -c $^ -o $@
+
+%.o : %.cpp
+	$(CXX) $(CXXFLAGS) $(CUDAFLAGS) -c $^ -o $@
 
 install: libcudashim.a
 	mkdir -p $(SHIM_INSTALL)
