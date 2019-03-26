@@ -1,5 +1,5 @@
-CFLAGS=-std=c99
-CXXFLAGS=-std=c++11
+CFLAGS=-std=c99 -fPIC
+CXXFLAGS=-std=c++11 -fPIC
 
 CUDAFLAGS=-I$(PACT_BENCH)/local/include
 CUDALINK=-L$(PACT_BENCH)/local/lib -L$(PACT_BENCH)/local/lib64 -lcuda -lcublas -lcudart -lpthread -ldl
@@ -9,19 +9,18 @@ SHIM_INSTALL ?= $(PACT_BENCH)/local/lib
 FC=gfortran
 
 .PHONY: all tests clean install
-all: tests libcudashim.a
+all: tests libcudashim.so
 
-libcudashim.a: shim.o
-	ar cru $@ $^
-	ranlib $@
+libcudashim.so: shim.o
+	$(CXX) -shared $^ -o $@
 
 tests: test ftest
 
-test: test.cpp libcudashim.a
-	$(CXX) $(CXXFLAGS) $(CUDAFLAGS) $< -o $@ -L. -lcudashim $(CUDALINK)
+test: test.cpp libcudashim.so
+	$(CXX) $(CXXFLAGS) $(CUDAFLAGS) $< -o $@ -L. -lcudashim $(CUDALINK) -Wl,-rpath,.
 
-ftest: ftest.f90 libcudashim.a
-	$(CXX) $< -o $@ -L. -lcudashim $(CUDALINK) -lgfortran
+ftest: ftest.f90 libcudashim.so
+	$(CXX) $< -o $@ -L. -lcudashim $(CUDALINK) -lgfortran -Wl,-rpath,.
 
 %.o : %.c
 	$(CC) $(CFLAGS) $(CUDAFLAGS) -c $^ -o $@
@@ -29,9 +28,9 @@ ftest: ftest.f90 libcudashim.a
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(CUDAFLAGS) -c $^ -o $@
 
-install: libcudashim.a
+install: libcudashim.so
 	mkdir -p $(SHIM_INSTALL)
 	cp $^ $(SHIM_INSTALL)
 
 clean:
-	rm -f *.a *.o test ftest
+	rm -f *.a *.o test ftest *.so
