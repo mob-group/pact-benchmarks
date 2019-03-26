@@ -124,31 +124,31 @@ extern "C" {
 void dgemm_(
   char *transA, char *transB,
   int *m, int *n, int *k,
-  double const* alpha, double const* A, int *lda,
-  double const* B, int *ldb,
-  double const* beta, double* C, int *ldc)
+  double * alpha, double * A, int *lda,
+  double * B, int *ldb,
+  double * beta, double* C, int *ldc)
 {
   static Functor<double> functor;
   return functor(
     transA, transB, *m, *n, *k, 
-    const_cast<double*>(alpha), const_cast<double*>(A), *lda,
-    const_cast<double*>(B), *ldb,
-    const_cast<double*>(beta), const_cast<double*>(C), *ldc);
+    alpha, A, *lda,
+    B, *ldb,
+    beta, C, *ldc);
 }
 
 void zgemm_(
   char *transA, char *transB,
   int *m, int *n, int *k,
-  cuDoubleComplex const* alpha, cuDoubleComplex const* A, int *lda,
-  cuDoubleComplex const* B, int *ldb,
-  cuDoubleComplex const* beta, cuDoubleComplex* C, int *ldc)
+  cuDoubleComplex * alpha, cuDoubleComplex * A, int *lda,
+  cuDoubleComplex * B, int *ldb,
+  cuDoubleComplex * beta, cuDoubleComplex* C, int *ldc)
 {
   static Functor<cuDoubleComplex> functor;
   return functor(
     transA, transB, *m, *n, *k, 
-    const_cast<cuDoubleComplex*>(alpha), const_cast<cuDoubleComplex*>(A), *lda,
-    const_cast<cuDoubleComplex*>(B), *ldb,
-    const_cast<cuDoubleComplex*>(beta), const_cast<cuDoubleComplex*>(C), *ldc);
+    alpha, A, *lda,
+    B, *ldb,
+    beta, C, *ldc);
 }
 
 }

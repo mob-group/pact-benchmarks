@@ -1,5 +1,5 @@
-CFLAGS=-std=c99 -fPIC
-CXXFLAGS=-std=c++11 -fPIC
+CFLAGS=-std=c99 -fPIC -g
+CXXFLAGS=-std=c++11 -fPIC -g
 
 CUDAFLAGS=-I$(PACT_BENCH)/local/include
 CUDALINK=-L$(PACT_BENCH)/local/lib -L$(PACT_BENCH)/local/lib64 -lcuda -lcublas -lcudart -lpthread -ldl

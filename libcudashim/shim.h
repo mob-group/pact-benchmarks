@@ -11,16 +11,16 @@ extern "C" {
 void dgemm_(
   char *transA, char *transB,
   int *m, int *n, int *k,
-  double const* alpha, double const* A, int *lda,
-  double const* B, int *ldb,
-  double const* beta, double* C, int *ldc);
+  double * alpha, double * A, int *lda,
+  double * B, int *ldb,
+  double * beta, double* C, int *ldc);
 
 void zgemm_(
   char *transA, char *transB,
   int *m, int *n, int *k,
-  cuDoubleComplex const* alpha, cuDoubleComplex const* A, int *lda,
-  cuDoubleComplex const* B, int *ldb,
-  cuDoubleComplex const* beta, cuDoubleComplex* C, int *ldc);
+  cuDoubleComplex * alpha, cuDoubleComplex * A, int *lda,
+  cuDoubleComplex * B, int *ldb,
+  cuDoubleComplex * beta, cuDoubleComplex* C, int *ldc);
 
 #ifdef __cplusplus
 }
