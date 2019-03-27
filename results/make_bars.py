@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from collections import namedtuple
+
+sns.set()
+sns.set_context("paper")
 
 # Schema for each bar chart:
 # - Benchmark (e.g. abinit)
@@ -32,7 +36,7 @@ def best_speed(row):
 
 def expert_label(data):
     if data.exp_impl is not None:
-        return 'expert'
+        return 'Expert'
     else:
         return ''
 
@@ -48,8 +52,11 @@ def bar(ax, data, y_max):
     ax.set_xlim(-1.5, 1.5)
     ax.set_ylim(0, y_max * 1.1)
 
+    ax.axhline(y=1, color='black', lw=0.8)
+
     ax.set_xticks([-1, 0, 1])
-    ax.set_xticklabels(['base', '{}'.format(data.our_impl), expert_label(data)])
+    ax.set_xticklabels(['Base', '{}'.format(data.our_impl), expert_label(data)])
+    # ax.tick_params(axis='x', labelsize=8)
 
 if __name__ == "__main__":
     fig, axes = plt.subplots(2, 5, sharey='row', figsize=(7,3))
@@ -59,4 +66,5 @@ if __name__ == "__main__":
             bar(*pair, best_speed(data_row))
 
     fig.tight_layout()
-    plt.savefig('out.pdf')
+    sns.despine(fig)
+    plt.savefig('perf.pdf')
