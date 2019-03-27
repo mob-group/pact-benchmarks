@@ -25,6 +25,9 @@ BarData.__new__.__defaults__ = (None,) * 2
 data = [
     [
         BarData('Abinit', 'Ti22', 1.2, 'MKL', 1.4, 'MKL')
+    ],
+    [
+        BarData('', 'VGG-16', 2.2, 'CUDA', 2.8, 'CUDA')
     ]
 ]
 
@@ -56,7 +59,9 @@ def bar(ax, data, y_max):
 
     ax.set_xticks([-1, 0, 1])
     ax.set_xticklabels(['Base', '{}'.format(data.our_impl), expert_label(data)])
-    # ax.tick_params(axis='x', labelsize=8)
+    ax.tick_params(axis='x', labelsize=8)
+
+    ax.set_title('{} {}'.format(data.benchmark, data.dataset))
 
 if __name__ == "__main__":
     fig, axes = plt.subplots(2, 5, sharey='row', figsize=(7,3))
