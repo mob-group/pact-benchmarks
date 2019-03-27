@@ -15,6 +15,13 @@ void dgemm_(
   double * B, int *ldb,
   double * beta, double* C, int *ldc);
 
+void sgemm_(
+  char *transA, char *transB,
+  int *m, int *n, int *k,
+  float * alpha, float * A, int *lda,
+  float * B, int *ldb,
+  float * beta, float* C, int *ldc);
+
 void zgemm_(
   char *transA, char *transB,
   int *m, int *n, int *k,

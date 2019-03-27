@@ -102,6 +102,22 @@ void Functor<double>::operator()(
 }
 
 template <>
+void Functor<float>::operator()(
+  char const* transA, char const* transB, 
+  int m, int n, int k, 
+  float* alpha, float* A, int lda, 
+  float* B, int ldb, 
+  float* beta, float* C, int ldc)
+{
+  auto d_A = shadow_d_A(A, m*k);
+  auto d_B = shadow_d_B(B, k*n);
+  auto d_C = shadow_d_C(C, m*n);
+
+  cublasSgemm(handle, str_to_op(transA), str_to_op(transB),
+                 n, m, k, alpha, d_B, ldb, d_A, lda, beta, d_C, ldc);
+}
+
+template <>
 void Functor<cuDoubleComplex>::operator()(
   char const* transA, char const* transB, 
   int m, int n, int k, 
@@ -129,6 +145,21 @@ void dgemm_(
   double * beta, double* C, int *ldc)
 {
   static Functor<double> functor;
+  return functor(
+    transA, transB, *m, *n, *k, 
+    alpha, A, *lda,
+    B, *ldb,
+    beta, C, *ldc);
+}
+
+void sgemm_(
+  char *transA, char *transB,
+  int *m, int *n, int *k,
+  float * alpha, float * A, int *lda,
+  float * B, int *ldb,
+  float * beta, float* C, int *ldc)
+{
+  static Functor<float> functor;
   return functor(
     transA, transB, *m, *n, *k, 
     alpha, A, *lda,
