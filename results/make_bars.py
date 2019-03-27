@@ -30,6 +30,12 @@ def has_expert(data):
 def best_speed(row):
     return max([max(d.exp_speed, d.our_speed) for d in row])
 
+def expert_label(data):
+    if data.exp_impl is not None:
+        return 'expert'
+    else:
+        return ''
+
 # Take an axis and some bar data, then plot data on the axis
 def bar(ax, data, y_max):
     bar_params = { 'width' : 0.8 }
@@ -41,6 +47,9 @@ def bar(ax, data, y_max):
 
     ax.set_xlim(-1.5, 1.5)
     ax.set_ylim(0, y_max * 1.1)
+
+    ax.set_xticks([-1, 0, 1])
+    ax.set_xticklabels(['base', '{}'.format(data.our_impl), expert_label(data)])
 
 if __name__ == "__main__":
     fig, axes = plt.subplots(2, 5, sharey='row', figsize=(7,3))
