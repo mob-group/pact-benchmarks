@@ -5,6 +5,14 @@
 #include <stdio.h>
 #include <math.h>
 
+#ifdef CUDA_SHIM
+#include <shim.h>
+#endif
+
+#ifdef MKL_SHIM
+#include <mkl.h>
+#endif
+
 void gemm_bin(int M, int N, int K, float ALPHA, 
         char  *A, int lda, 
         float *B, int ldb,
@@ -76,6 +84,12 @@ void gemm_nn(int M, int N, int K, float ALPHA,
         float *B, int ldb,
         float *C, int ldc)
 {
+#ifdef CUDA_SHIM
+    float beta = 0.0;
+    sgemm_("N", "N", &M, &N, &K, &ALPHA, A, &lda, B, &ldb, &beta, C, &ldc);
+#elif defined(MKL_SHIM)
+    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, M, N, K, ALPHA, A, lda, B, ldb, 0.0, C, ldc);
+#else
     int i,j,k;
     #pragma omp parallel for
     for(i = 0; i < M; ++i){
@@ -86,6 +100,7 @@ void gemm_nn(int M, int N, int K, float ALPHA,
             }
         }
     }
+#endif
 }
 
 void gemm_nt(int M, int N, int K, float ALPHA, 
