@@ -2,6 +2,7 @@
 
 #include <sys/time.h>
 #include <assert.h>
+#include <time.h>
 
 float *get_regression_values(char **labels, int n)
 {
@@ -557,6 +558,13 @@ void try_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filena
     }
 }
 
+static double get_time(void)
+{
+  struct timespec ts;
+  clock_gettime(CLOCK_REALTIME, &ts);
+  return (double)(ts.tv_sec + ((double)ts.tv_nsec / 1000000000));
+}
+
 void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top)
 {
     network *net = load_network(cfgfile, weightfile, 0);
@@ -571,7 +579,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
     int i = 0;
     char **names = get_labels(name_list);
-    clock_t time;
+    double nanos;
     int *indexes = calloc(top, sizeof(int));
     char buff[256];
     char *input = buff;
@@ -593,11 +601,11 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
         //printf("%d %d\n", r.w, r.h);
 
         float *X = r.data;
-        time=clock();
+        nanos=get_time();
         float *predictions = network_predict(net, X);
         if(net->hierarchy) hierarchy_predictions(predictions, net->outputs, net->hierarchy, 1, 1);
         top_k(predictions, net->outputs, top, indexes);
-        fprintf(stderr, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
+        fprintf(stderr, "%s: Predicted in %f seconds.\n", input, get_time() - nanos);
         for(i = 0; i < top; ++i){
             int index = indexes[i];
             //if(net->hierarchy) printf("%d, %s: %f, parent: %s \n",index, names[index], predictions[index], (net->hierarchy->parent[index] >= 0) ? names[net->hierarchy->parent[index]] : "Root");
