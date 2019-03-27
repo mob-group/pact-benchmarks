@@ -132,35 +132,33 @@ void sgemm_(
   float const* B, int *ldb,
   float const* beta, float* C, int *ldc)
 {
-  static float *devA, *devB, *devC = NULL;
-  static int last_m, last_n, last_k = 0;
+  static float* dev_buff = NULL;
+  static int alloced = 0;
+
+  int total_size = ((*m * *k) + (*k * *n) + (*m * *n)) * sizeof(float);
 
   cudaError_t stat;
 
-  if(*m != last_m || *n != last_n || *k != last_k) {
-    last_m = *m;
-    last_n = *n;
-    last_k = *k;
+  if(alloced < total_size) {
+    stat = cudaMalloc((void **)&dev_buff, total_size);
+    if(stat != cudaSuccess) { ERRC("Alloc", stat); }
 
-    cudaFree(devA); cudaFree(devB); cudaFree(devC);
-
-    stat = cudaMalloc((void **)&devA, *m * *k * sizeof(float));
-    if(stat != cudaSuccess) { ERRC("Alloc A", stat); }
-    stat = cudaMemcpy(devA, A, *m * *k * sizeof(float), cudaMemcpyHostToDevice);
-    if(stat != cudaSuccess) { ERRC("Copy A", stat); }
-
-    stat = cudaMalloc((void **)&devB, *k * *n * sizeof(float));
-    if(stat != cudaSuccess) { ERRC("Alloc B", stat); }
-    stat = cudaMemcpy(devB, B, *k * *n * sizeof(float), cudaMemcpyHostToDevice);
-    if(stat != cudaSuccess) { ERRC("Copy B", stat); }
-
-    stat = cudaMalloc((void **)&devC, *m * *n * sizeof(float));
-    if(stat != cudaSuccess) { ERRC("Alloc C", stat); }
-    stat = cudaMemcpy(devC, C, *m * *n * sizeof(float), cudaMemcpyHostToDevice);
-    if(stat != cudaSuccess) { ERRC("Copy C", stat); }
+    alloced = total_size;
   }
 
-  cublasStatus_t blas_stat = cublasSgemm_v2(
+  float *devA = dev_buff;
+  stat = cudaMemcpy(devA, A, *m * *k * sizeof(float), cudaMemcpyHostToDevice);
+  if(stat != cudaSuccess) { ERRC("Copy A", stat); }
+
+  float *devB = dev_buff + (*m * *k);
+  stat = cudaMemcpy(devB, B, *k * *n * sizeof(float), cudaMemcpyHostToDevice);
+  if(stat != cudaSuccess) { ERRC("Copy B", stat); }
+
+  float *devC = dev_buff + (*m * *k) + (*k * *n);
+  stat = cudaMemcpy(devC, C, *m * *n * sizeof(float), cudaMemcpyHostToDevice);
+  if(stat != cudaSuccess) { ERRC("Copy C", stat); }
+
+  cublasStatus_t blas_stat = cublasSgemm(
     get_handle(), CUBLAS_OP_N, CUBLAS_OP_N,
     *n, *m, *k,
     alpha, devB, *ldb,
