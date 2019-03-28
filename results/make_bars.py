@@ -33,9 +33,9 @@ data = [
     [
         BarData('Abinit', 'Titanium', 1.919559004, 'CUDA'),
         BarData('Abinit', 'Water', 1.281573499, 'CUDA'),
-        BarData('NWChem', 'A', 1, 'MKL'),
-        BarData('NWChem', 'B', 1, 'MKL'),
-        BarData('Parboil', 'SGEMM', 1, 'MKL'),
+        # BarData('NWChem', 'A', 0.01, 'MKL'),
+        # BarData('NWChem', 'B', 0.01, 'MKL'),
+        BarData('Parboil', 'SGEMM', 7.558644/0.514674, 'CUDA', 7.558644/0.392051, 'CUDA'),
     ]
 ]
 
