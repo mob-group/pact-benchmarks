@@ -1,6 +1,5 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
-#include <cublasXt.h>
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -84,20 +83,8 @@ void* retrieve_pointer(void* host)
   return 0;
 }
 
-void delete_pointer(void *host)
-{
-  for(int i = 0; i < 4; ++i) {
-    void * ex_host = pointer_map[i*2];
-    if(ex_host == host) {
-      cudaFree(pointer_map[i*2 + 1]);
-
-      pointer_map[i*2] = NULL;
-      pointer_map[i*2 + 1] = NULL;
-    }
-  }
-}
-
 #define ALLOC_AND_COPY(T, rows, cols, host)                         \
+  T *dev##host = 0;                                                 \
   do {                                                              \
     int rows_ = (rows);                                             \
     int cols_= (cols);                                              \
@@ -107,16 +94,16 @@ void delete_pointer(void *host)
     if(!retr##host) {                                               \
       cudaError_t stat##host = cudaMalloc(                          \
           (void **)&dev##host, rows_ * cols_ * sizeof(T));          \
-      printf("%p %d\n", dev##host, rows_ * cols_ * sizeof(T)); \
                                                                     \
       if(stat##host != cudaSuccess) {                               \
         ERRC("Alloc " #host, stat##host);                           \
       }                                                             \
                                                                     \
-      stat##host = cudaMemcpy(dev##host, host_, rows_ * cols_ * sizeof(T), cudaMemcpyHostToDevice); \
+      cublasStatus_t blas_stat##host = cublasSetMatrix(             \
+        rows_, cols_, sizeof(T), host_, rows_, dev##host, rows_);   \
                                                                     \
-      if(stat##host != cudaSuccess) {                \
-        ERRC("Copy " #host, stat##host);                       \
+      if(blas_stat##host != CUBLAS_STATUS_SUCCESS) {                \
+        ERR("Copy " #host);                                         \
       }                                                             \
       store_pointer((void *)host_, (void *)dev##host);              \
     } else {                                                        \
@@ -125,53 +112,6 @@ void delete_pointer(void *host)
   } while(0);                                                       \
   if(!dev##host) { ERR("Badly wrong"); }
 
-void sgemm_(
-  char *transA, char *transB,
-  int *m, int *n, int *k,
-  float const* alpha, float const* A, int *lda,
-  float const* B, int *ldb,
-  float const* beta, float* C, int *ldc)
-{
-  static float* dev_buff = NULL;
-  static int alloced = 0;
-
-  int total_size = ((*m * *k) + (*k * *n) + (*m * *n)) * sizeof(float);
-
-  cudaError_t stat;
-
-  if(alloced < total_size) {
-    stat = cudaMalloc((void **)&dev_buff, total_size);
-    if(stat != cudaSuccess) { ERRC("Alloc", stat); }
-
-    alloced = total_size;
-  }
-
-  float *devA = dev_buff;
-  stat = cudaMemcpy(devA, A, *m * *k * sizeof(float), cudaMemcpyHostToDevice);
-  if(stat != cudaSuccess) { ERRC("Copy A", stat); }
-
-  float *devB = dev_buff + (*m * *k);
-  stat = cudaMemcpy(devB, B, *k * *n * sizeof(float), cudaMemcpyHostToDevice);
-  if(stat != cudaSuccess) { ERRC("Copy B", stat); }
-
-  float *devC = dev_buff + (*m * *k) + (*k * *n);
-  stat = cudaMemcpy(devC, C, *m * *n * sizeof(float), cudaMemcpyHostToDevice);
-  if(stat != cudaSuccess) { ERRC("Copy C", stat); }
-
-  cublasStatus_t blas_stat = cublasSgemm(
-    get_handle(), CUBLAS_OP_N, CUBLAS_OP_N,
-    *n, *m, *k,
-    alpha, devB, *ldb,
-    devA, *lda, beta, 
-    devC, *ldc);
-  if(blas_stat != CUBLAS_STATUS_SUCCESS) { 
-    ERRC("SGEMM", blas_stat);
-  }
-
-  stat = cudaMemcpy(C, devC, *m * *n * sizeof(float), cudaMemcpyDeviceToHost);
-  if(stat != cudaSuccess) { ERRC("Copy C back", stat); }
-}
-
 void dgemm_(
   char *transA, char *transB,
   int *m, int *n, int *k,
@@ -179,7 +119,6 @@ void dgemm_(
   double const* B, int *ldb,
   double const* beta, double* C, int *ldc)
 {
-  double *devA, *devB, *devC = NULL;
   ALLOC_AND_COPY(double, *m, *k, A);
   ALLOC_AND_COPY(double, *k, *n, B);
   ALLOC_AND_COPY(double, *m, *n, C);
@@ -207,8 +146,6 @@ void zgemm_(
   cuDoubleComplex const* B, int *ldb,
   cuDoubleComplex const* beta, cuDoubleComplex* C, int *ldc)
 {
-  cuDoubleComplex *devA, *devB, *devC = NULL;
-
   ALLOC_AND_COPY(cuDoubleComplex, *m, *k, A);
   ALLOC_AND_COPY(cuDoubleComplex, *k, *n, B);
   ALLOC_AND_COPY(cuDoubleComplex, *m, *n, C);
@@ -221,11 +158,6 @@ void zgemm_(
     devC, *ldc);
   if(stat != CUBLAS_STATUS_SUCCESS) { 
     ERRC("ZGEMM", stat);
-  }
-
-  cudaError_t err = cudaMemcpy(C, devC, *m * *n * sizeof(*C), cudaMemcpyDeviceToHost);
-  if(err != cudaSuccess) {
-    ERRC("ZGEMM copy back", err);
   }
 
   stat = cublasGetMatrix(*m, *n, sizeof(*C), devC, *m, C, *m);
