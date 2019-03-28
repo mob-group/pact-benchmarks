@@ -27,10 +27,15 @@ data = [
         BarData('', 'ResNet-152', 9.362466855, 'MKL', 48.62573943, ''),
         BarData('', 'VGG-16', 10.85887595, 'MKL', 61.97973289, ''),
         BarData('', 'DenseNet-201', 5.609201284, 'MKL', 21.76856879, ''),
+        BarData('Pathsample', 'PFold', 1, ''),
+        BarData('Pathsample', 'NGT', 1, ''),
     ],
     [
-        BarData('Abinit', 'Ti22', 1.843529412, 'MKL'),
-        BarData('Abinit', 'V402', 1.076142132, 'MKL'),
+        BarData('Abinit', 'Ti22', 1.919559004, 'CUDA'),
+        BarData('Abinit', 'Water', 1, 'MKL'),
+        BarData('NWChem', 'A', 1, 'MKL'),
+        BarData('NWChem', 'B', 1, 'MKL'),
+        BarData('Parboil', 'SGEMM', 1, 'MKL'),
     ]
 ]
 
@@ -81,8 +86,8 @@ if __name__ == "__main__":
             legs = bar(*pair, best_speed(data_row))
 
     fig.legend(legs, ['Baseline', 'Ours', 'Expert'],
-            bbox_to_anchor=(0.5, 0), loc='lower center', ncol=3)
+            bbox_to_anchor=(0.5, 0.02), loc='lower center', ncol=3)
     fig.tight_layout()
-    fig.subplots_adjust(bottom=0.2)
+    fig.subplots_adjust(bottom=0.15)
     sns.despine(fig)
     plt.savefig('perf.pdf')
