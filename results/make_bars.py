@@ -29,8 +29,8 @@ data = [
         BarData('', 'DenseNet-201', 5.609201284, 'MKL', 21.76856879, ''),
     ],
     [
-        BarData('Abinit', 'Ti22', 1, 'MKL', 1, ''),
-        BarData('Abinit', 'V402', 1, 'MKL', 1, ''),
+        BarData('Abinit', 'Ti22', 1.843529412, 'MKL'),
+        BarData('Abinit', 'V402', 1.076142132, 'MKL'),
     ]
 ]
 
@@ -38,7 +38,7 @@ def has_expert(data):
     return None not in [data.exp_speed, data.exp_impl]
 
 def best_speed(row):
-    return max([max(d.exp_speed, d.our_speed) for d in row])
+    return max([max(d.exp_speed if d.exp_speed is not None else 0, d.our_speed) for d in row])
 
 def expert_label(data):
     if data.exp_impl is not None:
@@ -61,7 +61,7 @@ def bar(ax, data, y_max):
                     color='white')
 
     ax.set_xlim(-1.5, 1.5)
-    ax.set_ylim(0, data.our_speed * 2.5)
+    ax.set_ylim(0, min(y_max * 1.2, data.our_speed * 2.5))
 
     ax.axhline(y=1, color='black', lw=0.8)
 
