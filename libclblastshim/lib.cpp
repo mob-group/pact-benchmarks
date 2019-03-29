@@ -42,7 +42,7 @@ public:
 
       A_buf = cl::Buffer(ctx, CL_MEM_COPY_HOST_PTR, m * k * sizeof(float), A);
       B_buf = cl::Buffer(ctx, CL_MEM_COPY_HOST_PTR, k * n * sizeof(float), B);
-      C_buf = cl::Buffer(ctx, CL_MEM_COPY_HOST_PTR, m * n * sizeof(float), C);
+      C_buf = cl::Buffer(ctx, CL_MEM_WRITE_ONLY, m * n * sizeof(float));
     }
 
     auto stat = Gemm<float>(Layout::kRowMajor, Transpose::kNo, Transpose::kNo, 
