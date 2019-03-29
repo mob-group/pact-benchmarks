@@ -13,6 +13,10 @@
 #include <mkl.h>
 #endif
 
+#ifdef CLBLAST_SHIM
+#include <clblastshim.h>
+#endif
+
 void gemm_bin(int M, int N, int K, float ALPHA, 
         char  *A, int lda, 
         float *B, int ldb,
@@ -89,6 +93,8 @@ void gemm_nn(int M, int N, int K, float ALPHA,
     sgemm_("N", "N", &M, &N, &K, &ALPHA, A, &lda, B, &ldb, &beta, C, &ldc);
 #elif defined(MKL_SHIM)
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, M, N, K, ALPHA, A, lda, B, ldb, 0.0, C, ldc);
+#elif defined(CLBLAST_SHIM)
+    blast_sgemm_(M, N, K, ALPHA, A, lda, B, ldb, C, ldc);
 #else
     int i,j,k;
     #pragma omp parallel for
