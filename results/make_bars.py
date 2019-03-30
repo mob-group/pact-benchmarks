@@ -33,8 +33,8 @@ data = [
     [
         BarData('Abinit', 'Titanium', 1.542322835, 'MKL', 1.919559004, 'CUDA'),
         BarData('Abinit', 'Water', 1.200775946, 'MKL', 1.281573499, 'CUDA'),
-        BarData('NWChem', 'A', 0.01, 'MKL', 0.01, 'CUDA'),
-        BarData('NWChem', 'B', 0.01, 'MKL', 0.01, 'CUDA'),
+        BarData('NWChem', 'Buckyball', 1.218503937, 'MKL', 0.6627408994, 'CUDA'),
+        BarData('NWChem', 'Pentacene', 1.207220574, 'MKL', 0.4516188714, 'CUDA'),
         BarData('Parboil', 'SGEMM', 14.686275195560686, 'MKL', 19.279746767639924, 'CUDA'),
     ]
 ]
