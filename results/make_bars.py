@@ -5,6 +5,8 @@ import seaborn as sns
 
 from collections import namedtuple
 
+from sizes import *
+
 sns.set()
 sns.set_context("paper")
 
@@ -49,22 +51,24 @@ def bar(ax, data):
 
     ax.set_xticks([-1, 0, 1])
     ax.set_xticklabels([])
-    ax.tick_params(axis='x', labelsize=8)
+    ax.tick_params(axis='both', labelsize=6)
 
-    ax.set_title('{} {}'.format(data.benchmark, data.dataset))
+    ax.set_title('{} {}'.format(data.benchmark, data.dataset), fontsize=8)
     return ret
 
 if __name__ == "__main__":
-    fig, axes = plt.subplots(2, 5, sharey=False, figsize=(7,3))
+    fig, axes = plt.subplots(2, 5, sharey=False,
+            figsize=(text_w(1),text_w(0.4)))
 
     for ax_row, data_row in zip(axes, data):
         for pair in zip(ax_row, data_row):
             legs = bar(*pair)
 
     fig.legend(legs, ['Baseline', 'MKL', 'CUDA'],
-            bbox_to_anchor=(0.5, 0.02), loc='lower center', ncol=3)
+            bbox_to_anchor=(0.5, 0.02), loc='lower center', ncol=3, fontsize=8)
 
-    fig.text(0.01, 0.5, "Speedup ($\\times$)", rotation=90, va='center')
+    fig.text(0.01, 0.5, "Speedup ($\\times$)", rotation=90, va='center',
+            fontsize=8)
 
     fig.tight_layout()
     fig.subplots_adjust(bottom=0.15, left=0.075)
