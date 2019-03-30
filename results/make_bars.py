@@ -8,13 +8,6 @@ from collections import namedtuple
 sns.set()
 sns.set_context("paper")
 
-# Schema for each bar chart:
-# - Benchmark (e.g. abinit)
-# - Dataset (e.g. Ti22)
-# - Our speedup
-# - [opt] Their speedup
-# - Our impl
-# - [opt] Their impl
 BarData = namedtuple('BarData', [
     'benchmark', 'dataset',
     'a_speed', 'a_impl',
@@ -39,19 +32,6 @@ data = [
     ]
 ]
 
-def has_expert(data):
-    return None not in [data.exp_speed, data.exp_impl]
-
-def best_speed(row):
-    return max([max(d.exp_speed if d.exp_speed is not None else 0, d.our_speed) for d in row])
-
-def expert_label(data):
-    if data.exp_impl is not None:
-        return 'Expert'
-    else:
-        return ''
-
-# Take an axis and some bar data, then plot data on the axis
 def bar(ax, data):
     bar_params = { 'width' : 0.8 }
     ret = []
@@ -59,12 +39,6 @@ def bar(ax, data):
     ret.append(ax.bar(-1, 1, **bar_params))
     ret.append(ax.bar(0, data.a_speed, **bar_params))
     ret.append(ax.bar(1, data.b_speed, **bar_params))
-    # if has_expert(data):
-    #     ret.append(ax.bar(1, data.exp_speed, **bar_params))
-    #     if data.exp_speed > (data.our_speed * 2.5):
-    #         ax.text(1, data.our_speed * 2.5, '{:.0f}x  '.format(data.exp_speed),
-    #                 rotation=90, fontsize=6, va='top', ha='center',
-    #                 color='white')
 
     ax.set_xlim(-1.5, 1.5)
 
@@ -74,7 +48,6 @@ def bar(ax, data):
     ax.axhline(y=1, color='black', lw=0.8)
 
     ax.set_xticks([-1, 0, 1])
-    # # ax.set_xticklabels(['Base', '{}'.format(data.our_impl), expert_label(data)])
     ax.set_xticklabels([])
     ax.tick_params(axis='x', labelsize=8)
 
@@ -90,8 +63,11 @@ if __name__ == "__main__":
 
     fig.legend(legs, ['Baseline', 'MKL', 'CUDA'],
             bbox_to_anchor=(0.5, 0.02), loc='lower center', ncol=3)
+
+    fig.text(0.01, 0.5, "Speedup ($\\times$)", rotation=90, va='center')
+
     fig.tight_layout()
-    fig.subplots_adjust(bottom=0.15)
+    fig.subplots_adjust(bottom=0.15, left=0.075)
 
     sns.despine(fig)
     plt.savefig('perf.pdf')
