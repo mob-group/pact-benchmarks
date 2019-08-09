@@ -51,20 +51,20 @@ def bar(ax, data):
     return ret
 
 if __name__ == "__main__":
-    fig, axes = plt.subplots(1, 3, sharey=False, figsize=(col_w(1),col_w(0.5)), squeeze=False)
+    fig, axes = plt.subplots(1, 3, sharey=False, figsize=(col_w(1),col_w(0.35)), squeeze=False)
 
     for ax_row, data_row in zip(axes, data):
         for pair in zip(ax_row, data_row):
             legs = bar(*pair)
 
     fig.legend(legs, ['Baseline', 'OpenMP', 'OpenCL'],
-            bbox_to_anchor=(0.5, 0.02), loc='lower center', ncol=3, fontsize=8)
+            bbox_to_anchor=(0.5, -0.02), loc='lower center', ncol=3, fontsize=8)
 
     fig.text(0.025, 0.5, "Speedup ($\\times$)", rotation=90, va='center',
             fontsize=8)
 
     fig.tight_layout()
-    fig.subplots_adjust(bottom=0.22, left=0.15)
+    fig.subplots_adjust(bottom=0.25, left=0.15)
 
     sns.despine(fig)
     plt.savefig('nnperf.pdf')
